@@ -1,0 +1,9 @@
+[submodule "AppSettings"]
+	path = AppSettings
+	url = http://krr-app-bbgit01/AppSettings.git
+[submodule "Helpers"]
+	path = Helpers
+	url = http://krr-app-bbgit01/Helpers.git
+[submodule "MessageLogs"]
+	path = MessageLogs
+	url = http://krr-app-bbgit01/MessageLogs.git
