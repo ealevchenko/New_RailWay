@@ -44,6 +44,14 @@
     <Compile Include="Settings\RWDBSetting.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AppSettings\ConfigSettings\ConfigSettings.csproj">
+      <Project>{17ad2be4-8792-4ae9-abe5-2a8c4cedab73}</Project>
+      <Name>ConfigSettings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AppSettings\DBSettings\DBSettings.csproj">
+      <Project>{25455657-0e7c-4399-81ae-1c8e6a3587ea}</Project>
+      <Name>DBSettings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MLogs\MLogs.csproj">
       <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
       <Name>MLogs</Name>
