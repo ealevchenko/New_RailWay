@@ -1,0 +1,76 @@
+﻿using libClass;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Testing
+{
+
+
+
+
+    class Program
+    {
+
+        public class TestClass
+        {
+            public long ID { get; set; }
+            public DateTime DateTime { get; set; }
+            public string UserName { get; set; }
+            public string UserHostName { get; set; }
+            public string UserHostAddress { get; set; }
+            public string PhysicalPath { get; set; }
+            public int? Service { get; set; }
+            public int? EventID { get; set; }
+            public int? Level { get; set; }
+            public string Log { get; set; }
+        }
+
+        static void Main(string[] args)
+        {
+
+            #region libClass тест библиотеки работы скласами
+
+            //TestClass lg = new TestClass() { ID = 1, Level = 2 };
+            //Console.WriteLine("\nResult  : {0}", typeof(TestClass).GetFullFieldsAndValue(lg));
+            //Console.WriteLine("\nResult  : {0}", typeof(TestClass).GetFieldsAndValue(lg));
+            #endregion
+
+            #region Test_Logs тест логирования
+            Test_Logs test = new Test_Logs();
+            //RWDBLogs
+            //test.RWLogs_InformationToDB(); // сохранить информацию в лог БД
+            //test.RWLogs_WarningToDB(); // сохранить информацию в warning БД
+            //test.RWLogs_ErrorToDB(); // сохранить информацию в error БД
+            //test.RWLogs_CriticalToDB(); // сохранить информацию в critical БД
+            //test.RWLogs_ExceptionToDB(); // сохранить информацию в exception БД
+            //RWEventLogs
+            //test.RWLogs_InformationToEventLogs(); // сохранить информацию в лог windows
+            //test.RWLogs_WarningToEventLogs(); // сохранить warning в лог windows
+            //test.RWLogs_ErrorToEventLogs(); // сохранить error в лог windows
+            //test.RWLogs_ExceptionToEventLogs(); // сохранить exception в лог windows
+            //RWLogs_FileLogs()
+            //test.RWLogs_FileLogs(); // сохранить в файл на диске
+            //RWLogs_FileLogs()
+            //test.RWLog_WriteInformation();
+            //test.RWLog_WriteWarning();
+            //test.RWLog_WriteError();
+            //test.RWLog_WriteException();
+            #endregion
+
+            #region Test_Settings тест настроек
+            Test_Settings testSettings = new Test_Settings();
+            //RWSettings
+            //testSettings.RWSettings_GetSetting();
+            //testSettings.RWSettings_SetSetting();
+
+            #endregion
+
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
+        }
+    }
+}
