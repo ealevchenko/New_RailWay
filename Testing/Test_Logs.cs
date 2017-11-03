@@ -142,8 +142,8 @@ namespace Testing
             MLog.InitRWLogs(true, true, true, true, true, true);
             log.WriteInformation();
             log.WriteInformation(service.TransferMT);
-            log.WriteInformation(eventID.RWService_KIS_Transfer);
-            log.WriteInformation(service.TransferMT, eventID.RWService_KIS_Transfer);
+            log.WriteInformation(eventID.RailWay);
+            log.WriteInformation(service.TransferMT, eventID.RailWay);
        }
 
         public void RWLog_WriteWarning()
@@ -152,8 +152,8 @@ namespace Testing
             MLog.InitRWLogs(true, true, true, true, true, true);
             log.WriteWarning();
             log.WriteWarning(service.TransferMT);
-            log.WriteWarning(eventID.RWService_KIS_Transfer);
-            log.WriteWarning(service.TransferMT, eventID.RWService_KIS_Transfer);
+            log.WriteWarning(eventID.RailWay);
+            log.WriteWarning(service.TransferMT, eventID.RailWay);
 
         }
 
@@ -163,8 +163,8 @@ namespace Testing
             MLog.InitRWLogs(true, true, true, true, true, true);
             log.WriteError();
             log.WriteError(service.TransferMT);
-            log.WriteError(eventID.RWService_KIS_Transfer);
-            log.WriteError(service.TransferMT, eventID.RWService_KIS_Transfer);
+            log.WriteError(eventID.RailWay);
+            log.WriteError(service.TransferMT, eventID.RailWay);
 
         }
 
@@ -178,10 +178,10 @@ namespace Testing
             ex.WriteError(log);
             ex.WriteError(service.TransferMT);
             ex.WriteError(log,service.TransferMT);
-            ex.WriteError(eventID.RWService_KIS_Transfer);
-            ex.WriteError(log, eventID.RWService_KIS_Transfer);
-            ex.WriteError(service.TransferMT, eventID.RWService_KIS_Transfer);
-            ex.WriteError(log,service.TransferMT, eventID.RWService_KIS_Transfer);
+            ex.WriteError(eventID.RailWay);
+            ex.WriteError(log, eventID.RailWay);
+            ex.WriteError(service.TransferMT, eventID.RailWay);
+            ex.WriteError(log, service.TransferMT, eventID.RailWay);
         }
         #endregion
 

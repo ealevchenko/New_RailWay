@@ -31,13 +31,13 @@ namespace Testing
 
         static void Main(string[] args)
         {
-
-            #region libClass тест библиотеки работы скласами
-
-            //TestClass lg = new TestClass() { ID = 1, Level = 2 };
-            //Console.WriteLine("\nResult  : {0}", typeof(TestClass).GetFullFieldsAndValue(lg));
-            //Console.WriteLine("\nResult  : {0}", typeof(TestClass).GetFieldsAndValue(lg));
+            #region Test_RW_Reference
+            Test_RW_Reference tst_rw_ref = new Test_RW_Reference();
+            //tst_rw_ref.ReferenceCargo_Copy();
+            tst_rw_ref.ReferenceCargo_Get();
+            
             #endregion
+
 
             #region Test_Logs тест логирования
             Test_Logs test = new Test_Logs();
