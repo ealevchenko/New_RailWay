@@ -227,7 +227,7 @@ namespace MessageLog
 
         public static void WriteError(this Exception ex, string message, service service, eventID eventID, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nMessage:{0}/nException{1}",message,ex.ToString()) );
+            Console.WriteLine(String.Format("\nMessage:{0}\nException{1}",message,ex.ToString()) );
             if (elog) ex.SaveErrorToEventLogs(message, service, eventID);
             if (dblog) ex.SaveErrorToDB(message, service, eventID);
             if (flog) ex.SaveErrorToFile(message, service, eventID);
@@ -235,7 +235,7 @@ namespace MessageLog
 
         public static void WriteError(this Exception ex, service service, eventID eventID, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nException{0}", ex.ToString()));
+            Console.WriteLine(String.Format("\nException{0}", ex.ToString()));
             if (elog) ex.SaveErrorToEventLogs(service, eventID);
             if (dblog) ex.SaveErrorToDB(service, eventID);
             if (flog) ex.SaveErrorToFile(service, eventID);
@@ -243,7 +243,7 @@ namespace MessageLog
 
         public static void WriteError(this Exception ex, string message, service service, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nMessage:{0}/nException{1}", message, ex.ToString()));
+            Console.WriteLine(String.Format("\nMessage:{0}\nException{1}", message, ex.ToString()));
             if (elog) ex.SaveErrorToEventLogs(message, service);
             if (dblog) ex.SaveErrorToDB(message, service);
             if (flog) ex.SaveErrorToFile(message, service);
@@ -251,7 +251,7 @@ namespace MessageLog
 
         public static void WriteError(this Exception ex, service service, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nException{0}", ex.ToString()));
+            Console.WriteLine(String.Format("\nException{0}", ex.ToString()));
             if (elog) ex.SaveErrorToEventLogs(service);
             if (dblog) ex.SaveErrorToDB(service);
             if (flog) ex.SaveErrorToFile(service);
@@ -259,7 +259,7 @@ namespace MessageLog
 
         public static void WriteError(this Exception ex, string message, eventID eventID, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nMessage:{0}/nException{1}", message, ex.ToString()));
+            Console.WriteLine(String.Format("\nMessage:{0}\nException{1}", message, ex.ToString()));
             if (elog) ex.SaveErrorToEventLogs(message, eventID);
             if (dblog) ex.SaveErrorToDB(message, eventID);
             if (flog) ex.SaveErrorToFile(message, eventID);
@@ -267,7 +267,7 @@ namespace MessageLog
 
         public static void WriteError(this Exception ex, eventID eventID, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nException{0}", ex.ToString()));
+            Console.WriteLine(String.Format("\nException{0}", ex.ToString()));
             if (elog) ex.SaveErrorToEventLogs(eventID);
             if (dblog) ex.SaveErrorToDB(eventID);
             if (flog) ex.SaveErrorToFile(eventID);
@@ -275,7 +275,7 @@ namespace MessageLog
 
         public static void WriteError(this Exception ex, string message, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nMessage:{0}/nException{1}", message, ex.ToString()));
+            Console.WriteLine(String.Format("\nMessage:{0}\nException{1}", message, ex.ToString()));
             if (elog) ex.SaveErrorToEventLogs(message);
             if (dblog) ex.SaveErrorToDB(message);
             if (flog) ex.SaveErrorToFile(message);
@@ -283,7 +283,7 @@ namespace MessageLog
 
         public static void WriteError(this Exception ex, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nException{0}", ex.ToString()));
+            Console.WriteLine(String.Format("\nException{0}", ex.ToString()));
             if (elog) ex.SaveErrorToEventLogs();
             if (dblog) ex.SaveErrorToDB();
             if (flog) ex.SaveErrorToFile();
@@ -357,5 +357,15 @@ namespace MessageLog
 
         #endregion
 
+        /// <summary>
+        /// Возращает скорректированую ошибку eventID + error_code
+        /// </summary>
+        /// <param name="ev"></param>
+        /// <param name="error_code"></param>
+        /// <returns></returns>
+        static public int GetEventIDErrorCode(this eventID ev, int error_code)
+        {
+            return ((int)ev * (-10)) + error_code;
+        }
     }
 }
