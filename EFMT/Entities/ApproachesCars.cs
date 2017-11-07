@@ -9,6 +9,8 @@ namespace MT.Entities
     [Table("MT.ApproachesCars")]
     public partial class ApproachesCars
     {
+        public ApproachesCars() { }
+
         public int ID { get; set; }
 
         public int IDSostav { get; set; }
@@ -53,7 +55,7 @@ namespace MT.Entities
 
         public DateTime? Arrival { get; set; }
 
-        public int? ParentID { get; set; }
+        //public int? ParentID { get; set; }
 
         public virtual ApproachesSostav ApproachesSostav { get; set; }
     }

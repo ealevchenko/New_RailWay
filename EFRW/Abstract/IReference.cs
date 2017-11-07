@@ -18,7 +18,8 @@ namespace EFRW.Abstract
         ReferenceCargo GetReferenceCargo(int id);
         ReferenceCargo GetReferenceCargoOfCodeETSNG(int code_etsng);
         IQueryable<ReferenceCargo> GetReferenceCargoOfCodeETSNG(int code_etsng_start, int code_etsng_stop);
-        int GetCorectReferenceCargo(int code_etsng);
+        ReferenceCargo GetCorectReferenceCargo(int code_etsng);
+        int GetCodeCorectReferenceCargo(int code_etsng);
 
         #endregion
 

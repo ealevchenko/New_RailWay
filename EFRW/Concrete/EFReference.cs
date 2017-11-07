@@ -131,17 +131,27 @@ namespace EFRW.Concrete
             return GetReferenceCargo().Where(c => c.etsng >= code_etsng_start & c.etsng <= code_etsng_stop);
         }
         /// <summary>
-        /// Вернуть откорректированный код ETSNG
+        /// Вернуть уточненую строку ReferenceCargo
         /// </summary>
         /// <param name="code_etsng"></param>
         /// <returns></returns>
-        public int GetCorectReferenceCargo(int code_etsng)
+        public ReferenceCargo GetCorectReferenceCargo(int code_etsng)
         {
             ReferenceCargo ref_cargo = GetReferenceCargoOfCodeETSNG(code_etsng);
             if (ref_cargo == null)
             {
                 ref_cargo = GetReferenceCargoOfCodeETSNG(code_etsng * 10, (code_etsng * 10) + 9).FirstOrDefault();
             }
+            return ref_cargo;
+        }
+        /// <summary>
+        /// Вернуть откорректированный код ETSNG
+        /// </summary>
+        /// <param name="code_etsng"></param>
+        /// <returns></returns>
+        public int GetCodeCorectReferenceCargo(int code_etsng)
+        {
+            ReferenceCargo ref_cargo = GetCorectReferenceCargo(code_etsng);
             return ref_cargo != null ? ref_cargo.etsng : code_etsng;
         }
         #endregion
