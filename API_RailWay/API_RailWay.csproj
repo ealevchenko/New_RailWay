@@ -148,7 +148,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\1.cs" />
+    <Compile Include="Controllers\Example.cs" />
     <Compile Include="Controllers\ApproachesCarsController.cs" />
     <Compile Include="Controllers\ApproachesSostavController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
