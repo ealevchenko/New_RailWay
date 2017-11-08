@@ -78,7 +78,7 @@ namespace EFMT.Concrete
                         Owner = ApproachesCars.Owner,
                         NumDocArrival = ApproachesCars.NumDocArrival,
                         Arrival = ApproachesCars.Arrival,
-                        //ParentID = ApproachesCars.ParentID,
+                        ParentID = ApproachesCars.ParentID,
                         ApproachesSostav = ApproachesCars.ApproachesSostav
                     };
                     context.ApproachesCars.Add(dbEntry);
@@ -106,7 +106,7 @@ namespace EFMT.Concrete
                         dbEntry.Route = ApproachesCars.Route;
                         dbEntry.Owner = ApproachesCars.Owner;
                         dbEntry.NumDocArrival = ApproachesCars.NumDocArrival;
-                        //dbEntry.ParentID = ApproachesCars.ParentID;
+                        dbEntry.ParentID = ApproachesCars.ParentID;
                         dbEntry.ApproachesSostav = ApproachesCars.ApproachesSostav;
                     }
                 }

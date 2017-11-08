@@ -43,7 +43,7 @@ namespace API_RailWay.Controllers
                     Owner = app_car.Owner,
                     NumDocArrival = app_car.NumDocArrival,
                     Arrival = app_car.Arrival,
-                    //ParentID = app_car.ParentID,
+                    ParentID = app_car.ParentID,
                     ApproachesSostav = null
                 };
         }
@@ -92,7 +92,7 @@ namespace API_RailWay.Controllers
         public IHttpActionResult GetApproachesCarsOfSostav(int id)
         {
             IEnumerable<ApproachesCars> cars = this.rep_MT.GetApproachesCarsOfSostav(id);
-            if (cars == null)
+            if (cars == null || cars.ToList().Count() == 0)
             {
                 return NotFound();
             }
