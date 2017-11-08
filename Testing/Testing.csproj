@@ -57,6 +57,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test_Logs.cs" />
+    <Compile Include="Test_RWWebAPI.cs" />
     <Compile Include="Test_RW_Reference.cs" />
     <Compile Include="Test_Settings.cs" />
   </ItemGroup>
@@ -73,10 +74,6 @@
       <Project>{9d7a67b0-932b-40b7-8f30-696832b5088d}</Project>
       <Name>EFRW</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GetAPI\GetAPI.csproj">
-      <Project>{c9bdd88f-8648-4e79-9e90-a1941910c9f8}</Project>
-      <Name>GetAPI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Helpers\libClass\libClass.csproj">
       <Project>{38a8fe37-55f2-4357-a59d-d8c8a8755aa5}</Project>
       <Name>libClass</Name>
@@ -92,6 +89,10 @@
     <ProjectReference Include="..\RWSettings\RWSettings.csproj">
       <Project>{00d9d515-6089-4334-af39-28db22cd7d20}</Project>
       <Name>RWSettings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RWWebAPI\RWWebAPI.csproj">
+      <Project>{6f2c206c-b26c-4c3c-81ed-676d5e828f9b}</Project>
+      <Name>RWWebAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,4 @@
-﻿using GetAPI;
-using libClass;
+﻿using libClass;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +32,11 @@ namespace Testing
         static void Main(string[] args)
         {
 
-            Class1 cl = new Class1();
+            #region Test_RWWebAPI
+            Test_RWWebAPI tst_rw_api = new Test_RWWebAPI();
+            tst_rw_api.RWReference_CorrectCargo();
+            
+            #endregion
 
             #region Test_RW_Reference
             Test_RW_Reference tst_rw_ref = new Test_RW_Reference();

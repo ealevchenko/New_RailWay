@@ -13,6 +13,9 @@ namespace MessageLog
         RailWay = 0,
         // Общие модули 1000
         RWSettings_RWSetting = 1100,
+        RWWebAPI = 1200,
+        RWWebAPI_ClientWebAPI = 1210,
+        RWWebAPI_RWReference = 1211,
         //RWSettings_RWDBSetting = 1110,    
     
         //Sockets_EFSockets = 1200,
