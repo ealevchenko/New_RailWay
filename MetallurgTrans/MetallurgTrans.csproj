@@ -51,6 +51,10 @@
       <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
       <Name>MLogs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RWWebAPI\RWWebAPI.csproj">
+      <Project>{6f2c206c-b26c-4c3c-81ed-676d5e828f9b}</Project>
+      <Name>RWWebAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

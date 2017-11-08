@@ -1,6 +1,7 @@
 ﻿using EFMT.Concrete;
 using MessageLog;
 using MT.Entities;
+using RWWebAPI;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -95,6 +96,7 @@ namespace MetallurgTrans
         /// <returns></returns>
         public List<ApproachesCars> TransferTXTToListApproachesCars(string file, int id_sostav)
         {
+            RWReference api_reference = new RWReference();
             List<ApproachesCars> list = new List<ApproachesCars>();
             int count = 0;
             int error = 0;
@@ -110,6 +112,7 @@ namespace MetallurgTrans
                         string[] array = input.Split(';');
                         if (array.Count() >= 14)
                         {
+                            ReferenceCargo corect_cargo_code = api_reference.GetReferenceCargoOfCodeETSNG(int.Parse(array[3]));
                             ApproachesCars new_wag = new ApproachesCars()
                             {
                                 ID = 0,
@@ -118,7 +121,7 @@ namespace MetallurgTrans
                                 Num = !String.IsNullOrWhiteSpace(array[0]) ? int.Parse(array[0]) : -1,
                                 CountryCode = !String.IsNullOrWhiteSpace(array[1]) ? int.Parse(array[1].Substring(0, 2)) : -1, // Подрезка кода страны в фале 3 цифры переводим в 2 цифры
                                 Weight = !String.IsNullOrWhiteSpace(array[2]) ? int.Parse(array[2]) : -1,
-                                CargoCode = !String.IsNullOrWhiteSpace(array[3]) ? int.Parse(array[3]) : -1, //TODO: Добавить получение информации из справочника ref_general.GetCorectReferenceCargo(int.Parse(array[3])) : -1, // скорректируем код
+                                CargoCode = !String.IsNullOrWhiteSpace(array[3]) ? corect_cargo_code != null ? corect_cargo_code.etsng : -1 : -1, // скорректируем код
                                 TrainNumber = !String.IsNullOrWhiteSpace(array[5]) ? int.Parse(array[5]) : -1,
                                 Operation = array[6].ToString(),
                                 DateOperation = !String.IsNullOrWhiteSpace(array[7]) ? DateTime.Parse(array[7], CultureInfo.CreateSpecificCulture("ru-RU")) : DateTime.Now,
