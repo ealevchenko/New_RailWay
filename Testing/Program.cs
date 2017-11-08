@@ -1,4 +1,5 @@
-﻿using libClass;
+﻿using GetAPI;
+using libClass;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,10 +32,13 @@ namespace Testing
 
         static void Main(string[] args)
         {
+
+            Class1 cl = new Class1();
+
             #region Test_RW_Reference
             Test_RW_Reference tst_rw_ref = new Test_RW_Reference();
             //tst_rw_ref.ReferenceCargo_Copy();
-            tst_rw_ref.ReferenceCargo_Get();
+            //tst_rw_ref.ReferenceCargo_Get();
             
             #endregion
 
