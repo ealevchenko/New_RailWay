@@ -18,7 +18,7 @@ namespace Testing
         public void ReferenceCargo_Copy() {
             try
             {
-                EFReference ef_ref = new EFReference();
+                EFRW.Concrete.EFReference ef_ref = new EFRW.Concrete.EFReference();
                 GeneralReferences old = new GeneralReferences();
 
                 List<TypeCargo> list_old_type = old.GetTypeCargo().ToList();
@@ -64,7 +64,7 @@ namespace Testing
         public void ReferenceCargo_Get() {
             try
             {
-                EFReference ef_ref = new EFReference();
+                EFRW.Concrete.EFReference ef_ref = new EFRW.Concrete.EFReference();
                 foreach (EFRW.Entities.ReferenceCargo cargo in ef_ref.GetReferenceCargo().ToList()) {
                     Console.WriteLine(cargo.GetFieldsAndValue());                
                 }
