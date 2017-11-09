@@ -152,6 +152,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MTController.cs" />
     <Compile Include="Controllers\ReferenceController.cs" />
+    <Compile Include="Controllers\RWReferenceController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -196,6 +197,10 @@
     <ProjectReference Include="..\EFMT\EFMT.csproj">
       <Project>{415f94aa-63df-4538-9552-fc9a22b61636}</Project>
       <Name>EFMT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFReference\EFReference.csproj">
+      <Project>{09d0b7b9-79e7-4df8-ad4f-99df5e9083f8}</Project>
+      <Name>EFReference</Name>
     </ProjectReference>
     <ProjectReference Include="..\EFRW\EFRW.csproj">
       <Project>{9d7a67b0-932b-40b7-8f30-696832b5088d}</Project>

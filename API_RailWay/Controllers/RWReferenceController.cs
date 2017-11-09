@@ -1,6 +1,5 @@
-﻿using EFReference.Abstract;
-using EFReference.Concrete;
-using EFReference.Entities;
+﻿using EFRW.Abstract;
+using EFRW.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,29 +10,29 @@ using System.Web.Http.Description;
 
 namespace API_RailWay.Controllers
 {
-    [RoutePrefix("api/reference")]
-    public class ReferenceController : ApiController
+    [RoutePrefix("api/rw/reference")]
+    public class RWReferenceController : ApiController
     {
         IReference rep_ref;
 
         #region cargo
-        public ReferenceController()
+        public RWReferenceController()
         {
-            this.rep_ref = new EFReference.Concrete.EFReference();
+            this.rep_ref = new EFRW.Concrete.EFReference();
         }
 
-        // GET: api/reference/cargo
+        // GET: api/rw/reference/cargo
         [Route("cargo/{id:int?}")]
-        public IEnumerable<Cargo> GetCargo()
+        public IEnumerable<ReferenceCargo> GetCargo()
         {
-            return this.rep_ref.GetCargo();
+            return this.rep_ref.GetReferenceCargo();
         }
-        // GET: api/reference/cargo/id/5
+        // GET: api/rw/reference/cargo/id/5
         [Route("cargo/id/{id:int?}")]
-        [ResponseType(typeof(Cargo))]
+        [ResponseType(typeof(ReferenceCargo))]
         public IHttpActionResult GetCargo(int id)
         {
-            Cargo cargo = this.rep_ref.GetCargo(id);
+            ReferenceCargo cargo = this.rep_ref.GetReferenceCargo(id);
             if (cargo == null)
             {
                 return NotFound();
@@ -42,12 +41,12 @@ namespace API_RailWay.Controllers
             return Ok(cargo);
         }
 
-        // GET: api/reference/cargo/etsng_code/32203
-        [Route("cargo/etsng_code/{id:int}")]
-        [ResponseType(typeof(Cargo))]
+        // GET: api/rw/reference/cargo/code/32203
+        [Route("cargo/code/{id:int}")]
+        [ResponseType(typeof(ReferenceCargo))]
         public IHttpActionResult GetCargoOfCode(int id)
         {
-            Cargo cargo = this.rep_ref.GetCorrectCargo(id);
+            ReferenceCargo cargo = this.rep_ref.GetCorectReferenceCargo(id);
             if (cargo == null)
             {
                 return NotFound();

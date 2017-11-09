@@ -51,7 +51,7 @@ namespace RWWebAPI
         }
 
         public ReferenceCargo GetReferenceCargoOfCodeETSNG(int code_etsng) {
-            return GetJSONSelect<ReferenceCargo>(@"reference/cargo/code/" + code_etsng.ToString());
+            return GetJSONSelect<ReferenceCargo>(@"rw/reference/cargo/code/" + code_etsng.ToString());
         }
 
     }
