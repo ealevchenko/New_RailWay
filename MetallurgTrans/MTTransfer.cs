@@ -121,7 +121,7 @@ namespace MetallurgTrans
                                 Num = !String.IsNullOrWhiteSpace(array[0]) ? int.Parse(array[0]) : -1,
                                 CountryCode = !String.IsNullOrWhiteSpace(array[1]) ? int.Parse(array[1].Substring(0, 2)) : -1, // Подрезка кода страны в фале 3 цифры переводим в 2 цифры
                                 Weight = !String.IsNullOrWhiteSpace(array[2]) ? int.Parse(array[2]) : -1,
-                                CargoCode = !String.IsNullOrWhiteSpace(array[3]) ? corect_cargo_code != null ? corect_cargo_code.etsng : -1 : -1, // скорректируем код
+                                CargoCode = !String.IsNullOrWhiteSpace(array[3]) ? corect_cargo_code != null ? corect_cargo_code.etsng : int.Parse(array[3]) : -1, // скорректируем код
                                 TrainNumber = !String.IsNullOrWhiteSpace(array[5]) ? int.Parse(array[5]) : -1,
                                 Operation = array[6].ToString(),
                                 DateOperation = !String.IsNullOrWhiteSpace(array[7]) ? DateTime.Parse(array[7], CultureInfo.CreateSpecificCulture("ru-RU")) : DateTime.Now,
@@ -134,7 +134,8 @@ namespace MetallurgTrans
                                 Route = !String.IsNullOrWhiteSpace(array[12]) ? int.Parse(array[12]) : -1,
                                 Owner = !String.IsNullOrWhiteSpace(array[13]) ? int.Parse(array[13]) : -1,
                                 NumDocArrival = null,
-                                Arrival = null
+                                Arrival = null, 
+                                ParentID = null
                             };
                             list.Add(new_wag);
                         }
