@@ -51,6 +51,8 @@ namespace MT.Entities
 
         public DateTime? Arrival { get; set; }
 
+        public int? ParentID { get; set; }
+
         public virtual ArrivalSostav ArrivalSostav { get; set; }
     }
 }

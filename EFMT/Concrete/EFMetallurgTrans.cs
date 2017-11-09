@@ -11,11 +11,17 @@ using System.Data.SqlClient;
 
 namespace EFMT.Concrete
 {
+    public enum mtOperation : int { not = 0, coming = 1, tsp = 2 }
+
+    public enum mtConsignee : int { AMKR = 1 }
+    
     public class EFMetallurgTrans : IMT
     {
         private eventID eventID = eventID.EFMetallurgTrans;
 
         protected EFDbContext context = new EFDbContext();
+
+        #region Составы на подходах
 
         #region ApproachesCars
         public IQueryable<ApproachesCars> ApproachesCars
@@ -170,6 +176,31 @@ namespace EFMT.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Получить список вагонов по номеру с сортировкой по поступлению
+        /// </summary>
+        /// <param name="num_car"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public IQueryable<ApproachesCars> GetApproachesCarsOfNumCar(int num_car, bool order)
+        {
+            try
+            {
+                if (!order)
+                {
+                    return GetApproachesCars().Where(c => c.Num == num_car).OrderBy(c => c.ID);
+                }
+                else
+                {
+                    return GetApproachesCars().Where(c => c.Num == num_car).OrderByDescending(c => c.ID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetApproachesCarsOfNumCar(num_car={0},order={1})", num_car, order), eventID);
+                return null;
+            }
+        }
 
         #endregion
 
@@ -257,8 +288,8 @@ namespace EFMT.Concrete
             {
                 try
                 {
+                    if (DeleteApproachesCarsOfSostav(dbEntry.ID) < 0) return null; // Удалить вагоны состава  
                     context.ApproachesSostav.Remove(dbEntry);
-                    if (DeleteApproachesCarsOfSostav(dbEntry.ID) < 0) return null; // Удалить вагоны состава                    
                     context.SaveChanges();
                 }
                 catch (Exception e)
@@ -304,6 +335,325 @@ namespace EFMT.Concrete
                 return null;
             }
         }
+
         #endregion
+
+        #endregion
+
+        #region Составы на станциях УЗ КР
+
+        #region ArrivalCars
+
+        public IQueryable<ArrivalCars> ArrivalCars
+        {
+            get { return context.ArrivalCars; }
+        }
+
+        public IQueryable<ArrivalCars> GetArrivalCars()
+        {
+            try
+            {
+                return ArrivalCars;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCars()"), eventID);
+                return null;
+            }
+        }
+
+        public ArrivalCars GetArrivalCars(int id)
+        {
+            try
+            {
+                return GetArrivalCars().Where(c => c.ID == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCars(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveArrivalCars(ArrivalCars ArrivalCars)
+        {
+            ArrivalCars dbEntry;
+            try
+            {
+                if (ArrivalCars.ID == 0)
+                {
+                    dbEntry = new ArrivalCars()
+                    {
+                        ID = 0,
+                        IDSostav = ArrivalCars.IDSostav,
+                        Position = ArrivalCars.Position,
+                        Num = ArrivalCars.Num,
+                        CountryCode = ArrivalCars.CountryCode,
+                        Weight = ArrivalCars.Weight,
+                        CargoCode = ArrivalCars.CargoCode,
+                        Cargo = ArrivalCars.Cargo,
+                        StationCode = ArrivalCars.StationCode,
+                        Station = ArrivalCars.Station,
+                        Consignee = ArrivalCars.Consignee,
+                        Operation = ArrivalCars.Operation,
+                        CompositionIndex = ArrivalCars.CompositionIndex,
+                        DateOperation = ArrivalCars.DateOperation,
+                        TrainNumber = ArrivalCars.TrainNumber,
+                        NumDocArrival = ArrivalCars.NumDocArrival,
+                        Arrival = ArrivalCars.Arrival, 
+                        ParentID = ArrivalCars.ParentID, 
+                        ArrivalSostav = ArrivalCars.ArrivalSostav
+                    };
+                    context.ArrivalCars.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.ArrivalCars.Find(ArrivalCars.ID);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.IDSostav = ArrivalCars.IDSostav;
+                        dbEntry.Position = ArrivalCars.Position;
+                        dbEntry.Num = ArrivalCars.Num;
+                        dbEntry.CountryCode = ArrivalCars.CountryCode;
+                        dbEntry.Weight = ArrivalCars.Weight;
+                        dbEntry.CargoCode = ArrivalCars.CargoCode;
+                        dbEntry.Cargo = ArrivalCars.Cargo;
+                        dbEntry.StationCode = ArrivalCars.StationCode;
+                        dbEntry.Station = ArrivalCars.Station;
+                        dbEntry.Consignee = ArrivalCars.Consignee;
+                        dbEntry.Operation = ArrivalCars.Operation;
+                        dbEntry.CompositionIndex = ArrivalCars.CompositionIndex;
+                        dbEntry.DateOperation = ArrivalCars.DateOperation;
+                        dbEntry.TrainNumber = ArrivalCars.TrainNumber;
+                        dbEntry.NumDocArrival = ArrivalCars.NumDocArrival;
+                        dbEntry.Arrival = ArrivalCars.Arrival;
+                        dbEntry.ParentID = ArrivalCars.ParentID;
+                        dbEntry.ArrivalSostav = ArrivalCars.ArrivalSostav;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveArrivalCars(ArrivalCars={0})", ArrivalCars.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.ID;
+        }
+
+        public ArrivalCars DeleteArrivalCars(int id)
+        {
+            ArrivalCars dbEntry = context.ArrivalCars.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.ArrivalCars.Remove(dbEntry);
+
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteArrivalCars(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+
+        public int DeleteArrivalCarsOfSostav(int id_sostav)
+        {
+            try
+            {
+                SqlParameter IDSostav = new SqlParameter("@IDSostav", id_sostav);
+                return context.Database.ExecuteSqlCommand("DELETE FROM MT.ArrivalCars WHERE IDSostav = @IDSostav", IDSostav);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DeleteArrivalCarsOfSostav(id_sostav={0})", id_sostav), eventID);
+                return -1;
+            }
+        }
+
+        public IQueryable<ArrivalCars> GetArrivalCarsOfSostav(int id_sostav)
+        {
+            try
+            {
+                return GetArrivalCars().Where(c => c.IDSostav == id_sostav);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfSostav(id_sostav={0})", id_sostav), eventID);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Получить список вагонов по номеру с сортировкой по поступлению
+        /// </summary>
+        /// <param name="num_car"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public IQueryable<ArrivalCars> GetArrivalCarsOfNumCar(int num_car, bool order)
+        {
+            try
+            {
+                if (!order)
+                {
+                    return GetArrivalCars().Where(c => c.Num == num_car).OrderBy(c => c.ID);
+                }
+                else
+                {
+                    return GetArrivalCars().Where(c => c.Num == num_car).OrderByDescending(c => c.ID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfNumCar(num_car={0},order={1})", num_car, order), eventID);
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region ArrivalSostav
+
+        public IQueryable<ArrivalSostav> ArrivalSostav
+        {
+            get { return context.ArrivalSostav; }
+        }
+
+        public IQueryable<ArrivalSostav> GetArrivalSostav()
+        {
+            try
+            {
+                return ArrivalSostav;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalSostav()"), eventID);
+                return null;
+            }
+        }
+
+        public ArrivalSostav GetArrivalSostav(int id)
+        {
+            try
+            {
+                return GetArrivalSostav().Where(c => c.ID == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalSostav(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveArrivalSostav(ArrivalSostav ArrivalSostav)
+        {
+            ArrivalSostav dbEntry;
+            try
+            {
+                if (ArrivalSostav.ID == 0)
+                {
+                    dbEntry = new ArrivalSostav()
+                    {
+                        ID = 0,
+                        IDArrival = ArrivalSostav.IDArrival,
+                        FileName = ArrivalSostav.FileName,
+                        CompositionIndex = ArrivalSostav.CompositionIndex,
+                        DateTime = ArrivalSostav.DateTime,
+                        Operation = ArrivalSostav.Operation,
+                        Create = ArrivalSostav.Create,
+                        Close = ArrivalSostav.Close,
+                        Arrival = ArrivalSostav.Arrival,
+                        ParentID = ArrivalSostav.ParentID,
+                        ArrivalCars = ArrivalSostav.ArrivalCars
+                    };
+                    context.ArrivalSostav.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.ArrivalSostav.Find(ArrivalSostav.ID);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.IDArrival = ArrivalSostav.IDArrival;
+                        dbEntry.FileName = ArrivalSostav.FileName;
+                        dbEntry.CompositionIndex = ArrivalSostav.CompositionIndex;
+                        dbEntry.DateTime = ArrivalSostav.DateTime;
+                        dbEntry.Operation = ArrivalSostav.Operation;
+                        dbEntry.Create = ArrivalSostav.Create;
+                        dbEntry.Close = ArrivalSostav.Close;
+                        dbEntry.Arrival = ArrivalSostav.Arrival;
+                        dbEntry.ParentID = ArrivalSostav.ParentID;
+                        dbEntry.ArrivalCars = ArrivalSostav.ArrivalCars;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveArrivalSostav(ArrivalSostav={0})", ArrivalSostav.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.ID;
+        }
+
+        public ArrivalSostav DeleteArrivalSostav(int id)
+        {
+            ArrivalSostav dbEntry = context.ArrivalSostav.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    if (DeleteArrivalCarsOfSostav(dbEntry.ID) < 0) return null; // Удалить вагоны состава
+                    context.ArrivalSostav.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteArrivalSostav(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+
+        public ArrivalSostav GetArrivalSostavOfFile(string file)
+        {
+            try
+            {
+                return GetArrivalSostav().Where(s => s.FileName == file).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalSostavOfFile(file={0})", file), eventID);
+                return null;
+            }
+        }
+
+        public ArrivalSostav GetNoCloseArrivalSostav(string index, DateTime date)
+        {
+            try
+            {
+                return GetArrivalSostav().Where(s => s.CompositionIndex == index & s.Close == null & s.Arrival == null & s.DateTime <= date).OrderByDescending(s => s.DateTime).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNoCloseArrivalSostav(index={0}, date={1})", index, date), eventID); 
+                return null;
+            }
+        }
+
+        public int GetNextIDArrival()
+        {
+            int? id = context.Database.SqlQuery<int?>("SELECT max([IDArrival]) FROM [MT].[ArrivalSostav]").FirstOrDefault();
+            return id != null ? (int)++id : 0;
+        }
+
+        #endregion
+
+        #endregion
+
     }
 }
