@@ -35,20 +35,21 @@ namespace Testing
             #region Test_RWWebAPI
             Test_RWWebAPI tst_rw_api = new Test_RWWebAPI();
             //tst_rw_api.RWReference_CorrectCargo();
-            
+            //tst_rw_api.Reference_CorrectCargo(); //
             #endregion
 
             #region Test_MetallurgTrans
             Test_MetallurgTrans tst_tr_app = new Test_MetallurgTrans();
             //tst_tr_app.TransferApproaches();
-            //tst_tr_app.TransferArrival();
+            tst_tr_app.TransferArrival();
+            //tst_tr_app.EFMetallurgTrans_Consignee(); //
             #endregion
 
             #region Test_Reference
             Test_Reference tst_ref = new Test_Reference();
             //tst_ref.Cargo_Copy(); // Перенос справочника ЕТСНГ
-            tst_ref.GetCorrectCargo();// Проверка корректного кода етснг
-            
+            //tst_ref.GetCorrectCargo();// Проверка корректного кода етснг
+
             #endregion
 
             #region Test_RW_Reference

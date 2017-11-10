@@ -87,5 +87,13 @@ namespace EFMT.Abstract
         //bool IsConsignee(int Code, mtConsignee type);
         //int[] GetConsigneeToCodes(mtConsignee tmtc);
         #endregion
+
+        #region Грузополучатели
+        IQueryable<Consignee> Consignee { get; }
+        IQueryable<Consignee> GetConsignee();
+        Consignee GetConsignee(int code);
+        int SaveConsignee(Consignee Consignee);
+        Consignee DeleteConsignee(int code);
+        #endregion
     }
 }

@@ -655,5 +655,115 @@ namespace EFMT.Concrete
 
         #endregion
 
+        #region Грузополучатели
+
+        public IQueryable<Consignee> Consignee
+        {
+            get { return context.Consignee; }
+        }
+
+        public IQueryable<Consignee> GetConsignee()
+        {
+            try
+            {
+                return Consignee;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetConsignee()"), eventID);
+                return null;
+            }
+        }
+
+        public Consignee GetConsignee(int code)
+        {
+            try
+            {
+                return GetConsignee().Where(c => c.code == code).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetConsignee(code={0})", code), eventID);
+                return null;
+            }
+        }
+
+        public int SaveConsignee(Consignee Consignee)
+        {
+            Consignee dbEntry;
+            try
+            {
+                dbEntry = context.Consignee.Find(Consignee.code);
+
+                if (dbEntry == null)
+                {
+                    dbEntry = new Consignee()
+                    {
+                        code = Consignee.code,
+                        description = Consignee.description,
+                        consignee1 = Consignee.consignee1,
+                        send = Consignee.send
+                    };
+                    context.Consignee.Add(dbEntry);
+                }
+                else
+                {
+                        dbEntry.description = Consignee.description;
+                        dbEntry.consignee1 = Consignee.consignee1;
+                        dbEntry.send = Consignee.send;
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveConsignee(Consignee={0})", Consignee.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.code;
+        }
+
+        public Consignee DeleteConsignee(int code)
+        {
+            Consignee dbEntry = context.Consignee.Find(code);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.Consignee.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteConsignee(code={0})", code), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        /// <summary>
+        /// Получить список кодов грузополучателей основных или досылочных
+        /// </summary>
+        /// <param name="send"></param>
+        /// <returns></returns>
+        public IQueryable<Consignee> GetConsignee(bool send, mtConsignee Consignee)
+        {
+            try
+            {
+                return GetConsignee().Where(c=>c.send == send & c.consignee1 == (int)Consignee);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetConsignee(send={0})", send), eventID);
+                return null;
+            }
+        }
+
+        public bool IsConsigneeSend(bool send, int code, mtConsignee Consignee) {
+            Consignee consignee = GetConsignee().Where(c => c.send == send & c.code == code & c.consignee1 == (int)Consignee).FirstOrDefault();
+            return consignee != null ? true : false;
+        }
+
+        #endregion
+
     }
 }

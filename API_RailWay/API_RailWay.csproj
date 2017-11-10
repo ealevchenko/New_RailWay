@@ -152,6 +152,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MTController.cs" />
     <Compile Include="Controllers\ReferenceController.cs" />
+    <Compile Include="Controllers\RWEventController.cs" />
     <Compile Include="Controllers\RWReferenceController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">

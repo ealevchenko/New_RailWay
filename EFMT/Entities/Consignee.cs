@@ -11,13 +11,15 @@ namespace MT.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Code { get; set; }
+        public int code { get; set; }
 
         [Required]
         [StringLength(200)]
-        public string CodeDescription { get; set; }
+        public string description { get; set; }
 
-        [Column("Consignee")]
-        public int Consignee1 { get; set; }
+        [Column("consignee")]
+        public int consignee1 { get; set; }
+
+        public bool send { get; set; }
     }
 }

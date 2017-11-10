@@ -16,5 +16,12 @@ namespace Testing
             ReferenceCargo new_rc = rwr.GetReferenceCargoOfCodeETSNG(32203);
             Console.WriteLine("cargo = {0}, corect cargo = {1}",32203,new_rc.etsng);
         }
+
+        public void Reference_CorrectCargo() {
+            Reference r = new Reference();
+            Cargo new_rc = r.GetCargoOfCodeETSNG(32203);
+            Console.WriteLine("cargo = {0}, corect cargo = {1}", 32203, new_rc.code_etsng);
+        }
+
     }
 }

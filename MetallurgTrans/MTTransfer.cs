@@ -79,7 +79,7 @@ namespace MetallurgTrans
         public bool DeleteFile { get { return this.delete_file; } set { this.delete_file = value; } }
         private int day_range_approaches_cars = 30;
         public int DayRangeApproachesCars { get { return this.day_range_approaches_cars; } set { this.day_range_approaches_cars = value; } }
-        private int day_range_arrival_cars = 30;
+        private int day_range_arrival_cars = 10;
         public int DayRangeArrivalCars { get { return this.day_range_arrival_cars; } set { this.day_range_arrival_cars = value; } }
 
 
@@ -127,7 +127,6 @@ namespace MetallurgTrans
         /// <returns></returns>
         public List<ApproachesCars> TransferTXTToListApproachesCars(string file, int id_sostav)
         {
-            RWReference api_reference = new RWReference();
             List<ApproachesCars> list = new List<ApproachesCars>();
             int count = 0;
             int error = 0;
@@ -143,7 +142,13 @@ namespace MetallurgTrans
                         string[] array = input.Split(';');
                         if (array.Count() >= 14)
                         {
-                            ReferenceCargo corect_cargo_code = api_reference.GetReferenceCargoOfCodeETSNG(!String.IsNullOrWhiteSpace(array[3]) ? int.Parse(array[3]): 0);
+                            Reference api_reference = new Reference();
+                            int code_cargo = -1;
+                            if (!String.IsNullOrWhiteSpace(array[3]))
+                            {
+                                Cargo corect_cargo_code = api_reference.GetCargoOfCodeETSNG(int.Parse(array[3]));
+                                code_cargo = corect_cargo_code != null ? corect_cargo_code.code_etsng : int.Parse(array[3]);
+                            }
                             ApproachesCars new_wag = new ApproachesCars()
                             {
                                 ID = 0,
@@ -152,7 +157,7 @@ namespace MetallurgTrans
                                 Num = !String.IsNullOrWhiteSpace(array[0]) ? int.Parse(array[0]) : -1,
                                 CountryCode = !String.IsNullOrWhiteSpace(array[1]) ? int.Parse(array[1].Substring(0, 2)) : -1, // Подрезка кода страны в фале 3 цифры переводим в 2 цифры
                                 Weight = !String.IsNullOrWhiteSpace(array[2]) ? int.Parse(array[2]) : -1,
-                                CargoCode = !String.IsNullOrWhiteSpace(array[3]) ? corect_cargo_code != null ? corect_cargo_code.etsng : 0 : -1, // скорректируем код
+                                CargoCode = code_cargo, // скорректируем код
                                 TrainNumber = !String.IsNullOrWhiteSpace(array[5]) ? int.Parse(array[5]) : -1,
                                 Operation = array[6].ToString(),
                                 DateOperation = !String.IsNullOrWhiteSpace(array[7]) ? DateTime.Parse(array[7], CultureInfo.CreateSpecificCulture("ru-RU")) : DateTime.Now,
@@ -325,6 +330,7 @@ namespace MetallurgTrans
             {
                 try
                 {
+                    Console.WriteLine("Переносим файл {0}", fs.File);
                     // защита от записи повторов
                     FileInfo fi = new FileInfo(fs.File);
                     ApproachesSostav exs_sostav = efmt.GetApproachesSostavOfFile(fi.Name);
@@ -423,14 +429,21 @@ namespace MetallurgTrans
 
             if (old_car.CargoCode == car.CargoCode)
             {
-                if (old_car.DateOperation.Date.AddDays(day_range) > car.DateOperation)
-                {
+                if (old_car.CompositionIndex == car.CompositionIndex |
+                        (old_car.CompositionIndex != car.CompositionIndex &
+                        efmt.IsConsigneeSend(false, old_car.Consignee, mtConsignee.AMKR) & 
+                        efmt.IsConsigneeSend(true, car.Consignee, mtConsignee.AMKR) & 
+                        car.Operation == "ПРИБ" &
+                        old_car.DateOperation.Date.AddDays(day_range) > car.DateOperation)
+                    )
+                { // Продолжаем цепочку вагонов если равны CompositionIndex или (CompositionIndex не равны но следующий код досылки и входит в диапазон времени)
                     parentid = old_car.ID;
-                } // больше допустимого интервала
+                    old_car.NumDocArrival = 0;
+                    old_car.Arrival = car.DateOperation;
+                }// 
             } // грузы в вагонах разные
             // закрываем старый вагон
-            old_car.NumDocArrival = 0;
-            old_car.Arrival = car.DateOperation;
+
             efmt.SaveArrivalCars(old_car); // сохранить изменение
             return parentid;
         }
@@ -472,13 +485,17 @@ namespace MetallurgTrans
             int error = 0;
             try
             {
-                RWReference api_reference = new RWReference();
+                Reference api_reference = new Reference();
                 XDocument doc = XDocument.Load(file);
                 foreach (XElement element in doc.Element("NewDataSet").Elements("Table"))
                 {
                     try
                     {
-                        ReferenceCargo corect_cargo_code = api_reference.GetReferenceCargoOfCodeETSNG(!String.IsNullOrWhiteSpace((string)element.Element("IDCargo")) ? (int)element.Element("IDCargo"): 0);
+                        int code_cargo = -1;
+                        if (!String.IsNullOrWhiteSpace((string)element.Element("IDCargo"))) {
+                            Cargo corect_cargo_code = api_reference.GetCargoOfCodeETSNG((int)element.Element("IDCargo"));
+                            code_cargo = corect_cargo_code != null ? corect_cargo_code.code_etsng : (int)element.Element("IDCargo");
+                        }
                         ArrivalCars mtarr = new ArrivalCars()
                         {
                             ID = 0,
@@ -488,7 +505,7 @@ namespace MetallurgTrans
                             CountryCode = !String.IsNullOrWhiteSpace((string)element.Element("CountryCode"))
                              ? ((string)element.Element("CountryCode")).Length >= 2 ? int.Parse(((string)element.Element("CountryCode")).Substring(0, 2)) : (int)element.Element("CountryCode") : -1, // Подрезка кода страны в фале 3 цифры переводим в 2 цифры 
                             Weight = !String.IsNullOrWhiteSpace((string)element.Element("Weight")) ? (int)element.Element("Weight") : -1,
-                            CargoCode = !String.IsNullOrWhiteSpace((string)element.Element("IDCargo")) ? corect_cargo_code != null ? corect_cargo_code.etsng : 0 : -1,
+                            CargoCode = code_cargo,
                             Cargo = !String.IsNullOrWhiteSpace((string)element.Element("Cargo")) ? (string)element.Element("Cargo") : "?",
                             StationCode = !String.IsNullOrWhiteSpace((string)element.Element("IDStation")) ? (int)element.Element("IDStation") : -1,
                             Station = !String.IsNullOrWhiteSpace((string)element.Element("Station")) ? (string)element.Element("Station") : "?",

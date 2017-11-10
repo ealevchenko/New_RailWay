@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EFMetallurgTrans.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test_Logs.cs" />
@@ -71,6 +72,10 @@
     <ProjectReference Include="..\..\Project RailWay\EFRailWay\EFRailWay.csproj">
       <Project>{0824a22b-c33f-48b2-840f-86b2ea252a42}</Project>
       <Name>EFRailWay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFMT\EFMT.csproj">
+      <Project>{415f94aa-63df-4538-9552-fc9a22b61636}</Project>
+      <Name>EFMT</Name>
     </ProjectReference>
     <ProjectReference Include="..\EFReference\EFReference.csproj">
       <Project>{09d0b7b9-79e7-4df8-ad4f-99df5e9083f8}</Project>
