@@ -44,7 +44,15 @@ namespace EFReference.Concrete
         /// <returns></returns>
         public Cargo GetCargo(int id)
         {
-            return GetCargo().Where(c => c.id == id).FirstOrDefault();
+            try
+            {
+                return GetCargo().Where(c => c.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCargo(id={0})", id), eventID);
+                return null;
+            }
         }
 
         public int SaveCargo(Cargo Cargo)
@@ -148,6 +156,124 @@ namespace EFReference.Concrete
             Cargo ref_cargo = GetCorrectCargo(code_etsng);
             return ref_cargo != null ? ref_cargo.code_etsng : code_etsng;
         }
+        #endregion
+
+        #region Stations
+
+        public IQueryable<Stations> Stations
+        {
+            get { return context.Stations; }
+        }
+
+        public IQueryable<Stations> GetStations()
+        {
+            try
+            {
+                return Stations;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GeStations()"), eventID);
+                return null;
+            }
+        }
+
+        public Stations GetStations(int id)
+        {
+            try
+            {
+                return GetStations().Where(c => c.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GeStations(id={0})",id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveStations(Stations Stations)
+        {
+            Stations dbEntry;
+            try
+            {
+                if (Stations.id == 0)
+                {
+                    dbEntry = new Stations()
+                    {
+                        id = 0,
+                        code = Stations.code,
+                        code_cs = Stations.code_cs,
+                        station = Stations.station,
+                        id_ir = Stations.id_ir,
+                        InternalRailroad = Stations.InternalRailroad
+                    };
+                    context.Stations.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.Stations.Find(Stations.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.code = Stations.code;
+                        dbEntry.code_cs = Stations.code_cs;
+                        dbEntry.station = Stations.station;
+                        dbEntry.id_ir = Stations.id_ir;
+                        dbEntry.InternalRailroad = Stations.InternalRailroad;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveStations(Stations={0})", Stations.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public Stations DeleteStations(int id)
+        {
+            Stations dbEntry = context.Stations.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.Stations.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteStations(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+
+        public Stations GetStationsOfCode(int code) {
+            try
+            {
+                return GetStations().Where(c => c.code == code).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStationsOfCode(code={0})", code), eventID);
+                return null;
+            }
+        }
+
+        public Stations GetStationsOfCodeCS(int code_cs) {
+            try
+            {
+                return GetStations().Where(c => c.code_cs == code_cs).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStationsOfCode(code_cs={0})", code_cs), eventID);
+                return null;
+            }
+        }
+
         #endregion
     }
 }

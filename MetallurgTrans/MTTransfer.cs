@@ -433,7 +433,7 @@ namespace MetallurgTrans
                         (old_car.CompositionIndex != car.CompositionIndex &
                         efmt.IsConsigneeSend(false, old_car.Consignee, mtConsignee.AMKR) & 
                         efmt.IsConsigneeSend(true, car.Consignee, mtConsignee.AMKR) & 
-                        car.Operation == "ПРИБ" &
+                        //car.Operation == "ПРИБ" &
                         old_car.DateOperation.Date.AddDays(day_range) > car.DateOperation)
                     )
                 { // Продолжаем цепочку вагонов если равны CompositionIndex или (CompositionIndex не равны но следующий код досылки и входит в диапазон времени)

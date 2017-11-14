@@ -16,12 +16,12 @@ namespace API_RailWay.Controllers
     {
         IReference rep_ref;
 
-        #region cargo
         public ReferenceController()
         {
             this.rep_ref = new EFReference.Concrete.EFReference();
-        }
-
+        }        
+        
+        #region cargo
         // GET: api/reference/cargo
         [Route("cargo/{id:int?}")]
         public IEnumerable<Cargo> GetCargo()
@@ -57,5 +57,56 @@ namespace API_RailWay.Controllers
         }
         #endregion
 
+        #region Stations
+
+        protected Stations CreateStations(Stations stations)
+        {
+            return new Stations()
+            {
+                id = stations.id,
+                code = stations.code,
+                code_cs = stations.code_cs,
+                station = stations.station,
+                id_ir = stations.id_ir,
+                InternalRailroad = null,
+            };
+        }
+
+        // GET: api/reference/stations
+        [Route("stations/{id:int?}")]
+        [ResponseType(typeof(Stations))]
+        public IEnumerable<Stations> GetStations()
+        {
+            List<Stations> new_station = new List<Stations>();
+            this.rep_ref.GetStations().ToList().ForEach(c => new_station.Add(CreateStations(c)));
+            return new_station;
+        }
+        // GET: api/reference/stations/id/5
+        [Route("stations/id/{id:int?}")]
+        [ResponseType(typeof(Stations))]
+        public IHttpActionResult GetStations(int id)
+        {
+            Stations stations = this.rep_ref.GetStations(id);
+            if (stations == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(CreateStations(stations));
+        }
+
+        // GET: api/reference/stations/code/46700
+        [Route("stations/code/{id:int}")]
+        [ResponseType(typeof(Stations))]
+        public IHttpActionResult GetStationsOfCode(int id)
+        {
+            Stations stations = this.rep_ref.GetStationsOfCode(id);
+            if (stations == null)
+            {
+                return NotFound();
+            }
+            return Ok(CreateStations(stations));
+        }
+        #endregion
     }
 }

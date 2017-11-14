@@ -54,6 +54,10 @@
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFReference.cs" />
     <Compile Include="Entities\Cargo.cs" />
+    <Compile Include="Entities\Countrys.cs" />
+    <Compile Include="Entities\InternalRailroad.cs" />
+    <Compile Include="Entities\States.cs" />
+    <Compile Include="Entities\Stations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
