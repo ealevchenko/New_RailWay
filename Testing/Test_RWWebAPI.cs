@@ -23,5 +23,11 @@ namespace Testing
             Console.WriteLine("cargo = {0}, corect cargo = {1}", 32203, new_rc.code_etsng);
         }
 
+        public void Reference_StationsOfCode()
+        {
+            Reference r = new Reference();
+            Stations stat = r.GetStationsOfCode(46700);
+            Console.WriteLine("Stations = {0}, Stations = {1}", 46700, stat.code_cs);
+        }
     }
 }

@@ -36,12 +36,13 @@ namespace Testing
             Test_RWWebAPI tst_rw_api = new Test_RWWebAPI();
             //tst_rw_api.RWReference_CorrectCargo();
             //tst_rw_api.Reference_CorrectCargo(); //
+            tst_rw_api.Reference_StationsOfCode();// Получить код Кривой рог главный
             #endregion
 
             #region Test_MetallurgTrans
             Test_MetallurgTrans tst_tr_app = new Test_MetallurgTrans();
             //tst_tr_app.TransferApproaches();
-            tst_tr_app.TransferArrival();
+            //tst_tr_app.TransferArrival();
             //tst_tr_app.EFMetallurgTrans_Consignee(); //
             #endregion
 

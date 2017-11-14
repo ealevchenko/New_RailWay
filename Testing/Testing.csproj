@@ -69,10 +69,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Project RailWay\EFRailWay\EFRailWay.csproj">
-      <Project>{0824a22b-c33f-48b2-840f-86b2ea252a42}</Project>
-      <Name>EFRailWay</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EFMT\EFMT.csproj">
       <Project>{415f94aa-63df-4538-9552-fc9a22b61636}</Project>
       <Name>EFMT</Name>
