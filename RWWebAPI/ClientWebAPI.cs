@@ -70,17 +70,20 @@ namespace WebAPI
                         }
                         catch (Exception e)
                         {
+                            e.WriteError(String.Format("Ошибка создания StreamReader ответа, команда {0}, метод {1}, accept {2}",api_comand,metod,accept),eventID);
                             return null;
                         }
                     }
                 }
                 catch (Exception e)
                 {
+                    e.WriteError(String.Format("Ошибка получения ответа WebResponse, команда {0}, метод {1}, accept {2}", api_comand, metod, accept), eventID);
                     return null;
                 }
             }
             catch (Exception e)
             {
+                e.WriteErrorMethod(String.Format("Ошибка выполнения метода Select(api_comand={0}, metod={1}, accept={2}", api_comand, metod, accept), eventID);
                 return null;
             }
         }
