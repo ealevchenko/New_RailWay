@@ -70,6 +70,8 @@ namespace EFMT.Abstract
         //IQueryable<ArrivalSostav> GetArrivalSostavOfIndex(string index, bool start);
         ArrivalSostav GetArrivalSostavOfFile(string file);
         ArrivalSostav GetNoCloseArrivalSostav(string index, DateTime date);
+        IQueryable<ArrivalSostav> GetArrivalSostavOfIDArrival(int id_arrival, bool order);
+        ArrivalSostav GetFirstArrivalSostavOfIDArrival(int id_arrival);
         //int SetArrivalCars(int doc, int num, DateTime dt, int day);
         //IQueryable<ArrivalSostav> GetStartArrivalSostav();
         //IQueryable<ArrivalSostav> GetStartArrivalSostav(DateTime start, DateTime stop);

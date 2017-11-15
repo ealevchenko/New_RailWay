@@ -9,13 +9,18 @@ namespace MessageLog
     public enum eventID : int
     {
         Null = -1,
-
         RailWay = 0,
-        // Общие модули 1000
-        RWSettings_RWSetting = 1100,
-        RWWebAPI = 1200,
-        RWWebAPI_ClientWebAPI = 1210,
-        RWWebAPI_RWReference = 1211,
+
+        #region Вспомогательные общие модуля 1000
+
+        RWSettings_RWSetting = 1100, // Библиотека доступа к настройкам сервисов БД, *.config файлы
+
+        RWWebAPI = 1200,                // Библиотеки получения данных с WebApi RailWay
+        RWWebAPI_ClientWebAPI = 1201,   // Библиотека клиент WebApi RailWay
+        RWWebAPI_RWReference = 1202,    // Библиотека получения данных справочников ситемы RailWay
+        RWWebAPI_Reference = 1203,      // Библиотека получения данных общих справочников железных дорог
+        #endregion
+
         //RWSettings_RWDBSetting = 1110,    
     
         //Sockets_EFSockets = 1200,
@@ -28,16 +33,41 @@ namespace MessageLog
         //RWService_KIS_Transfer = 3000, // new
         //RWService_RailWay = 4000, // new
 
-        EFMetallurgTrans = 2100, // Библиотека доступа к данным БД MT
-        //EFMetallurgTrans_EFMTApproaches = 2110,
-        //EFMetallurgTrans_EFMTArrival = 2120,
+        #region Служба МеталлургТранс 2000
 
-        MetallurgTrans = 3000, // Библиотека сервисов обработки данных МеталлургТранс
-        MetallurgTrans_MTTransfer = 3100, // Модуль переноса данных МеталлургТранс
+        EFMetallurgTrans = 2100,            // Библиотека доступа к данным БД MT
 
-        EFRW = 4000, // Библиотека доступа к данным БД RailWay
-        EFRW_EFReference = 4100, // Модуль доступа к БД справочников системы RailWay 
+        MetallurgTrans = 2200,              // Библиотека сервисов обработки данных МеталлургТранс
+        MetallurgTrans_MTTransfer = 2201,   // Модуль переноса данных МеталлургТранс
 
-        EFReference = 5000, // Библиотека доступа к данным обшим справочникам ЖД
+        #endregion
+
+        #region Служба RailCars 3000
+        EFRailCars = 3100,                  // Библиотека доступа к данным БД системы RailCars
+        RCReference = 3200,                 // Библиотека доступа к справочникам системы RailCars
+        #endregion
+
+        #region Служба RailWay 4000
+
+        EFRW = 4100,                        // Библиотека доступа к данным БД RailWay
+        EFRW_EFReference = 4101,            // Модуль доступа к БД справочников системы RailWay 
+        #endregion
+
+        #region Служба общей справочной системы 5000
+        EFReference = 5100,                 // Библиотека доступа к данным обшим справочникам ЖД
+
+        #endregion
+
+        #region Служба системы КИС 6000
+
+        EFWagons = 6100,                        // Библиотека доступа к данным БД системы КИС
+        #endregion
+
+        #region Модуля согласования старой ситемы Railcars c новой Railway 10000
+        OLDVersion = 10000,                 // Библиотеки старой системы RailCars
+        OLDVersion_TRailCars = 10100,       // Библиотека переноса вагонов в старую систему RailCars
+        #endregion
+
+
     }
 }

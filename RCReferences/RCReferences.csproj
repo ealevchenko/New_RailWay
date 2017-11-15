@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A1F50999-31D4-4793-A92F-4D0F436922CB}</ProjectGuid>
+    <ProjectGuid>{F36E6439-4C3E-423D-B636-01211BD018D7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TransferRailCars</RootNamespace>
-    <AssemblyName>TransferRailCars</AssemblyName>
+    <RootNamespace>RCReference</RootNamespace>
+    <AssemblyName>RCReference</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,13 +39,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RCReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TRailCars.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EFMT\EFMT.csproj">
-      <Project>{415f94aa-63df-4538-9552-fc9a22b61636}</Project>
-      <Name>EFMT</Name>
+    <ProjectReference Include="..\EFRC\EFRC.csproj">
+      <Project>{89a9bc62-6912-4df8-a7f6-1c9a4beac8dd}</Project>
+      <Name>EFRC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MLogs\MLogs.csproj">
+      <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
+      <Name>MLogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RWWebAPI\RWWebAPI.csproj">
+      <Project>{6f2c206c-b26c-4c3c-81ed-676d5e828f9b}</Project>
+      <Name>RWWebAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

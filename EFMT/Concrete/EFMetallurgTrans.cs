@@ -644,6 +644,49 @@ namespace EFMT.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Получить список составов пренадлежащих указанному коду прибытия с сортировкой
+        /// </summary>
+        /// <param name="id_arrival"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public IQueryable<ArrivalSostav> GetArrivalSostavOfIDArrival(int id_arrival, bool order)
+        {
+            try
+            {
+                if (!order)
+                {
+                    return GetArrivalSostav().Where(c => c.IDArrival == id_arrival).OrderBy(c => c.ID);
+                }
+                else
+                {
+                    return GetArrivalSostav().Where(c => c.IDArrival == id_arrival).OrderByDescending(c => c.ID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalSostavOfIDArrival(id_arrival={0}, order={1})", id_arrival, order), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить первую строку состава пренадлежащему указанному коду прибытия.
+        /// </summary>
+        /// <param name="id_arrival"></param>
+        /// <returns></returns>
+        public ArrivalSostav GetFirstArrivalSostavOfIDArrival(int id_arrival)
+        {
+            try
+            {
+                return GetArrivalSostav().Where(c => c.IDArrival == id_arrival & c.ParentID == null).FirstOrDefault();
+
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetFirstArrivalSostavOfIDArrival(id_arrival={0})", id_arrival), eventID);
+                return null;
+            }
+        }
 
         public int GetNextIDArrival()
         {
@@ -753,7 +796,7 @@ namespace EFMT.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetConsignee(send={0})", send), eventID);
+                e.WriteErrorMethod(String.Format("GetConsignee(send={0}, Consignee={1})", send, Consignee), eventID);
                 return null;
             }
         }
@@ -761,6 +804,26 @@ namespace EFMT.Concrete
         public bool IsConsigneeSend(bool send, int code, mtConsignee Consignee) {
             Consignee consignee = GetConsignee().Where(c => c.send == send & c.code == code & c.consignee1 == (int)Consignee).FirstOrDefault();
             return consignee != null ? true : false;
+        }
+        /// <summary>
+        /// Получить список кодов по указанному грузополучателю
+        /// </summary>
+        /// <param name="Consignee"></param>
+        /// <returns></returns>
+        public int[] GetListCodeConsigneeOfConsignee(mtConsignee Consignee)
+        {
+            try
+            {
+                List<int> codes = new List<int>();
+                GetConsignee().Where(c => c.consignee1 == (int)Consignee).ToList().ForEach(c => codes.Add(c.code));
+                return codes.ToArray();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetListCodeConsigneeOfConsignee(Consignee={0})", Consignee), eventID);
+                return null;
+            }
+
         }
 
         #endregion

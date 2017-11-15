@@ -66,7 +66,7 @@ namespace RWWebAPI
     
     public class Reference : ClientWebAPI
     {
-        private eventID eventID = eventID.RWWebAPI_RWReference;
+        private eventID eventID = eventID.RWWebAPI_Reference;
 
         public Reference():base(){
         

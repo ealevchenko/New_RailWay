@@ -36,7 +36,7 @@ namespace Testing
             Test_RWWebAPI tst_rw_api = new Test_RWWebAPI();
             //tst_rw_api.RWReference_CorrectCargo();
             //tst_rw_api.Reference_CorrectCargo(); //
-            tst_rw_api.Reference_StationsOfCode();// Получить код Кривой рог главный
+            //tst_rw_api.Reference_StationsOfCode();// Получить код Кривой рог главный
             #endregion
 
             #region Test_MetallurgTrans
@@ -60,6 +60,14 @@ namespace Testing
             
             #endregion
 
+            #region Test_Wagons
+            Test_Wagons tst_wag = new Test_Wagons();
+            //tst_wag.Test_KometaContent_KometaVagonSob(); // все данные KometaVagonSob
+            tst_wag.Test_KometaContent_KometaVagonSob(68823137); // все данные KometaVagonSob
+            //tst_wag.Test_KometaContent_KometaVagonSob(68823137, DateTime.Now); // все данные KometaVagonSob
+            //tst_rw_ref.ReferenceCargo_Get();
+            
+            #endregion
 
             #region Test_Logs тест логирования
             Test_Logs test = new Test_Logs();
