@@ -14,7 +14,7 @@ namespace RWWebAPI
             return list.Contains(source);
         }
 
-        public static DateTime? DateConversion(this string date)
+        public static DateTime? DateNullConversion(this string date)
         {
             if (String.IsNullOrWhiteSpace(date)) return null;
             try
@@ -26,5 +26,12 @@ namespace RWWebAPI
                 return null;
             }
         }
+
+        public static DateTime DateConversion(this string date)
+        {
+            DateTime? new_date = date.DateNullConversion();
+            return new_date != null ? (DateTime)new_date : new DateTime();
+        }
+
     }
 }
