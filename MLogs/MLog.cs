@@ -69,6 +69,7 @@ namespace MessageLog
             if (elog) message.SaveInformationToEventLogs(service, eventID);
             if (dblog) message.SaveInformationToDB(service, eventID);
             if (flog) message.SaveInformationToFile(service, eventID);
+            Console.WriteLine(String.Format("\nservice: {0}\neventID: {1}\nInformation: {2}", service, eventID, message));
         }
 
         public static void WriteInformation(this string message, service service, bool elog, bool dblog, bool flog)
@@ -76,6 +77,7 @@ namespace MessageLog
             if (elog) message.SaveInformationToEventLogs(service);
             if (dblog) message.SaveInformationToDB(service);
             if (flog) message.SaveInformationToFile(service);
+            Console.WriteLine(String.Format("\nservice: {0}\nInformation: {1}", service, message));
         }
 
         public static void WriteInformation(this string message, eventID eventID, bool elog, bool dblog, bool flog)
@@ -83,6 +85,7 @@ namespace MessageLog
             if (elog) message.SaveInformationToEventLogs(eventID);
             if (dblog) message.SaveInformationToDB(eventID);
             if (flog) message.SaveInformationToFile(eventID);
+            Console.WriteLine(String.Format("\neventID: {0}\nInformation: {1}", eventID, message));
         }
 
         public static void WriteInformation(this string message, bool elog, bool dblog, bool flog)
@@ -90,6 +93,7 @@ namespace MessageLog
             if (elog) message.SaveInformationToEventLogs();
             if (dblog) message.SaveInformationToDB();
             if (flog) message.SaveInformationToFile();
+            Console.WriteLine(String.Format("\nInformation: {0}", message));
         }
 
         public static void WriteInformation(this string message, service service, eventID eventID)
@@ -121,6 +125,7 @@ namespace MessageLog
             if (elog) message.SaveWarningToEventLogs(service, eventID);
             if (dblog) message.SaveWarningToDB(service, eventID);
             if (flog) message.SaveWarningToFile(service, eventID);
+            Console.WriteLine(String.Format("\nservice: {0}\neventID: {1}\nWarning: {2}", service, eventID, message));
         }
 
         public static void WriteWarning(this string message, service service, bool elog, bool dblog, bool flog)
@@ -128,6 +133,7 @@ namespace MessageLog
             if (elog) message.SaveWarningToEventLogs(service);
             if (dblog) message.SaveWarningToDB(service);
             if (flog) message.SaveWarningToFile(service);
+            Console.WriteLine(String.Format("\nservice: {0}\nWarning: {1}", service, message));
         }
 
         public static void WriteWarning(this string message, eventID eventID, bool elog, bool dblog, bool flog)
@@ -135,6 +141,7 @@ namespace MessageLog
             if (elog) message.SaveWarningToEventLogs(eventID);
             if (dblog) message.SaveWarningToDB(eventID);
             if (flog) message.SaveWarningToFile(eventID);
+            Console.WriteLine(String.Format("\neventID: {0}\nWarning: {1}", eventID, message));
         }
 
         public static void WriteWarning(this string message, bool elog, bool dblog, bool flog)
@@ -142,6 +149,7 @@ namespace MessageLog
             if (elog) message.SaveWarningToEventLogs();
             if (dblog) message.SaveWarningToDB();
             if (flog) message.SaveWarningToFile();
+            Console.WriteLine(String.Format("\nWarning: {0}", message));
         }
 
         public static void WriteWarning(this string message, service service, eventID eventID)
@@ -170,35 +178,39 @@ namespace MessageLog
 
         public static void WriteError(this string message, service service, eventID eventID, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nError:{0}", message));
+            //Console.WriteLine(String.Format("\nError: {0}", message));
             if (elog) message.SaveErrorToEventLogs(service, eventID);
             if (dblog) message.SaveErrorToDB(service, eventID);
             if (flog) message.SaveErrorToFile(service, eventID);
+            Console.WriteLine(String.Format("\nservice: {0}\neventID: {1}\nError: {2}", service, eventID, message));
         }
 
 
         public static void WriteError(this string message, service service, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nError:{0}", message));            
+            //Console.WriteLine(String.Format("\nError: {0}", message));            
             if (elog) message.SaveErrorToEventLogs(service);
             if (dblog) message.SaveErrorToDB(service);
             if (flog) message.SaveErrorToFile(service);
+            Console.WriteLine(String.Format("\nservice: {0}\nError: {1}", service, message));
         }
 
         public static void WriteError(this string message, eventID eventID, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nError:{0}", message));              
+            //Console.WriteLine(String.Format("\nError: {0}", message));              
             if (elog) message.SaveErrorToEventLogs(eventID);
             if (dblog) message.SaveErrorToDB(eventID);
             if (flog) message.SaveErrorToFile(eventID);
+            Console.WriteLine(String.Format("\neventID: {0}\nError: {1}", eventID, message));
         }
 
         public static void WriteError(this string message, bool elog, bool dblog, bool flog)
         {
-            Console.WriteLine(String.Format("/nError:{0}", message));              
+            //Console.WriteLine(String.Format("\nError: {0}", message));              
             if (elog) message.SaveErrorToEventLogs();
             if (dblog) message.SaveErrorToDB();
             if (flog) message.SaveErrorToFile();
+            Console.WriteLine(String.Format("\nError: {0}", message));
         }
 
         public static void WriteError(this string message, service service, eventID eventID)
