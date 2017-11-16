@@ -32,11 +32,23 @@ namespace Testing
         static void Main(string[] args)
         {
 
+            DateTime dt = new DateTime();
+
             #region Test_RWWebAPI
             Test_RWWebAPI tst_rw_api = new Test_RWWebAPI();
             //tst_rw_api.RWReference_CorrectCargo();
             //tst_rw_api.Reference_CorrectCargo(); //
-            tst_rw_api.Reference_StationsOfCode();// Получить код Кривой рог главный
+            //tst_rw_api.Reference_StationsOfCode();// Получить код Кривой рог главный
+            //tst_rw_api.Wagons_GetKometaVagonSob(); // Получить собственника вагона
+            //tst_rw_api.Wagons_GetKometaVagonSob(68823137, DateTime.Now); // Получить собственника вагона до указаной даты
+            //tst_rw_api.Wagons_GetSobstvForNakl(); // Показать все накладные
+            //tst_rw_api.Wagons_GetSobstvForNakl(10); // Показать все накладные
+            //tst_rw_api.Wagons_GetGruzSP(307);
+            //tst_rw_api.Wagons_GetGruzSPToTarGR(12502, false); 
+            //tst_rw_api.Wagons_GetSTPR1GR();
+            tst_rw_api.Wagons_GetSTPR1GR(291);
+
+
             #endregion
 
             #region Test_MetallurgTrans

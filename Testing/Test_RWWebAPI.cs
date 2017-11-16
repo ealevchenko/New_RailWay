@@ -29,5 +29,61 @@ namespace Testing
             Stations stat = r.GetStationsOfCode(46700);
             Console.WriteLine("Stations = {0}, Stations = {1}", 46700, stat.code_cs);
         }
+
+        public void Wagons_GetKometaVagonSob()
+        {
+            Wagons w = new Wagons();
+            List<KometaVagonSob> stat = w.GetKometaVagonSob(68823137);
+            Console.WriteLine("Stations = {0}, Count = {1}", 68823137, stat.Count());
+        }
+
+        public void Wagons_GetKometaVagonSob(int num, DateTime dt)
+        {
+            Wagons w = new Wagons();
+            KometaVagonSob stat = w.GetKometaVagonSob(num, dt);
+            Console.WriteLine("Stations = {0}, Count = {1}", num, stat.N_VAGON);
+        }
+
+        public void Wagons_GetSobstvForNakl()
+        {
+            Wagons w = new Wagons();
+            List<KometaSobstvForNakl> stat = w.GetSobstvForNakl();
+            Console.WriteLine("Count = {0}", stat.Count());
+        }
+
+        public void Wagons_GetSobstvForNakl(int nak)
+        {
+            Wagons w = new Wagons();
+            KometaSobstvForNakl stat = w.GetSobstvForNakl(nak);
+            Console.WriteLine("NPLAT = {0}", stat.NPLAT);
+        }
+
+        public void Wagons_GetGruzSP(int kod)
+        {
+            Wagons w = new Wagons();
+            PromGruzSP stat = w.GetGruzSP(kod);
+            Console.WriteLine("NAME_GR = {0}", stat.NAME_GR);
+        }
+
+        public void Wagons_GetGruzSPToTarGR(int? kod, bool corect)
+        {
+            Wagons w = new Wagons();
+            PromGruzSP stat = w.GetGruzSPToTarGR(kod, corect);
+            Console.WriteLine("NAME_GR = {0}", stat.NAME_GR);
+        }
+
+        public void Wagons_GetSTPR1GR()
+        {
+            Wagons w = new Wagons();
+            List<NumVagStpr1Gr> stat = w.GetSTPR1GR();
+            Console.WriteLine("Count = {0}", stat.Count());
+        }
+
+        public void Wagons_GetSTPR1GR(int kod)
+        {
+            Wagons w = new Wagons();
+            NumVagStpr1Gr stat = w.GetSTPR1GR(kod);
+            Console.WriteLine("Count = {0}", stat.GR);
+        }
     }
 }
