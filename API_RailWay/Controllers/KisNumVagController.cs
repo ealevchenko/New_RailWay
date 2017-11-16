@@ -23,7 +23,7 @@ namespace API_RailWay.Controllers
         // GET: api/kis/num_vag/stpr1gr
         [Route("stpr1gr")]
         [ResponseType(typeof(NumVagStpr1Gr))]
-        public IHttpActionResult GetGruzSP()
+        public IHttpActionResult GetSTPR1GR()
         {
             List<NumVagStpr1Gr> list = this.rep_kis.GetSTPR1GR().ToList();
             if (list == null || list.Count() == 0)
@@ -36,7 +36,7 @@ namespace API_RailWay.Controllers
         // GET: api/kis/num_vag/stpr1gr/kod/291
         [Route("stpr1gr/kod/{kod:int}")]
         [ResponseType(typeof(NumVagStpr1Gr))]
-        public IHttpActionResult GetGruzSP(int kod)
+        public IHttpActionResult GetSTPR1GR(int kod)
         {
             NumVagStpr1Gr gsp = this.rep_kis.GetSTPR1GR(kod);
             if (gsp == null)
