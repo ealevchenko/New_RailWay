@@ -33,7 +33,7 @@ namespace RWWebAPI
             this.name_full_en = (string)info.GetValue("name_full_en", typeof(string));
             this.etsng = (int)info.GetValue("etsng", typeof(int));
             this.id_type = (int)info.GetValue("id_type", typeof(int));
-            this.datetime = ((string)info.GetValue("datetime", typeof(string))).DateConversion();
+            this.datetime = ((string)info.GetValue("datetime", typeof(string))).DateNullConversion();
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
