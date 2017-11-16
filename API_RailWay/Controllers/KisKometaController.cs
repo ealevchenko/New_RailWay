@@ -60,5 +60,32 @@ namespace API_RailWay.Controllers
             }
             return Ok(vs);
         }
+
+        // GET: api/kis/kometa/sobstv_for_nakl
+        [Route("sobstv_for_nakl")]
+        [ResponseType(typeof(KometaSobstvForNakl))]
+        public IHttpActionResult GetSobstvForNakl()
+        {
+            List<KometaSobstvForNakl> list = this.rep_kis.GetSobstvForNakl().ToList();
+            if (list == null || list.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+
+        // GET: api/kis/kometa/sobstv_for_nakl/sob/10
+        [Route("sobstv_for_nakl/sob/{kod:int}")]
+        [ResponseType(typeof(KometaSobstvForNakl))]
+        public IHttpActionResult GetSobstvForNakl(int kod)
+        {
+            KometaSobstvForNakl nakl = this.rep_kis.GetSobstvForNakl(kod);
+            if (nakl == null)
+            {
+                return NotFound();
+            }
+            return Ok(nakl);
+        }
+
     }
 }

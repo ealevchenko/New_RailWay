@@ -159,6 +159,8 @@
     <Compile Include="Controllers\Example.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KisKometaController.cs" />
+    <Compile Include="Controllers\KisNumVagController.cs" />
+    <Compile Include="Controllers\KisPromController.cs" />
     <Compile Include="Controllers\MTController.cs" />
     <Compile Include="Controllers\ReferenceController.cs" />
     <Compile Include="Controllers\RWEventController.cs" />
