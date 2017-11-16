@@ -12,6 +12,18 @@ using System.Xml;
 
 namespace WebAPI
 {
+    public class WebAPIResponse {
+        public string response { get; set; }
+        public Exception error { get; set; }
+        public WebAPIResponse(string response) {
+            this.response = response; this.error = null;
+        }
+        public WebAPIResponse(Exception error)
+        {
+            this.response = null; this.error = error;
+        }
+    }
+
     public class ClientWebAPI
     {
         protected string url_primary =null;
@@ -42,17 +54,18 @@ namespace WebAPI
             this.url_secondary = url_secondary;    
         }
         /// <summary>
-        /// Выполнить запрос к Web Api
+        /// Выполнить запрос к Web Api по указанному url
         /// </summary>
         /// <param name="api_comand"></param>
         /// <param name="metod"></param>
         /// <param name="accept"></param>
         /// <returns></returns>
-        public string Select(string api_comand, string metod, string accept)
+        public WebAPIResponse Select(string url, string api_comand, string metod, string accept)
         {
             try
             {
-                HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(this.url_primary + api_comand);
+                String.Format("Выполняем запрос к WebAPI, url:{0}, api_comand {1}, metod {2}, accept {3}", url, api_comand, metod, accept).WriteInformation(eventID);
+                HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url + api_comand);
                 request.Method = metod;
                 request.PreAuthenticate = true;
                 request.Credentials = CredentialCache.DefaultCredentials;
@@ -65,27 +78,43 @@ namespace WebAPI
                         {
                             using (System.IO.StreamReader rd = new System.IO.StreamReader(response.GetResponseStream()))
                             {
-                                return rd.ReadToEnd();
+                                return new WebAPIResponse(rd.ReadToEnd());
                             }
                         }
                         catch (Exception e)
                         {
                             e.WriteError(String.Format("Ошибка создания StreamReader ответа, команда {0}, метод {1}, accept {2}",api_comand,metod,accept),eventID);
-                            return null;
+                            return new WebAPIResponse(e);
                         }
                     }
                 }
                 catch (Exception e)
                 {
                     e.WriteError(String.Format("Ошибка получения ответа WebResponse, команда {0}, метод {1}, accept {2}", api_comand, metod, accept), eventID);
-                    return null;
+                    return new WebAPIResponse(e);
                 }
             }
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("Ошибка выполнения метода Select(api_comand={0}, metod={1}, accept={2}", api_comand, metod, accept), eventID);
-                return null;
+                return new WebAPIResponse(e);
             }
+        }
+        /// <summary>
+        /// Выполнить запрос к Web Api по доступному url (primary, secondary)
+        /// </summary>
+        /// <param name="api_comand"></param>
+        /// <param name="metod"></param>
+        /// <param name="accept"></param>
+        /// <returns></returns>
+        public string Select(string api_comand, string metod, string accept)
+        {
+            WebAPIResponse respone;
+              respone  = Select(this.url_primary, api_comand, metod, accept);
+            if (respone.error != null & this.url_secondary != null) {
+                respone = Select(this.url_secondary, api_comand, metod, accept);
+            }
+            return respone != null ? respone.response : null;
         }
         /// <summary>
         /// Выполнить запрос к Web Api типа Get получить формат JSON

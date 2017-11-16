@@ -36,7 +36,7 @@ namespace Testing
             Test_RWWebAPI tst_rw_api = new Test_RWWebAPI();
             //tst_rw_api.RWReference_CorrectCargo();
             //tst_rw_api.Reference_CorrectCargo(); //
-            //tst_rw_api.Reference_StationsOfCode();// Получить код Кривой рог главный
+            tst_rw_api.Reference_StationsOfCode();// Получить код Кривой рог главный
             #endregion
 
             #region Test_MetallurgTrans
@@ -73,7 +73,7 @@ namespace Testing
             //tst_wag.Test_PromContent_GetGruzSPToTarGR(12502, true); // Грузы по промышленой поиск по етснг с коррекцией 
             //tst_wag.Test_PromContent_GetGruzSPToTarGR(12502, false);// Грузы по промышленой поиск по етснг без коррекции 
             //tst_wag.Test_VagonsContent_GetSTPR1GR();
-            tst_wag.Test_VagonsContent_GetSTPR1GR(291);
+            //tst_wag.Test_VagonsContent_GetSTPR1GR(291);
             #endregion
 
             #region Test_Logs тест логирования
