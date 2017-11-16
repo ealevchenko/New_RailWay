@@ -186,25 +186,30 @@ namespace Testing
                     t.N_VAGON,t.SOB,t.DATE_AR, t.DATE_END, t.ROD,t.DATE_REM, t.PRIM,t.CODE);        
         }
 
-        //public void Test_KometaContent_KometaSobstvForNakl()
-        //{
-        //    KometaContent kom_con = new KometaContent();
-        //    foreach (KometaSobstvForNakl t in kom_con.GetSobstvForNakl())
-        //    {
-        //        WL(t);
-        //    }
-        //}
+        public void Test_KometaContent_KometaSobstvForNakl()
+        {
+            EFWagons kom_con = new EFWagons();
+            foreach (KometaSobstvForNakl t in kom_con.GetSobstvForNakl())
+            {
+                WL(t);
+            }
+        }
 
-        //public void Test_KometaContent_KometaSobstvForNakl(int sob)
-        //{
-        //    KometaContent kom_con = new KometaContent();            
-        //    WL(kom_con.GetSobstvForNakl(sob));
-        //}
-        //public void WL(KometaSobstvForNakl t) 
-        //{ 
-        //        Console.WriteLine("NPLAT: {0},\t SOBSTV: {1},\t ABR: {2},\t SOD_PLAT: {3},\t ID: {4},\t ID2: {5}",
-        //            t.NPLAT,t.SOBSTV,t.ABR, t.SOD_PLAT, t.ID,t.ID2);        
-        //}
+        public void Test_KometaContent_KometaSobstvForNakl(int sob)
+        {
+            EFWagons kom_con = new EFWagons();
+            WL(kom_con.GetSobstvForNakl(sob));
+        }
+
+        public void WL(KometaSobstvForNakl t)
+        {
+            if (t == null)
+            {
+                Console.WriteLine("NULL"); return;
+            } 
+            Console.WriteLine("NPLAT: {0},\t SOBSTV: {1},\t ABR: {2},\t SOD_PLAT: {3},\t ID: {4},\t ID2: {5}",
+                t.NPLAT, t.SOBSTV, t.ABR, t.SOD_PLAT, t.ID, t.ID2);
+        }
 
         //public void Test_KometaContent_GetKometaStrana()
         //{
@@ -227,49 +232,55 @@ namespace Testing
         //            t.KOD_STRAN,t.NAME,t.ABREV_STRAN);        
         //}
 
-        //public void Test_PromContent_GetGruzSP()
-        //{
-        //    foreach (PromGruzSP t in promsostav.GetGruzSP())
-        //    {
-        //        WL(t);
-        //    }
-        //}
+        public void Test_PromContent_GetGruzSP()
+        {
+            EFWagons promsostav = new EFWagons();
+            foreach (PromGruzSP t in promsostav.GetGruzSP())
+            {
+                WL(t);
+            }
+        }
 
-        //public void Test_PromContent_GetGruzSP(int k_gruz)
-        //{
-        //        WL(promsostav.GetGruzSP(k_gruz));
-        //}
+        public void Test_PromContent_GetGruzSP(int k_gruz)
+        {
+            EFWagons promsostav = new EFWagons();
+            WL(promsostav.GetGruzSP(k_gruz));
+        }
 
-        //public void Test_PromContent_GetGruzSPToTarGR(int? tar_gr, bool corect)
-        //{
-        //    WL(promsostav.GetGruzSPToTarGR(tar_gr, corect));
-        //}
+        public void Test_PromContent_GetGruzSPToTarGR(int? tar_gr, bool corect)
+        {
+            EFWagons promsostav = new EFWagons();
+            WL(promsostav.GetGruzSPToTarGR(tar_gr, corect));
+        }
 
-        //public void WL(PromGruzSP t) 
-        //{
-        //    if (t == null) { Console.WriteLine(" = Null"); return; }
-        //    Console.WriteLine("K_GRUZ: {0},\t NAME_GR: {1},\t ABREV_GR: {2},\t GRUP_P: {3},\t NGRUP_P: {4},\t GRUP_O: {5},\t GROUP_OSV: {6},\t NGRUP_O: {7},\t TAR_GR: {8},\t KOD1: {9},\t KOD2: {10},\t K_GR: {11}",
-        //            t.K_GRUZ,t.NAME_GR,t.ABREV_GR,t.GRUP_P,t.NGRUP_P,t.GRUP_O,t.GROUP_OSV,t.NGRUP_O,t.TAR_GR,t.KOD1,t.KOD2,t.K_GR);        
-        //}
+        public void WL(PromGruzSP t)
+        {
+            if (t == null) { Console.WriteLine(" = Null"); return; }
+            Console.WriteLine("K_GRUZ: {0},\t NAME_GR: {1},\t ABREV_GR: {2},\t GRUP_P: {3},\t NGRUP_P: {4},\t GRUP_O: {5},\t GROUP_OSV: {6},\t NGRUP_O: {7},\t TAR_GR: {8},\t KOD1: {9},\t KOD2: {10},\t K_GR: {11}",
+                    t.K_GRUZ, t.NAME_GR, t.ABREV_GR, t.GRUP_P, t.NGRUP_P, t.GRUP_O, t.GROUP_OSV, t.NGRUP_O, t.TAR_GR, t.KOD1, t.KOD2, t.K_GR);
+        }
 
-        //public void Test_VagonsContent_GetSTPR1GR()
-        //{
-        //    foreach (NumVagStpr1Gr t in vc.GetSTPR1GR())
-        //    {
-        //        WL(t);
-        //    }
-        //}
+        public void Test_VagonsContent_GetSTPR1GR()
+        {
 
-        //public void Test_VagonsContent_GetSTPR1GR(int kod_gr)
-        //{
-        //    WL(vc.GetSTPR1GR(kod_gr));
-        //}
-        //public void WL(NumVagStpr1Gr t) 
-        //{
-        //    if (t == null) { Console.WriteLine(" = Null"); return; }
-        //    Console.WriteLine("KOD_GR: {0},\t GR: {1},\t OLD: {2}",
-        //            t.KOD_GR,t.GR,t.OLD);        
-        //}
+            EFWagons vc = new EFWagons();
+            foreach (NumVagStpr1Gr t in vc.GetSTPR1GR())
+            {
+                WL(t);
+            }
+        }
+
+        public void Test_VagonsContent_GetSTPR1GR(int kod_gr)
+        {
+            EFWagons vc = new EFWagons();
+            WL(vc.GetSTPR1GR(kod_gr));
+        }
+        public void WL(NumVagStpr1Gr t)
+        {
+            if (t == null) { Console.WriteLine(" = Null"); return; }
+            Console.WriteLine("KOD_GR: {0},\t GR: {1},\t OLD: {2}",
+                    t.KOD_GR, t.GR, t.OLD);
+        }
 
         //public void Test_PromContent_GetNatHist()
         //{

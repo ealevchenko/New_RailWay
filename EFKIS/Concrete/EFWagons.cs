@@ -20,9 +20,11 @@ namespace EFKIS.Concrete
         private eventID eventID = eventID.EFWagons;
 
         protected EFDbContext context = new EFDbContext();
-        
-        #region KometaVagonSob  
-      
+
+        #region KOMETA
+
+        #region KometaVagonSob
+
         public IQueryable<KometaVagonSob> KometaVagonSob
         {
             get { return context.KometaVagonSob; }
@@ -145,6 +147,150 @@ namespace EFKIS.Concrete
         }
         #endregion
 
+        #region KometaSobstvForNakl
+        /// <summary>
+        /// Получить собственников по накладной
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<KometaSobstvForNakl> GetSobstvForNakl()
+        {
+            try
+            {
+                return context.KometaSobstvForNakl;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSobstvForNakl()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить собственников по накладной по коду
+        /// </summary>
+        /// <param name="kod_sob"></param>
+        /// <returns></returns>
+        public KometaSobstvForNakl GetSobstvForNakl(int kod_sob)
+        {
+            try
+            {
+                return GetSobstvForNakl().Where(s => s.SOBSTV == kod_sob).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSobstvForNakl(kod_sob={0})", kod_sob), eventID);
+                return null;
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region PROM (Информация по станции промышленная)
+
+        #region PROM.GRUZ_SP
+        /// <summary>
+        /// Получить все грузы
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<PromGruzSP> GetGruzSP()
+        {
+            try
+            {
+                return context.PromGruzSP;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetGruzSP()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить груз по коду груза
+        /// </summary>
+        /// <param name="k_gruz"></param>
+        /// <returns></returns>
+        public PromGruzSP GetGruzSP(int k_gruz)
+        {
+            try
+            {
+                return GetGruzSP().Where(g => g.K_GRUZ == k_gruz).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetGruzSP(k_gruz={0})", k_gruz), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить код груза по коду ЕТСНГ (corect - false без коррекции кода ЕТСНГ, corect - true с коррекцией кода ЕТСНГ поиск по диапазону код0 ... код9)
+        /// </summary>
+        /// <param name="tar_gr"></param>
+        /// <param name="corect"></param>
+        /// <returns></returns>
+        public PromGruzSP GetGruzSPToTarGR(int? tar_gr, bool corect)
+        {
+            try
+            {
+                if (!corect)
+                {
+                    return GetGruzSP().Where(g => g.TAR_GR == tar_gr).FirstOrDefault();
+                }
+                else
+                {
+                    return GetGruzSP().Where(g => g.TAR_GR >= tar_gr * 10 & g.TAR_GR <= (tar_gr * 10) + 9).FirstOrDefault();
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetGruzSPToTarGR(tar_gr={0}, corect={1})", tar_gr,corect), eventID);
+                return null;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+
+        #region NUM_VAG (Информация по вагонам)
+
+        #region NumVagStpr1Gr (Справочник грузов по вагонам)
+        /// <summary>
+        /// список грузов
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1Gr> GetSTPR1GR()
+        {
+            try
+            {
+                return context.NumVagStpr1Gr;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1GR()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить груз по kod_gr
+        /// </summary>
+        /// <param name="kod_gr"></param>
+        /// <returns></returns>
+        public NumVagStpr1Gr GetSTPR1GR(int kod_gr)
+        {
+            try
+            {
+                return GetSTPR1GR().Where(g => g.KOD_GR == kod_gr).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1GR(kod_gr={0})", kod_gr), eventID);
+                return null;
+            }
+        }
+        #endregion
+
+        #endregion
 
     }
 }

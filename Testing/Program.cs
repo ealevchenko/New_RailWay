@@ -63,10 +63,17 @@ namespace Testing
             #region Test_Wagons
             Test_Wagons tst_wag = new Test_Wagons();
             //tst_wag.Test_KometaContent_KometaVagonSob(); // все данные KometaVagonSob
-            tst_wag.Test_KometaContent_KometaVagonSob(68823137); // все данные KometaVagonSob
+            //tst_wag.Test_KometaContent_KometaVagonSob(68823137); // все данные KometaVagonSob
             //tst_wag.Test_KometaContent_KometaVagonSob(68823137, DateTime.Now); // все данные KometaVagonSob
             //tst_rw_ref.ReferenceCargo_Get();
-            
+            //tst_wag.Test_KometaContent_KometaSobstvForNakl(); // Накладные по собственникам 
+            //tst_wag.Test_KometaContent_KometaSobstvForNakl(10); // Накладные по собственникам   
+            //tst_wag.Test_PromContent_GetGruzSP();               // Грузы по промышленой     
+            //tst_wag.Test_PromContent_GetGruzSP(307);               // Грузы по промышленой  
+            //tst_wag.Test_PromContent_GetGruzSPToTarGR(12502, true); // Грузы по промышленой поиск по етснг с коррекцией 
+            //tst_wag.Test_PromContent_GetGruzSPToTarGR(12502, false);// Грузы по промышленой поиск по етснг без коррекции 
+            //tst_wag.Test_VagonsContent_GetSTPR1GR();
+            tst_wag.Test_VagonsContent_GetSTPR1GR(291);
             #endregion
 
             #region Test_Logs тест логирования
