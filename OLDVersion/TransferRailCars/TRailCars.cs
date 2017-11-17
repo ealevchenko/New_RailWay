@@ -269,6 +269,128 @@ namespace TransferRailCars
             }
         }
         /// <summary>
+        /// Вернуть trWagon по номеру вагона из спсиска trWagon[]
+        /// </summary>
+        /// <param name="wagons"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        protected trWagon GetWagons(trWagon[] wagons, int num)
+        {
+            if (wagons == null | wagons.Count() == 0) return null;
+            foreach (trWagon wag in wagons)
+            {
+                if (wag.CarriageNumber == num) return wag;
+            }
+            return null;
+        }
+        /// <summary>
+        /// Получить строку SAPIncSupply из trWagon
+        /// </summary>
+        /// <param name="wagon"></param>
+        /// <param name="idsostav"></param>
+        /// <returns></returns>
+        public SAPIncSupply ConvertWagonToSAPSupply(trWagon wagon, int idsostav)
+        {
+            if (wagon == null) return null;
+            RCReference rc_ref = new RCReference();
+            //Определим страну по общему справочнику
+            int id_country = 0;
+            if (wagon.CountryCode > 0)
+            {
+                int country = 0;
+                country = int.Parse(wagon.CountryCode.ToString().Substring(0, 2));
+                //id_country = trans_ref.DefinitionIDCountrySNG(country);
+            }
+            //Определим груз по общему справочнику
+            int id_cargo = rc_ref.DefinitionIDCargo(wagon.IDCargo);
+
+            SAPIncSupply sap_Supply = new SAPIncSupply()
+            {
+                ID = 0,
+                DateTime = wagon.DateOperation,
+                CompositionIndex = wagon.CompositionIndex,
+                IDMTSostav = idsostav,
+                CarriageNumber = wagon.CarriageNumber,
+                Position = wagon.Position,
+                NumNakl = null,
+                CountryCode = wagon.CountryCode,
+                IDCountry = id_country,
+                WeightDoc = (decimal?)wagon.Weight,
+                DocNumReweighing = null,
+                DocDataReweighing = null,
+                WeightReweighing = null,
+                DateTimeReweighing = null,
+                PostReweighing = null,
+                CodeCargo = wagon.IDCargo,
+                IDCargo = id_cargo,
+                CodeMaterial = null,
+                NameMaterial = null,
+                CodeStationShipment = null,
+                NameStationShipment = null,
+                CodeShop = null,
+                NameShop = null,
+                CodeNewShop = null,
+                NameNewShop = null,
+                PermissionUnload = null,
+                Step1 = null,
+                Step2 = null
+
+            };
+            return sap_Supply;
+
+        }
+
+        /// <summary>
+        /// Получить список номеров вагонов с trWagon[]
+        /// </summary>
+        /// <param name="wagons"></param>
+        /// <returns></returns>
+        protected List<int> GetWagonsToListInt(trWagon[] wagons)
+        {
+            List<int> res = new List<int>();
+            if (wagons != null)
+            {
+                foreach (trWagon wag in wagons)
+                {
+                    res.Add(wag.CarriageNumber);
+                }
+            }
+            return res;
+        }
+
+        protected bool DeleteExistWagon(ref List<int> list, int wag)
+        {
+            if (list == null) return false;
+            bool Result = false;
+            int index = list.Count() - 1;
+            while (index >= 0)
+            {
+                if (list[index] == wag)
+                {
+                    list.RemoveAt(index);
+                    Result = true;
+                }
+                index--;
+            }
+            return Result;
+        }
+
+        protected void DeleteExistWagon(ref List<int> list_new, ref List<int> list_old)
+        {
+            if (list_new == null & list_old == null) return;
+            int index = list_new.Count() - 1;
+            while (index >= 0)
+            {
+                if (DeleteExistWagon(ref list_old, list_new[index]))
+                {
+                    list_new.RemoveAt(index);
+                }
+                index--;
+            }
+        }
+
+        #region Поставить вагоны в прибытие из станций Кривого Рога
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="id_sostav"></param>
@@ -309,16 +431,16 @@ namespace TransferRailCars
                 // ..................
 
                 // Создаем или изменяем строки в справочнике САП
-                //int rec_sap;
-                //try
-                //{
-                //    rec_sap = sap_transfer.PutInSapIncomingSupply(sostav);
-                //}
-                //catch (Exception e)
-                //{
-                //    ServicesEventLog.LogError(e, mess_sap_error, servece_owner, eventID);
-                //    rec_sap = -1;
-                //}
+                int rec_sap;
+                try
+                {
+                    rec_sap = PutInSapIncomingSupply(sostav);
+                }
+                catch (Exception e)
+                {
+                    e.WriteError(mess_sap_error, eventID);
+                    rec_sap = -1;
+                }
                 result = res_arc; //TODO: переделат возврат после (Выполнить код постановки вагонов в систему RailWay (прибытие из КР))
             }
             catch (Exception e)
@@ -328,8 +450,6 @@ namespace TransferRailCars
             }
             return result;
         }
-
-        #region Поставить вагоны в прибытие из станций Кривого Рога
         /// <summary>
         /// Поставить вагоны в прибытие из станций УЗ
         /// </summary>
@@ -520,6 +640,60 @@ namespace TransferRailCars
                 e.WriteError(mess_transfer_vag_error, eventID);
                 return (int)errorTransfer.global;
             }
+        }
+        #endregion
+
+        #region SAP
+        /// <summary>
+        /// Перенести состав в справочник САП входящие поставки
+        /// </summary>
+        /// <param name="sostav"></param>
+        /// <returns></returns>
+        public int PutInSapIncomingSupply(trSostav sostav)
+        {
+            
+            if (sostav == null) return 0;
+            EFSAP efsap = new EFSAP();
+            List<int> list_new_wag = new List<int>();
+            List<int> list_old_wag = new List<int>();
+            //if (sostav.Wagons != null)
+            //{
+            list_new_wag = GetWagonsToListInt(sostav.Wagons);
+            //}
+            ResultTransfers result = new ResultTransfers(list_new_wag.Count(), 0, 0, 0, 0, 0);
+            if (sostav.ParentID != null)
+            {
+                list_old_wag = efsap.GetSAPIncSupplyToNumWagons((int)sostav.ParentID);
+            }
+            DeleteExistWagon(ref list_new_wag, ref list_old_wag);
+            // Удалим вагоны которых нет в новом составе
+            foreach (int wag in list_old_wag)
+            {
+                result.SetResultDelete(efsap.DeleteSAPIncSupply((int)sostav.ParentID, wag));
+            }
+            // Добавим вагоны которых нет в старом составе
+            foreach (int wag in list_new_wag)
+            {
+                trWagon new_wag = GetWagons(sostav.Wagons, wag);
+                result.SetResultInsert(efsap.SaveSAPIncSupply(ConvertWagonToSAPSupply(new_wag, sostav.id)));
+            }
+            // если есть старый состав обновим id и исправим нумерацию вагонов
+            if (sostav.ParentID != null)
+            {
+
+                if (sostav.Wagons != null)
+                {
+                    int res_upd = efsap.UpdateSAPIncSupplyIDSostav(sostav.id, (int)sostav.ParentID);
+                    foreach (trWagon wag in sostav.Wagons)
+                    {
+                        result.SetResultUpdate(efsap.UpdateSAPIncSupplyPosition(sostav.id, wag.CarriageNumber, wag.Position));
+                    }
+                }
+                else { int res_del = efsap.DeleteSAPIncSupplySostav((int)sostav.ParentID); }
+            }
+            String.Format("Определено для переноса в справочник САП входящие поставки {0} вагонов, удалено предыдущих вагонов: {1}, добавлено новых вагонов:  {2}, обновлено позиций вагонов : {3}, общее количество ошибок: {4}.",
+            result.counts, result.deletes, result.inserts, result.updates, result.errors).WriteWarning(eventID);
+            return result.ResultInsert;
         }
         #endregion
 

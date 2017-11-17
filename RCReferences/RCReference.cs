@@ -386,6 +386,35 @@ namespace RCReferences
         //    if (str == null) return null; //TODO: Можно доработать сделав подбор кода (европ от isa отличается на 1 цифру больше, убирать последнюю цифру и пробовать как код iso)  
         //    return reference.DefinitionIDCountryCode(str.KOD_STRAN);
         //}
+
+        /// <summary>
+        /// Получить id груза по коду ЕТ СНГ 
+        /// </summary>
+        /// <param name="id_cargo"></param>
+        /// <returns></returns>
+        public int DefinitionIDCargo(int id_cargo)
+        {
+            EFRCReference efrc_reference = new EFRCReference();
+            Reference api_reference = new Reference();
+            EFRC.Entities.ReferenceCargo ref_cargo = efrc_reference.GetReferenceCargoOfCodeETSNG(id_cargo);
+            if (ref_cargo == null)
+            {
+                Cargo cargo = api_reference.GetCargoOfCodeETSNG(id_cargo);
+                EFRC.Entities.ReferenceCargo new_cargo = new EFRC.Entities.ReferenceCargo()
+                {
+                    IDCargo = 0,
+                    Name = cargo.name_etsng.Length > 200 ? cargo.name_etsng.Remove(199).Trim() : cargo.name_etsng.Trim(),
+                    NameFull = cargo.name_etsng.Length > 500 ? cargo.name_etsng.Remove(499).Trim() : cargo.name_etsng.Trim(),
+                    ETSNG = id_cargo,
+                    TypeCargo = 0,
+                    DateTime = DateTime.Now
+                };
+                int res = efrc_reference.SaveReferenceCargo(new_cargo);
+                if (res > 0) { return res; }
+                else return 0;
+            }
+            return ref_cargo.IDCargo;
+        }
         #endregion
 
         #region Синхронизация справочников
