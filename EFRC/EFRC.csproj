@@ -51,7 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IRC.cs" />
+    <Compile Include="Abstract\IRCReference.cs" />
+    <Compile Include="Abstract\ISAP.cs" />
     <Compile Include="Concrete\EFRailCars.cs" />
+    <Compile Include="Concrete\EFRCReference.cs" />
+    <Compile Include="Concrete\EFSAP.cs" />
     <Compile Include="Entities\GDSTAIT.cs" />
     <Compile Include="Entities\GRUZS.cs" />
     <Compile Include="Entities\GRUZ_FRONTS.cs" />
@@ -63,9 +67,14 @@
     <Compile Include="Entities\OWNERS_COUNTRIES.cs" />
     <Compile Include="Entities\PARKS.cs" />
     <Compile Include="Entities\PARK_STATE.cs" />
+    <Compile Include="Entities\RCReference\ReferenceCargo.cs" />
+    <Compile Include="Entities\RCReference\ReferenceCountry.cs" />
+    <Compile Include="Entities\RCReference\ReferenceStation.cs" />
+    <Compile Include="Entities\sap\SAP_Inc_Supply.cs" />
     <Compile Include="Entities\SHOPS.cs" />
     <Compile Include="Entities\STATIONS.cs" />
     <Compile Include="Entities\TUPIKI.cs" />
+    <Compile Include="Entities\RCReference\TypeCargo.cs" />
     <Compile Include="Entities\VAGONS.cs" />
     <Compile Include="Entities\VAGON_OPERATIONS.cs" />
     <Compile Include="Entities\VAG_CONDITIONS.cs" />

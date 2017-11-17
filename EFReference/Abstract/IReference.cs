@@ -31,5 +31,15 @@ namespace EFReference.Abstract
         Stations GetStationsOfCodeCS(int code_cs);
         #endregion
 
+        #region Countrys
+        IQueryable<Countrys> Countrys { get; }
+        IQueryable<Countrys> GetCountrys();
+        Countrys GetCountrys(int id);
+        int SaveCountrys(Countrys Countrys);
+        Countrys DeleteCountrys(int id);
+        Countrys GetCountryOfCodeSNG(int code_sng);
+        Countrys GetCountryOfCode(int code_iso);
+        #endregion
+
     }
 }

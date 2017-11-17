@@ -45,6 +45,8 @@ namespace MessageLog
         #region Служба RailCars 3000
         EFRailCars = 3100,                  // Библиотека доступа к данным БД системы RailCars
         RCReference = 3200,                 // Библиотека доступа к справочникам системы RailCars
+        EFSAP = 3300,                       // Библиотека доступа к справочникам обновляемых SAP
+        EFRCReference = 3400,               // Библиотека доступа к справочникам системы RailCars+
         #endregion
 
         #region Служба RailWay 4000

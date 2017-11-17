@@ -275,5 +275,121 @@ namespace EFReference.Concrete
         }
 
         #endregion
+
+        #region Countrys
+        public IQueryable<Countrys> Countrys
+        {
+            get { return context.Countrys; }
+        }
+
+        public IQueryable<Countrys> GetCountrys()
+        {
+            try
+            {
+                return Countrys;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCountrys()"), eventID);
+                return null;
+            }
+        }
+
+        public Countrys GetCountrys(int id)
+        {
+            try
+            {
+                return GetCountrys().Where(c => c.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCountrys(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveCountrys(Countrys Countrys)
+        {
+            Countrys dbEntry;
+            try
+            {
+                if (Countrys.id == 0)
+                {
+                    dbEntry = new Countrys()
+                    {
+                        id = 0,
+                        country = Countrys.country, 
+                        alpha_2 = Countrys.alpha_2,
+                        alpha_3 = Countrys.alpha_3, 
+                        code = Countrys.code,
+                        iso3166_2 = Countrys.iso3166_2,
+                        id_state = Countrys.id_state,
+                        code_europe = Countrys.code_europe,
+                        States = Countrys.States
+                    };
+                    context.Countrys.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.Countrys.Find(Countrys.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.country = Countrys.country;
+                        dbEntry.alpha_2 = Countrys.alpha_2;
+                        dbEntry.alpha_3 = Countrys.alpha_3;
+                        dbEntry.code = Countrys.code;
+                        dbEntry.iso3166_2 = Countrys.iso3166_2;
+                        dbEntry.id_state = Countrys.id_state;
+                        dbEntry.code_europe = Countrys.code_europe;
+                        dbEntry.States = Countrys.States;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveCountrys(Countrys={0})", Countrys.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public Countrys DeleteCountrys(int id)
+        {
+            Countrys dbEntry = context.Countrys.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.Countrys.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteCountrys(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        /// <summary>
+        /// Вернуть строку справочника по коду СНГ и стран балтии
+        /// </summary>
+        /// <param name="code_sng"></param>
+        /// <returns></returns>
+        public Countrys GetCountryOfCodeSNG(int code_sng)
+        {
+            return GetCountrys().Where(c => c.id_state == code_sng).FirstOrDefault();
+        }
+        /// <summary>
+        /// Вернуть строку кодов страны по коду iso
+        /// </summary>
+        /// <param name="code_iso"></param>
+        /// <returns></returns>
+        public Countrys GetCountryOfCode(int code_iso)
+        {
+            return GetCountrys().Where(c => c.code == code_iso).FirstOrDefault();
+        }
+        #endregion
     }
 }

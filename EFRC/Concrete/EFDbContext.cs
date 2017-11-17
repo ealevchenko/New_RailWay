@@ -32,6 +32,14 @@ namespace EFRC.Concrete
         public virtual DbSet<PARKS> PARKS { get; set; }
         public virtual DbSet<VAGON_OPERATIONS> VAGON_OPERATIONS { get; set; }
 
+        //SAP
+        public virtual DbSet<SAPIncSupply> SAPIncSupply { get; set; }
+        // Справочники системы Railway
+        public virtual DbSet<TypeCargo> TypeCargo { get; set; }
+        public virtual DbSet<ReferenceCargo> ReferenceCargo { get; set; }
+        public virtual DbSet<ReferenceCountry> ReferenceCountry { get; set; }
+        public virtual DbSet<ReferenceStation> ReferenceStation { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GRUZS>()
@@ -127,6 +135,15 @@ namespace EFRC.Concrete
 
             modelBuilder.Entity<VAGON_OPERATIONS>()
                 .Property(e => e.weight_gruz)
+                .HasPrecision(18, 3);
+
+            //SAP
+            modelBuilder.Entity<SAPIncSupply>()
+                .Property(e => e.WeightDoc)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<SAPIncSupply>()
+                .Property(e => e.WeightReweighing)
                 .HasPrecision(18, 3);
         }
     }

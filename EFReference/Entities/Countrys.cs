@@ -17,7 +17,7 @@ namespace EFReference.Entities
 
         [Required]
         [StringLength(2)]
-        public string Alpha_2 { get; set; }
+        public string alpha_2 { get; set; }
 
         [Required]
         [StringLength(3)]
