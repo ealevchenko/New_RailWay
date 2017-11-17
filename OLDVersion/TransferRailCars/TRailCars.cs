@@ -1,5 +1,6 @@
 ﻿using EFMT.Concrete;
 using EFRC.Concrete;
+using EFRC.Entities;
 using MessageLog;
 using MT.Entities;
 using RCReferences;
@@ -88,35 +89,35 @@ namespace TransferRailCars
             return false;
         }
     }
-    
+
     public class trWagon
-        {
-            public int Position { get; set; }
-            public int CarriageNumber { get; set; }
-            public int CountryCode { get; set; }
-            public float Weight { get; set; }
-            public int IDCargo { get; set; }
-            public string Cargo { get; set; }
-            public int IDStation { get; set; }
-            public string Station { get; set; }
-            public int Consignee { get; set; }
-            public string Operation { get; set; }
-            public string CompositionIndex { get; set; }
-            public DateTime DateOperation { get; set; }
-            public int TrainNumber { get; set; }
-            public int Conditions { get; set; }
-        }
+    {
+        public int Position { get; set; }
+        public int CarriageNumber { get; set; }
+        public int CountryCode { get; set; }
+        public float Weight { get; set; }
+        public int IDCargo { get; set; }
+        public string Cargo { get; set; }
+        public int IDStation { get; set; }
+        public string Station { get; set; }
+        public int Consignee { get; set; }
+        public string Operation { get; set; }
+        public string CompositionIndex { get; set; }
+        public DateTime DateOperation { get; set; }
+        public int TrainNumber { get; set; }
+        public int Conditions { get; set; }
+    }
 
     public class trSostav
-        {
-            public int id { get; set; }
-            public int? codecs_in_station { get; set; } // Станция получатель состава
-            public int? codecs_from_station { get; set; } // Станция отравитель состава
-            public DateTime DateTime_on { get; set; }
-            public DateTime DateTime_from { get; set; }
-            public int? ParentID { get; set; }
-            public trWagon[] Wagons { get; set; }
-        }    
+    {
+        public int id { get; set; }
+        public int? codecs_in_station { get; set; } // Станция получатель состава
+        public int? codecs_from_station { get; set; } // Станция отравитель состава
+        public DateTime DateTime_on { get; set; }
+        public DateTime DateTime_from { get; set; }
+        public int? ParentID { get; set; }
+        public trWagon[] Wagons { get; set; }
+    }
 
     public class TRailCars
     {
@@ -300,7 +301,7 @@ namespace TransferRailCars
                 }
                 catch (Exception e)
                 {
-                    e.WriteError(String.Format("Ошибка постановки состава №{0} в прибытие АМКР", id_sostav),eventID);
+                    e.WriteError(String.Format("Ошибка постановки состава №{0} в прибытие АМКР", id_sostav), eventID);
                     res_arc = -1;
                 }
                 // Поставим вагоны в систему RailWay            
@@ -336,6 +337,7 @@ namespace TransferRailCars
         /// <returns></returns>
         public int PutInArrival(trSostav sostav)
         {
+            EFRailCars efrc = new EFRailCars();
             string mess_transfer = String.Format("состава:{0} в прибытие со станции УЗ:{1} системы Railway", sostav.id, sostav.codecs_in_station);
             string mess_transfer_sostav = "Перенос " + mess_transfer;
             string mess_transfer_error = "переноса " + mess_transfer;
@@ -345,36 +347,96 @@ namespace TransferRailCars
 
                 if (sostav == null) return 0;
                 ResultTransfers result = new ResultTransfers(sostav.Wagons != null ? sostav.Wagons.Count() : 0, 0, null, null, 0, 0);
+                //if (sostav.ParentID != null)
+                //{
+                //    string mess_del = String.Format("удаления состава:{0} из прибытия системы Railway, по которому получено новое ТСП (новый состав:{1})", sostav.ParentID, sostav.id);
+                //    string mess_del_error = mess_transfer;
+                //    string mess_del_error1 = String.Format("Ошибка " + mess_transfer);
+                //    try
+                //    {
+                //        //TODO: !! ВОЗМОЖНО (ПРИБЫТИЕ С УЗ) - доработать удаление составов по которым происходит тсп (удалять только те вагоны которых нет в новом тсп и добавлять новые - вдруг поезд приняли уже на станцию)
+                //        EFRailCars efrc = new EFRailCars();
+                //        int res = efrc.DeleteVagonsToInsertMT((int)sostav.ParentID); // Удалить предыдущий состав (По этому составу было новое ТСП) 
+                //        if (res < 0)
+                //        {
+                //            mess_del_error1.WriteError(eventID);
+                //            return (int)errorTransfer.global;
+                //        }
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        e.WriteError(mess_del_error, eventID);
+                //        return (int)errorTransfer.global;
+                //    }
+                //}
+                if (sostav.Wagons == null) return 0;
+                List<trWagon> list_new_vag = sostav.Wagons.ToList();
+                // проверим старый состав с этим вагоном
                 if (sostav.ParentID != null)
                 {
-                    string mess_del = String.Format("удаления состава:{0} из прибытия системы Railway, по которому получено новое ТСП (новый состав:{1})", sostav.ParentID, sostav.id);
-                    string mess_del_error = mess_transfer;
-                    string mess_del_error1 = String.Format("Ошибка " + mess_transfer);
-                    try
+                    List<IGrouping<int?, VAGON_OPERATIONS>> group_list_old_vag = efrc.GetVagonsOperationsGroupingVagon((int)sostav.ParentID).ToList();
+                    foreach (IGrouping<int?, VAGON_OPERATIONS> group_wag in group_list_old_vag)
                     {
-                        //TODO: !! ВОЗМОЖНО (ПРИБЫТИЕ С УЗ) - доработать удаление составов по которым происходит тсп (удалять только те вагоны которых нет в новом тсп и добавлять новые - вдруг поезд приняли уже на станцию)
-                        EFRailCars efrc = new EFRailCars();
-                        int res = efrc.DeleteVagonsToInsertMT((int)sostav.ParentID); // Удалить предыдущий состав (По этому составу было новое ТСП) 
-                        if (res < 0)
+                        // старый вавгон есть в новом списке
+                        trWagon tw = list_new_vag.Find(w => w.CarriageNumber == group_wag.Key);
+                        if (tw != null)
                         {
-                            mess_del_error1.WriteError(eventID);
-                            return (int)errorTransfer.global;
+                            // есть, проверка стоит в прибытии или приняли в систему
+                            // получить список по убыванию, последняя операция вверху
+                            List<VAGON_OPERATIONS> list_old_wag = group_wag.OrderByDescending(o => o.id_oper).ToList();
+                            if (list_old_wag != null && list_old_wag.Count() > 0)
+                            {
+                                if ((list_old_wag[0].id_stat == 33 & list_old_wag[0].st_lock_id_stat == 13) |
+                                    (list_old_wag[0].id_stat == 33 & list_old_wag[0].st_lock_id_stat == 4) |
+                                    (list_old_wag[0].id_stat == 35 & list_old_wag[0].st_lock_id_stat == 20))
+                                {
+                                    // стоит в прибытии, удалим
+                                    efrc.DeleteVagonsOperations((int)sostav.ParentID, group_wag.Key != null ? (int)group_wag.Key : 0);
+                                }
+                                else { 
+                                    // уже в работе, заменим номер состава, уберем из нового списка вагон
+                                    efrc.UpdateIDSostavVagonsOperations((int)sostav.ParentID, group_wag.Key != null ? (int)group_wag.Key : 0, (int)sostav.id);
+                                    result.IncSkipped();
+                                    list_new_vag.Remove(tw);
+                                }
+                            }
+                        }
+                        else { 
+                            // нет, удалить из системы все записи по старому вагону
+                            efrc.DeleteVagonsOperations((int)sostav.ParentID, group_wag.Key != null ? (int)group_wag.Key : 0);
                         }
                     }
-                    catch (Exception e)
-                    {
-                        e.WriteError(mess_del_error, eventID);
-                        return (int)errorTransfer.global;
-                    }
                 }
-                if (sostav.Wagons == null) return 0;
-                foreach (trWagon wag in sostav.Wagons)
+                // ставим вагоны в прибытие
+                foreach (trWagon wag in list_new_vag)
                 {
+                    
                     string mess_transfer_vag = String.Format("вагона:{0}, состава:{1} в прибытие со станции УЗ:{2} системы Railway", wag.CarriageNumber, sostav.id, sostav.codecs_in_station);
                     string mess_transfer_vag_error = "переноса " + mess_transfer_vag;
                     string mess_transfer_vag_error1 = "Ошибка переноса " + mess_transfer_vag;
                     try
                     {
+                        // есть, проверка стоит в прибытии или приняли в систему
+                        // получить список по убыванию, последняя операция вверху
+                        List<VAGON_OPERATIONS> list_old_wag = efrc.GetVagonsOperations(sostav.id, wag.CarriageNumber).ToList();
+                        if (list_old_wag != null && list_old_wag.Count() > 0)
+                        {
+                            if ((list_old_wag[0].id_stat == 33 & list_old_wag[0].st_lock_id_stat == 13) |
+                                (list_old_wag[0].id_stat == 33 & list_old_wag[0].st_lock_id_stat == 4) |
+                                (list_old_wag[0].id_stat == 35 & list_old_wag[0].st_lock_id_stat == 20))
+                            {
+                                // стоит в прибытии, удалим
+                                efrc.DeleteVagonsOperations(sostav.id, wag.CarriageNumber);
+                            }
+                            else
+                            {
+                                // уже в работе
+                                result.IncSkipped();
+                                continue;
+
+                            }
+                        }
+                        // ставим
                         if (result.SetResultInsert(ArrivalWagon(wag, sostav.id, sostav.DateTime_on, sostav.DateTime_from, sostav.codecs_in_station)))
                         {
                             String.Format(mess_transfer_vag_error1 + ", код ошибки: {0}", ((errorTransfer)result.result).ToString()).WriteError(eventID);
@@ -429,8 +491,8 @@ namespace TransferRailCars
                 int id_way_33 = 998; // Путь УЗ с которого прийдет состав
                 int id_way_35 = 1002;// Путь УЗ с которого прийдет состав
                 EFRailCars efrc = new EFRailCars();
-                if (!efrc.IsVagonOperationMT(id_sostav, dt_from, id_vagon)) // вагон не стоит
-                {
+                //if (!efrc.IsVagonOperationMT(id_sostav, dt_from, id_vagon)) // вагон не стоит
+                //{
                     // Поставим вагон
 
                     int res1 = 0;
@@ -450,8 +512,8 @@ namespace TransferRailCars
                         return res1;
                     }
                     return (int)errorTransfer.no_stations; ;
-                }
-                return 0;
+                //}
+                //return 0;
             }
             catch (Exception e)
             {
