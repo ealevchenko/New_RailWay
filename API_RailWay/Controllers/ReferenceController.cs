@@ -108,5 +108,60 @@ namespace API_RailWay.Controllers
             return Ok(CreateStations(stations));
         }
         #endregion
+
+        #region Countrys
+
+        protected Countrys CreateCountrys(Countrys countrys)
+        {
+            return new Countrys()
+            {
+                id = countrys.id, 
+                country = countrys.country,
+                alpha_2 = countrys.alpha_2,
+                alpha_3 = countrys.alpha_3,
+                code = countrys.code,
+                iso3166_2 = countrys.iso3166_2,
+                id_state = countrys.id_state,
+                code_europe = countrys.code_europe,
+                States = null
+            };
+        }
+
+        // GET: api/reference/countrys
+        [Route("countrys/{id:int?}")]
+        [ResponseType(typeof(Countrys))]
+        public IEnumerable<Countrys> GetCountrys()
+        {
+            List<Countrys> new_countrys = new List<Countrys>();
+            this.rep_ref.GetCountrys().ToList().ForEach(c => new_countrys.Add(CreateCountrys(c)));
+            return new_countrys;
+        }
+
+        // GET: api/reference/countrys/code_sng/25
+        [Route("countrys/code_sng/{code:int}")]
+        [ResponseType(typeof(Countrys))]
+        public IHttpActionResult GetCountryOfCodeSNG(int code)
+        {
+            Countrys countrys = this.rep_ref.GetCountryOfCodeSNG(code);
+            if (countrys == null)
+            {
+                return NotFound();
+            }
+            return Ok(CreateCountrys(countrys));
+        }
+        // GET: api/reference/countrys/code_iso/418
+        [Route("countrys/code_iso/{code:int}")]
+        [ResponseType(typeof(Countrys))]
+        public IHttpActionResult GetCountryOfCode(int code)
+        {
+            Countrys countrys = this.rep_ref.GetCountryOfCode(code);
+            if (countrys == null)
+            {
+                return NotFound();
+            }
+            return Ok(CreateCountrys(countrys));
+        }
+        #endregion
+
     }
 }
