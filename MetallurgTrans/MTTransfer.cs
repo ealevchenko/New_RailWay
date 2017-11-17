@@ -595,7 +595,7 @@ namespace MetallurgTrans
                 {
                     // Переносим вагоны
                     count_wagons = TransferListArrivalCarsToDB(TransferXMLToListArrivalCars(file, new_id));
-                    if (count_wagons > 0) { countCopy++; }
+                    if (count_wagons > 0) { countCopy++;} 
                     if (count_wagons < 0) { countError++; } // Счетчик ошибок при переносе
                 }
                 if (new_id < 0) { countError++; } // Счетчик ошибок при переносе
@@ -766,9 +766,6 @@ namespace MetallurgTrans
         /// <returns></returns>
         public int TransferArrival()
         {
-            //MT_Transfer old = new MT_Transfer(servece_owner);
-            //old.DayMonitoringTrains = 3;
-            //old.TransferArrival(this.fromPath, false); //TODO: УБРАТЬ СТАРЫЙ ПЕРЕНОС ПРИБЫТИЯ
             return TransferArrival(this.fromPath, this.delete_file);
         }
         #endregion
