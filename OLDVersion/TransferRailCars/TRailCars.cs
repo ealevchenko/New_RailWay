@@ -299,7 +299,7 @@ namespace TransferRailCars
             {
                 int country = 0;
                 country = int.Parse(wagon.CountryCode.ToString().Substring(0, 2));
-                //id_country = trans_ref.DefinitionIDCountrySNG(country);
+                id_country = rc_ref.DefinitionIDCountrySNG(country);
             }
             //Определим груз по общему справочнику
             int id_cargo = rc_ref.DefinitionIDCargo(wagon.IDCargo);

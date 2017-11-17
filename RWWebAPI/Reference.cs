@@ -63,6 +63,35 @@ namespace RWWebAPI
  	        throw new NotImplementedException();
         }
     }
+
+    public class Countrys: ISerializable
+    {
+        public int id { get; set; }
+        public string country { get; set; }
+        public string alpha_2 { get; set; }
+        public string alpha_3 { get; set; }
+        public int code { get; set; }
+        public string iso3166_2 { get; set; }
+        public int? id_state { get; set; }
+        public int? code_europe { get; set; }
+
+        public Countrys(SerializationInfo info, StreamingContext context)
+        {
+            this.id = (int)info.GetValue("id", typeof(int));
+            this.country = (string)info.GetValue("country", typeof(string));
+            this.alpha_2 = (string)info.GetValue("alpha_2", typeof(string));
+            this.alpha_3 = (string)info.GetValue("alpha_3", typeof(string));
+            this.code = (int)info.GetValue("code", typeof(int));
+            this.iso3166_2 = (string)info.GetValue("iso3166_2", typeof(string));
+            this.id_state = (int?)info.GetValue("id_state", typeof(int?));
+            this.code_europe = (int?)info.GetValue("code_europe", typeof(int?));
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new NotImplementedException();
+        }
+    }
     
     public class Reference : ClientWebAPI
     {
@@ -80,5 +109,16 @@ namespace RWWebAPI
         {
             return GetJSONSelect<Stations>(@"reference/stations/code/" + code.ToString());
         }
+
+        public Countrys GetCountryOfCodeSNG(int code_sng)
+        {
+            return GetJSONSelect<Countrys>(@"reference/countrys/code_sng/" + code_sng.ToString());
+        }
+
+        public Countrys GetCountryOfCode(int code_iso)
+        {
+            return GetJSONSelect<Countrys>(@"reference/countrys/code_iso/" + code_iso.ToString());
+        }
+
     }
 }

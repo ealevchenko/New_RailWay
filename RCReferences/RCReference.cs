@@ -16,7 +16,7 @@ namespace RCReferences
         
         public RCReference() { }
 
-        #region Определение ID по справочникам
+        #region Определение ID по справочникам системы RailCars
         ///// <summary>
         ///// Определить ID станции системы Railcars (если ID нет в системе создать по данным справочника KIS)
         ///// </summary>
@@ -386,7 +386,9 @@ namespace RCReferences
         //    if (str == null) return null; //TODO: Можно доработать сделав подбор кода (европ от isa отличается на 1 цифру больше, убирать последнюю цифру и пробовать как код iso)  
         //    return reference.DefinitionIDCountryCode(str.KOD_STRAN);
         //}
+        #endregion
 
+        #region Определение ID по справочникам системы RailCars+
         /// <summary>
         /// Получить id груза по коду ЕТ СНГ 
         /// </summary>
@@ -414,6 +416,42 @@ namespace RCReferences
                 else return 0;
             }
             return ref_cargo.IDCargo;
+        }
+        /// <summary>
+        /// Получить id страны из справочника
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        protected int DefinitionIDCountry(Countrys code)
+        {
+            if (code == null) return 0;
+            if (code.code <= 0) return 0;
+            EFRCReference efrc_reference = new EFRCReference();
+            EFRC.Entities.ReferenceCountry ref_code = efrc_reference.GetReferenceCountryOfCode(code.code);
+            if (ref_code == null)
+            {
+                EFRC.Entities.ReferenceCountry new_rc = new EFRC.Entities.ReferenceCountry()
+                {
+                    IDCountry = 0,
+                    Country = code.country,
+                    Code = code.code,
+                };
+                int res = efrc_reference.SaveReferenceCountry(new_rc);
+                if (res > 0) { return res; }
+                else return 0;
+            }
+            return ref_code.IDCountry;
+        }
+        /// <summary>
+        /// Получить id строки справочника стан системы RailCars+ по коду СНГ и стран балтии.
+        /// </summary>
+        /// <param name="code_country_sng"></param>
+        /// <returns></returns>
+        public int DefinitionIDCountrySNG(int code_country_sng)
+        {
+            Reference api_reference = new Reference();
+            Countrys code = api_reference.GetCountryOfCodeSNG(code_country_sng);
+            return DefinitionIDCountry(code);
         }
         #endregion
 
