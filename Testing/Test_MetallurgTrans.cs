@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TransferRailCars;
 
 namespace Testing
 {
@@ -53,6 +54,15 @@ namespace Testing
             Console.WriteLine("Добавим код - 3437 -> {0}", efmt.SaveConsignee(code_amkr));
             Console.WriteLine("Добавим код - 6302 -> {0}", efmt.SaveConsignee(code_send6302));
             Console.WriteLine("Добавим код - 9999 -> {0}", efmt.SaveConsignee(code_send9999));
+        }
+        /// <summary>
+        /// Поставить состав в прибытие системы RailCars
+        /// </summary>
+        public void TRailCars_ArrivalToRailCars() {
+            TRailCars trc = new TRailCars();
+            //trc.ArrivalToRailCars(4113);
+            trc.ArrivalToRailCars(4114);
+
         }
     }
 }

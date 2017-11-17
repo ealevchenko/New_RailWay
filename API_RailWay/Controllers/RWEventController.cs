@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using TransferRailCars;
 
 namespace API_RailWay.Controllers
 {
@@ -14,18 +15,12 @@ namespace API_RailWay.Controllers
         
         }
 
-        // GET: api/rw/event/arrival/sostav/id/5
+        // GET: api/rw/event/arrival/sostav/id/4113
         [Route("arrival/sostav/id/{id:int}")]
         public int GetArrivalSostav(int id)
         {
-            //Cargo cargo = this.rep_ref.GetCargo(id);
-            //if (cargo == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return Ok(cargo);
-            return 1;
+            TRailCars trc = new TRailCars();
+            return trc.ArrivalToRailCars(id);
         }
     }
 }

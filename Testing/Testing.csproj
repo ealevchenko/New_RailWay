@@ -110,6 +110,10 @@
       <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
       <Name>MLogs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OLDVersion\TransferRailCars\TransferRailCars.csproj">
+      <Project>{a1f50999-31d4-4793-a92f-4d0f436922cb}</Project>
+      <Name>TransferRailCars</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RWSettings\RWSettings.csproj">
       <Project>{00d9d515-6089-4334-af39-28db22cd7d20}</Project>
       <Name>RWSettings</Name>

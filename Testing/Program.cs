@@ -46,7 +46,7 @@ namespace Testing
             //tst_rw_api.Wagons_GetGruzSP(307);
             //tst_rw_api.Wagons_GetGruzSPToTarGR(12502, false); 
             //tst_rw_api.Wagons_GetSTPR1GR();
-            tst_rw_api.Wagons_GetSTPR1GR(291);
+            //tst_rw_api.Wagons_GetSTPR1GR(291);
 
 
             #endregion
@@ -56,6 +56,7 @@ namespace Testing
             //tst_tr_app.TransferApproaches();
             //tst_tr_app.TransferArrival();
             //tst_tr_app.EFMetallurgTrans_Consignee(); //
+            tst_tr_app.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
             #endregion
 
             #region Test_Reference
