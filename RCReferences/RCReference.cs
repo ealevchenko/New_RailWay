@@ -103,64 +103,71 @@ namespace RCReferences
         /// <returns></returns>
         public int DefinitionSetIDVagon(int num_vag, DateTime dt, int train_number, int? id_sostav, int? natur, bool transit)
         {
-            EFRailCars efrc = new EFRailCars();
-
-            int? id_vagons = efrc.GetIDVagons(num_vag, dt);
-            if (id_vagons == null)
+            try
             {
-                id_vagons = efrc.GetIDNewVagons(num_vag, dt);
+                EFRailCars efrc = new EFRailCars();
+                Wagons kis = new Wagons();
+                int? id_vagons = efrc.GetIDVagons(num_vag, dt);
                 if (id_vagons == null)
                 {
-
-                    //KometaVagonSob kvs = kc.GetVagonsSob(num_vag, dt);
-                    //VAGONS wag;
-                    //if (kvs != null)
-                    //{
-                    //    int? owner = DefinitionIDOwner(kvs.SOB, null); // Определим id владельца (системы railCars)                        
-                    //    wag = new VAGONS()
-                    //    {
-                    //        id_vag = 0,
-                    //        num = num_vag,
-                    //        id_ora = null,
-                    //        id_owner = owner,
-                    //        id_stat = null,
-                    //        is_locom = train_number,
-                    //        locom_seria = null,
-                    //        rod = kvs.ROD,
-                    //        st_otpr = "-",
-                    //        date_ar = kvs.DATE_AR,
-                    //        date_end = kvs.DATE_END,
-                    //        date_in = dt,
-                    //        IDSostav = id_sostav,
-                    //        Natur = natur,
-                    //        Transit = transit
-                    //    };
-                    //}
-                    //else
-                    //{
-                    //    wag = new VAGONS()
-                    //    {
-                    //        id_vag = 0,
-                    //        num = num_vag,
-                    //        id_ora = null,
-                    //        id_owner = null,
-                    //        id_stat = null,
-                    //        is_locom = train_number,
-                    //        locom_seria = null,
-                    //        rod = null,
-                    //        st_otpr = "-",
-                    //        date_ar = null,
-                    //        date_end = null,
-                    //        date_in = dt,
-                    //        IDSostav = id_sostav,
-                    //        Natur = natur,
-                    //        Transit = transit
-                    //    };
-                    //}
-                    //id_vagons = efrc.SaveVAGONS(wag); // Вернуть id или ошибку
+                    id_vagons = efrc.GetIDNewVagons(num_vag, dt);
+                    if (id_vagons == null)
+                    {
+                        KometaVagonSob kvs = kis.GetKometaVagonSob(num_vag, dt);
+                        VAGONS wag;
+                        if (kvs != null)
+                        {
+                            int? owner = DefinitionIDOwner(kvs.SOB, null); // Определим id владельца (системы railCars)                        
+                            wag = new VAGONS()
+                            {
+                                id_vag = 0,
+                                num = num_vag,
+                                id_ora = null,
+                                id_owner = owner,
+                                id_stat = null,
+                                is_locom = train_number,
+                                locom_seria = null,
+                                rod = kvs.ROD,
+                                st_otpr = "-",
+                                date_ar = kvs.DATE_AR,
+                                date_end = kvs.DATE_END,
+                                date_in = dt,
+                                IDSostav = id_sostav,
+                                Natur = natur,
+                                Transit = transit
+                            };
+                        }
+                        else
+                        {
+                            wag = new VAGONS()
+                            {
+                                id_vag = 0,
+                                num = num_vag,
+                                id_ora = null,
+                                id_owner = null,
+                                id_stat = null,
+                                is_locom = train_number,
+                                locom_seria = null,
+                                rod = null,
+                                st_otpr = "-",
+                                date_ar = null,
+                                date_end = null,
+                                date_in = dt,
+                                IDSostav = id_sostav,
+                                Natur = natur,
+                                Transit = transit
+                            };
+                        }
+                        id_vagons = efrc.SaveVAGONS(wag); // Вернуть id или ошибку
+                    }
                 }
+                return (int)id_vagons;
             }
-            return (int)id_vagons;
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DefinitionSetIDVagon(num_vag={0}, dt={1}, train_number={2}, id_sostav={3}, natur={4}, transit={5})", num_vag, dt, train_number, id_sostav, natur, transit), eventID);
+                return -1;
+            }
         }
         /// <summary>
         /// Определить Id владельца (если id нет в системе RailCars создать из данных КИС)
@@ -170,26 +177,36 @@ namespace RCReferences
         /// <returns></returns>
         public int? DefinitionIDOwner(int id_sob_kis, int? id_owner_country)
         {
-            EFRailCars efrc = new EFRailCars();
-            int? id_own = efrc.GetIDOwnersOfKis(id_sob_kis);
-            if (id_own == null)
+            try
             {
-                //KometaSobstvForNakl sfn = kc.GetSobstvForNakl(id_sob_kis);
-                //if (sfn != null)
-                //{
-                //    int res = efrc.SaveOWNERS(new OWNERS()
-                //    {
-                //        id_owner = 0,
-                //        name = sfn.NPLAT,
-                //        abr = sfn.ABR,
-                //        id_country = id_owner_country,
-                //        id_ora = id_sob_kis,
-                //        id_ora_temp = null,
-                //    });
-                //    if (res > 0) { id_own = res; }
-                //}
+                EFRailCars efrc = new EFRailCars();
+                Wagons kis = new Wagons();
+                int? id_own = efrc.GetIDOwnersOfKis(id_sob_kis);
+                if (id_own == null)
+                {
+
+                    KometaSobstvForNakl sfn = kis.GetSobstvForNakl(id_sob_kis);
+                    if (sfn != null)
+                    {
+                        int res = efrc.SaveOWNERS(new OWNERS()
+                        {
+                            id_owner = 0,
+                            name = sfn.NPLAT,
+                            abr = sfn.ABR,
+                            id_country = id_owner_country,
+                            id_ora = id_sob_kis,
+                            id_ora_temp = null,
+                        });
+                        if (res > 0) { id_own = res; }
+                    }
+                }
+                return id_own;
             }
-            return id_own;
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DefinitionIDOwner(id_sob_kis={0}, id_owner_country={1})", id_sob_kis, id_owner_country), eventID);
+                return null;
+            }
         }
         /// <summary>
         /// Определить Id груза (если id нет в системе RailCars создать из данных КИС)
@@ -199,48 +216,57 @@ namespace RCReferences
         /// <returns></returns>
         public int? DefinitionIDGruzs(int? id_gruz_prom_kis, int? id_gruz_vag_kis)
         {
-            EFRailCars efrc = new EFRailCars();
-            int? id_gruz = efrc.GetIDGruzs(id_gruz_prom_kis, id_gruz_vag_kis);
-            if (id_gruz == null)
+            try
             {
-                if (id_gruz_prom_kis != null & id_gruz_vag_kis == null)
+                EFRailCars efrc = new EFRailCars();
+                Wagons kis = new Wagons();
+                int? id_gruz = efrc.GetIDGruzs(id_gruz_prom_kis, id_gruz_vag_kis);
+                if (id_gruz == null)
                 {
-                    //PromGruzSP pg = pc.GetGruzSP((int)id_gruz_prom_kis);
-                    //if (pg != null)
-                    //{
-                    //    int res = efrc.SaveGRUZS(new GRUZS()
-                    //    {
-                    //        id_gruz = 0,
-                    //        name = pg.ABREV_GR.Trim(),
-                    //        name_full = pg.NAME_GR.Trim(),
-                    //        id_ora = id_gruz_prom_kis,
-                    //        id_ora2 = null,
-                    //        ETSNG = pg.TAR_GR,
+                    if (id_gruz_prom_kis != null & id_gruz_vag_kis == null)
+                    {
+                        PromGruzSP pg = kis.GetGruzSP((int)id_gruz_prom_kis);
+                        if (pg != null)
+                        {
+                            int res = efrc.SaveGRUZS(new GRUZS()
+                            {
+                                id_gruz = 0,
+                                name = pg.ABREV_GR.Trim(),
+                                name_full = pg.NAME_GR.Trim(),
+                                id_ora = id_gruz_prom_kis,
+                                id_ora2 = null,
+                                ETSNG = pg.TAR_GR,
 
-                    //    });
-                    //    if (res > 0) { id_gruz = res; }
-                    //}
+                            });
+                            if (res > 0) { id_gruz = res; }
+                        }
+                    }
+                    // отправляемые грузы
+                    if (id_gruz_vag_kis != null & id_gruz_prom_kis == null)
+                    {
+                        NumVagStpr1Gr nvgr = kis.GetSTPR1GR((int)id_gruz_vag_kis);
+                        if (nvgr != null)
+                        {
+                            int res = efrc.SaveGRUZS(new GRUZS()
+                            {
+                                id_gruz = 0,
+                                name = nvgr.GR.Trim(),
+                                name_full = nvgr.GR.Trim(),
+                                id_ora = null,
+                                id_ora2 = id_gruz_vag_kis,
+                                ETSNG = null
+                            });
+                            if (res > 0) { id_gruz = res; }
+                        }
+                    }
                 }
-                // отправляемые грузы
-                if (id_gruz_vag_kis != null & id_gruz_prom_kis == null)
-                {
-                    //NumVagStpr1Gr nvgr = vc.GetSTPR1GR((int)id_gruz_vag_kis);
-                    //if (nvgr != null)
-                    //{
-                    //    int res = efrc.SaveGRUZS(new GRUZS()
-                    //    {
-                    //        id_gruz = 0,
-                    //        name = nvgr.GR.Trim(),
-                    //        name_full = nvgr.GR.Trim(),
-                    //        id_ora = null,
-                    //        id_ora2 = id_gruz_vag_kis,
-                    //        ETSNG = null
-                    //    });
-                    //    if (res > 0) { id_gruz = res; }
-                    //}
-                }
+                return id_gruz;
             }
-            return id_gruz;
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DefinitionIDGruzs(id_gruz_prom_kis={0}, id_gruz_vag_kis={1})", id_gruz_prom_kis, id_gruz_vag_kis), eventID);
+                return null;
+            }
         }
         /// <summary>
         /// Определить Id груза по коду ЕТСНГ (если id нет в системе RailCars создать из данных КИС или справочника ЕТСНГ)
@@ -249,43 +275,52 @@ namespace RCReferences
         /// <returns></returns>
         public int? DefinitionIDGruzs(int id_cargo)
         {
-            EFRailCars efrc = new EFRailCars();
-            Reference api_reference = new Reference();
-            int? id_gr = efrc.GetIDGruzsToETSNG(id_cargo);
-            if (id_gr == null)
+            try
             {
-                //PromGruzSP pg;
-                //pg = pc.GetGruzSPToTarGR(id_cargo, false);
-                //if (pg == null)
-                //{
-                //    pg = pc.GetGruzSPToTarGR(id_cargo, true);
-                //    if (pg == null)
-                //    {
-                //        Cargo cargo = api_reference.GetCargoOfCodeETSNG(id_cargo);
-                //        //Code_Cargo cargo = refRailway.GetCargos_ETSNG(id_cargo);
-                //        if (cargo != null)
-                //        {
-                //            int res = efrc.SaveGRUZS(new GRUZS()
-                //            {
-                //                id_gruz = 0,
-                //                name = cargo.name_etsng.Length > 200 ? cargo.name_etsng.Remove(199).Trim() : cargo.name_etsng.Trim(),
-                //                name_full = cargo.name_etsng.Length > 500 ? cargo.name_etsng.Remove(499).Trim() : cargo.name_etsng.Trim(),
-                //                id_ora = null,
-                //                id_ora2 = null,
-                //                ETSNG = cargo.code_etsng,
+                EFRailCars efrc = new EFRailCars();
+                Wagons kis = new Wagons();
+                Reference api_reference = new Reference();
+                int? id_gr = efrc.GetIDGruzsToETSNG(id_cargo);
+                if (id_gr == null)
+                {
+                    PromGruzSP pg;
+                    pg = kis.GetGruzSPToTarGR(id_cargo, false);
+                    if (pg == null)
+                    {
+                        pg = kis.GetGruzSPToTarGR(id_cargo, true);
+                        if (pg == null)
+                        {
+                            Cargo cargo = api_reference.GetCargoOfCodeETSNG(id_cargo);
+                            //Code_Cargo cargo = refRailway.GetCargos_ETSNG(id_cargo);
+                            if (cargo != null)
+                            {
+                                int res = efrc.SaveGRUZS(new GRUZS()
+                                {
+                                    id_gruz = 0,
+                                    name = cargo.name_etsng.Length > 200 ? cargo.name_etsng.Remove(199).Trim() : cargo.name_etsng.Trim(),
+                                    name_full = cargo.name_etsng.Length > 500 ? cargo.name_etsng.Remove(499).Trim() : cargo.name_etsng.Trim(),
+                                    id_ora = null,
+                                    id_ora2 = null,
+                                    ETSNG = cargo.code_etsng,
 
-                //            });
-                //            if (res > 0) { id_gr = res; }
-                //        }
-                //        else { id_gr = 0; }
+                                });
+                                if (res > 0) { id_gr = res; }
+                            }
+                            else { id_gr = 0; }
 
-                //    }
-                //    else { return DefinitionIDGruzs(pg.K_GRUZ, null); }
-                //}
-                //else { return DefinitionIDGruzs(pg.K_GRUZ, null); }
+                        }
+                        else { return DefinitionIDGruzs(pg.K_GRUZ, null); }
+                    }
+                    else { return DefinitionIDGruzs(pg.K_GRUZ, null); }
 
+                }
+                return id_gr;
             }
-            return id_gr;
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DefinitionIDGruzs(id_cargo={0})", id_cargo), eventID);
+                return null;
+            }
         }
         ///// <summary>
         ///// Определить id цеха (если id нет в системе RailCars создать из данных КИС)
