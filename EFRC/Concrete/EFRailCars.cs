@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using libClass;
+using System.Data.SqlClient;
 
 namespace EFRC.Concrete
 {
@@ -250,6 +251,92 @@ namespace EFRC.Concrete
             {
                 e.WriteErrorMethod(String.Format("GetVagonsOperationsToMTSostav(id_sostav:{0}, dt_amkr:{1}, id_vagon:{2})", id_sostav, dt_amkr, id_vagon), eventID);
                 return null;
+            }
+        }
+        /// <summary>
+        /// Получить вагоны по составу
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <returns></returns>
+        public IQueryable<VAGON_OPERATIONS> GetVagonsOperations(int id_sostav)
+        {
+            try
+            {
+                return GetVAGON_OPERATIONS().Where(o => o.IDSostav == id_sostav);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetVagonsOperations(id_sostav:{0})", id_sostav), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть операции по указаному составу с группировкой по вагонам
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <returns></returns>
+        public IQueryable<IGrouping<int?, VAGON_OPERATIONS>> GetVagonsOperationsGroupingVagon(int id_sostav) {
+            return GetVagonsOperations(id_sostav).GroupBy(o => o.num_vagon);
+        }
+        /// <summary>
+        /// Получить список операций над указаным вагоном по указаному составу с сортировкой по убыванию 
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="num_vag"></param>
+        /// <returns></returns>
+        public IQueryable<VAGON_OPERATIONS> GetVagonsOperations(int id_sostav, int num_vag)
+        {
+            try
+            {
+                return GetVagonsOperations(id_sostav).Where(o => o.num_vagon == num_vag).OrderByDescending(o => o.id_oper);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetVagonsOperations(id_sostav:{0}, num_vag:{1})", id_sostav, num_vag), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Удалить операции пренадлежащие указаному составу и вагону 
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="num_vag"></param>
+        /// <returns></returns>
+        public int DeleteVagonsOperations(int id_sostav, int num_vag)
+        {
+            try
+            {
+                //TODO: При удалении операций с вагонами можно предусматреть коррекцию их на пути
+                SqlParameter IDSostav = new SqlParameter("@IDSostav", id_sostav);
+                SqlParameter NumVag = new SqlParameter("@NumVag", num_vag);
+                return context.Database.ExecuteSqlCommand("DELETE FROM [dbo].[VAGON_OPERATIONS] where [IDSostav] = @IDSostav and [num_vagon]= @NumVag", IDSostav, NumVag);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DeleteVagonsOperations(id_sostav={0}, num_vag={1})", id_sostav, num_vag), eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Обновить номер состава 
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="num_vag"></param>
+        /// <param name="new_id_sostav"></param>
+        /// <returns></returns>
+        public int UpdateIDSostavVagonsOperations(int id_sostav, int num_vag, int new_id_sostav)
+        {
+            try
+            {
+                SqlParameter IDSostav = new SqlParameter("@IDSostav", id_sostav);
+                SqlParameter NumVag = new SqlParameter("@NumVag", num_vag);
+                SqlParameter NewIDSostav = new SqlParameter("@NewIDSostav", new_id_sostav);
+                return context.Database.ExecuteSqlCommand("UPDATE [dbo].[VAGON_OPERATIONS] SET [IDSostav] = @NewIDSostav WHERE [IDSostav] = @IDSostav and [num_vagon]= @NumVag", NewIDSostav, IDSostav, NumVag);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("UpdateIDSostavVagonsOperations(id_sostav={0}, num_vag={1}, new_id_sostav={2})", id_sostav, num_vag, new_id_sostav), eventID);
+                return -1;
             }
         }
         /// <summary>

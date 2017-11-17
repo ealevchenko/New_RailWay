@@ -19,6 +19,11 @@ namespace EFRC.Abstract
         int DeleteVagonsToInsertMT(int id_sostav);
         IQueryable<VAGON_OPERATIONS> GetVagonsOperationsToMTSostav(int id_sostav, DateTime dt_amkr);
         VAGON_OPERATIONS GetVagonsOperationsToMTSostav(int id_sostav, DateTime dt_amkr, int id_vagon);
+        IQueryable<VAGON_OPERATIONS> GetVagonsOperations(int id_sostav); 
+        IQueryable<IGrouping<int?, VAGON_OPERATIONS>> GetVagonsOperationsGroupingVagon(int id_sostav);
+        IQueryable<VAGON_OPERATIONS> GetVagonsOperations(int id_sostav, int num_vag);
+        int DeleteVagonsOperations(int id_sostav, int num_vag);
+        int UpdateIDSostavVagonsOperations(int id_sostav, int num_vag, int new_id_sostav);
         bool IsVagonOperationMT(int id_sostav, DateTime dt_amkr, int id_vagon);
         int? MaxPositionWay(int id_way);
         int InsertVagon(int natur, DateTime dt_amkr, int id_vagon, int num_vagon, int? id_sostav, DateTime? dt_uz, int id_station, int id_way, int id_stat_kis, int? id_cond, int? id_cond2);
