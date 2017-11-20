@@ -85,5 +85,12 @@ namespace Testing
             NumVagStpr1Gr stat = w.GetSTPR1GR(kod);
             Console.WriteLine("Count = {0}", stat.GR);
         }
+
+        public void Reference_GetCountryOfCodeSNG()
+        {
+            Reference r = new Reference();
+            Countrys stat = r.GetCountryOfCodeSNG(20);
+            Console.WriteLine("Stations = {0}, Stations = {1}", "Маскали", stat.country);
+        }
     }
 }

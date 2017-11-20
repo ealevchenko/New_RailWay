@@ -64,6 +64,7 @@ namespace RWWebAPI
         }
     }
 
+    [Serializable]
     public class Countrys: ISerializable
     {
         public int id { get; set; }
