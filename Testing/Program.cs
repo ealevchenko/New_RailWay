@@ -57,6 +57,8 @@ namespace Testing
             //tst_tr_app.TransferArrival();
             //tst_tr_app.EFMetallurgTrans_Consignee(); //
             //tst_tr_app.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
+            //tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
+            tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
             #endregion
 
             #region Test_Reference
@@ -111,7 +113,7 @@ namespace Testing
             //test.RWLog_WriteException();
             //test.MLog_WriteEvents();
             //test.MLog_WriteLogServices();
-            test.MLog_WriteLogStatusServices();
+            //test.MLog_WriteLogStatusServices();
             #endregion
 
             #region Test_Settings тест настроек

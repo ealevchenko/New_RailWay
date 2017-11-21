@@ -61,6 +61,10 @@
       <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
       <Name>MLogs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RWSettings\RWSettings.csproj">
+      <Project>{00d9d515-6089-4334-af39-28db22cd7d20}</Project>
+      <Name>RWSettings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RWWebAPI\RWWebAPI.csproj">
       <Project>{6f2c206c-b26c-4c3c-81ed-676d5e828f9b}</Project>
       <Name>RWWebAPI</Name>
