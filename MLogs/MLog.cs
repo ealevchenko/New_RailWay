@@ -24,10 +24,6 @@ namespace MessageLog
         static bool _fLogs = false;
         static bool _fLogErrors = false;
 
-
-
-
-
         static MLog()
         {
             FileLogs.InitLogger();
@@ -367,6 +363,87 @@ namespace MessageLog
             WriteError(e, GetMessageMethod(method));
         }
 
+        #endregion
+
+        #region Event
+
+        public static long WriteEvents(this string events, string status, service service, eventID eventID)
+        {
+            Console.WriteLine(String.Format("\nservice: {0}\neventID: {1}\nevents: {2}\nstatus: {3}", service, eventID, events, status));
+            return MDBLogs.SaveEvents(events, status, service, eventID);
+        }
+
+        public static long WriteEvents(this string events, string status, service service)
+        {
+            return WriteEvents(events, status, service, eventID.Null);
+        }
+
+        public static long WriteEvents(this string events, string status, eventID eventID)
+        {
+            return WriteEvents(events, status, service.Null, eventID);
+        }
+
+        public static long WriteEvents(this string events, string status)
+        {
+            return WriteEvents(events, status, service.Null, eventID.Null);
+        }
+
+        public static long WriteEvents(this string events, EventStatus status, service service, eventID eventID)
+        {
+            Console.WriteLine(String.Format("\nservice: {0}\neventID: {1}\nevents: {2}\nstatus: {3}", service, eventID, events, status.ToString()));
+            return MDBLogs.SaveEvents(events, status, service, eventID);
+        }
+
+        public static long WriteEvents(this string events, EventStatus status, service service)
+        {
+            return WriteEvents(events, status, service, eventID.Null);
+        }
+
+        public static long WriteEvents(this string events, EventStatus status, eventID eventID)
+        {
+            return WriteEvents(events, status, service.Null, eventID);
+        }
+
+        public static long WriteEvents(this string events, EventStatus status)
+        {
+            return WriteEvents(events, status, service.Null, eventID.Null);
+        }
+        #endregion
+
+        #region Services
+        /// <summary>
+        /// Записать лог сервиса
+        /// </summary>
+        /// <param name="id_service"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public static long WriteServices(this service service, DateTime start, DateTime stop, int code)
+        {
+            return MServicesLog.WriteLogServices(service, start, stop, code);
+        }
+        /// <summary>
+        /// Записать статус сервиса после выполнения
+        /// </summary>
+        /// <param name="id_service"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public static long WriteStatusServices(this service service, DateTime start, DateTime stop)
+        {
+            return MServicesLog.WriteLogStatusServices(service, start, stop);
+        }
+        /// <summary>
+        /// Записать статус сервиса при запуске
+        /// </summary>
+        /// <param name="id_service"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static long WriteStatusServices(this service service, DateTime start)
+        {
+            return MServicesLog.WriteLogStatusServices(service, start);
+        }
         #endregion
 
         /// <summary>

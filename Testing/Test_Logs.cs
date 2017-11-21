@@ -185,5 +185,39 @@ namespace Testing
         }
         #endregion
 
+        #region Events
+
+        public void MLog_WriteEvents() { 
+            string events = "eventsTest";
+            string status = "statusTest";
+            service service = MessageLog.service.TransferMT;
+            eventID eventID = MessageLog.eventID.EFRCReference;
+            events.WriteEvents(status,service,eventID);
+            events.WriteEvents(status,service);
+            events.WriteEvents(status,eventID);
+            events.WriteEvents(status);
+            EventStatus status1 = EventStatus.No_Actions;
+            service service1 = MessageLog.service.ServicesMT;
+            eventID eventID1 = MessageLog.eventID.EFSAP;
+            events.WriteEvents(status1,service1,eventID1);
+            events.WriteEvents(status1,service1);
+            events.WriteEvents(status1,eventID1);
+            events.WriteEvents(status1);
+        }
+
+        public void MLog_WriteLogServices()
+        { 
+            service service = MessageLog.service.TransferMT;
+            service.WriteServices(DateTime.Now.AddDays(-1), DateTime.Now, 5);
+        }
+
+        public void MLog_WriteLogStatusServices()
+        { 
+            service service = MessageLog.service.TransferMT;
+            service.WriteStatusServices(DateTime.Now.AddDays(-1), DateTime.Now);
+            MessageLog.service.TransferApproaches.WriteStatusServices(DateTime.Now.AddDays(-1));
+        }
+        #endregion
+
     }
 }

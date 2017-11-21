@@ -60,8 +60,8 @@ namespace Testing
         /// </summary>
         public void TRailCars_ArrivalToRailCars() {
             TRailCars trc = new TRailCars();
-            trc.ArrivalToRailCars(4113);
-            //trc.ArrivalToRailCars(4114);
+            //trc.ArrivalToRailCars(4113);
+            trc.ArrivalToRailCars(4114);
 
         }
     }

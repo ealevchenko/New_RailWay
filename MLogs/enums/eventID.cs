@@ -39,7 +39,8 @@ namespace MessageLog
 
         MetallurgTrans = 2200,              // Библиотека сервисов обработки данных МеталлургТранс
         MetallurgTrans_MTTransfer = 2201,   // Модуль переноса данных МеталлургТранс
-        MetallurgTrans_SFTPClient = 2202,   // Модуль переноса данных МеталлургТранс
+        MetallurgTrans_SFTPClient = 2202,   // Модуль доступа к SFTP серверам (данных МеталлургТранс)
+        MetallurgTrans_MTThread = 2202,     // Модуль потоков переноса данных
         #endregion
 
         #region Служба RailCars 3000

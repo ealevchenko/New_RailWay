@@ -47,7 +47,7 @@ namespace Testing
             //tst_rw_api.Wagons_GetGruzSPToTarGR(12502, false); 
             //tst_rw_api.Wagons_GetSTPR1GR();
             //Wagons_GetSTPR1GR(291);
-            tst_rw_api.Reference_GetCountryOfCodeSNG();
+            //tst_rw_api.Reference_GetCountryOfCodeSNG();
 
             #endregion
 
@@ -109,6 +109,9 @@ namespace Testing
             //test.RWLog_WriteWarning();
             //test.RWLog_WriteError();
             //test.RWLog_WriteException();
+            //test.MLog_WriteEvents();
+            //test.MLog_WriteLogServices();
+            test.MLog_WriteLogStatusServices();
             #endregion
 
             #region Test_Settings тест настроек

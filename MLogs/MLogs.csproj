@@ -45,6 +45,7 @@
     <Compile Include="Logs\MDBLogs.cs" />
     <Compile Include="Logs\MEventLog.cs" />
     <Compile Include="Logs\MFileLogs.cs" />
+    <Compile Include="Logs\MServicesLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MLog.cs" />
   </ItemGroup>
@@ -60,6 +61,10 @@
     <ProjectReference Include="..\MessageLogs\FileLogs\FileLogs.csproj">
       <Project>{5700d165-d83a-44b4-be83-e8f77e68813b}</Project>
       <Name>FileLogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MessageLogs\ServicesLogs\ServicesLogs.csproj">
+      <Project>{7674323e-0834-4bbf-87e6-d582d2eb7a27}</Project>
+      <Name>ServicesLogs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
