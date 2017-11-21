@@ -53,6 +53,10 @@
       <Project>{415f94aa-63df-4538-9552-fc9a22b61636}</Project>
       <Name>EFMT</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MessageLogs\DBLogs\DBLogs.csproj">
+      <Project>{56b38018-2e35-42f4-87d8-273dd38a9899}</Project>
+      <Name>DBLogs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MLogs\MLogs.csproj">
       <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
       <Name>MLogs</Name>

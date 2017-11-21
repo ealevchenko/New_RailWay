@@ -406,15 +406,12 @@ namespace TransferRailCars
             int result = 0;
             try
             {
-                //KIS_RC_Transfer rc_transfer = new KIS_RC_Transfer(servece_owner); // Перенос в системе RailCars
-
                 trSostav sostav = GetSostav(id_sostav);
                 // Поставим вагоны в систему RailCars
                 int res_arc;
 
                 try
                 {
-                    //res_arc = rc_transfer.PutInArrival(sostav);
                     res_arc = PutInArrival(sostav);
                     if (res_arc < 0)
                     {
@@ -426,11 +423,6 @@ namespace TransferRailCars
                     e.WriteError(String.Format("Ошибка постановки состава №{0} в прибытие АМКР", id_sostav), eventID);
                     res_arc = -1;
                 }
-                // Поставим вагоны в систему RailWay            
-                // TODO: Выполнить код постановки вагонов в систему RailWay (прибытие из КР)
-                // ..................
-
-                // Создаем или изменяем строки в справочнике САП
                 int rec_sap;
                 try
                 {
@@ -441,7 +433,7 @@ namespace TransferRailCars
                     e.WriteError(mess_sap_error, eventID);
                     rec_sap = -1;
                 }
-                result = res_arc; //TODO: переделат возврат после (Выполнить код постановки вагонов в систему RailWay (прибытие из КР))
+                result = res_arc;
             }
             catch (Exception e)
             {
@@ -467,28 +459,6 @@ namespace TransferRailCars
 
                 if (sostav == null) return 0;
                 ResultTransfers result = new ResultTransfers(sostav.Wagons != null ? sostav.Wagons.Count() : 0, 0, null, null, 0, 0);
-                //if (sostav.ParentID != null)
-                //{
-                //    string mess_del = String.Format("удаления состава:{0} из прибытия системы Railway, по которому получено новое ТСП (новый состав:{1})", sostav.ParentID, sostav.id);
-                //    string mess_del_error = mess_transfer;
-                //    string mess_del_error1 = String.Format("Ошибка " + mess_transfer);
-                //    try
-                //    {
-                //        //TODO: !! ВОЗМОЖНО (ПРИБЫТИЕ С УЗ) - доработать удаление составов по которым происходит тсп (удалять только те вагоны которых нет в новом тсп и добавлять новые - вдруг поезд приняли уже на станцию)
-                //        EFRailCars efrc = new EFRailCars();
-                //        int res = efrc.DeleteVagonsToInsertMT((int)sostav.ParentID); // Удалить предыдущий состав (По этому составу было новое ТСП) 
-                //        if (res < 0)
-                //        {
-                //            mess_del_error1.WriteError(eventID);
-                //            return (int)errorTransfer.global;
-                //        }
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        e.WriteError(mess_del_error, eventID);
-                //        return (int)errorTransfer.global;
-                //    }
-                //}
                 if (sostav.Wagons == null) return 0;
                 List<trWagon> list_new_vag = sostav.Wagons.ToList();
                 // проверим старый состав с этим вагоном
@@ -570,8 +540,7 @@ namespace TransferRailCars
                 }
                 mess_transfer_sostav += String.Format(", определено для переноса:{0} вагонов, перенесено: {1}, перенесено ранее: {2}, ошибок переноса: {3}.", result.counts, result.inserts, result.skippeds, result.errors);
                 mess_transfer_sostav.WriteWarning(eventID);
-                //TODO: Добавить формирование события
-                //if (result.counts > 0) { mess_transfer_sostav.SaveLogEvents(result.errors > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+                if (result.counts > 0) { mess_transfer_sostav.SaveEvents(result.errors > 0 ? EventStatus.Error : EventStatus.Ok, eventID); }
                 return result.ResultInsert;
             }
             catch (Exception e)

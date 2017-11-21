@@ -306,7 +306,7 @@ namespace EFRC.Concrete
         {
             try
             {
-                //TODO: При удалении операций с вагонами можно предусматреть коррекцию их на пути
+                //TODO: Now При удалении операций с вагонами можно предусматреть коррекцию их на пути
                 SqlParameter IDSostav = new SqlParameter("@IDSostav", id_sostav);
                 SqlParameter NumVag = new SqlParameter("@NumVag", num_vag);
                 return context.Database.ExecuteSqlCommand("DELETE FROM [dbo].[VAGON_OPERATIONS] where [IDSostav] = @IDSostav and [num_vagon]= @NumVag", IDSostav, NumVag);
