@@ -107,12 +107,12 @@ namespace API_RailWay.Controllers
             }
             return Ok(CreateStations(stations));
         }
-        // GET: api/reference/stations/correct/code/4671
-        [Route("stations/correct/code/{code:int}")]
+        // GET: api/reference/stations/correct/code/4671/false
+        [Route("stations/correct/code/{code:int}/{check:bool}")]
         [ResponseType(typeof(Stations))]
-        public IHttpActionResult GetCorrectStationsOfCode(int code)
+        public IHttpActionResult GetCorrectStationsOfCode(int code, bool check)
         {
-            Stations stations = this.rep_ref.GetCorrectStationsOfCode(code);
+            Stations stations = this.rep_ref.GetCorrectStationsOfCode(code, check);
             if (stations == null)
             {
                 return NotFound();

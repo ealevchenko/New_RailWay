@@ -29,7 +29,7 @@ namespace EFReference.Abstract
         Stations DeleteStations(int id);
         Stations GetStationsOfCode(int code);
         IQueryable<Stations>  GetStationsOfCode(int code_start, int code_stop);
-        Stations GetCorrectStationsOfCode(int code);
+        Stations GetCorrectStationsOfCode(int code, bool check);
         Stations GetStationsOfCodeCS(int code_cs);
         #endregion
 

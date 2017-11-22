@@ -274,14 +274,16 @@ namespace EFReference.Concrete
             }
         }
         /// <summary>
-        /// Вернуть строку станции по скорректированному коду
+        /// Вернуть строку станции по скорректированному коду c проверкой текущего кода или нет (добавляем в конец вариант 0..9)
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public Stations GetCorrectStationsOfCode(int code) {
+        public Stations GetCorrectStationsOfCode(int code, bool check)
+        {
             try
             {
-                Stations ref_station = GetStationsOfCode(code);
+                Stations ref_station = null;
+                if (check) { ref_station = GetStationsOfCode(code); }
                 if (ref_station == null)
                 {
                     ref_station = GetStationsOfCode(code * 10, (code * 10) + 9).FirstOrDefault();

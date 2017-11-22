@@ -144,16 +144,22 @@ namespace MetallurgTrans
                         {
                             Reference api_reference = new Reference();
                             int code_cargo = -1;
+                            int code_station_from = -1;
+                            int code_station_on = -1;
                             if (!String.IsNullOrWhiteSpace(array[3]))
                             {
                                 Cargo corect_cargo_code = api_reference.GetCargoOfCodeETSNG(int.Parse(array[3]));
                                 code_cargo = corect_cargo_code != null ? corect_cargo_code.code_etsng : int.Parse(array[3]);
                             }
-                            //if (!String.IsNullOrWhiteSpace(array[4]))
-                            //{
-                            //    Cargo corect_cargo_code = api_reference.GetCargoOfCodeETSNG(int.Parse(array[3]));
-                            //    code_cargo = corect_cargo_code != null ? corect_cargo_code.code_etsng : int.Parse(array[3]);
-                            //}
+                            if (!String.IsNullOrWhiteSpace(array[4]))
+                            {
+                                int codefrom = int.Parse(array[4].Substring(0, 4));
+                                int codeon = int.Parse(array[4].Substring(9, 4));
+                                Stations corect_station_from = api_reference.GetCorrectStationsOfCode(codefrom);
+                                code_station_from = corect_station_from != null ? corect_station_from.code : codefrom;
+                                Stations corect_station_on = api_reference.GetCorrectStationsOfCode(codeon);
+                                code_station_on = corect_station_on != null ? corect_station_on.code : codeon;
+                            }
                             ApproachesCars new_wag = new ApproachesCars()
                             {
                                 ID = 0,
@@ -166,8 +172,8 @@ namespace MetallurgTrans
                                 TrainNumber = !String.IsNullOrWhiteSpace(array[5]) ? int.Parse(array[5]) : -1,
                                 Operation = array[6].ToString(),
                                 DateOperation = !String.IsNullOrWhiteSpace(array[7]) ? DateTime.Parse(array[7], CultureInfo.CreateSpecificCulture("ru-RU")) : DateTime.Now,
-                                CodeStationFrom = !String.IsNullOrWhiteSpace(array[4]) ? int.Parse(array[4].Substring(0, 4)) : -1,
-                                CodeStationOn = !String.IsNullOrWhiteSpace(array[4]) ? int.Parse(array[4].Substring(9, 4)) : -1,
+                                CodeStationFrom = code_station_from,
+                                CodeStationOn = code_station_on,
                                 CodeStationCurrent = !String.IsNullOrWhiteSpace(array[8]) ? int.Parse(array[8]) : -1,
                                 CountWagons = !String.IsNullOrWhiteSpace(array[9]) ? int.Parse(array[9]) : -1,
                                 SumWeight = !String.IsNullOrWhiteSpace(array[10]) ? int.Parse(array[10]) : -1,

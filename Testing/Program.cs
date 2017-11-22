@@ -53,12 +53,12 @@ namespace Testing
 
             #region Test_MetallurgTrans
             Test_MetallurgTrans tst_tr_app = new Test_MetallurgTrans();
-            //tst_tr_app.TransferApproaches();
+            tst_tr_app.TransferApproaches();
             //tst_tr_app.TransferArrival();
             //tst_tr_app.EFMetallurgTrans_Consignee(); //
             //tst_tr_app.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
             //tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
-            tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
+            //tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
             #endregion
 
             #region Test_Reference
