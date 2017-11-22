@@ -96,17 +96,30 @@ namespace API_RailWay.Controllers
         }
 
         // GET: api/reference/stations/code/46700
-        [Route("stations/code/{id:int}")]
+        [Route("stations/code/{code:int}")]
         [ResponseType(typeof(Stations))]
-        public IHttpActionResult GetStationsOfCode(int id)
+        public IHttpActionResult GetStationsOfCode(int code)
         {
-            Stations stations = this.rep_ref.GetStationsOfCode(id);
+            Stations stations = this.rep_ref.GetStationsOfCode(code);
             if (stations == null)
             {
                 return NotFound();
             }
             return Ok(CreateStations(stations));
         }
+        // GET: api/reference/stations/correct/code/4671
+        [Route("stations/correct/code/{code:int}")]
+        [ResponseType(typeof(Stations))]
+        public IHttpActionResult GetCorrectStationsOfCode(int code)
+        {
+            Stations stations = this.rep_ref.GetCorrectStationsOfCode(code);
+            if (stations == null)
+            {
+                return NotFound();
+            }
+            return Ok(CreateStations(stations));
+        }
+
         #endregion
 
         #region Countrys

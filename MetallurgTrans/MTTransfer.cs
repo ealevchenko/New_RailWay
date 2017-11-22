@@ -149,6 +149,11 @@ namespace MetallurgTrans
                                 Cargo corect_cargo_code = api_reference.GetCargoOfCodeETSNG(int.Parse(array[3]));
                                 code_cargo = corect_cargo_code != null ? corect_cargo_code.code_etsng : int.Parse(array[3]);
                             }
+                            //if (!String.IsNullOrWhiteSpace(array[4]))
+                            //{
+                            //    Cargo corect_cargo_code = api_reference.GetCargoOfCodeETSNG(int.Parse(array[3]));
+                            //    code_cargo = corect_cargo_code != null ? corect_cargo_code.code_etsng : int.Parse(array[3]);
+                            //}
                             ApproachesCars new_wag = new ApproachesCars()
                             {
                                 ID = 0,

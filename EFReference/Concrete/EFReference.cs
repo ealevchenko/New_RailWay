@@ -262,6 +262,39 @@ namespace EFReference.Concrete
             }
         }
 
+        public IQueryable<Stations>  GetStationsOfCode(int code_start, int code_stop) {
+            try
+            {
+                return GetStations().Where(c => c.code >= code_start & c.code<=code_stop);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStationsOfCode(code_start={0}, code_stop={1})", code_start, code_stop), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть строку станции по скорректированному коду
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public Stations GetCorrectStationsOfCode(int code) {
+            try
+            {
+                Stations ref_station = GetStationsOfCode(code);
+                if (ref_station == null)
+                {
+                    ref_station = GetStationsOfCode(code * 10, (code * 10) + 9).FirstOrDefault();
+                }
+                return ref_station;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCorrectStationsOfCode(code={0})", code), eventID);
+                return null;
+            }
+        }
+
         public Stations GetStationsOfCodeCS(int code_cs) {
             try
             {

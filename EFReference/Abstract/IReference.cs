@@ -28,6 +28,8 @@ namespace EFReference.Abstract
         int SaveStations(Stations Stations);
         Stations DeleteStations(int id);
         Stations GetStationsOfCode(int code);
+        IQueryable<Stations>  GetStationsOfCode(int code_start, int code_stop);
+        Stations GetCorrectStationsOfCode(int code);
         Stations GetStationsOfCodeCS(int code_cs);
         #endregion
 
