@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "RailWay";
     ViewBag.Home = "RailWay";
-    ViewBag.ImageFone = "background-image: url(../../Image/header1.jpg);";
+    ViewBag.ImageFone = "background-image: url(Image/header1.jpg);";
 }
 @*@section Document {
         <div class="container">
@@ -32,7 +32,6 @@
     <p class="lead">@GlobalResources.rw_caption</p>
     <p><a href="#" class="btn btn-primary btn-lg">@GlobalResources.home_index_link_station</a></p>
     <p><a href='@Url.Action("Index", "ParkState")' class="btn btn-primary btn-lg">@GlobalResources.home_index_park_state</a></p>
-    <p>@Html.ActionLink(@GlobalResources.home_index_park_state, "Index", "ParkState", new { @class = "btn btn-primary btn-lg" })</p>
 </div>
 
 @*<div class="jumbotron">
