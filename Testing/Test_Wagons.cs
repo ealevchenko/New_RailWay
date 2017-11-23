@@ -28,28 +28,106 @@ namespace Testing
         
         }
 
-        //#region KometaParkState
+        #region KometaParkState
 
-        //public void Test_EFKometaParkState_KometaParkState()
-        //{
-        //    EFKometaParkState kps = new EFKometaParkState();
-        //    try
-        //    {
-        //        //List<KometaParkState> list = kps.GetKometaParkState().ToList();
-        //        foreach (KometaParkState t in kps.GetKometaParkState())
-        //        {
-        //            WL(t);
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return;
-        //    }
-        //}
+        public void Test_EFKometaParkState_KometaParkState()
+        {
+            EFWagons kps = new EFWagons();
+            try
+            {
+                //List<KometaParkState> list = kps.GetKometaParkState().ToList();
+                foreach (KometaParkState t in kps.GetKometaParkState().ToList())
+                {
+                    WL(t);
+                }
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
+        public void Test_EFKometaParkState_KometaParkState(DateTime Date)
+        {
+            EFWagons kps = new EFWagons();
+
+            try
+            {
+                List<KometaParkState> list = kps.GetKometaParkState(Date).ToList();
+                foreach (KometaParkState t in list)
+                {
+                    WL(t);
+                }
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
+        public void Test_EFKometaParkState_KometaParkStateToStation(DateTime Date)
+        {
+            EFWagons kps = new EFWagons();
+
+            try
+            {
+                List<IGrouping<string, KometaParkState>> list = kps.GetKometaParkStateToStation(Date).ToList();
+                foreach (IGrouping<string, KometaParkState> tg in list)
+                {
+                    foreach (KometaParkState t in tg)
+                    {
+                        WL(t);
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
+        public void Test_EFKometaParkState_KometaParkState(DateTime Date, int id_station)
+        {
+            EFWagons kps = new EFWagons();
+            try
+            {
+                List<KometaParkState> list = kps.GetKometaParkState(Date, id_station).ToList();
+                foreach (KometaParkState t in list)
+                {
+                    WL(t);
+                }
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
+        public void Test_EFKometaParkState_KometaParkStateToWay(DateTime Date, int id_station)
+        {
+            EFWagons kps = new EFWagons();
+            try
+            {
+                List<IGrouping<string, KometaParkState>> list = kps.GetKometaParkStateToWay(Date, id_station).ToList();
+                foreach (IGrouping<string, KometaParkState> tg in list)
+                {
+                    foreach (KometaParkState t in tg)
+                    {
+                        WL(t);
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
 
         //public void Test_EFKometaParkState_KometaParkState(int id, DateTime dt)
         //{
-        //    EFKometaParkState kps = new EFKometaParkState();
+        //    EFWagons kps = new EFWagons();
         //    try
         //    {
         //        List<KometaParkState> list = kps.GetKometaParkState(id, dt).ToList();
@@ -65,93 +143,93 @@ namespace Testing
         //    }
         //}
 
-        //public void WL(KometaParkState t)
-        //{
-        //    if (t == null) { Console.WriteLine(" = Null"); return; }
-        //    Console.WriteLine("N_DOC : {0},\t " +
-        //        "N_DOC : {1},\t " +
-        //        "DATE_DOC : {2},\t " +
-        //        "K_STAN : {3},\t " +
-        //        "NM_STAN : {4},\t " +
-        //        "RAIL : {5},\t " +
-        //        "ORDER_RAIL : {6},\t " +
-        //        "N_VAG : {7},\t " +
-        //        "ID_STRAN : {8},\t " +
-        //        "DATE_PR : {9},\t " +
-        //        "ID_SOB : {10},\t " +
-        //        "NM_SOB : {11},\t " +
-        //        "ID_GODN : {12},\t " +
-        //        "NM_GODN : {13},\t " +
-        //        "ID_GRUZ : {14},\t " +
-        //        "NM_GRUZ : {15},\t " +
-        //        "ID_MAIL : {16},\t " +
-        //        "N_MAIL : {17},\t " +
-        //        "DATE_MAIL : {18},\t " +
-        //        "ID_MR : {19},\t " +
-        //        "TEXT_MR : {20},\t " +
-        //        "PRIM : {21},\t " +
-        //        "NN : {22},\t " +
-        //        "STAN_MAIL : {23},\t " +
-        //        "TEXT : {24},\t " +
-        //        "ST_OTPR    : {25},\t " +
-        //        "PR_GRUZ : {26},\t " +
-        //        "TYPE_VAG  : {27},\t " +
-        //        "CEH_NAZN  : {28},\t " +
-        //        "STATUS  : {29},\t " +
-        //        "DT_STATUS : {30},\t " +
-        //        "ID_GRUZ2 : {31},\t " +
-        //        "NM_GRUZ2 : {32},\t " +
-        //        "REM_TUP : {33},\t " +
-        //        "PR_V : {34},\t " +
-        //        "PR_S : {35},\t " +
-        //        "DT_REFRESH : {36},\t " +
-        //        "PR_GR : {37},\t " +
-        //        "OTCEP : {38},\t " +
-        //        "NM_TP : {39},\t ",
-        //            t.N_DOC,
-        //            t.N_DOC,
-        //            t.DATE_DOC,
-        //            t.K_STAN,
-        //            t.NM_STAN,
-        //            t.RAIL,
-        //            t.ORDER_RAIL,
-        //            t.N_VAG,
-        //            t.ID_STRAN,
-        //            t.DATE_PR,
-        //            t.ID_SOB,
-        //            t.NM_SOB,
-        //            t.ID_GODN,
-        //            t.NM_GODN,
-        //            t.ID_GRUZ,
-        //            t.NM_GRUZ,
-        //            t.ID_MAIL,
-        //            t.N_MAIL,
-        //            t.DATE_MAIL,
-        //            t.ID_MR,
-        //            t.TEXT_MR,
-        //            t.PRIM,
-        //            t.NN,
-        //            t.STAN_MAIL,
-        //            t.TEXT,
-        //            t.ST_OTPR,
-        //            t.PR_GRUZ,
-        //            t.TYPE_VAG,
-        //            t.CEH_NAZN,
-        //            t.STATUS,
-        //            t.DT_STATUS,
-        //            t.ID_GRUZ2,
-        //            t.NM_GRUZ2,
-        //            t.REM_TUP,
-        //            t.PR_V,
-        //            t.PR_S,
-        //            t.DT_REFRESH,
-        //            t.PR_GR,
-        //            t.OTCEP,
-        //            t.NM_TP
-        //            );
+        public void WL(KometaParkState t)
+        {
+            if (t == null) { Console.WriteLine(" = Null"); return; }
+            Console.WriteLine("N_DOC : {0},\t " +
+                "N_DOC : {1},\t " +
+                "DATE_DOC : {2},\t " +
+                "K_STAN : {3},\t " +
+                "NM_STAN : {4},\t " +
+                "RAIL : {5},\t " +
+                "ORDER_RAIL : {6},\t " +
+                "N_VAG : {7},\t " +
+                "ID_STRAN : {8},\t " +
+                "DATE_PR : {9},\t " +
+                "ID_SOB : {10},\t " +
+                "NM_SOB : {11},\t " +
+                "ID_GODN : {12},\t " +
+                "NM_GODN : {13},\t " +
+                "ID_GRUZ : {14},\t " +
+                "NM_GRUZ : {15},\t " +
+                "ID_MAIL : {16},\t " +
+                "N_MAIL : {17},\t " +
+                "DATE_MAIL : {18},\t " +
+                "ID_MR : {19},\t " +
+                "TEXT_MR : {20},\t " +
+                "PRIM : {21},\t " +
+                "NN : {22},\t " +
+                "STAN_MAIL : {23},\t " +
+                "TEXT : {24},\t " +
+                "ST_OTPR    : {25},\t " +
+                "PR_GRUZ : {26},\t " +
+                "TYPE_VAG  : {27},\t " +
+                "CEH_NAZN  : {28},\t " +
+                "STATUS  : {29},\t " +
+                "DT_STATUS : {30},\t " +
+                "ID_GRUZ2 : {31},\t " +
+                "NM_GRUZ2 : {32},\t " +
+                "REM_TUP : {33},\t " +
+                "PR_V : {34},\t " +
+                "PR_S : {35},\t " +
+                "DT_REFRESH : {36},\t " +
+                "PR_GR : {37},\t " +
+                "OTCEP : {38},\t " +
+                "NM_TP : {39},\t ",
+                    t.N_DOC,
+                    t.N_DOC,
+                    t.DATE_DOC,
+                    t.K_STAN,
+                    t.NM_STAN,
+                    t.RAIL,
+                    t.ORDER_RAIL,
+                    t.N_VAG,
+                    t.ID_STRAN,
+                    t.DATE_PR,
+                    t.ID_SOB,
+                    t.NM_SOB,
+                    t.ID_GODN,
+                    t.NM_GODN,
+                    t.ID_GRUZ,
+                    t.NM_GRUZ,
+                    t.ID_MAIL,
+                    t.N_MAIL,
+                    t.DATE_MAIL,
+                    t.ID_MR,
+                    t.TEXT_MR,
+                    t.PRIM,
+                    t.NN,
+                    t.STAN_MAIL,
+                    t.TEXT,
+                    t.ST_OTPR,
+                    t.PR_GRUZ,
+                    t.TYPE_VAG,
+                    t.CEH_NAZN,
+                    t.STATUS,
+                    t.DT_STATUS,
+                    t.ID_GRUZ2,
+                    t.NM_GRUZ2,
+                    t.REM_TUP,
+                    t.PR_V,
+                    t.PR_S,
+                    t.DT_REFRESH,
+                    t.PR_GR,
+                    t.OTCEP,
+                    t.NM_TP
+                    );
 
-        //}
-        //#endregion
+        }
+        #endregion
 
         public void Test_KometaContent_KometaVagonSob()
         {

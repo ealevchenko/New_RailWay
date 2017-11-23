@@ -155,9 +155,9 @@ namespace MetallurgTrans
                             {
                                 int codefrom = int.Parse(array[4].Substring(0, 4));
                                 int codeon = int.Parse(array[4].Substring(9, 4));
-                                Stations corect_station_from = api_reference.GetCorrectStationsOfCode(codefrom);
+                                Stations corect_station_from = api_reference.GetCorrectStationsOfCode(codefrom, false);
                                 code_station_from = corect_station_from != null ? corect_station_from.code : codefrom;
-                                Stations corect_station_on = api_reference.GetCorrectStationsOfCode(codeon);
+                                Stations corect_station_on = api_reference.GetCorrectStationsOfCode(codeon, false);
                                 code_station_on = corect_station_on != null ? corect_station_on.code : codeon;
                             }
                             ApproachesCars new_wag = new ApproachesCars()

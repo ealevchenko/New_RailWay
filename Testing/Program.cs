@@ -53,7 +53,7 @@ namespace Testing
 
             #region Test_MetallurgTrans
             Test_MetallurgTrans tst_tr_app = new Test_MetallurgTrans();
-            tst_tr_app.TransferApproaches();
+            //tst_tr_app.TransferApproaches();
             //tst_tr_app.TransferArrival();
             //tst_tr_app.EFMetallurgTrans_Consignee(); //
             //tst_tr_app.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
@@ -89,6 +89,11 @@ namespace Testing
             //tst_wag.Test_PromContent_GetGruzSPToTarGR(12502, false);// Грузы по промышленой поиск по етснг без коррекции 
             //tst_wag.Test_VagonsContent_GetSTPR1GR();
             //tst_wag.Test_VagonsContent_GetSTPR1GR(291);
+            //tst_wag.Test_EFKometaParkState_KometaParkState(); // Данные по состояние парка
+            //tst_wag.Test_EFKometaParkState_KometaParkState(DateTime.Now); // Данные по состояние парка за указаный день
+            tst_wag.Test_EFKometaParkState_KometaParkStateToStation(DateTime.Now);
+            //tst_wag.Test_EFKometaParkState_KometaParkState(DateTime.Now, 4); // Данные по состояние парка за указаный день
+            //tst_wag.Test_EFKometaParkState_KometaParkStateToWay(DateTime.Now, 1); // Данные по состояние парка за указаный день
             #endregion
 
             #region Test_Logs тест логирования

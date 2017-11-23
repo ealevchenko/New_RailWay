@@ -1,0 +1,24 @@
+﻿/*Блокировка экрана*/
+.LockOff {
+    display: none;
+    visibility: hidden;
+}
+
+.LockOn {
+    display: block;
+    visibility: visible;
+    position: absolute;
+    z-index: 999;
+    top: 0px;
+    left: 0px;
+    width: 105%;
+    height:1000%;
+    background-color: #ccc;
+    text-align: center;
+    padding-top: 20%;
+    filter: alpha(opacity=75);
+    opacity: 0.75;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: xx-large;
+    color: #0033CC;
+}

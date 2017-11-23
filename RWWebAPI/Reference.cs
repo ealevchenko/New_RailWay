@@ -111,9 +111,9 @@ namespace RWWebAPI
             return GetJSONSelect<Stations>(@"reference/stations/code/" + code.ToString());
         }
 
-        public Stations GetCorrectStationsOfCode(int code)
+        public Stations GetCorrectStationsOfCode(int code, bool check)
         {
-            return GetJSONSelect<Stations>(@"reference/stations/correct/code/" + code.ToString());
+            return GetJSONSelect<Stations>(String.Format(@"reference/stations/correct/code/{0}/{1}",code.ToString(), check));
         }
 
         public Countrys GetCountryOfCodeSNG(int code_sng)

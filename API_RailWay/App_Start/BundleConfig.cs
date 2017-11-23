@@ -8,6 +8,7 @@ namespace API_RailWay
         // Дополнительные сведения об объединении см. по адресу: http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            //JS
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -19,10 +20,27 @@ namespace API_RailWay
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
+            bundles.Add(new ScriptBundle("~/bundles/creative").Include(
+                "~/Scripts/creative.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/easing").Include(
+                "~/Scripts/jquery.easing.min.js"));
+            bundles.Add(new ScriptBundle("~/bundles/fittext").Include(
+                "~/Scripts/jquery.fittext.js"));
+            bundles.Add(new ScriptBundle("~/bundles/wow").Include(
+                "~/Scripts/wow.min.js"));
+
+
+            //CSS
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Creative/css").Include(
+                    "~/Content/bootstrap.css",
+                    "~/Content/font-awesome.min.css",
+                    "~/Content/animate.min.css",
+                    "~/Content/creative.css"));
         }
     }
 }

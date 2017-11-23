@@ -71,7 +71,6 @@ namespace MetallurgTrans
         private static void TransferApproaches()
         {
             service service = service.TransferApproaches;
-            bool error_setting = false;
             DateTime dt_start = DateTime.Now;
             try
             {
@@ -121,46 +120,42 @@ namespace MetallurgTrans
                     catch (Exception ex)
                     {
                         ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
-                        error_setting = true;
                     }
                 }
                 while (true) // слушаем всегда
                 {
                     _eventApproaches.WaitOne(); // Здесь остановится
                     dt_start = DateTime.Now;
-                    if (!error_setting)
+                    int count_copy = 0;
+                    int res_transfer = 0;
+                    lock (locker_sftp)
                     {
-                        int count_copy = 0;
-                        int res_transfer = 0;
-                        lock (locker_sftp)
-                        {
-
-                            // подключится считать и закрыть соединение
-                            SFTPClient csftp = new SFTPClient(connect_SFTP, service.TransferApproaches);
-                            csftp.fromPathsHost = fromPathHost;
-                            csftp.FileFiltrHost = fileFiltrHost;
-                            csftp.toDirPath = toDirPath;
-                            csftp.toTMPDirPath = toTMPDirPath;
-                            csftp.DeleteFileHost = deleteFileHost;
-                            csftp.RewriteFile = rewriteFile;
-                            count_copy = csftp.CopyToDir();
-                        }
-
-                        lock (locker_db_approaches)
-                        {
-                            MTTransfer mtt = new MTTransfer(service);
-                            mtt.FromPath = toTMPDirPath;
-                            mtt.DeleteFile = deleteFileMT;
-                            res_transfer = mtt.TransferApproaches();
-                        }
-
-                        TimeSpan ts = DateTime.Now - dt_start;
-                        string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2} мин {3} сек {4} мсек, код выполнения error_setting:{5} count_copy:{6} res_transfer:{7}", service.ToString(), servece_owner, ts.Minutes, ts.Seconds, ts.Milliseconds, error_setting, count_copy, res_transfer);
-                        mes_service_exec.WriteInformation(servece_owner, eventID);
-
-                        mes_service_exec.SaveEvents(error_setting | count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
-                        service.WriteServices(dt_start, DateTime.Now, res_transfer);
+                        // подключится считать и закрыть соединение
+                        SFTPClient csftp = new SFTPClient(connect_SFTP, service.TransferApproaches);
+                        csftp.fromPathsHost = fromPathHost;
+                        csftp.FileFiltrHost = fileFiltrHost;
+                        csftp.toDirPath = toDirPath;
+                        csftp.toTMPDirPath = toTMPDirPath;
+                        csftp.DeleteFileHost = deleteFileHost;
+                        csftp.RewriteFile = rewriteFile;
+                        count_copy = csftp.CopyToDir();
                     }
+
+                    lock (locker_db_approaches)
+                    {
+                        MTTransfer mtt = new MTTransfer(service);
+                        mtt.FromPath = toTMPDirPath;
+                        mtt.DeleteFile = deleteFileMT;
+                        res_transfer = mtt.TransferApproaches();
+                    }
+
+                    TimeSpan ts = DateTime.Now - dt_start;
+                    string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2} мин {3} сек {4} мсек, код выполнения: count_copy:{5} res_transfer:{6}", service.ToString(), servece_owner, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
+                    mes_service_exec.WriteInformation(servece_owner, eventID);
+
+                    mes_service_exec.SaveEvents(count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
+                    service.WriteServices(dt_start, DateTime.Now, res_transfer);
+
                     _eventApproaches.Reset(); // Останавливаем и ждем 
                 } // {end слушаем всегда}
             }

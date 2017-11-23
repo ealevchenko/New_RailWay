@@ -20,7 +20,6 @@ namespace EFKIS.Concrete
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //
             modelBuilder.HasDefaultSchema("KOMETA");
         }
 

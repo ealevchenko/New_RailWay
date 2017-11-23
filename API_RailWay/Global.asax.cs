@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -20,6 +22,26 @@ namespace API_RailWay
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ControllerBuilder.Current.SetControllerFactory(new NinjectControllerFactory());
+        }
+
+        protected void Application_BeginRequest()
+        {
+            string cultureName = null;
+            // Получаем куки из контекста, которые могут содержать установленную культуру
+            HttpCookie cultureCookie = HttpContext.Current.Request.Cookies["lang"];
+            if (cultureCookie != null)
+                cultureName = cultureCookie.Value;
+            else
+                cultureName = "ru";
+
+            // Список культур
+            List<string> cultures = new List<string>() { "ru", "en", "uk" };
+            if (!cultures.Contains(cultureName))
+            {
+                cultureName = "ru";
+            }
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(cultureName);
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture(cultureName);
         }
     }
 }

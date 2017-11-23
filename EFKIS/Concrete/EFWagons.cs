@@ -23,6 +23,88 @@ namespace EFKIS.Concrete
 
         #region KOMETA
 
+        #region KometaParkState
+
+        public IQueryable<KometaParkState> KometaParkState
+        {
+            get { return context.KometaParkState; }
+        }
+
+        public IQueryable<KometaParkState> GetKometaParkState()
+        {
+            try
+            {
+                return KometaParkState;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaParkState()"), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<KometaParkState> GetKometaParkState(DateTime Date)
+        {
+            DateTime date_start = Date.Date;
+            DateTime date_stop = date_start.AddDays(1).AddSeconds(-1);
+            try
+            {
+                return GetKometaParkState().Where(p => p.DATE_DOC >= date_start & p.DATE_DOC <= date_stop).OrderByDescending(p => p.DATE_DOC).OrderBy(p => p.K_STAN).OrderBy(p => p.RAIL).OrderBy(p => p.NN);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaParkState(Date={0})", Date), eventID);
+                return null;
+            }
+        }
+
+        public List<IGrouping<string, KometaParkState>> GetKometaParkStateToStation(DateTime Date)
+        {
+            //List<IGrouping<int, KometaVagonSob>> group_list = new List<IGrouping<int, KometaVagonSob>>();
+            //group_list = GetVagonsSob().GroupBy(s => s.N_VAGON).ToList();
+            
+            try
+            {
+                List<KometaParkState> list = GetKometaParkState(Date).ToList();
+                return list.GroupBy(s => s.K_STAN).ToList();  
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaParkStateToStation(Date={0})", Date), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<KometaParkState> GetKometaParkState(DateTime Date, int id_station)
+        {
+            try
+            {
+                List<KometaParkState> list = GetKometaParkState(Date).ToList();
+                return list.Where(p => int.Parse(p.K_STAN) == id_station).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaParkState(Date={0}, id_station={1})",Date,id_station), eventID);
+                return null;
+            }
+        }
+
+        public List<IGrouping<string, KometaParkState>> GetKometaParkStateToWay(DateTime Date, int id_station)
+        {
+            try
+            {
+                List<KometaParkState> list = GetKometaParkState(Date, id_station).ToList();
+                return list.GroupBy(s => s.RAIL).ToList();  
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaParkState(Date={0}, id_station={1})",Date,id_station), eventID);
+                return null;
+            }
+        }
+
+        #endregion
+
         #region KometaVagonSob
 
         public IQueryable<KometaVagonSob> KometaVagonSob
