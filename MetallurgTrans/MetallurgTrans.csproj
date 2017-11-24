@@ -53,6 +53,10 @@
       <Project>{415f94aa-63df-4538-9552-fc9a22b61636}</Project>
       <Name>EFMT</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EFReference\EFReference.csproj">
+      <Project>{09d0b7b9-79e7-4df8-ad4f-99df5e9083f8}</Project>
+      <Name>EFReference</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MessageLogs\DBLogs\DBLogs.csproj">
       <Project>{56b38018-2e35-42f4-87d8-273dd38a9899}</Project>
       <Name>DBLogs</Name>
@@ -64,10 +68,6 @@
     <ProjectReference Include="..\RWSettings\RWSettings.csproj">
       <Project>{00d9d515-6089-4334-af39-28db22cd7d20}</Project>
       <Name>RWSettings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RWWebAPI\RWWebAPI.csproj">
-      <Project>{6f2c206c-b26c-4c3c-81ed-676d5e828f9b}</Project>
-      <Name>RWWebAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
