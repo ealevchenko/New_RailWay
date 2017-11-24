@@ -68,5 +68,12 @@ namespace EFRC.Abstract
         int? GetIDGruzsToETSNG(int? etsng);
         #endregion
 
+        #region STATIONS
+        IQueryable<STATIONS> STATIONS { get; }
+        IQueryable<STATIONS> GetSTATIONS();
+        STATIONS GetSTATIONS(int id_stat);
+        int SaveSTATIONS(STATIONS STATIONS);
+        STATIONS DeleteSTATIONS(int id_stat);
+        #endregion
     }
 }

@@ -1,0 +1,39 @@
+﻿.report-wide{
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1500px;
+}
+
+BODY {
+    font-family: Cambria, Georgia, "Times New Roman";
+    margin: 0;
+}
+
+DIV#header DIV.title {
+    font: bold 1em "Arial Narrow", "Franklin Gothic Medium", Arial;
+}
+
+DIV#report {
+    color: #666;
+    background: White;
+}
+
+DIV#header {
+    background-color: #444;
+    border-bottom: 2px solid #111;
+    color: White;
+}
+
+    DIV#header DIV.title {
+        font-size: 2em;
+        padding: .6em;
+    }
+
+DIV#report-content {
+    padding: 1em;
+    border-left: 2px solid gray;
+}
+
+div#cls {
+    clear: left;
+}

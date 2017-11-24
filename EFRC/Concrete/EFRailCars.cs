@@ -973,6 +973,100 @@ namespace EFRC.Concrete
         }
         #endregion
 
+        #region STATIONS
+
+        public IQueryable<STATIONS> STATIONS
+        {
+            get { return context.STATIONS; }
+        }
+
+        public IQueryable<STATIONS> GetSTATIONS()
+        {
+            try
+            {
+                return STATIONS;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTATIONS()"), eventID);
+                return null;
+            }
+        }
+
+        public STATIONS GetSTATIONS(int id_stat)
+        {
+            try
+            {
+                return GetSTATIONS().Where(g => g.id_stat == id_stat).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTATIONS(id_stat={0})", id_stat), eventID);
+                return null;
+            }
+        }
+
+        public int SaveSTATIONS(STATIONS STATIONS)
+        {
+            STATIONS dbEntry;
+            try
+            {
+                if (STATIONS.id_stat == 0)
+                {
+                    dbEntry = new STATIONS()
+                    {
+                        id_stat = STATIONS.id_stat,
+                        name = STATIONS.name,
+                        id_ora = STATIONS.id_ora,
+                        outer_side = STATIONS.outer_side,
+                        is_uz = STATIONS.is_uz,
+                    };
+                    context.STATIONS.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.STATIONS.Find(STATIONS.id_stat);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.name = STATIONS.name;
+                        dbEntry.id_ora = STATIONS.id_ora;
+                        dbEntry.outer_side = STATIONS.outer_side;
+                        dbEntry.is_uz = STATIONS.is_uz;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveSTATIONS(STATIONS={0})", STATIONS.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id_stat;
+        }
+
+        public STATIONS DeleteSTATIONS(int id_stat)
+        {
+            STATIONS dbEntry = context.STATIONS.Find(id_stat);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.STATIONS.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteSTATIONS(id_stat={0})", id_stat), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+
+        #endregion
+
+
+
 
 
     }

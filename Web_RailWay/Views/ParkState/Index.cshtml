@@ -1,0 +1,62 @@
+﻿@using Web_RailWay.App_LocalResources;
+
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        OnSuccess = "selectPeriod",
+        //LoadingElementId = "loading",
+        LoadingElementDuration = 1000,
+        OnBegin = "OnBegin",
+        OnFailure = "OnFailure",
+        OnComplete = "OnComplete"
+    };
+    ViewBag.Title = "Состояние парка";
+    ViewBag.ImageFone = "background: #ddd";
+    ViewBag.Home = "RailWay";
+}
+
+@*@section Document {
+
+}
+
+@section Admin {
+
+    @{ Html.RenderAction("LinkMTControl", "Admin"); }
+}*@
+
+@Scripts.Render("~/bundles/Ajax")
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/jquery.cookie.js"></script>
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        @Styles.Render("~/datetime/css")
+        @Scripts.Render("~/bundles/datetime")
+        @using (Ajax.BeginForm("Station", "ParkState", ajaxOpts, new { @id = "fmList" })) //
+        {
+            <div id="select-rangedatetime">
+
+                <input id="date" name="date" size="20" value='@ViewBag.dt_start'>       
+                @*@Html.Label(@GlobalResource.select_date_range_title)
+
+                <span id="select-range">
+                    <input id="date-start" name="date_start" size="20" value='@ViewBag.dt_start'> до
+                    <input id="date-stop" name="date_stop" size="20" value='@ViewBag.dt_stop'>
+                </span>*@
+
+                <button type="submit">@GlobalResources.button_title_view</button>
+
+            </div>
+        }
+    </div>
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    @*<div id="loading" class="load" style="display: none">
+            <p>Loading Data...</p>
+        </div>*@
+    <div id="report-content">
+        dddd
+    </div>
+    <div id="cls">
+
+    </div>
+</div>
