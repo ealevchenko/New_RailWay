@@ -1,7 +1,7 @@
 ﻿using EFMT.Concrete;
 using MessageLog;
 using MT.Entities;
-using RWWebAPI;
+//using RWWebAPI;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -107,14 +107,41 @@ namespace MetallurgTrans
             if (old_car==null) return null; // нет историии движения, первая операция над вагоном
             if (old_car.Arrival!=null) return null; // история закрыта, первая операция над вагоном 
 
-            if (old_car.CargoCode == car.CargoCode) {
+            if (old_car.CargoCode == car.CargoCode)
+            {
+                // входит в диапазон времени
                 if (old_car.DateOperation.Date.AddDays(day_range) > car.DateOperation)
                 {
-                    parentid = old_car.ID;
-                } // больше допустимого интервала
-            } // грузы в вагонах разные
+                    old_car.NumDocArrival = 0;
+                    // предыдущий состав не прибыл на станцию назначения
+                    if (old_car.CodeStationOn != old_car.CodeStationCurrent)
+                    {
+                        parentid = old_car.ID;
+                    }
+                    else
+                    {
+                        // новый состав стоит еще на станции что и предыдущий
+                        if (old_car.CodeStationCurrent == car.CodeStationCurrent)
+                        {
+                            parentid = old_car.ID;
+                        }
+                        else { 
+                            // вагон начал движение по новому маршруту
+                            old_car.NumDocArrival = -1; 
+                        }
+                    }
+                }
+                else
+                {
+                    // больше допустимого интервала
+                    old_car.NumDocArrival = -2;
+                }
+            }
+            else { 
+                // грузы в вагонах разные
+                old_car.NumDocArrival = -3;
+            } 
             // закрываем старый вагон
-            old_car.NumDocArrival = 0;
             old_car.Arrival = car.DateOperation;
             efmt.SaveApproachesCars(old_car); // сохранить изменение
             return parentid;
@@ -142,22 +169,24 @@ namespace MetallurgTrans
                         string[] array = input.Split(';');
                         if (array.Count() >= 14)
                         {
-                            Reference api_reference = new Reference();
+                            //Reference api_reference = new Reference();
+                            EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
+
                             int code_cargo = -1;
                             int code_station_from = -1;
                             int code_station_on = -1;
                             if (!String.IsNullOrWhiteSpace(array[3]))
                             {
-                                Cargo corect_cargo_code = api_reference.GetCargoOfCodeETSNG(int.Parse(array[3]));
+                                EFReference.Entities.Cargo corect_cargo_code = ef_reference.GetCargoOfCodeETSNG(int.Parse(array[3]));
                                 code_cargo = corect_cargo_code != null ? corect_cargo_code.code_etsng : int.Parse(array[3]);
                             }
                             if (!String.IsNullOrWhiteSpace(array[4]))
                             {
                                 int codefrom = int.Parse(array[4].Substring(0, 4));
                                 int codeon = int.Parse(array[4].Substring(9, 4));
-                                Stations corect_station_from = api_reference.GetCorrectStationsOfCode(codefrom, false);
+                                EFReference.Entities.Stations corect_station_from = ef_reference.GetCorrectStationsOfCode(codefrom, false);
                                 code_station_from = corect_station_from != null ? corect_station_from.code : codefrom;
-                                Stations corect_station_on = api_reference.GetCorrectStationsOfCode(codeon, false);
+                                EFReference.Entities.Stations corect_station_on = ef_reference.GetCorrectStationsOfCode(codeon, false);
                                 code_station_on = corect_station_on != null ? corect_station_on.code : codeon;
                             }
                             ApproachesCars new_wag = new ApproachesCars()
@@ -494,7 +523,8 @@ namespace MetallurgTrans
             int error = 0;
             try
             {
-                Reference api_reference = new Reference();
+                //Reference api_reference = new Reference();
+                EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
                 XDocument doc = XDocument.Load(file);
                 foreach (XElement element in doc.Element("NewDataSet").Elements("Table"))
                 {
@@ -502,7 +532,7 @@ namespace MetallurgTrans
                     {
                         int code_cargo = -1;
                         if (!String.IsNullOrWhiteSpace((string)element.Element("IDCargo"))) {
-                            Cargo corect_cargo_code = api_reference.GetCargoOfCodeETSNG((int)element.Element("IDCargo"));
+                            EFReference.Entities.Cargo corect_cargo_code = ef_reference.GetCargoOfCodeETSNG((int)element.Element("IDCargo"));
                             code_cargo = corect_cargo_code != null ? corect_cargo_code.code_etsng : (int)element.Element("IDCargo");
                         }
                         ArrivalCars mtarr = new ArrivalCars()

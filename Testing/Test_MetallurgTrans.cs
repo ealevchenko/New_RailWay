@@ -79,7 +79,7 @@ namespace Testing
         public void MTThread_Timer_TransferApproaches() {
 
             Timer timer_TransferApproaches = new Timer();
-            timer_TransferApproaches.Interval = 60000;
+            timer_TransferApproaches.Interval = 30000;
             timer_TransferApproaches.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerTransferApproaches);
             timer_TransferApproaches.Start();
             //MTThread mth = new MTThread(service.ServicesMT);
@@ -97,6 +97,13 @@ namespace Testing
             {
                 return;
             }
+        }
+
+        public void MTThread_TransferArrival()
+        {
+
+            MTThread mth = new MTThread(service.ServicesMT);
+            mth.StartTransferArrival();
         }
     }
 }

@@ -58,7 +58,8 @@ namespace Testing
             //tst_tr_app.EFMetallurgTrans_Consignee(); //
             //tst_tr_app.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
             //tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
-            //tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
+            tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
+            //tst_tr_app.MTThread_TransferArrival(); // Запустить перенос в потоке
             #endregion
 
             #region Test_Reference
@@ -91,7 +92,7 @@ namespace Testing
             //tst_wag.Test_VagonsContent_GetSTPR1GR(291);
             //tst_wag.Test_EFKometaParkState_KometaParkState(); // Данные по состояние парка
             //tst_wag.Test_EFKometaParkState_KometaParkState(DateTime.Now); // Данные по состояние парка за указаный день
-            tst_wag.Test_EFKometaParkState_KometaParkStateToStation(DateTime.Now);
+            //tst_wag.Test_EFKometaParkState_KometaParkStateToStation(DateTime.Now);
             //tst_wag.Test_EFKometaParkState_KometaParkState(DateTime.Now, 4); // Данные по состояние парка за указаный день
             //tst_wag.Test_EFKometaParkState_KometaParkStateToWay(DateTime.Now, 1); // Данные по состояние парка за указаный день
             #endregion
