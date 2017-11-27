@@ -10,9 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using TransferRailCars;
 
 namespace MetallurgTrans
 {
+    /// <summary>
+    /// Коды ошибок операций переноса вагонов
+    /// </summary>
     public enum mtt_err : int
     {
             global_error = -1,
@@ -20,6 +24,16 @@ namespace MetallurgTrans
             not_listApproachesCars = -3,
             not_listArrivalCars = -4,
         //not_listStartArrivalSostav = -5,
+    }
+    /// <summary>
+    /// Коды ошибок истории движения вагонов
+    /// </summary>
+    public enum mtt_err_arrival : int { 
+        close_car = 0,
+        close_manual = -1,
+        close_new_route = -2,
+        close_timeout = -3,
+        close_different_cargo = -4,
     }
 
     [Serializable()]
@@ -81,7 +95,8 @@ namespace MetallurgTrans
         public int DayRangeApproachesCars { get { return this.day_range_approaches_cars; } set { this.day_range_approaches_cars = value; } }
         private int day_range_arrival_cars = 10;
         public int DayRangeArrivalCars { get { return this.day_range_arrival_cars; } set { this.day_range_arrival_cars = value; } }
-
+        private bool arrival_to_railway = true;
+        public bool ArrivalToRailWay { get { return this.arrival_to_railway; } set { this.arrival_to_railway = value; } }
 
         public MTTransfer()
         {
@@ -112,7 +127,7 @@ namespace MetallurgTrans
                 // входит в диапазон времени
                 if (old_car.DateOperation.Date.AddDays(day_range) > car.DateOperation)
                 {
-                    old_car.NumDocArrival = 0;
+                    old_car.NumDocArrival = (int)mtt_err_arrival.close_car;
                     // предыдущий состав не прибыл на станцию назначения
                     if (old_car.CodeStationOn != old_car.CodeStationCurrent)
                     {
@@ -127,19 +142,19 @@ namespace MetallurgTrans
                         }
                         else { 
                             // вагон начал движение по новому маршруту
-                            old_car.NumDocArrival = -1; 
+                            old_car.NumDocArrival = (int)mtt_err_arrival.close_new_route; 
                         }
                     }
                 }
                 else
                 {
                     // больше допустимого интервала
-                    old_car.NumDocArrival = -2;
+                    old_car.NumDocArrival = (int)mtt_err_arrival.close_timeout;
                 }
             }
             else { 
                 // грузы в вагонах разные
-                old_car.NumDocArrival = -3;
+                old_car.NumDocArrival = (int)mtt_err_arrival.close_different_cargo;
             } 
             // закрываем старый вагон
             old_car.Arrival = car.DateOperation;
@@ -467,21 +482,36 @@ namespace MetallurgTrans
 
             if (old_car.CargoCode == car.CargoCode)
             {
-                if (old_car.CompositionIndex == car.CompositionIndex |
-                        (old_car.CompositionIndex != car.CompositionIndex &
-                        efmt.IsConsigneeSend(false, old_car.Consignee, mtConsignee.AMKR) & 
-                        efmt.IsConsigneeSend(true, car.Consignee, mtConsignee.AMKR) & 
-                        //car.Operation == "ПРИБ" &
-                        old_car.DateOperation.Date.AddDays(day_range) > car.DateOperation)
-                    )
-                { // Продолжаем цепочку вагонов если равны CompositionIndex или (CompositionIndex не равны но следующий код досылки и входит в диапазон времени)
-                    parentid = old_car.ID;
-                    old_car.NumDocArrival = 0;
-                    old_car.Arrival = car.DateOperation;
-                }// 
-            } // грузы в вагонах разные
-            // закрываем старый вагон
+                if (old_car.DateOperation.Date.AddDays(day_range) > car.DateOperation)
+                {
 
+                    if (old_car.CompositionIndex == car.CompositionIndex |
+                            (old_car.CompositionIndex != car.CompositionIndex &
+                            efmt.IsConsigneeSend(false, old_car.Consignee, mtConsignee.AMKR) &
+                            efmt.IsConsigneeSend(true, car.Consignee, mtConsignee.AMKR)))
+                    { // Продолжаем цепочку вагонов если равны CompositionIndex или (CompositionIndex не равны но следующий код досылки и входит в диапазон времени)
+                        parentid = old_car.ID;
+                        old_car.NumDocArrival = (int)mtt_err_arrival.close_car;
+                        old_car.Arrival = car.DateOperation;
+                    }
+                    else
+                    {
+                        // вагон начал движение по новому маршруту
+                        old_car.NumDocArrival = (int)mtt_err_arrival.close_new_route;
+                    }
+                }
+                else
+                {
+                    // больше допустимого интервала
+                    old_car.NumDocArrival = (int)mtt_err_arrival.close_timeout;
+                }
+            }
+            else
+            {
+                // грузы в вагонах разные
+                old_car.NumDocArrival = (int)mtt_err_arrival.close_different_cargo;
+            }
+            // закрываем старый вагон
             efmt.SaveArrivalCars(old_car); // сохранить изменение
             return parentid;
         }
@@ -639,10 +669,11 @@ namespace MetallurgTrans
                 if (new_id < 0) { countError++; } // Счетчик ошибок при переносе
                 if (count_wagons > 0 & new_id > 0)
                 {
-                    //TODO: Now ПЕРЕДАТЬ ОПЕРАЦИЮ НОВЫЙ СОСТАВ
-                    //RWO_MT rw_operations = new RWO_MT();
-                    //int IDArrival = mt_arrival.GetIDArrival(new_id);
-                    //rw_operations.ArrivalSostav(new_id);
+                    if (arrival_to_railway) { 
+                        //TODO: Убрать старый метод переноса составов в прибытие, добаить новый
+                        TRailCars trc = new TRailCars();
+                        int res = trc.ArrivalToRailCars(new_id);
+                    }
                     return true;
                 }
             }

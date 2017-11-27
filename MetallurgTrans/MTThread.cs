@@ -186,7 +186,7 @@ namespace MetallurgTrans
                     }
 
                     TimeSpan ts = DateTime.Now - dt_start;
-                    string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2} мин {3} сек {4} мсек, код выполнения: count_copy:{5} res_transfer:{6}", service.ToString(), servece_owner, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
+                    string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
                     mes_service_exec.WriteInformation(servece_owner, eventID);
 
                     mes_service_exec.SaveEvents(count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
@@ -208,6 +208,7 @@ namespace MetallurgTrans
             DateTime dt_start = DateTime.Now;
             try
             {
+                bool arrivalToRailWay = true;
                 connectSFTP connect_SFTP = new connectSFTP()
                 {
                     Host = "www.metrans.com.ua",
@@ -215,6 +216,7 @@ namespace MetallurgTrans
                     User = "arcelors",
                     PSW = "$fh#ER2J63"
                 };
+                
                 string fromPathHost = "/xmlin";
                 string fileFiltrHost = "*.xml";
                 string toDirPath = @"C:\xml";
@@ -228,6 +230,7 @@ namespace MetallurgTrans
                     try
                     {
                         // Если нет перенесем настройки в БД
+                        arrivalToRailWay = RWSetting.GetDB_Config_DefaultSetting("ArrivalToRailWay", service, arrivalToRailWay, true);
                         connect_SFTP = new connectSFTP()
                         {
                             Host = RWSetting.GetDB_Config_DefaultSetting<string>("Host", service.HostMT, "www.metrans.com.ua", true),
@@ -280,6 +283,7 @@ namespace MetallurgTrans
                         lock (locker_db_approaches) // делаются отметки о прибытии
                         {
                             MTTransfer mtt = new MTTransfer(service);
+                            mtt.ArrivalToRailWay = arrivalToRailWay;
                             mtt.FromPath = toTMPDirPath;
                             mtt.DeleteFile = deleteFileMT;
                             res_transfer = mtt.TransferArrival();
@@ -287,7 +291,7 @@ namespace MetallurgTrans
                     }
 
                     TimeSpan ts = DateTime.Now - dt_start;
-                    string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2} мин {3} сек {4} мсек, код выполнения: count_copy:{5} res_transfer:{6}", service.ToString(), servece_owner, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
+                    string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
                     mes_service_exec.WriteInformation(servece_owner, eventID);
                     mes_service_exec.SaveEvents(count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
                     service.WriteServices(dt_start, DateTime.Now, res_transfer);
