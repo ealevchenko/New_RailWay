@@ -41,5 +41,15 @@ namespace MessageLog
         {
             return ServicesLogs.WriteLogStatusServices((int)service, start);
         }
+        /// <summary>
+        /// Записать статус сервиса при запуске
+        /// </summary>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        public static long WriteLogStatusServices(this service service)
+        {
+            return ServicesLogs.WriteLogStatusServices((int)service, DateTime.Now);
+        }
+
     }
 }
