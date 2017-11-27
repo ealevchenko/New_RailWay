@@ -1,6 +1,9 @@
-﻿using EFRC.Concrete;
+﻿//using EFKIS.Concrete;
+//using EFKIS.Entities;
+using EFRC.Concrete;
 using EFRC.Entities;
 using MessageLog;
+using RWWebAPI;
 //using RWWebAPI;
 using System;
 using System.Collections.Generic;
@@ -279,7 +282,8 @@ namespace RCReferences
             {
                 EFRailCars efrc = new EFRailCars();
                 Wagons kis = new Wagons();
-                Reference api_reference = new Reference();
+                EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
+                //Reference api_reference = new Reference();
                 int? id_gr = efrc.GetIDGruzsToETSNG(id_cargo);
                 if (id_gr == null)
                 {
@@ -290,7 +294,7 @@ namespace RCReferences
                         pg = kis.GetGruzSPToTarGR(id_cargo, true);
                         if (pg == null)
                         {
-                            Cargo cargo = api_reference.GetCargoOfCodeETSNG(id_cargo);
+                            EFReference.Entities.Cargo cargo = ef_reference.GetCargoOfCodeETSNG(id_cargo);
                             //Code_Cargo cargo = refRailway.GetCargos_ETSNG(id_cargo);
                             if (cargo != null)
                             {
@@ -397,11 +401,12 @@ namespace RCReferences
         public int DefinitionIDCargo(int id_cargo)
         {
             EFRCReference efrc_reference = new EFRCReference();
-            Reference api_reference = new Reference();
+            EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
+            //Reference api_reference = new Reference();
             EFRC.Entities.ReferenceCargo ref_cargo = efrc_reference.GetReferenceCargoOfCodeETSNG(id_cargo);
             if (ref_cargo == null)
             {
-                Cargo cargo = api_reference.GetCargoOfCodeETSNG(id_cargo);
+                EFReference.Entities.Cargo cargo = ef_reference.GetCargoOfCodeETSNG(id_cargo);
                 EFRC.Entities.ReferenceCargo new_cargo = new EFRC.Entities.ReferenceCargo()
                 {
                     IDCargo = 0,
@@ -422,7 +427,7 @@ namespace RCReferences
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        protected int DefinitionIDCountry(Countrys code)
+        protected int DefinitionIDCountry(EFReference.Entities.Countrys code)
         {
             if (code == null) return 0;
             if (code.code <= 0) return 0;
@@ -449,8 +454,9 @@ namespace RCReferences
         /// <returns></returns>
         public int DefinitionIDCountrySNG(int code_country_sng)
         {
-            Reference api_reference = new Reference();
-            Countrys code = api_reference.GetCountryOfCodeSNG(code_country_sng);
+            //Reference api_reference = new Reference();
+            EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
+            EFReference.Entities.Countrys code = ef_reference.GetCountryOfCodeSNG(code_country_sng);
             return DefinitionIDCountry(code);
         }
         #endregion

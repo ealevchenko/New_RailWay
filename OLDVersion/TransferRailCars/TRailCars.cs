@@ -4,7 +4,7 @@ using EFRC.Entities;
 using MessageLog;
 using MT.Entities;
 using RCReferences;
-using RWWebAPI;
+//using RWWebAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -232,9 +232,10 @@ namespace TransferRailCars
 
                 //MTSostav sost = mtc.Get_MTSostav(id_sostav);
                 // Определим код станции по справочникам
-                Reference api_reference = new Reference();
-                Stations station_in = api_reference.GetStationsOfCode(int.Parse(sost.CompositionIndex.Substring(9, 4)) * 10);
-                Stations station_from = api_reference.GetStationsOfCode(int.Parse(sost.CompositionIndex.Substring(0, 4)) * 10);
+                EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
+                //Reference api_reference = new Reference();
+                EFReference.Entities.Stations station_in = ef_reference.GetStationsOfCode(int.Parse(sost.CompositionIndex.Substring(9, 4)) * 10);
+                EFReference.Entities.Stations station_from = ef_reference.GetStationsOfCode(int.Parse(sost.CompositionIndex.Substring(0, 4)) * 10);
                 int? codecs_in = station_in != null ? station_in.code_cs : int.Parse(sost.CompositionIndex.Substring(9, 4)) * 10;
                 int? codecs_from = station_from != null ? station_from.code_cs : int.Parse(sost.CompositionIndex.Substring(0, 4)) * 10;
                 //int? codecs_in = api_reference..GetCodeCSStations(int.Parse(sost.CompositionIndex.Substring(9, 4)) * 10);

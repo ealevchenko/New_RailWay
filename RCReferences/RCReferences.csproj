@@ -47,6 +47,10 @@
       <Project>{89a9bc62-6912-4df8-a7f6-1c9a4beac8dd}</Project>
       <Name>EFRC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EFReference\EFReference.csproj">
+      <Project>{09d0b7b9-79e7-4df8-ad4f-99df5e9083f8}</Project>
+      <Name>EFReference</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MLogs\MLogs.csproj">
       <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
       <Name>MLogs</Name>
