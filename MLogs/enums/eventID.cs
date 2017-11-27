@@ -34,7 +34,8 @@ namespace MessageLog
         //RWService_RailWay = 4000, // new
 
         #region Служба МеталлургТранс 2000
-
+        MTTServices = 2000,                 // Служба
+        
         EFMetallurgTrans = 2100,            // Библиотека доступа к данным БД MT
 
         MetallurgTrans = 2200,              // Библиотека сервисов обработки данных МеталлургТранс
