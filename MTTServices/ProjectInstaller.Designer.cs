@@ -34,13 +34,13 @@ namespace MTTServices
             // 
             // serviceProcessInstaller1
             // 
-            this.serviceProcessInstaller1.Password = null;
-            this.serviceProcessInstaller1.Username = null;
+            this.serviceProcessInstaller1.Password = "B8T2OMoUyB4jZ62F49WT";
+            this.serviceProcessInstaller1.Username = @"EUROPE\krr-svc-RailWay";
             // 
             // serviceInstaller1
             // 
             this.serviceInstaller1.Description = "Перенос информации предоставляемой ООО МеталлургТранс";
-            this.serviceInstaller1.DisplayName = "MTTServices";
+            this.serviceInstaller1.DisplayName = "Services MetallurgTrans Transfer";
             this.serviceInstaller1.ServiceName = "MTTServices";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 

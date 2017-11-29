@@ -211,12 +211,20 @@ namespace Testing
             service.WriteServices(DateTime.Now.AddDays(-1), DateTime.Now, 5);
         }
 
-        public void MLog_WriteLogStatusServices()
+        public void MLog_WriteStatusServices()
         { 
             service service = MessageLog.service.TransferMT;
             service.WriteStatusServices(DateTime.Now.AddDays(-1), DateTime.Now);
             MessageLog.service.TransferApproaches.WriteStatusServices(DateTime.Now.AddDays(-1));
         }
+
+        public void MLog_WriteLogStatusServices()
+        { 
+            service service = MessageLog.service.TransferMT;
+            service.WriteLogStatusServices();
+            service.WriteLogStatusServices(DateTime.Now.AddHours(-1), DateTime.Now);
+        }
+
         #endregion
 
     }

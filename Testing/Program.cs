@@ -59,7 +59,7 @@ namespace Testing
             //tst_tr_app.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
             //tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
             //tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
-            tst_tr_app.MTThread_TransferArrival(); // Запустить перенос в потоке
+            //tst_tr_app.MTThread_TransferArrival(); // Запустить перенос в потоке
             #endregion
 
             #region Test_Reference
@@ -120,6 +120,7 @@ namespace Testing
             //test.MLog_WriteEvents();
             //test.MLog_WriteLogServices();
             //test.MLog_WriteLogStatusServices();
+            test.MLog_WriteLogStatusServices();
             #endregion
 
             #region Test_Settings тест настроек
