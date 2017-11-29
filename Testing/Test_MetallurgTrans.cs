@@ -72,8 +72,8 @@ namespace Testing
         public void MTThread_TransferApproaches() {
 
             MTThread mth = new MTThread(service.ServicesMT);
-            mth.StartTransferApproaches();
-            mth.StartTransferApproaches();
+            //mth.StartTransferApproaches();
+            //mth.StartTransferApproaches();
         }
 
         public void MTThread_Timer_TransferApproaches() {
@@ -91,7 +91,7 @@ namespace Testing
         {
             try
             {
-                    mth_timer.StartTransferApproaches();
+                    //mth_timer.StartTransferApproaches();
             }
             catch (Exception ex)
             {
@@ -103,7 +103,7 @@ namespace Testing
         {
 
             MTThread mth = new MTThread(service.ServicesMT);
-            mth.StartTransferArrival();
+            //mth.StartTransferArrival();
         }
     }
 }
