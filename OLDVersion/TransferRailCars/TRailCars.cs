@@ -540,8 +540,8 @@ namespace TransferRailCars
                     }
                 }
                 mess_transfer_sostav += String.Format(", определено для переноса:{0} вагонов, перенесено: {1}, перенесено ранее: {2}, ошибок переноса: {3}.", result.counts, result.inserts, result.skippeds, result.errors);
-                mess_transfer_sostav.WriteWarning(eventID);
-                if (result.counts > 0) { mess_transfer_sostav.SaveEvents(result.errors > 0 ? EventStatus.Error : EventStatus.Ok, eventID); }
+                mess_transfer_sostav.WriteInformation(eventID);
+                if (result.counts > 0) { mess_transfer_sostav.WriteEvents(result.errors > 0 ? EventStatus.Error : EventStatus.Ok, eventID); }
                 return result.ResultInsert;
             }
             catch (Exception e)
@@ -662,7 +662,7 @@ namespace TransferRailCars
                 else { int res_del = efsap.DeleteSAPIncSupplySostav((int)sostav.ParentID); }
             }
             String.Format("Определено для переноса в справочник САП входящие поставки {0} вагонов, удалено предыдущих вагонов: {1}, добавлено новых вагонов:  {2}, обновлено позиций вагонов : {3}, общее количество ошибок: {4}.",
-            result.counts, result.deletes, result.inserts, result.updates, result.errors).WriteWarning(eventID);
+            result.counts, result.deletes, result.inserts, result.updates, result.errors).WriteInformation(eventID);
             return result.ResultInsert;
         }
         #endregion

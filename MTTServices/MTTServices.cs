@@ -88,7 +88,7 @@ namespace MTTServices
             // Отправить сообщение
             string mes_service_start = String.Format("Основной сервис {0} - запущен. Интервал выполнения сервиса {1}-{2} сек, сервиса {3}-{4} сек., сервиса {5}-{6} сек.", 
                 this.servece_name, this.thread_approaches, this.interval_transfer_approaches, this.thread_arrival, this.interval_transfer_arrival, this.thread_close, this.interval_close_transfer);
-            mes_service_start.WriteWarning(servece_name, this.eventID);
+            //mes_service_start.WriteInformation(servece_name, this.eventID);
             mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
             this.thread_approaches.WriteLogStatusServices();
             this.thread_arrival.WriteLogStatusServices();
@@ -105,7 +105,7 @@ namespace MTTServices
             //...............
             // Отправить сообщение
             string mes_service_stop = String.Format("Основной сервис {0} - остановлен.", this.servece_name);
-            mes_service_stop.WriteWarning(servece_name, this.eventID);
+            //mes_service_stop.WriteInformation(servece_name, this.eventID);
             mes_service_stop.WriteEvents(EventStatus.Ok, servece_name, eventID);
 
         }
@@ -120,7 +120,7 @@ namespace MTTServices
                     this.interval_transfer_approaches = interval_app;
                     timer_TransferApproaches.Interval = interval_app*1000;
                     string mes_service_start = String.Format("Основной сервис {0} - интервал выполнения сервиса {1} изменен на {2} сек.", this.servece_name, this.thread_approaches, timer_TransferApproaches.Interval / 1000);
-                    mes_service_start.WriteWarning(servece_name, this.eventID);
+                    mes_service_start.WriteInformation(servece_name, this.eventID);
                     mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
                 }
                 int interval_arr = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", this.thread_arrival, this.interval_transfer_arrival, true);
@@ -129,7 +129,7 @@ namespace MTTServices
                     this.interval_transfer_arrival = interval_arr;
                     timer_TransferArrival.Interval = interval_arr*1000;
                     string mes_service_start = String.Format("Основной сервис {0} - интервал выполнения сервиса {1} изменен на {2} сек.", this.servece_name, this.thread_arrival, timer_TransferArrival.Interval / 1000);
-                    mes_service_start.WriteWarning(servece_name, this.eventID);
+                    mes_service_start.WriteInformation(servece_name, this.eventID);
                     mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
                 }
 
@@ -139,7 +139,7 @@ namespace MTTServices
                     this.interval_close_transfer = interval_cls;
                     timer_CloseTransfer.Interval = interval_cls * 1000;
                     string mes_service_start = String.Format("Основной сервис {0} - интервал выполнения сервиса {1} изменен на {2} сек.", this.servece_name, this.thread_close, timer_CloseTransfer.Interval / 1000);
-                    mes_service_start.WriteWarning(servece_name, this.eventID);
+                    mes_service_start.WriteInformation(servece_name, this.eventID);
                     mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);                    
                 }
 
@@ -156,6 +156,7 @@ namespace MTTServices
         /// <param name="args"></param>
         public void OnTimerTransferApproaches(object sender, System.Timers.ElapsedEventArgs args)
         {
+            //"Таймер - OnTimerTransferApproaches - сработал".WriteInformation(this.servece_name, eventID);
             try
             {
                 // Проверка активности выполнения
@@ -177,6 +178,7 @@ namespace MTTServices
         /// <param name="args"></param>
         public void OnTimerTransferArrival(object sender, System.Timers.ElapsedEventArgs args)
         {
+            //"Таймер - OnTimerTransferArrival - сработал".WriteInformation(this.servece_name, eventID);
             try
             {
                 // Проверка активности выполнения
@@ -194,6 +196,7 @@ namespace MTTServices
 
         public void OnTimerCloseTransfer(object sender, System.Timers.ElapsedEventArgs args)
         {
+            //"Таймер - OnTimerCloseTransfer - сработал".WriteInformation(this.servece_name, eventID);
             try
             {
                 // Проверка активности выполнения

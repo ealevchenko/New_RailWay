@@ -172,8 +172,8 @@ namespace MetallurgTrans
                 }
                 string mess = String.Format("На сервере SFTP:{0} найдено {1} файлов, перенесено {2}", connect_SFTP.Host, listfromFile.Count(), count);
                 if (fromDeleteFile) { mess = String.Format(mess + ", удаленно {0}", cdel); }
-                mess.WriteWarning(servece_owner, this.eventID);
-                if (listfromFile != null && listfromFile.Count() > 0) { mess.SaveEvents(listfromFile.Count() != count ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+                mess.WriteInformation(servece_owner, this.eventID);
+                if (listfromFile != null && listfromFile.Count() > 0) { mess.WriteEvents(listfromFile.Count() != count ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
                 return count;
             }
             catch (Exception e)

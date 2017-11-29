@@ -279,7 +279,7 @@ namespace MetallurgTrans
                     }
                     string mess = String.Format("В списке определенно: {0} вагонов, перенесено в БД MT.Approaches : {1}, пропущено по ошибке : {2}", list.Count(), trans, error);
                     mess.WriteInformation(servece_owner, this.eventID);
-                    if (list.Count() > 0) { mess.SaveEvents(trans_id, servece_owner, eventID); }
+                    if (list.Count() > 0) { mess.WriteEvents(trans_id, servece_owner, eventID); }
                     return trans;
                 }
                 else return 0;
@@ -457,7 +457,7 @@ namespace MetallurgTrans
             }
             string mess = String.Format("Перенос txt-файлов в БД MT.Approaches выполнен, определено для переноса {0} txt-файлов, перенесено {1}, были перенесены ранее {2}, ошибки при переносе {3}, удаленно {4}.", files.Count(), countCopy, countExist, countError, countDelete);
             mess.WriteInformation(servece_owner, this.eventID);
-            if (files != null && files.Count() > 0) { mess.SaveEvents(countError > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+            if (files != null && files.Count() > 0) { mess.WriteEvents(countError > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
             return files.Count();
         }
         /// <summary>
@@ -635,7 +635,7 @@ namespace MetallurgTrans
                     }
                     string mess = String.Format("В списке определенно: {0} вагонов, перенесено в БД MT.Arrival : {1}, пропущено по ошибке : {2}", list.Count(), trans, error);
                     mess.WriteInformation(servece_owner, this.eventID);
-                    if (list.Count() > 0) { mess.SaveEvents(trans_id, servece_owner, eventID); }
+                    if (list.Count() > 0) { mess.WriteEvents(trans_id, servece_owner, eventID); }
                     return trans;
                 }
                 else return 0;
@@ -825,7 +825,7 @@ namespace MetallurgTrans
             }
             string mess = String.Format("Перенос xml-файлов в БД MT.Arrival выполнен, определено для переноса {0} xml-файлов, перенесено {1}, были перенесены ранее {2}, ошибки при переносе {3}, удаленно {4}.", files.Count(), countCopy, countExist, countError, countDelete);
             mess.WriteInformation(servece_owner, this.eventID);
-            if (files != null && files.Count() > 0) { mess.SaveEvents(countError > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+            if (files != null && files.Count() > 0) { mess.WriteEvents(countError > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
             return files.Count();
         }
         /// <summary>

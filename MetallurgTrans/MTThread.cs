@@ -43,6 +43,7 @@ namespace MetallurgTrans
             bool res = false;
             service service = service.TransferApproaches;
             string mes_service_start = String.Format("Поток {0} сервиса {1}", service.ToString(), servece_owner);
+            //(mes_service_start + "- Попытка StartTransferApproaches").WriteInformation(servece_owner, eventID);
             try
             {
                 //string stat = mes_service_start + String.Format(" IsAlive = {0}, ThreadState = {1}", thTransferApproaches.IsAlive.ToString(), thTransferApproaches.ThreadState.ToString());
@@ -51,6 +52,7 @@ namespace MetallurgTrans
                 {
                     thTransferApproaches.Name = service.ToString();
                     thTransferApproaches.Start();
+                    //(mes_service_start + "- StartTransferApproaches").WriteInformation(servece_owner, eventID);
                 }
                 else
                 {
@@ -68,7 +70,7 @@ namespace MetallurgTrans
                 mes_service_start += " - ошибка запуска.";
                 ex.WriteError(mes_service_start, servece_owner, eventID);
                 res = false;
-                mes_service_start.SaveEvents(EventStatus.Error, servece_owner, eventID);
+                mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
             }
             return res;
         }
@@ -99,7 +101,7 @@ namespace MetallurgTrans
                 mes_service_start += " - ошибка запуска.";
                 ex.WriteError(mes_service_start, servece_owner, eventID);
                 res = false;
-                mes_service_start.SaveEvents(EventStatus.Error, servece_owner, eventID);
+                mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
             }
             return res;
         }
@@ -160,45 +162,52 @@ namespace MetallurgTrans
                 }
                 while (true) // слушаем всегда
                 {
+                    //"TransferApproaches-".WriteInformation(servece_owner, eventID);
                     _eventApproaches.WaitOne(); // Здесь остановится
                     dt_start = DateTime.Now;
                     int count_copy = 0;
                     int res_transfer = 0;
                     lock (locker_sftp)
                     {
+                        //"SFTPClient-".WriteInformation(servece_owner, eventID);
                         // подключится считать и закрыть соединение
                         SFTPClient csftp = new SFTPClient(connect_SFTP, service);
+                        //"SFTPClient-1".WriteInformation(servece_owner, eventID);
                         csftp.fromPathsHost = fromPathHost;
                         csftp.FileFiltrHost = fileFiltrHost;
                         csftp.toDirPath = toDirPath;
                         csftp.toTMPDirPath = toTMPDirPath;
                         csftp.DeleteFileHost = deleteFileHost;
                         csftp.RewriteFile = rewriteFile;
+                        //"SFTPClient-2".WriteInformation(servece_owner, eventID);
                         count_copy = csftp.CopyToDir();
                     }
-
+                    
                     lock (locker_db_approaches)
                     {
+                        //"MTTransfer-".WriteInformation(servece_owner, eventID);
                         MTTransfer mtt = new MTTransfer(service);
                         mtt.FromPath = toTMPDirPath;
                         mtt.DeleteFile = deleteFileMT;
                         res_transfer = mtt.TransferApproaches();
                     }
-
+                    //"end-".WriteInformation(servece_owner, eventID);
                     TimeSpan ts = DateTime.Now - dt_start;
                     string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
                     mes_service_exec.WriteInformation(servece_owner, eventID);
 
-                    mes_service_exec.SaveEvents(count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
+                    //mes_service_exec.WriteEvents(count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
                     service.WriteServices(dt_start, DateTime.Now, res_transfer);
-
                     _eventApproaches.Reset(); // Останавливаем и ждем 
+                    //Thread.Sleep(1);
+
                 } // {end слушаем всегда}
             }
             catch (Exception ex)
             {
                 ex.WriteError(String.Format("Ошибка выполнения цикла переноса, потока {0} сервис {1}", service.ToString(), servece_owner), servece_owner, eventID);
                 service.WriteServices(dt_start, DateTime.Now, -1);
+
             }
         }
 
@@ -293,7 +302,7 @@ namespace MetallurgTrans
                     TimeSpan ts = DateTime.Now - dt_start;
                     string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
                     mes_service_exec.WriteInformation(servece_owner, eventID);
-                    mes_service_exec.SaveEvents(count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
+                    //mes_service_exec.WriteEvents(count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
                     service.WriteServices(dt_start, DateTime.Now, res_transfer);
 
                     _eventArrival.Reset(); // Останавливаем и ждем 
