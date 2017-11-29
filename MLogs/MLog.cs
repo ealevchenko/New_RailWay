@@ -300,42 +300,42 @@ namespace MessageLog
 
         public static void WriteError(this Exception ex, string message, service service, eventID eventID)
         {
-            WriteError(ex, message, service, eventID, _eLogs, _dbLogs, _fLogs);
+            WriteError(ex, message, service, eventID, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this Exception ex, service service, eventID eventID)
         {
-            WriteError(ex, service, eventID, _eLogs, _dbLogs, _fLogs);
+            WriteError(ex, service, eventID, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this Exception ex, string message, service service)
         {
-            WriteError(ex, message, service, _eLogs, _dbLogs, _fLogs);
+            WriteError(ex, message, service, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this Exception ex, service service)
         {
-            WriteError(ex, service, _eLogs, _dbLogs, _fLogs);
+            WriteError(ex, service, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this Exception ex, string message, eventID eventID)
         {
-            WriteError(ex, message, eventID, _eLogs, _dbLogs, _fLogs);
+            WriteError(ex, message, eventID, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this Exception ex, eventID eventID)
         {
-            WriteError(ex,  eventID, _eLogs, _dbLogs, _fLogs);
+            WriteError(ex, eventID, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this Exception ex, string message)
         {
-            WriteError(ex, message, _eLogs, _dbLogs, _fLogs);
+            WriteError(ex, message, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this Exception ex)
         {
-            WriteError(ex, _eLogs, _dbLogs, _fLogs);
+            WriteError(ex, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
 
