@@ -35,6 +35,7 @@ namespace MessageLog
                 _dbLogErrors = bool.Parse(ConfigurationManager.AppSettings["dbLogErrors"].ToString());
                 _fLogs = bool.Parse(ConfigurationManager.AppSettings["fLogs"].ToString());
                 _fLogErrors = bool.Parse(ConfigurationManager.AppSettings["fLogErrors"].ToString());
+                //LogError(new Exception(), String.Format("Ок чтения AppSettings:(Logs={0},LogErrors={1},dbLogs={2},dbLogErrors={3},fLogs={4},fLogErrors={5})", _eLogs,_eLogErrors,_dbLogs,_dbLogErrors,_fLogs,_fLogErrors));
             }
             catch (Exception e)
             {
@@ -211,22 +212,22 @@ namespace MessageLog
 
         public static void WriteError(this string message, service service, eventID eventID)
         {
-            WriteError(message, service, eventID, _eLogs, _dbLogs, _fLogs);
+            WriteError(message, service, eventID, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this string message, service service)
         {
-            WriteError(message, service, _eLogs, _dbLogs, _fLogs);
+            WriteError(message, service, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this string message, eventID eventID)
         {
-            WriteError(message, eventID, _eLogs, _dbLogs, _fLogs);
+            WriteError(message, eventID, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         public static void WriteError(this string message)
         {
-            WriteError(message, _eLogs, _dbLogs, _fLogs);
+            WriteError(message, _eLogErrors, _dbLogErrors, _fLogErrors);
         }
 
         #endregion
@@ -370,6 +371,7 @@ namespace MessageLog
         public static long WriteEvents(this string events, string status, service service, eventID eventID)
         {
             Console.WriteLine(String.Format("\nservice: {0}\neventID: {1}\nevents: {2}\nstatus: {3}", service, eventID, events, status));
+            WriteWarning(events+", status:"+status, service, eventID);
             return MDBLogs.SaveEvents(events, status, service, eventID);
         }
 
@@ -391,6 +393,7 @@ namespace MessageLog
         public static long WriteEvents(this string events, EventStatus status, service service, eventID eventID)
         {
             Console.WriteLine(String.Format("\nservice: {0}\neventID: {1}\nevents: {2}\nstatus: {3}", service, eventID, events, status.ToString()));
+            WriteWarning(events+", status:"+status.ToString(), service, eventID);
             return MDBLogs.SaveEvents(events, status, service, eventID);
         }
 
@@ -421,6 +424,7 @@ namespace MessageLog
         /// <returns></returns>
         public static long WriteServices(this service service, DateTime start, DateTime stop, int code)
         {
+            service.WriteStatusServices(start, stop);
             return MServicesLog.WriteLogServices(service, start, stop, code);
         }
         /// <summary>

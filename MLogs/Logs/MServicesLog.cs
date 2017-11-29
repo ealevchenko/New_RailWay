@@ -48,7 +48,7 @@ namespace MessageLog
         /// <returns></returns>
         public static long WriteLogStatusServices(this service service)
         {
-            return ServicesLogs.WriteLogStatusServices((int)service, DateTime.Now);
+            return WriteLogStatusServices(service, DateTime.Now);
         }
 
     }
