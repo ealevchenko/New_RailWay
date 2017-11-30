@@ -64,7 +64,7 @@ namespace WebAPI
         {
             try
             {
-                String.Format("Выполняем запрос к WebAPI, url:{0}, api_comand {1}, metod {2}, accept {3}", url, api_comand, metod, accept).WriteInformation(eventID);
+                //String.Format("Выполняем запрос к WebAPI, url:{0}, api_comand {1}, metod {2}, accept {3}", url, api_comand, metod, accept).WriteInformation(eventID);
                 HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url + api_comand);
                 request.Method = metod;
                 request.PreAuthenticate = true;

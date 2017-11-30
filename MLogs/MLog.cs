@@ -393,7 +393,7 @@ namespace MessageLog
         public static long WriteEvents(this string events, EventStatus status, service service, eventID eventID)
         {
             Console.WriteLine(String.Format("\nservice: {0}\neventID: {1}\nevents: {2}\nstatus: {3}", service, eventID, events, status.ToString()));
-            WriteWarning(events+", status:"+status.ToString(), service, eventID);
+            WriteWarning(events+", status: "+status.ToString(), service, eventID);
             return MDBLogs.SaveEvents(events, status, service, eventID);
         }
 

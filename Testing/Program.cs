@@ -32,21 +32,21 @@ namespace Testing
         static void Main(string[] args)
         {
             // Define an interval of 1 day, 15+ hours.
-            TimeSpan interval = new TimeSpan(1, 15, 42, 45, 750);
-            Console.WriteLine("Value of TimeSpan: {0}", interval);
+            //TimeSpan interval = new TimeSpan(1, 15, 42, 45, 750);
+            //Console.WriteLine("Value of TimeSpan: {0}", interval);
 
-            Console.WriteLine("There are {0:N5} milliseconds, as follows:", interval.TotalMilliseconds);
-            long nMilliseconds = interval.Days * 24 * 60 * 60 * 1000 +
-                                 interval.Hours * 60 * 60 * 1000 +
-                                 interval.Minutes * 60 * 1000 +
-                                 interval.Seconds * 1000 +
-                                 interval.Milliseconds;
-            Console.WriteLine("   Milliseconds:     {0,18:N0}", nMilliseconds);
-            Console.WriteLine("   Ticks:            {0,18:N0}",
-                              nMilliseconds * 10000 - interval.Ticks);
+            //Console.WriteLine("There are {0:N5} milliseconds, as follows:", interval.TotalMilliseconds);
+            //long nMilliseconds = interval.Days * 24 * 60 * 60 * 1000 +
+            //                     interval.Hours * 60 * 60 * 1000 +
+            //                     interval.Minutes * 60 * 1000 +
+            //                     interval.Seconds * 1000 +
+            //                     interval.Milliseconds;
+            //Console.WriteLine("   Milliseconds:     {0,18:N0}", nMilliseconds);
+            //Console.WriteLine("   Ticks:            {0,18:N0}",
+            //                  nMilliseconds * 10000 - interval.Ticks);
 
 
-            DateTime dt = new DateTime();
+            //DateTime dt = new DateTime();
 
             #region Test_RWWebAPI
             Test_RWWebAPI tst_rw_api = new Test_RWWebAPI();
@@ -71,7 +71,7 @@ namespace Testing
             //tst_tr_app.TransferArrival();
             //tst_tr_app.EFMetallurgTrans_Consignee(); //
             //tst_tr_app.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
-            //tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
+            tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
             //tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
             //tst_tr_app.MTThread_TransferArrival(); // Запустить перенос в потоке
             #endregion
@@ -134,7 +134,7 @@ namespace Testing
             //test.MLog_WriteEvents();
             //test.MLog_WriteLogServices();
             //test.MLog_WriteLogStatusServices();
-            test.MLog_WriteLogStatusServices();
+           // test.MLog_WriteLogStatusServices();
             #endregion
 
             #region Test_Settings тест настроек

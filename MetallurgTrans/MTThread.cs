@@ -20,17 +20,12 @@ namespace MetallurgTrans
         protected static object locker_db_arrival = new object();
 
         protected Thread thTransferApproaches = new Thread(new ParameterizedThreadStart(TransferApproaches));
-
         public bool statusTransferApproaches { get { return thTransferApproaches.IsAlive; } }
+
+        protected static bool run_approaches = false;
 
         protected Thread thTransferArrival = new Thread(new ParameterizedThreadStart(TransferArrival));
         public bool statusTransferArrival { get { return thTransferArrival.IsAlive; } }
-
-        //protected static bool run_approaches = false;
-        //protected static bool run_arrival = false;
-
-        //static ManualResetEvent _eventApproaches = new ManualResetEvent(true);
-        //static ManualResetEvent _eventArrival = new ManualResetEvent(true);
 
         public MTThread()
         { 
@@ -40,151 +35,120 @@ namespace MetallurgTrans
         public MTThread(service servece_name) {
             servece_owner = servece_name;
         }
-
+        /// <summary>
+        /// Запустить поток переноса вагонов на подходах
+        /// </summary>
+        /// <param name="delay"></param>
+        /// <returns></returns>
         public bool StartTransferApproaches(int delay)
         {
-            bool res = false;
             service service = service.TransferApproaches;
-            string mes_service_start = String.Format("Поток {0} сервиса {1}", service.ToString(), servece_owner);
-            //(mes_service_start + "- Попытка StartTransferApproaches").WriteInformation(servece_owner, eventID);
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
             try
             {
-                //string stat = mes_service_start + String.Format(" IsAlive = {0}, ThreadState = {1}", thTransferApproaches.IsAlive.ToString(), thTransferApproaches.ThreadState.ToString());
-                //ServicesEventLog.LogWarning(stat,servece_owner, eventID);
                 if (!thTransferApproaches.IsAlive)
                 {
-                    //run_approaches = true;
-                    thTransferApproaches.Name = service.ToString();
+                    run_approaches = true;
+                    if (thTransferApproaches.ThreadState == ThreadState.Unstarted)
+                    {
+                        thTransferApproaches.Name = service.ToString();
+                    }
                     thTransferApproaches.Start(delay * 1000);
-                    //(mes_service_start + "- StartTransferApproaches").WriteInformation(servece_owner, eventID);
+                    mes_service_start += " - запущен.";
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_owner, eventID);
                 }
-                //else
-                //{
-                //    if (thTransferApproaches.ThreadState == ThreadState.)
-                //    {
-                //        //string run = mes_service_start +". Выполняю _event.Set()";
-                //        //ServicesEventLog.LogWarning(run,servece_owner, eventID);
-                //        //_eventApproaches.Set();
-                //    }
-                //}
-                res = true;
+                return true;
             }
             catch (Exception ex)
             {
                 mes_service_start += " - ошибка запуска.";
                 ex.WriteError(mes_service_start, servece_owner, eventID);
-                res = false;
                 mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
+                return false;
             }
-            return res;
+            
         }
-
+        /// <summary>
+        /// Остановить поток переноса вагонов на подходах
+        /// </summary>
+        /// <returns></returns>
         public bool StopTransferApproaches()
         {
-            bool res = false;
             service service = service.TransferApproaches;
-            string mes_service_stop = String.Format("Поток {0} сервиса {1}", service.ToString(), servece_owner);
-            //(mes_service_start + "- Попытка StartTransferApproaches").WriteInformation(servece_owner, eventID);
+            string mes_service_stop = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
             try
             {
-                //run_approaches = false;
-                thTransferApproaches.Abort();
-                thTransferApproaches.Join(1000);
-                //string stat = mes_service_start + String.Format(" IsAlive = {0}, ThreadState = {1}", thTransferApproaches.IsAlive.ToString(), thTransferApproaches.ThreadState.ToString());
-                //ServicesEventLog.LogWarning(stat,servece_owner, eventID);
-                //if (thTransferApproaches.IsAlive)
-                //{
-                //    thTransferApproaches.Name = service.ToString();
-                //    thTransferApproaches.Start(delay * 1000);
-                //    //(mes_service_start + "- StartTransferApproaches").WriteInformation(servece_owner, eventID);
-                //}
-                //else
-                //{
-                //    if (thTransferApproaches.ThreadState == ThreadState.)
-                //    {
-                //        //string run = mes_service_start +". Выполняю _event.Set()";
-                //        //ServicesEventLog.LogWarning(run,servece_owner, eventID);
-                //        //_eventApproaches.Set();
-                //    }
-                //}
-                res = true;
+                //thTransferApproaches.Abort();
+                //thTransferApproaches.Join(1000);
+                run_approaches = false;
+                //mes_service_stop += " - остановлен.";
+                //mes_service_stop.WriteEvents(EventStatus.Ok, servece_owner, eventID);
+                return true;
             }
             catch (Exception ex)
             {
                 mes_service_stop += " - ошибка остановки.";
                 ex.WriteError(mes_service_stop, servece_owner, eventID);
-                res = false;
                 mes_service_stop.WriteEvents(EventStatus.Error, servece_owner, eventID);
+                return false;
             }
-            return res;
         }
-
-
+        /// <summary>
+        /// Запустить поток переноса вагонов по прибытию
+        /// </summary>
+        /// <param name="delay"></param>
+        /// <returns></returns>
         public bool StartTransferArrival(int delay)
         {
-            bool res = false;
             service service = service.TransferArrival;
-            string mes_service_start = String.Format("Поток {0} сервиса {1}", service.ToString(), servece_owner);
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
             try
             {
                 if (!thTransferArrival.IsAlive)
                 {
                     thTransferArrival.Name = service.ToString();
                     thTransferArrival.Start(delay * 1000);
+                    mes_service_start += " - запущен.";
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_owner, eventID);
                 }
-                //else
-                //{
-                //    if (thTransferArrival.ThreadState == ThreadState.WaitSleepJoin)
-                //    {
-                //        //_eventArrival.Set();
-                //    }
-                //}
-                res = true;
+                return true;
             }
             catch (Exception ex)
             {
                 mes_service_start += " - ошибка запуска.";
                 ex.WriteError(mes_service_start, servece_owner, eventID);
-                res = false;
                 mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
+                return false;
             }
-            return res;
         }
-
+        /// <summary>
+        /// Остановить поток переноса вагонов по прибытию
+        /// </summary>
+        /// <returns></returns>
         public bool StopTransferArrival()
         {
-            bool res = false;
             service service = service.TransferArrival;
-            string mes_service_stop = String.Format("Поток {0} сервиса {1}", service.ToString(), servece_owner);
+            string mes_service_stop = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
             try
             {
                 thTransferArrival.Abort();
                 thTransferArrival.Join(1000);
-                //if (!thTransferArrival.IsAlive)
-                //{
-                //    thTransferArrival.Name = service.ToString();
-                //    thTransferArrival.Start(delay * 1000);
-                //}
-                //else
-                //{
-                //    if (thTransferArrival.ThreadState == ThreadState.WaitSleepJoin)
-                //    {
-                //        //_eventArrival.Set();
-                //    }
-                //}
-                res = true;
+                mes_service_stop += " - остановлен.";
+                mes_service_stop.WriteEvents(EventStatus.Ok, servece_owner, eventID);
+                return true;
             }
             catch (Exception ex)
             {
                 mes_service_stop += " - ошибка останова.";
                 ex.WriteError(mes_service_stop, servece_owner, eventID);
-                res = false;
                 mes_service_stop.WriteEvents(EventStatus.Error, servece_owner, eventID);
+                return false;
             }
-            return res;
         }
-
-
+        /// <summary>
+        /// Поток переноса вагонов на подходах
+        /// </summary>
+        /// <param name="delay"></param>
         private static void TransferApproaches(object delay)
         {
             bool abort = true;
@@ -234,54 +198,51 @@ namespace MetallurgTrans
                         deleteFileMT = RWSetting.GetDB_Config_DefaultSetting("DeleteFileTransferApproaches", service, true, true);
                         // Признак перезаписывать файлы при переносе
                         rewriteFile = RWSetting.GetDB_Config_DefaultSetting("RewriteFileTransferApproaches", service, false, true);
-
                     }
                     catch (Exception ex)
                     {
                         ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
                     }
                 }
-                while (true) // слушаем всегда
+                while (run_approaches) // слушаем всегда
                 {
+                    "TransferApproaches - работаю".WriteInformation(servece_owner, eventID);
                     try
                     {
-                        //"TransferApproaches-".WriteInformation(servece_owner, eventID);
-                        //_eventApproaches.WaitOne(); // Здесь остановится
                         dt_start = DateTime.Now;
                         int count_copy = 0;
                         int res_transfer = 0;
                         lock (locker_sftp)
                         {
-                            //"SFTPClient-".WriteInformation(servece_owner, eventID);
                             // подключится считать и закрыть соединение
                             SFTPClient csftp = new SFTPClient(connect_SFTP, service);
-                            //"SFTPClient-1".WriteInformation(servece_owner, eventID);
                             csftp.fromPathsHost = fromPathHost;
                             csftp.FileFiltrHost = fileFiltrHost;
                             csftp.toDirPath = toDirPath;
                             csftp.toTMPDirPath = toTMPDirPath;
                             csftp.DeleteFileHost = deleteFileHost;
                             csftp.RewriteFile = rewriteFile;
-                            //"SFTPClient-2".WriteInformation(servece_owner, eventID);
                             count_copy = csftp.CopyToDir();
                         }
 
                         lock (locker_db_approaches)
                         {
-                            //"MTTransfer-".WriteInformation(servece_owner, eventID);
                             MTTransfer mtt = new MTTransfer(service);
                             mtt.FromPath = toTMPDirPath;
                             mtt.DeleteFile = deleteFileMT;
                             res_transfer = mtt.TransferApproaches();
                         }
-                        //"end-".WriteInformation(servece_owner, eventID);
                         TimeSpan ts = DateTime.Now - dt_start;
                         int sleep = delay_transfer - (int)ts.TotalMilliseconds; // Определим время для задержки, отнимим от времени задержки по умолчанию время выполнения переноса.
                         string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}, следующее выполнение через {8} милисек.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer, sleep);
                         mes_service_exec.WriteInformation(servece_owner, eventID);
-                        //mes_service_exec.WriteEvents(count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
                         service.WriteServices(dt_start, DateTime.Now, res_transfer);
-                        if (sleep > 0) Thread.Sleep(sleep);
+                        if (sleep > 0) 
+                        while (sleep > 0) { 
+                            Thread.Sleep(1);
+                            sleep--;
+                            if (!run_approaches) break;
+                        }
                     }
                     catch (ThreadAbortException exc)
                     {
@@ -289,6 +250,7 @@ namespace MetallurgTrans
                         {
                             String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
                             abort = false;
+                            run_approaches = false;
                         }
                     }
                     catch (Exception ex)
@@ -297,6 +259,7 @@ namespace MetallurgTrans
                         service.WriteServices(dt_start, DateTime.Now, -1);
                     }
                 } // {end слушаем всегда}
+                String.Format("Поток {0} сервиса {1} - остановлен, run_approaches={2}", service.ToString(), servece_owner, run_approaches).WriteWarning(servece_owner, eventID);
             }
             catch (ThreadAbortException exc)
             {
@@ -304,16 +267,21 @@ namespace MetallurgTrans
                 {
                     String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
                     abort = false;
+                    run_approaches = false;
                 }
             }
             catch (Exception ex)
             {
                 ex.WriteError(String.Format("Ошибка выполнения потока {0} сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
                 service.WriteServices(dt_start, DateTime.Now, -1);
+                run_approaches = false;
             }
 
         }
-
+        /// <summary>
+        /// Поток переноса вагонов по прибытию
+        /// </summary>
+        /// <param name="delay"></param>
         private static void TransferArrival(object delay)
         {
             bool abort = true;
@@ -393,27 +361,20 @@ namespace MetallurgTrans
                             csftp.RewriteFile = rewriteFile;
                             count_copy = csftp.CopyToDir();
                         }
-
                         lock (locker_db_arrival)
                         {
-                            lock (locker_db_approaches) // делаются отметки о прибытии
-                            {
-                                MTTransfer mtt = new MTTransfer(service);
-                                mtt.ArrivalToRailWay = arrivalToRailWay;
-                                mtt.FromPath = toTMPDirPath;
-                                mtt.DeleteFile = deleteFileMT;
-                                res_transfer = mtt.TransferArrival();
-                            }
-                        }
 
+                            MTTransfer mtt = new MTTransfer(service);
+                            mtt.ArrivalToRailWay = arrivalToRailWay;
+                            mtt.FromPath = toTMPDirPath;
+                            mtt.DeleteFile = deleteFileMT;
+                            res_transfer = mtt.TransferArrival();
+                        }
                         TimeSpan ts = DateTime.Now - dt_start;
                         int sleep = delay_transfer - (int)ts.TotalMilliseconds; // Определим время для задержки, отнимим от времени задержки по умолчанию время выполнения переноса.
                         string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}, следующее выполнение через {8} милисек.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer, sleep);
                         mes_service_exec.WriteInformation(servece_owner, eventID);
-                        //mes_service_exec.WriteEvents(count_copy < 0 | res_transfer < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
                         service.WriteServices(dt_start, DateTime.Now, res_transfer);
-
-                        //_eventArrival.Reset(); // Останавливаем и ждем 
                         if (sleep > 0) Thread.Sleep(sleep);
                     }
                     catch (ThreadAbortException exc)

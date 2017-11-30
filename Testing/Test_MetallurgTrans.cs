@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+//using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using TransferRailCars;
@@ -72,7 +73,10 @@ namespace Testing
         public void MTThread_TransferApproaches() {
 
             MTThread mth = new MTThread(service.ServicesMT);
-            //mth.StartTransferApproaches();
+            mth.StartTransferApproaches(30000);
+            mth.StopTransferApproaches();
+            System.Threading.Thread.Sleep(15);
+            mth.StartTransferApproaches(30000);
             //mth.StartTransferApproaches();
         }
 
