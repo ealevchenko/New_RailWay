@@ -73,10 +73,10 @@ namespace Testing
         public void MTThread_TransferApproaches() {
 
             MTThread mth = new MTThread(service.ServicesMT);
-            mth.StartTransferApproaches(30000);
-            mth.StopTransferApproaches();
-            System.Threading.Thread.Sleep(15);
-            mth.StartTransferApproaches(30000);
+            //mth.StartTransferApproaches(30000);
+            //mth.StopTransferApproaches();
+            //System.Threading.Thread.Sleep(15);
+            //mth.StartTransferApproaches(30000);
             //mth.StartTransferApproaches();
         }
 

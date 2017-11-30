@@ -32,6 +32,8 @@ namespace MTTServices
         bool active_transfer_arrival = true;
 
         System.Timers.Timer timer_services = new System.Timers.Timer();
+        System.Timers.Timer timer_services_approaches = new System.Timers.Timer();
+        System.Timers.Timer timer_services_arrival = new System.Timers.Timer();
 
         private MTThread mtt = new MTThread(service.TransferMT);
 
@@ -76,19 +78,9 @@ namespace MTTServices
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
             // Запустить таймер контроля сервиса
             timer_services.Start();
-            // интервалы
-            this.interval_transfer_approaches = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
-            this.interval_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", this.thread_arrival, this.interval_transfer_arrival, true);
-            this.interval_close_transfer = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseTransfer", this.thread_close, this.interval_close_transfer, true);
-            // состояние активности
-            this.active_transfer_approaches = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
-            this.active_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
-            // запускаем
-            RunTransferApproaches();
-            //mtt.StartTransferApproaches(this.interval_transfer_approaches);
-            //mtt.StartTransferArrival(this.interval_transfer_arrival);
-
-
+            // Запустить таймера потоков
+            RunTimerTransferApproaches();
+            RunTimerTransferArrival();
             //TODO: Добавить запуск других таймеров
             //...............
 
@@ -104,44 +96,66 @@ namespace MTTServices
             this.thread_close.WriteLogStatusServices();
         }
 
-        protected bool RunTransferApproaches() {
+        protected void RunTimerTransferApproaches()
+        {
             bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
-            if ((active_app != this.active_transfer_approaches) | (active_app & !mtt.statusTransferApproaches))
+            if (active_app)
             {
-                this.active_transfer_approaches = active_app;
-                if (active_app & !mtt.statusTransferApproaches) { 
-                    mtt.StartTransferApproaches(this.interval_transfer_approaches);
-                    return true;
-                }
-                if (!active_app & mtt.statusTransferApproaches) { 
-                    mtt.StopTransferApproaches();
-                    return false;
-                }
+                mtt.StartTransferApproaches();
+                timer_services_approaches.Start();
             }
-            return !mtt.statusTransferApproaches;
+            timer_services_approaches.Start();
         }
 
-        protected void IntervalTransferApproaches() {
-
-            int interval_app = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
-            if (interval_app != this.interval_transfer_approaches)
+        protected void RunTimerTransferArrival()
+        {
+            bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
+            if (active_arr)
             {
-
-                this.interval_transfer_approaches = interval_app;
-                // Перезапустить службу
-                if (mtt.statusTransferApproaches)
-                {
-                    mtt.StopTransferApproaches();
-                }
-                RunTransferApproaches();
-                string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_approaches, interval_app);
-                mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                mtt.StartTransferArrival();
+                timer_services_arrival.Start();
             }
+            timer_services_arrival.Start();
         }
+
+        //protected bool RunTransferApproaches() {
+        //    bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
+        //    if ((active_app != this.active_transfer_approaches) | (active_app & !mtt.statusTransferApproaches))
+        //    {
+        //        this.active_transfer_approaches = active_app;
+        //        if (active_app & !mtt.statusTransferApproaches) { 
+        //            mtt.StartTransferApproaches(this.interval_transfer_approaches);
+        //            return true;
+        //        }
+        //        if (!active_app & mtt.statusTransferApproaches) { 
+        //            mtt.StopTransferApproaches();
+        //            return false;
+        //        }
+        //    }
+        //    return !mtt.statusTransferApproaches;
+        //}
+
+        //protected void IntervalTransferApproaches() {
+
+        //    int interval_app = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
+        //    if (interval_app != this.interval_transfer_approaches)
+        //    {
+
+        //        this.interval_transfer_approaches = interval_app;
+        //        // Перезапустить службу
+        //        if (mtt.statusTransferApproaches)
+        //        {
+        //            mtt.StopTransferApproaches();
+        //        }
+        //        RunTransferApproaches();
+        //        string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_approaches, interval_app);
+        //        mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+        //    }
+        //}
 
         protected override void OnStop()
         {
-            mtt.StopTransferApproaches();
+            //mtt.StopTransferApproaches();
             //mtt.StopTransferArrival();
             //TODO: Добавить остановку других таймеров
             //...............
@@ -153,42 +167,82 @@ namespace MTTServices
 
         public void OnTimerServices(object sender, System.Timers.ElapsedEventArgs args)
         {
-            String.Format("Сервис : {0} сработал таймер контроля сервиса.", this.servece_name).WriteInformation(servece_name, eventID);            
+            //String.Format("Сервис : {0} сработал таймер контроля сервиса.", this.servece_name).WriteInformation(servece_name, eventID);            
             try
             {
-                // Проверка изменения интервала выполнения потоков
-                // Поток TransferApproaches
-                if (RunTransferApproaches()) {
-                    IntervalTransferApproaches();
+                // TransferApproaches
+                bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
+                int interval_app = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
+                if (active_app & interval_app != this.interval_transfer_approaches)
+                {
+                    this.interval_transfer_approaches = interval_app;                    
+                    timer_services_approaches.Stop();
+                    timer_services_approaches.Interval = this.interval_transfer_approaches * 1000;
+                    RunTimerTransferApproaches();
+                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_approaches, this.interval_transfer_approaches);
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
                 }
-                // Поток TransferArrival
-                //bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, true, true);
-                //if (active_arr)
-                //{
-                //    if (!mtt.statusTransferArrival) { mtt.StartTransferArrival(this.interval_transfer_arrival); }
-                //    int interval_arr = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", this.thread_arrival, this.interval_transfer_arrival, true);
-                //    if (interval_arr != this.interval_transfer_arrival)
-                //    {
-
-                //        this.interval_transfer_arrival = interval_arr;
-                //        // Перезапустить службу
-                //        mtt.StopTransferArrival();
-                //        mtt.StartTransferArrival(this.interval_transfer_arrival);
-                //        string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_arrival, interval_arr);
-                //        mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
-                //    }
-                //}
-                //else { 
-                //    // Остановить службу
-                //    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} прервано по значению параметра ActiveTransferArrival:{2} сек.", this.servece_name, this.thread_arrival, active_arr);
-                //    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
-                //    mtt.StopTransferArrival();
-                //}                
-
+                // TransferArrival
+                bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
+                int interval_arr = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", this.thread_arrival, this.interval_transfer_arrival, true);
+                if (active_arr & interval_arr != this.interval_transfer_arrival)
+                {
+                    this.interval_transfer_arrival = interval_arr;
+                    timer_services_arrival.Stop();
+                    timer_services_arrival.Interval = this.interval_transfer_arrival * 1000;
+                    RunTimerTransferArrival();
+                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_arrival, this.interval_transfer_arrival);
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
             }
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("OnTimerServices(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
+            }
+        }
+
+        private void OnTimerServicesApproaches(object sender, System.Timers.ElapsedEventArgs args)
+        {
+            //String.Format("Сервис : {0} сработал таймер Approaches.", this.servece_name).WriteInformation(servece_name, eventID);
+            try
+            {
+                bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
+                if (active_app)
+                {
+                    mtt.StartTransferApproaches();
+                }
+                if (active_app != this.active_transfer_approaches) {
+                    this.active_transfer_approaches = active_app;
+                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_approaches, active_app ? "возабновленно":"остановленно");
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OnTimerServicesApproaches(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
+            }
+        }
+
+        private void OnTimerServicesArrival(object sender, System.Timers.ElapsedEventArgs args)
+        {
+            //String.Format("Сервис : {0} сработал таймер Approaches.", this.servece_name).WriteInformation(servece_name, eventID);
+            try
+            {
+                bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
+                if (active_arr)
+                {
+                    mtt.StartTransferArrival();
+                }
+                if (active_arr != this.active_transfer_arrival)
+                {
+                    this.active_transfer_arrival = active_arr;
+                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_arrival, active_arr ? "возабновленно" : "остановленно");
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OnTimerServicesArrival(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
             }
         }
         /// <summary>
@@ -198,9 +252,23 @@ namespace MTTServices
         {
             try
             {
+                // интервалы
+                this.interval_transfer_approaches = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
+                this.interval_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", this.thread_arrival, this.interval_transfer_arrival, true);
+                this.interval_close_transfer = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseTransfer", this.thread_close, this.interval_close_transfer, true);
+                // состояние активности
+                this.active_transfer_approaches = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
+                this.active_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
+                
                 //// Настроем таймер контроля выполнения сервиса
                 timer_services.Interval = 30000;
                 timer_services.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServices);
+
+                timer_services_approaches.Interval = this.interval_transfer_approaches * 1000;
+                timer_services_approaches.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesApproaches);
+
+                timer_services_arrival.Interval = this.interval_transfer_arrival * 1000;
+                timer_services_arrival.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesArrival);
 
                 //TODO: Добавить инициализацию других таймеров
                 //...............
@@ -211,6 +279,8 @@ namespace MTTServices
                 return;
             } 
         }
+
+
 
 
     }
