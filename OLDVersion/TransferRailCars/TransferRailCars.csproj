@@ -67,10 +67,6 @@
       <Project>{f36e6439-4c3e-423d-b636-01211bd018d7}</Project>
       <Name>RCReferences</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\RWWebAPI\RWWebAPI.csproj">
-      <Project>{6f2c206c-b26c-4c3c-81ed-676d5e828f9b}</Project>
-      <Name>RWWebAPI</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

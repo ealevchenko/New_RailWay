@@ -43,6 +43,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EFKIS\EFKIS.csproj">
+      <Project>{6a689386-eff1-4b21-be6d-3dd93e1b01bf}</Project>
+      <Name>EFKIS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EFRC\EFRC.csproj">
       <Project>{89a9bc62-6912-4df8-a7f6-1c9a4beac8dd}</Project>
       <Name>EFRC</Name>

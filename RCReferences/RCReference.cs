@@ -1,10 +1,10 @@
-﻿//using EFKIS.Concrete;
+﻿using EFKIS.Concrete;
+using EFKIS.Entities;
+//using EFKIS.Concrete;
 //using EFKIS.Entities;
 using EFRC.Concrete;
 using EFRC.Entities;
 using MessageLog;
-using RWWebAPI;
-//using RWWebAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,14 +109,14 @@ namespace RCReferences
             try
             {
                 EFRailCars efrc = new EFRailCars();
-                Wagons kis = new Wagons();
+                EFWagons kis = new EFWagons();
                 int? id_vagons = efrc.GetIDVagons(num_vag, dt);
                 if (id_vagons == null)
                 {
                     id_vagons = efrc.GetIDNewVagons(num_vag, dt);
                     if (id_vagons == null)
                     {
-                        KometaVagonSob kvs = kis.GetKometaVagonSob(num_vag, dt);
+                        KometaVagonSob kvs = kis.GetVagonsSob(num_vag, dt);
                         VAGONS wag;
                         if (kvs != null)
                         {
@@ -183,7 +183,7 @@ namespace RCReferences
             try
             {
                 EFRailCars efrc = new EFRailCars();
-                Wagons kis = new Wagons();
+                EFWagons kis = new EFWagons();
                 int? id_own = efrc.GetIDOwnersOfKis(id_sob_kis);
                 if (id_own == null)
                 {
@@ -222,7 +222,7 @@ namespace RCReferences
             try
             {
                 EFRailCars efrc = new EFRailCars();
-                Wagons kis = new Wagons();
+                EFWagons kis = new EFWagons();
                 int? id_gruz = efrc.GetIDGruzs(id_gruz_prom_kis, id_gruz_vag_kis);
                 if (id_gruz == null)
                 {
@@ -281,7 +281,7 @@ namespace RCReferences
             try
             {
                 EFRailCars efrc = new EFRailCars();
-                Wagons kis = new Wagons();
+                EFWagons kis = new EFWagons();
                 EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
                 //Reference api_reference = new Reference();
                 int? id_gr = efrc.GetIDGruzsToETSNG(id_cargo);
