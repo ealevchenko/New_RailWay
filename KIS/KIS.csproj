@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{27DA4048-F46E-4C77-857B-2BD1809FEA87}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KIS</RootNamespace>
+    <AssemblyName>KIS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="KISTransfer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EFKIS\EFKIS.csproj">
+      <Project>{6a689386-eff1-4b21-be6d-3dd93e1b01bf}</Project>
+      <Name>EFKIS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Helpers\libClass\libClass.csproj">
+      <Project>{38a8fe37-55f2-4357-a59d-d8c8a8755aa5}</Project>
+      <Name>libClass</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MessageLogs\DBLogs\DBLogs.csproj">
+      <Project>{56b38018-2e35-42f4-87d8-273dd38a9899}</Project>
+      <Name>DBLogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MLogs\MLogs.csproj">
+      <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
+      <Name>MLogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RailCars\RailCars.csproj">
+      <Project>{41f8ef7a-d0f7-4ff8-a89a-bea17b0674ba}</Project>
+      <Name>RailCars</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RCReferences\RCReferences.csproj">
+      <Project>{f36e6439-4c3e-423d-b636-01211bd018d7}</Project>
+      <Name>RCReferences</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

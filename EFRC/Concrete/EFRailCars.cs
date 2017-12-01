@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace EFRC.Concrete
 {
-    public class EFRailCars: IRC
+    public class EFRailCars : IRC
     {
         private eventID eventID = eventID.EFRailCars;
 
@@ -19,184 +19,184 @@ namespace EFRC.Concrete
 
         #region VAGON_OPERATIONS
 
-            #region Общие
-            public IQueryable<VAGON_OPERATIONS> VAGON_OPERATIONS
-            {
-                get { return context.VAGON_OPERATIONS; }
-            }
+        #region Общие
+        public IQueryable<VAGON_OPERATIONS> VAGON_OPERATIONS
+        {
+            get { return context.VAGON_OPERATIONS; }
+        }
 
-            public IQueryable<VAGON_OPERATIONS> GetVAGON_OPERATIONS()
+        public IQueryable<VAGON_OPERATIONS> GetVAGON_OPERATIONS()
+        {
+            try
             {
-                try
-                {
-                    return VAGON_OPERATIONS;
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetVAGON_OPERATIONS()"), eventID);
-                    return null;
-                }
+                return VAGON_OPERATIONS;
             }
-
-            public VAGON_OPERATIONS GetVAGON_OPERATIONS(int id_oper)
+            catch (Exception e)
             {
-                try
-                {
-                    return GetVAGON_OPERATIONS().Where(c => c.id_oper == id_oper).FirstOrDefault();
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetVAGON_OPERATIONS(id_oper={0})", id_oper), eventID);
-                    return null;
-                }
+                e.WriteErrorMethod(String.Format("GetVAGON_OPERATIONS()"), eventID);
+                return null;
             }
+        }
 
-            public int SaveVAGON_OPERATIONS(VAGON_OPERATIONS VAGON_OPERATIONS)
+        public VAGON_OPERATIONS GetVAGON_OPERATIONS(int id_oper)
+        {
+            try
             {
-                VAGON_OPERATIONS dbEntry;
-                try
+                return GetVAGON_OPERATIONS().Where(c => c.id_oper == id_oper).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetVAGON_OPERATIONS(id_oper={0})", id_oper), eventID);
+                return null;
+            }
+        }
+
+        public int SaveVAGON_OPERATIONS(VAGON_OPERATIONS VAGON_OPERATIONS)
+        {
+            VAGON_OPERATIONS dbEntry;
+            try
+            {
+                if (VAGON_OPERATIONS.id_oper == 0)
                 {
-                    if (VAGON_OPERATIONS.id_oper == 0)
+                    dbEntry = new VAGON_OPERATIONS()
                     {
-                        dbEntry = new VAGON_OPERATIONS()
-                        {
-                            id_oper = 0,
-                            dt_uz = VAGON_OPERATIONS.dt_uz,
-                            dt_amkr = VAGON_OPERATIONS.dt_amkr,
-                            dt_out_amkr = VAGON_OPERATIONS.dt_out_amkr,
-                            n_natur = VAGON_OPERATIONS.n_natur,
-                            id_vagon = VAGON_OPERATIONS.id_vagon,
-                            id_stat = VAGON_OPERATIONS.id_stat,
-                            dt_from_stat = VAGON_OPERATIONS.dt_from_stat,
-                            dt_on_stat = VAGON_OPERATIONS.dt_on_stat,
-                            id_way = VAGON_OPERATIONS.id_way,
-                            dt_from_way = VAGON_OPERATIONS.dt_from_way,
-                            dt_on_way = VAGON_OPERATIONS.dt_on_way,
-                            num_vag_on_way = VAGON_OPERATIONS.num_vag_on_way,
-                            is_present = VAGON_OPERATIONS.is_present,
-                            id_locom = VAGON_OPERATIONS.id_locom,
-                            id_locom2 = VAGON_OPERATIONS.id_locom2,
-                            id_cond2 = VAGON_OPERATIONS.id_cond2,
-                            id_gruz = VAGON_OPERATIONS.id_gruz,
-                            id_gruz_amkr = VAGON_OPERATIONS.id_gruz_amkr,
-                            id_shop_gruz_for = VAGON_OPERATIONS.id_shop_gruz_for,
-                            weight_gruz = VAGON_OPERATIONS.weight_gruz,
-                            id_tupik = VAGON_OPERATIONS.id_tupik,
-                            id_nazn_country = VAGON_OPERATIONS.id_nazn_country,
-                            id_gdstait = VAGON_OPERATIONS.id_gdstait,
-                            id_cond = VAGON_OPERATIONS.id_cond,
-                            note = VAGON_OPERATIONS.note,
-                            is_hist = VAGON_OPERATIONS.is_hist,
-                            id_oracle = VAGON_OPERATIONS.id_oracle,
-                            lock_id_way = VAGON_OPERATIONS.lock_id_way,
-                            lock_order = VAGON_OPERATIONS.lock_order,
-                            lock_side = VAGON_OPERATIONS.lock_side,
-                            lock_id_locom = VAGON_OPERATIONS.lock_id_locom,
-                            st_lock_id_stat = VAGON_OPERATIONS.st_lock_id_stat,
-                            st_lock_order = VAGON_OPERATIONS.st_lock_order,
-                            st_lock_train = VAGON_OPERATIONS.st_lock_train,
-                            st_lock_side = VAGON_OPERATIONS.st_lock_side,
-                            st_gruz_front = VAGON_OPERATIONS.st_gruz_front,
-                            st_shop = VAGON_OPERATIONS.st_shop,
-                            oracle_k_st = VAGON_OPERATIONS.oracle_k_st,
-                            st_lock_locom1 = VAGON_OPERATIONS.st_lock_locom1,
-                            st_lock_locom2 = VAGON_OPERATIONS.st_lock_locom2,
-                            id_oper_parent = VAGON_OPERATIONS.id_oper_parent,
-                            grvu_SAP = VAGON_OPERATIONS.grvu_SAP,
-                            ngru_SAP = VAGON_OPERATIONS.ngru_SAP,
-                            id_ora_23_temp = VAGON_OPERATIONS.id_ora_23_temp,
-                            edit_user = VAGON_OPERATIONS.edit_user,
-                            edit_dt = VAGON_OPERATIONS.edit_dt,
-                            IDSostav = VAGON_OPERATIONS.IDSostav,
-                            num_vagon = VAGON_OPERATIONS.num_vagon,  
-                        };
-                        context.VAGON_OPERATIONS.Add(dbEntry);
-                    }
-                    else
+                        id_oper = 0,
+                        dt_uz = VAGON_OPERATIONS.dt_uz,
+                        dt_amkr = VAGON_OPERATIONS.dt_amkr,
+                        dt_out_amkr = VAGON_OPERATIONS.dt_out_amkr,
+                        n_natur = VAGON_OPERATIONS.n_natur,
+                        id_vagon = VAGON_OPERATIONS.id_vagon,
+                        id_stat = VAGON_OPERATIONS.id_stat,
+                        dt_from_stat = VAGON_OPERATIONS.dt_from_stat,
+                        dt_on_stat = VAGON_OPERATIONS.dt_on_stat,
+                        id_way = VAGON_OPERATIONS.id_way,
+                        dt_from_way = VAGON_OPERATIONS.dt_from_way,
+                        dt_on_way = VAGON_OPERATIONS.dt_on_way,
+                        num_vag_on_way = VAGON_OPERATIONS.num_vag_on_way,
+                        is_present = VAGON_OPERATIONS.is_present,
+                        id_locom = VAGON_OPERATIONS.id_locom,
+                        id_locom2 = VAGON_OPERATIONS.id_locom2,
+                        id_cond2 = VAGON_OPERATIONS.id_cond2,
+                        id_gruz = VAGON_OPERATIONS.id_gruz,
+                        id_gruz_amkr = VAGON_OPERATIONS.id_gruz_amkr,
+                        id_shop_gruz_for = VAGON_OPERATIONS.id_shop_gruz_for,
+                        weight_gruz = VAGON_OPERATIONS.weight_gruz,
+                        id_tupik = VAGON_OPERATIONS.id_tupik,
+                        id_nazn_country = VAGON_OPERATIONS.id_nazn_country,
+                        id_gdstait = VAGON_OPERATIONS.id_gdstait,
+                        id_cond = VAGON_OPERATIONS.id_cond,
+                        note = VAGON_OPERATIONS.note,
+                        is_hist = VAGON_OPERATIONS.is_hist,
+                        id_oracle = VAGON_OPERATIONS.id_oracle,
+                        lock_id_way = VAGON_OPERATIONS.lock_id_way,
+                        lock_order = VAGON_OPERATIONS.lock_order,
+                        lock_side = VAGON_OPERATIONS.lock_side,
+                        lock_id_locom = VAGON_OPERATIONS.lock_id_locom,
+                        st_lock_id_stat = VAGON_OPERATIONS.st_lock_id_stat,
+                        st_lock_order = VAGON_OPERATIONS.st_lock_order,
+                        st_lock_train = VAGON_OPERATIONS.st_lock_train,
+                        st_lock_side = VAGON_OPERATIONS.st_lock_side,
+                        st_gruz_front = VAGON_OPERATIONS.st_gruz_front,
+                        st_shop = VAGON_OPERATIONS.st_shop,
+                        oracle_k_st = VAGON_OPERATIONS.oracle_k_st,
+                        st_lock_locom1 = VAGON_OPERATIONS.st_lock_locom1,
+                        st_lock_locom2 = VAGON_OPERATIONS.st_lock_locom2,
+                        id_oper_parent = VAGON_OPERATIONS.id_oper_parent,
+                        grvu_SAP = VAGON_OPERATIONS.grvu_SAP,
+                        ngru_SAP = VAGON_OPERATIONS.ngru_SAP,
+                        id_ora_23_temp = VAGON_OPERATIONS.id_ora_23_temp,
+                        edit_user = VAGON_OPERATIONS.edit_user,
+                        edit_dt = VAGON_OPERATIONS.edit_dt,
+                        IDSostav = VAGON_OPERATIONS.IDSostav,
+                        num_vagon = VAGON_OPERATIONS.num_vagon,
+                    };
+                    context.VAGON_OPERATIONS.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.VAGON_OPERATIONS.Find(VAGON_OPERATIONS.id_oper);
+                    if (dbEntry != null)
                     {
-                        dbEntry = context.VAGON_OPERATIONS.Find(VAGON_OPERATIONS.id_oper);
-                        if (dbEntry != null)
-                        {
-                            dbEntry.dt_uz = VAGON_OPERATIONS.dt_uz;
-                            dbEntry.dt_amkr = VAGON_OPERATIONS.dt_amkr;
-                            dbEntry.dt_out_amkr = VAGON_OPERATIONS.dt_out_amkr;
-                            dbEntry.n_natur = VAGON_OPERATIONS.n_natur;
-                            dbEntry.id_vagon = VAGON_OPERATIONS.id_vagon;
-                            dbEntry.id_stat = VAGON_OPERATIONS.id_stat;
-                            dbEntry.dt_from_stat = VAGON_OPERATIONS.dt_from_stat;
-                            dbEntry.dt_on_stat = VAGON_OPERATIONS.dt_on_stat;
-                            dbEntry.id_way = VAGON_OPERATIONS.id_way;
-                            dbEntry.dt_from_way = VAGON_OPERATIONS.dt_from_way;
-                            dbEntry.dt_on_way = VAGON_OPERATIONS.dt_on_way;
-                            dbEntry.num_vag_on_way = VAGON_OPERATIONS.num_vag_on_way;
-                            dbEntry.is_present = VAGON_OPERATIONS.is_present;
-                            dbEntry.id_locom = VAGON_OPERATIONS.id_locom;
-                            dbEntry.id_locom2 = VAGON_OPERATIONS.id_locom2;
-                            dbEntry.id_cond2 = VAGON_OPERATIONS.id_cond2;
-                            dbEntry.id_gruz = VAGON_OPERATIONS.id_gruz;
-                            dbEntry.id_gruz_amkr = VAGON_OPERATIONS.id_gruz_amkr;
-                            dbEntry.id_shop_gruz_for = VAGON_OPERATIONS.id_shop_gruz_for;
-                            dbEntry.weight_gruz = VAGON_OPERATIONS.weight_gruz;
-                            dbEntry.id_tupik = VAGON_OPERATIONS.id_tupik;
-                            dbEntry.id_nazn_country = VAGON_OPERATIONS.id_nazn_country;
-                            dbEntry.id_gdstait = VAGON_OPERATIONS.id_gdstait;
-                            dbEntry.id_cond = VAGON_OPERATIONS.id_cond;
-                            dbEntry.note = VAGON_OPERATIONS.note;
-                            dbEntry.is_hist = VAGON_OPERATIONS.is_hist;
-                            dbEntry.id_oracle = VAGON_OPERATIONS.id_oracle;
-                            dbEntry.lock_id_way = VAGON_OPERATIONS.lock_id_way;
-                            dbEntry.lock_order = VAGON_OPERATIONS.lock_order;
-                            dbEntry.lock_side = VAGON_OPERATIONS.lock_side;
-                            dbEntry.lock_id_locom = VAGON_OPERATIONS.lock_id_locom;
-                            dbEntry.st_lock_id_stat = VAGON_OPERATIONS.st_lock_id_stat;
-                            dbEntry.st_lock_order = VAGON_OPERATIONS.st_lock_order;
-                            dbEntry.st_lock_train = VAGON_OPERATIONS.st_lock_train;
-                            dbEntry.st_lock_side = VAGON_OPERATIONS.st_lock_side;
-                            dbEntry.st_gruz_front = VAGON_OPERATIONS.st_gruz_front;
-                            dbEntry.st_shop = VAGON_OPERATIONS.st_shop;
-                            dbEntry.oracle_k_st = VAGON_OPERATIONS.oracle_k_st;
-                            dbEntry.st_lock_locom1 = VAGON_OPERATIONS.st_lock_locom1;
-                            dbEntry.st_lock_locom2 = VAGON_OPERATIONS.st_lock_locom2;
-                            dbEntry.id_oper_parent = VAGON_OPERATIONS.id_oper_parent;
-                            dbEntry.grvu_SAP = VAGON_OPERATIONS.grvu_SAP;
-                            dbEntry.ngru_SAP = VAGON_OPERATIONS.ngru_SAP;
-                            dbEntry.id_ora_23_temp = VAGON_OPERATIONS.id_ora_23_temp;
-                            dbEntry.edit_user = VAGON_OPERATIONS.edit_user;
-                            dbEntry.edit_dt = VAGON_OPERATIONS.edit_dt;
-                            dbEntry.IDSostav = VAGON_OPERATIONS.IDSostav;
-                            dbEntry.num_vagon = VAGON_OPERATIONS.num_vagon;
-                        }
+                        dbEntry.dt_uz = VAGON_OPERATIONS.dt_uz;
+                        dbEntry.dt_amkr = VAGON_OPERATIONS.dt_amkr;
+                        dbEntry.dt_out_amkr = VAGON_OPERATIONS.dt_out_amkr;
+                        dbEntry.n_natur = VAGON_OPERATIONS.n_natur;
+                        dbEntry.id_vagon = VAGON_OPERATIONS.id_vagon;
+                        dbEntry.id_stat = VAGON_OPERATIONS.id_stat;
+                        dbEntry.dt_from_stat = VAGON_OPERATIONS.dt_from_stat;
+                        dbEntry.dt_on_stat = VAGON_OPERATIONS.dt_on_stat;
+                        dbEntry.id_way = VAGON_OPERATIONS.id_way;
+                        dbEntry.dt_from_way = VAGON_OPERATIONS.dt_from_way;
+                        dbEntry.dt_on_way = VAGON_OPERATIONS.dt_on_way;
+                        dbEntry.num_vag_on_way = VAGON_OPERATIONS.num_vag_on_way;
+                        dbEntry.is_present = VAGON_OPERATIONS.is_present;
+                        dbEntry.id_locom = VAGON_OPERATIONS.id_locom;
+                        dbEntry.id_locom2 = VAGON_OPERATIONS.id_locom2;
+                        dbEntry.id_cond2 = VAGON_OPERATIONS.id_cond2;
+                        dbEntry.id_gruz = VAGON_OPERATIONS.id_gruz;
+                        dbEntry.id_gruz_amkr = VAGON_OPERATIONS.id_gruz_amkr;
+                        dbEntry.id_shop_gruz_for = VAGON_OPERATIONS.id_shop_gruz_for;
+                        dbEntry.weight_gruz = VAGON_OPERATIONS.weight_gruz;
+                        dbEntry.id_tupik = VAGON_OPERATIONS.id_tupik;
+                        dbEntry.id_nazn_country = VAGON_OPERATIONS.id_nazn_country;
+                        dbEntry.id_gdstait = VAGON_OPERATIONS.id_gdstait;
+                        dbEntry.id_cond = VAGON_OPERATIONS.id_cond;
+                        dbEntry.note = VAGON_OPERATIONS.note;
+                        dbEntry.is_hist = VAGON_OPERATIONS.is_hist;
+                        dbEntry.id_oracle = VAGON_OPERATIONS.id_oracle;
+                        dbEntry.lock_id_way = VAGON_OPERATIONS.lock_id_way;
+                        dbEntry.lock_order = VAGON_OPERATIONS.lock_order;
+                        dbEntry.lock_side = VAGON_OPERATIONS.lock_side;
+                        dbEntry.lock_id_locom = VAGON_OPERATIONS.lock_id_locom;
+                        dbEntry.st_lock_id_stat = VAGON_OPERATIONS.st_lock_id_stat;
+                        dbEntry.st_lock_order = VAGON_OPERATIONS.st_lock_order;
+                        dbEntry.st_lock_train = VAGON_OPERATIONS.st_lock_train;
+                        dbEntry.st_lock_side = VAGON_OPERATIONS.st_lock_side;
+                        dbEntry.st_gruz_front = VAGON_OPERATIONS.st_gruz_front;
+                        dbEntry.st_shop = VAGON_OPERATIONS.st_shop;
+                        dbEntry.oracle_k_st = VAGON_OPERATIONS.oracle_k_st;
+                        dbEntry.st_lock_locom1 = VAGON_OPERATIONS.st_lock_locom1;
+                        dbEntry.st_lock_locom2 = VAGON_OPERATIONS.st_lock_locom2;
+                        dbEntry.id_oper_parent = VAGON_OPERATIONS.id_oper_parent;
+                        dbEntry.grvu_SAP = VAGON_OPERATIONS.grvu_SAP;
+                        dbEntry.ngru_SAP = VAGON_OPERATIONS.ngru_SAP;
+                        dbEntry.id_ora_23_temp = VAGON_OPERATIONS.id_ora_23_temp;
+                        dbEntry.edit_user = VAGON_OPERATIONS.edit_user;
+                        dbEntry.edit_dt = VAGON_OPERATIONS.edit_dt;
+                        dbEntry.IDSostav = VAGON_OPERATIONS.IDSostav;
+                        dbEntry.num_vagon = VAGON_OPERATIONS.num_vagon;
                     }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveVAGON_OPERATIONS(VAGON_OPERATIONS={0})", VAGON_OPERATIONS.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id_oper;
+        }
+
+        public VAGON_OPERATIONS DeleteVAGON_OPERATIONS(int id_oper)
+        {
+            VAGON_OPERATIONS dbEntry = context.VAGON_OPERATIONS.Find(id_oper);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.VAGON_OPERATIONS.Remove(dbEntry);
+
                     context.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("SaveVAGON_OPERATIONS(VAGON_OPERATIONS={0})", VAGON_OPERATIONS.GetFieldsAndValue()), eventID);
-                    return -1;
+                    e.WriteErrorMethod(String.Format("DeleteVAGON_OPERATIONS(id_oper={0})", id_oper), eventID);
+                    return null;
                 }
-                return dbEntry.id_oper;
             }
-
-            public VAGON_OPERATIONS DeleteVAGON_OPERATIONS(int id_oper)
-            {
-                VAGON_OPERATIONS dbEntry = context.VAGON_OPERATIONS.Find(id_oper);
-                if (dbEntry != null)
-                {
-                    try
-                    {
-                        context.VAGON_OPERATIONS.Remove(dbEntry);
-
-                        context.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        e.WriteErrorMethod(String.Format("DeleteVAGON_OPERATIONS(id_oper={0})", id_oper), eventID);
-                        return null;
-                    }
-                }
-                return dbEntry;
-            }
-            #endregion
+            return dbEntry;
+        }
+        #endregion
 
         /// <summary>
         /// Удалить вагоны пренадлежащие составу перенесеному по данным металлург транс 
@@ -275,7 +275,8 @@ namespace EFRC.Concrete
         /// </summary>
         /// <param name="id_sostav"></param>
         /// <returns></returns>
-        public IQueryable<IGrouping<int?, VAGON_OPERATIONS>> GetVagonsOperationsGroupingVagon(int id_sostav) {
+        public IQueryable<IGrouping<int?, VAGON_OPERATIONS>> GetVagonsOperationsGroupingVagon(int id_sostav)
+        {
             return GetVagonsOperations(id_sostav).GroupBy(o => o.num_vagon);
         }
         /// <summary>
@@ -349,7 +350,7 @@ namespace EFRC.Concrete
         public bool IsVagonOperationMT(int id_sostav, DateTime dt_amkr, int id_vagon)
         {
             VAGON_OPERATIONS vo = GetVagonsOperationsToMTSostav(id_sostav, dt_amkr, id_vagon);
-            return vo!=null ? true: false;
+            return vo != null ? true : false;
         }
         /// <summary>
         /// Вернуть последний по порядку вагон на пути
@@ -629,8 +630,9 @@ namespace EFRC.Concrete
         /// <returns></returns>
         public IQueryable<VAGONS> GetVagons(int num_vag)
         {
-            try { 
-            return GetVAGONS().Where(v => v.num == num_vag).OrderByDescending(v => v.date_ar);
+            try
+            {
+                return GetVAGONS().Where(v => v.num == num_vag).OrderByDescending(v => v.date_ar);
             }
             catch (Exception e)
             {
@@ -646,8 +648,9 @@ namespace EFRC.Concrete
         /// <returns></returns>
         public VAGONS GetVagons(int num_vag, DateTime dt)
         {
-            try { 
-            return GetVagons(num_vag).Where(v => v.date_ar <= dt & v.date_end == null).OrderByDescending(v => v.date_ar).FirstOrDefault();
+            try
+            {
+                return GetVagons(num_vag).Where(v => v.date_ar <= dt & v.date_end == null).OrderByDescending(v => v.date_ar).FirstOrDefault();
             }
             catch (Exception e)
             {
@@ -1062,12 +1065,217 @@ namespace EFRC.Concrete
             }
             return dbEntry;
         }
+        /// <summary>
+        /// Вернуть станцию по id системы КИС
+        /// </summary>
+        /// <param name="id_station_kis"></param>
+        /// <returns></returns>
+        public STATIONS GetStationsOfKis(int id_station_kis)
+        {
+            try
+            {
+                return GetSTATIONS().Where(s => s.id_ora == id_station_kis).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStationsOfKis(id_station_kis={0})", id_station_kis), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть ID станции системы Railcars
+        /// </summary>
+        /// <param name="id_station_kis"></param>
+        /// <returns></returns>
+        public int? GetIDStationsOfKis(int id_station_kis)
+        {
+            try
+            {
+                STATIONS st = GetStationsOfKis(id_station_kis);
+                if (st != null) return st.id_stat;
+                return null;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStationsOfKis(id_station_kis={0})", id_station_kis), eventID);
+                return null;
+            }
+        }
 
         #endregion
 
+        #region WAYS
 
+        public IQueryable<WAYS> WAYS
+        {
+            get { return context.WAYS; }
+        }
+        /// <summary>
+        /// Получить список всех путей
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<WAYS> GetWAYS()
+        {
+            try
+            {
+                return WAYS;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWays()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить путь по id
+        /// </summary>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public WAYS GetWAYS(int id_way)
+        {
+            try
+            {
+                return GetWAYS().Where(w => w.id_way == id_way).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWays(id_way={0})", id_way), eventID);
+                return null;
+            }
+        }
 
+        public int SaveWAYS(WAYS WAYS)
+        {
+            WAYS dbEntry;
+            try
+            {
+                if (WAYS.id_way == 0)
+                {
+                    dbEntry = new WAYS()
+                    {
+                        id_way = 0,
+                        id_stat = WAYS.id_stat,
+                        id_park = WAYS.id_park,
+                        num = WAYS.num,
+                        name = WAYS.name,
+                        vag_capacity = WAYS.vag_capacity,
+                        order = WAYS.order,
+                        bind_id_cond = WAYS.bind_id_cond,
+                        for_rospusk = WAYS.for_rospusk, 
+                    };
+                    context.WAYS.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.WAYS.Find(WAYS.id_way);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.id_stat = WAYS.id_stat;
+                        dbEntry.id_park = WAYS.id_park;
+                        dbEntry.num = WAYS.num;
+                        dbEntry.name = WAYS.name;
+                        dbEntry.vag_capacity = WAYS.vag_capacity;
+                        dbEntry.order = WAYS.order;
+                        dbEntry.bind_id_cond = WAYS.bind_id_cond;
+                        dbEntry.for_rospusk = WAYS.for_rospusk;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveWAYS(WAYS={0})", WAYS.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id_way;
+        }
 
+        public WAYS DeleteWAYS(int id_way)
+        {
+            WAYS dbEntry = context.WAYS.Find(id_way);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.WAYS.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteWAYS(id_way={0})", id_way), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
 
+        /// <summary>
+        /// Вернуть все пути на станции
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <returns></returns>
+        public IQueryable<WAYS> GetWaysOfStations(int id_station)
+        {
+            try
+            {
+                return GetWAYS().Where(w => w.id_stat == id_station);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWaysOfStations(id_station={0})", id_station), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть путь по указанной станции и номеру пути
+        /// </summary>
+        /// <param name="id_station_kis"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public WAYS GetWaysOfStations(int id_station, string num)
+        {
+            try
+            {
+                return GetWaysOfStations(id_station).Where(w => w.num.ToUpper() == num.ToUpper()).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWaysOfStations(id_station={0}, num={1})", id_station, num), eventID);
+                return null;
+            }
+        }
+
+        public int? GetIDWaysToStations(int id_station, string num)
+        {
+            try
+            {
+                WAYS ws = GetWaysOfStations(id_station, num);
+                return ws != null ? (int?)ws.id_way : null;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDWaysToStations(id_station={0}, num={1})", id_station, num), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть ID станции
+        /// </summary>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public int? GetIDStationOfWay(int id_way)
+        {
+            try
+            {
+                WAYS way = GetWAYS(id_way);
+                return way != null ? way.id_stat : null;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDStationOfWay(id_way={0})", id_way), eventID);
+                return null;
+            }
+        }
+        #endregion
     }
 }

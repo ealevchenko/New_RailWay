@@ -33,11 +33,11 @@ namespace EFKIS.Entities
 
         public int? count_wagons { get; set; }
 
-        public int? count_nathIist { get; set; }
+        public int? count_nathist { get; set; }
 
         public int? count_set_wagons { get; set; }
 
-        public int? count_set_nathIist { get; set; }
+        public int? count_set_nathist { get; set; }
 
         public DateTime? close { get; set; }
 

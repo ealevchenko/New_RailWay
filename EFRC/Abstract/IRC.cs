@@ -74,6 +74,23 @@ namespace EFRC.Abstract
         STATIONS GetSTATIONS(int id_stat);
         int SaveSTATIONS(STATIONS STATIONS);
         STATIONS DeleteSTATIONS(int id_stat);
+
+        STATIONS GetStationsOfKis(int id_station_kis);
+        int? GetIDStationsOfKis(int id_station_kis);
+        #endregion
+
+        #region WAYS
+
+        IQueryable<WAYS> WAYS {get;}
+        IQueryable<WAYS> GetWAYS();
+        WAYS GetWAYS(int id_way);
+        int SaveWAYS(WAYS WAYS);
+        WAYS DeleteWAYS(int id_way);
+
+        IQueryable<WAYS> GetWaysOfStations(int id_station);
+        WAYS GetWaysOfStations(int id_station, string num);
+        int? GetIDWaysToStations(int id_station, string num);
+        int? GetIDStationOfWay(int id_way);
         #endregion
     }
 }

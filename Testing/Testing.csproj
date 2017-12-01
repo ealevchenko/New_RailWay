@@ -67,6 +67,7 @@
     <Compile Include="EFMetallurgTrans.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test_KIS.cs" />
     <Compile Include="Test_Logs.cs" />
     <Compile Include="Test_MetallurgTrans.cs" />
     <Compile Include="Test_Reference.cs" />
@@ -99,6 +100,10 @@
     <ProjectReference Include="..\Helpers\libClass\libClass.csproj">
       <Project>{38a8fe37-55f2-4357-a59d-d8c8a8755aa5}</Project>
       <Name>libClass</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KIS\KIS.csproj">
+      <Project>{27da4048-f46e-4c77-857b-2bd1809fea87}</Project>
+      <Name>KIS</Name>
     </ProjectReference>
     <ProjectReference Include="..\MessageLogs\DBLogs\DBLogs.csproj">
       <Project>{56b38018-2e35-42f4-87d8-273dd38a9899}</Project>

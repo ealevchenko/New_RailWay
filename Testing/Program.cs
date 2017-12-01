@@ -73,7 +73,12 @@ namespace Testing
             //tst_tr_app.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
             //tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
             //tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
-            tst_tr_app.MTThread_TransferArrival(); // Запустить перенос в потоке
+            //tst_tr_app.MTThread_TransferArrival(); // Запустить перенос в потоке
+            #endregion
+
+            #region Test_KIS
+            Test_KIS tst_kis = new Test_KIS();
+            tst_kis.Test_KISTransfer_TransferArrivalKISToRailWay(); // Запустить перенос в потоке
             #endregion
 
             #region Test_Reference

@@ -20,35 +20,37 @@ namespace RCReferences
         public RCReference() { }
 
         #region Определение ID по справочникам системы RailCars
-        ///// <summary>
-        ///// Определить ID станции системы Railcars (если ID нет в системе создать по данным справочника KIS)
-        ///// </summary>
-        ///// <param name="id_station_kis"></param>
-        ///// <param name="num_way"></param>
-        ///// <returns>id станции системы Railcars</returns>
-        //public int? DefinitionIDStations(int id_station_kis, int? num_way)
-        //{
-        //    int? stan = rs_stat.GetIDStationsOfKis(id_station_kis);
-        //    if (stan == null)
-        //    {
-        //        if (num_way != null) { num_way = 0; }
-        //        int outer_side = (int)num_way % 2; // 0-четн. 1-нечет.
-        //        NumVagStan st = vc.GetStations(id_station_kis);
-        //        if (st != null)
-        //        {
-        //            int res = rs_stat.SaveStations(new STATIONS()
-        //            {
-        //                id_stat = 0,
-        //                name = st.NAME,
-        //                id_ora = id_station_kis,
-        //                outer_side = outer_side,
-        //                is_uz = 0
-        //            });
-        //            if (res > 0) return res;
-        //        }
-        //    }
-        //    return stan;
-        //}
+        /// <summary>
+        /// Определить ID станции системы Railcars (если ID нет в системе создать по данным справочника KIS)
+        /// </summary>
+        /// <param name="id_station_kis"></param>
+        /// <param name="num_way"></param>
+        /// <returns>id станции системы Railcars</returns>
+        public int? DefinitionIDStations(int id_station_kis, int? num_way)
+        {
+            EFRailCars efrc = new EFRailCars();
+            EFWagons kis = new EFWagons();
+            int? stan = efrc.GetIDStationsOfKis(id_station_kis);
+            if (stan == null)
+            {
+                if (num_way != null) { num_way = 0; }
+                int outer_side = (int)num_way % 2; // 0-четн. 1-нечет.
+                KometaStan st = kis.GetKometaStan(id_station_kis);
+                if (st != null)
+                {
+                    int res = efrc.SaveSTATIONS(new STATIONS()
+                    {
+                        id_stat = 0,
+                        name = st.NAME,
+                        id_ora = id_station_kis,
+                        outer_side = outer_side,
+                        is_uz = 0
+                    });
+                    if (res > 0) return res;
+                }
+            }
+            return stan;
+        }
         ///// <summary>
         ///// Определить ID станции системы Railcars (если ID нет в системе создать по данным глобальных станций)
         ///// </summary>
@@ -58,42 +60,43 @@ namespace RCReferences
         //{
         //    return reference.DefinitionIDStation(code_cs);
         //}
-        ///// <summary>
-        ///// Определить ID пути системы Railcars (если ID нет в системе создать путь)
-        ///// </summary>
-        ///// <param name="id_station_kis"></param>
-        ///// <param name="num_way"></param>
-        ///// <returns></returns>
-        //public int? DefinitionIDWays(int id_station, int? num_way)
-        //{
-        //    if (num_way != null)
-        //    {
-        //        int? way = rs_ways.GetIDWaysToStations(id_station, ((int)num_way).ToString());
-        //        if (way == null)
-        //        {
-        //            int res = rs_ways.SaveWays(new WAYS()
-        //            {
-        //                id_way = 0,
-        //                id_stat = id_station,
-        //                id_park = null,
-        //                num = ((int)num_way).ToString(),
-        //                name = "?",
-        //                vag_capacity = null,
-        //                order = null,
-        //                bind_id_cond = null,
-        //                for_rospusk = null,
-        //            });
-        //            if (res > 0) return res;
-        //        }
-        //        return way;
-        //    }
-        //    else
-        //    {
-        //        WAYS ws = rs_ways.GetWaysOfStations(id_station).OrderBy(w => w.num).FirstOrDefault();
-        //        if (ws != null) return ws.id_way;
-        //    }
-        //    return null;
-        //}
+        /// <summary>
+        /// Определить ID пути системы Railcars (если ID нет в системе создать путь)
+        /// </summary>
+        /// <param name="id_station_kis"></param>
+        /// <param name="num_way"></param>
+        /// <returns></returns>
+        public int? DefinitionIDWays(int id_station, int? num_way)
+        {
+            EFRailCars efrc = new EFRailCars();
+            if (num_way != null)
+            {
+                int? way = efrc.GetIDWaysToStations(id_station, ((int)num_way).ToString());
+                if (way == null)
+                {
+                    int res = efrc.SaveWAYS(new WAYS()
+                    {
+                        id_way = 0,
+                        id_stat = id_station,
+                        id_park = null,
+                        num = ((int)num_way).ToString(),
+                        name = "?",
+                        vag_capacity = null,
+                        order = null,
+                        bind_id_cond = null,
+                        for_rospusk = null,
+                    });
+                    if (res > 0) return res;
+                }
+                return way;
+            }
+            else
+            {
+                WAYS ws = efrc.GetWaysOfStations(id_station).OrderBy(w => w.num).FirstOrDefault();
+                if (ws != null) return ws.id_way;
+            }
+            return null;
+        }
         /// <summary>
         /// Получить ID вагона системы Railcars (если id нет создать из данных КИС или создать временную строку)
         /// </summary>

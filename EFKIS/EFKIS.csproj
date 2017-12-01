@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IKIS.cs" />
+    <Compile Include="Abstract\ITKIS.cs" />
     <Compile Include="Concrete\EFTDbContext.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFTKIS.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Entities\PromSostav.cs" />
     <Compile Include="Entities\PromVagon.cs" />
     <Compile Include="Entities\ArrivalSostav.cs" />
+    <Compile Include="Helpers\Filters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

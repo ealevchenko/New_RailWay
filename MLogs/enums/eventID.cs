@@ -49,6 +49,8 @@ namespace MessageLog
         RCReference = 3200,                 // Библиотека доступа к справочникам системы RailCars
         EFSAP = 3300,                       // Библиотека доступа к справочникам обновляемых SAP
         EFRCReference = 3400,               // Библиотека доступа к справочникам системы RailCars+
+        RailCars = 3500,                    // Библиотека сервисов обработки данных Railcars
+
         #endregion
 
         #region Служба RailWay 4000
@@ -66,6 +68,8 @@ namespace MessageLog
 
         EFWagons = 6100,                        // Библиотека доступа к данным БД системы КИС
         EFTKIS = 6200,                          // Библиотека доступа к таблицам переноса данных из системы КИС в систему RailCars, RailWay 
+        KIS = 6300,                             // Библиотека сервисов обработки данных КИС
+        KIS_KISTransfer = 6301,                 // Модуль переноса данных КИС
         #endregion
 
         #region Модуля согласования старой ситемы Railcars c новой Railway 10000
