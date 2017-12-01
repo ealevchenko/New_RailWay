@@ -65,6 +65,7 @@ namespace MessageLog
         #region Служба системы КИС 6000
 
         EFWagons = 6100,                        // Библиотека доступа к данным БД системы КИС
+        EFTKIS = 6200,                          // Библиотека доступа к таблицам переноса данных из системы КИС в систему RailCars, RailWay 
         #endregion
 
         #region Модуля согласования старой ситемы Railcars c новой Railway 10000

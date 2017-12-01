@@ -49,6 +49,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,7 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IKIS.cs" />
+    <Compile Include="Concrete\EFTDbContext.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
+    <Compile Include="Concrete\EFTKIS.cs" />
     <Compile Include="Concrete\EFWagons.cs" />
     <Compile Include="Entities\KometaParkState.cs" />
     <Compile Include="Entities\KometaSobstvForNakl.cs" />
@@ -80,6 +84,7 @@
     <Compile Include="Entities\PromNatHist.cs" />
     <Compile Include="Entities\PromSostav.cs" />
     <Compile Include="Entities\PromVagon.cs" />
+    <Compile Include="Entities\ArrivalSostav.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
