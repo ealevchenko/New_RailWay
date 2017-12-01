@@ -1,0 +1,51 @@
+﻿@using Web_RailWay.App_LocalResources;
+@{
+    ViewBag.Title = @MTResource.index_report_approaches_title;
+    ViewBag.ImageFone = "background-image: url(Image/header.jpg);";
+    ViewBag.Home = @MTResource.index_report_approaches_title;
+}
+@section Document {
+
+}
+
+@section Admin {
+
+    @*@{ Html.RenderAction("LinkMTControl", "Admin"); }*@
+}
+
+<div class="jumbotron">
+    <h1>@ViewBag.Title</h1>
+    <p class="lead">@MTResource.index_report_approaches_desc</p>
+</div>
+
+<div class="content">
+    <ul class="ca-menu">
+        <li>
+            <a href="#">
+                <span class="ca-icon">K</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">@MTResource.index_report_approaches_cargo_title</h2>
+                    <h3 class="ca-sub">@MTResource.index_report_approaches_cargo_desc</h3>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="ca-icon">I</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">@MTResource.index_report_approaches_sostav_title</h2>
+                    <h3 class="ca-sub">@MTResource.index_report_approaches_sostav_desc</h3>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="ca-icon">H</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">@MTResource.index_report_approaches_cars_title</h2>
+                    <h3 class="ca-sub">@MTResource.index_report_approaches_cars_desc</h3>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>

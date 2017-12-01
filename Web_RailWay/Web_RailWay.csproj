@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -168,6 +170,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GlobalResources.uk.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\MTResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MTResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -181,6 +188,9 @@
     <Compile Include="Controllers\api\RWReferenceController.cs" />
     <Compile Include="Controllers\api\ValuesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MettalurgTransController.cs" />
+    <Compile Include="Controllers\MTApproachesController.cs" />
+    <Compile Include="Controllers\MTArrivalController.cs" />
     <Compile Include="Controllers\ParkStateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -207,6 +217,7 @@
     <Content Include="fonts\websymbols\websymbols-regular-webfont.svg" />
     <Content Include="fonts\websymbols\WebSymbolsRegular-demo.html" />
     <Content Include="Global.asax" />
+    <Content Include="Image\header.jpg" />
     <Content Include="Image\header1.jpg" />
     <Content Include="Image\Levchenko.jpg" />
     <Content Include="Scripts\bootstrap.js" />
@@ -262,6 +273,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_RailWay.cshtml" />
     <Content Include="Views\ParkState\Index.cshtml" />
+    <Content Include="Views\MetallurgTrans\Index.cshtml" />
+    <Content Include="Views\MTApproaches\Index.cshtml" />
+    <Content Include="Views\MTArrival\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFKIS\EFKIS.csproj">
@@ -303,6 +317,10 @@
     <EmbeddedResource Include="App_LocalResources\GlobalResources.uk.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GlobalResources.uk.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\MTResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MTResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
