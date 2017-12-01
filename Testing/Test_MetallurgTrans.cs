@@ -65,14 +65,14 @@ namespace Testing
         /// </summary>
         public void TRailCars_ArrivalToRailCars() {
             TRailCars trc = new TRailCars();
-            //trc.ArrivalToRailCars(4113);
-            trc.ArrivalToRailCars(4114);
+            trc.ArrivalToRailCars(10564);
 
         }
 
         public void MTThread_TransferApproaches() {
 
             MTThread mth = new MTThread(service.ServicesMT);
+            mth.StartTransferApproaches();
             //mth.StartTransferApproaches(30000);
             //mth.StopTransferApproaches();
             //System.Threading.Thread.Sleep(15);
@@ -107,7 +107,7 @@ namespace Testing
         {
 
             MTThread mth = new MTThread(service.ServicesMT);
-            //mth.StartTransferArrival();
+            mth.StartTransferArrival();
         }
     }
 }
