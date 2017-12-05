@@ -10,13 +10,14 @@ namespace EFKIS.Abstract
     public interface ITKIS
     {
         #region Перенос вагонов по данным КИС
-        IQueryable<ArrivalSostav> ArrivalSostav { get; }
-        IQueryable<ArrivalSostav> GetArrivalSostav();
-        ArrivalSostav GetArrivalSostav(int id);
-        int SaveArrivalSostav(ArrivalSostav ArrivalSostav);
-        ArrivalSostav DeleteArrivalSostav(int id);
+        IQueryable<BufferArrivalSostav> BufferArrivalSostav { get; }
+        IQueryable<BufferArrivalSostav> GetBufferArrivalSostav();
+        BufferArrivalSostav GetBufferArrivalSostav(int id);
+        int SaveArrivalSostav(BufferArrivalSostav BufferArrivalSostav);
+        BufferArrivalSostav DeleteBufferArrivalSostav(int id);
         DateTime? GetLastDateTime();
-        IQueryable<ArrivalSostav> GetArrivalSostav(DateTime start, DateTime stop);
+        IQueryable<BufferArrivalSostav> GetBufferArrivalSostav(DateTime start, DateTime stop);
+        IQueryable<BufferArrivalSostav> GetBufferArrivalSostavNoClose();
         #endregion
     }
 }

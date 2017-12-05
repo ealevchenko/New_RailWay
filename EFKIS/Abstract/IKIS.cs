@@ -66,6 +66,8 @@ namespace EFKIS.Abstract
         #region PROM.Nat_Hist
         IQueryable<PromNatHist> PromNatHist { get; }
         IQueryable<PromNatHist> GetPromNatHist();
+
+        PromNatHist GetNatHist(int natur, int station, int day, int month, int year, int wag);
         #endregion
 
         #region PROM.Vagon
@@ -75,6 +77,12 @@ namespace EFKIS.Abstract
         IQueryable<PromVagon> GetVagon(int natur, int station, int day, int month, int year);
         int? CountWagonsVagon(int natur, int station, int day, int month, int year);
         PromVagon GetVagon(int natur, int station, int day, int month, int year, int num);
+        #endregion
+
+        #region PROM.CEX
+        IQueryable<PromCex> PromCex {get;}
+        IQueryable<PromCex> GetCex();
+        PromCex GetCex(int k_podr);
         #endregion
 
         #endregion

@@ -17,45 +17,45 @@ namespace EFKIS.Concrete
         protected EFTDbContext context = new EFTDbContext();
 
 
-        public IQueryable<ArrivalSostav> ArrivalSostav
+        public IQueryable<BufferArrivalSostav> BufferArrivalSostav
         {
-            get { return context.ArrivalSostav; }
+            get { return context.BufferArrivalSostav; }
         }
 
-        public IQueryable<ArrivalSostav> GetArrivalSostav()
+        public IQueryable<BufferArrivalSostav> GetBufferArrivalSostav()
         {
             try
             {
-                return ArrivalSostav;
+                return BufferArrivalSostav;
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetArrivalSostav()"), eventID);
+                e.WriteErrorMethod(String.Format("GetBufferArrivalSostav()"), eventID);
                 return null;
             }
         }
 
-        public ArrivalSostav GetArrivalSostav(int id)
+        public BufferArrivalSostav GetBufferArrivalSostav(int id)
         {
             try
             {
-                return GetArrivalSostav().Where(s => s.id == id).FirstOrDefault();
+                return GetBufferArrivalSostav().Where(s => s.id == id).FirstOrDefault();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetArrivalSostav(id={0})", id), eventID);
+                e.WriteErrorMethod(String.Format("GetBufferArrivalSostav(id={0})", id), eventID);
                 return null;
             }
         }
 
-        public int SaveArrivalSostav(ArrivalSostav ArrivalSostav)
+        public int SaveArrivalSostav(BufferArrivalSostav ArrivalSostav)
         {
-            ArrivalSostav dbEntry;
+            BufferArrivalSostav dbEntry;
             try
             {
                 if (ArrivalSostav.id == 0)
                 {
-                    dbEntry = new ArrivalSostav()
+                    dbEntry = new BufferArrivalSostav()
                     {
                         id = ArrivalSostav.id,
                         datetime = ArrivalSostav.datetime,
@@ -80,11 +80,11 @@ namespace EFKIS.Concrete
                         list_no_update_wagons = ArrivalSostav.list_no_update_wagons,
                         message = ArrivalSostav.message,
                     };
-                    context.ArrivalSostav.Add(dbEntry);
+                    context.BufferArrivalSostav.Add(dbEntry);
                 }
                 else
                 {
-                    dbEntry = context.ArrivalSostav.Find(ArrivalSostav.id);
+                    dbEntry = context.BufferArrivalSostav.Find(ArrivalSostav.id);
                     if (dbEntry != null)
                     {
                         dbEntry.datetime = ArrivalSostav.datetime;
@@ -114,26 +114,26 @@ namespace EFKIS.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("SaveArrivalSostav(ArrivalSostav={0})", ArrivalSostav.GetFieldsAndValue()), eventID);
+                e.WriteErrorMethod(String.Format("SaveBufferArrivalSostav(ArrivalSostav={0})", BufferArrivalSostav.GetFieldsAndValue()), eventID);
                 return -1;
             }
             return dbEntry.id;
         }
 
-        public ArrivalSostav DeleteArrivalSostav(int id)
+        public BufferArrivalSostav DeleteBufferArrivalSostav(int id)
         {
-            ArrivalSostav dbEntry = context.ArrivalSostav.Find(id);
+            BufferArrivalSostav dbEntry = context.BufferArrivalSostav.Find(id);
             if (dbEntry != null)
             {
                 try
                 {
-                    context.ArrivalSostav.Remove(dbEntry);
+                    context.BufferArrivalSostav.Remove(dbEntry);
 
                     context.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("DeleteArrivalSostav(id={0})", id), eventID);
+                    e.WriteErrorMethod(String.Format("DeleteBufferArrivalSostav(id={0})", id), eventID);
                     return null;
                 }
             }
@@ -147,7 +147,7 @@ namespace EFKIS.Concrete
         {
             try
             {
-                ArrivalSostav oas = GetArrivalSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
+                BufferArrivalSostav oas = GetBufferArrivalSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
                 return oas != null ? (DateTime?)oas.datetime : null;
             }
             catch (Exception e)
@@ -162,15 +162,15 @@ namespace EFKIS.Concrete
         /// <param name="start"></param>
         /// <param name="stop"></param>
         /// <returns></returns>
-        public IQueryable<ArrivalSostav> GetArrivalSostav(DateTime start, DateTime stop)
+        public IQueryable<BufferArrivalSostav> GetBufferArrivalSostav(DateTime start, DateTime stop)
         {
             try
             {
-                return GetArrivalSostav().Where(o => o.datetime >= start & o.datetime <= stop);
+                return GetBufferArrivalSostav().Where(o => o.datetime >= start & o.datetime <= stop);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetArrivalSostav()"), eventID);
+                e.WriteErrorMethod(String.Format("GetBufferArrivalSostav()"), eventID);
                 return null;
             }
         }
@@ -178,15 +178,15 @@ namespace EFKIS.Concrete
         /// Выбрать не закрытые перенесеные составы
         /// </summary>
         /// <returns></returns>
-        public IQueryable<ArrivalSostav> GetArrivalSostavNoClose()
+        public IQueryable<BufferArrivalSostav> GetBufferArrivalSostavNoClose()
         {
             try
             {
-                return GetArrivalSostav().Where(o => o.close == null).OrderBy(o => o.datetime);
+                return GetBufferArrivalSostav().Where(o => o.close == null).OrderBy(o => o.datetime);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetArrivalSostavNoClose()"), eventID);
+                e.WriteErrorMethod(String.Format("GetBufferArrivalSostavNoClose()"), eventID);
                 return null;
             }
         }

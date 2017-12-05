@@ -16,6 +16,12 @@ namespace MessageLog
         TransferMT = 121,
         HostMT = 122,
         CloseTransfer = 131,
+        // сервисы КИС
+        ServicesKIS = 200,
+        //CopyArrivalSostavMT = 211,  // поток переноса данных
+        //TransferArrivalMT = 212,    // поток переноса вагонов в прибытие с УЗ
+        CopyArrivalSostavKIS = 211, // поток переноса данных
+        TransferArrivalKIS = 212,   // поток переноса вагонов в прибытие с УЗ по данным КИС
     }
 
 }

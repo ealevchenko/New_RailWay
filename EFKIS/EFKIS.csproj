@@ -85,7 +85,7 @@
     <Compile Include="Entities\PromNatHist.cs" />
     <Compile Include="Entities\PromSostav.cs" />
     <Compile Include="Entities\PromVagon.cs" />
-    <Compile Include="Entities\ArrivalSostav.cs" />
+    <Compile Include="Entities\BufferArrivalSostav.cs" />
     <Compile Include="Helpers\Filters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

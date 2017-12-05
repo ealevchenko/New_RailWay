@@ -6,8 +6,8 @@ namespace EFKIS.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("KIS.ArrivalSostav")]
-    public partial class ArrivalSostav
+    [Table("KIS.BufferArrivalSostav")]
+    public partial class BufferArrivalSostav
     {
         public int id { get; set; }
 

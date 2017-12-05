@@ -637,20 +637,29 @@ namespace EFKIS.Concrete
         //{
         //    return GetNatHist(natur, station, day, month, year, null);
         //}
-        ///// <summary>
-        ///// Получить вагон по натурному листу станции и дате поступления
-        ///// </summary>
-        ///// <param name="natur"></param>
-        ///// <param name="station"></param>
-        ///// <param name="day"></param>
-        ///// <param name="month"></param>
-        ///// <param name="year"></param>
-        ///// <param name="wag"></param>
-        ///// <returns></returns>
-        //public PromNatHist GetNatHist(int natur, int station, int day, int month, int year, int wag)
-        //{
-        //    return GetNatHist(natur, station, day, month, year, null).Where(h => h.N_VAG == wag).FirstOrDefault();
-        //}
+        /// <summary>
+        /// Получить вагон по натурному листу станции и дате поступления
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <param name="station"></param>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <param name="wag"></param>
+        /// <returns></returns>
+        public PromNatHist GetNatHist(int natur, int station, int day, int month, int year, int wag)
+        {
+            try
+            {
+                return GetNatHist(natur, station, day, month, year, null).Where(h => h.N_VAG == wag).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNatHist(natur={0}, station={1}, day={2}, month={3}, year={4}, wag={5})", natur, station, day, month, year, wag), eventID);
+                return null;
+            }
+
+        }
         ///// <summary>
         ///// Получить количество вагонов по натурному листу станции и дате поступления
         ///// </summary>
@@ -835,6 +844,46 @@ namespace EFKIS.Concrete
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("GetVagon(natur={0}, station={1}, day={2}, month={3}, year={4}, num={5})", natur, station, day, month, year, num), eventID);
+                return null;
+            }
+        }
+        #endregion
+
+        #region PROM.CEX
+        public IQueryable<PromCex> PromCex
+        {
+            get { return context.PromCex; }
+        }
+        /// <summary>
+        /// Получить перечень всех цехов
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<PromCex> GetCex()
+        {
+            try
+            {
+                return PromCex;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCex()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить цех по id
+        /// </summary>
+        /// <param name="k_podr"></param>
+        /// <returns></returns>
+        public PromCex GetCex(int k_podr)
+        {
+            try
+            {
+                return GetCex().Where(c => c.K_PODR == k_podr).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCex(k_podr={0})",k_podr), eventID);
                 return null;
             }
         }
