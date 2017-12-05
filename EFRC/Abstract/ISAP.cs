@@ -23,5 +23,7 @@ namespace EFRC.Abstract
         int DeleteSAPIncSupplySostav(int idsostav);
         int DeleteSAPIncSupply(int idsostav, int numvag);
         int CountSAPIncSupply(int idsostav);
+        int GetDefaultIDSAPIncSupply();
+        bool IsWagonToSAPSupply(int idsostav, int vagon);
     }
 }

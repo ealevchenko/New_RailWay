@@ -33,7 +33,7 @@ namespace RCReferences
             int? stan = efrc.GetIDStationsOfKis(id_station_kis);
             if (stan == null)
             {
-                if (num_way != null) { num_way = 0; }
+                if (num_way == null) { num_way = 0; }
                 int outer_side = (int)num_way % 2; // 0-четн. 1-нечет.
                 KometaStan st = kis.GetKometaStan(id_station_kis);
                 if (st != null)
@@ -329,32 +329,34 @@ namespace RCReferences
                 return null;
             }
         }
-        ///// <summary>
-        ///// Определить id цеха (если id нет в системе RailCars создать из данных КИС)
-        ///// </summary>
-        ///// <param name="id_shop_kis"></param>
-        ///// <returns></returns>
-        //public int? DefinitionIDShop(int id_shop_kis)
-        //{
-        //    int? id_shop = rs_shp.GetIDShopsOfKis(id_shop_kis);
-        //    if (id_shop == null)
-        //    {
-        //        PromCex cex = pc.GetCex(id_shop_kis);
-        //        if (cex != null)
-        //        {
-        //            int res = rs_shp.SaveShop(new SHOPS()
-        //            {
-        //                id_shop = 0,
-        //                name = cex.ABREV_P,
-        //                name_full = cex.NAME_P,
-        //                id_stat = null,
-        //                id_ora = id_shop_kis
-        //            });
-        //            if (res > 0) { id_shop = res; }
-        //        }
-        //    }
-        //    return id_shop;
-        //}
+        /// <summary>
+        /// Определить id цеха (если id нет в системе RailCars создать из данных КИС)
+        /// </summary>
+        /// <param name="id_shop_kis"></param>
+        /// <returns></returns>
+        public int? DefinitionIDShop(int id_shop_kis)
+        {
+            EFRailCars efrc = new EFRailCars();
+            EFWagons kis = new EFWagons();
+            int? id_shop = efrc.GetIDShopsOfKis(id_shop_kis);
+            if (id_shop == null)
+            {
+                PromCex cex = kis.GetCex(id_shop_kis);
+                if (cex != null)
+                {
+                    int res = efrc.SaveSHOPS(new SHOPS()
+                    {
+                        id_shop = 0,
+                        name = cex.ABREV_P,
+                        name_full = cex.NAME_P,
+                        id_stat = null,
+                        id_ora = id_shop_kis
+                    });
+                    if (res > 0) { id_shop = res; }
+                }
+            }
+            return id_shop;
+        }
         ///// <summary>
         ///// Определить id тупика (если id нет в системе RailCars создать из данных КИС)
         ///// </summary>
@@ -410,15 +412,30 @@ namespace RCReferences
             if (ref_cargo == null)
             {
                 EFReference.Entities.Cargo cargo = ef_reference.GetCargoOfCodeETSNG(id_cargo);
-                EFRC.Entities.ReferenceCargo new_cargo = new EFRC.Entities.ReferenceCargo()
+                EFRC.Entities.ReferenceCargo new_cargo;
+                if (cargo != null)
                 {
-                    IDCargo = 0,
-                    Name = cargo.name_etsng.Length > 200 ? cargo.name_etsng.Remove(199).Trim() : cargo.name_etsng.Trim(),
-                    NameFull = cargo.name_etsng.Length > 500 ? cargo.name_etsng.Remove(499).Trim() : cargo.name_etsng.Trim(),
-                    ETSNG = id_cargo,
-                    TypeCargo = 0,
-                    DateTime = DateTime.Now
-                };
+                    new_cargo = new EFRC.Entities.ReferenceCargo()
+                    {
+                        IDCargo = 0,
+                        Name = cargo.name_etsng.Length > 200 ? cargo.name_etsng.Remove(199).Trim() : cargo.name_etsng.Trim(),
+                        NameFull = cargo.name_etsng.Length > 500 ? cargo.name_etsng.Remove(499).Trim() : cargo.name_etsng.Trim(),
+                        ETSNG = id_cargo,
+                        TypeCargo = 0,
+                        DateTime = DateTime.Now
+                    };
+                }
+                else { 
+                    new_cargo = new EFRC.Entities.ReferenceCargo()
+                    {
+                        IDCargo = 0,
+                        Name = "?",
+                        NameFull = "?",
+                        ETSNG = id_cargo,
+                        TypeCargo = 0,
+                        DateTime = DateTime.Now
+                    };                
+                }
                 int res = efrc_reference.SaveReferenceCargo(new_cargo);
                 if (res > 0) { return res; }
                 else return 0;

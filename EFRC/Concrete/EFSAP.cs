@@ -294,6 +294,34 @@ namespace EFRC.Concrete
             IQueryable<SAPIncSupply> list = GetSAPIncSupplyOfSostav(idsostav);
             return list != null ? list.Count() : 0;
         }
+        /// <summary>
+        /// Получить IDSostav по умолчанию (если в таблицах MT нет данного состава тогда ему присваивается id по умолчанию (отрицательное)
+        /// </summary>
+        /// <returns></returns>
+        public int GetDefaultIDSAPIncSupply()
+        {
+            try
+            {
+                SAPIncSupply sap_s = GetSAPIncSupply().Where(s => s.IDMTSostav < 0).OrderBy(s => s.IDMTSostav).FirstOrDefault();
+                return sap_s != null ? sap_s.IDMTSostav - 1 : -1;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDefaultIDSAPIncSupply()"), eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Проверка наличия вагона в справочнике САП
+        /// </summary>
+        /// <param name="idsostav"></param>
+        /// <param name="vagon"></param>
+        /// <returns></returns>
+        public bool IsWagonToSAPSupply(int idsostav, int vagon)
+        {
+            SAPIncSupply sap = GetSAPIncSupply(idsostav, vagon);
+            return sap != null ? true : false;
+        }
 
     }
 }

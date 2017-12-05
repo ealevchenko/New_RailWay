@@ -80,6 +80,7 @@
     <Compile Include="Entities\VAG_CONDITIONS.cs" />
     <Compile Include="Entities\VAG_CONDITIONS2.cs" />
     <Compile Include="Entities\WAYS.cs" />
+    <Compile Include="Helpers\Conversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

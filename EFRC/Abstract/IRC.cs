@@ -28,9 +28,23 @@ namespace EFRC.Abstract
         int? MaxPositionWay(int id_way);
         int InsertVagon(int natur, DateTime dt_amkr, int id_vagon, int num_vagon, int? id_sostav, DateTime? dt_uz, int id_station, int id_way, int id_stat_kis, int? id_cond, int? id_cond2);
         int InsertVagon(int IDSostav, int id_vagon, int num_vagon, DateTime dt_uz_on, DateTime dt_uz_from, int id_station_from, int position, int? id_gruz, decimal weight_gruz, int id_station_in, int num_train, int id_cond2, int way_from);
+        int UpdateVagon(DateTime dt_amkr, int num_vagon, int natur, int[] idstation_amkr, int id_gruz, int id_shop, int? id_cond);
+        int UpdateVagon(int id_sostav, int num_vagon, int[] idstation_amkr, DateTime dt_amkr, int? id_cond, int natur);
+        VAGON_OPERATIONS GetVagonsOfArrivalUZ(int id_mtsostav, int num, int[] idstation_uz, int idstation);
+        IQueryable<VAGON_OPERATIONS> GetVagonsOfArrival(int id_mtsostav, int num, int[] idstation_uz);
+        IQueryable<VAGON_OPERATIONS> GetVagonsOfStationAMKR(int id_mtsostav, int num, int[] idstation_amkr);
+        IQueryable<VAGON_OPERATIONS> GetVagonsOfArrival(int[] idstation_uz);
+        int DeleteVagonsOfArrival(int id_mtsostav, int num, int[] idstation_uz);
+        int TakeVagonOfUZ(VAGON_OPERATIONS vagon, int natur, DateTime dt_amkr, int id_stations, int id_ways, int id_cond);
+        int TakeVagonOfUZ(int id_mtsostav, int num, int[] idstation_uz, int natur, DateTime dt_amkr, int id_stations, int id_ways, int id_cond);
+        int TakeVagonOfAllUZ(int id_mtsostav, int num, int[] idstation_uz, int natur, DateTime dt_amkr, int id_stations, int id_ways, int id_cond);
+        IQueryable<VAGON_OPERATIONS> GetWagonsOfWay(int way);
+        IQueryable<VAGON_OPERATIONS> GetWagonsOfStation(int id_stat);
+        int OffSetCars(int way, int start_num);
+        IQueryable<VAGON_OPERATIONS> GetVagonsAMKRToUZ(int[] idstation_uz);
         #endregion
 
-        #region VAGON_OPERATIONS
+        #region VAGONS
         IQueryable<VAGONS> VAGONS { get; }
         IQueryable<VAGONS> GetVAGONS();
         VAGONS GetVAGONS(int id_vag);
@@ -77,6 +91,15 @@ namespace EFRC.Abstract
 
         STATIONS GetStationsOfKis(int id_station_kis);
         int? GetIDStationsOfKis(int id_station_kis);
+        IQueryable<STATIONS> GetUZStations();
+        IQueryable<STATIONS> GetAMKRStations();
+        List<int> GetUZStationsToID();
+        List<int> GetAMKRStationsToID();
+        List<int> GetListStations(IQueryable<STATIONS> stations);
+        bool IsUZ(int id_stat);
+        bool IsAMKR(int id_stat);
+        IQueryable<STATIONS> GetStationOfListID(int[] id_statuins);
+        IQueryable<STATIONS> GetStationOfNotListID(int[] id_statuins);
         #endregion
 
         #region WAYS
@@ -91,6 +114,16 @@ namespace EFRC.Abstract
         WAYS GetWaysOfStations(int id_station, string num);
         int? GetIDWaysToStations(int id_station, string num);
         int? GetIDStationOfWay(int id_way);
+        #endregion
+
+        #region SHOPS
+        IQueryable<SHOPS> SHOPS {get;}
+        IQueryable<SHOPS> GetSHOPS();
+        SHOPS GetSHOPS(int id_shop);
+        int SaveSHOPS(SHOPS SHOPS);
+        SHOPS DeleteSHOPS(int id_shop);
+        SHOPS GetShopsOfKis(int id_shop_kis);
+        int? GetIDShopsOfKis(int id_shop_kis);
         #endregion
     }
 }
