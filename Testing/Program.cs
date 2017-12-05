@@ -78,7 +78,11 @@ namespace Testing
 
             #region Test_KIS
             Test_KIS tst_kis = new Test_KIS();
-            tst_kis.Test_KISTransfer_TransferArrivalKISToRailWay(); // Запустить перенос в потоке
+            //tst_kis.Test_KISTransfer_TransferArrivalKISToRailWay(); // Запустить перенос в потоке
+            //tst_kis.Test_KISTransfer_PutCarsToStation(); // Поставить на путь
+            //tst_kis.Test_KISTransfer_UpdateCarsToStation(); // Поставить на путь
+            //tst_kis.Test_KISThread_StartCopyBufferArrivalSostav(); // Запустить поток переноса составов
+            //tst_kis.Test_KISThread_StartTransferArrivalOfKIS();
             #endregion
 
             #region Test_Reference
