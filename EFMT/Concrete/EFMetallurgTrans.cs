@@ -202,6 +202,59 @@ namespace EFMT.Concrete
             }
         }
 
+        /// <summary>
+        /// Закрыть вагон на подходах установив номер документа и дату захода (поиск по номеру вагона и весу)
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="num"></param>
+        /// <param name="dt"></param>
+        /// <param name="weight"></param>
+        /// <returns></returns>
+        public int CloseApproachesCarsOfDocWeight(int doc, int num, DateTime dt, decimal? weight)
+        {
+            try
+            {
+                SqlParameter idoc = new SqlParameter("@doc", doc);
+                SqlParameter inum = new SqlParameter("@num", num);
+                SqlParameter dt_amkr = new SqlParameter("@dt", dt);
+                SqlParameter iweight = new SqlParameter("@weight", Math.Round((weight != null ? (decimal)weight : 0), 0));
+
+                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ApproachesCars] SET NumDocArrival = @doc, Arrival = @dt" +
+                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation<=@dt and [Weight]=@weight", idoc, dt_amkr, inum, iweight);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseApproachesCarsOfDoc(doc={0}, num={1}, dt={2}, weight={3})", doc, num, dt, weight), eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Закрыть вагон на подходах установив номер документа и дату захода (поиск по номеру вагона и интервалу времени)
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="num"></param>
+        /// <param name="dt"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        public int CloseApproachesCarsOfDocDay(int doc, int num, DateTime dt, int day)
+        {
+            try
+            {
+                SqlParameter idoc = new SqlParameter("@doc", doc);
+                SqlParameter inum = new SqlParameter("@num", num);
+                SqlParameter dt_start = new SqlParameter("@dt_start", dt.AddDays(day * -1));
+                SqlParameter dt_stop = new SqlParameter("@dt_stop", dt);
+
+                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ApproachesCars] SET NumDocArrival = @doc, Arrival = @dt_stop" +
+                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation>=@dt_start and DateOperation<=@dt_stop", idoc, dt_start, dt_stop, inum);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseArrivalCarsOfDoc(doc={0}, num={1}, dt={2}, day={3})", doc, num, dt, day), eventID);
+                return -1;
+            }
+        }
+
         #endregion
 
         #region ApproachesSostav
@@ -513,7 +566,79 @@ namespace EFMT.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Получить строку вагона из состава по натурному листу, номеру вагона, дате захода на АМКР
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <param name="num_wag"></param>
+        /// <param name="dt"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        public ArrivalCars GetArrivalCarsToNatur(int natur, int num_wag, DateTime dt, int day)
+        {
+            DateTime dt_st = dt.AddDays(-1 * day);
+            try
+            {
+                return GetArrivalCars().Where(l => l.NumDocArrival == natur & l.Num == num_wag & l.DateOperation >= dt_st & l.DateOperation <= dt).OrderByDescending(l => l.ID).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCarsToNatur(natur={0}, num_wag={1}, dt={2}, day={3})", natur, num_wag, dt, day), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Закрыть вагон в прибытии установив номер документа и дату захода (поиск по номеру вагона и весу)
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="num"></param>
+        /// <param name="dt"></param>
+        /// <param name="weight"></param>
+        /// <returns></returns>
+        public int CloseArrivalCarsOfDocWeight(int doc, int num, DateTime dt, decimal? weight)
+        {
+            try
+            {
+                SqlParameter idoc = new SqlParameter("@doc", doc);
+                SqlParameter inum = new SqlParameter("@num", num);
+                SqlParameter dt_amkr = new SqlParameter("@dt", dt);
+                SqlParameter iweight = new SqlParameter("@weight", Math.Round((weight!=null ? (decimal) weight: 0),0));
 
+                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ArrivalCars] SET NumDocArrival = @doc, Arrival = @dt" +
+                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation<=@dt and [Weight]=@weight", idoc, dt_amkr, inum, iweight);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseArrivalCarsOfDoc(doc={0}, num={1}, dt={2}, weight={3})", doc, num, dt, weight), eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Закрыть вагон в прибытии установив номер документа и дату захода (поиск по номеру вагона и интервалу времени)
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="num"></param>
+        /// <param name="dt"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        public int CloseArrivalCarsOfDocDay(int doc, int num, DateTime dt, int day)
+        {
+            try
+            {
+                SqlParameter idoc = new SqlParameter("@doc", doc);
+                SqlParameter inum = new SqlParameter("@num", num);
+                SqlParameter dt_start = new SqlParameter("@dt_start", dt.AddDays(day*-1));
+                SqlParameter dt_stop = new SqlParameter("@dt_stop", dt);
+
+                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ArrivalCars] SET NumDocArrival = @doc, Arrival = @dt_stop" +
+                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation>=@dt_start and DateOperation<=@dt_stop", idoc, dt_start, dt_stop, inum );
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseArrivalCarsOfDoc(doc={0}, num={1}, dt={2}, day={3})", doc, num, dt, day), eventID);
+                return -1;
+            }
+        }
         #endregion
 
         #region ArrivalSostav

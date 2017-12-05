@@ -37,7 +37,6 @@ namespace MetallurgTrans
         /// <summary>
         /// Запустить поток переноса вагонов на подходах
         /// </summary>
-        /// <param name="delay"></param>
         /// <returns></returns>
         public bool StartTransferApproaches()
         {

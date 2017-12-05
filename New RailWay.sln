@@ -75,6 +75,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KIS", "KIS\KIS.csproj", "{2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RailCars", "RailCars\RailCars.csproj", "{41F8EF7A-D0F7-4FF8-A89A-BEA17B0674BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KISTServices", "KISTServices\KISTServices.csproj", "{09BF8D5A-C4C2-438F-8803-5899D1C39C8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,6 +179,10 @@ Global
 		{41F8EF7A-D0F7-4FF8-A89A-BEA17B0674BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41F8EF7A-D0F7-4FF8-A89A-BEA17B0674BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41F8EF7A-D0F7-4FF8-A89A-BEA17B0674BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09BF8D5A-C4C2-438F-8803-5899D1C39C8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09BF8D5A-C4C2-438F-8803-5899D1C39C8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09BF8D5A-C4C2-438F-8803-5899D1C39C8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09BF8D5A-C4C2-438F-8803-5899D1C39C8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -207,5 +213,9 @@ Global
 		{7B0E36EA-839B-47C1-A92A-C9953928797F} = {36D4A4DC-D756-4DFC-B27B-CB5E54DB288F}
 		{27DA4048-F46E-4C77-857B-2BD1809FEA87} = {9CCD8669-127A-4FB2-992B-44B828AF4F00}
 		{41F8EF7A-D0F7-4FF8-A89A-BEA17B0674BA} = {ACB9966D-7875-4C9D-8259-4B0953363FA4}
+		{09BF8D5A-C4C2-438F-8803-5899D1C39C8B} = {9CCD8669-127A-4FB2-992B-44B828AF4F00}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A356AE68-D58C-4CF0-9078-E5D69D44254C}
 	EndGlobalSection
 EndGlobal

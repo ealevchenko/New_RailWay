@@ -118,46 +118,9 @@ namespace MTTServices
             timer_services_arrival.Start();
         }
 
-        //protected bool RunTransferApproaches() {
-        //    bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
-        //    if ((active_app != this.active_transfer_approaches) | (active_app & !mtt.statusTransferApproaches))
-        //    {
-        //        this.active_transfer_approaches = active_app;
-        //        if (active_app & !mtt.statusTransferApproaches) { 
-        //            mtt.StartTransferApproaches(this.interval_transfer_approaches);
-        //            return true;
-        //        }
-        //        if (!active_app & mtt.statusTransferApproaches) { 
-        //            mtt.StopTransferApproaches();
-        //            return false;
-        //        }
-        //    }
-        //    return !mtt.statusTransferApproaches;
-        //}
-
-        //protected void IntervalTransferApproaches() {
-
-        //    int interval_app = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
-        //    if (interval_app != this.interval_transfer_approaches)
-        //    {
-
-        //        this.interval_transfer_approaches = interval_app;
-        //        // Перезапустить службу
-        //        if (mtt.statusTransferApproaches)
-        //        {
-        //            mtt.StopTransferApproaches();
-        //        }
-        //        RunTransferApproaches();
-        //        string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_approaches, interval_app);
-        //        mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
-        //    }
-        //}
-
         protected override void OnStop()
         {
-            //mtt.StopTransferApproaches();
-            //mtt.StopTransferArrival();
-            //TODO: Добавить остановку других таймеров
+            // Добавить остановку других таймеров
             //...............
             // Отправить сообщение
             string mes_service_stop = String.Format("Сервис : {0} - остановлен.", this.servece_name);
@@ -270,7 +233,7 @@ namespace MTTServices
                 timer_services_arrival.Interval = this.interval_transfer_arrival * 1000;
                 timer_services_arrival.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesArrival);
 
-                //TODO: Добавить инициализацию других таймеров
+                //Добавить инициализацию других таймеров
                 //...............
             }
             catch (Exception e)

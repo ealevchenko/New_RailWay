@@ -670,7 +670,7 @@ namespace MetallurgTrans
                 if (count_wagons > 0 & new_id > 0)
                 {
                     if (arrival_to_railway) { 
-                        //TODO: Убрать старый метод переноса составов в прибытие, добаить новый
+                        //TODO: Убрать старый метод переноса составов в прибытие, добаить новый переносить из службы КИС
                         TRailCars trc = new TRailCars();
                         int res = trc.ArrivalToRailCars(new_id);
                     }

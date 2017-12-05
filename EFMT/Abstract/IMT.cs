@@ -22,6 +22,8 @@ namespace EFMT.Abstract
         //bool IsApproachesCarsOfSostav(int idsostav);
         //int SetArrivalApproachesCars(int num, int idsostav, DateTime dt_operation);
         //int CloseApproachesSostav();
+        int CloseApproachesCarsOfDocWeight(int doc, int num, DateTime dt, decimal? weight);
+        int CloseApproachesCarsOfDocDay(int doc, int num, DateTime dt, int day);
 
         IQueryable<ApproachesSostav> ApproachesSostav { get; }
         IQueryable<ApproachesSostav> GetApproachesSostav();
@@ -57,7 +59,9 @@ namespace EFMT.Abstract
         IQueryable<ArrivalCars> GetArrivalCarsOfNumCar(int num_car, bool order);
         //bool IsArrivalCarsOfSostav(int idsostav);
         //List<ArrivalCars> GetArrivalCarsOfConsignees(int id_sostav, int[] Consignees);
-
+        ArrivalCars GetArrivalCarsToNatur(int natur, int num_wag, DateTime dt, int day);
+        int CloseArrivalCarsOfDocWeight(int doc, int num, DateTime dt, decimal? weight);
+        int CloseArrivalCarsOfDocDay(int doc, int num, DateTime dt, int day);
 
 
         IQueryable<ArrivalSostav> ArrivalSostav { get; }
@@ -88,6 +92,7 @@ namespace EFMT.Abstract
         //IQueryable<Consignee> GetConsignee(mtConsignee tmtc);
         //bool IsConsignee(int Code, mtConsignee type);
         //int[] GetConsigneeToCodes(mtConsignee tmtc);
+
         #endregion
 
         #region Грузополучатели
