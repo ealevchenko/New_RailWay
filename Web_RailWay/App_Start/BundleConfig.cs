@@ -18,6 +18,9 @@ namespace Web_RailWay
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
             "~/Scripts/jquery-ui.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Ajax").Include(
+            "~/Scripts/jquery.unobtrusive-ajax.min.js"));
+
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

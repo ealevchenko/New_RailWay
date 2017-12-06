@@ -1,0 +1,60 @@
+﻿@using Web_RailWay.App_LocalResources;
+
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        OnSuccess = "selectPeriod",
+        //LoadingElementId = "loading",
+        LoadingElementDuration = 1000,
+        OnBegin = "OnBegin",
+        OnFailure = "OnFailure",
+        OnComplete = "OnComplete"
+    };
+    ViewBag.Title = @MTResource.mt_arrival_sostsv_report_title;
+    ViewBag.ImageFone = "background-image: url(../Image/header1.jpg);";
+    ViewBag.Home = @MTResource.mt_arrival_sostsv_report_home;
+}
+@Scripts.Render("~/bundles/Ajax")
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/jquery.cookie.js"></script>
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        @Styles.Render("~/datetime/css")
+        @Scripts.Render("~/bundles/datetime")
+        @using (Ajax.BeginForm("ListSostav", "MTArrival", ajaxOpts, new { @id = "fmList" })) //
+        {
+            <div id="select-rangedatetime">
+                @Html.Label(@GlobalResources.select_date_range_title)
+
+                <span id="select-range">
+                    <input id="date-start" name="date_start" size="20" value='@ViewBag.dt_start'> до
+                    <input id="date-stop" name="date_stop" size="20" value='@ViewBag.dt_stop'>
+                </span>
+                <button type="submit">@GlobalResources.button_title_view</button>
+            </div>
+        }
+    </div>
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    @*<div id="loading" class="load" style="display: none">
+            <p>Loading Data...</p>
+        </div>*@
+    <div id="report-menu">
+        @{ Html.RenderAction("ListSostav", "MTArrival", new { date_start = @DateTime.Parse(@ViewBag.dt_start), date_stop = @DateTime.Parse(@ViewBag.dt_stop) }); }
+    </div>
+    <div id="report-menu-content">
+        <div id="operation">
+
+        </div>
+        <div id="operation-detali">
+
+        </div>
+    </div>
+    <div id="cls">
+
+    </div>
+
+
+</div>
+<script src="~/Scripts/reports/mt/mtarrivalsostav.js"></script>
+

@@ -1,4 +1,15 @@
-﻿.report-wide{
+﻿body {
+    background-color: transparent;
+    background-repeat: repeat, no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-background-size: auto, cover;
+    -moz-background-size: auto, cover;
+    -o-background-size: auto, cover;
+    background-size: auto, cover;
+}
+
+.report-wide{
     margin-right: auto;
     margin-left: auto;
     max-width: 1500px;
@@ -32,6 +43,44 @@ DIV#header {
 DIV#report-content {
     padding: 1em;
     border-left: 2px solid gray;
+}
+
+DIV#report-menu {
+    float: left;
+    width: 18em;
+    padding: .3em;
+}
+
+    DIV#report-menu A {
+        font: bold 1.1em "Arial Narrow","Franklin Gothic Medium",Arial;
+        display: block;
+        text-decoration: none;
+        padding: .6em;
+        color: Black;
+        border-bottom: 1px solid silver;
+    }
+
+        DIV#report-menu A.selected {
+            background-color: #666;
+            color: White;
+        }
+
+        DIV#report-menu A:hover {
+            background-color: #CCC;
+        }
+
+        DIV#report-menu A.selected:hover {
+            background-color: #666;
+        }
+
+DIV#report-menu-content {
+    margin-left: 19em;
+    padding: 1em;
+    border-left: 2px solid gray;
+}
+
+DIV#report-detali {
+    padding: 1em;
 }
 
 div#cls {

@@ -248,5 +248,23 @@ namespace Web_RailWay.App_LocalResources {
                 return ResourceManager.GetString("link_goto_mt", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Составы.
+        /// </summary>
+        public static string mt_arrival_sostsv_report_home {
+            get {
+                return ResourceManager.GetString("mt_arrival_sostsv_report_home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Составы на УЗ Кривого Рога.
+        /// </summary>
+        public static string mt_arrival_sostsv_report_title {
+            get {
+                return ResourceManager.GetString("mt_arrival_sostsv_report_title", resourceCulture);
+            }
+        }
     }
 }

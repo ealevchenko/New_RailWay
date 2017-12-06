@@ -180,4 +180,10 @@
   <data name="link_goto_mt" xml:space="preserve">
     <value>О компании</value>
   </data>
+  <data name="mt_arrival_sostsv_report_home" xml:space="preserve">
+    <value>Составы</value>
+  </data>
+  <data name="mt_arrival_sostsv_report_title" xml:space="preserve">
+    <value>Составы на УЗ Кривого Рога</value>
+  </data>
 </root>

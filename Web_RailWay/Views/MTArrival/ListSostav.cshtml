@@ -1,0 +1,17 @@
+﻿@using Web_RailWay.App_Code
+@model List<int>
+
+@foreach (int links in Model)
+{
+    @Ajax.ActionLink(@Html.GetMTArrivalIndex(links).ToString() + " (" + @Html.GetMTArrivalDT(links).ToString() + ")"
+                        , "ListSostavOperation"
+                        , new { id = links }
+                    , new AjaxOptions
+                    {
+                        Url = Url.Action("ListSostavOperation", new { id = links }),
+                        OnSuccess = "listSostavOperation"
+
+                    }
+                        , new { @id = "a-sostav-operation", @href = "#" }
+                        )
+}
