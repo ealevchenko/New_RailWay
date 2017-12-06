@@ -130,7 +130,7 @@ namespace MTTServices
 
         public void OnTimerServices(object sender, System.Timers.ElapsedEventArgs args)
         {
-            //String.Format("Сервис : {0} сработал таймер контроля сервиса.", this.servece_name).WriteInformation(servece_name, eventID);            
+            String.Format("Сервис : {0} сработал таймер OnTimerServices контроля сервиса.", this.servece_name).WriteInformation(servece_name, eventID);            
             try
             {
                 // TransferApproaches
@@ -166,7 +166,7 @@ namespace MTTServices
 
         private void OnTimerServicesApproaches(object sender, System.Timers.ElapsedEventArgs args)
         {
-            //String.Format("Сервис : {0} сработал таймер Approaches.", this.servece_name).WriteInformation(servece_name, eventID);
+            String.Format("Сервис : {0} сработал таймер OnTimerServicesApproaches.", this.servece_name).WriteInformation(servece_name, eventID);
             try
             {
                 bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
@@ -188,7 +188,7 @@ namespace MTTServices
 
         private void OnTimerServicesArrival(object sender, System.Timers.ElapsedEventArgs args)
         {
-            //String.Format("Сервис : {0} сработал таймер Approaches.", this.servece_name).WriteInformation(servece_name, eventID);
+            String.Format("Сервис : {0} сработал таймер OnTimerServicesArrival.", this.servece_name).WriteInformation(servece_name, eventID);
             try
             {
                 bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
