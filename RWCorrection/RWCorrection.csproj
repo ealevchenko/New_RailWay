@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{91FE966C-D3A2-4421-A18C-88FB3253E528}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RWCorrection</RootNamespace>
+    <AssemblyName>RWCorrection</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CorrectionTransfer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EFKIS\EFKIS.csproj">
+      <Project>{6a689386-eff1-4b21-be6d-3dd93e1b01bf}</Project>
+      <Name>EFKIS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFMT\EFMT.csproj">
+      <Project>{415f94aa-63df-4538-9552-fc9a22b61636}</Project>
+      <Name>EFMT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFRC\EFRC.csproj">
+      <Project>{89a9bc62-6912-4df8-a7f6-1c9a4beac8dd}</Project>
+      <Name>EFRC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFReference\EFReference.csproj">
+      <Project>{09d0b7b9-79e7-4df8-ad4f-99df5e9083f8}</Project>
+      <Name>EFReference</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFRW\EFRW.csproj">
+      <Project>{9d7a67b0-932b-40b7-8f30-696832b5088d}</Project>
+      <Name>EFRW</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MLogs\MLogs.csproj">
+      <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
+      <Name>MLogs</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

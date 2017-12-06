@@ -1,4 +1,5 @@
 ﻿using libClass;
+using RWCorrection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,10 @@ namespace Testing
 
         static void Main(string[] args)
         {
+            CorrectionTransfer corr = new CorrectionTransfer();
+            //corr.CorrSAPIncSupply(2356);
+            corr.CorrSAPIncSupply();
+            DateTime dt = new DateTime();            
             // Define an interval of 1 day, 15+ hours.
             //TimeSpan interval = new TimeSpan(1, 15, 42, 45, 750);
             //Console.WriteLine("Value of TimeSpan: {0}", interval);
@@ -46,7 +51,7 @@ namespace Testing
             //                  nMilliseconds * 10000 - interval.Ticks);
 
 
-            //DateTime dt = new DateTime();
+
 
             #region Test_RWWebAPI
             Test_RWWebAPI tst_rw_api = new Test_RWWebAPI();

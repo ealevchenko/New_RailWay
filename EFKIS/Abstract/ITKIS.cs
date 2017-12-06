@@ -18,6 +18,7 @@ namespace EFKIS.Abstract
         DateTime? GetLastDateTime();
         IQueryable<BufferArrivalSostav> GetBufferArrivalSostav(DateTime start, DateTime stop);
         IQueryable<BufferArrivalSostav> GetBufferArrivalSostavNoClose();
+        BufferArrivalSostav GetBufferArrivalSostavOfNatur(int natur);
         #endregion
     }
 }

@@ -190,6 +190,23 @@ namespace EFKIS.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Получить строку по натурке
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <returns></returns>
+        public BufferArrivalSostav GetBufferArrivalSostavOfNatur(int natur)
+        {
+            try
+            {
+                return GetBufferArrivalSostav().Where(o => o.natur == natur).OrderByDescending(o => o.datetime).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferArrivalSostavOfNatur(natur={0})", natur), eventID);
+                return null;
+            }
+        }
 
 
     }
