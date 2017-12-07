@@ -14,10 +14,10 @@ namespace MetallurgTrans
         private static eventID eventID = eventID.MetallurgTrans_MTThread;
         protected static service servece_owner = service.Null;
 
-        protected static object locker_setting = new object();
-        protected static object locker_sftp = new object();
-        protected static object locker_db_approaches = new object();
-        protected static object locker_db_arrival = new object();
+        //protected static object locker_setting = new object();
+        //protected static object locker_sftp = new object();
+        //protected static object locker_db_approaches = new object();
+        //protected static object locker_db_arrival = new object();
 
         protected Thread thTransferApproaches = null;
         public bool statusTransferApproaches { get { return thTransferApproaches.IsAlive; } }
@@ -117,7 +117,7 @@ namespace MetallurgTrans
                 bool deleteFileMT = true;
                 bool rewriteFile = false;
                 // считать настройки
-                lock (locker_setting)
+                //lock (locker_setting)
                 {
                     try
                     {
@@ -153,7 +153,7 @@ namespace MetallurgTrans
                 dt_start = DateTime.Now;
                 int count_copy = 0;
                 int res_transfer = 0;
-                lock (locker_sftp)
+                //lock (locker_sftp)
                 {
                     // подключится считать и закрыть соединение
                     SFTPClient csftp = new SFTPClient(connect_SFTP, service);
@@ -166,7 +166,7 @@ namespace MetallurgTrans
                     count_copy = csftp.CopyToDir();
                 }
 
-                lock (locker_db_approaches)
+                //lock (locker_db_approaches)
                 {
                     MTTransfer mtt = new MTTransfer(service);
                     mtt.FromPath = toTMPDirPath;
@@ -217,7 +217,7 @@ namespace MetallurgTrans
                 bool deleteFileMT = true;
                 bool rewriteFile = false;
                 // считать настройки
-                lock (locker_setting)
+                //lock (locker_setting)
                 {
                     try
                     {
@@ -254,7 +254,7 @@ namespace MetallurgTrans
                         dt_start = DateTime.Now;
                         int count_copy = 0;
                         int res_transfer = 0;
-                        lock (locker_sftp)
+                        //lock (locker_sftp)
                         {
 
                             // подключится считать и закрыть соединение
@@ -267,7 +267,7 @@ namespace MetallurgTrans
                             csftp.RewriteFile = rewriteFile;
                             count_copy = csftp.CopyToDir();
                         }
-                        lock (locker_db_arrival)
+                        //lock (locker_db_arrival)
                         {
 
                             MTTransfer mtt = new MTTransfer(service);

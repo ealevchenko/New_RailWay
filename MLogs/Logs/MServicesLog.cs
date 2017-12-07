@@ -50,6 +50,18 @@ namespace MessageLog
         {
             return WriteLogStatusServices(service, DateTime.Now);
         }
+        /// <summary>
+        /// Проверка работы сервиса
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public static bool IsRunServices(this service service, int period)
+        {
+            return ServicesLogs.IsRunServices((int)service, period);
+        }
+
+
 
     }
 }

@@ -138,6 +138,11 @@ namespace KIS
         private static void TransferArrivalOfKIS()
         {
             service service = service.TransferArrivalKIS;
+            if (!service.TransferArrival.IsRunServices(360)) {
+
+                String.Format("Поток {0} сервиса {1} - заблокирован, из-за остановки службы {2}", service.ToString(), servece_owner, service.TransferArrival).WriteError(servece_owner, eventID);
+                return;
+            }
             DateTime dt_start = DateTime.Now;
             try
             {

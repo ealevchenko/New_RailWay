@@ -128,7 +128,7 @@ namespace KIS
                 {
                     Position = pv != null ? pv.NPP : 0,
                     CarriageNumber = pv.N_VAG,
-                    CountryCode = pv != null ? pv.KOD_STRAN != null ? ((int)pv.KOD_STRAN * 10) + 1 : 0 : 0,
+                    CountryCode = pv != null ? pv.KOD_STRAN != null ? (int)pv.KOD_STRAN : 0 : 0,
                     Weight = pv != null ? pv.WES_GR != null ? (float)pv.WES_GR : 0 : 0,
                     IDCargo = IDCargo,
                     Cargo = null,
