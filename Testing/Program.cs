@@ -34,8 +34,9 @@ namespace Testing
         {
             CorrectionTransfer corr = new CorrectionTransfer();
             //corr.CorrSAPIncSupply(2356);
-            corr.CorrSAPIncSupply();
-            DateTime dt = new DateTime();            
+            //corr.CorrSAPIncSupply();
+            //corr.CorrSAPIncSupplyArrivalRC(4, 3567);
+            //DateTime dt = new DateTime();            
             // Define an interval of 1 day, 15+ hours.
             //TimeSpan interval = new TimeSpan(1, 15, 42, 45, 750);
             //Console.WriteLine("Value of TimeSpan: {0}", interval);
