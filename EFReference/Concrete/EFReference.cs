@@ -426,5 +426,58 @@ namespace EFReference.Concrete
             return GetCountrys().Where(c => c.code == code_iso).FirstOrDefault();
         }
         #endregion
+
+        #region States
+
+        public IQueryable<States> States
+        {
+            get { return context.States; }
+        }
+        /// <summary>
+        /// Получить список стран
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<States> GetStates()
+        {
+            try
+            {
+                return States;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStates()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить страну по коду
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public States GetStates(int code)
+        {
+            try
+            {
+                return GetStates().Where(s => s.id == code).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStates(code={0})",code), eventID);
+                return null;
+            }
+
+        }
+        /// <summary>
+        /// Получить страну по коду
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public string GetStatesToState(int code)
+        {
+            States state = GetStates(code);
+            return state != null ? state.state : null;
+        }
+
+        #endregion
     }
 }

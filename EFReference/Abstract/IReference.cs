@@ -43,5 +43,12 @@ namespace EFReference.Abstract
         Countrys GetCountryOfCode(int code_iso);
         #endregion
 
+        #region States
+        IQueryable<States> States {get;}
+        IQueryable<States> GetStates();
+        States GetStates(int code);
+        string GetStatesToState(int code);
+        #endregion
+
     }
 }
