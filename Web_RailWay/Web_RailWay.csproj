@@ -151,7 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\lockpanel\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +211,7 @@
     <Content Include="Content\jquery-ui\jquery-ui.structure.min.css" />
     <Content Include="Content\jquery-ui\jquery-ui.theme.css" />
     <Content Include="Content\jquery-ui\jquery-ui.theme.min.css" />
+    <Content Include="Content\lockpanel\lockpanel.css" />
     <Content Include="Content\reports.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
