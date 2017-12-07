@@ -23,6 +23,13 @@
         time: {
             enabled: true
         }
+    }).bind('datepicker-closed', function () {
+            $("#report-menu").empty();
+            // Очистить operation
+            $("#report-operation").empty();
+            // Очистить operation-detali 
+            $("#report-operation-content").empty();
+        $('form#fmList').submit(); // Отправить форму
     });
 
     //валидация
@@ -74,10 +81,49 @@
 function selectPeriod(data) {
 
     LockScreenOff();
+    // Отметить выбранную ссылку 
+    $(function () {
+        $('a#a-sostav-operation').click(function (evt) {
+            $('a#a-sostav-operation').removeClass();
+            $(this).addClass('selected');
+        });
+    })
+
+    // Очистить operation
+    $("#report-operation").empty();
+    // Очистить operation-detali 
+    $("#report-operation-content").empty();
+    // Показать составы 
     var target = $("#report-menu");
     target.empty();
     target.append(data);
 }
+
+function listSostavOperation(data) {
+
+    LockScreenOff();
+    $(function () {
+        $('a#a-sostav-detali').click(function (evt) {
+            $('a#a-sostav-detali').removeClass();
+            $(this).addClass('selected');
+        });
+    })
+    // Очистить operation-detali 
+    $("#report-operation-content").empty();
+    // Показать операции 
+    var target = $("#report-operation");
+    target.empty();
+    target.append(data);
+}
+
+function detaliSostavOperation(data) {
+    LockScreenOff();
+    var target = $("#report-operation-content");
+    target.empty();
+    target.append(data);
+}
+
+
 
 function OnBegin() {
     LockScreen('Мы обрабатываем ваш запрос...');
@@ -85,6 +131,8 @@ function OnBegin() {
 
 function OnFailure(request, error) {
     //alert("This is the OnFailure Callback:" + error);
+    LockScreenOff();
+    alert("Ошибка: " + error);
 }
 
 function OnComplete(request, status) {

@@ -1,0 +1,19 @@
+﻿@using Web_RailWay.App_Code
+@model List<int>
+
+@foreach (int links in Model)
+{
+    @Ajax.ActionLink(@Html.GetMTArrivalOperations(links).ToString() + " (" + @Html.GetMTArrivalDT(links).ToString() + ")"
+                                , "DetaliSostavOperation"
+                        , new { id = links }
+                        , new AjaxOptions
+                        {
+                            Url = Url.Action("DetaliSostavOperation", new { id = links }),
+                            OnSuccess = "detaliSostavOperation",
+                            //LoadingElementId = "loading",
+                            LoadingElementDuration = 1000,
+                            OnBegin = "OnBegin",
+                            OnFailure = "OnFailure",
+                        }
+                        , new { @id = "a-sostav-detali", @href = "#" }  )
+}

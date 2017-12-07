@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="coming" xml:space="preserve">
+    <value>Прибытие</value>
+  </data>
   <data name="index_description" xml:space="preserve">
     <value>Отчетная документация, полученная по данным предоставленным компанией ООО «Металлургтранс». Информация о вагонах находящихся на станциях УЗ Кривого Рога направляющихся на станции АМКР.</value>
   </data>
@@ -185,5 +188,116 @@
   </data>
   <data name="mt_arrival_sostsv_report_title" xml:space="preserve">
     <value>Составы на УЗ Кривого Рога</value>
+  </data>
+  <data name="mt_report_field_cargo_code" xml:space="preserve">
+    <value>Груз(код)</value>
+  </data>
+  <data name="mt_report_field_cargo_type" xml:space="preserve">
+    <value>Род груза</value>
+  </data>
+  <data name="mt_report_field_close" xml:space="preserve">
+    <value>Строка закрыта</value>
+  </data>
+  <data name="mt_report_field_code_station_from" xml:space="preserve">
+    <value>Код и станция отправления</value>
+  </data>
+  <data name="mt_report_field_code_station_on" xml:space="preserve">
+    <value>Код и станция прибытия</value>
+  </data>
+  <data name="mt_report_field_code_station_сurrent" xml:space="preserve">
+    <value>Станция дислокации</value>
+  </data>
+  <data name="mt_report_field_consignee" xml:space="preserve">
+    <value>Грузополучатель</value>
+  </data>
+  <data name="mt_report_field_country" xml:space="preserve">
+    <value>Страна</value>
+  </data>
+  <data name="mt_report_field_countvag_countamkr" xml:space="preserve">
+    <value>Кол вагонов (кол. АМКР)</value>
+  </data>
+  <data name="mt_report_field_count_wag" xml:space="preserve">
+    <value>Кол. вагонов (шт.)</value>
+  </data>
+  <data name="mt_report_field_create" xml:space="preserve">
+    <value>Строка создана</value>
+  </data>
+  <data name="mt_report_field_data_arrival" xml:space="preserve">
+    <value>Дата принятия на АМКР</value>
+  </data>
+  <data name="mt_report_field_date_location" xml:space="preserve">
+    <value>Дата прибытия на станцию</value>
+  </data>
+  <data name="mt_report_field_date_operation" xml:space="preserve">
+    <value>Дата операции</value>
+  </data>
+  <data name="mt_report_field_doc_arrival" xml:space="preserve">
+    <value>№ Док. принятия на АМКР</value>
+  </data>
+  <data name="mt_report_field_idarrival" xml:space="preserve">
+    <value>Код прибытия состава</value>
+  </data>
+  <data name="mt_report_field_index" xml:space="preserve">
+    <value>Номер состава</value>
+  </data>
+  <data name="mt_report_field_natur" xml:space="preserve">
+    <value>Натурка</value>
+  </data>
+  <data name="mt_report_field_npp" xml:space="preserve">
+    <value>№п.п.</value>
+  </data>
+  <data name="mt_report_field_num_train" xml:space="preserve">
+    <value>№ поезда</value>
+  </data>
+  <data name="mt_report_field_num_wag" xml:space="preserve">
+    <value>№ вагона</value>
+  </data>
+  <data name="mt_report_field_operation" xml:space="preserve">
+    <value>Тип операции</value>
+  </data>
+  <data name="mt_report_field_time_arrival" xml:space="preserve">
+    <value>Примерное время прибытия в пункт назначения</value>
+  </data>
+  <data name="mt_report_field_txt_file" xml:space="preserve">
+    <value>TXT-файл (МТ)</value>
+  </data>
+  <data name="mt_report_field_weight" xml:space="preserve">
+    <value>Вес(т.)</value>
+  </data>
+  <data name="mt_report_field_xml_file" xml:space="preserve">
+    <value>XML-файл (МТ)</value>
+  </data>
+  <data name="mt_report_home" xml:space="preserve">
+    <value>Отчет</value>
+  </data>
+  <data name="mt_report_route" xml:space="preserve">
+    <value>Направление</value>
+  </data>
+  <data name="mt_report_title_group_mass" xml:space="preserve">
+    <value>Массовые грузы</value>
+  </data>
+  <data name="mt_report_title_group_not" xml:space="preserve">
+    <value>Неопределенные грузы</value>
+  </data>
+  <data name="mt_report_title_group_single" xml:space="preserve">
+    <value>Одиночные грузы</value>
+  </data>
+  <data name="tsp" xml:space="preserve">
+    <value>ТСП</value>
+  </data>
+  <data name="close_car" xml:space="preserve">
+    <value>Закрыт по ТСП</value>
+  </data>
+  <data name="close_different_cargo" xml:space="preserve">
+    <value>Закрыт по грузу</value>
+  </data>
+  <data name="close_manual" xml:space="preserve">
+    <value>Закрыт вручную</value>
+  </data>
+  <data name="close_new_route" xml:space="preserve">
+    <value>Закрыт по изменению маршрута</value>
+  </data>
+  <data name="close_timeout" xml:space="preserve">
+    <value>Закрыт по времени</value>
   </data>
 </root>

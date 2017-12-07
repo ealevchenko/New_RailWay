@@ -79,10 +79,51 @@ DIV#report-menu-content {
     border-left: 2px solid gray;
 }
 
+DIV#report-operation {
+}
+
+    DIV#report-operation A {
+        font: bold 1.1em "Arial Narrow","Franklin Gothic Medium",Arial;
+        display: block;
+        text-decoration: none;
+        padding: .6em;
+        margin-right: 5px;
+        color: Black;
+        border: 1px solid silver;
+        float: left;
+    }
+
+        DIV#report-operation A.selected {
+            background-color: #666;
+            color: White;
+        }
+
+        DIV#report-operation A:hover {
+            background-color: #CCC;
+        }
+
+        DIV#report-operation A.selected:hover {
+            background-color: #666;
+        }
+
 DIV#report-detali {
     padding: 1em;
 }
 
 div#cls {
     clear: left;
+}
+
+
+/*Отчет вагоны по прибытию*/ 
+#cars-arrival TR.amkr {
+    background-color: #fcfa7e;
+}
+
+#cars-arrival TR.amkr-taken {
+    background-color: #91cb6a;
+}
+
+#cars-arrival TR.normal {
+    background-color: White;
 }

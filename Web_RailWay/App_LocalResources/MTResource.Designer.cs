@@ -19,7 +19,7 @@ namespace Web_RailWay.App_LocalResources {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class MTResource {
@@ -57,6 +57,60 @@ namespace Web_RailWay.App_LocalResources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Закрыт по ТСП.
+        /// </summary>
+        public static string close_car {
+            get {
+                return ResourceManager.GetString("close_car", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Закрыт по грузу.
+        /// </summary>
+        public static string close_different_cargo {
+            get {
+                return ResourceManager.GetString("close_different_cargo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Закрыт вручную.
+        /// </summary>
+        public static string close_manual {
+            get {
+                return ResourceManager.GetString("close_manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Закрыт по изменению маршрута.
+        /// </summary>
+        public static string close_new_route {
+            get {
+                return ResourceManager.GetString("close_new_route", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Закрыт по времени.
+        /// </summary>
+        public static string close_timeout {
+            get {
+                return ResourceManager.GetString("close_timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Прибытие.
+        /// </summary>
+        public static string coming {
+            get {
+                return ResourceManager.GetString("coming", resourceCulture);
             }
         }
         
@@ -264,6 +318,294 @@ namespace Web_RailWay.App_LocalResources {
         public static string mt_arrival_sostsv_report_title {
             get {
                 return ResourceManager.GetString("mt_arrival_sostsv_report_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Груз(код).
+        /// </summary>
+        public static string mt_report_field_cargo_code {
+            get {
+                return ResourceManager.GetString("mt_report_field_cargo_code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Род груза.
+        /// </summary>
+        public static string mt_report_field_cargo_type {
+            get {
+                return ResourceManager.GetString("mt_report_field_cargo_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Строка закрыта.
+        /// </summary>
+        public static string mt_report_field_close {
+            get {
+                return ResourceManager.GetString("mt_report_field_close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Код и станция отправления.
+        /// </summary>
+        public static string mt_report_field_code_station_from {
+            get {
+                return ResourceManager.GetString("mt_report_field_code_station_from", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Код и станция прибытия.
+        /// </summary>
+        public static string mt_report_field_code_station_on {
+            get {
+                return ResourceManager.GetString("mt_report_field_code_station_on", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Станция дислокации.
+        /// </summary>
+        public static string mt_report_field_code_station_сurrent {
+            get {
+                return ResourceManager.GetString("mt_report_field_code_station_сurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Грузополучатель.
+        /// </summary>
+        public static string mt_report_field_consignee {
+            get {
+                return ResourceManager.GetString("mt_report_field_consignee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Кол. вагонов (шт.).
+        /// </summary>
+        public static string mt_report_field_count_wag {
+            get {
+                return ResourceManager.GetString("mt_report_field_count_wag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Страна.
+        /// </summary>
+        public static string mt_report_field_country {
+            get {
+                return ResourceManager.GetString("mt_report_field_country", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Кол вагонов (кол. АМКР).
+        /// </summary>
+        public static string mt_report_field_countvag_countamkr {
+            get {
+                return ResourceManager.GetString("mt_report_field_countvag_countamkr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Строка создана.
+        /// </summary>
+        public static string mt_report_field_create {
+            get {
+                return ResourceManager.GetString("mt_report_field_create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Дата принятия на АМКР.
+        /// </summary>
+        public static string mt_report_field_data_arrival {
+            get {
+                return ResourceManager.GetString("mt_report_field_data_arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Дата прибытия на станцию.
+        /// </summary>
+        public static string mt_report_field_date_location {
+            get {
+                return ResourceManager.GetString("mt_report_field_date_location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Дата операции.
+        /// </summary>
+        public static string mt_report_field_date_operation {
+            get {
+                return ResourceManager.GetString("mt_report_field_date_operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на № Док. принятия на АМКР.
+        /// </summary>
+        public static string mt_report_field_doc_arrival {
+            get {
+                return ResourceManager.GetString("mt_report_field_doc_arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Код прибытия состава.
+        /// </summary>
+        public static string mt_report_field_idarrival {
+            get {
+                return ResourceManager.GetString("mt_report_field_idarrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Номер состава.
+        /// </summary>
+        public static string mt_report_field_index {
+            get {
+                return ResourceManager.GetString("mt_report_field_index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Натурка.
+        /// </summary>
+        public static string mt_report_field_natur {
+            get {
+                return ResourceManager.GetString("mt_report_field_natur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на №п.п..
+        /// </summary>
+        public static string mt_report_field_npp {
+            get {
+                return ResourceManager.GetString("mt_report_field_npp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на № поезда.
+        /// </summary>
+        public static string mt_report_field_num_train {
+            get {
+                return ResourceManager.GetString("mt_report_field_num_train", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на № вагона.
+        /// </summary>
+        public static string mt_report_field_num_wag {
+            get {
+                return ResourceManager.GetString("mt_report_field_num_wag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Тип операции.
+        /// </summary>
+        public static string mt_report_field_operation {
+            get {
+                return ResourceManager.GetString("mt_report_field_operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Примерное время прибытия в пункт назначения.
+        /// </summary>
+        public static string mt_report_field_time_arrival {
+            get {
+                return ResourceManager.GetString("mt_report_field_time_arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на TXT-файл (МТ).
+        /// </summary>
+        public static string mt_report_field_txt_file {
+            get {
+                return ResourceManager.GetString("mt_report_field_txt_file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вес(т.).
+        /// </summary>
+        public static string mt_report_field_weight {
+            get {
+                return ResourceManager.GetString("mt_report_field_weight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на XML-файл (МТ).
+        /// </summary>
+        public static string mt_report_field_xml_file {
+            get {
+                return ResourceManager.GetString("mt_report_field_xml_file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Отчет.
+        /// </summary>
+        public static string mt_report_home {
+            get {
+                return ResourceManager.GetString("mt_report_home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Направление.
+        /// </summary>
+        public static string mt_report_route {
+            get {
+                return ResourceManager.GetString("mt_report_route", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Массовые грузы.
+        /// </summary>
+        public static string mt_report_title_group_mass {
+            get {
+                return ResourceManager.GetString("mt_report_title_group_mass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Неопределенные грузы.
+        /// </summary>
+        public static string mt_report_title_group_not {
+            get {
+                return ResourceManager.GetString("mt_report_title_group_not", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Одиночные грузы.
+        /// </summary>
+        public static string mt_report_title_group_single {
+            get {
+                return ResourceManager.GetString("mt_report_title_group_single", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ТСП.
+        /// </summary>
+        public static string tsp {
+            get {
+                return ResourceManager.GetString("tsp", resourceCulture);
             }
         }
     }

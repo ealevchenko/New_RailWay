@@ -1,0 +1,118 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+@using EFMT.Entities;
+@using EFMT.Concrete;
+
+@model ArrivalSostav
+
+<table class="table" id="sostav-arrival">
+    <tr>
+        <th>@MTResource.mt_report_field_index:</th>
+        <td>
+            @*@if (@Html.IsApproachesSostavOfIndex(@Model.CompositionIndex))
+            {
+                @Html.RouteLink(Model.CompositionIndex.ToString(),
+                     new { controller = "MTApproaches", action = "ListIndex", index = (string)@Model.CompositionIndex },
+                          new { @onclick = "LockScreen('" + @GlobalResources.lock_text + "');", @title = @MTResource.link_title_go_approaches_index });
+            }
+            else
+            { @Model.CompositionIndex }*@
+            @Model.CompositionIndex
+        </td>
+        <th>@MTResource.mt_report_field_code_station_from:</th>
+        <td>@Html.GetMTStationFromOfIndex((string)@Model.CompositionIndex)</td>
+        <th>@MTResource.mt_report_field_code_station_on:</th>
+        <td>@Html.GetMTStationOnOfIndex(@Model.CompositionIndex)</td>
+    </tr>
+    <tr>
+        <th>@MTResource.mt_report_field_date_operation:</th>
+        <td>@Model.DateTime - @Html.GetMTOperations(Model.Operation)</td>
+        <th>@MTResource.mt_report_field_num_train:</th>
+        <td>@Html.GetMTArrivalTrain(Model.ID)</td>
+        <th>@MTResource.mt_report_field_countvag_countamkr:</th>
+        <td>@Model.ArrivalCars.ToList().Count() (@Html.GetCountMTArrivalCarsAMKR(Model.ID, EFMT.Concrete.mtConsignee.AMKR))</td>
+    </tr>
+    <tr>
+        <th>@MTResource.mt_report_field_xml_file:</th>
+        <td>@Model.FileName</td>
+        <th>@MTResource.mt_report_field_create:</th>
+        <td>@Model.Create</td>
+        <th>@MTResource.mt_report_field_close:</th>
+        <td>@Model.Close</td>
+    </tr>
+</table>
+
+<table class="table" id="cars-arrival">
+    <thead>
+        <tr>
+            <th>
+                @MTResource.mt_report_field_npp
+            </th>
+            <th>
+                @MTResource.mt_report_field_num_wag
+            </th>
+            <th>
+                @MTResource.mt_report_field_country
+            </th>
+            <th>
+                @MTResource.mt_report_field_weight
+            </th>
+            <th>
+                @MTResource.mt_report_field_cargo_code
+            </th>
+            <th>
+                @MTResource.mt_report_field_code_station_on
+            </th>
+            <th>
+                @MTResource.mt_report_field_consignee
+            </th>
+            <th>
+                @MTResource.mt_report_field_doc_arrival
+            </th>
+            <th>
+                @MTResource.mt_report_field_data_arrival
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ArrivalCars cars in Model.ArrivalCars.ToList())
+        {
+            <tr class='@Html.GetStatusMTArrivalCars(@cars.Consignee,@cars.NumDocArrival)'>
+                <td>
+                    @cars.Position
+                </td>
+                <td>
+                    @cars.Num
+                </td>
+                <td>
+                    @Html.GetReferenceCountryOfCountryCode(@cars.CountryCode)
+                </td>
+                <td>
+                    @cars.Weight
+                </td>
+                <td>
+                    @Html.GetReferenceCargoOfCode(@cars.CargoCode)
+                </td>
+                <td>
+                    @Html.GetReferenceStationsOfCodecs(@cars.StationCode)
+                </td>
+                <td>
+                    @Html.GetMTConsignee(@cars.Consignee) (@Html.DisplayFor(modelItem => @cars.Consignee))
+                </td>
+                <td>
+                    @if (@cars.NumDocArrival == null || @cars.NumDocArrival > 0)
+                    {
+                        @cars.NumDocArrival
+                    }
+                    else
+                    {
+                        @Html.GetMTNumDocArrival((int)@cars.NumDocArrival)
+                    }
+                </td>
+                <td>
+                    @cars.Arrival
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

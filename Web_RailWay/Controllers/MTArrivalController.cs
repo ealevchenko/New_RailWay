@@ -1,4 +1,5 @@
 ﻿using EFMT.Abstract;
+using EFMT.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,24 @@ namespace Web_RailWay.Controllers
                 .Select(x => x.ID)
                 .ToList();
             return PartialView(list);
+        }
+
+        public PartialViewResult ListSostavOperation(int id)
+        {
+            List<int> list = new List<int>();
+            int id_arrival = this.ef_mt.GetArrivalSostav(id).IDArrival;
+            list = this.ef_mt.ArrivalSostav
+                .Where(x => x.IDArrival == id_arrival)
+                .OrderBy(x => x.ID)
+                .Select(x => x.ID)
+                .ToList();
+            return PartialView(list);
+        }
+
+        public PartialViewResult DetaliSostavOperation(int id)
+        {
+            ArrivalSostav sostav = this.ef_mt.GetArrivalSostav(id);
+            return PartialView(sostav);
         }
     }
 }

@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\ViewMTHelpers.cs" />
+    <Content Include="App_Code\ViewReferenceHelpers.cs" />
     <Compile Include="App_LocalResources\GlobalResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -280,6 +281,8 @@
     <Content Include="Views\MTArrival\Index.cshtml" />
     <Content Include="Views\MTArrival\Sostav.cshtml" />
     <Content Include="Views\MTArrival\ListSostav.cshtml" />
+    <Content Include="Views\MTArrival\ListSostavOperation.cshtml" />
+    <Content Include="Views\MTArrival\DetaliSostavOperation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFKIS\EFKIS.csproj">
@@ -297,6 +300,10 @@
     <ProjectReference Include="..\EFRW\EFRW.csproj">
       <Project>{9d7a67b0-932b-40b7-8f30-696832b5088d}</Project>
       <Name>EFRW</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MetallurgTrans\MetallurgTrans.csproj">
+      <Project>{fa3408e4-c498-4f7b-a22e-b909e45c40e9}</Project>
+      <Name>MetallurgTrans</Name>
     </ProjectReference>
     <ProjectReference Include="..\OLDVersion\TransferRailCars\TransferRailCars.csproj">
       <Project>{a1f50999-31d4-4793-a92f-4d0f436922cb}</Project>
