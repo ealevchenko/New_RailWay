@@ -1,4 +1,4 @@
-namespace MT.Entities
+namespace EFMT.Entities
 {
     using System;
     using System.Collections.Generic;

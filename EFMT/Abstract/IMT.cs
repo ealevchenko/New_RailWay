@@ -1,4 +1,5 @@
-﻿using MT.Entities;
+﻿using EFMT.Concrete;
+using EFMT.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +59,7 @@ namespace EFMT.Abstract
         IQueryable<ArrivalCars> GetArrivalCarsOfSostav(int id_sostav);
         IQueryable<ArrivalCars> GetArrivalCarsOfNumCar(int num_car, bool order);
         //bool IsArrivalCarsOfSostav(int idsostav);
-        //List<ArrivalCars> GetArrivalCarsOfConsignees(int id_sostav, int[] Consignees);
+        List<ArrivalCars> GetArrivalCarsOfConsignees(int id_sostav, int[] Consignees);
         ArrivalCars GetArrivalCarsToNatur(int natur, int num_wag, DateTime dt, int day);
         int CloseArrivalCarsOfDocWeight(int doc, int num, DateTime dt, decimal? weight);
         int CloseArrivalCarsOfDocDay(int doc, int num, DateTime dt, int day);
@@ -84,15 +85,6 @@ namespace EFMT.Abstract
         //int CloseArrivalSostav();
         //List<ArrivalSostav> GetOperationArrivalSostav(int id_sostav, bool destinct);
 
-        //IQueryable<Consignee> Consignee { get; }
-        //int SaveConsignee(Consignee Consignee);
-        //Consignee DeleteConsignee(int Code);
-        //IQueryable<Consignee> GetConsignee();
-        //Consignee GetConsignee(int Code);
-        //IQueryable<Consignee> GetConsignee(mtConsignee tmtc);
-        //bool IsConsignee(int Code, mtConsignee type);
-        //int[] GetConsigneeToCodes(mtConsignee tmtc);
-
         #endregion
 
         #region Грузополучатели
@@ -101,6 +93,20 @@ namespace EFMT.Abstract
         Consignee GetConsignee(int code);
         int SaveConsignee(Consignee Consignee);
         Consignee DeleteConsignee(int code);
+
+        IQueryable<Consignee> GetConsignee(bool send, mtConsignee Consignee);
+        bool IsConsigneeSend(bool send, int code, mtConsignee Consignee);
+        bool IsConsignee(int Code, mtConsignee Consignee);
+        int[] GetListCodeConsigneeOfConsignee(mtConsignee Consignee);
+        IQueryable<Consignee> GetConsignee(mtConsignee tmtc);
+        int[] GetConsigneeToCodes(mtConsignee tmtc);
+
+        //IQueryable<Consignee> Consignee { get; }
+        //int SaveConsignee(Consignee Consignee);
+        //Consignee DeleteConsignee(int Code);
+        //IQueryable<Consignee> GetConsignee();
+        //Consignee GetConsignee(int Code);
+        //bool IsConsignee(int Code, mtConsignee type);
         #endregion
     }
 }

@@ -1,6 +1,6 @@
 ﻿using EFMT.Abstract;
 using MessageLog;
-using MT.Entities;
+using EFMT.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using libClass;
 using System.Data.SqlClient;
+using RWConversionFunctions;
 
 namespace EFMT.Concrete
 {
@@ -639,6 +640,27 @@ namespace EFMT.Concrete
                 return -1;
             }
         }
+        /// <summary>
+        /// Вернуть список вагонов по укзанному составу с указаным кодом грузополучателя
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="Consignees"></param>
+        /// <returns></returns>
+        public List<ArrivalCars> GetArrivalCarsOfConsignees(int id_sostav, int[] Consignees)
+        {
+            try
+            {
+                string Consignees_s = Consignees.IntsToString(',');
+                string sql = "SELECT * FROM MT.ArrivalCars where IDSostav = " + id_sostav.ToString() + " and [Consignee] in(" + Consignees_s + ")";
+                return context.Database.SqlQuery<ArrivalCars>(sql).ToList();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfConsignees(id_sostav={0}, Consignees={1})", id_sostav, Consignees.IntsToString(';')), eventID);                
+                return null;
+            }
+        }
+
         #endregion
 
         #region ArrivalSostav
@@ -931,6 +953,17 @@ namespace EFMT.Concrete
             return consignee != null ? true : false;
         }
         /// <summary>
+        /// Код пренадлежит грузополучателю 
+        /// </summary>
+        /// <param name="Code"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public bool IsConsignee(int Code, mtConsignee Consignee)
+        {
+            Consignee consignee = GetConsignee().Where(c => c.code == Code & c.consignee1 == (int)Consignee).FirstOrDefault();
+            return consignee != null ? true : false;
+        }
+        /// <summary>
         /// Получить список кодов по указанному грузополучателю
         /// </summary>
         /// <param name="Consignee"></param>
@@ -950,8 +983,32 @@ namespace EFMT.Concrete
             }
 
         }
+        /// <summary>
+        /// Получить список строк кодов указанного грузополучателя
+        /// </summary>
+        /// <param name="tmtc"></param>
+        /// <returns></returns>
+        public IQueryable<Consignee> GetConsignee(mtConsignee tmtc)
+        {
+            return GetConsignee().Where(c => c.consignee1 == (int)tmtc);
+        }
+        /// <summary>
+        /// Получить список кодов указанного грузополучателя
+        /// </summary>
+        /// <param name="tmtc"></param>
+        /// <returns></returns>
+        public int[] GetConsigneeToCodes(mtConsignee tmtc)
+        {
+            return GetConsignee(tmtc).Select(c => c.code).ToArray();
+        }
 
         #endregion
+
+
+
+
+
+
 
     }
 }
