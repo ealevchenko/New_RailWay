@@ -1,6 +1,5 @@
 ﻿@using Web_RailWay.App_LocalResources;
 @using Web_RailWay.App_Code;
-
 @{
     AjaxOptions ajaxOpts = new AjaxOptions
     {
@@ -11,31 +10,34 @@
         OnFailure = "OnFailure",
         OnComplete = "OnComplete"
     };
-    ViewBag.Title = @MTResource.mt_arrival_sostsv_report_title;
+    ViewBag.Title = @MTResource.mt_arrival_cars_report_title;
     ViewBag.ImageFone = "background-image: url(../Image/header1.jpg);";
-    ViewBag.Home = @MTResource.mt_arrival_sostsv_report_home;
+    ViewBag.Home = @MTResource.mt_arrival_cars_report_home;
 }
 @Scripts.Render("~/bundles/Ajax")
 @Scripts.Render("~/bundles/jqueryval")
-<link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
 <script src="~/Scripts/jquery.cookie.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
 <div id="report" class="report-wide">
     <div id="header">
         <div class="title">@ViewBag.Title</div>
         @Styles.Render("~/datetime/css")
         @Scripts.Render("~/bundles/datetime")
-        @using (Ajax.BeginForm("ListSostav", "MTArrival", ajaxOpts, new { @id = "fmList" })) //
+        @using (Ajax.BeginForm("ListSostavArrival", "MTArrival", ajaxOpts, new { @id = "fmList" })) //
         {
             <div id="select-rangedatetime">
                 @Html.Label(@GlobalResources.select_station)
-                @{ int[] station = new int[] { 467004, 467201 }; }
-                @Html.DropDownList("station", station.ToList().GetSelectListItem(ViewReferenceHelpers.GetReferenceStationsOfCodecs, @GlobalResources.all_stations, (int)@ViewBag.station), new { @id = "soflow", @onchange = "$('form#fmList').submit();" })
+                @{ int[] station = new int[] { 467004, 467201 }; } 
+                @Html.DropDownList("station", station.ToList().GetSelectListItem(ViewReferenceHelpers.GetReferenceStationsOfCodecs, @GlobalResources.all_stations, (int)@ViewBag.station),
+               new { @id = "soflow", @onchange = "$('form#fmList').submit();" })
+                @**@ 
                 @Html.Label(@GlobalResources.select_date_range_title)
 
                 <span id="select-range">
                     <input id="date-start" name="date_start" size="20" value='@ViewBag.dt_start'> до
                     <input id="date-stop" name="date_stop" size="20" value='@ViewBag.dt_stop'>
                 </span>
+
                 @*<button type="submit">@GlobalResources.button_title_view</button>*@
             </div>
         }
@@ -45,19 +47,18 @@
             <p>Loading Data...</p>
         </div>*@
     <div id="report-menu">
-        @{ Html.RenderAction("ListSostav", "MTArrival", new { date_start = @DateTime.Parse(@ViewBag.dt_start), date_stop = @DateTime.Parse(@ViewBag.dt_stop) }); }
+        @{ Html.RenderAction("ListSostavArrival", "MTArrival", new { date_start = @DateTime.Parse(@ViewBag.dt_start), date_stop = @DateTime.Parse(@ViewBag.dt_stop), station = 0 }); }
     </div>
     <div id="report-menu-content">
-        <div id="report-operation">
-
-        </div>
         <div id="report-operation-content">
 
         </div>
     </div>
-    <div id="cls"></div>
+    <div id="cls">
+
+    </div>
 
 
 </div>
-<script src="~/Scripts/reports/mt/mtarrivalsostav.js"></script>
+<script src="~/Scripts/reports/mt/mtarrivalcars.js"></script>
 

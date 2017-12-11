@@ -300,4 +300,25 @@
   <data name="close_timeout" xml:space="preserve">
     <value>Закрыт по времени</value>
   </data>
+  <data name="mt_arrival_cars_report_home" xml:space="preserve">
+    <value>Вагоны</value>
+  </data>
+  <data name="mt_arrival_cars_report_title" xml:space="preserve">
+    <value>Вагоны с грузополучателем АМКР</value>
+  </data>
+  <data name="mt_report_field_data_user_name" xml:space="preserve">
+    <value>Принял</value>
+  </data>
+  <data name="mt_link_all" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="mt_link_amkr" xml:space="preserve">
+    <value>АМКР</value>
+  </data>
+  <data name="mt_link_amkr_arival" xml:space="preserve">
+    <value>АМКР принятые</value>
+  </data>
+  <data name="mt_link_amkr_not_arival" xml:space="preserve">
+    <value>АМКР не принятые</value>
+  </data>
 </root>

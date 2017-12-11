@@ -2,9 +2,66 @@
 @using Web_RailWay.App_LocalResources;
 @using EFMT.Entities;
 @using EFMT.Concrete;
+@using Web_RailWay.App_Code;
 
 @model ArrivalSostav
+<div id="report-select-detali">
+    @Ajax.ActionLink(@MTResource.mt_link_all
+    , "DetaliSostavOperation"
+    , new { idSostav = @Model.ID, cars = 0 }
+    , new AjaxOptions
+    {
+        Url = Url.Action("DetaliSostavOperation",
+        new { idSostav = @Model.ID, cars = 0 }),
+        OnSuccess = "detaliSostavOperation",
+        LoadingElementDuration = 1000,
+        OnBegin = "OnBegin",
+        OnFailure = "OnFailure",
+    }
+    , new { @id = "a-select-cars", @href = "#", @class = @ViewBag.cars == 0 ? "selected" : "" })
 
+    @Ajax.ActionLink(@MTResource.mt_link_amkr
+    , "DetaliSostavOperation"
+    , new { idSostav = @Model.ID, cars = 1 }
+    , new AjaxOptions
+    {
+        Url = Url.Action("DetaliSostavOperation",
+        new { idSostav = @Model.ID, cars = 1 }),
+        OnSuccess = "detaliSostavOperation",
+        LoadingElementDuration = 1000,
+        OnBegin = "OnBegin",
+        OnFailure = "OnFailure",
+    }
+    , new { @id = "a-select-cars", @href = "#", @class = @ViewBag.cars == 1 ? "selected" : "" })
+
+    @Ajax.ActionLink(@MTResource.mt_link_amkr_arival
+    , "DetaliSostavOperation"
+    , new { idSostav = @Model.ID, cars = 2 }
+    , new AjaxOptions
+    {
+        Url = Url.Action("DetaliSostavOperation",
+        new { idSostav = @Model.ID, cars = 2 }),
+        OnSuccess = "detaliSostavOperation",
+        LoadingElementDuration = 1000,
+        OnBegin = "OnBegin",
+        OnFailure = "OnFailure",
+    }
+    , new { @id = "a-select-cars", @href = "#", @class = @ViewBag.cars == 2 ? "selected" : "" })
+
+    @Ajax.ActionLink(@MTResource.mt_link_amkr_not_arival
+    , "DetaliSostavOperation"
+    , new { idSostav = @Model.ID, cars = 3 }
+    , new AjaxOptions
+    {
+        Url = Url.Action("DetaliSostavOperation",
+        new { idSostav = @Model.ID, cars = 3 }),
+        OnSuccess = "detaliSostavOperation",
+        LoadingElementDuration = 1000,
+        OnBegin = "OnBegin",
+        OnFailure = "OnFailure",
+    }
+    , new { @id = "a-select-cars", @href = "#", @class = @ViewBag.cars == 3 ? "selected" : "" })
+</div>
 <table class="table" id="sostav-arrival">
     <tr>
         <th>@MTResource.mt_report_field_index:</th>
@@ -41,7 +98,6 @@
         <td>@Model.Close</td>
     </tr>
 </table>
-
 <table class="table" id="cars-arrival">
     <thead>
         <tr>
@@ -72,12 +128,19 @@
             <th>
                 @MTResource.mt_report_field_data_arrival
             </th>
+            <th>
+                @MTResource.mt_report_field_data_user_name
+            </th>
         </tr>
     </thead>
     <tbody>
         @foreach (ArrivalCars cars in Model.ArrivalCars.ToList())
         {
-            <tr class='@Html.GetStatusMTArrivalCars(@cars.Consignee,@cars.NumDocArrival)'>
+            if (@ViewBag.cars == 0 || 
+                (@ViewBag.cars == 1 & cars.Consignee.IsConsigneeAMKR()) || 
+                (@ViewBag.cars == 2 & cars.Consignee.IsConsigneeAMKR() & cars.NumDocArrival>0) || 
+                (@ViewBag.cars == 3 & cars.Consignee.IsConsigneeAMKR() & cars.NumDocArrival == null) ) {
+            <tr class='@Html.GetStatusMTArrivalCars(@cars.Consignee, @cars.NumDocArrival)'>
                 <td>
                     @cars.Position
                 </td>
@@ -102,7 +165,10 @@
                 <td>
                     @if (@cars.NumDocArrival == null || @cars.NumDocArrival > 0)
                     {
-                        @cars.NumDocArrival
+                        if (@cars.NumDocArrival == null & cars.Consignee.IsConsigneeAMKR())
+                        { <input id="manual-arrival" type="button" value='@GlobalResources.button_title_close' />}
+                        else
+                        { @cars.NumDocArrival}
                     }
                     else
                     {
@@ -112,7 +178,11 @@
                 <td>
                     @cars.Arrival
                 </td>
+                <td>
+                    @cars.UserName
+                </td>
             </tr>
+            }
         }
     </tbody>
 </table>

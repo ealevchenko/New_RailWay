@@ -62,6 +62,10 @@ namespace Web_RailWay.App_Code
 
         #endregion
 
+        public static bool IsConsigneeAMKR(this int consignee)
+        {
+            return ef_mt.IsConsignee(consignee, mtConsignee.AMKR);
+        }
 
         #region html
 

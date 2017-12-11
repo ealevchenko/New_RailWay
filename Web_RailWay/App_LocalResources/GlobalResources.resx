@@ -249,4 +249,13 @@
   <data name="home_index_park_state" xml:space="preserve">
     <value>Состояние парка</value>
   </data>
+  <data name="select_station" xml:space="preserve">
+    <value>Выберите станцию: </value>
+  </data>
+  <data name="all_stations" xml:space="preserve">
+    <value>Все станции</value>
+  </data>
+  <data name="button_title_close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
 </root>

@@ -44,7 +44,8 @@ namespace Web_RailWay.Controllers
                     NumDocArrival = app_car.NumDocArrival,
                     Arrival = app_car.Arrival,
                     ParentID = app_car.ParentID,
-                    ApproachesSostav = null
+                    ApproachesSostav = null,
+                    UserName = app_car.UserName,
                 };
         }
 

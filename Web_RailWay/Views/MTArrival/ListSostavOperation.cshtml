@@ -1,9 +1,9 @@
 ﻿@using Web_RailWay.App_Code
 @model List<int>
 
-@foreach (int links in Model)
-{
-    @Ajax.ActionLink(@Html.GetMTArrivalOperations(links).ToString() + " (" + @Html.GetMTArrivalDT(links).ToString() + ")"
+    @foreach (int links in Model)
+    {
+        @Ajax.ActionLink(@Html.GetMTArrivalOperations(links).ToString() + " (" + @Html.GetMTArrivalDT(links).ToString() + ")"
                                 , "DetaliSostavOperation"
                         , new { id = links }
                         , new AjaxOptions
@@ -15,5 +15,6 @@
                             OnBegin = "OnBegin",
                             OnFailure = "OnFailure",
                         }
-                        , new { @id = "a-sostav-detali", @href = "#" }  )
-}
+                        , new { @id = "a-sostav-detali", @href = "#" })
+    }
+<div id="cls-operation"></div>

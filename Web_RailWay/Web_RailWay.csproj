@@ -156,6 +156,7 @@
   <ItemGroup>
     <Content Include="App_Code\ViewMTHelpers.cs" />
     <Content Include="App_Code\ViewReferenceHelpers.cs" />
+    <Content Include="App_Code\ElementsHelpers.cs" />
     <Compile Include="App_LocalResources\GlobalResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -196,6 +197,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\AccessAttribute.cs" />
     <Compile Include="Infrastructure\NinjectControllerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -204,6 +206,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\creative.css" />
     <Content Include="Content\datetime\daterangepicker.css" />
+    <Content Include="Content\dropdownlist.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\jquery-ui\jquery-ui.css" />
     <Content Include="Content\jquery-ui\jquery-ui.min.css" />
@@ -252,6 +255,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\reports\mt\mtarrivalcars.js" />
     <Content Include="Scripts\reports\mt\mtarrivalsostav.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -283,8 +287,14 @@
     <Content Include="Views\MTArrival\ListSostav.cshtml" />
     <Content Include="Views\MTArrival\ListSostavOperation.cshtml" />
     <Content Include="Views\MTArrival\DetaliSostavOperation.cshtml" />
+    <Content Include="Views\MTArrival\Cars.cshtml" />
+    <Content Include="Views\MTArrival\ListSostavArrival.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EFAccess\EFAccess.csproj">
+      <Project>{d7893364-dfa2-4618-9d10-e4c28dc7227f}</Project>
+      <Name>EFAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EFKIS\EFKIS.csproj">
       <Project>{6a689386-eff1-4b21-be6d-3dd93e1b01bf}</Project>
       <Name>EFKIS</Name>
@@ -300,6 +310,10 @@
     <ProjectReference Include="..\EFRW\EFRW.csproj">
       <Project>{9d7a67b0-932b-40b7-8f30-696832b5088d}</Project>
       <Name>EFRW</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MessageLogs\WebLogs\WebLogs.csproj">
+      <Project>{f89091ab-e2d5-465e-9702-39cfa3a46f51}</Project>
+      <Name>WebLogs</Name>
     </ProjectReference>
     <ProjectReference Include="..\MetallurgTrans\MetallurgTrans.csproj">
       <Project>{fa3408e4-c498-4f7b-a22e-b909e45c40e9}</Project>
@@ -320,18 +334,22 @@
     <EmbeddedResource Include="App_LocalResources\GlobalResources.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GlobalResources.en.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\GlobalResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GlobalResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\GlobalResources.uk.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GlobalResources.uk.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\MTResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MTResource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

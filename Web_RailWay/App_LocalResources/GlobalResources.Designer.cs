@@ -70,6 +70,24 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Все станции.
+        /// </summary>
+        public static string all_stations {
+            get {
+                return ResourceManager.GetString("all_stations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Закрыть.
+        /// </summary>
+        public static string button_title_close {
+            get {
+                return ResourceManager.GetString("button_title_close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Показать.
         /// </summary>
         public static string button_title_view {
@@ -417,6 +435,15 @@ namespace Web_RailWay.App_LocalResources {
         public static string select_service_title {
             get {
                 return ResourceManager.GetString("select_service_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Выберите станцию: .
+        /// </summary>
+        public static string select_station {
+            get {
+                return ResourceManager.GetString("select_station", resourceCulture);
             }
         }
         

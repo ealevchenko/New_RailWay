@@ -1,17 +1,6 @@
 ﻿@using Web_RailWay.App_Code
 @model List<int>
 
-@*@{
-        AjaxOptions ajaxOpts1 = new AjaxOptions
-        {
-            Url = Url.Action("listSostavOperation", new { id = links }),
-            OnSuccess = "selectPeriod",
-            //LoadingElementId = "loading",
-            LoadingElementDuration = 1000,
-            OnBegin = "OnBegin",
-        };
-    }*@
-
 
 @foreach (int links in Model)
 {

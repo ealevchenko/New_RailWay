@@ -59,7 +59,15 @@ namespace Web_RailWay.App_Code
             }
             return MvcHtmlString.Create(cargo != null ? cargo.name_etsng + "(" + code.ToString() + ")" : code.ToString());
         }
-
         #endregion
+        
+        public static string GetReferenceStationsOfCodecs(int? code)
+        {
+            if (code == null) return "-";
+            Stations station = ef_reference.GetStationsOfCodeCS((int)code);
+            return station != null ? station.station : code.ToString();
+        }
+
+
     }
 }

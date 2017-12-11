@@ -1,4 +1,7 @@
-﻿body {
+﻿/*div {
+    border: 1px solid red;
+}*/
+body {
     background-color: transparent;
     background-repeat: repeat, no-repeat;
     background-position: center center;
@@ -105,6 +108,38 @@ DIV#report-operation {
         DIV#report-operation A.selected:hover {
             background-color: #666;
         }
+
+DIV#report-operation {
+}
+
+DIV#report-select-detali A {
+    font: bold 1.1em "Arial Narrow","Franklin Gothic Medium",Arial;
+    display: block;
+    text-decoration: none;
+    padding: .6em;
+    margin-right: 5px;
+    color: Black;
+    border: 1px solid silver;
+    float: left;
+    text-transform: uppercase;
+}
+
+    DIV#report-select-detali A.selected {
+        background-color: #666;
+        color: White;
+    }
+
+    DIV#report-select-detali A:hover {
+        background-color: #CCC;
+    }
+
+    DIV#report-select-detali A.selected:hover {
+        background-color: #666;
+    }
+
+DIV#cls-operation {
+    padding-top: 50px;
+}
 
 DIV#report-detali {
     padding: 1em;
