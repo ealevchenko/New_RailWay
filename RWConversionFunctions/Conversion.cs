@@ -21,7 +21,7 @@ namespace RWConversionFunctions
             {
                 list += i.ToString() + sep;
             }
-            return list.Remove(list.Length - 1);
+            if (!String.IsNullOrWhiteSpace(list)) { return list.Remove(list.Length - 1); } else { return null; }
         }
 
     }
