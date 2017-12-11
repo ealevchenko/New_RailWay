@@ -9,6 +9,7 @@ namespace MessageLog
     public enum service : int
     {
         Null = -1,
+        Test = 1,
         // сервисы МеталлургТранса
         ServicesMT = 100,
         TransferApproaches = 111,

@@ -10,7 +10,7 @@ namespace MessageLog
     {
         Null = -1,
         RailWay = 0,
-
+        Test = 1,
         #region Вспомогательные общие модуля 1000
 
         RWSettings_RWSetting = 1100, // Библиотека доступа к настройкам сервисов БД, *.config файлы
@@ -19,6 +19,9 @@ namespace MessageLog
         RWWebAPI_ClientWebAPI = 1201,   // Библиотека клиент WebApi RailWay
         RWWebAPI_RWReference = 1202,    // Библиотека получения данных справочников ситемы RailWay
         RWWebAPI_Reference = 1203,      // Библиотека получения данных общих справочников железных дорог
+
+        EFAccess = 1300,                // Библиотеки доступа к данным системы RailWay
+        EFAccess_EFWebAcces = 1301,     // Библиотеки доступа к данным web-сайта RailWay
         #endregion
 
         //RWSettings_RWDBSetting = 1110,    
@@ -56,7 +59,8 @@ namespace MessageLog
         #region Служба RailWay 4000
 
         EFRW = 4100,                        // Библиотека доступа к данным БД RailWay
-        EFRW_EFReference = 4101,            // Модуль доступа к БД справочников системы RailWay 
+        EFRW_EFReference = 4101,            // Модуль доступа к БД справочников системы RailWay
+
         #endregion
 
         #region Служба общей справочной системы 5000

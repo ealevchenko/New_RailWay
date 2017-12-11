@@ -156,7 +156,7 @@ namespace MetallurgTrans
                 //lock (locker_sftp)
                 {
                     // подключится считать и закрыть соединение
-                    SFTPClient csftp = new SFTPClient(connect_SFTP, service);
+                    SFTPClient csftp = new SFTPClient(connect_SFTP.Host,connect_SFTP.Port,connect_SFTP.User,connect_SFTP.PSW, service);
                     csftp.fromPathsHost = fromPathHost;
                     csftp.FileFiltrHost = fileFiltrHost;
                     csftp.toDirPath = toDirPath;
@@ -197,6 +197,7 @@ namespace MetallurgTrans
         private static void TransferArrival()
         {
             service service = service.TransferArrival;
+            "TransferArrival -1".WriteInformation(service.Test, eventID.Test);
             DateTime dt_start = DateTime.Now;
             try
             {
@@ -216,6 +217,7 @@ namespace MetallurgTrans
                 bool deleteFileHost = true;
                 bool deleteFileMT = true;
                 bool rewriteFile = false;
+                "TransferArrival -2".WriteInformation(service.Test, eventID.Test);
                 // считать настройки
                 //lock (locker_setting)
                 {
@@ -244,6 +246,7 @@ namespace MetallurgTrans
                         deleteFileMT = RWSetting.GetDB_Config_DefaultSetting("DeleteFileTransferArrival", service, deleteFileMT, true);
                         // Признак перезаписывать файлы при переносе
                         rewriteFile = RWSetting.GetDB_Config_DefaultSetting("RewriteFileTransferArrival", service, rewriteFile, true);
+                        "TransferArrival -3".WriteInformation(service.Test, eventID.Test);
                     }
                     catch (Exception ex)
                     {
@@ -256,7 +259,7 @@ namespace MetallurgTrans
                         int res_transfer = 0;
                         //lock (locker_sftp)
                         {
-
+                            "TransferArrival -4".WriteInformation(service.Test, eventID.Test);
                             // подключится считать и закрыть соединение
                             SFTPClient csftp = new SFTPClient(connect_SFTP, service);
                             csftp.fromPathsHost = fromPathHost;
@@ -269,18 +272,20 @@ namespace MetallurgTrans
                         }
                         //lock (locker_db_arrival)
                         {
-
+                            "TransferArrival -5".WriteInformation(service.Test, eventID.Test);
                             MTTransfer mtt = new MTTransfer(service);
                             mtt.ArrivalToRailWay = arrivalToRailWay;
                             mtt.FromPath = toTMPDirPath;
                             mtt.DeleteFile = deleteFileMT;
                             res_transfer = mtt.TransferArrival();
                         }
+                            "TransferArrival -6".WriteInformation(service.Test, eventID.Test);
                         TimeSpan ts = DateTime.Now - dt_start;
                         string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
                         mes_service_exec.WriteInformation(servece_owner, eventID);
                         service.WriteServices(dt_start, DateTime.Now, res_transfer);
                         //String.Format("Поток {0} сервиса {1} - выполнен.", service.ToString(), servece_owner).WriteWarning(servece_owner, eventID);
+                        "TransferArrival - Ok".WriteInformation(service.Test, eventID.Test);
             }
             catch (ThreadAbortException exc)
             {

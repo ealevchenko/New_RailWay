@@ -225,7 +225,8 @@ namespace MetallurgTrans
                                 Route = !String.IsNullOrWhiteSpace(array[12]) ? int.Parse(array[12]) : -1,
                                 Owner = !String.IsNullOrWhiteSpace(array[13]) ? int.Parse(array[13]) : -1,
                                 NumDocArrival = null,
-                                Arrival = null, 
+                                Arrival = null,
+                                UserName = null,
                             };
                             // Получить parent_id
                             new_wag.ParentID = GetParentID(new_wag, this.day_range_approaches_cars);
@@ -585,6 +586,7 @@ namespace MetallurgTrans
                             TrainNumber = !String.IsNullOrWhiteSpace((string)element.Element("TrainNumber")) ? (int)element.Element("TrainNumber") : -1,
                             NumDocArrival = null,
                             Arrival = null,
+                            UserName = null,
                              
                         };
                         // Получить parent_id

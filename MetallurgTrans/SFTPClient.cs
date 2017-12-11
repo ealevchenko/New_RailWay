@@ -16,6 +16,7 @@ namespace MetallurgTrans
         not_fromFilePaths = -2,
         coincide_fromFilePaths_toDirPath = -3,
         not_connect = -4,
+        null_client_sftp = - 5,
     }
     
     [Serializable()]
@@ -82,9 +83,20 @@ namespace MetallurgTrans
             this.connect_SFTP = con_sftp;
         }
 
+        public SFTPClient(string Host, int Port, string User, string PSW)
+        {
+            this.connect_SFTP = new connectSFTP() {  Host = Host, Port = Port, User = User, PSW=PSW};
+        }
+
         public SFTPClient(connectSFTP con_sftp, service servece_owner)
         {
             this.connect_SFTP = con_sftp;
+            this.servece_owner = servece_owner;
+        }
+
+        public SFTPClient(string Host, int Port, string User, string PSW , service servece_owner)
+        {
+            this.connect_SFTP = new connectSFTP() { Host = Host, Port = Port, User = User, PSW = PSW }; 
             this.servece_owner = servece_owner;
         }
 
@@ -113,6 +125,7 @@ namespace MetallurgTrans
         /// </summary>
         public void Close()
         {
+            "TransferArrival -4 close connect".WriteInformation(servece_owner, eventID.Test);
             this.client_sftp.Close();
 
         }
@@ -141,13 +154,17 @@ namespace MetallurgTrans
                     String.Format("Метод SFTPClient.CopySFTPFile() :Путь для постоянного хранения перенесённых файлов toDirPath:{0}, совпадает с временным хранилищем для обработки toTMPDirPath:{1}.", toDirPath, toTMPDirPath).WriteError(servece_owner, this.eventID);
                     return this.eventID.GetEventIDErrorCode((int)sftp_client_error.coincide_fromFilePaths_toDirPath);                    
                 }
-                
+                "TransferArrival -4.1".WriteInformation(servece_owner, eventID.Test);
+                if (this.client_sftp == null) return this.eventID.GetEventIDErrorCode((int)sftp_client_error.null_client_sftp);
                 string[] listfromFile = this.client_sftp.GetFileList(fromFilePaths + "//" + fromFileFiltr);
-                if (listfromFile == null | listfromFile.Count() == 0)
+                "TransferArrival -4.2".WriteInformation(servece_owner, eventID.Test);
+                if (listfromFile == null || listfromFile.Count() == 0)
                 {
                     //ServicesEventLog.LogInformation(String.Format("На сервере SFTP отсутствуют файлы для копирования"), this.eventID);
+                    "TransferArrival -4.2 - files - 0".WriteInformation(servece_owner, eventID.Test);
                     return 0;
                 }
+                ("TransferArrival -4.2 - files - " + listfromFile.Count().ToString()).WriteInformation(servece_owner, eventID.Test);
                 int count = 0;
                 int cdel = 0;
                 foreach (string file in listfromFile)
@@ -155,21 +172,25 @@ namespace MetallurgTrans
                     // Если указана папка перенос в постоянное хранилище
                     if (!String.IsNullOrWhiteSpace(toDirPath))
                     {
+                        if (this.client_sftp == null) return this.eventID.GetEventIDErrorCode((int)sftp_client_error.null_client_sftp);
                         client_sftp.Get(fromFilePaths + "//" + file, toDirPath + "\\");
                     }
                     // Переносим во временное хранилище
                     if ((toRewriteFile) | (!toRewriteFile & !ExistFile(toTMPDirPath + "\\" + file)))
                     {
+                        if (this.client_sftp == null) return this.eventID.GetEventIDErrorCode((int)sftp_client_error.null_client_sftp);
                         client_sftp.Get(fromFilePaths + "//" + file, toTMPDirPath + "\\");
                         count++;
                     }
                     // Удалим файлы из host
                     if (fromDeleteFile)
                     {
+                        if (this.client_sftp == null) return this.eventID.GetEventIDErrorCode((int)sftp_client_error.null_client_sftp);
                         client_sftp.Rm(fromFilePaths + "//" + file);
                         cdel++;
                     }
                 }
+                "TransferArrival -4.3".WriteInformation(servece_owner, eventID.Test);
                 string mess = String.Format("На сервере SFTP:{0} найдено {1} файлов, перенесено {2}", connect_SFTP.Host, listfromFile.Count(), count);
                 if (fromDeleteFile) { mess = String.Format(mess + ", удаленно {0}", cdel); }
                 mess.WriteInformation(servece_owner, this.eventID);
@@ -178,7 +199,8 @@ namespace MetallurgTrans
             }
             catch (Exception e)
             {
-                e.WriteError(String.Format("Ошибка копирования файлов из sftp-сервера, Host:{0} ", this.connect_SFTP.Host), servece_owner, eventID);
+                e.WriteErrorMethod(String.Format("CopySFTPFile(fromFilePaths={0}, fromFileFiltr={1}, toTMPDirPath={2}, toDirPath={3}, fromDeleteFile={4}, toRewriteFile={5})", 
+                    fromFilePaths, fromFileFiltr,toTMPDirPath,toDirPath,fromDeleteFile,toRewriteFile), this.servece_owner, eventID);
                 return this.eventID.GetEventIDErrorCode((int)sftp_client_error.clobal_error);
             }
         }
@@ -201,16 +223,26 @@ namespace MetallurgTrans
         /// <returns></returns>
         public int CopyToDir(string fromFilePaths, string fromFileFiltr, string toTMPDirPath, string toDirPath, bool fromDeleteFile, bool toRewriteFile)
         {
-            int res = 0;
-            if (Connect())
+            try
             {
-                res = CopySFTPFile(fromFilePaths, fromFileFiltr, toTMPDirPath, toDirPath, fromDeleteFile, toRewriteFile);
-                Close();
+                int res = 0;
+                if (Connect())
+                {
+                    res = CopySFTPFile(fromFilePaths, fromFileFiltr, toTMPDirPath, toDirPath, fromDeleteFile, toRewriteFile);
+                    Close();
+                }
+                else
+                {
+                    res = this.eventID.GetEventIDErrorCode((int)sftp_client_error.not_connect);
+                }
+                return res;
             }
-            else {
-                res = this.eventID.GetEventIDErrorCode((int)sftp_client_error.not_connect);
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CopyToDir(fromFilePaths={0}, fromFileFiltr={1}, toTMPDirPath={2}, toDirPath={3}, fromDeleteFile={4}, toRewriteFile={5})",
+                    fromFilePaths, fromFileFiltr, toTMPDirPath, toDirPath, fromDeleteFile, toRewriteFile), this.servece_owner, eventID);
+                return this.eventID.GetEventIDErrorCode((int)sftp_client_error.clobal_error);
             }
-            return res;
         }
         /// <summary>
         /// Полное копирование из SFTP в указаную папку 
