@@ -1,5 +1,6 @@
 ﻿using EFKIS.Concrete;
 using EFKIS.Entities;
+using EFMT.Entities;
 using EFRC.Concrete;
 using EFRC.Entities;
 using MessageLog;
@@ -109,40 +110,64 @@ namespace KIS
         /// <param name="id_sostav"></param>
         /// <param name="pv"></param>
         /// <returns></returns>
-        public bool CheckingWagonToSAPSupply(int id_sostav, PromVagon pv)
+        public bool CheckingWagonToSAPSupply(int id_sostav, PromVagon pv, ArrivalCars cars )
         {
             EFSAP ef_sap = new EFSAP();
             EFWagons ef_wag = new EFWagons();
             // Проверим есть строка в справочнеке САП поставки
             if (!ef_sap.IsWagonToSAPSupply(id_sostav, pv.N_VAG))
             {
-                // Определим код груза
-                int IDCargo = 0;
-                if (pv.K_GR != null)
+                trWagon new_wag;
+                //TODO: Тест исправление вагоны с определенным IDsostav записывались как принятые по КИС
+                if (id_sostav > 0 & cars != null)
                 {
-                    PromGruzSP pg = ef_wag.GetGruzSP((int)pv.K_GR);
-                    IDCargo = pg != null ? pg.TAR_GR != null ? (int)pg.TAR_GR : 0 : 0;
+                    new_wag = new trWagon()
+                        {
+                            Position = cars.Position,
+                            CarriageNumber = cars.Num,
+                            CountryCode = cars.CountryCode,
+                            Weight = cars.Weight,
+                            IDCargo = cars.CargoCode,
+                            Cargo = cars.Cargo,
+                            IDStation = cars.StationCode,
+                            Station = cars.Station,
+                            Consignee = cars.Consignee,
+                            Operation = cars.Operation,
+                            CompositionIndex = cars.CompositionIndex,
+                            DateOperation = cars.DateOperation,
+                            TrainNumber = cars.TrainNumber,
+                            Conditions = 15, // прибывший с УЗ
+                        };
                 }
-                // Создадим строку в САП (id состава)
-                trWagon wag = new trWagon()
+                else
                 {
-                    Position = pv != null ? pv.NPP : 0,
-                    CarriageNumber = pv.N_VAG,
-                    CountryCode = pv != null ? pv.KOD_STRAN != null ? (int)pv.KOD_STRAN : 0 : 0,
-                    Weight = pv != null ? pv.WES_GR != null ? (float)pv.WES_GR : 0 : 0,
-                    IDCargo = IDCargo,
-                    Cargo = null,
-                    IDStation = 0,
-                    Station = null,
-                    Consignee = 0,
-                    Operation = null,
-                    CompositionIndex = "N:" + pv.N_NATUR + " D:" + pv.D_PR_DD + "." + pv.D_PR_MM + "." + pv.D_PR_YY + " " + pv.T_PR_HH + "-" + pv.T_PR_MI,
-                    DateOperation = DateTime.Now,
-                    TrainNumber = 0,
-                    Conditions = 0,
-                };
-
-                SetWagonToSAPSupply(wag, id_sostav);
+                    // Определим код груза
+                    int IDCargo = 0;
+                    if (pv.K_GR != null)
+                    {
+                        PromGruzSP pg = ef_wag.GetGruzSP((int)pv.K_GR);
+                        IDCargo = pg != null ? pg.TAR_GR != null ? (int)pg.TAR_GR : 0 : 0;
+                    }
+                    // Создадим строку в САП (id состава)
+                    new_wag = new trWagon()
+                    {
+                        Position = pv != null ? pv.NPP : 0,
+                        CarriageNumber = pv.N_VAG,
+                        CountryCode = pv != null ? pv.KOD_STRAN != null ? (int)pv.KOD_STRAN : 0 : 0,
+                        Weight = pv != null ? pv.WES_GR != null ? (float)pv.WES_GR : 0 : 0,
+                        IDCargo = IDCargo,
+                        Cargo = null,
+                        IDStation = 0,
+                        Station = null,
+                        Consignee = 0,
+                        Operation = null,
+                        CompositionIndex = "N:" + pv.N_NATUR + " D:" + pv.D_PR_DD + "." + pv.D_PR_MM + "." + pv.D_PR_YY + " " + pv.T_PR_HH + "-" + pv.T_PR_MI,
+                        DateOperation = DateTime.Now,
+                        TrainNumber = 0,
+                        Conditions = 0,
+                    };
+                }
+                SetWagonToSAPSupply(new_wag, id_sostav);
                 return false;
             }
             return true;

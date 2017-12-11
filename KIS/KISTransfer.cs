@@ -809,6 +809,10 @@ namespace KIS
                 if (res_close_arrival <= 0)
                 { 
                     res_close_arrival = ef_mt.CloseArrivalCarsOfDocDay(natur, num_vag, dt_amkr, 1);
+                    // если нет строки закрыть последннюю строку с этим вагоном код закрытия системой (-1)
+                    if (res_close_arrival <= 0) {
+                        ef_mt.CloseArrivalCars(num_vag, dt_amkr, -1);
+                    }
                 }
                 int res_close_approaches = ef_mt.CloseApproachesCarsOfDocWeight(natur, num_vag, dt_amkr, pv.WES_GR);
                 if (res_close_approaches <= 0)
@@ -821,7 +825,7 @@ namespace KIS
                     idsostav = mt_list.IDSostav;
                 }
                 // Проверим есть строка в справочнеке САП поставки
-                sap_trans.CheckingWagonToSAPSupply(idsostav, pv);
+                sap_trans.CheckingWagonToSAPSupply(idsostav, pv, mt_list);
 
                                                                  //if (idsostav > 0)
                                                                  //{
