@@ -60,9 +60,12 @@ namespace EFMT.Abstract
         IQueryable<ArrivalCars> GetArrivalCarsOfNumCar(int num_car, bool order);
         //bool IsArrivalCarsOfSostav(int idsostav);
         List<ArrivalCars> GetArrivalCarsOfConsignees(int id_sostav, int[] Consignees);
+        List<ArrivalCars> GetArrivalCarsOfConsignees(int[] Consignees);
         ArrivalCars GetArrivalCarsToNatur(int natur, int num_wag, DateTime dt, int day);
         int CloseArrivalCarsOfDocWeight(int doc, int num, DateTime dt, decimal? weight);
         int CloseArrivalCarsOfDocDay(int doc, int num, DateTime dt, int day);
+        IQueryable<ArrivalCars> GetArrivalCars(int num, DateTime dt);
+        int CloseArrivalCars(int num, DateTime dt, int code_close);
 
 
         IQueryable<ArrivalSostav> ArrivalSostav { get; }

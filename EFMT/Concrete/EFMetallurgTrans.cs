@@ -86,7 +86,8 @@ namespace EFMT.Concrete
                         NumDocArrival = ApproachesCars.NumDocArrival,
                         Arrival = ApproachesCars.Arrival,
                         ParentID = ApproachesCars.ParentID,
-                        ApproachesSostav = ApproachesCars.ApproachesSostav
+                        ApproachesSostav = ApproachesCars.ApproachesSostav, 
+                        UserName = ApproachesCars.UserName
                     };
                     context.ApproachesCars.Add(dbEntry);
                 }
@@ -115,6 +116,7 @@ namespace EFMT.Concrete
                         dbEntry.NumDocArrival = ApproachesCars.NumDocArrival;
                         dbEntry.ParentID = ApproachesCars.ParentID;
                         dbEntry.ApproachesSostav = ApproachesCars.ApproachesSostav;
+                        dbEntry.UserName = ApproachesCars.UserName;
                     }
                 }
                 context.SaveChanges();
@@ -219,9 +221,10 @@ namespace EFMT.Concrete
                 SqlParameter inum = new SqlParameter("@num", num);
                 SqlParameter dt_amkr = new SqlParameter("@dt", dt);
                 SqlParameter iweight = new SqlParameter("@weight", Math.Round((weight != null ? (decimal)weight : 0), 0));
+                SqlParameter user_name = new SqlParameter("@UserName", System.Environment.UserDomainName + @"\" + System.Environment.UserName);
 
-                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ApproachesCars] SET NumDocArrival = @doc, Arrival = @dt" +
-                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation<=@dt and [Weight]=@weight", idoc, dt_amkr, inum, iweight);
+                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ApproachesCars] SET NumDocArrival = @doc, Arrival = @dt, UserName = @UserName" +
+                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation<=@dt and [Weight]=@weight", idoc, dt_amkr, inum, iweight, user_name);
             }
             catch (Exception e)
             {
@@ -245,9 +248,10 @@ namespace EFMT.Concrete
                 SqlParameter inum = new SqlParameter("@num", num);
                 SqlParameter dt_start = new SqlParameter("@dt_start", dt.AddDays(day * -1));
                 SqlParameter dt_stop = new SqlParameter("@dt_stop", dt);
+                SqlParameter user_name = new SqlParameter("@UserName", System.Environment.UserDomainName + @"\" + System.Environment.UserName);
 
-                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ApproachesCars] SET NumDocArrival = @doc, Arrival = @dt_stop" +
-                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation>=@dt_start and DateOperation<=@dt_stop", idoc, dt_start, dt_stop, inum);
+                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ApproachesCars] SET NumDocArrival = @doc, Arrival = @dt_stop , UserName = @UserName" +
+                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation>=@dt_start and DateOperation<=@dt_stop", idoc, dt_start, dt_stop, inum, user_name);
             }
             catch (Exception e)
             {
@@ -456,7 +460,8 @@ namespace EFMT.Concrete
                         NumDocArrival = ArrivalCars.NumDocArrival,
                         Arrival = ArrivalCars.Arrival, 
                         ParentID = ArrivalCars.ParentID, 
-                        ArrivalSostav = ArrivalCars.ArrivalSostav
+                        ArrivalSostav = ArrivalCars.ArrivalSostav, 
+                        UserName = ArrivalCars.UserName
                     };
                     context.ArrivalCars.Add(dbEntry);
                 }
@@ -483,6 +488,7 @@ namespace EFMT.Concrete
                         dbEntry.Arrival = ArrivalCars.Arrival;
                         dbEntry.ParentID = ArrivalCars.ParentID;
                         dbEntry.ArrivalSostav = ArrivalCars.ArrivalSostav;
+                        dbEntry.UserName = ArrivalCars.UserName;
                     }
                 }
                 context.SaveChanges();
@@ -604,9 +610,10 @@ namespace EFMT.Concrete
                 SqlParameter inum = new SqlParameter("@num", num);
                 SqlParameter dt_amkr = new SqlParameter("@dt", dt);
                 SqlParameter iweight = new SqlParameter("@weight", Math.Round((weight!=null ? (decimal) weight: 0),0));
+                SqlParameter user_name = new SqlParameter("@UserName", System.Environment.UserDomainName + @"\" + System.Environment.UserName);
 
-                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ArrivalCars] SET NumDocArrival = @doc, Arrival = @dt" +
-                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation<=@dt and [Weight]=@weight", idoc, dt_amkr, inum, iweight);
+                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ArrivalCars] SET NumDocArrival = @doc, Arrival = @dt , UserName = @UserName" +
+                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation<=@dt and [Weight]=@weight", idoc, dt_amkr, inum, iweight, user_name);
             }
             catch (Exception e)
             {
@@ -630,9 +637,9 @@ namespace EFMT.Concrete
                 SqlParameter inum = new SqlParameter("@num", num);
                 SqlParameter dt_start = new SqlParameter("@dt_start", dt.AddDays(day*-1));
                 SqlParameter dt_stop = new SqlParameter("@dt_stop", dt);
-
-                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ArrivalCars] SET NumDocArrival = @doc, Arrival = @dt_stop" +
-                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation>=@dt_start and DateOperation<=@dt_stop", idoc, dt_start, dt_stop, inum );
+                SqlParameter user_name = new SqlParameter("@UserName", System.Environment.UserDomainName + @"\" + System.Environment.UserName);
+                return context.Database.ExecuteSqlCommand("UPDATE [MT].[ArrivalCars] SET NumDocArrival = @doc, Arrival = @dt_stop , UserName = @UserName" +
+                                " where NumDocArrival is null and Arrival is null and Num=@num and DateOperation>=@dt_start and DateOperation<=@dt_stop", idoc, dt_start, dt_stop, inum, user_name);
             }
             catch (Exception e)
             {
@@ -651,13 +658,73 @@ namespace EFMT.Concrete
             try
             {
                 string Consignees_s = Consignees.IntsToString(',');
-                string sql = "SELECT * FROM MT.ArrivalCars where IDSostav = " + id_sostav.ToString() + " and [Consignee] in(" + Consignees_s + ")";
+                string sql = "SELECT * FROM MT.ArrivalCars where IDSostav = " + id_sostav.ToString() + " and [Consignee] in(" + (Consignees_s != null ? Consignees_s : "0") + ")";
                 return context.Database.SqlQuery<ArrivalCars>(sql).ToList();
             }
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("GetArrivalCarsOfConsignees(id_sostav={0}, Consignees={1})", id_sostav, Consignees.IntsToString(';')), eventID);                
                 return null;
+            }
+        }
+
+        public List<ArrivalCars> GetArrivalCarsOfConsignees(int[] Consignees)
+        {
+            try
+            {
+                string Consignees_s = Consignees.IntsToString(',');
+                string sql = "SELECT * FROM MT.ArrivalCars where [Consignee] in(" + (Consignees_s != null ? Consignees_s : "0") + ")";
+                return context.Database.SqlQuery<ArrivalCars>(sql).ToList();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfConsignees(Consignees={0})", Consignees.IntsToString(';')), eventID);                
+                return null;
+            }
+        }
+        /// <summary>
+        /// Найти все записи по указаному вагону ниже указанной даты
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public IQueryable<ArrivalCars> GetArrivalCars(int num, DateTime dt)
+        {
+            try
+            {
+                return GetArrivalCars().Where(c => c.Num == num & c.DateOperation <= dt);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCars(num={0}, dt={1})", num, dt), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Закрыть не закрытую последнюю запись по указаному вагону ниже указанной даты 
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="dt"></param>
+        /// <param name="code_close"></param>
+        /// <returns></returns>
+        public int CloseArrivalCars(int num, DateTime dt, int code_close)
+        {
+            try
+            {
+                ArrivalCars car = GetArrivalCars(num, dt).Where(c => c.NumDocArrival == null).OrderByDescending(c => c.DateOperation).FirstOrDefault();
+                if (car != null)
+                {
+                    car.NumDocArrival = code_close;
+                    car.Arrival = dt;
+                    car.UserName = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                    return SaveArrivalCars(car);
+                }
+                return 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseArrivalCars(num={0}, dt={1}, code_close={2})", num, dt, code_close), eventID);
+                return -1;
             }
         }
 

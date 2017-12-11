@@ -53,6 +53,9 @@ namespace EFMT.Entities
 
         public int? ParentID { get; set; }
 
+        [StringLength(100)]
+        public string UserName { get; set; }
+
         public virtual ArrivalSostav ArrivalSostav { get; set; }
     }
 }
