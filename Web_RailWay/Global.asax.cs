@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Moveax.Mvc.ErrorHandler;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace Web_RailWay
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ControllerBuilder.Current.SetControllerFactory(new NinjectControllerFactory());
+            ViewEngines.Engines.Add(new CustomLocationViewEngine());
         }
 
         protected void Application_BeginRequest()
@@ -42,6 +44,17 @@ namespace Web_RailWay
             }
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(cultureName);
             Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture(cultureName);
+        }
+
+        protected void Application_Error(object sender, System.EventArgs e)
+        {
+            var errorHandler = new MvcApplicationErrorHandler(application: this, exception: this.Server.GetLastError())
+            {
+                EnableHttpReturnCodes = true,
+                PassThroughHttp401 = false
+            };
+
+            errorHandler.Execute();
         }
     }
 }
