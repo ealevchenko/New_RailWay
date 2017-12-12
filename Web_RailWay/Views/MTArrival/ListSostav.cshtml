@@ -1,20 +1,36 @@
 ﻿@using Web_RailWay.App_Code
 @model List<int>
 
-
 @foreach (int links in Model)
 {
     @Ajax.ActionLink(@Html.GetMTArrivalIndex(links).ToString() + " (" + @Html.GetMTArrivalDT(links).ToString() + ")"
         , "listSostavOperation"
-        , new { id = links }
+            , new { id = links }
         , new AjaxOptions
-            {
-                Url = Url.Action("ListSostavOperation", new { id = links }),
-                OnSuccess = "listSostavOperation",
-                //LoadingElementId = "loading",
-                LoadingElementDuration = 1000,
-                OnBegin = "OnBegin",
-                OnFailure = "OnFailure",
-            }
-        , new { @id = "a-sostav-operation", @href = "#" } )
+        {
+            Url = Url.Action("ListSostavOperation", new { id = links }),
+            OnSuccess = "listSostavOperation",
+            //LoadingElementId = "loading",
+            LoadingElementDuration = 1000,
+            OnBegin = "OnBegin",
+            OnFailure = "OnFailure",
+            OnComplete = "OnComplete",
+        }
+        , new { @id = "a-sostav-operation", @href = "#", @idsostav= links } )
 }
+
+<script>
+    $(function () {
+        $('a#a-sostav-operation').click(function (evt) {
+            $('a#a-sostav-operation').removeClass();
+            $(this).addClass('selected');
+        });
+    })
+
+    $(document).ready(function () {
+        var el = $('a#a-sostav-operation').first();
+        if (el != null) {
+            el.click();
+        }
+    });
+</script>

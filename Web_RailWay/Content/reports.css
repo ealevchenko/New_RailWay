@@ -150,6 +150,10 @@ div#cls {
 }
 
 
+form#fmDetali {
+text-align:left;
+}
+
 /*Отчет вагоны по прибытию*/ 
 #cars-arrival TR.amkr {
     background-color: #fcfa7e;

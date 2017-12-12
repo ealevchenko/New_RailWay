@@ -321,4 +321,16 @@
   <data name="mt_link_amkr_not_arival" xml:space="preserve">
     <value>АМКР не принятые</value>
   </data>
+  <data name="all_cars" xml:space="preserve">
+    <value>Все вагоны</value>
+  </data>
+  <data name="amkr_cars" xml:space="preserve">
+    <value>Вагоны для АМКР</value>
+  </data>
+  <data name="amkr_cars_arival" xml:space="preserve">
+    <value>Вагоны для АМКР, принятые</value>
+  </data>
+  <data name="amkr_cars_no_arival" xml:space="preserve">
+    <value>Вагоны для АМКР, не принятые</value>
+  </data>
 </root>

@@ -17,7 +17,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <Use64BitIISExpress />
@@ -205,6 +205,7 @@
     <Compile Include="Infrastructure\AccessAttribute.cs" />
     <Compile Include="Infrastructure\CustomLocationViewEngine.cs" />
     <Compile Include="Infrastructure\NinjectControllerFactory.cs" />
+    <Compile Include="Infrastructure\ViewAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +275,7 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
@@ -298,6 +300,7 @@
     <Content Include="Views\Error\Http404.cshtml" />
     <Content Include="Views\Error\Default.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\MTArrival\ButtonCloseArrivalCar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFAccess\EFAccess.csproj">

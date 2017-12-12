@@ -5,7 +5,7 @@
     {
         @Ajax.ActionLink(@Html.GetMTArrivalOperations(links).ToString() + " (" + @Html.GetMTArrivalDT(links).ToString() + ")"
                                 , "DetaliSostavOperation"
-                        , new { id = links }
+                             , new { id = links }
                         , new AjaxOptions
                         {
                             Url = Url.Action("DetaliSostavOperation", new { id = links }),
@@ -14,7 +14,25 @@
                             LoadingElementDuration = 1000,
                             OnBegin = "OnBegin",
                             OnFailure = "OnFailure",
+                            OnComplete = "OnComplete",
                         }
                         , new { @id = "a-sostav-detali", @href = "#" })
     }
 <div id="cls-operation"></div>
+
+<script>
+    // Определим события для выбранных ссылок
+    $(function () {
+        $('a#a-sostav-detali').click(function (evt) {
+            $('a#a-sostav-detali').removeClass();
+            $(this).addClass('selected');
+        });
+    })
+
+    $(document).ready(function () {
+        var el = $('a#a-sostav-detali').last();
+        if (el != null) {
+            el.click();
+        }
+    });
+</script>

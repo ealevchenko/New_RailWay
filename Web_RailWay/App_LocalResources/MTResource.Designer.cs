@@ -19,7 +19,7 @@ namespace Web_RailWay.App_LocalResources {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class MTResource {
@@ -57,6 +57,42 @@ namespace Web_RailWay.App_LocalResources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Все вагоны.
+        /// </summary>
+        public static string all_cars {
+            get {
+                return ResourceManager.GetString("all_cars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны для АМКР.
+        /// </summary>
+        public static string amkr_cars {
+            get {
+                return ResourceManager.GetString("amkr_cars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны для АМКР, принятые.
+        /// </summary>
+        public static string amkr_cars_arival {
+            get {
+                return ResourceManager.GetString("amkr_cars_arival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны для АМКР, не принятые.
+        /// </summary>
+        public static string amkr_cars_no_arival {
+            get {
+                return ResourceManager.GetString("amkr_cars_no_arival", resourceCulture);
             }
         }
         

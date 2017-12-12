@@ -27,6 +27,22 @@ namespace Web_RailWay.Controllers
             return View();
         }
 
+        //private void SaveCookie(string key, string val) {
+        //    HttpCookie cookie = Request.Cookies[key];
+        //    if (cookie != null)
+        //    {
+        //        cookie.Value = val;
+        //    }
+        //    else
+        //    {
+        //        cookie = new HttpCookie(key);
+        //        cookie.HttpOnly = false;
+        //        cookie.Value = val;
+        //        cookie.Expires = DateTime.Now.AddYears(1);
+        //    }
+        //    Response.Cookies.Add(cookie);
+        //}
+
         [Access(LogVisit = true)]
         public ActionResult Sostav()
         {
@@ -61,8 +77,7 @@ namespace Web_RailWay.Controllers
                 .Select(x => x.ID)
                 .ToList();
             }
-
-
+            //ViewBag.view_sostav_id = list.FirstOrDefault();
             return PartialView(list);
         }
 
@@ -78,13 +93,45 @@ namespace Web_RailWay.Controllers
             return PartialView(list);
         }
 
-        public PartialViewResult DetaliSostavOperation(int id, int? cars)
+        public PartialViewResult DetaliSostavOperation(int id)
         {
-            
-            ViewBag.cars = cars!=null ? cars: 0;
+            // Сохраняем выбранную культуру в куки
+            HttpCookie cookie = Request.Cookies["view-cars"];
+            //if (cookie == null)
+            //{
+            //    cookie = new HttpCookie("view-cars");
+            //    cookie.HttpOnly = false;
+            //    cookie.Value = "0";
+            //    cookie.Expires = DateTime.Now.AddYears(1);
+            //    Response.Cookies.Add(cookie);
+            //}
+            //HttpCookie cookie_id = Request.Cookies["id-operation"];
+            //if (id == null & cookie_id != null)
+            //{
+            //    id = int.Parse(cookie_id.Value);
+            //}
+
+            ViewBag.view_cars = int.Parse(cookie.Value);
             ArrivalSostav sostav = this.ef_mt.GetArrivalSostav(id);
             return PartialView(sostav);
         }
+
+        [View]
+        public PartialViewResult ButtonCloseArrivalCar(int id_sostav, int? id)
+        {
+            if (id == null) return null;
+            ViewBag.id_sostav = id_sostav;
+            return PartialView(id);
+        }
+
+        public RedirectToRouteResult CloseArrivalCrs(int id_sostav, int id_car)
+        {
+            //ars.CloseArrivalSostav(IDOrcSostav);
+            //ViewBag.Result = "Ок";
+            return RedirectToAction("DetaliSostavOperation", "MTArrival", new { id_sostav });
+        }
+
+
         /// <summary>
         /// Показать вагоны
         /// </summary>

@@ -19,6 +19,7 @@
 @Scripts.Render("~/bundles/jqueryval")
 <link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
 <script src="~/Scripts/jquery.cookie.js"></script>
+<script>$.cookie('view-cars', '0');</script>
 <div id="report" class="report-wide">
     <div id="header">
         <div class="title">@ViewBag.Title</div>
@@ -31,12 +32,10 @@
                 @{ int[] station = new int[] { 467004, 467201 }; }
                 @Html.DropDownList("station", station.ToList().GetSelectListItem(ViewReferenceHelpers.GetReferenceStationsOfCodecs, @GlobalResources.all_stations, (int)@ViewBag.station), new { @id = "soflow", @onchange = "$('form#fmList').submit();" })
                 @Html.Label(@GlobalResources.select_date_range_title)
-
                 <span id="select-range">
                     <input id="date-start" name="date_start" size="20" value='@ViewBag.dt_start'> до
                     <input id="date-stop" name="date_stop" size="20" value='@ViewBag.dt_stop'>
                 </span>
-                @*<button type="submit">@GlobalResources.button_title_view</button>*@
             </div>
         }
     </div>
@@ -49,10 +48,10 @@
     </div>
     <div id="report-menu-content">
         <div id="report-operation">
-
+            @*@{ Html.RenderAction("ListSostavOperation", "MTArrival"); }*@
         </div>
         <div id="report-operation-content">
-
+            @*@{ Html.RenderAction("DetaliSostavOperation", "MTArrival"); }*@
         </div>
     </div>
     <div id="cls"></div>

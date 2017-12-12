@@ -14,6 +14,8 @@ using Web_RailWay.App_LocalResources;
 
 namespace Web_RailWay.App_Code
 {
+    
+    
     public static class ViewMTHelpers
     {
         static EFMetallurgTrans ef_mt = new EFMetallurgTrans();
@@ -65,6 +67,16 @@ namespace Web_RailWay.App_Code
         public static bool IsConsigneeAMKR(this int consignee)
         {
             return ef_mt.IsConsignee(consignee, mtConsignee.AMKR);
+        }
+
+        public static IEnumerable<SelectListItem> GetViewCars(int? selected)
+        {
+            List<SelectListItem> sli = new List<SelectListItem>();
+            sli.Add(new SelectListItem() { Text = "all_cars".GetResource(), Value = "0" , Selected = selected==0 ? true: false });
+            sli.Add(new SelectListItem() { Text = "amkr_cars".GetResource(), Value = "1" , Selected = selected==1 ? true: false});
+            sli.Add(new SelectListItem() { Text = "amkr_cars_arival".GetResource(), Value = "2" , Selected = selected==2 ? true: false});
+            sli.Add(new SelectListItem() { Text = "amkr_cars_no_arival".GetResource(), Value = "3" , Selected = selected==3 ? true: false});
+            return sli;
         }
 
         #region html
@@ -162,7 +174,7 @@ namespace Web_RailWay.App_Code
         public static MvcHtmlString GetMTArrivalTrain(this HtmlHelper html, int id)
         {
             ArrivalSostav arr_s = ef_mt.GetArrivalSostav(id);
-            return MvcHtmlString.Create( arr_s != null ?  arr_s.ArrivalCars != null ? arr_s.ArrivalCars.ToList()[0].TrainNumber.ToString() :"-"  : (string)"-" );
+            return MvcHtmlString.Create( arr_s != null ?  arr_s.ArrivalCars != null && arr_s.ArrivalCars.Count()>0 ? arr_s.ArrivalCars.ToList()[0].TrainNumber.ToString() :"-"  : (string)"-" );
         }
         /// <summary>
         /// Получить количесво вагонов указаного грузополучателя по указаному составу

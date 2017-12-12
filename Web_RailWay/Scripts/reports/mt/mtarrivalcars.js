@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    // Обнулим сокеты
+    $.cookie('view-cars', '0');
 
     myVar = $.cookie('lang');
 
@@ -31,12 +33,6 @@
             $("#report-operation-content").empty();
                 $('form#fmList').submit(); // Отправить форму  
     });
-
-    //$(function () {
-    //    $('#soflow').change(function () {
-    //        $('form#fmList').submit(); // Отправить форму
-    //    });
-    //})
 
     //валидация
     $(function () {
@@ -86,15 +82,7 @@
 
 function selectPeriod(data) {
 
-    LockScreenOff();
-    // Отметить выбранную ссылку 
-    $(function () {
-        $('a#a-sostav-operation').click(function (evt) {
-            $('a#a-sostav-operation').removeClass();
-            $(this).addClass('selected');
-        });
-    })
-
+    //LockScreenOff();
     $("#report-operation-content").empty();
     // Показать составы 
     var target = $("#report-menu");
@@ -103,7 +91,7 @@ function selectPeriod(data) {
 }
 
 function detaliSostavOperation(data) {
-    LockScreenOff();
+    //LockScreenOff();
     // Отметить выбранную ссылку 
     $(function () {
         $('a#a-select-cars').click(function (evt) {
@@ -118,7 +106,8 @@ function detaliSostavOperation(data) {
 }
 
 function OnBegin() {
-    LockScreen('Мы обрабатываем ваш запрос...');
+    myVar = $.cookie('lang');
+    LockScreen(myVar == 'en' ? 'We are processing your request ...' : 'Мы обрабатываем ваш запрос...');
 }
 
 function OnFailure(request, error) {
@@ -128,5 +117,6 @@ function OnFailure(request, error) {
 }
 
 function OnComplete(request, status) {
-    //alert("This is the OnComplete Callback: " + status);        
+    //alert("This is the OnComplete Callback: " + status);    
+    LockScreenOff();
 }
