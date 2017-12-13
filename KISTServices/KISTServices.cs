@@ -69,6 +69,45 @@ namespace KISTServices
             InitializeService();
         }
 
+        #region Управление службой
+        /// <summary>
+        /// Инициализация сервиса (проверка данных в БД и создание settings)
+        /// </summary>
+        public void InitializeService() 
+        {
+            try
+            {
+                // интервалы
+                this.interval_copy_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyArrivalSostavKIS", this.thread_copy_arrival, this.interval_copy_arrival, true);
+                this.interval_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrivalKIS", this.thread_arrival, this.interval_transfer_arrival, true);
+                this.interval_close_transfer = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseTransfer", this.thread_close, this.interval_close_transfer, true);
+                // состояние активности
+                this.active_copy_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyArrivalSostavKIS", this.thread_copy_arrival, this.active_copy_arrival, true);
+                this.active_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrivalKIS", this.thread_arrival, this.active_transfer_arrival, true);
+                
+                //// Настроем таймер контроля выполнения сервиса
+                timer_services.Interval = 30000;
+                timer_services.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServices);
+
+                timer_services_copy_arrival.Interval = this.interval_copy_arrival * 1000;
+                timer_services_copy_arrival.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesCopyBufferArrivalSostav);
+
+                timer_services_arrival.Interval = this.interval_transfer_arrival * 1000;
+                timer_services_arrival.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesTransferArrivalKIS);
+
+                //Добавить инициализацию других таймеров
+                //...............
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("InitializeService()"), this.servece_name, eventID);
+                return;
+            } 
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
         protected override void OnStart(string[] args)
         {
             // Update the service state to Start Pending.
@@ -95,29 +134,9 @@ namespace KISTServices
             this.thread_arrival.WriteLogStatusServices();
             this.thread_close.WriteLogStatusServices();
         }
-
-        protected void RunTimerCopyArrival()
-        {
-            bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyBufferArrivalSostav", this.thread_copy_arrival, this.active_copy_arrival, true);
-            if (active_app)
-            {
-                kist.StartCopyBufferArrivalSostav();
-                timer_services_copy_arrival.Start();
-            }
-            timer_services_copy_arrival.Start();
-        }
-
-        protected void RunTimerTransferArrivalKIS()
-        {
-            bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrivalKIS", this.thread_arrival, this.active_transfer_arrival, true);
-            if (active_arr)
-            {
-                kist.StartTransferArrivalOfKIS();
-                timer_services_arrival.Start();
-            }
-            timer_services_arrival.Start();
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void OnStop()
         {
             // Добавить остановку других таймеров
@@ -127,7 +146,11 @@ namespace KISTServices
             mes_service_stop.WriteEvents(EventStatus.Ok, servece_name, eventID);
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void OnTimerServices(object sender, System.Timers.ElapsedEventArgs args)
         {
             //String.Format("Сервис : {0} сработал таймер контроля сервиса.", this.servece_name).WriteInformation(servece_name, eventID);            
@@ -163,17 +186,48 @@ namespace KISTServices
                 e.WriteErrorMethod(String.Format("OnTimerServices(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
             }
         }
+        #endregion
 
+        #region CopyArrival
+        /// <summary>
+        /// Запустить поток с учетом бита активности выполнения
+        /// </summary>
+        /// <param name="active"></param>
+        protected void StartCopyArrival(bool active)
+        {
+            if (active)
+            {
+                kist.StartCopyBufferArrivalSostav();
+            }
+        }
+        /// <summary>
+        /// Запустить поток
+        /// </summary>
+        protected void StartCopyArrival()
+        {
+            bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyBufferArrivalSostav", this.thread_copy_arrival, this.active_copy_arrival, true);
+            StartCopyArrival(active_app);
+        }
+        /// <summary>
+        /// Первый запуск или перезапуск потока
+        /// </summary>
+        protected void RunTimerCopyArrival()
+        {
+            StartCopyArrival();
+            timer_services_copy_arrival.Start();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void OnTimerServicesCopyBufferArrivalSostav(object sender, System.Timers.ElapsedEventArgs args)
         {
             //String.Format("Сервис : {0} сработал таймер Approaches.", this.servece_name).WriteInformation(servece_name, eventID);
             try
             {
                 bool active_copy = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyArrivalSostavKIS", this.thread_copy_arrival, this.active_copy_arrival, true);
-                if (active_copy)
-                {
-                    kist.StartCopyBufferArrivalSostav();
-                }
+                StartCopyArrival(active_copy);
                 if (active_copy != this.active_copy_arrival) {
                     this.active_copy_arrival = active_copy;
                     string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_copy_arrival, active_copy ? "возабновленно":"остановленно");
@@ -185,17 +239,60 @@ namespace KISTServices
                 e.WriteErrorMethod(String.Format("OnTimerServicesCopyBufferArrivalSostav(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
             }
         }
+        #endregion
 
+        #region CopyArrival
+        /// <summary>
+        /// Запустить поток с учетом бита активности выполнения
+        /// </summary>
+        /// <param name="active"></param>
+        protected void StartTransferArrivalKIS(bool active)
+        {
+            if (active)
+            {
+                int interval_arr = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", service.TransferArrival, 300, false);
+                int? code_run_service = service.TransferArrival.GetCodeReturnServices(interval_arr+60);
+                if (code_run_service == null)
+                {
+                    String.Format("Поток {0} сервиса {1} - заблокирован, из-за остановки службы {2}", this.thread_arrival, this.servece_name, service.TransferArrival).WriteError(servece_name, eventID);
+                    return;
+                }
+                if (code_run_service < 0)
+                {
+                    String.Format("Поток {0} сервиса {1} - заблокирован, из-за ошибки {2} последнего выполнения службы {3}", this.thread_arrival, this.servece_name, code_run_service, service.TransferArrival).WriteError(servece_name, eventID);
+                    return;
+                }
+                kist.StartTransferArrivalOfKIS();
+            }
+        }        
+        /// <summary>
+        /// Запустить поток
+        /// </summary>
+        protected void StartTransferArrivalKIS()
+        {
+            bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrivalKIS", this.thread_arrival, this.active_transfer_arrival, true);
+            StartTransferArrivalKIS(active_arr);
+        }
+        /// <summary>
+        /// Первый запуск или перезапуск потока
+        /// </summary>
+        protected void RunTimerTransferArrivalKIS()
+        {
+            StartTransferArrivalKIS();
+            timer_services_arrival.Start();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void OnTimerServicesTransferArrivalKIS(object sender, System.Timers.ElapsedEventArgs args)
         {
             //String.Format("Сервис : {0} сработал таймер Approaches.", this.servece_name).WriteInformation(servece_name, eventID);
             try
             {
                 bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrivalKIS", this.thread_arrival, this.active_transfer_arrival, true);
-                if (active_arr)
-                {
-                    kist.StartTransferArrivalOfKIS();
-                }
+                StartTransferArrivalKIS(active_arr);
                 if (active_arr != this.active_transfer_arrival)
                 {
                     this.active_transfer_arrival = active_arr;
@@ -208,43 +305,7 @@ namespace KISTServices
                 e.WriteErrorMethod(String.Format("OnTimerServicesTransferArrivalKIS(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
             }
         }
-        /// <summary>
-        /// Инициализация сервиса (проверка данных в БД и создание settings)
-        /// </summary>
-        public void InitializeService() 
-        {
-            try
-            {
-                // интервалы
-                this.interval_copy_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyArrivalSostavKIS", this.thread_copy_arrival, this.interval_copy_arrival, true);
-                this.interval_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrivalKIS", this.thread_arrival, this.interval_transfer_arrival, true);
-                this.interval_close_transfer = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseTransfer", this.thread_close, this.interval_close_transfer, true);
-                // состояние активности
-                this.active_copy_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyArrivalSostavKIS", this.thread_copy_arrival, this.active_copy_arrival, true);
-                this.active_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrivalKIS", this.thread_arrival, this.active_transfer_arrival, true);
-                
-                //// Настроем таймер контроля выполнения сервиса
-                timer_services.Interval = 30000;
-                timer_services.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServices);
-
-                timer_services_copy_arrival.Interval = this.interval_copy_arrival * 1000;
-                timer_services_copy_arrival.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesCopyBufferArrivalSostav);
-
-                timer_services_arrival.Interval = this.interval_transfer_arrival * 1000;
-                timer_services_arrival.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesTransferArrivalKIS);
-
-                //Добавить инициализацию других таймеров
-                //...............
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("InitializeService()"), this.servece_name, eventID);
-                return;
-            } 
-        }
-
-
-
+        #endregion
 
     }
 }

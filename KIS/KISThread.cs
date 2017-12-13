@@ -82,7 +82,6 @@ namespace KIS
                     }
                 }
                 dt_start = DateTime.Now;
-                int count_copy = 0;
                 int res_copy = 0;
                 lock (locker_tas)
                 {
@@ -91,7 +90,7 @@ namespace KIS
                     res_copy = kis_trans.CopyBufferArrivalSostavOfKIS(add_control_period);
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
-                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_copy);
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_copy:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_copy);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
                 service.WriteServices(dt_start, DateTime.Now, res_copy);
             }
@@ -138,11 +137,6 @@ namespace KIS
         private static void TransferArrivalOfKIS()
         {
             service service = service.TransferArrivalKIS;
-            if (!service.TransferArrival.IsRunServices(360)) {
-
-                String.Format("Поток {0} сервиса {1} - заблокирован, из-за остановки службы {2}", service.ToString(), servece_owner, service.TransferArrival).WriteError(servece_owner, eventID);
-                return;
-            }
             DateTime dt_start = DateTime.Now;
             try
             {
@@ -161,7 +155,6 @@ namespace KIS
                     }
                 }
                 dt_start = DateTime.Now;
-                int count_copy = 0;
                 int res_transfer = 0;
                 lock (locker_tas)
                 {
@@ -170,7 +163,7 @@ namespace KIS
                     res_transfer = kis_trans.TransferArrivalOfKIS();
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
-                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
                 service.WriteServices(dt_start, DateTime.Now, res_transfer);
             }
