@@ -69,145 +69,7 @@ namespace MTTServices
             InitializeService();
         }
 
-        protected override void OnStart(string[] args)
-        {
-            // Update the service state to Start Pending.
-            ServiceStatus serviceStatus = new ServiceStatus();
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
-            serviceStatus.dwWaitHint = 100000;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-            // Запустить таймер контроля сервиса
-            timer_services.Start();
-            // Запустить таймера потоков
-            RunTimerTransferApproaches();
-            RunTimerTransferArrival();
-            //TODO: Добавить запуск других таймеров
-            //...............
-
-            // Update the service state to Running.
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-            // Отправить сообщение
-            string mes_service_start = String.Format("Сервис : {0} - запущен. Интервал выполнения сервиса {1}-{2} сек, сервиса {3}-{4} сек., сервиса {5}-{6} сек.", 
-                this.servece_name, this.thread_approaches, this.interval_transfer_approaches, this.thread_arrival, this.interval_transfer_arrival, this.thread_close, this.interval_close_transfer);
-            mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
-            this.thread_approaches.WriteLogStatusServices();
-            this.thread_arrival.WriteLogStatusServices();
-            this.thread_close.WriteLogStatusServices();
-        }
-
-        protected void RunTimerTransferApproaches()
-        {
-            bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
-            if (active_app)
-            {
-                mtt.StartTransferApproaches();
-                timer_services_approaches.Start();
-            }
-            timer_services_approaches.Start();
-        }
-
-        protected void RunTimerTransferArrival()
-        {
-            bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
-            if (active_arr)
-            {
-                mtt.StartTransferArrival();
-                timer_services_arrival.Start();
-            }
-            timer_services_arrival.Start();
-        }
-
-        protected override void OnStop()
-        {
-            // Добавить остановку других таймеров
-            //...............
-            // Отправить сообщение
-            string mes_service_stop = String.Format("Сервис : {0} - остановлен.", this.servece_name);
-            mes_service_stop.WriteEvents(EventStatus.Ok, servece_name, eventID);
-
-        }
-
-        public void OnTimerServices(object sender, System.Timers.ElapsedEventArgs args)
-        {
-            String.Format("Сервис : {0} сработал таймер OnTimerServices контроля сервиса.", this.servece_name).WriteInformation(servece_name, eventID);            
-            try
-            {
-                // TransferApproaches
-                bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
-                int interval_app = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
-                if (active_app & interval_app != this.interval_transfer_approaches)
-                {
-                    this.interval_transfer_approaches = interval_app;                    
-                    timer_services_approaches.Stop();
-                    timer_services_approaches.Interval = this.interval_transfer_approaches * 1000;
-                    RunTimerTransferApproaches();
-                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_approaches, this.interval_transfer_approaches);
-                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
-                }
-                // TransferArrival
-                bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
-                int interval_arr = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", this.thread_arrival, this.interval_transfer_arrival, true);
-                if (active_arr & interval_arr != this.interval_transfer_arrival)
-                {
-                    this.interval_transfer_arrival = interval_arr;
-                    timer_services_arrival.Stop();
-                    timer_services_arrival.Interval = this.interval_transfer_arrival * 1000;
-                    RunTimerTransferArrival();
-                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_arrival, this.interval_transfer_arrival);
-                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("OnTimerServices(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
-            }
-        }
-
-        private void OnTimerServicesApproaches(object sender, System.Timers.ElapsedEventArgs args)
-        {
-            String.Format("Сервис : {0} сработал таймер OnTimerServicesApproaches.", this.servece_name).WriteInformation(servece_name, eventID);
-            try
-            {
-                bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
-                if (active_app)
-                {
-                    mtt.StartTransferApproaches();
-                }
-                if (active_app != this.active_transfer_approaches) {
-                    this.active_transfer_approaches = active_app;
-                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_approaches, active_app ? "возабновленно":"остановленно");
-                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("OnTimerServicesApproaches(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
-            }
-        }
-
-        private void OnTimerServicesArrival(object sender, System.Timers.ElapsedEventArgs args)
-        {
-            String.Format("Сервис : {0} сработал таймер OnTimerServicesArrival.", this.servece_name).WriteInformation(servece_name, eventID);
-            try
-            {
-                bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
-                if (active_arr)
-                {
-                    mtt.StartTransferArrival();
-                }
-                if (active_arr != this.active_transfer_arrival)
-                {
-                    this.active_transfer_arrival = active_arr;
-                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_arrival, active_arr ? "возабновленно" : "остановленно");
-                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("OnTimerServicesArrival(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
-            }
-        }
+        #region Управление службой
         /// <summary>
         /// Инициализация сервиса (проверка данных в БД и создание settings)
         /// </summary>
@@ -243,8 +105,162 @@ namespace MTTServices
             } 
         }
 
+        protected override void OnStart(string[] args)
+        {
+            // Update the service state to Start Pending.
+            ServiceStatus serviceStatus = new ServiceStatus();
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
+            serviceStatus.dwWaitHint = 100000;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            // Запустить таймер контроля сервиса
+            timer_services.Start();
+            // Запустить таймера потоков
+            RunTimerTransferApproaches();
+            RunTimerTransferArrival();
+            //TODO: Добавить запуск других таймеров
+            //...............
 
+            // Update the service state to Running.
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            // Отправить сообщение
+            string mes_service_start = String.Format("Сервис : {0} - запущен. Интервал выполнения сервиса {1}-{2} сек, сервиса {3}-{4} сек., сервиса {5}-{6} сек.", 
+                this.servece_name, this.thread_approaches, this.interval_transfer_approaches, this.thread_arrival, this.interval_transfer_arrival, this.thread_close, this.interval_close_transfer);
+            mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+            this.thread_approaches.WriteLogStatusServices();
+            this.thread_arrival.WriteLogStatusServices();
+            this.thread_close.WriteLogStatusServices();
+        }
 
+        protected override void OnStop()
+        {
+            // Добавить остановку других таймеров
+            //...............
+            // Отправить сообщение
+            string mes_service_stop = String.Format("Сервис : {0} - остановлен.", this.servece_name);
+            mes_service_stop.WriteEvents(EventStatus.Ok, servece_name, eventID);
+
+        }
+
+        public void OnTimerServices(object sender, System.Timers.ElapsedEventArgs args)
+        {
+            //String.Format("Сервис : {0} сработал таймер OnTimerServices контроля сервиса.", this.servece_name).WriteInformation(servece_name, eventID);            
+            try
+            {
+                // TransferApproaches
+                bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
+                int interval_app = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
+                if (active_app & interval_app != this.interval_transfer_approaches)
+                {
+                    this.interval_transfer_approaches = interval_app;                    
+                    timer_services_approaches.Stop();
+                    timer_services_approaches.Interval = this.interval_transfer_approaches * 1000;
+                    RunTimerTransferApproaches();
+                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_approaches, this.interval_transfer_approaches);
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+                // TransferArrival
+                bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
+                int interval_arr = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", this.thread_arrival, this.interval_transfer_arrival, true);
+                if (active_arr & interval_arr != this.interval_transfer_arrival)
+                {
+                    this.interval_transfer_arrival = interval_arr;
+                    timer_services_arrival.Stop();
+                    timer_services_arrival.Interval = this.interval_transfer_arrival * 1000;
+                    RunTimerTransferArrival();
+                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_arrival, this.interval_transfer_arrival);
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OnTimerServices(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
+            }
+        }
+        #endregion
+
+        #region TransferApproaches
+        protected void StartTransferApproaches(bool active)
+        {
+            if (active)
+            {
+                mtt.StartTransferApproaches();
+            }
+        }
+
+        protected void StartTransferApproaches()
+        {
+            bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
+            StartTransferApproaches(active_app);
+        }
+
+        protected void RunTimerTransferApproaches()
+        {
+            StartTransferApproaches();
+            timer_services_approaches.Start();
+        }
+
+        private void OnTimerServicesApproaches(object sender, System.Timers.ElapsedEventArgs args)
+        {
+            //String.Format("Сервис : {0} сработал таймер OnTimerServicesApproaches.", this.servece_name).WriteInformation(servece_name, eventID);
+            try
+            {
+                bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
+                StartTransferApproaches(active_app);
+                if (active_app != this.active_transfer_approaches) {
+                    this.active_transfer_approaches = active_app;
+                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_approaches, active_app ? "возабновленно":"остановленно");
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OnTimerServicesApproaches(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
+            }
+        }
+        #endregion
+
+        #region TransferArrival
+        protected void StartTransferArrival(bool active)
+        {
+            if (active)
+            {
+                mtt.StartTransferArrival();
+            }
+        }
+
+        protected void StartTransferArrival()
+        {
+            bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
+            StartTransferArrival(active_arr);
+        }
+
+        protected void RunTimerTransferArrival()
+        {
+            StartTransferArrival();
+            timer_services_arrival.Start();
+        }
+
+        private void OnTimerServicesArrival(object sender, System.Timers.ElapsedEventArgs args)
+        {
+            //String.Format("Сервис : {0} сработал таймер OnTimerServicesArrival.", this.servece_name).WriteInformation(servece_name, eventID);
+            try
+            {
+                bool active_arr = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
+                StartTransferArrival(active_arr);
+                if (active_arr != this.active_transfer_arrival)
+                {
+                    this.active_transfer_arrival = active_arr;
+                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_arrival, active_arr ? "возабновленно" : "остановленно");
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OnTimerServicesArrival(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
+            }
+        }
+        #endregion
 
     }
 }

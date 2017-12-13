@@ -125,7 +125,7 @@ namespace MetallurgTrans
         /// </summary>
         public void Close()
         {
-            "TransferArrival -4 close connect".WriteInformation(servece_owner, eventID.Test);
+            //"TransferArrival -4 close connect".WriteInformation(servece_owner, eventID.Test);
             this.client_sftp.Close();
 
         }
@@ -154,17 +154,17 @@ namespace MetallurgTrans
                     String.Format("Метод SFTPClient.CopySFTPFile() :Путь для постоянного хранения перенесённых файлов toDirPath:{0}, совпадает с временным хранилищем для обработки toTMPDirPath:{1}.", toDirPath, toTMPDirPath).WriteError(servece_owner, this.eventID);
                     return this.eventID.GetEventIDErrorCode((int)sftp_client_error.coincide_fromFilePaths_toDirPath);                    
                 }
-                "TransferArrival -4.1".WriteInformation(servece_owner, eventID.Test);
+                //"TransferArrival -4.1".WriteInformation(servece_owner, eventID.Test);
                 if (this.client_sftp == null) return this.eventID.GetEventIDErrorCode((int)sftp_client_error.null_client_sftp);
                 string[] listfromFile = this.client_sftp.GetFileList(fromFilePaths + "//" + fromFileFiltr);
-                "TransferArrival -4.2".WriteInformation(servece_owner, eventID.Test);
+                //"TransferArrival -4.2".WriteInformation(servece_owner, eventID.Test);
                 if (listfromFile == null || listfromFile.Count() == 0)
                 {
                     //ServicesEventLog.LogInformation(String.Format("На сервере SFTP отсутствуют файлы для копирования"), this.eventID);
-                    "TransferArrival -4.2 - files - 0".WriteInformation(servece_owner, eventID.Test);
+                    //"TransferArrival -4.2 - files - 0".WriteInformation(servece_owner, eventID.Test);
                     return 0;
                 }
-                ("TransferArrival -4.2 - files - " + listfromFile.Count().ToString()).WriteInformation(servece_owner, eventID.Test);
+                //("TransferArrival -4.2 - files - " + listfromFile.Count().ToString()).WriteInformation(servece_owner, eventID.Test);
                 int count = 0;
                 int cdel = 0;
                 foreach (string file in listfromFile)
@@ -190,7 +190,7 @@ namespace MetallurgTrans
                         cdel++;
                     }
                 }
-                "TransferArrival -4.3".WriteInformation(servece_owner, eventID.Test);
+                //"TransferArrival -4.3".WriteInformation(servece_owner, eventID.Test);
                 string mess = String.Format("На сервере SFTP:{0} найдено {1} файлов, перенесено {2}", connect_SFTP.Host, listfromFile.Count(), count);
                 if (fromDeleteFile) { mess = String.Format(mess + ", удаленно {0}", cdel); }
                 mess.WriteInformation(servece_owner, this.eventID);
