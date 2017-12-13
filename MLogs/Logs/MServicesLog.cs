@@ -60,8 +60,16 @@ namespace MessageLog
         {
             return ServicesLogs.IsRunServices((int)service, period);
         }
-
-
+        /// <summary>
+        /// Вернуть код последнего выполнения службы.
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public static int? GetCodeReturnServices(this service service, int period)
+        {
+            return ServicesLogs.GetCodeReturnServices((int)service, period);
+        }
 
     }
 }
