@@ -117,7 +117,7 @@ function selectPeriod(data) {
             var id_sostav = $(this).attr("id")
             // Получим движение состава
             $.ajax({
-                url: '/MTApproaches/ListHistoryLocation/',
+                url: '/railway/MTApproaches/ListHistoryLocation/',
                 type: 'GET',
                 data: { id_sostav: id_sostav, route: false },
                 dataType: 'html',
