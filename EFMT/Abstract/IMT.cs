@@ -25,6 +25,7 @@ namespace EFMT.Abstract
         //int CloseApproachesSostav();
         int CloseApproachesCarsOfDocWeight(int doc, int num, DateTime dt, decimal? weight);
         int CloseApproachesCarsOfDocDay(int doc, int num, DateTime dt, int day);
+        List<DateTime> GroupDateApproachesCars();
 
         IQueryable<ApproachesSostav> ApproachesSostav { get; }
         IQueryable<ApproachesSostav> GetApproachesSostav();
@@ -36,6 +37,8 @@ namespace EFMT.Abstract
         //IQueryable<ApproachesSostav> GetApproachesSostavOfIndex(string index, bool start);
         ApproachesSostav GetApproachesSostavOfFile(string file);
         ApproachesSostav GetNoCloseApproachesSostav(string index, DateTime date);
+        ApproachesSostav GetApproachesSostavOfParentID(int parent_id);
+        List<ApproachesSostav> GetApproachesSostavLocation(int id_sostav, bool destinct);
         //IQueryable<ApproachesSostav> GetNoCloseApproachesSostav();
         //List<ApproachesSostav> GetApproachesSostavLocation(int id_sostav, bool destinct);
         ////ApproachesSostavLocation GetApproachesSostavLocation(int id);

@@ -260,6 +260,19 @@ namespace EFMT.Concrete
             }
         }
 
+        public List<DateTime> GroupDateApproachesCars()
+        {
+            try
+            {
+               return context.Database.SqlQuery<DateTime>("SELECT Distinct(Convert(date,DateOperation,120)) FROM MT.ApproachesCars where(Arrival IS NULL) ORDER BY Convert(date, DateOperation, 120) DESC").ToList();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GroupDateApproachesCars()"), eventID);
+                return null;
+            }
+        }
+
         #endregion
 
         #region ApproachesSostav
@@ -391,6 +404,98 @@ namespace EFMT.Concrete
             {
                 e.WriteErrorMethod(String.Format("GetNoCloseApproachesSostav(index={0}, date={1})", index, date), eventID); 
                 return null;
+            }
+        }
+        /// <summary>
+        /// Получить следующую строку
+        /// </summary>
+        /// <param name="parent_id"></param>
+        /// <returns></returns>
+        public ApproachesSostav GetApproachesSostavOfParentID(int parent_id)
+        {
+            try
+            {
+                return GetApproachesSostav().Where(s => s.ParentID == parent_id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetApproachesSostavOfParentID(parent_id={0})", parent_id), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список операций над составом
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="destinct"></param>
+        /// <returns></returns>
+        public List<ApproachesSostav> GetApproachesSostavLocation(int id_sostav, bool destinct)
+        {
+            try
+            {
+                List<ApproachesSostav> list = new List<ApproachesSostav>();
+                ApproachesSostav sostav = GetApproachesSostav(id_sostav);
+                if (sostav != null)
+                {
+                    list.Add(sostav);
+                    if (destinct)
+                    {
+                        GetApproachesSostavLocationDestinct(ref list, sostav);
+                    }
+                    else { GetApproachesSostavLocation(ref list, sostav); }
+                }
+                return list;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetApproachesSostavLocation(id_sostav={0}, destinct={1})", id_sostav, destinct), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список операций для состава от последней к первой
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="id_sostav"></param>
+        protected void GetApproachesSostavLocationDestinct(ref List<ApproachesSostav> list, ApproachesSostav sostav)
+        {
+            try
+            {
+                if (sostav == null || sostav.ParentID == null) return;
+                ApproachesSostav csostav = GetApproachesSostav((int)sostav.ParentID);
+                if (csostav != null)
+                {
+                    list.Add(csostav);
+                    GetApproachesSostavLocationDestinct(ref list, csostav);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetApproachesSostavLocationDestinct(list={0}, sostav={1})", list, sostav), eventID);
+                return;
+            }
+        }
+        /// <summary>
+        /// Получить список операций для состава от первой к последней
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="sostav"></param>
+        protected void GetApproachesSostavLocation(ref List<ApproachesSostav> list, ApproachesSostav sostav)
+        {
+            try
+            {
+                if (sostav == null) return;
+                ApproachesSostav csostav = GetApproachesSostavOfParentID((int)sostav.ID);
+                if (csostav != null)
+                {
+                    list.Add(csostav);
+                    GetApproachesSostavLocation(ref list, csostav);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetApproachesSostavLocation(list={0}, sostav={1})", list, sostav), eventID);
+                return;
             }
         }
 
