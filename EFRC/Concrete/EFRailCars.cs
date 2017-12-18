@@ -833,7 +833,7 @@ namespace EFRC.Concrete
             {
                 int result = 0;
                 List<VAGON_OPERATIONS> list = new List<VAGON_OPERATIONS>();
-                list = GetWagonsOfWay(way).Where(o => o.lock_id_way == null).OrderBy(o => o.num_vag_on_way).ToList();
+                list = GetWagonsOfWay(way).Where(o => o.lock_id_way == null & o.is_hist == 0).OrderBy(o => o.num_vag_on_way).ToList();
 
                 foreach (VAGON_OPERATIONS wag in list)
                 {
@@ -877,7 +877,6 @@ namespace EFRC.Concrete
                 return null;
             }
         }
-
         /// <summary>
         /// Вернуть операции над вагонами по указаному натурному листу и дате захода на АМКР
         /// </summary>
