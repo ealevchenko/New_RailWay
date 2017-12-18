@@ -779,7 +779,7 @@ namespace KIS
             string mess_arr_vag_err1 = "Ошибка переноса " + mess;
             try
             {
-                
+
                 int idsostav = ef_sap.GetDefaultIDSAPIncSupply();
                 // Получим информацию для заполнения вагона с учетом отсутствия данных в PromVagon
                 PromVagon pv = ef_wag.GetVagon(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
@@ -807,10 +807,11 @@ namespace KIS
                 // Сделать отметку на МТ о принятии вагона
                 int res_close_arrival = ef_mt.CloseArrivalCarsOfDocWeight(natur, num_vag, dt_amkr, pv.WES_GR);
                 if (res_close_arrival <= 0)
-                { 
+                {
                     res_close_arrival = ef_mt.CloseArrivalCarsOfDocDay(natur, num_vag, dt_amkr, 1);
                     // если нет строки закрыть последннюю строку с этим вагоном код закрытия системой (-1)
-                    if (res_close_arrival <= 0) {
+                    if (res_close_arrival <= 0)
+                    {
                         ef_mt.CloseArrivalCars(num_vag, dt_amkr, -1);
                     }
                 }
@@ -827,22 +828,22 @@ namespace KIS
                 // Проверим есть строка в справочнеке САП поставки
                 sap_trans.CheckingWagonToSAPSupply(idsostav, pv, mt_list);
 
-                                                                 //if (idsostav > 0)
-                                                                 //{
-                                                                 //    int res_appr = approaches.CloseApproachesSostav(idsostav);
-                                                                 //    string mes_appr = String.Format("Состав {0}, принятый на АМКР закрыт в таблице составов  на подходе id={1}", idsostav, res_appr);
-                                                                 //    string mes_appr_err = String.Format("Ошибка закрытия состава {0} в таблице составов  на подходе, код ошибки ={1}", idsostav, res_appr);
-                                                                 //    if (res_appr > 0)
-                                                                 //    {
-                                                                 //        mes_appr.WriteInformation(servece_owner, eventID);
-                                                                 //    }
-                                                                 //    if (res_appr < 0)
-                                                                 //    {
-                                                                 //        mes_appr_err.WriteError(servece_owner, eventID);
-                                                                 //    }
-                                                                 //    mes_appr.WriteEvents(res_appr < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
-                                                                 //} // Закроем в базе подходов принятый состав
-                                                                 // Проверим в наличии в прибытия из любой станции УЗ на станцию id_stations
+                //if (idsostav > 0)
+                //{
+                //    int res_appr = approaches.CloseApproachesSostav(idsostav);
+                //    string mes_appr = String.Format("Состав {0}, принятый на АМКР закрыт в таблице составов  на подходе id={1}", idsostav, res_appr);
+                //    string mes_appr_err = String.Format("Ошибка закрытия состава {0} в таблице составов  на подходе, код ошибки ={1}", idsostav, res_appr);
+                //    if (res_appr > 0)
+                //    {
+                //        mes_appr.WriteInformation(servece_owner, eventID);
+                //    }
+                //    if (res_appr < 0)
+                //    {
+                //        mes_appr_err.WriteError(servece_owner, eventID);
+                //    }
+                //    mes_appr.WriteEvents(res_appr < 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
+                //} // Закроем в базе подходов принятый состав
+                // Проверим в наличии в прибытия из любой станции УЗ на станцию id_stations
                 VAGON_OPERATIONS vagon = ef_rc.GetVagonsOfArrivalUZ(idsostav, num_vag, ef_rc.GetUZStationsToID().ToArray(), id_stations);
                 if (vagon != null)
                 {
@@ -973,7 +974,7 @@ namespace KIS
                     set_wagons = GetWagonsToListInt(orc_sostav.list_wagons); // поставим занаво
                 }
                 if (set_wagons.Count() == 0) return 0;
-                ResultTransfers result = new ResultTransfers(set_wagons.Count(), null,0 , null,0,0);
+                ResultTransfers result = new ResultTransfers(set_wagons.Count(), null, 0, null, 0, 0);
                 orc_sostav.list_no_update_wagons = null;
                 orc_sostav.message = null;
                 // Ставим вагоны на путь станции
@@ -1073,6 +1074,100 @@ namespace KIS
         }
         #endregion
 
+        #endregion
+
+        #region Коррекция системы переноса
+        /// <summary>
+        /// Удалить составы по ранее ошибочно созданной натурке (натурку создали затем убрали и эти вагоны занеслись по новой натурке)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int DeleteSostavBufferArrivalSostav(int id) {
+            EFTKIS ef_tkis = new EFTKIS();
+            EFRailCars ef_rc = new EFRailCars();
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+
+            int del_rc = 0;
+            int err_del_rc = 0;
+            int del_sap = 0;
+            int upd_mt = 0;
+            try
+            {
+                BufferArrivalSostav del_bas = ef_tkis.GetBufferArrivalSostav(id);
+                BufferArrivalSostav new_bas = null;
+                List<BufferArrivalSostav> not_close_list = ef_tkis.GetBufferArrivalSostav().Where(b => b.datetime >= del_bas.datetime & b.id != del_bas.id).ToList();
+                foreach (BufferArrivalSostav bas in not_close_list)
+                {
+                    if (bas.list_wagons.Trim() == del_bas.list_wagons.Trim())
+                    {
+                        new_bas = bas;
+                        break;
+                    }
+                }
+                string mess = String.Format("Коррекция данных (Удалена натурка {0} от {1}, создана новая {2} от {3}). ",
+                    del_bas.natur, del_bas.datetime, (new_bas != null ? (int?)new_bas.natur : null), (new_bas != null ? (DateTime?)new_bas.datetime : null));
+
+                List<VAGON_OPERATIONS> list_del_wagons = ef_rc.GetVagonsOperationsToNatur(del_bas.natur, del_bas.datetime).ToList();
+                foreach (VAGON_OPERATIONS wag in list_del_wagons)
+                {
+                    int? way = wag.id_way;
+                    int idsostav = (int)wag.IDSostav;
+                    VAGON_OPERATIONS res_del = ef_rc.DeleteVAGON_OPERATIONS(wag.id_oper);
+                    if (res_del != null)
+                    {
+                        del_rc++;
+                        //String.Format(mess + "Из системы RailCars - удален вагон {0}", wag.num_vagon).WriteEvents(servece_owner, eventID);
+                        if (way != null)
+                        {
+                            ef_rc.OffSetCars((int)way, 1);
+                        }
+                        if (wag.IDSostav < 0)
+                        {
+                            // idsostav отрицательный
+                            EFSAP ef_sap = new EFSAP();
+                            ef_sap.DeleteSAPIncSupplySostav(idsostav);
+                            del_sap++;
+                        }
+                        if (wag.IDSostav > 0)
+                        {
+                            // idsostav положительный
+                            if (new_bas != null)
+                            {
+                                int new_natur = new_bas.natur;
+                                DateTime date_amkr = new_bas.datetime;
+                                ArrivalCars arr_car = ef_mt.GetArrivalCars((int)wag.IDSostav);
+                                if (arr_car != null)
+                                {
+                                    arr_car.NumDocArrival = new_natur;
+                                    arr_car.Arrival = date_amkr;
+                                    arr_car.UserName = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                                    ef_mt.SaveArrivalCars(arr_car);
+                                    upd_mt++;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        err_del_rc++;
+                    }
+                }
+                if (err_del_rc == 0) {
+                    del_bas.close = DateTime.Now;
+                    del_bas.close_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                    del_bas.status = (int)statusSting.Delete;
+                    ef_tkis.SaveArrivalSostav(del_bas);
+                }
+                String.Format(mess + "Из системы RailCars - удалено {0} вагонов, ошибок удаления {1}, из справочника САП вхю пост. удалено {2} строк, в прибытии МТ Скорректировано {3} строки."
+                    , del_rc, err_del_rc,del_sap,upd_mt).WriteEvents(err_del_rc > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DeleteSostavBufferArrivalSostav(id={0})", id), servece_owner, eventID);
+                return (int)errorTransfer.global;
+            }
+            return del_rc;
+        }
         #endregion
     }
 }
