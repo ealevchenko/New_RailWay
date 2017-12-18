@@ -154,5 +154,70 @@ namespace RWCorrection
             }
 
         }
+        /// <summary>
+        /// Быстрое решение
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public int CorrSAPIncSupplyArrival(string index) {
+            try
+            {
+                EFSAP ef_sap = new EFSAP();
+                EFRailCars ef_rc = new EFRailCars();
+                EFTKIS ef_kis = new EFTKIS();
+                EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+
+                List<SAPIncSupply> list_sap = ef_sap.GetSAPIncSupply().Where(s=>s.CompositionIndex.Trim() == index.Trim()).ToList();
+                foreach (SAPIncSupply sap in list_sap) {
+
+                    ArrivalCars car = ef_mt.ArrivalCars
+                                .Where(x => x.Num == sap.CarriageNumber & x.NumDocArrival == null)
+                                .OrderByDescending(x => x.ID)
+                                .FirstOrDefault();
+                    if (car != null) { 
+                        // Определим натурку
+                        if (sap.IDMTSostav < 0)
+                        {
+                            List<VAGON_OPERATIONS> list_vag = ef_rc.GetVagonsOperations(sap.IDMTSostav).ToList();
+                            if (list_vag != null && list_vag.Count() > 0) {
+                                int? natur = list_vag[0].n_natur;
+                                DateTime? dt_amkr = list_vag[0].dt_amkr;
+                                if (natur != null & dt_amkr != null) {
+                                    car.NumDocArrival = natur;
+                                    car.Arrival = dt_amkr;
+                                    car.UserName = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                                    ef_mt.SaveArrivalCars(car);
+                                    // Подмена id в операциях
+                                    foreach (VAGON_OPERATIONS w in list_vag) {
+                                        w.IDSostav = car.IDSostav;
+                                        ef_rc.SaveVAGON_OPERATIONS(w);
+                                    }
+                                    // Подмена id в сап вх пост. 
+                                    sap.IDMTSostav = car.IDSostav;
+                                    sap.CompositionIndex = car.CompositionIndex;
+                                    ef_sap.SaveSAPIncSupply(sap);
+                                }
+
+
+                            }
+                        }
+
+                    }
+                }
+                
+                //EFRailCars ef_rc = new EFRailCars();
+                //List<VAGON_OPERATIONS> vag_list_arr = ef_rc.GetVAGON_OPERATIONS().Where(v => v.st_lock_id_stat == station & v.st_lock_train == train & v.is_hist == 0).OrderBy(v => v.num_vag_on_way).ToList();
+                //foreach (VAGON_OPERATIONS v in vag_list_arr)
+                //{
+                //    Console.WriteLine("Вагон {0} - результат {1}", v.num_vagon, CorrSAPIncSupplyOfNum((int)v.num_vagon));
+                //}
+                return 0;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return -1;
+            }
+        }
     }
 }

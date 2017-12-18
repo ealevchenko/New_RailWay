@@ -51,5 +51,14 @@ namespace Testing
             KISThread kis_t = new KISThread(service.ServicesKIS);
             kis_t.StartTransferArrivalOfKIS();
         }
+        /// <summary>
+        /// тест коррекции (удалили натурный лист)
+        /// </summary>
+        public void Test_KISTransfer_DeleteSostavBufferArrivalSostav()
+        {
+            KISTransfer kis_trans = new KISTransfer();
+            kis_trans.DeleteSostavBufferArrivalSostav(217);
+        }
+
     }
 }

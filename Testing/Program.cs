@@ -33,6 +33,7 @@ namespace Testing
         static void Main(string[] args)
         {
             CorrectionTransfer corr = new CorrectionTransfer();
+            corr.CorrSAPIncSupplyArrival("N:6742 D:13.12.2017 5-0");
             //corr.CorrSAPIncSupply(2356);
             //corr.CorrSAPIncSupply();
             //corr.CorrSAPIncSupplyArrivalRC(4, 3567);
@@ -89,6 +90,7 @@ namespace Testing
             //tst_kis.Test_KISTransfer_UpdateCarsToStation(); // Поставить на путь
             //tst_kis.Test_KISThread_StartCopyBufferArrivalSostav(); // Запустить поток переноса составов
             //tst_kis.Test_KISThread_StartTransferArrivalOfKIS();
+            //tst_kis.Test_KISTransfer_DeleteSostavBufferArrivalSostav(); // Тест коррекции
             #endregion
 
             #region Test_Reference
