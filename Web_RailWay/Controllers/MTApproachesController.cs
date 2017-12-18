@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using Web_RailWay.Infrastructure;
 
 namespace Web_RailWay.Controllers
 {
@@ -23,7 +24,7 @@ namespace Web_RailWay.Controllers
         {
             return View();
         }
-
+        [Access(LogVisit = true)]
         public ActionResult Sostav()
         {
             ViewBag.dt_start = Thread.CurrentThread.CurrentCulture.Name == "en-US" ? DateTime.Now.Date.ToString("MM/dd/yyyy 00:00") : DateTime.Now.Date.ToString("dd.MM.yyyy 00:00");
@@ -86,7 +87,7 @@ namespace Web_RailWay.Controllers
             ApproachesSostav sostav = this.ef_mt.ApproachesSostav.Where(c => c.ID == id_sostav).FirstOrDefault();
             return PartialView(sostav);
         }
-
+        [Access(LogVisit = true)]
         public ActionResult Cars()
         {
             ViewBag.station = 0;
