@@ -27,10 +27,6 @@ namespace Web_RailWay.Controllers
         [Access(LogVisit = true)]
         public ActionResult Sostav()
         {
-            ViewBag.dt_start = Thread.CurrentThread.CurrentCulture.Name == "en-US" ? DateTime.Now.Date.ToString("MM/dd/yyyy 00:00") : DateTime.Now.Date.ToString("dd.MM.yyyy 00:00");
-            ViewBag.dt_stop = Thread.CurrentThread.CurrentCulture.Name == "en-US" ? DateTime.Now.AddDays(1).Date.AddSeconds(-1).ToString("MM/dd/yyyy 23:59") : DateTime.Now.AddDays(1).Date.AddSeconds(-1).ToString("dd.MM.yyyy 23:59");
-            //ViewBag.dt_start = new DateTime(2017, 8, 10, 0, 40, 0).ToString("dd.MM.yyyy HH:mm:ss");
-            //ViewBag.dt_stop = new DateTime(2017, 8, 30, 4, 59, 59).ToString("dd.MM.yyyy HH:mm:ss");
             ViewBag.station = 0;
             return View();
         }

@@ -31,8 +31,8 @@
                 @Html.DropDownList("station", station.ToList().GetSelectListItem(ViewReferenceHelpers.GetReferenceStationsOfCodecs, @GlobalResources.all_stations, (int)@ViewBag.station), new { @id = "soflow", @onchange = "$('form#fmList').submit();" })
                 @Html.Label(@GlobalResources.select_date_range_title)
                 <span id="select-range">
-                    <input id="date-start" name="date_start" size="20" value='@ViewBag.dt_start'> до
-                    <input id="date-stop" name="date_stop" size="20" value='@ViewBag.dt_stop'>
+                    <input id="date-start" name="date_start" size="20" > до
+                    <input id="date-stop" name="date_stop" size="20" >
                 </span>
             </div>
         }

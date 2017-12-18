@@ -24,7 +24,7 @@
             },
             time: {
                 enabled: true
-            }
+            },
         }).bind('datepicker-closed', function () {
             $("#report-menu").empty();
             // Очистить operation
@@ -33,7 +33,13 @@
             $("#report-operation-content").empty();
             $('form#fmList').submit(); // Отправить форму
         });
-
+    // Задать дату 
+    var dt = new Date();
+    var d_start = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+    var d_stop = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 23, 59, 59);
+    var s_d_start = d_start.getDate() + '.' + d_start.getMonth() + '.' + d_start.getFullYear() + ' ' + d_start.getHours() + ':' + d_start.getMinutes();
+    var s_d_stop = d_stop.getDate() + '.' + d_stop.getMonth() + '.' + d_stop.getFullYear()+' '+d_stop.getHours()+':'+d_stop.getMinutes()
+    $('#select-range').data('dateRangePicker').setDateRange(s_d_start, s_d_stop);
     //валидация
     $(function () {
 
@@ -80,10 +86,12 @@
 
     //Первая выборка
     OnBegin();
+    //alert('date_start:' + d_start.toString('DD.MM.yyyy HH:mm'))
+    //alert('date_stop:' + d_stop.toString('DD.MM.yyyy HH:mm'))
     $.ajax({
         url: '/railway/MTApproaches/ListSostav/',
         type: 'GET',
-        data: { date_start: $('#date-start').val(), date_stop: $('#date-stop').val() },
+        data: { date_start: d_start.toISOString(), date_stop: d_stop.toISOString(), },
         dataType: 'html',
         success: function (data) {
             selectPeriod(data);

@@ -423,7 +423,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52536</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:52469/</IISUrl>
+          <IISUrl>http://localhost:52469/railway</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:52469</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
