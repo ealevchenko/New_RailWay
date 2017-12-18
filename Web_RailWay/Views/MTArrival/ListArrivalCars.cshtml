@@ -1,0 +1,49 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+@using EFMT.Entities;
+
+@model List<ArrivalCars>
+
+<table class="table" id="list-arrival-cars">
+    <thead>
+        <tr>
+            <th>
+                @MTResource.mt_report_field_npp
+            </th>
+            <th>
+                @MTResource.mt_report_field_num_wag
+            </th>
+            <th>
+                @MTResource.mt_report_field_country
+            </th>
+            <th>
+                @MTResource.mt_report_field_weight
+            </th>
+            <th>
+                @MTResource.mt_report_field_cargo_code
+            </th>
+            <th>
+                @MTResource.mt_report_field_code_station_on
+            </th>
+            <th>
+                @MTResource.mt_report_field_consignee
+            </th>
+            <th>
+                @MTResource.mt_report_field_doc_arrival
+            </th>
+            <th>
+                @MTResource.mt_report_field_data_arrival
+            </th>
+            <th>
+                @MTResource.mt_report_field_data_user_name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ArrivalCars cars in @Model)
+        {
+            @{ Html.RenderAction("ArrivalCars", "MTArrival", new { num = (int)@cars.Num }); }
+        }
+    </tbody>
+</table>
+

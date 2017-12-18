@@ -1,0 +1,8 @@
+﻿@using Web_RailWay.App_Code
+@model List<int>
+
+@foreach (int links in Model)
+{
+    string index = @Html.GetMTApproachesIndex(links).ToString();
+    <a id='@links' name='link-sostav' title='(@links)' href="#">@Html.GetMTApproachesLocationStation(links) (@Html.GetMTApproachesDT(links))</a>
+}

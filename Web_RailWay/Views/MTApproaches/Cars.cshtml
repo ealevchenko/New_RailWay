@@ -1,0 +1,48 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        OnSuccess = "selectGroupDateCars",
+        OnBegin = "OnBegin",
+        OnFailure = "OnFailure",
+        OnComplete = "OnComplete"
+    };
+    ViewBag.Title = @MTResource.mt_approaches_cars_report_title;
+    ViewBag.ImageFone = "background-image: url(../Image/header1.jpg);";
+    ViewBag.Home = @MTResource.mt_approaches_cars_report_home;
+}
+@Scripts.Render("~/bundles/Ajax")
+@Scripts.Render("~/bundles/jqueryval")
+<link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
+<script src="~/Scripts/jquery.cookie.js"></script>
+@*<script>$.cookie('view-cars', '0');</script>*@
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        @using (Ajax.BeginForm("ListGroupDateCars", "MTApproaches", ajaxOpts, new { @id = "fmList" })) //
+        {
+            <div id="select-rangedatetime">
+                @*@Html.Label(@GlobalResources.select_station)
+                @{ int[] station = new int[] { 467004, 467201 }; }
+                @Html.DropDownList("station", station.ToList().GetSelectListItem(ViewReferenceHelpers.GetReferenceStationsOfCodecs, @GlobalResources.all_stations, (int)@ViewBag.station), new { @id = "soflow", @onchange = "$('form#fmList').submit();" })*@
+            </div>
+        }
+        @*<a href="#" class="delivered">Прибывшие</a>
+        <a href="#" class="not-delivered">Не прибывшие</a>*@
+    </div>
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    <div id="report-detali">
+
+    </div>
+    <div id="cls"></div>
+
+
+</div>
+<script src="~/Scripts/reports/mt/mtapproachescars.js"></script>
+
+
+
+
+

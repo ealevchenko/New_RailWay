@@ -1,6 +1,8 @@
 ﻿using EFMT.Abstract;
 using EFMT.Concrete;
 using EFMT.Entities;
+using EFRC.Abstract;
+using EFRC.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,22 +29,6 @@ namespace Web_RailWay.Controllers
             return View();
         }
 
-        //private void SaveCookie(string key, string val) {
-        //    HttpCookie cookie = Request.Cookies[key];
-        //    if (cookie != null)
-        //    {
-        //        cookie.Value = val;
-        //    }
-        //    else
-        //    {
-        //        cookie = new HttpCookie(key);
-        //        cookie.HttpOnly = false;
-        //        cookie.Value = val;
-        //        cookie.Expires = DateTime.Now.AddYears(1);
-        //    }
-        //    Response.Cookies.Add(cookie);
-        //}
-
         [Access(LogVisit = true)]
         public ActionResult Sostav()
         {
@@ -52,7 +38,7 @@ namespace Web_RailWay.Controllers
             return View();
         }
         /// <summary>
-        /// Сформировать ajax отчет
+        /// Показать меню составов
         /// </summary>
         /// <param name="date_start"></param>
         /// <param name="date_stop"></param>
@@ -77,10 +63,13 @@ namespace Web_RailWay.Controllers
                 .Select(x => x.ID)
                 .ToList();
             }
-            //ViewBag.view_sostav_id = list.FirstOrDefault();
             return PartialView(list);
         }
-
+        /// <summary>
+        /// Показать меню операций
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public PartialViewResult ListSostavOperation(int id)
         {
             List<int> list = new List<int>();
@@ -92,30 +81,25 @@ namespace Web_RailWay.Controllers
                 .ToList();
             return PartialView(list);
         }
-
+        /// <summary>
+        /// Показать детальную информацию о вагонах
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public PartialViewResult DetaliSostavOperation(int id)
         {
             // Сохраняем выбранную культуру в куки
             HttpCookie cookie = Request.Cookies["view-cars"];
-            //if (cookie == null)
-            //{
-            //    cookie = new HttpCookie("view-cars");
-            //    cookie.HttpOnly = false;
-            //    cookie.Value = "0";
-            //    cookie.Expires = DateTime.Now.AddYears(1);
-            //    Response.Cookies.Add(cookie);
-            //}
-            //HttpCookie cookie_id = Request.Cookies["id-operation"];
-            //if (id == null & cookie_id != null)
-            //{
-            //    id = int.Parse(cookie_id.Value);
-            //}
-
             ViewBag.view_cars = int.Parse(cookie.Value);
             ArrivalSostav sostav = this.ef_mt.GetArrivalSostav(id);
             return PartialView(sostav);
         }
-
+        /// <summary>
+        /// Показать кнопку закрыть вагон
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [View]
         public PartialViewResult ButtonCloseArrivalCar(int id_sostav, int? id)
         {
@@ -123,15 +107,18 @@ namespace Web_RailWay.Controllers
             ViewBag.id_sostav = id_sostav;
             return PartialView(id);
         }
-
+        /// <summary>
+        /// Закрыть вагон
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="id_car"></param>
+        /// <returns></returns>
         public RedirectToRouteResult CloseArrivalCrs(int id_sostav, int id_car)
         {
             //ars.CloseArrivalSostav(IDOrcSostav);
             //ViewBag.Result = "Ок";
             return RedirectToAction("DetaliSostavOperation", "MTArrival", new { id_sostav });
         }
-
-
         /// <summary>
         /// Показать вагоны
         /// </summary>
@@ -174,6 +161,81 @@ namespace Web_RailWay.Controllers
             }
             return PartialView(list);
         }
+        /// <summary>
+        /// Показать список вагонов не принятых на АМКР
+        /// </summary>
+        /// <param name="date_start"></param>
+        /// <param name="date_stop"></param>
+        /// <param name="station"></param>
+        /// <returns></returns>
+        public PartialViewResult ListNotArrival(DateTime date_start, DateTime date_stop, int? station)
+        {
+            List<IGrouping<string, ArrivalCars>> list = new List<IGrouping<string, ArrivalCars>>();
+            station = station != null ? station : 0;
+            if (station != 0)
+            {
+                list = this.ef_mt.GetArrivalCarsOfConsignees(this.ef_mt.GetConsigneeToCodes(mtConsignee.AMKR))
+                    .Where(x => x.DateOperation >= date_start & x.DateOperation <= date_stop & x.NumDocArrival == null & x.StationCode == station)
+                    .OrderByDescending(x => x.DateOperation)
+                    .GroupBy(x => x.CompositionIndex)
+                    .ToList();
+            }
+            else
+            {
+                list = this.ef_mt.GetArrivalCarsOfConsignees(this.ef_mt.GetConsigneeToCodes(mtConsignee.AMKR))
+                    .Where(x => x.DateOperation >= date_start & x.DateOperation <= date_stop & x.NumDocArrival == null)
+                    .OrderByDescending(x => x.DateOperation)
+                    .GroupBy(x => x.CompositionIndex)
+                    .ToList();
+            }
+            return PartialView(list);
+        }
 
+        /// <summary>
+        /// Показать результат быстрого решения 
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public PartialViewResult QuickCorrectArrivalCars(int num)
+        {
+            ArrivalCars car = this.ef_mt.ArrivalCars
+                .Where(x => x.Num ==  num & x.NumDocArrival == null)
+                    .OrderByDescending(x => x.ID)
+                    .FirstOrDefault();
+            if (car == null) return null;
+            return PartialView(car);
+        }
+        /// <summary>
+        /// Показать результат детального решения 
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public PartialViewResult DetailedCorrectArrivalCars(int num)
+        {
+            List<ArrivalCars> cars = this.ef_mt.ArrivalCars
+                    .Where(x => x.Num == num)
+                    .OrderByDescending(x => x.ID)
+                    .ToList();
+             return PartialView(cars);
+        }
+
+        /// <summary>
+        /// Показать список прибывших вагонов
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public PartialViewResult ListArrivalCars(List<ArrivalCars> list)
+        {
+            return PartialView(list);
+        }
+        /// <summary>
+        /// Показать вагон
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public PartialViewResult ArrivalCar(ArrivalCars car)
+        {
+            return PartialView(car);
+        }
     }
 }

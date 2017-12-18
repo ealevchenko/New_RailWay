@@ -1,0 +1,107 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+@using EFMT.Entities;
+@using EFMT.Concrete;
+
+@model List<IGrouping<string, ArrivalCars>>
+<table class="table" id="cars-group">
+    <tbody>
+        @foreach (IGrouping<string, ArrivalCars> gr in Model)
+        {
+            <tr>
+                <th>
+                    @gr.Key @gr.ToList()[0].DateOperation
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <table class="table" id="cars-arrival">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @MTResource.mt_report_field_npp
+                                </th>
+                                <th>
+                                    @MTResource.mt_report_field_num_wag
+                                </th>
+                                <th>
+                                    @MTResource.mt_report_field_country
+                                </th>
+                                <th>
+                                    @MTResource.mt_report_field_weight
+                                </th>
+                                <th>
+                                    @MTResource.mt_report_field_cargo_code
+                                </th>
+                                <th>
+                                    @MTResource.mt_report_field_code_station_on
+                                </th>
+                                <th>
+                                    @MTResource.mt_report_field_consignee
+                                </th>
+                                <th>
+                                    @MTResource.mt_report_field_doc_arrival
+                                </th>
+                                <th>
+                                    @MTResource.mt_report_field_data_arrival
+                                </th>
+                                <th>
+                                    @MTResource.mt_report_field_data_user_name
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ArrivalCars cars in gr)
+                            {
+                                <tr class='@Html.GetStatusMTArrivalCars(@cars.Consignee, @cars.NumDocArrival)'>
+                                    <td>
+                                        @cars.Position
+                                    </td>
+                                    <td>
+                                        @cars.Num
+                                    </td>
+                                    <td>
+                                        @Html.GetReferenceCountryOfCountryCode(@cars.CountryCode)
+                                    </td>
+                                    <td>
+                                        @cars.Weight
+                                    </td>
+                                    <td>
+                                        @Html.GetReferenceCargoOfCode(@cars.CargoCode)
+                                    </td>
+                                    <td>
+                                        @Html.GetReferenceStationsOfCodecs(@cars.StationCode)
+                                    </td>
+                                    <td>
+                                        @Html.GetMTConsignee(@cars.Consignee) (@Html.DisplayFor(modelItem => @cars.Consignee))
+                                    </td>
+                                    <td>
+                                        @if (@cars.NumDocArrival == null || @cars.NumDocArrival > 0)
+                                        {
+                                            if (@cars.NumDocArrival == null & cars.Consignee.IsConsigneeAMKR())
+                                            {
+                                                { Html.RenderAction("ButtonCloseArrivalCar", "MTAdmin", new { id_sostav = @cars.IDSostav, id = @cars.ID }); }
+                                            }
+                                            else
+                                            { @cars.NumDocArrival}
+                                        }
+                                        else
+                                        {
+                                            @Html.GetMTNumDocArrival((int)@cars.NumDocArrival)
+                                        }
+                                    </td>
+                                    <td>
+                                        @cars.Arrival
+                                    </td>
+                                    <td>
+                                        @cars.UserName
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

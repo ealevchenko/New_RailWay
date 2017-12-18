@@ -1,0 +1,78 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+@using EFRC.Entities;
+@using EFRC.Concrete;
+
+@model List<IGrouping<string, SAPIncSupply>>
+<table class="table" id="cars-group">
+    <tbody>
+        @foreach (IGrouping<string, SAPIncSupply> gr in Model)
+        {
+            <tr>
+                <th>
+                    @Html.GetNumDocOfSAPISIndex((string)@gr.Key) @Html.GetDateTimeDocOfSAPISIndex((string)@gr.Key)
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <table class="table" id="cars-arrival">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @SAPResource.sap_report_field_npp
+                                </th>
+                                <th>
+                                    @SAPResource.sap_report_field_num_wag
+                                </th>
+                                <th>
+                                    @SAPResource.sap_report_field_country
+                                </th>
+                                <th>
+                                    @SAPResource.sap_report_field_weight
+                                </th>
+                                <th>
+                                    @SAPResource.sap_report_field_cargo_code
+                                </th>
+                                <th>
+                                    @SAPResource.sap_report_field_doc_arrival
+                                </th>
+                                <th>
+                                    @SAPResource.sap_report_field_data_arrival
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (SAPIncSupply cars in gr)
+                            {
+                                <tr>
+                                    <td>
+                                        @cars.Position
+                                    </td>
+                                    <td>
+                                        @cars.CarriageNumber
+                                    </td>
+                                    <td>
+                                        @Html.GetReferenceCountryOfCountryCode((int)@cars.CountryCode)
+                                    </td>
+                                    <td>
+                                        @cars.WeightDoc
+                                    </td>
+                                    <td>
+                                        @Html.GetReferenceCargoOfCode((int)@cars.CodeCargo)
+                                    </td>
+                                    <td>
+                                        @Html.GetNumDocOfSAPISIndex((string)@cars.CompositionIndex)
+                                    </td>
+                                    <td>
+                                        @Html.GetDateTimeDocOfSAPISIndex((string)@cars.CompositionIndex)
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

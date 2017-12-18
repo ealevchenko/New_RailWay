@@ -18,7 +18,7 @@ namespace Web_RailWay.App_Code
     
     public static class ViewMTHelpers
     {
-        static EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+        //static EFMetallurgTrans ef_mt = new EFMetallurgTrans();
 
         #region Преобразование
         /// <summary>
@@ -26,7 +26,7 @@ namespace Web_RailWay.App_Code
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static string GetResource(this string key)
+        private static string GetResource(this string key)
         {
             ResourceManager rmMT = new ResourceManager(typeof(MTResource));
             return rmMT.GetString(key, CultureInfo.CurrentCulture);
@@ -66,6 +66,7 @@ namespace Web_RailWay.App_Code
 
         public static bool IsConsigneeAMKR(this int consignee)
         {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
             return ef_mt.IsConsignee(consignee, mtConsignee.AMKR);
         }
 
@@ -110,8 +111,15 @@ namespace Web_RailWay.App_Code
             return html.GetReferenceStationsOfCode(index.GetCodeOnOfIndex());
         }
 
+        public static MvcHtmlString GetMTStationsOfIndex(this HtmlHelper html, string index)
+        {
+            if (String.IsNullOrWhiteSpace(index)) return MvcHtmlString.Create("-");
+            return MvcHtmlString.Create(ViewReferenceHelpers.GetReferenceStationsOfCode(index.GetCodeFromOfIndex()) + " - " + ViewReferenceHelpers.GetReferenceStationsOfCode(index.GetCodeOnOfIndex()));
+        }
+
         public static MvcHtmlString GetMTConsignee(this HtmlHelper html, int id)
         {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
             Consignee consignee = ef_mt.GetConsignee(id);
             return MvcHtmlString.Create(consignee != null ? ((mtConsignee)consignee.consignee1).ToString() : id.ToString());
         }
@@ -124,9 +132,19 @@ namespace Web_RailWay.App_Code
         /// <returns></returns>
         public static MvcHtmlString GetStatusMTArrivalCars(this HtmlHelper html, int consignee, int? doc)
         {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
             if (ef_mt.IsConsignee(consignee, mtConsignee.AMKR))
             {
                 return MvcHtmlString.Create(doc != null ? "amkr-taken" : "amkr");
+            } return MvcHtmlString.Create("normal");
+        }
+
+        public static MvcHtmlString GetStatusMTApproachesCars(this HtmlHelper html, int code_from, int code_current, int? doc)
+        {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+            if (code_from == code_current)
+            {
+                return MvcHtmlString.Create(doc != null ? "delivered-taken" : "delivered");
             } return MvcHtmlString.Create("normal");
         }
         #endregion
@@ -140,6 +158,7 @@ namespace Web_RailWay.App_Code
         /// <returns></returns>
         public static MvcHtmlString GetMTArrivalIndex(this HtmlHelper html, int id)
         {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
             ArrivalSostav arr_s = ef_mt.GetArrivalSostav(id);
             return MvcHtmlString.Create(arr_s != null ? arr_s.CompositionIndex : " - ");
         }
@@ -151,8 +170,9 @@ namespace Web_RailWay.App_Code
         /// <returns></returns>
         public static MvcHtmlString GetMTArrivalDT(this HtmlHelper html, int id)
         {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
             ArrivalSostav arr_s = ef_mt.GetArrivalSostav(id);
-            return MvcHtmlString.Create(arr_s != null ? Thread.CurrentThread.CurrentCulture.Name == "en-US" ? arr_s.DateTime.ToString("MM/dd/yyyy hh:mm") : arr_s.DateTime.ToString("dd.MM.yyyy hh:mm") : " - ");
+            return MvcHtmlString.Create(arr_s != null ? Thread.CurrentThread.CurrentCulture.Name == "en-US" ? arr_s.DateTime.ToString("MM/dd/yyyy HH:mm") : arr_s.DateTime.ToString("dd.MM.yyyy HH:mm") : " - ");
         }
         /// <summary>
         /// Вернуть операцию МТ над вагоном
@@ -162,6 +182,7 @@ namespace Web_RailWay.App_Code
         /// <returns></returns>
         public static MvcHtmlString GetMTArrivalOperations(this HtmlHelper html, int id)
         {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
             ArrivalSostav arr_s = ef_mt.GetArrivalSostav(id);
             return arr_s != null ? GetMTOperations(html, arr_s.Operation) : MvcHtmlString.Create("-");
         }
@@ -173,6 +194,7 @@ namespace Web_RailWay.App_Code
         /// <returns></returns>
         public static MvcHtmlString GetMTArrivalTrain(this HtmlHelper html, int id)
         {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
             ArrivalSostav arr_s = ef_mt.GetArrivalSostav(id);
             return MvcHtmlString.Create( arr_s != null ?  arr_s.ArrivalCars != null && arr_s.ArrivalCars.Count()>0 ? arr_s.ArrivalCars.ToList()[0].TrainNumber.ToString() :"-"  : (string)"-" );
         }
@@ -185,9 +207,65 @@ namespace Web_RailWay.App_Code
         /// <returns></returns>
         public static MvcHtmlString GetCountMTArrivalCarsAMKR(this HtmlHelper html, int id, mtConsignee consignee)
         {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
             return MvcHtmlString.Create(ef_mt.GetArrivalCarsOfConsignees(id, ef_mt.GetConsigneeToCodes(consignee)).Count().ToString());
         }
 
+        #endregion
+
+        #region Approaches
+        /// <summary>
+        /// Вернуть индекс состава
+        /// </summary>
+        /// <param name="html"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static MvcHtmlString GetMTApproachesIndex(this HtmlHelper html, int id)
+        {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+            ApproachesSostav arr_s = ef_mt.GetApproachesSostav(id);
+            return MvcHtmlString.Create(arr_s != null ? arr_s.CompositionIndex : " - ");
+        }
+        /// <summary>
+        /// Вернуть дату операции
+        /// </summary>
+        /// <param name="html"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static MvcHtmlString GetMTApproachesDT(this HtmlHelper html, int id)
+        {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+            ApproachesSostav arr_s = ef_mt.GetApproachesSostav(id);
+            return MvcHtmlString.Create(arr_s != null ? Thread.CurrentThread.CurrentCulture.Name == "en-US" ? arr_s.DateTime.ToString("MM/dd/yyyy HH:mm") : arr_s.DateTime.ToString("dd.MM.yyyy HH:mm") : " - ");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="html"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static MvcHtmlString GetMTApproachesLocationStation(this HtmlHelper html, int id)
+        {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+            List<ApproachesCars> list = ef_mt.GetApproachesCarsOfSostav(id).ToList();
+            if (list != null && list.Count()>0)
+            {
+                return ViewReferenceHelpers.GetReferenceStationsOfCode(html, list[0].CodeStationCurrent);
+            }
+            return MvcHtmlString.Create(" - ");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="html"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static MvcHtmlString GetMTApproachesTrain(this HtmlHelper html, int id)
+        {
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+            ApproachesSostav arr_s = ef_mt.GetApproachesSostav(id);
+            return MvcHtmlString.Create(arr_s != null ? arr_s.ApproachesCars != null && arr_s.ApproachesCars.Count() > 0 ? arr_s.ApproachesCars.ToList()[0].TrainNumber.ToString() : "-" : (string)"-");
+        }
         #endregion
 
         #endregion

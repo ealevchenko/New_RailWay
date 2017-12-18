@@ -19,7 +19,7 @@ namespace Web_RailWay.App_LocalResources {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class MTResource {
@@ -322,6 +322,15 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Операция.
+        /// </summary>
+        public static string index_report_field_operation {
+            get {
+                return ResourceManager.GetString("index_report_field_operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на ООО Металлургтранс.
         /// </summary>
         public static string index_title {
@@ -336,6 +345,42 @@ namespace Web_RailWay.App_LocalResources {
         public static string link_goto_mt {
             get {
                 return ResourceManager.GetString("link_goto_mt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны.
+        /// </summary>
+        public static string mt_approaches_cars_report_home {
+            get {
+                return ResourceManager.GetString("mt_approaches_cars_report_home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны с грузами в адрес АМКР на подходах..
+        /// </summary>
+        public static string mt_approaches_cars_report_title {
+            get {
+                return ResourceManager.GetString("mt_approaches_cars_report_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Составы.
+        /// </summary>
+        public static string mt_approaches_sostsv_report_home {
+            get {
+                return ResourceManager.GetString("mt_approaches_sostsv_report_home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Составы с грузами в адрес АМКР на подходах..
+        /// </summary>
+        public static string mt_approaches_sostsv_report_title {
+            get {
+                return ResourceManager.GetString("mt_approaches_sostsv_report_title", resourceCulture);
             }
         }
         
@@ -412,6 +457,15 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Прибыл на АМКР.
+        /// </summary>
+        public static string mt_report_field_arrival {
+            get {
+                return ResourceManager.GetString("mt_report_field_arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Груз(код).
         /// </summary>
         public static string mt_report_field_cargo_code {
@@ -435,6 +489,15 @@ namespace Web_RailWay.App_LocalResources {
         public static string mt_report_field_close {
             get {
                 return ResourceManager.GetString("mt_report_field_close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Код и станция положения.
+        /// </summary>
+        public static string mt_report_field_code_station_current {
+            get {
+                return ResourceManager.GetString("mt_report_field_code_station_current", resourceCulture);
             }
         }
         
@@ -619,6 +682,15 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Владелец.
+        /// </summary>
+        public static string mt_report_field_owner {
+            get {
+                return ResourceManager.GetString("mt_report_field_owner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Примерное время прибытия в пункт назначения.
         /// </summary>
         public static string mt_report_field_time_arrival {
@@ -669,6 +741,24 @@ namespace Web_RailWay.App_LocalResources {
         public static string mt_report_route {
             get {
                 return ResourceManager.GetString("mt_report_route", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны, отсутствующие в списке МТ, но принятые на АМКР.
+        /// </summary>
+        public static string mt_report_title_cars_arrival_not_mt {
+            get {
+                return ResourceManager.GetString("mt_report_title_cars_arrival_not_mt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны из списка МТ не принятые на АМКР.
+        /// </summary>
+        public static string mt_report_title_cars_not_arrival {
+            get {
+                return ResourceManager.GetString("mt_report_title_cars_not_arrival", resourceCulture);
             }
         }
         

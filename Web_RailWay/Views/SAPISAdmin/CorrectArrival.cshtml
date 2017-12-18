@@ -1,0 +1,48 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        Url = Url.Action("ListManualSostavArrival", "SAPIS"),
+        OnSuccess = "selectPeriod",
+        //LoadingElementId = "loading",
+        //LoadingElementDuration = 1000,
+        OnBegin = "OnBegin",
+        OnFailure = "OnFailure",
+        OnComplete = "OnComplete"
+    };
+    ViewBag.Title = @SAPResource.sap_correct_arrival_report_title;
+    ViewBag.ImageFone = "background-image: url(../Image/header1.jpg);";
+    ViewBag.Home = @SAPResource.sap_list_report_home;
+}
+@Scripts.Render("~/bundles/Ajax")
+@Scripts.Render("~/bundles/jqueryval")
+@*<link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">*@
+<script src="~/Scripts/jquery.cookie.js"></script>
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        @Styles.Render("~/datetime/css")
+        @Scripts.Render("~/bundles/datetime")
+        @using (Ajax.BeginForm("ListManualSostavArrival", "SAPIS",null, ajaxOpts, new { @id = "fmList" })) //
+        {
+            <div id="select-rangedatetime">
+                @Html.Label(@GlobalResources.select_date_range_title)
+                <span id="select-range">
+                    <input id="date-start" name="date_start" size="20" value='@ViewBag.dt_start'> до
+                    <input id="date-stop" name="date_stop" size="20" value='@ViewBag.dt_stop'>
+                </span>
+            </div>
+        }
+    </div>
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    <div id="report-detali">
+        @{ Html.RenderAction("ListManualSostavArrival", "SAPIS", new { date_start = @DateTime.Parse(@ViewBag.dt_start), date_stop = @DateTime.Parse(@ViewBag.dt_stop) }); }
+    </div>
+    <div id="cls"></div>
+</div>
+<script src="~/Scripts/admin/sap/sapisadmin.js"></script>
+
+
+

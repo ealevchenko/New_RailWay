@@ -9,7 +9,7 @@ namespace Web_RailWay.Controllers
 {
     public class HomeController : Controller
     {
-        //[Access(LogVisit = true)]
+        [Access(LogVisit = true)]
         public ActionResult Index()
         {
             return View();

@@ -333,4 +333,34 @@
   <data name="amkr_cars_no_arival" xml:space="preserve">
     <value>Вагоны для АМКР, не принятые</value>
   </data>
+  <data name="mt_report_title_cars_arrival_not_mt" xml:space="preserve">
+    <value>Вагоны, отсутствующие в списке МТ, но принятые на АМКР</value>
+  </data>
+  <data name="mt_report_title_cars_not_arrival" xml:space="preserve">
+    <value>Вагоны из списка МТ не принятые на АМКР</value>
+  </data>
+  <data name="mt_approaches_sostsv_report_home" xml:space="preserve">
+    <value>Составы</value>
+  </data>
+  <data name="mt_approaches_sostsv_report_title" xml:space="preserve">
+    <value>Составы с грузами в адрес АМКР на подходах.</value>
+  </data>
+  <data name="index_report_field_operation" xml:space="preserve">
+    <value>Операция</value>
+  </data>
+  <data name="mt_report_field_arrival" xml:space="preserve">
+    <value>Прибыл на АМКР</value>
+  </data>
+  <data name="mt_report_field_code_station_current" xml:space="preserve">
+    <value>Код и станция положения</value>
+  </data>
+  <data name="mt_report_field_owner" xml:space="preserve">
+    <value>Владелец</value>
+  </data>
+  <data name="mt_approaches_cars_report_home" xml:space="preserve">
+    <value>Вагоны</value>
+  </data>
+  <data name="mt_approaches_cars_report_title" xml:space="preserve">
+    <value>Вагоны с грузами в адрес АМКР на подходах.</value>
+  </data>
 </root>

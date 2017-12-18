@@ -1,0 +1,19 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@model List<DateTime>
+
+
+<table class="table"id="list-group-date">
+    @foreach (DateTime gr in Model)
+    {
+        <tr>
+            <td class="group-date">
+                <a href="#" class="show-detali-object a-show-detali">Выборка за: @gr.Date.ToString("dd-MM-yyyy")</a>
+                <div class="status detali-object" id='group-date' day='@gr.Day' month='@gr.Month' year='@gr.Year'>
+
+                </div>
+            </td>
+        </tr>
+    }
+</table>

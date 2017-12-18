@@ -1,0 +1,32 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+@using EFMT.Entities;
+
+@model ArrivalCars
+<td>
+    @Model.DateOperation
+</td>
+<td>
+    @Model.CompositionIndex
+</td>
+<td>
+    @Model.Position
+</td>
+<td>
+    @Model.Num
+</td>
+<td>
+    @Html.GetReferenceCountryOfCountryCode((int)@Model.CountryCode)
+</td>
+<td>
+    @Model.Weight
+</td>
+<td>
+    @Html.GetReferenceCargoOfCode((int)@Model.CargoCode)
+</td>
+<td>
+    @Model.NumDocArrival
+</td>
+<td>
+    @Model.Arrival
+</td>

@@ -1,0 +1,78 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+@using EFMT.Entities;
+
+@model List<IGrouping<int, ApproachesCars>>
+
+<table class="table" id="list-approaches-cars">
+    <thead>
+        <tr>
+            <th>
+                @MTResource.mt_report_field_num_wag
+            </th>
+            <th>
+                @MTResource.mt_report_field_country
+            </th>
+            <th>
+                @MTResource.mt_report_field_owner
+            </th>
+            <th>
+                @MTResource.mt_report_field_operation
+            </th>
+            <th>
+                @MTResource.mt_report_field_weight
+            </th>
+            <th>
+                @MTResource.mt_report_field_code_station_from
+            </th>
+            <th>
+                @MTResource.mt_report_field_code_station_on
+            </th>
+            <th>
+                @MTResource.mt_report_field_code_station_current
+            </th>
+            <th>
+                @MTResource.mt_report_field_doc_arrival
+                (@MTResource.mt_report_field_data_arrival \ @MTResource.mt_report_field_data_user_name)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (IGrouping<int, ApproachesCars> gr in @Model)
+        {
+            <tr>
+                <td colspan="9" class="group-cargo">
+                    @{ string clas = "show-detali-cargo "+ @gr.ToList()[0].DateOperation.Day.ToString() + @gr.ToList()[0].DateOperation.Month.ToString() + @gr.ToList()[0].DateOperation.Year.ToString() + " a-show-detali";}
+                    <a href="#" id='@gr.Key' class='@clas'>@Html.GetReferenceCargoOfCode(@gr.Key) - @gr.Count() вагонов</a>
+                </td>
+            </tr>
+            foreach (ApproachesCars car in @gr)
+            {
+                <tr class='@Html.GetStatusMTApproachesCars(car.CodeStationOn, car.CodeStationCurrent, car.NumDocArrival)' cargo='@car.DateOperation.Day@car.DateOperation.Month@car.DateOperation.Year@gr.Key'style="display:none">
+                    <td>@car.Num</td>
+                    <td>@Html.GetReferenceCountryOfCountryCode(@car.CountryCode)</td>
+                    <td>@car.Owner</td>
+                    <td>@car.Operation</td>
+                    <td>@car.Weight</td>
+                    <td>
+                        @Html.GetReferenceStationsOfCode(@car.CodeStationFrom)
+                    </td>
+                    <td>
+                        @Html.GetReferenceStationsOfCode(@car.CodeStationOn)
+                    </td>
+                    <td>
+                        @Html.GetReferenceStationsOfCode(@car.CodeStationCurrent)
+                    </td>
+                    <td>
+                        @if (@car.NumDocArrival != null)
+                    {
+                            @Html.GetMTNumDocArrival((int)@car.NumDocArrival)
+                            @car.Arrival
+                            @car.UserName
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

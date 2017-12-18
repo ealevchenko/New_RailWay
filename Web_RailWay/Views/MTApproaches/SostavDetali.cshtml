@@ -1,0 +1,111 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+@using EFMT.Entities;
+
+@model ApproachesSostav
+
+<table class="table" id="sostav-approaches">
+    <tr>
+        <th>@MTResource.mt_report_field_index:</th>
+        <td>
+            @*@if (@Html.IsApproachesSostavOfIndex(@Model.CompositionIndex))
+                {
+                    @Html.RouteLink(Model.CompositionIndex.ToString(),
+                         new { controller = "MTApproaches", action = "ListIndex", index = (string)@Model.CompositionIndex },
+                              new { @onclick = "LockScreen('" + @GlobalResources.lock_text + "');", @title = @MTResource.link_title_go_approaches_index });
+                }
+                else
+                { @Model.CompositionIndex }*@
+            @Model.CompositionIndex
+        </td>
+        <th>@MTResource.mt_report_field_code_station_from:</th>
+        <td>@Html.GetMTStationFromOfIndex((string)@Model.CompositionIndex)</td>
+        <th>@MTResource.mt_report_field_code_station_on:</th>
+        <td>@Html.GetMTStationOnOfIndex(@Model.CompositionIndex)</td>
+    </tr>
+    <tr>
+        <th>@MTResource.mt_report_field_date_operation:</th>
+        <td>
+            @*@Model.DateTime - @Html.GetMTOperations(Model.Operation)*@
+        </td>
+        <th>@MTResource.mt_report_field_num_train:</th>
+        <td>@Html.GetMTApproachesTrain(Model.ID)</td>
+        <th>@MTResource.mt_report_field_countvag_countamkr:</th>
+        <td>@Model.ApproachesCars.ToList().Count()</td>
+    </tr>
+    <tr>
+        <th>@MTResource.mt_report_field_xml_file:</th>
+        <td>@Model.FileName</td>
+        <th>@MTResource.mt_report_field_create:</th>
+        <td>@Model.Create</td>
+        <th>@MTResource.mt_report_field_close:</th>
+        <td>@Model.Close</td>
+    </tr>
+</table>
+<table class="table" id="cars-arrival">
+    <thead>
+        <tr>
+            <th>
+                @MTResource.mt_report_field_num_wag
+                (@MTResource.index_report_field_operation)
+            </th>
+            <th>
+                @MTResource.mt_report_field_country
+                (@MTResource.mt_report_field_owner)
+
+            </th>
+            <th>
+                @MTResource.mt_report_field_cargo_code /                
+                @MTResource.mt_report_field_weight
+            </th>
+            <th>
+                @MTResource.mt_report_field_code_station_on
+            </th>
+            <th>
+                @MTResource.mt_report_field_code_station_from
+
+            </th>
+            <th>
+                @MTResource.mt_report_field_code_station_current
+            </th>
+            <th>
+                @MTResource.mt_report_field_arrival
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ApproachesCars cars in Model.ApproachesCars.ToList())
+        {
+            
+            <tr class='@Html.GetStatusMTApproachesCars(cars.CodeStationFrom, cars.CodeStationCurrent, cars.NumDocArrival)'>
+                <td>
+                    @cars.Num (@cars.Operation)
+                </td>
+                <td>
+                    @Html.GetReferenceCountryOfCountryCode(@cars.CountryCode)
+                    (@cars.Owner)
+                </td>
+                <td>
+                    @Html.GetReferenceCargoOfCode(@cars.CargoCode) - вес: @cars.Weight
+                </td>
+                <td>
+                    @Html.GetReferenceStationsOfCode(@cars.CodeStationOn)
+                </td>
+                <td>
+                    @Html.GetReferenceStationsOfCode(@cars.CodeStationFrom)
+                </td>
+                <td>
+                    @Html.GetReferenceStationsOfCode(@cars.CodeStationCurrent)
+                </td>
+                <td>
+                    @if (@cars.NumDocArrival != null)
+                    {
+                        @Html.GetMTNumDocArrival((int)@cars.NumDocArrival)
+                        @cars.Arrival
+                        @cars.UserName
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

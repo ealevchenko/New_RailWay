@@ -1,0 +1,38 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+<table>
+    <tr>
+        <td style="text-align:center">
+            <a href="#" class="show-detali-object a-show-detali">@MTResource.mt_report_title_cars_not_arrival</a>
+            <div class="status detali-object" id="list-not-arrival">
+                @{ Html.RenderAction("ListNotArrival", "MTArrival", new { date_start = (DateTime)@ViewBag.dt_start, date_stop = (DateTime)@ViewBag.dt_stop, station = (int)@ViewBag.station }); }
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align:center">
+            <a href="#" class="show-detali-object a-show-detali">@MTResource.mt_report_title_cars_arrival_not_mt</a>
+            <div class="status detali-object" id="list-not-mt">
+                @{ Html.RenderAction("ListManualArrival", "SAPIS", new { date_start = (DateTime)@ViewBag.dt_start, date_stop = (DateTime)@ViewBag.dt_stop }); }
+            </div>
+        </td>
+    </tr>
+</table>
+
+<script>
+
+    // Открывающиеся панели
+    var list_not_arrival = $.cookie('list-not-arrival');
+    $('div#list-not-arrival').attr('style', list_not_arrival);
+    var list_not_mt = $.cookie('list-not-mt');
+    $('div#list-not-mt').attr('style', list_not_mt);
+    $('a.show-detali-object').click(function (evt) {
+        evt.preventDefault();
+        $(this).siblings('.detali-object').slideToggle();
+        var id = $(this).siblings('.detali-object').attr("id");
+        var style = $.cookie(id);
+        if (style == null | style == 'display: none;') {
+            $.cookie(id, 'display: block;');
+        } else { $.cookie(id, 'display: none;'); }
+    });
+</script>

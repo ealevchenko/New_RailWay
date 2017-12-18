@@ -1,0 +1,50 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+@using EFMT.Entities;
+
+@model ArrivalCars
+
+<tr class='@Html.GetStatusMTArrivalCars(@Model.Consignee, @Model.NumDocArrival)'>
+    <tr>
+    <td>
+        @Model.Position
+    </td>
+    <td>
+        @Model.Num
+    </td>
+    <td>
+        @Html.GetReferenceCountryOfCountryCode(@Model.CountryCode)
+    </td>
+    <td>
+        @Model.Weight
+    </td>
+    <td>
+        @Html.GetReferenceCargoOfCode(@Model.CargoCode)
+    </td>
+    <td>
+        @Html.GetReferenceStationsOfCodecs(@Model.StationCode)
+    </td>
+    <td>
+        @Html.GetMTConsignee(@Model.Consignee) (@Html.DisplayFor(modelItem => @Model.Consignee))
+    </td>
+    <td>
+        @if (@Model.NumDocArrival == null || @Model.NumDocArrival > 0)
+                    {
+                        if (@Model.NumDocArrival == null & @Model.Consignee.IsConsigneeAMKR())
+                        {
+                        }
+                        else
+                        { @Model.NumDocArrival}
+                    }
+                    else
+                    {
+                    @Html.GetMTNumDocArrival((int)@Model.NumDocArrival)
+                    }
+    </td>
+    <td>
+        @Model.Arrival
+    </td>
+    <td>
+        @Model.UserName
+    </td>
+</tr>

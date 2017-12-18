@@ -1,0 +1,95 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+@using EFMT.Entities;
+
+@model List<ArrivalCars>
+<td id="detailed" colspan="10">
+    <table class="table" id="list-arrival-cars">
+        <thead>
+            <tr>
+                <th>
+
+                </th>
+                <th>
+                    @MTResource.mt_report_field_date_operation
+                </th>
+                <th>
+                    @MTResource.mt_report_field_index
+                </th>
+                <th>
+                    @MTResource.mt_report_field_num_wag
+                </th>
+                <th>
+                    @MTResource.mt_report_field_country
+                </th>
+                <th>
+                    @MTResource.mt_report_field_weight
+                </th>
+                <th>
+                    @MTResource.mt_report_field_cargo_code
+                </th>
+                <th>
+                    @MTResource.mt_report_field_code_station_on
+                </th>
+                <th>
+                    @MTResource.mt_report_field_consignee
+                </th>
+                <th>
+                    @MTResource.mt_report_field_doc_arrival
+                </th>
+                <th>
+                    @MTResource.mt_report_field_data_arrival
+                </th>
+                <th>
+                    @MTResource.mt_report_field_data_user_name
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ArrivalCars car in @Model)
+            {
+            <tr class='@Html.GetStatusMTArrivalCars(@car.Consignee, @car.NumDocArrival)'>
+                <td>
+                    <input id='@car.ID' name='@car.Num' type="checkbox" />
+                </td>
+                <td>
+                    @car.DateOperation
+                </td>
+                <td>
+                    @car.CompositionIndex
+                </td>
+                <td>
+                    @car.Num
+                </td>
+                <td>
+                    @Html.GetReferenceCountryOfCountryCode(@car.CountryCode)
+                </td>
+                <td>
+                    @car.Weight
+                </td>
+                <td>
+                    @Html.GetReferenceCargoOfCode(@car.CargoCode)
+                </td>
+                <td>
+                    @Html.GetReferenceStationsOfCodecs(@car.StationCode)
+                </td>
+                <td>
+                    @Html.GetMTConsignee(@car.Consignee) (@Html.DisplayFor(modelItem => @car.Consignee))
+                </td>
+                <td>
+                    @if (@car.NumDocArrival != null) {
+                        @Html.GetMTNumDocArrival((int)@car.NumDocArrival)
+                        }
+                </td>
+                <td>
+                    @car.Arrival
+                </td>
+                <td>
+                    @car.UserName
+                </td>
+            </tr>
+                }
+        </tbody>
+    </table>
+</td>
+

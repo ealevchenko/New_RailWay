@@ -1,0 +1,6 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+@using EFMT.Entities;
+
+@model List<IGrouping<int, ApproachesCars>>
+@{ Html.RenderAction("ListCargoArrivalCars", "MTApproaches", new { list = (List<IGrouping<int, ApproachesCars>>)@Model }); }
