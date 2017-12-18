@@ -58,6 +58,7 @@ namespace EFMT.Concrete
 
         public int SaveApproachesCars(ApproachesCars ApproachesCars)
         {
+            //EFDbContext context1 = new EFDbContext();
             ApproachesCars dbEntry;
             try
             {
@@ -114,8 +115,9 @@ namespace EFMT.Concrete
                         dbEntry.Route = ApproachesCars.Route;
                         dbEntry.Owner = ApproachesCars.Owner;
                         dbEntry.NumDocArrival = ApproachesCars.NumDocArrival;
+                        dbEntry.Arrival = ApproachesCars.Arrival;
                         dbEntry.ParentID = ApproachesCars.ParentID;
-                        dbEntry.ApproachesSostav = ApproachesCars.ApproachesSostav;
+                        //dbEntry.ApproachesSostav = ApproachesCars.ApproachesSostav;
                         dbEntry.UserName = ApproachesCars.UserName;
                     }
                 }
@@ -204,7 +206,6 @@ namespace EFMT.Concrete
                 return null;
             }
         }
-
         /// <summary>
         /// Закрыть вагон на подходах установив номер документа и дату захода (поиск по номеру вагона и весу)
         /// </summary>
@@ -259,7 +260,10 @@ namespace EFMT.Concrete
                 return -1;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<DateTime> GroupDateApproachesCars()
         {
             try
@@ -272,7 +276,40 @@ namespace EFMT.Concrete
                 return null;
             }
         }
-
+        /// <summary>
+        /// Показать не закрытые вагоны
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<ApproachesCars> GetNoCloseApproachesCars()
+        {
+            try
+            {
+                return GetApproachesCars().Where(c => c.Arrival == null);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNotCloseApproachesCars()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить следущую запис по указанному вагону выше указанной даты операции
+        /// </summary>
+        /// <param name="num_car"></param>
+        /// <param name="operation"></param>
+        /// <returns></returns>
+        public ApproachesCars GetApproachesCarsOfNextCar(int num_car, DateTime operation)
+        {
+            try
+            {
+                return GetApproachesCars().Where(c => c.Num == num_car & c.DateOperation > operation).OrderBy(c => c.DateOperation).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetApproachesCarsOfNextCar(num_car={0},operation={1})", num_car, operation), eventID);
+                return null;
+            }
+        }
         #endregion
 
         #region ApproachesSostav
@@ -798,6 +835,24 @@ namespace EFMT.Concrete
             try
             {
                 return GetArrivalCars().Where(c => c.Num == num & c.DateOperation <= dt);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCars(num={0}, dt={1})", num, dt), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Показать следующую запись
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public ArrivalCars GetArrivalCarsOfNextCar(int num, DateTime dt)
+        {
+            try
+            {
+                return GetArrivalCars().Where(c => c.Num == num & c.DateOperation > dt).OrderBy(c => c.DateOperation).FirstOrDefault();
             }
             catch (Exception e)
             {

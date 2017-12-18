@@ -109,5 +109,12 @@ namespace Testing
             MTThread mth = new MTThread(service.ServicesMT);
             mth.StartTransferArrival();
         }
+
+        public void MTTransfer_CloseApproachesCars()
+        {
+            MTTransfer mtt = new MTTransfer();
+            int res = mtt.CloseApproachesCars();
+            Console.WriteLine("Закрыто {0}", res);
+        }
     }
 }

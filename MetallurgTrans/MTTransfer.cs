@@ -34,6 +34,8 @@ namespace MetallurgTrans
         close_new_route = -2,
         close_timeout = -3,
         close_different_cargo = -4,
+        close_arrival_uz = -5,
+        close_arrival_station_on = -6,
     }
 
     [Serializable()]
@@ -91,9 +93,12 @@ namespace MetallurgTrans
         public string FromPath { get { return this.fromPath; } set { this.fromPath = value; } }
         private bool delete_file = false;
         public bool DeleteFile { get { return this.delete_file; } set { this.delete_file = value; } }
-        private int day_range_approaches_cars = 30;
+        private int day_range_approaches_cars = 30; // тайм аут по времени для вагонов на подходе
         public int DayRangeApproachesCars { get { return this.day_range_approaches_cars; } set { this.day_range_approaches_cars = value; } }
-        private int day_range_arrival_cars = 10;
+        private int day_range_approaches_cars_arrival = 3; // тайм аут по времени для вагонов на подходе прибывших на конечную станцию
+        public int DayRangeApproachesCarsArrival { get { return this.day_range_approaches_cars_arrival; } set { this.day_range_approaches_cars_arrival = value; } }
+
+        private int day_range_arrival_cars = 10; // тайм аут по времени для вагонов прибывших на УЗ
         public int DayRangeArrivalCars { get { return this.day_range_arrival_cars; } set { this.day_range_arrival_cars = value; } }
         private bool arrival_to_railway = true;
         public bool ArrivalToRailWay { get { return this.arrival_to_railway; } set { this.arrival_to_railway = value; } }
@@ -837,6 +842,121 @@ namespace MetallurgTrans
         public int TransferArrival()
         {
             return TransferArrival(this.fromPath, this.delete_file);
+        }
+        #endregion
+
+        #region Автозакрытие вагонов на подходах
+        /// <summary>
+        /// проверить все вагоны
+        /// </summary>
+        /// <returns></returns>
+        public int CloseApproachesCars() {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            int close = 0;
+            int skip = 0;
+            int error = 0;
+
+            List<ApproachesCars> list = new List<ApproachesCars>();
+            DateTime dt = DateTime.Now.AddDays(-1*this.day_range_approaches_cars_arrival);
+            list = efmt.GetNoCloseApproachesCars().Where(c => c.DateOperation < dt).OrderByDescending(c => c.DateOperation).ToList();
+            foreach (ApproachesCars car in list.ToList()) {
+                //ApproachesCars car_close = car;
+                int res = CloseApproachesCar(car);
+                if (res > 0) { close++; }
+                if (res == 0) { skip++; }
+                if (res < 0) { error++; }
+            }
+            string mess = String.Format("Коррекция вагонов на подходах БД MT.Approaches - выполнена, определено {0} не закрытых вагонов, закрыто автоматически {1}, пропущено {2}, ошибки закрытия {3}.",
+                list != null ? list.Count() : 0, close, skip, error);
+            mess.WriteInformation(servece_owner, this.eventID);
+            if (list != null && list.Count() > 0) { mess.WriteEvents(error > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+            return close;
+        }
+
+        public int CloseApproachesCar(ApproachesCars car) {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            int result = 0;
+            try
+            {
+                //-----------------------------------------------------------------------------
+                // Проверим есть продолжение истории с вагоном в таблице на подходах
+                ApproachesCars car_next = efmt.GetApproachesCarsOfNextCar(car.Num, car.DateOperation);
+                if (car_next != null)
+                {
+                    if (car.CargoCode == car_next.CargoCode)
+                    {
+                        // входит в диапазон времени
+                        if (car.DateOperation.Date.AddDays(this.day_range_approaches_cars) > car_next.DateOperation)
+                        {
+                            car.NumDocArrival = (int)mtt_err_arrival.close_car;
+                            // предыдущий состав не прибыл на станцию назначения
+                            if (car.CodeStationOn != car.CodeStationCurrent)
+                            {
+                                //parentid = car.ID;
+                            }
+                            else
+                            {
+                                // новый состав стоит еще на станции что и предыдущий
+                                if (car.CodeStationCurrent == car_next.CodeStationCurrent)
+                                {
+                                    //parentid = car.ID;
+                                }
+                                else
+                                {
+                                    // вагон начал движение по новому маршруту
+                                    car.NumDocArrival = (int)mtt_err_arrival.close_new_route;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // больше допустимого интервала
+                            car.NumDocArrival = (int)mtt_err_arrival.close_timeout;
+                        }
+                    }
+                    else
+                    {
+                        // грузы в вагонах разные
+                        car.NumDocArrival = (int)mtt_err_arrival.close_different_cargo;
+                    }
+
+                    car.Arrival = car_next.DateOperation;
+                    return efmt.SaveApproachesCars(car); // сохранить изменение
+                }
+                //-----------------------------------------------------------------------------
+                // Проверим есть продолжение истории с вагоном в таблице прибыл на УЗ
+                ArrivalCars car_arrival = efmt.GetArrivalCarsOfNextCar(car.Num, car.DateOperation);
+                if (car_arrival != null) {
+
+                    int num = car_arrival.NumDocArrival > 0 ? (int)car_arrival.NumDocArrival : (int)mtt_err_arrival.close_arrival_uz;
+                    DateTime dt_oper = car_arrival.DateOperation;
+                    car.NumDocArrival = num;
+                    car.Arrival = dt_oper;
+                    return efmt.SaveApproachesCars(car); // сохранить изменение         
+                }
+                //-----------------------------------------------------------------------------
+                // Проверим вагон дошол до станции назначения, если да закроем его через 2 суток
+                if (car.CodeStationOn == car.CodeStationCurrent & car.DateOperation.AddDays(this.day_range_approaches_cars_arrival) < DateTime.Now)
+                {
+                    car.NumDocArrival = (int)mtt_err_arrival.close_arrival_station_on;
+                    car.Arrival = DateTime.Now;
+                    return efmt.SaveApproachesCars(car); // сохранить изменение                        
+                }
+                //-----------------------------------------------------------------------------
+                // Проверим вагон дошол до станции назначения, если да закроем его через 2 суток
+                //if (car.CodeStationOn != car.CodeStationCurrent & car.DateOperation.AddDays(30) < DateTime.Now) {
+                //    car.NumDocArrival = (int)mtt_err_arrival.close_timeout;
+                //    car.Arrival = car_arrival.DateOperation;
+                //    return efmt.SaveApproachesCars(car); // сохранить изменение                        
+                //}
+                return result;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseApproachesCar(car={0})", car), servece_owner, eventID);
+                return -1;
+            }
+
         }
         #endregion
     }

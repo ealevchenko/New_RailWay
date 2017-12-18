@@ -20,12 +20,11 @@ namespace EFMT.Abstract
 
         IQueryable<ApproachesCars> GetApproachesCarsOfSostav(int idsostav);
         IQueryable<ApproachesCars> GetApproachesCarsOfNumCar(int num_car, bool order);
-        //bool IsApproachesCarsOfSostav(int idsostav);
-        //int SetArrivalApproachesCars(int num, int idsostav, DateTime dt_operation);
-        //int CloseApproachesSostav();
         int CloseApproachesCarsOfDocWeight(int doc, int num, DateTime dt, decimal? weight);
         int CloseApproachesCarsOfDocDay(int doc, int num, DateTime dt, int day);
         List<DateTime> GroupDateApproachesCars();
+        IQueryable<ApproachesCars> GetNoCloseApproachesCars();
+        ApproachesCars GetApproachesCarsOfNextCar(int num_car, DateTime operation);
 
         IQueryable<ApproachesSostav> ApproachesSostav { get; }
         IQueryable<ApproachesSostav> GetApproachesSostav();
@@ -33,22 +32,12 @@ namespace EFMT.Abstract
         int SaveApproachesSostav(ApproachesSostav ApproachesSostav);
         ApproachesSostav DeleteApproachesSostav(int id);
 
-        //ApproachesSostav GetApproachesSostavOfParentID(int parent_id);
-        //IQueryable<ApproachesSostav> GetApproachesSostavOfIndex(string index, bool start);
+
         ApproachesSostav GetApproachesSostavOfFile(string file);
         ApproachesSostav GetNoCloseApproachesSostav(string index, DateTime date);
         ApproachesSostav GetApproachesSostavOfParentID(int parent_id);
         List<ApproachesSostav> GetApproachesSostavLocation(int id_sostav, bool destinct);
-        //IQueryable<ApproachesSostav> GetNoCloseApproachesSostav();
-        //List<ApproachesSostav> GetApproachesSostavLocation(int id_sostav, bool destinct);
-        ////ApproachesSostavLocation GetApproachesSostavLocation(int id);
-        //int SetApproachesCars(int doc, int num, DateTime dt, int day);
 
-
-
-        //List<GroupTypeCargoApproaches> GetCargoApproachesOfGroup(int? group);
-        //List<GroupTypeStationCurrentCargoApproaches> GetCargoApproachesOfType(int? type);
-        //List<GroupTypeOwnerCargoApproaches> GetCargoApproachesOfTypeStationCurrent(int? type, int stationcurrent);
         #endregion
 
         #region На станциях УЗ КР
@@ -68,6 +57,7 @@ namespace EFMT.Abstract
         int CloseArrivalCarsOfDocWeight(int doc, int num, DateTime dt, decimal? weight);
         int CloseArrivalCarsOfDocDay(int doc, int num, DateTime dt, int day);
         IQueryable<ArrivalCars> GetArrivalCars(int num, DateTime dt);
+        ArrivalCars GetArrivalCarsOfNextCar(int num, DateTime dt);
         int CloseArrivalCars(int num, DateTime dt, int code_close);
 
 

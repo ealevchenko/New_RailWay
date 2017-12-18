@@ -33,7 +33,7 @@ namespace Testing
         static void Main(string[] args)
         {
             CorrectionTransfer corr = new CorrectionTransfer();
-            corr.CorrSAPIncSupplyArrival("N:6742 D:13.12.2017 5-0");
+            //corr.CorrSAPIncSupplyArrival("N:6742 D:13.12.2017 5-0");
             //corr.CorrSAPIncSupply(2356);
             //corr.CorrSAPIncSupply();
             //corr.CorrSAPIncSupplyArrivalRC(4, 3567);
@@ -81,6 +81,7 @@ namespace Testing
             //tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
             //tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
             //tst_tr_app.MTThread_TransferArrival(); // Запустить перенос в потоке
+            tst_tr_app.MTTransfer_CloseApproachesCars(); // автозакрытие вагонов на подходах
             #endregion
 
             #region Test_KIS
