@@ -21,7 +21,7 @@
     //});
 
     $.ajax({
-        url: '/MTApproaches/ListGroupDateCars/',
+        url: '/railway/MTApproaches/ListGroupDateCars/',
         type: 'GET',
         //data: { date_start: $('#date-start').val(), date_stop: $('#date-stop').val() },
         dataType: 'html',
@@ -59,7 +59,7 @@ function selectGroupDateCars(data) {
             OnBegin();
                 // Получим вагоны
                 $.ajax({
-                    url: '/MTApproaches/ListArrivalCarsOfDate/',
+                    url: '/railway/MTApproaches/ListArrivalCarsOfDate/',
                     type: 'GET',
                     data: { date_start: d_start.toISOString(), date_stop: d_stop.toISOString()},
                     dataType: 'html',

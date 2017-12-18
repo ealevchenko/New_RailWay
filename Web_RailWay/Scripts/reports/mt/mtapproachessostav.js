@@ -81,8 +81,8 @@
     //Первая выборка
     OnBegin();
     $.ajax({
-        url: '/MTApproaches/ListSostav/',
-        type: 'POST',
+        url: '/railway/MTApproaches/ListSostav/',
+        type: 'GET',
         data: { date_start: $('#date-start').val(), date_stop: $('#date-stop').val() },
         dataType: 'html',
         success: function (data) {
@@ -118,7 +118,7 @@ function selectPeriod(data) {
             // Получим движение состава
             $.ajax({
                 url: '/MTApproaches/ListHistoryLocation/',
-                type: 'POST',
+                type: 'GET',
                 data: { id_sostav: id_sostav, route: false },
                 dataType: 'html',
                 success: function (data) {
@@ -159,8 +159,8 @@ function listLocationSostav(data) {
             var id_sostav = $(this).attr("id")
             // Получим движение состава
             $.ajax({
-                url: '/MTApproaches/SostavDetali/',
-                type: 'POST',
+                url: '/railway/MTApproaches/SostavDetali/',
+                type: 'GET',
                 data: { id_sostav: id_sostav },
                 dataType: 'html',
                 success: function (data) {
