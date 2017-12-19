@@ -67,7 +67,14 @@ namespace EFKIS.Abstract
         IQueryable<PromNatHist> PromNatHist { get; }
         IQueryable<PromNatHist> GetPromNatHist();
 
+        IQueryable<PromNatHist> GetNatHist(int natur, int station, int day, int month, int year, bool? sort);
+        IQueryable<PromNatHist> GetNatHist(int natur, int station, int day, int month, int year);
         PromNatHist GetNatHist(int natur, int station, int day, int month, int year, int wag);
+
+        IQueryable<PromNatHist> GetNatHistOfVagon(int num_vag);
+        IQueryable<PromNatHist> GetNatHistOfVagonLess(int num_vag, DateTime start);
+        IQueryable<PromNatHist> GetNatHistOfVagonLess(int num_vag, DateTime start, bool sort);
+
         #endregion
 
         #region PROM.Vagon

@@ -88,6 +88,14 @@ namespace EFKIS.Helpers
             if (DT != null & DT <= start) { return true; }
             return false;
         }
+
+        public static bool IsGreaterOrEqual(PromNatHist pnh, DateTime? start)
+        {
+            DateTime? DT = GetDateTime(pnh);
+            if (DT != null & DT >= start) { return true; }
+            return false;
+        }
+
         /// <summary>
         /// вернуть дату и время
         /// </summary>
