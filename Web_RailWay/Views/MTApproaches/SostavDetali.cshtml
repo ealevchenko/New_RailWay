@@ -47,7 +47,7 @@
         <tr>
             <th>
                 @MTResource.mt_report_field_num_wag
-                (@MTResource.index_report_field_operation)
+                @*(@MTResource.index_report_field_operation)*@
             </th>
             <th>
                 @MTResource.mt_report_field_country
@@ -78,7 +78,8 @@
             
             <tr class='@Html.GetStatusMTApproachesCars(cars.CodeStationOn, cars.CodeStationCurrent, cars.NumDocArrival)'>
                 <td>
-                    @cars.Num (@cars.Operation)
+                    @cars.Num 
+                    @*(@cars.Operation)*@
                 </td>
                 <td>
                     @Html.GetReferenceCountryOfCountryCode(@cars.CountryCode)
