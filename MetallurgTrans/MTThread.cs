@@ -320,7 +320,7 @@ namespace MetallurgTrans
             {
                 if ((thCloseTransferApproaches == null) || (!thCloseTransferApproaches.IsAlive && thCloseTransferApproaches.ThreadState == ThreadState.Stopped))
                 {
-                    thCloseTransferApproaches = new Thread(TransferArrival);
+                    thCloseTransferApproaches = new Thread(CloseApproachesCars);
                     thCloseTransferApproaches.Name = service.ToString();
                     thCloseTransferApproaches.Start();
                     //mes_service_start += " - запущен.";

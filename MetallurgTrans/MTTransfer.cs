@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TransferRailCars;
+//using EFKIS.Concrete;
+//using EFKIS.Entities;
 
 namespace MetallurgTrans
 {
@@ -95,7 +97,7 @@ namespace MetallurgTrans
         public bool DeleteFile { get { return this.delete_file; } set { this.delete_file = value; } }
         private int day_range_approaches_cars = 30; // тайм аут по времени для вагонов на подходе
         public int DayRangeApproachesCars { get { return this.day_range_approaches_cars; } set { this.day_range_approaches_cars = value; } }
-        private int day_range_approaches_cars_arrival = 3; // тайм аут по времени для вагонов на подходе прибывших на конечную станцию
+        private int day_range_approaches_cars_arrival = 5; // тайм аут по времени для вагонов на подходе прибывших на конечную станцию
         public int DayRangeApproachesCarsArrival { get { return this.day_range_approaches_cars_arrival; } set { this.day_range_approaches_cars_arrival = value; } }
 
         private int day_range_arrival_cars = 10; // тайм аут по времени для вагонов прибывших на УЗ
@@ -858,7 +860,7 @@ namespace MetallurgTrans
 
             List<ApproachesCars> list = new List<ApproachesCars>();
             DateTime dt = DateTime.Now.AddDays(-1*this.day_range_approaches_cars_arrival);
-            list = efmt.GetNoCloseApproachesCars().Where(c => c.DateOperation < dt).OrderByDescending(c => c.DateOperation).ToList();
+            list = efmt.GetNoCloseApproachesCars().Where(c => c.DateOperation < dt).OrderBy(c => c.DateOperation).ToList();
             foreach (ApproachesCars car in list.ToList()) {
                 //ApproachesCars car_close = car;
                 int res = CloseApproachesCar(car);
@@ -945,11 +947,16 @@ namespace MetallurgTrans
                     return efmt.SaveApproachesCars(car); // сохранить изменение                        
                 }
                 //-----------------------------------------------------------------------------
-                // Проверим вагон дошол до станции назначения, если да закроем его через 2 суток
-                //if (car.CodeStationOn != car.CodeStationCurrent & car.DateOperation.AddDays(30) < DateTime.Now) {
-                //    car.NumDocArrival = (int)mtt_err_arrival.close_timeout;
-                //    car.Arrival = car_arrival.DateOperation;
-                //    return efmt.SaveApproachesCars(car); // сохранить изменение                        
+                // TODO:Отключить Проверим вагон есть в системе КИС
+
+                //EFWagons ef_wag = new EFWagons();
+                //List<PromNatHist> list = ef_wag.GetNatHistOfVagonGreater(car.Num, car.DateOperation).ToList();
+                
+                //if (list != null && list.Count() > 0) { 
+                //    car.NumDocArrival = (int)mtt_err_arrival.close_arrival_station_on;
+                //    car.Arrival = list[0].DAT_VVOD != null ? list[0].DAT_VVOD : DateTime.Now;
+                //    Console.WriteLine("Вагон:{0}, дата операции:{1}, индекс:{2}, прибыл на станцию (3 дня прошло -закрываю), код:{3}", car.Num, car.DateOperation, car.CompositionIndex, car.NumDocArrival);
+                //    return efmt.SaveApproachesCars(car); // сохранить изменение                 
                 //}
                 Console.WriteLine("Вагон:{0}, дата операции:{1}, индекс:{2} - оставлен до выяснения", car.Num, car.DateOperation, car.CompositionIndex);
                 return result;
