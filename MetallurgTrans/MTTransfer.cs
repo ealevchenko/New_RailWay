@@ -919,8 +919,8 @@ namespace MetallurgTrans
                         // грузы в вагонах разные
                         car.NumDocArrival = (int)mtt_err_arrival.close_different_cargo;
                     }
-
                     car.Arrival = car_next.DateOperation;
+                    Console.WriteLine("Вагон:{0}, дата операции:{1}, индекс:{2}, найдено продолжение на подходах, код:{3}", car.Num, car.DateOperation, car.CompositionIndex, car.NumDocArrival);
                     return efmt.SaveApproachesCars(car); // сохранить изменение
                 }
                 //-----------------------------------------------------------------------------
@@ -932,6 +932,7 @@ namespace MetallurgTrans
                     DateTime dt_oper = car_arrival.DateOperation;
                     car.NumDocArrival = num;
                     car.Arrival = dt_oper;
+                    Console.WriteLine("Вагон:{0}, дата операции:{1}, индекс:{2}, найдено продолжение в прибитии, код:{3}", car.Num, car.DateOperation, car.CompositionIndex, car.NumDocArrival);
                     return efmt.SaveApproachesCars(car); // сохранить изменение         
                 }
                 //-----------------------------------------------------------------------------
@@ -940,6 +941,7 @@ namespace MetallurgTrans
                 {
                     car.NumDocArrival = (int)mtt_err_arrival.close_arrival_station_on;
                     car.Arrival = DateTime.Now;
+                    Console.WriteLine("Вагон:{0}, дата операции:{1}, индекс:{2}, прибыл на станцию (3 дня прошло -закрываю), код:{3}", car.Num, car.DateOperation, car.CompositionIndex, car.NumDocArrival);
                     return efmt.SaveApproachesCars(car); // сохранить изменение                        
                 }
                 //-----------------------------------------------------------------------------
@@ -949,6 +951,7 @@ namespace MetallurgTrans
                 //    car.Arrival = car_arrival.DateOperation;
                 //    return efmt.SaveApproachesCars(car); // сохранить изменение                        
                 //}
+                Console.WriteLine("Вагон:{0}, дата операции:{1}, индекс:{2} - оставлен до выяснения", car.Num, car.DateOperation, car.CompositionIndex);
                 return result;
             }
             catch (Exception e)

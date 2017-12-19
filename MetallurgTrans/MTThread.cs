@@ -22,8 +22,11 @@ namespace MetallurgTrans
         protected Thread thTransferApproaches = null;
         public bool statusTransferApproaches { get { return thTransferApproaches.IsAlive; } }
 
-        protected Thread thTransferArrival = null; 
+        protected Thread thTransferArrival = null;
         public bool statusTransferArrival { get { return thTransferArrival.IsAlive; } }
+
+        protected Thread thCloseTransferApproaches = null; 
+        public bool statusCloseTransferApproaches { get { return thCloseTransferApproaches.IsAlive; } }
 
         public MTThread()
         { 
@@ -33,7 +36,7 @@ namespace MetallurgTrans
         public MTThread(service servece_name) {
             servece_owner = servece_name;
         }
-
+        #region TransferApproaches
         /// <summary>
         /// Запустить поток переноса вагонов на подходах
         /// </summary>
@@ -64,38 +67,8 @@ namespace MetallurgTrans
             
         }
         /// <summary>
-        /// Запустить поток переноса вагонов по прибытию
-        /// </summary>
-        /// <param name="delay"></param>
-        /// <returns></returns>
-        public bool StartTransferArrival()
-        {
-            service service = service.TransferArrival;
-            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
-            try
-            {
-                if ((thTransferArrival == null) || (!thTransferArrival.IsAlive && thTransferArrival.ThreadState == ThreadState.Stopped))
-                {
-                    thTransferArrival = new Thread(TransferArrival);
-                    thTransferArrival.Name = service.ToString();
-                    thTransferArrival.Start();
-                    //mes_service_start += " - запущен.";
-                    //mes_service_start.WriteEvents(EventStatus.Ok, servece_owner, eventID);
-                }
-                return thTransferApproaches.IsAlive;
-            }
-            catch (Exception ex)
-            {
-                mes_service_start += " - ошибка запуска.";
-                ex.WriteError(mes_service_start, servece_owner, eventID);
-                //mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
-                return false;
-            }
-        }
-        /// <summary>
         /// Поток переноса вагонов на подходах
         /// </summary>
-        /// <param name="delay"></param>
         private static void TransferApproaches()
         {
             service service = service.TransferApproaches;
@@ -191,10 +164,41 @@ namespace MetallurgTrans
 
             }
         }
+        #endregion
+
+        #region TransferArrival
+        /// <summary>
+        /// Запустить поток переноса вагонов по прибытию
+        /// </summary>
+        /// <param name="delay"></param>
+        /// <returns></returns>
+        public bool StartTransferArrival()
+        {
+            service service = service.TransferArrival;
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
+            try
+            {
+                if ((thTransferArrival == null) || (!thTransferArrival.IsAlive && thTransferArrival.ThreadState == ThreadState.Stopped))
+                {
+                    thTransferArrival = new Thread(TransferArrival);
+                    thTransferArrival.Name = service.ToString();
+                    thTransferArrival.Start();
+                    //mes_service_start += " - запущен.";
+                    //mes_service_start.WriteEvents(EventStatus.Ok, servece_owner, eventID);
+                }
+                return thTransferApproaches.IsAlive;
+            }
+            catch (Exception ex)
+            {
+                mes_service_start += " - ошибка запуска.";
+                ex.WriteError(mes_service_start, servece_owner, eventID);
+                //mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
+                return false;
+            }
+        }
         /// <summary>
         /// Поток переноса вагонов по прибытию
         /// </summary>
-        /// <param name="delay"></param>
         private static void TransferArrival()
         {
             service service = service.TransferArrival;
@@ -301,5 +305,88 @@ namespace MetallurgTrans
                 service.WriteServices(dt_start, DateTime.Now, -1);
             }
         }
+        #endregion
+
+        #region CloseApproachesCars
+        /// <summary>
+        /// Запустить поток закрытия вагонов на подходах
+        /// </summary>
+        /// <returns></returns>
+        public bool StartCloseApproachesCars()
+        {
+            service service = service.CloseTransferApproaches;
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
+            try
+            {
+                if ((thCloseTransferApproaches == null) || (!thCloseTransferApproaches.IsAlive && thCloseTransferApproaches.ThreadState == ThreadState.Stopped))
+                {
+                    thCloseTransferApproaches = new Thread(TransferArrival);
+                    thCloseTransferApproaches.Name = service.ToString();
+                    thCloseTransferApproaches.Start();
+                    //mes_service_start += " - запущен.";
+                    //mes_service_start.WriteEvents(EventStatus.Ok, servece_owner, eventID);
+                }
+                return thCloseTransferApproaches.IsAlive;
+            }
+            catch (Exception ex)
+            {
+                mes_service_start += " - ошибка запуска.";
+                ex.WriteError(mes_service_start, servece_owner, eventID);
+                //mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Поток закрытия вагонов на подходах
+        /// </summary>
+        private static void CloseApproachesCars()
+        {
+            service service = service.CloseTransferApproaches;
+            DateTime dt_start = DateTime.Now;
+            try
+            {
+                int day_range_approaches_cars = 30;
+                int day_range_approaches_cars_arrival = 3;
+                // считать настройки
+                //lock (locker_setting)
+                {
+                    try
+                    {   
+                        // тайм аут (дней) по времени для вагонов на подходе
+                        day_range_approaches_cars = RWSetting.GetDB_Config_DefaultSetting<int>("DayRangeApproachesCars", service, day_range_approaches_cars, true);
+                        // тайм аут (дней) по времени для вагонов на подходе прибывших на конечную станцию
+                        day_range_approaches_cars_arrival = RWSetting.GetDB_Config_DefaultSetting<int>("DayRangeApproachesCarsArrival", service, day_range_approaches_cars_arrival, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                    }
+                }
+                dt_start = DateTime.Now;
+                int res_close = 0;
+                {
+                    MTTransfer mtt = new MTTransfer(service);
+                    mtt.DayRangeApproachesCars = 30; // тайм аут (дней) по времени для вагонов на подходе
+                    mtt.DayRangeApproachesCarsArrival = 3; // тайм аут (дней) по времени для вагонов на подходе прибывших на конечную станцию
+                    res_close = mtt.CloseApproachesCars();
+                }
+                TimeSpan ts = DateTime.Now - dt_start;
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_close:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_close);
+                mes_service_exec.WriteInformation(servece_owner, eventID);
+                int res = res_close;
+                service.WriteServices(dt_start, DateTime.Now, res);
+            }
+            catch (ThreadAbortException exc)
+            {
+                String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
+            }
+            catch (Exception ex)
+            {
+                ex.WriteError(String.Format("Ошибка выполнения потока {0} сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, -1);
+
+            }
+        }
+        #endregion
     }
 }

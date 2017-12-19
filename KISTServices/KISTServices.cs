@@ -22,11 +22,11 @@ namespace KISTServices
         private service servece_name = service.ServicesKIS;
         private service thread_copy_arrival = service.CopyArrivalSostavKIS;
         private service thread_arrival = service.TransferArrivalKIS;
-        private service thread_close = service.CloseTransfer;
+        //private service thread_close = service.CloseTransfer;
 
         private int interval_copy_arrival = 60; // секунд
         private int interval_transfer_arrival = 300; // секунд
-        private int interval_close_transfer = 60; // секунд
+        //private int interval_close_transfer = 60; // секунд
 
         bool active_copy_arrival = true;
         bool active_transfer_arrival = true;
@@ -80,7 +80,7 @@ namespace KISTServices
                 // интервалы
                 this.interval_copy_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyArrivalSostavKIS", this.thread_copy_arrival, this.interval_copy_arrival, true);
                 this.interval_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrivalKIS", this.thread_arrival, this.interval_transfer_arrival, true);
-                this.interval_close_transfer = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseTransfer", this.thread_close, this.interval_close_transfer, true);
+                //this.interval_close_transfer = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseTransfer", this.thread_close, this.interval_close_transfer, true);
                 // состояние активности
                 this.active_copy_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyArrivalSostavKIS", this.thread_copy_arrival, this.active_copy_arrival, true);
                 this.active_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrivalKIS", this.thread_arrival, this.active_transfer_arrival, true);
@@ -127,12 +127,12 @@ namespace KISTServices
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
             // Отправить сообщение
-            string mes_service_start = String.Format("Сервис : {0} - запущен. Интервал выполнения сервиса {1}-{2} сек, сервиса {3}-{4} сек., сервиса {5}-{6} сек.", 
-            this.servece_name, this.thread_copy_arrival, this.interval_copy_arrival, this.thread_arrival, this.interval_transfer_arrival, this.thread_close, this.interval_close_transfer);
+            string mes_service_start = String.Format("Сервис : {0} - запущен. Интервал выполнения сервиса {1}-{2} сек, сервиса {3}-{4} сек.", 
+            this.servece_name, this.thread_copy_arrival, this.interval_copy_arrival, this.thread_arrival, this.interval_transfer_arrival);
             mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
             this.thread_copy_arrival.WriteLogStatusServices();
             this.thread_arrival.WriteLogStatusServices();
-            this.thread_close.WriteLogStatusServices();
+            //this.thread_close.WriteLogStatusServices();
         }
         /// <summary>
         /// 
@@ -241,7 +241,7 @@ namespace KISTServices
         }
         #endregion
 
-        #region CopyArrival
+        #region TransferArrivalKIS
         /// <summary>
         /// Запустить поток с учетом бита активности выполнения
         /// </summary>
