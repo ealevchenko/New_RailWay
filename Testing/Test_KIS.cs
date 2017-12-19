@@ -60,5 +60,16 @@ namespace Testing
             kis_trans.DeleteSostavBufferArrivalSostav(217);
         }
 
+        public void Test_KISTransfer_CloseBufferArrivalSostav()
+        {
+            KISTransfer kis_trans = new KISTransfer();
+            kis_trans.CloseBufferArrivalSostav();
+        }
+
+        public void Test_KISThread_StartCloseBufferArrivalSostav()
+        {
+            KISThread kis_t = new KISThread(service.ServicesKIS);
+            kis_t.StartCloseBufferArrivalSostav();
+        }
     }
 }

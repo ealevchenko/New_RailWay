@@ -116,5 +116,11 @@ namespace Testing
             int res = mtt.CloseApproachesCars();
             Console.WriteLine("Закрыто {0}", res);
         }
+
+        public void MTThread_CloseApproachesCars()
+        {
+            MTThread mth = new MTThread(service.ServicesMT);
+            mth.StartCloseApproachesCars();
+        }
     }
 }
