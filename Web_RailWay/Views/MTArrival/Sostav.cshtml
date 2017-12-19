@@ -5,7 +5,6 @@
     AjaxOptions ajaxOpts = new AjaxOptions
     {
         OnSuccess = "selectPeriod",
-        //LoadingElementId = "loading",
         LoadingElementDuration = 1000,
         OnBegin = "OnBegin",
         OnFailure = "OnFailure",
@@ -33,25 +32,28 @@
                 @Html.DropDownList("station", station.ToList().GetSelectListItem(ViewReferenceHelpers.GetReferenceStationsOfCodecs, @GlobalResources.all_stations, (int)@ViewBag.station), new { @id = "soflow", @onchange = "$('form#fmList').submit();" })
                 @Html.Label(@GlobalResources.select_date_range_title)
                 <span id="select-range">
-                    <input id="date-start" name="date_start" size="20" value='@ViewBag.dt_start'> до
-                    <input id="date-stop" name="date_stop" size="20" value='@ViewBag.dt_stop'>
+                    <input id="date-start" name="date_start" size="20"> @GlobalResources.to
+                    <input id="date-stop" name="date_stop" size="20">
                 </span>
             </div>
         }
+        @Html.Label(@MTResource.link_approaches, new { @class = "title-label" })&nbsp;
+        <a href='@Url.Action("Sostav", "MTApproaches")' class="btn btn-link">@MTResource.index_report_approaches_sostav_title</a>
+        <a href='@Url.Action("Cars", "MTApproaches")' class="btn btn-link">@MTResource.index_report_approaches_cars_title</a>
+        &nbsp;@Html.Label(@MTResource.link_arrival, new { @class = "title-label" })&nbsp;
+        @*<a href='@Url.Action("Sostav", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_sostav_title</a>*@
+        <a href='@Url.Action("Cars", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_cars_title</a>     
     </div>
     <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
-    @*<div id="loading" class="load" style="display: none">
-            <p>Loading Data...</p>
-        </div>*@
     <div id="report-menu">
-        @{ Html.RenderAction("ListSostav", "MTArrival", new { date_start = @DateTime.Parse(@ViewBag.dt_start), date_stop = @DateTime.Parse(@ViewBag.dt_stop) }); }
+
     </div>
     <div id="report-menu-content">
         <div id="report-operation">
-            @*@{ Html.RenderAction("ListSostavOperation", "MTArrival"); }*@
+
         </div>
         <div id="report-operation-content">
-            @*@{ Html.RenderAction("DetaliSostavOperation", "MTArrival"); }*@
+
         </div>
     </div>
     <div id="cls"></div>

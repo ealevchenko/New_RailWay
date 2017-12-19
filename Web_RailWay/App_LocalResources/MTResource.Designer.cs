@@ -340,6 +340,24 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на На подходах:.
+        /// </summary>
+        public static string link_approaches {
+            get {
+                return ResourceManager.GetString("link_approaches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на По прибытию:.
+        /// </summary>
+        public static string link_arrival {
+            get {
+                return ResourceManager.GetString("link_arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на О компании.
         /// </summary>
         public static string link_goto_mt {

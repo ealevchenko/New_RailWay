@@ -70,8 +70,6 @@
                     required: "Поле с датой пустое!",
                 }
             },
-
-
         })
 
         $('input#date-start').addClass("dateValidation").change(function (e) {
@@ -86,8 +84,6 @@
 
     //Первая выборка
     OnBegin();
-    //alert('date_start:' + d_start.toString('DD.MM.yyyy HH:mm'))
-    //alert('date_stop:' + d_stop.toString('DD.MM.yyyy HH:mm'))
     $.ajax({
         url: '/railway/MTApproaches/ListSostav/',
         type: 'GET',

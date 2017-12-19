@@ -363,4 +363,10 @@
   <data name="mt_approaches_cars_report_title" xml:space="preserve">
     <value>Вагоны с грузами в адрес АМКР на подходах.</value>
   </data>
+  <data name="link_approaches" xml:space="preserve">
+    <value>На подходах:</value>
+  </data>
+  <data name="link_arrival" xml:space="preserve">
+    <value>По прибытию:</value>
+  </data>
 </root>

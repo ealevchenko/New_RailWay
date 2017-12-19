@@ -59,11 +59,10 @@
                 @MTResource.mt_report_field_weight
             </th>
             <th>
-                @MTResource.mt_report_field_code_station_on
+                @MTResource.mt_report_field_code_station_from
             </th>
             <th>
-                @MTResource.mt_report_field_code_station_from
-
+                @MTResource.mt_report_field_code_station_on
             </th>
             <th>
                 @MTResource.mt_report_field_code_station_current
@@ -77,7 +76,7 @@
         @foreach (ApproachesCars cars in Model.ApproachesCars.ToList())
         {
             
-            <tr class='@Html.GetStatusMTApproachesCars(cars.CodeStationFrom, cars.CodeStationCurrent, cars.NumDocArrival)'>
+            <tr class='@Html.GetStatusMTApproachesCars(cars.CodeStationOn, cars.CodeStationCurrent, cars.NumDocArrival)'>
                 <td>
                     @cars.Num (@cars.Operation)
                 </td>
@@ -89,11 +88,12 @@
                     @Html.GetReferenceCargoOfCode(@cars.CargoCode) - вес: @cars.Weight
                 </td>
                 <td>
-                    @Html.GetReferenceStationsOfCode(@cars.CodeStationOn)
-                </td>
-                <td>
                     @Html.GetReferenceStationsOfCode(@cars.CodeStationFrom)
                 </td>
+                <td>
+                    @Html.GetReferenceStationsOfCode(@cars.CodeStationOn)
+                </td>
+
                 <td>
                     @Html.GetReferenceStationsOfCode(@cars.CodeStationCurrent)
                 </td>

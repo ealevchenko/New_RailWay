@@ -261,4 +261,7 @@
   <data name="button_title_close_all" xml:space="preserve">
     <value>Закрыть все</value>
   </data>
+  <data name="to" xml:space="preserve">
+    <value>до</value>
+  </data>
 </root>

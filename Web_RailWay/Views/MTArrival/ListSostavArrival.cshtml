@@ -18,20 +18,3 @@
         }
         , new { @id = "a-sostav-operation", @href = "#" })
 }
-
-<script>
-    // Определим события для выбранных ссылок
-    $(function () {
-        $('a#a-sostav-operation').click(function (evt) {
-            $('a#a-sostav-operation').removeClass();
-            $(this).addClass('selected');
-        });
-    })
-
-    $(document).ready(function () {
-        var el = $('a#a-sostav-operation').first();
-        if (el != null) {
-            el.click();
-        }
-    });
-</script>

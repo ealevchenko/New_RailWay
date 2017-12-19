@@ -29,8 +29,12 @@
                 @Html.DropDownList("station", station.ToList().GetSelectListItem(ViewReferenceHelpers.GetReferenceStationsOfCodecs, @GlobalResources.all_stations, (int)@ViewBag.station), new { @id = "soflow", @onchange = "$('form#fmList').submit();" })*@
             </div>
         }
-        @*<a href="#" class="delivered">Прибывшие</a>
-        <a href="#" class="not-delivered">Не прибывшие</a>*@
+        @Html.Label(@MTResource.link_approaches, new { @class = "title-label" })&nbsp;
+        <a href='@Url.Action("Sostav", "MTApproaches")' class="btn btn-link">@MTResource.index_report_approaches_sostav_title</a>
+        @*<a href='@Url.Action("Cars", "MTApproaches")' class="btn btn-link">@MTResource.index_report_approaches_cars_title</a>*@
+        &nbsp;@Html.Label(@MTResource.link_arrival, new { @class = "title-label" })&nbsp;
+        <a href='@Url.Action("Sostav", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_sostav_title</a>
+        <a href='@Url.Action("Cars", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_cars_title</a>   
     </div>
     <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
     <div id="report-detali">

@@ -26,6 +26,49 @@ BODY {
 DIV#header DIV.title {
     font: bold 1em "Arial Narrow", "Franklin Gothic Medium", Arial;
 }
+.title-label {
+    text-transform: uppercase;
+    color: blanchedalmond;
+}
+/*Ссылки на header*/
+DIV#header a.btn-link {
+        font-weight: normal;
+        color: White;
+        cursor: pointer;
+        border-radius: 0;
+    }
+
+    DIV#header a.btn-link,
+    DIV#header a.btn-link:active,
+    DIV#header a.btn-link[disabled],
+    fieldset[disabled] DIV#header a.btn-link {
+        background-color: transparent;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+        DIV#header a.btn-link,
+        DIV#header a.btn-link:hover,
+        DIV#header a.btn-link:focus,
+        DIV#header a.btn-link:active {
+            border-color: transparent;
+        }
+
+            DIV#header a.btn-link:hover,
+            DIV#header a.btn-link:focus {
+                color: #fcfa7e;
+                text-decoration: underline;
+                background-color: transparent;
+                font-weight:400;
+            }
+
+            DIV#header a.btn-link[disabled]:hover,
+            fieldset[disabled] DIV#header a.btn-link:hover,
+            DIV#header a.btn-link[disabled]:focus,
+            fieldset[disabled] DIV#header a.btn-link:focus {
+                color: #999999;
+                text-decoration: none;
+            }
 
 DIV#report {
     color: #666;
