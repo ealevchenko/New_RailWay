@@ -21,10 +21,9 @@ namespace MessageLog
 
         // сервисы КИС
         ServicesKIS = 200,
-        //CopyArrivalSostavMT = 211,  // поток переноса данных
-        //TransferArrivalMT = 212,    // поток переноса вагонов в прибытие с УЗ
-        CopyArrivalSostavKIS = 211, // поток переноса данных
-        TransferArrivalKIS = 212,   // поток переноса вагонов в прибытие с УЗ по данным КИС
+        CopyArrivalSostavKIS = 211,     // поток переноса данных в буфер
+        TransferArrivalKIS = 212,       // поток переноса вагонов в прибытие с УЗ по данным КИС
+        CloseArrivalSostavKIS = 213,    // поток закрытия данных в буфере
     }
 
 }

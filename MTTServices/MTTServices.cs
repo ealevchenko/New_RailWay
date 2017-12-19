@@ -26,7 +26,7 @@ namespace MTTServices
 
         private int interval_transfer_approaches = 300; // секунд
         private int interval_transfer_arrival = 300; // секунд
-        private int interval_close_approaches = 60*60; // 1раз в час
+        private int interval_close_approaches = 3600; // 1раз в час
 
         bool active_transfer_approaches = true;
         bool active_transfer_arrival = true;
@@ -187,7 +187,7 @@ namespace MTTServices
                     this.interval_close_approaches = interval_close;
                     timer_services_close_approaches.Stop();
                     timer_services_close_approaches.Interval = this.interval_close_approaches * 1000;
-                    RunTimerTransferArrival();
+                    RunTimerCloseApproachesCars();
                     string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_close_approaches, this.interval_close_approaches);
                     mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
                 }
@@ -309,7 +309,7 @@ namespace MTTServices
             try
             {
                 bool active_close = RWSetting.GetDB_Config_DefaultSetting("ActiveCloseApproachesCars", this.thread_close_approaches, this.active_close_approaches, true);
-                StartTransferArrival(active_close);
+                StartCloseApproachesCars(active_close);
                 if (active_close != this.active_close_approaches)
                 {
                     this.active_close_approaches = active_close;

@@ -23,6 +23,9 @@ namespace KIS
         protected Thread thTransferArrivalOfKIS = null;
         public bool statusTransferArrivalOfKIS { get { return thTransferArrivalOfKIS.IsAlive; } }
 
+        protected Thread thCloseBufferArrivalSostav = null;
+        public bool statusCloseBufferArrivalSostav { get { return thCloseBufferArrivalSostav.IsAlive; } }
+
         public KISThread()
         {
 
@@ -32,6 +35,8 @@ namespace KIS
         {
             servece_owner = servece_name;
         }
+
+        #region CopyBufferArrivalSostav
         /// <summary>
         /// Запустить поток переноса информации о составах принятых в системе КИС
         /// </summary>
@@ -105,6 +110,9 @@ namespace KIS
 
             }
         }
+        #endregion
+
+        #region TransferArrivalOfKIS
         /// <summary>
         /// Запустить поток переноса вагонов состава принятых в системе КИС
         /// </summary>
@@ -178,5 +186,84 @@ namespace KIS
 
             }
         }
+        #endregion
+
+        #region CloseBufferArrivalSostav
+        /// <summary>
+        /// Запустить поток закрытия составов в буфере переноса из КИС
+        /// </summary>
+        /// <returns></returns>
+        public bool StartCloseBufferArrivalSostav()
+        {
+            service service = service.CloseArrivalSostavKIS;
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
+            try
+            {
+                if ((thCloseBufferArrivalSostav == null) || (!thCloseBufferArrivalSostav.IsAlive && thCloseBufferArrivalSostav.ThreadState == ThreadState.Stopped))
+                {
+                    thCloseBufferArrivalSostav = new Thread(CloseBufferArrivalSostav);
+                    thCloseBufferArrivalSostav.Name = service.ToString();
+                    thCloseBufferArrivalSostav.Start();
+                }
+                return thCloseBufferArrivalSostav.IsAlive;
+            }
+            catch (Exception ex)
+            {
+                mes_service_start += " - ошибка запуска.";
+                ex.WriteError(mes_service_start, servece_owner, eventID);
+                return false;
+            }
+
+        }
+        /// <summary>
+        /// Поток закрытия составов в буфере переноса из КИС
+        /// </summary>
+        private static void CloseBufferArrivalSostav()
+        {
+            service service = service.CloseArrivalSostavKIS;
+            DateTime dt_start = DateTime.Now;
+            try
+            {
+                int day_range_arrival_kis_copy = 2; // тайм аут (суток) по времени для составов перенесеных из КИС для копирования в систему RailCars
+                // считать настройки
+                lock (locker_setting)
+                {
+                    try
+                    {
+                        // Период контроля добавления натурных листов прибытия
+                        day_range_arrival_kis_copy = RWSetting.GetDB_Config_DefaultSetting<int>("DayRangeArrivalKisCopy", service, day_range_arrival_kis_copy, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                    }
+                }
+                dt_start = DateTime.Now;
+                int res_close = 0;
+                lock (locker_tas)
+                {
+                    // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
+                    KISTransfer kis_trans = new KISTransfer(service);
+                    kis_trans.DayRangeArrivalKisCopy = day_range_arrival_kis_copy; //тайм аут (суток) по времени для составов перенесеных из КИС для копирования в систему RailCars
+                    res_close = kis_trans.CloseBufferArrivalSostav();
+                }
+                TimeSpan ts = DateTime.Now - dt_start;
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_close:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_close);
+                mes_service_exec.WriteInformation(servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, res_close);
+            }
+            catch (ThreadAbortException exc)
+            {
+                String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
+            }
+            catch (Exception ex)
+            {
+                ex.WriteError(String.Format("Ошибка выполнения потока {0} сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, -1);
+
+            }
+        }
+
+        #endregion        
     }
 }

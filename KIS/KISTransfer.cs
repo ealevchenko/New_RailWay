@@ -138,6 +138,9 @@ namespace KIS
         private eventID eventID = eventID.KIS_KISTransfer;
         protected service servece_owner = service.Null;
 
+        private int day_range_arrival_kis_copy = 2; // тайм аут (суток) по времени для составов перенесеных из КИС для копирования в систему RailCars
+        public int DayRangeArrivalKisCopy { get { return this.day_range_arrival_kis_copy; } set { this.day_range_arrival_kis_copy = value; } }
+
         public KISTransfer()
         {
 
@@ -1076,6 +1079,80 @@ namespace KIS
 
         #endregion
 
+        #region Закрыть перенос составов
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public int CloseBufferArrivalSostav() {
+
+            EFTKIS ef_tkis = new EFTKIS();
+            int close = 0;
+            int skip = 0;
+            int error = 0;
+
+            List<BufferArrivalSostav> list = new List<BufferArrivalSostav>();
+            list = ef_tkis.GetBufferArrivalSostavNoClose().OrderBy(c => c.datetime).ToList();
+            foreach (BufferArrivalSostav bas in list.ToList())
+            {
+                int res = CloseBufferArrivalSostav(bas);
+                if (res > 0) { close++; }
+                if (res == 0) { skip++; }
+                if (res < 0) { error++; }
+            }
+            string mess = String.Format("Проверка буфера переноса вагонов из системы КИС в систему RailCars - выполнена, определено {0} не перенесенных состава, закрыто автоматически {1}, пропущено {2}, ошибки закрытия {3}.",
+                list != null ? list.Count() : 0, close, skip, error);
+            mess.WriteInformation(servece_owner, this.eventID);
+            if (list != null && list.Count() > 0) { mess.WriteEvents(error > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+            return close;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bas"></param>
+        /// <returns></returns>
+        public int CloseBufferArrivalSostav(BufferArrivalSostav bas) {
+
+            EFWagons ef_wag = new EFWagons();
+            EFTKIS ef_tkis = new EFTKIS();
+            List<PromVagon> list_pv = ef_wag.GetVagon(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            List<PromNatHist> list_pnh = ef_wag.GetNatHist(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            // Ситуация-1. Проверим наличие вагонов в системе КИС (Могли отменить натурку данных нет в таблицах PromVagons, NanHist)
+            if ((list_pv == null || list_pv.Count() == 0) & (list_pnh == null || list_pnh.Count() == 0)) { 
+                // данных нет в двух таблицах
+                //if (bas.list_wagons != null) { 
+                    // вагоны были выставленны
+                    // удалим вагоны по этому составу, но проверим если была сосздана новая натурка с этими вагонми тогда сделаем коррекцию вагонов по прибытию
+                    return DeleteSostavBufferArrivalSostav(bas.id);
+                //}
+            }
+            // Ситуация-2.  Проверим наличие вагонов в системе КИС (Могли отменить натурку убрать данные из таблиц NanHist)
+            if ((list_pv != null && list_pv.Count() > 0) & (list_pnh == null || list_pnh.Count() == 0)) { 
+                    return DeleteSostavBufferArrivalSostav(bas.id);
+            }
+            // Ситуация-3.  Не все вагоны обновились (нет годности и цеха))
+            if ((list_pv != null && list_pv.Count() > 0) & (list_pnh != null && list_pnh.Count() > 0)) { 
+                    //return DeleteSostavBufferArrivalSostav(bas.id);
+                if (bas.message != null) {
+                    if (bas.message.Contains(((int)errorTransfer.no_stations).ToString())) return 0;
+                    if (bas.message.Contains(((int)errorTransfer.no_ways).ToString())) return 0;
+                    if (bas.message.Contains(((int)errorTransfer.no_wagons).ToString())) return 0;
+                    if (bas.message.Contains(((int)errorTransfer.no_wagon_is_list).ToString())) return 0;
+                    if (bas.message.Contains(((int)errorTransfer.no_wagon_is_nathist).ToString())) return 0;
+                    // Даем срок закрыть данные
+                    if (bas.datetime < DateTime.Now.AddDays(-1 * this.day_range_arrival_kis_copy))
+                    {
+                        bas.close = DateTime.Now;
+                        bas.close_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                        return ef_tkis.SaveArrivalSostav(bas);
+                    }
+                }
+            }
+            // пропускаем
+            return 0;
+        }
+        #endregion
+
         #region Коррекция системы переноса
         /// <summary>
         /// Удалить составы по ранее ошибочно созданной натурке (натурку создали затем убрали и эти вагоны занеслись по новой натурке)
@@ -1098,7 +1175,7 @@ namespace KIS
                 List<BufferArrivalSostav> not_close_list = ef_tkis.GetBufferArrivalSostav().Where(b => b.datetime >= del_bas.datetime & b.id != del_bas.id).ToList();
                 foreach (BufferArrivalSostav bas in not_close_list)
                 {
-                    if (bas.list_wagons.Trim() == del_bas.list_wagons.Trim())
+                    if (bas.list_wagons != null && del_bas.list_wagons != null && bas.list_wagons.Trim() == del_bas.list_wagons.Trim())
                     {
                         new_bas = bas;
                         break;
