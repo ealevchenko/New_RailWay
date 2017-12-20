@@ -222,6 +222,7 @@ namespace MetallurgTrans
                 bool deleteFileHost = true;
                 bool deleteFileMT = true;
                 bool rewriteFile = false;
+                int dayrangeArrivalCars = 10;
                 //"TransferArrival -2".WriteInformation(service.Test, eventID.Test);
                 // считать настройки
                 //lock (locker_setting)
@@ -251,6 +252,9 @@ namespace MetallurgTrans
                         deleteFileMT = RWSetting.GetDB_Config_DefaultSetting("DeleteFileTransferArrival", service, deleteFileMT, true);
                         // Признак перезаписывать файлы при переносе
                         rewriteFile = RWSetting.GetDB_Config_DefaultSetting("RewriteFileTransferArrival", service, rewriteFile, true);
+                        // Период для определения незакрытого состава и вагона 
+                        dayrangeArrivalCars = RWSetting.GetDB_Config_DefaultSetting<int>("AddControlPeriodCopyArrivalSostav", service, dayrangeArrivalCars, true);
+
                         //"TransferArrival -3".WriteInformation(service.Test, eventID.Test);
                     }
                     catch (Exception ex)
@@ -279,6 +283,7 @@ namespace MetallurgTrans
                         {
                             //"TransferArrival -5".WriteInformation(service.Test, eventID.Test);
                             MTTransfer mtt = new MTTransfer(service);
+                            mtt.DayRangeArrivalCars = dayrangeArrivalCars;
                             mtt.ArrivalToRailWay = arrivalToRailWay;
                             mtt.FromPath = toTMPDirPath;
                             mtt.DeleteFile = deleteFileMT;

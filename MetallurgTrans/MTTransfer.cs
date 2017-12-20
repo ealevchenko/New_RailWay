@@ -25,6 +25,7 @@ namespace MetallurgTrans
             not_fromPath = -2,
             not_listApproachesCars = -3,
             not_listArrivalCars = -4,
+            file_error = -5
         //not_listStartArrivalSostav = -5,
     }
     /// <summary>
@@ -506,18 +507,21 @@ namespace MetallurgTrans
                     {
                         // вагон начал движение по новому маршруту
                         old_car.NumDocArrival = (int)mtt_err_arrival.close_new_route;
+                        old_car.Arrival = car.DateOperation;
                     }
                 }
                 else
                 {
                     // больше допустимого интервала
                     old_car.NumDocArrival = (int)mtt_err_arrival.close_timeout;
+                    old_car.Arrival = DateTime.Now;
                 }
             }
             else
             {
                 // грузы в вагонах разные
                 old_car.NumDocArrival = (int)mtt_err_arrival.close_different_cargo;
+                old_car.Arrival = car.DateOperation;
             }
             // закрываем старый вагон
             efmt.SaveArrivalCars(old_car); // сохранить изменение
@@ -532,7 +536,17 @@ namespace MetallurgTrans
         {
             try
             {
-                XDocument doc = XDocument.Load(file);
+                XDocument doc;
+                try
+                {
+                    doc = XDocument.Load(file);
+                }
+                catch (Exception e)
+                {
+                    e.WriteError(String.Format("Ошибка считывания файла:{0}", file), servece_owner, eventID);
+                    return (int)mtt_err.file_error;
+                }
+
                 foreach (XElement element in doc.Element("NewDataSet").Elements("Table"))
                 {
                     string opr = (string)element.Element("Operation");
@@ -563,7 +577,16 @@ namespace MetallurgTrans
             {
                 //Reference api_reference = new Reference();
                 EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
-                XDocument doc = XDocument.Load(file);
+                XDocument doc;
+                try
+                {
+                    doc = XDocument.Load(file);
+                }
+                catch (Exception e)
+                {
+                    e.WriteError(String.Format("Ошибка считывания файла:{0}", file), servece_owner, eventID);
+                    return null;
+                }
                 foreach (XElement element in doc.Element("NewDataSet").Elements("Table"))
                 {
                     try
@@ -710,7 +733,7 @@ namespace MetallurgTrans
                         string index = fi.Name.Substring(5, 13);
                         DateTime date = DateTime.Parse(fi.Name.Substring(19, 4) + "-" + fi.Name.Substring(23, 2) + "-" + fi.Name.Substring(25, 2) + " " + fi.Name.Substring(27, 2) + ":" + fi.Name.Substring(29, 2) + ":00");
                         int operation = GetOperationToXml(file);
-                        // Добавим строку
+                        // Добавим строку если определилась операция
                         listfs.Add(new FileArrivalSostav()
                         {
                             Index = index,
@@ -718,6 +741,7 @@ namespace MetallurgTrans
                             Operation = operation,
                             File = file
                         });
+                        
                     }
                 }
                 catch (Exception e)
@@ -757,6 +781,7 @@ namespace MetallurgTrans
                 try
                 {
                     Console.WriteLine("Переносим файл {0}", fs.File);
+                    XDocument doc= XDocument.Load(fs.File);
                     // защита от записи повторов
                     FileInfo fi = new FileInfo(fs.File);
                     ArrivalSostav exs_sostav = efmt.GetArrivalSostavOfFile(fi.Name);
@@ -765,7 +790,7 @@ namespace MetallurgTrans
                         int? ParentIDSostav = null;
                         int IDArrival = efmt.GetNextIDArrival();
                         // получить не закрытый состав
-                        ArrivalSostav no_close_sostav = efmt.GetNoCloseArrivalSostav(fs.Index, fs.Date);
+                        ArrivalSostav no_close_sostav = efmt.GetNoCloseArrivalSostav(fs.Index, fs.Date, this.day_range_arrival_cars);
 
                         if (no_close_sostav != null)
                         {
@@ -802,7 +827,7 @@ namespace MetallurgTrans
                         // Проверка сравниваем количество если совподает удаляем файл, иначе добавляем новые вагоны и удаляем файл
                         List<ArrivalCars> list = TransferXMLToListArrivalCars(fs.File, exs_sostav.ID);
                         List<ArrivalCars> listdb = efmt.GetArrivalCarsOfSostav(exs_sostav.ID).ToList();
-                        if (list != null & listdb != null)
+                        if (list != null && listdb != null)
                         {
                             if (list.Count() != listdb.Count())
                             {
@@ -968,6 +993,63 @@ namespace MetallurgTrans
             }
 
         }
+        #endregion
+
+        #region Коррекция данных
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="interval"></param>
+        public void CorrectCloseArrivalSostav(int interval) {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            List<int> list = efmt.GetArrivalSostav().OrderBy(s => s.IDArrival).Select(s => s.IDArrival).Distinct().ToList();
+            if (list == null || list.Count() == 0) return;
+            foreach (int id in list)
+            {
+                CorrectCloseArrivalSostav(id, interval);
+            }
+            return;
+        }
+        /// <summary>
+        /// Коррекция наследования операций над составами по группе составов с кодом прибытия
+        /// </summary>
+        /// <param name="id_arrival"></param>
+        /// <returns></returns>
+        public void CorrectCloseArrivalSostav(int id_arrival, int interval) {
+
+            EFMetallurgTrans efmt = new EFMetallurgTrans();   
+            List<ArrivalSostav> list = efmt.GetArrivalSostavOfIDArrival(id_arrival).ToList();
+            if (list == null || list.Count() <= 1) return;
+
+            foreach (ArrivalSostav arr_first in list.Where(c => c.ParentID == null))
+            {
+                //ArrivalSostav car = list.Where(c => c.ParentID == arr_first.ID).FirstOrDefault();
+                CorrectCloseArrivalSostav(arr_first, ref list, interval);
+            }
+            return;
+        }
+        /// <summary>
+        /// Рекурсиный проход по всем составам 
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="list"></param>
+        /// <param name="interval"></param>
+        public void CorrectCloseArrivalSostav(ArrivalSostav car, ref List<ArrivalSostav> list, int interval) { 
+
+            EFMetallurgTrans efmt = new EFMetallurgTrans();                
+            ArrivalSostav car_next = list.Where(c => c.ParentID == car.ID).FirstOrDefault();
+                if (car_next != null) {
+                    DateTime date = car.DateTime.AddDays(interval);
+                    if (car_next.DateTime > date) {
+                        car_next.ParentID = null;
+                        efmt.SaveArrivalSostav(car_next);
+                        return;
+                    }
+                    CorrectCloseArrivalSostav(car_next, ref list, interval);
+                }
+                return;
+        }
+
         #endregion
     }
 }

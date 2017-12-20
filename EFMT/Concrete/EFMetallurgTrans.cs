@@ -960,7 +960,7 @@ namespace EFMT.Concrete
                         dbEntry.Close = ArrivalSostav.Close;
                         dbEntry.Arrival = ArrivalSostav.Arrival;
                         dbEntry.ParentID = ArrivalSostav.ParentID;
-                        dbEntry.ArrivalCars = ArrivalSostav.ArrivalCars;
+                        //dbEntry.ArrivalCars = ArrivalSostav.ArrivalCars;
                     }
                 }
                 context.SaveChanges();
@@ -1005,7 +1005,12 @@ namespace EFMT.Concrete
                 return null;
             }
         }
-
+        /// <summary>
+        /// Показать не закрытые составы по индексу и дате
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public ArrivalSostav GetNoCloseArrivalSostav(string index, DateTime date)
         {
             try
@@ -1018,6 +1023,27 @@ namespace EFMT.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Показать не закрытые составы по индексу и дате и рериоду отбора суток
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="date"></param>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public ArrivalSostav GetNoCloseArrivalSostav(string index, DateTime date, int period)
+        {
+            try
+            {
+                DateTime data_start = date.AddDays(-1 * period);
+                return GetArrivalSostav().Where(s => s.CompositionIndex == index & s.Close == null & s.Arrival == null & s.DateTime >= data_start & s.DateTime <= date).OrderByDescending(s => s.DateTime).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNoCloseArrivalSostav(index={0}, date={1},  period={2})", index, date, period), eventID); 
+                return null;
+            }
+        }
+
         /// <summary>
         /// Получить список составов пренадлежащих указанному коду прибытия с сортировкой
         /// </summary>
@@ -1058,6 +1084,24 @@ namespace EFMT.Concrete
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("GetFirstArrivalSostavOfIDArrival(id_arrival={0})", id_arrival), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список составов по указаному коду прибытия
+        /// </summary>
+        /// <param name="id_arrival"></param>
+        /// <returns></returns>
+        public IQueryable<ArrivalSostav> GetArrivalSostavOfIDArrival(int id_arrival)
+        {
+            try
+            {
+                return GetArrivalSostav().Where(c => c.IDArrival == id_arrival).OrderBy(c => c.ID);
+
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalSostavOfIDArrival(id_arrival={0})", id_arrival), eventID);
                 return null;
             }
         }

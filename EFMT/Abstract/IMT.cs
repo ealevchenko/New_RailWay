@@ -50,7 +50,6 @@ namespace EFMT.Abstract
 
         IQueryable<ArrivalCars> GetArrivalCarsOfSostav(int id_sostav);
         IQueryable<ArrivalCars> GetArrivalCarsOfNumCar(int num_car, bool order);
-        //bool IsArrivalCarsOfSostav(int idsostav);
         List<ArrivalCars> GetArrivalCarsOfConsignees(int id_sostav, int[] Consignees);
         List<ArrivalCars> GetArrivalCarsOfConsignees(int[] Consignees);
         ArrivalCars GetArrivalCarsToNatur(int natur, int num_wag, DateTime dt, int day);
@@ -67,19 +66,15 @@ namespace EFMT.Abstract
         int SaveArrivalSostav(ArrivalSostav ArrivalSostav);
         ArrivalSostav DeleteArrivalSostav(int id);
 
-        //ArrivalSostav GetArrivalSostavOfParentID(int parent_id);
-        //IQueryable<ArrivalSostav> GetArrivalSostavOfIndex(string index, bool start);
+
         ArrivalSostav GetArrivalSostavOfFile(string file);
         ArrivalSostav GetNoCloseArrivalSostav(string index, DateTime date);
+        ArrivalSostav GetNoCloseArrivalSostav(string index, DateTime date, int period);
         IQueryable<ArrivalSostav> GetArrivalSostavOfIDArrival(int id_arrival, bool order);
         ArrivalSostav GetFirstArrivalSostavOfIDArrival(int id_arrival);
-        //int SetArrivalCars(int doc, int num, DateTime dt, int day);
-        //IQueryable<ArrivalSostav> GetStartArrivalSostav();
-        //IQueryable<ArrivalSostav> GetStartArrivalSostav(DateTime start, DateTime stop);
+        IQueryable<ArrivalSostav> GetArrivalSostavOfIDArrival(int id_arrival);
         int GetNextIDArrival();
-        //int GetIDArrival(int id);
-        //int CloseArrivalSostav();
-        //List<ArrivalSostav> GetOperationArrivalSostav(int id_sostav, bool destinct);
+
 
         #endregion
 
