@@ -35,10 +35,10 @@
         });
     // Задать дату 
     var dt = new Date();
-    var d_start = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
+    var d_start = new Date(dt.getFullYear(), dt.getMonth(), (dt.getDate()-1));
     var d_stop = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 23, 59, 59);
-    var s_d_start = d_start.getDate() + '.' + d_start.getMonth() + '.' + d_start.getFullYear() + ' ' + d_start.getHours() + ':' + d_start.getMinutes();
-    var s_d_stop = d_stop.getDate() + '.' + d_stop.getMonth() + '.' + d_stop.getFullYear()+' '+d_stop.getHours()+':'+d_stop.getMinutes()
+    var s_d_start = d_start.getDate() + '.' + (d_start.getMonth()+1) + '.' + d_start.getFullYear() + ' ' + d_start.getHours() + ':' + d_start.getMinutes();
+    var s_d_stop = d_stop.getDate() + '.' + (d_stop.getMonth()+1) + '.' + d_stop.getFullYear()+' '+d_stop.getHours()+':'+d_stop.getMinutes()
     $('#select-range').data('dateRangePicker').setDateRange(s_d_start, s_d_stop);
     //валидация
     $(function () {
