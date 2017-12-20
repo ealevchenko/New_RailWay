@@ -31,7 +31,7 @@ namespace Testing
         {
             MTTransfer mtt = new MTTransfer();
             mtt.FromPath = @"D:\xlm_new";
-            mtt.DeleteFile = true;
+            mtt.DeleteFile = false;
             int res_transfer = mtt.TransferArrival();
         }
 
@@ -122,5 +122,18 @@ namespace Testing
             MTThread mth = new MTThread(service.ServicesMT);
             mth.StartCloseApproachesCars();
         }
+
+        public void MTTransfer_CorrectCloseArrivalSostav()
+        {
+            MTTransfer mtt = new MTTransfer();
+            mtt.CorrectCloseArrivalSostav(120,10);
+        }
+
+        public void MTTransfer_CorrectCloseArrivalSostav(int id)
+        {
+            MTTransfer mtt = new MTTransfer();
+            mtt.CorrectCloseArrivalSostav(id);
+        }
+
     }
 }

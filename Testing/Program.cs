@@ -81,8 +81,10 @@ namespace Testing
             //tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
             //tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
             //tst_tr_app.MTThread_TransferArrival(); // Запустить перенос в потоке
-            tst_tr_app.MTTransfer_CloseApproachesCars(); // автозакрытие вагонов на подходах
+            //tst_tr_app.MTTransfer_CloseApproachesCars(); // автозакрытие вагонов на подходах
             //tst_tr_app.MTThread_CloseApproachesCars(); // поток автозакрытие вагонов на подходах
+            //tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(); // Коррекция составов по прибытию
+            tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(10);// Коррекция составов по прибытию всех составов
             #endregion
 
             #region Test_KIS
