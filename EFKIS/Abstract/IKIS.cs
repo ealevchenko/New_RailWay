@@ -100,6 +100,44 @@ namespace EFKIS.Abstract
         IQueryable<NumVagStpr1Gr> GetSTPR1GR();
         NumVagStpr1Gr GetSTPR1GR(int kod_gr);
         #endregion
+
+        #region NumVagStpr1InStDoc (Составы по прибытию)
+
+        IQueryable<NumVagStpr1InStDoc> NumVagStpr1InStDoc { get; }
+        IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDoc();
+        NumVagStpr1InStDoc GetSTPR1InStDoc(int doc);
+        IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDoc(DateTime start, DateTime stop);
+        IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDoc(DateTime start, DateTime stop, bool order);
+        IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDocOfAmkr(string where);
+        IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDocOfAmkr();
+        #endregion
+
+        #region NumVagStpr1InStVag (вагоны по прибытию)
+        IQueryable<NumVagStpr1InStVag> NumVagStpr1InStVag { get; }
+        IQueryable<NumVagStpr1InStVag> GetSTPR1InStVag();
+        IQueryable<NumVagStpr1InStVag> GetSTPR1InStVag(int doc);
+        IQueryable<NumVagStpr1InStVag> GetSTPR1InStVag(int doc, bool sort);
+        int GetCountSTPR1InStVag(int doc);
+        #endregion
+
+        #region NumVagStpr1OutStDoc (Составы по отправке)
+        IQueryable<NumVagStpr1OutStDoc> NumVagStpr1OutStDoc { get; }
+        IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDoc();
+        NumVagStpr1OutStDoc GetSTPR1OutStDoc(int doc);
+        IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDoc(DateTime start, DateTime stop);
+        IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDoc(DateTime start, DateTime stop, bool order);
+        IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDocOfAmkr(string where);
+        IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDocOfAmkr();
+        #endregion
+
+        #region NumVagStpr1OutStVag (вагоны по отправке)
+        IQueryable<NumVagStpr1OutStVag> NumVagStpr1OutStVag { get; }
+        IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStVag();
+        IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStVag(int doc);
+        IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStVag(int doc, bool sort);
+        int GetCountSTPR1OutStVag(int doc);
+        #endregion
+
         #endregion
     }
 }

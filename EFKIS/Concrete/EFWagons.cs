@@ -930,7 +930,7 @@ namespace EFKIS.Concrete
 
         #endregion
 
-
+        
         #region NUM_VAG (Информация по вагонам)
 
         #region NumVagStpr1Gr (Справочник грузов по вагонам)
@@ -969,7 +969,353 @@ namespace EFKIS.Concrete
         }
         #endregion
 
+        #region NumVagStpr1InStDoc (Составы по прибытию)
+
+        public IQueryable<NumVagStpr1InStDoc> NumVagStpr1InStDoc
+        {
+            get { return context.NumVagStpr1InStDoc; }
+        }
+        /// <summary>
+        /// Получить список операций перемещений по прибытию с других станций
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDoc()
+        {
+            try
+            {
+                return NumVagStpr1InStDoc;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1InStDoc()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить строку по номеру документа
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public NumVagStpr1InStDoc GetSTPR1InStDoc(int doc)
+        {
+            try
+            {
+                return GetSTPR1InStDoc().Where(i => i.ID_DOC == doc).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1InStDoc(doc={0})",doc), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Показать за указаный период
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDoc(DateTime start, DateTime stop)
+        {
+            try
+            {
+                return GetSTPR1InStDoc().Where(v => v.DATE_IN_ST >= start & v.DATE_IN_ST <= stop);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1InStDoc(start={0}, stop={1})", start, stop), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Показать за указаный период с сортировкой
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDoc(DateTime start, DateTime stop, bool order)
+        {
+            try
+            {
+                if (order)
+                { return GetSTPR1InStDoc(start, stop).OrderByDescending(i => i.DATE_IN_ST); }
+                else
+                { return GetSTPR1InStDoc(start, stop).OrderBy(i => i.DATE_IN_ST); }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1InStDoc(start={0}, stop={1}, order={2})", start, stop, order), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список операций перемещений по прибытию с других станций c дополнительной выборкой
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDocOfAmkr(string where)
+        {
+            try
+            {
+                string sql = "select a.* from NUM_VAG.STPR1_IN_ST_DOC a inner join NUM_VAG.STAN b on a.ST_IN_ST=b.K_STAN and b.MPS=0 " + (!String.IsNullOrWhiteSpace(where) ? " WHERE " + where : "");
+                return context.Database.SqlQuery<NumVagStpr1InStDoc>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1InStDocOfAmkr(where={0})", where), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список операций перемещений по прибытию с других станций на станции АМКР
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDocOfAmkr()
+        { return GetSTPR1InStDocOfAmkr(null); }
         #endregion
+
+        #region NumVagStpr1InStVag (вагоны по прибытию)
+        public IQueryable<NumVagStpr1InStVag> NumVagStpr1InStVag
+        {
+            get { return context.NumVagStpr1InStVag; }
+        }
+        /// <summary>
+        /// Получить список вагонов перемещений по внутреним станциям по прибытию
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1InStVag> GetSTPR1InStVag()
+        {
+            try
+            {
+                return NumVagStpr1InStVag;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1InStVag()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список вагонов перемещений по внутреним станциям по прибытию по указаномку документу
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1InStVag> GetSTPR1InStVag(int doc)
+        {
+            try
+            {
+                return GetSTPR1InStVag().Where(v => v.ID_DOC == doc);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1InStVag(doc={0})", doc), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список вагонов перемещений по внутреним станциям по прибытию по указаному документу c сортировкой вагонов по порядку прибывания
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1InStVag> GetSTPR1InStVag(int doc, bool sort)
+        {
+            if (sort) { return GetSTPR1InStVag(doc).OrderByDescending(v => v.N_IN_ST); }
+            else { return GetSTPR1InStVag(doc).OrderBy(v => v.N_IN_ST); }
+        }
+        /// <summary>
+        /// Получить количество вагонов
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public int GetCountSTPR1InStVag(int doc)
+        {
+            return GetSTPR1InStVag(doc).Count();
+        }
+        #endregion
+
+        #region NumVagStpr1OutStDoc (Составы по отправке)
+        /// <summary>
+        /// 
+        /// </summary>
+        public IQueryable<NumVagStpr1OutStDoc> NumVagStpr1OutStDoc
+        {
+            get { return context.NumVagStpr1OutStDoc; }
+        }
+        /// <summary>
+        /// Показать все составы
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDoc()
+        {
+            try
+            {
+                return NumVagStpr1OutStDoc;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1OutStDoc()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public NumVagStpr1OutStDoc GetSTPR1OutStDoc(int doc)
+        {
+            try
+            {
+                return GetSTPR1OutStDoc().Where(v => v.ID_DOC == doc).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1OutStDoc(doc={0})", doc), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Показать отправленные составы за указанное время
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDoc(DateTime start, DateTime stop)
+        {
+            try
+            {
+                return GetSTPR1OutStDoc().Where(v => v.DATE_OUT_ST >= start & v.DATE_OUT_ST <= stop);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1OutStDoc(start={0}, stop={1})", start, stop), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Показать за указаный период с сортировкой
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDoc(DateTime start, DateTime stop, bool order)
+        {
+            try
+            {
+                if (order)
+                { return GetSTPR1OutStDoc(start, stop).OrderByDescending(i => i.DATE_OUT_ST); }
+                else
+                { return GetSTPR1OutStDoc(start, stop).OrderBy(i => i.DATE_OUT_ST); }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1OutStDoc(start={0}, stop={1}, order={2})", start, stop, order), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список операций перемещений по отправке с других станций c дополнительной выборкой
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDocOfAmkr(string where)
+        {
+            try
+            {
+                string sql = "select a.* from NUM_VAG.STPR1_OUT_ST_DOC a inner join NUM_VAG.STAN b on a.st_out_st=b.K_STAN and b.MPS=0 " + (!String.IsNullOrWhiteSpace(where) ? " WHERE " + where : "");
+                return context.Database.SqlQuery<NumVagStpr1OutStDoc>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1OutStDocOfAmkr(where={0})", where), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список операций перемещений по отправке с других станций на станции АМКР
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1OutStDoc> GetSTPR1OutStDocOfAmkr()
+        { return GetSTPR1OutStDocOfAmkr(null); }
+        #endregion
+
+        #region NumVagStpr1OutStVag (вагоны по отправке)
+        /// <summary>
+        /// 
+        /// </summary>
+        public IQueryable<NumVagStpr1OutStVag> NumVagStpr1OutStVag
+        {
+            get { return context.NumVagStpr1OutStVag; }
+        }
+        /// <summary>
+        /// Показать все вагоны
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStVag()
+        {
+            try
+            {
+                return NumVagStpr1OutStVag;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1OutStVag()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть список вагонов по номеру документа
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStVag(int doc)
+        {
+            try
+            {
+                return GetSTPR1OutStVag().Where(v => v.ID_DOC == doc);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1OutStVag(doc={0})", doc), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список вагонов перемещений по внутреним станциям по отправке по указаному документу c сортировкой вагонов по порядку прибывания
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStVag(int doc, bool sort)
+        {
+            if (sort) { return GetSTPR1OutStVag(doc).OrderByDescending(v => v.N_OUT_ST); }
+            else { return GetSTPR1OutStVag(doc).OrderBy(v => v.N_OUT_ST); }
+        }
+        /// <summary>
+        /// Вернуть ко вагонов по номеру документа
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        public int GetCountSTPR1OutStVag(int doc)
+        {
+            try
+            {
+                return GetSTPR1InStVag(doc).Count();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCountSTPR1OutStVag(doc={0})", doc), eventID);
+                return -1;
+            }
+        }
+        #endregion
+
+        #endregion
+
+
 
     }
 }
