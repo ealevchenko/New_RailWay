@@ -87,6 +87,8 @@
     <Compile Include="Entities\PromVagon.cs" />
     <Compile Include="Entities\BufferArrivalSostav.cs" />
     <Compile Include="Helpers\Filters.cs" />
+    <Compile Include="Entities\BufferInputSostav.cs" />
+    <Compile Include="Entities\BufferOutputSostav.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,7 @@ namespace EFKIS.Concrete
 
         protected EFTDbContext context = new EFTDbContext();
 
-
+        #region BufferArrivalSostav Перенос прибывших с УЗ вагонов по данным КИС
         public IQueryable<BufferArrivalSostav> BufferArrivalSostav
         {
             get { return context.BufferArrivalSostav; }
@@ -143,7 +143,7 @@ namespace EFKIS.Concrete
         /// Вернуть последнее время по которому перенесли состав
         /// </summary>
         /// <returns></returns>
-        public DateTime? GetLastDateTime()
+        public DateTime? GetLastDateTimeBufferArrivalSostav()
         {
             try
             {
@@ -152,7 +152,7 @@ namespace EFKIS.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetLastDateTime()"), eventID);
+                e.WriteErrorMethod(String.Format("GetLastDateTimeBufferArrivalSostav()"), eventID);
                 return null;
             }
         }
@@ -207,7 +207,293 @@ namespace EFKIS.Concrete
                 return null;
             }
         }
+        #endregion
 
+        #region BufferInputSostav Перенос прибывающих вагонов на станцию по данным КИС
+        public IQueryable<BufferInputSostav> BufferInputSostav
+        {
+            get { return context.BufferInputSostav; }
+        }
 
+        public IQueryable<BufferInputSostav> GetBufferInputSostav()
+        {
+            try
+            {
+                return BufferInputSostav;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferInputSostav()"), eventID);
+                return null;
+            }
+        }
+
+        public BufferInputSostav GetBufferInputSostav(int id)
+        {
+            try
+            {
+                return GetBufferInputSostav().Where(s => s.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferInputSostav(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveBufferInputSostav(BufferInputSostav BufferInputSostav)
+        {
+            BufferInputSostav dbEntry;
+            try
+            {
+                if (BufferInputSostav.id == 0)
+                {
+                    dbEntry = new BufferInputSostav()
+                    {
+                        id = BufferInputSostav.id,
+                        datetime = BufferInputSostav.datetime,
+                        doc_num = BufferInputSostav.doc_num,
+                        id_station_from_kis = BufferInputSostav.id_station_from_kis,
+                        way_num_kis = BufferInputSostav.way_num_kis,
+                        napr = BufferInputSostav.napr,
+                        id_station_on_kis = BufferInputSostav.id_station_on_kis,
+                        count_wagons = BufferInputSostav.count_wagons,
+                        count_set_wagons = BufferInputSostav.count_set_wagons,
+                        natur = BufferInputSostav.natur,
+                        close = BufferInputSostav.close,
+                        close_user = BufferInputSostav.close_user,
+                        status = BufferInputSostav.status,
+                        message = BufferInputSostav.message
+                    };
+                    context.BufferInputSostav.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.BufferInputSostav.Find(BufferInputSostav.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.id = BufferInputSostav.id;
+                        dbEntry.datetime = BufferInputSostav.datetime;
+                        dbEntry.doc_num = BufferInputSostav.doc_num;
+                        dbEntry.id_station_from_kis = BufferInputSostav.id_station_from_kis;
+                        dbEntry.way_num_kis = BufferInputSostav.way_num_kis;
+                        dbEntry.napr = BufferInputSostav.napr;
+                        dbEntry.id_station_on_kis = BufferInputSostav.id_station_on_kis;
+                        dbEntry.count_wagons = BufferInputSostav.count_wagons;
+                        dbEntry.count_set_wagons = BufferInputSostav.count_set_wagons;
+                        dbEntry.natur = BufferInputSostav.natur;
+                        dbEntry.close = BufferInputSostav.close;
+                        dbEntry.close_user = BufferInputSostav.close_user;
+                        dbEntry.status = BufferInputSostav.status;
+                        dbEntry.message = BufferInputSostav.message;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveBufferInputSostav(BufferInputSostav={0})", BufferInputSostav.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public BufferInputSostav DeleteBufferInputSostav(int id)
+        {
+            BufferInputSostav dbEntry = context.BufferInputSostav.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.BufferInputSostav.Remove(dbEntry);
+
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteBufferInputSostav(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        /// <summary>
+        /// Вернуть последнее время по которому перенесли состав
+        /// </summary>
+        /// <returns></returns>
+        public DateTime? GetLastDateTimeBufferInputSostav()
+        {
+            try
+            {
+                BufferInputSostav bis = GetBufferInputSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
+                return bis != null ? (DateTime?)bis.datetime : null;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastDateTimeBufferInputSostav()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть за строки за указанный период
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public IQueryable<BufferInputSostav> GetBufferInputSostav(DateTime start, DateTime stop)
+        {
+            try
+            {
+                return GetBufferInputSostav().Where(o => o.datetime >= start & o.datetime <= stop);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferInputSostav(start={0}, stop={1})", start, stop), eventID);
+                return null;
+            }
+        }
+        #endregion
+
+        #region BufferOutputSostav Перенос отправленных вагонов на станцию по данным КИС
+        public IQueryable<BufferOutputSostav> BufferOutputSostav
+        {
+            get { return context.BufferOutputSostav; }
+        }
+
+        public IQueryable<BufferOutputSostav> GetBufferOutputSostav()
+        {
+            try
+            {
+                return BufferOutputSostav;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferOutputSostav()"), eventID);
+                return null;
+            }
+        }
+
+        public BufferOutputSostav GetBufferOutputSostav(int id)
+        {
+            BufferOutputSostav dbEntry = context.BufferOutputSostav.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.BufferOutputSostav.Remove(dbEntry);
+
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetBufferOutputSostav(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+
+        public int SaveBufferOutputSostav(BufferOutputSostav BufferOutputSostav)
+        {
+            BufferOutputSostav dbEntry;
+            try
+            {
+                if (BufferOutputSostav.id == 0)
+                {
+                    dbEntry = new BufferOutputSostav()
+                    {
+                        id = BufferOutputSostav.id,
+                        datetime = BufferOutputSostav.datetime,
+                        doc_num = BufferOutputSostav.doc_num,
+                        id_station_on_kis = BufferOutputSostav.id_station_on_kis,
+                        way_num_kis = BufferOutputSostav.way_num_kis,
+                        napr = BufferOutputSostav.napr,
+                        id_station_from_kis = BufferOutputSostav.id_station_from_kis,
+                        count_wagons = BufferOutputSostav.count_wagons,
+                        count_set_wagons = BufferOutputSostav.count_set_wagons,
+                        close = BufferOutputSostav.close,
+                        close_user = BufferOutputSostav.close_user,
+                        status = BufferOutputSostav.status,
+                        message = BufferOutputSostav.message
+                    };
+                    context.BufferOutputSostav.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.BufferOutputSostav.Find(BufferOutputSostav.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.id = BufferOutputSostav.id;
+                        dbEntry.datetime = BufferOutputSostav.datetime;
+                        dbEntry.doc_num = BufferOutputSostav.doc_num;
+                        dbEntry.id_station_on_kis = BufferOutputSostav.id_station_on_kis;
+                        dbEntry.way_num_kis = BufferOutputSostav.way_num_kis;
+                        dbEntry.napr = BufferOutputSostav.napr;
+                        dbEntry.id_station_from_kis = BufferOutputSostav.id_station_from_kis;
+                        dbEntry.count_wagons = BufferOutputSostav.count_wagons;
+                        dbEntry.count_set_wagons = BufferOutputSostav.count_set_wagons;
+                        dbEntry.close = BufferOutputSostav.close;
+                        dbEntry.close_user = BufferOutputSostav.close_user;
+                        dbEntry.status = BufferOutputSostav.status;
+                        dbEntry.message = BufferOutputSostav.message;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveBufferOutputSostav(BufferOutputSostav={0})", BufferOutputSostav.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public BufferOutputSostav DeleteBufferOutputSostav(int id)
+        {
+            BufferOutputSostav dbEntry = context.BufferOutputSostav.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.BufferOutputSostav.Remove(dbEntry);
+
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteBufferOutputSostav(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+
+        public DateTime? GetLastDateTimeBufferOutputSostav()
+        {
+            try
+            {
+                BufferOutputSostav bos = GetBufferOutputSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
+                return bos != null ? (DateTime?)bos.datetime : null;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastDateTimeBufferOutputSostav()"), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<BufferOutputSostav> GetBufferOutputSostav(DateTime start, DateTime stop)
+        {
+            try
+            {
+                return GetBufferOutputSostav().Where(o => o.datetime >= start & o.datetime <= stop);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferOutputSostav(start={0}, stop={1})",start,stop), eventID);
+                return null;
+            }
+        }
+        #endregion
     }
 }

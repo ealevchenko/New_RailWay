@@ -18,6 +18,8 @@ namespace EFKIS.Concrete
         }
 
         public virtual DbSet<BufferArrivalSostav> BufferArrivalSostav { get; set; }
+        public virtual DbSet<BufferInputSostav> BufferInputSostav { get; set; }
+        public virtual DbSet<BufferOutputSostav> BufferOutputSostav { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
