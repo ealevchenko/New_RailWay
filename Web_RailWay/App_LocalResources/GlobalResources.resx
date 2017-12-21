@@ -264,4 +264,13 @@
   <data name="to" xml:space="preserve">
     <value>до</value>
   </data>
+  <data name="link_reference_control" xml:space="preserve">
+    <value>Управление справочниками</value>
+  </data>
+  <data name="link_statistic_control" xml:space="preserve">
+    <value>Контроль работы системы</value>
+  </data>
+  <data name="lunk_service_control" xml:space="preserve">
+    <value>Контроль работы служб</value>
+  </data>
 </root>

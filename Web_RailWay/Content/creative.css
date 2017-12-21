@@ -752,3 +752,16 @@ a.select-lang {
 a.select-not-lang {
   color:green;
 }
+
+a.link-admin {
+    color: aliceblue;
+    -webkit-transition: all .35s;
+    -moz-transition: all .35s;
+    transition: all .35s;
+}
+
+    a.link-admin:hover,
+    a.link-admin:focus {
+        font-size:17px;
+        color: #fff;
+    }

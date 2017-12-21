@@ -177,6 +177,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GlobalResources.uk.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\KISResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>KISResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\MTResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -201,6 +206,8 @@
     <Compile Include="Controllers\api\ValuesController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KISController.cs" />
+    <Compile Include="Controllers\KISTController.cs" />
     <Compile Include="Controllers\MettalurgTransController.cs" />
     <Compile Include="Controllers\MTAdminController.cs" />
     <Compile Include="Controllers\MTApproachesController.cs" />
@@ -272,6 +279,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\reports\kis\kistransferarrival.js" />
     <Content Include="Scripts\reports\mt\mtapproachescars.js" />
     <Content Include="Scripts\reports\mt\mtapproachessostav.js" />
     <Content Include="Scripts\reports\mt\mtarrivalcars.js" />
@@ -334,6 +342,10 @@
     <Content Include="Views\MTApproaches\ListGroupDateCars.cshtml" />
     <Content Include="Views\MTApproaches\ListArrivalCarsOfDate.cshtml" />
     <Content Include="Views\MTApproaches\ListCargoArrivalCars.cshtml" />
+    <Content Include="Views\Home\LinkAdmin.cshtml" />
+    <Content Include="Views\KIS\Index.cshtml" />
+    <Content Include="Views\KIS\LinkKISControl.cshtml" />
+    <Content Include="Views\KIST\TransferArrival.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFAccess\EFAccess.csproj">
@@ -394,6 +406,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GlobalResources.uk.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\KISResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>KISResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\MTResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

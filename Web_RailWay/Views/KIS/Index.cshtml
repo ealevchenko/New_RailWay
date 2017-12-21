@@ -1,0 +1,54 @@
+﻿@using Web_RailWay.App_LocalResources;
+
+@{
+    ViewBag.Title = @KISResource.index_title;
+    ViewBag.ImageFone = "background-image: url(Image/header.jpg);";
+    ViewBag.Home = @KISResource.index_title;
+}
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("LinkKISControl", "KIS"); }
+}
+
+<div class="jumbotron">
+    <h1>@ViewBag.Title</h1>
+    <p class="lead">@KISResource.index_description</p>
+    <p><a href="#" class="btn btn-primary btn-lg">@GlobalResources.link_goto</a></p>
+</div>
+
+<div class="content">
+    <ul class="ca-menu">
+        <li>
+            <a href="#">
+                <span class="ca-icon">H</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">@KISResource.index_report_arrival_title</h2>
+                    <h3 class="ca-sub">@KISResource.index_report_arrival_desc</h3>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="ca-icon">K</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">@KISResource.index_report_input_title</h2>
+                    <h3 class="ca-sub">@KISResource.index_report_input_desc</h3>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="ca-icon">H</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">@KISResource.index_report_output_title</h2>
+                    <h3 class="ca-sub">@KISResource.index_report_output_desc</h3>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+@*@Url.Action("Index", "MTApproaches")'*@
+

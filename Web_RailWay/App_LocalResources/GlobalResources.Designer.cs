@@ -322,6 +322,15 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Управление справочниками.
+        /// </summary>
+        public static string link_reference_control {
+            get {
+                return ResourceManager.GetString("link_reference_control", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Выполнить.
         /// </summary>
         public static string link_run {
@@ -331,11 +340,29 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Контроль работы системы.
+        /// </summary>
+        public static string link_statistic_control {
+            get {
+                return ResourceManager.GetString("link_statistic_control", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Мы обрабатываем ваш запрос....
         /// </summary>
         public static string lock_text {
             get {
                 return ResourceManager.GetString("lock_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Контроль работы служб.
+        /// </summary>
+        public static string lunk_service_control {
+            get {
+                return ResourceManager.GetString("lunk_service_control", resourceCulture);
             }
         }
         

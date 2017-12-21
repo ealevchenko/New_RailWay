@@ -1,4 +1,6 @@
-﻿using EFMT.Abstract;
+﻿using EFKIS.Abstract;
+using EFKIS.Concrete;
+using EFMT.Abstract;
 using EFMT.Concrete;
 using EFRC.Abstract;
 using EFRC.Concrete;
@@ -37,6 +39,7 @@ namespace Web_RailWay.Infrastructure
             // конфигурирование контейнера
             ninjectKernel.Bind<IMT>().To<EFMetallurgTrans>();
             ninjectKernel.Bind<ISAP>().To<EFSAP>();
+            ninjectKernel.Bind<ITKIS>().To<EFTKIS>();            
         }
     }
 }

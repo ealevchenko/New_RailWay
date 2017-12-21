@@ -16,6 +16,15 @@ namespace Web_RailWay.Controllers
         }
 
         /// <summary>
+        /// Список основных ссылок на отчеты
+        /// </summary>
+        /// <returns></returns>
+        public PartialViewResult LinkAdmin()
+        {
+            return PartialView();
+        }
+
+        /// <summary>
         /// Смена культуры
         /// </summary>
         /// <param name="lang"></param>
