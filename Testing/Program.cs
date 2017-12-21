@@ -84,7 +84,7 @@ namespace Testing
             //tst_tr_app.MTTransfer_CloseApproachesCars(); // автозакрытие вагонов на подходах
             //tst_tr_app.MTThread_CloseApproachesCars(); // поток автозакрытие вагонов на подходах
             //tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(); // Коррекция составов по прибытию
-            tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(10);// Коррекция составов по прибытию всех составов
+            //tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(10);// Коррекция составов по прибытию всех составов
             #endregion
 
             #region Test_KIS
@@ -97,6 +97,10 @@ namespace Testing
             //tst_kis.Test_KISTransfer_DeleteSostavBufferArrivalSostav(); // Тест коррекции
             //tst_kis.Test_KISTransfer_CloseBufferArrivalSostav();// закрытие
             //tst_kis.Test_KISThread_StartCloseBufferArrivalSostav(); // Запуск потока закрытия составов
+            //tst_kis.Test_KISTransfer_CopyBufferInputSostavOfKIS(); // Копирование в буфер прибытия
+            //tst_kis.Test_KISTransfer_CopyBufferOutputSostavOfKIS(); // Копирование в буфер отправки
+            //tst_kis.Test_KISThread_StartCopyBufferInputSostav(); // Запуск потока Копирование в буфер прибытия
+            tst_kis.Test_KISThread_StartCopyBufferOutputSostav(); // Запуск потока Копирование в буфер отправки
             #endregion
 
             #region Test_Reference

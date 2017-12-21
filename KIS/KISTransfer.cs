@@ -141,6 +141,15 @@ namespace KIS
         private int day_range_arrival_kis_copy = 2; // тайм аут (суток) по времени для составов перенесеных из КИС для копирования в систему RailCars
         public int DayRangeArrivalKisCopy { get { return this.day_range_arrival_kis_copy; } set { this.day_range_arrival_kis_copy = value; } }
 
+        private int day_control_arrival_kis_add_data = 1; // Период(суток) контроля системы КИС вагоны из УЗ КР на предмет вставки новых строк.
+        public int DayControlArrivalKisAddData { get { return this.day_control_arrival_kis_add_data; } set { this.day_control_arrival_kis_add_data = value; } }
+
+        private int day_control_input_kis_add_data = 1; // Период(суток) контроля системы КИС вагоны по прибытию на предмет вставки новых строк.
+        public int DayControlInputKisAddData { get { return this.day_control_input_kis_add_data; } set { this.day_control_input_kis_add_data = value; } }
+
+        private int day_control_output_kis_add_data = 1; // Период(суток) контроля системы КИС вагоны по отправке на предмет вставки новых строк.
+        public int DayControlOutputKisAddData { get { return this.day_control_output_kis_add_data; } set { this.day_control_output_kis_add_data = value; } }
+
         public KISTransfer()
         {
 
@@ -318,6 +327,309 @@ namespace KIS
         }
         #endregion
 
+        #region Таблица переноса составов из КИС [BufferInputSostav]
+        /// <summary>
+        /// Сохранить состав из КИС
+        /// </summary>
+        /// <param name="inp_sostav"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        protected int SaveBufferInputSostav(NumVagStpr1InStDoc inp_sostav, statusSting status)
+        {
+            EFTKIS ef_tkis = new EFTKIS();
+            try
+            {
+                return ef_tkis.SaveBufferInputSostav(new BufferInputSostav()
+                {
+                    id = 0,
+                    datetime = inp_sostav.DATE_IN_ST,
+                    doc_num = inp_sostav.ID_DOC,
+                    id_station_from_kis = inp_sostav.ST_IN_ST != null ? (int)inp_sostav.ST_IN_ST : 0,
+                    way_num_kis = inp_sostav.N_PUT_IN_ST != null ? (int)inp_sostav.N_PUT_IN_ST : 0,
+                    napr = inp_sostav.NAPR_IN_ST != null ? (int)inp_sostav.NAPR_IN_ST : 0,
+                    id_station_on_kis = inp_sostav.K_STAN != null ? (int)inp_sostav.K_STAN : 0,
+                    natur = inp_sostav.OLD_N_NATUR,
+                    count_wagons = null,
+                    count_set_wagons = null,
+                    close = null,
+                    close_user = null,
+                    status = (int)status,
+                    message = null,
+                });
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveBufferInputSostav(inp_sostav={0}, status={1})", inp_sostav.GetFieldsAndValue(), status), servece_owner, eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// проверить изменения в количестве вагонов в составе
+        /// </summary>
+        /// <param name="bis"></param>
+        /// <param name="doc"></param>
+        protected void CheckChangeExistBufferInputSostav(BufferInputSostav bis, int doc)
+        {
+            EFTKIS ef_tkis = new EFTKIS();
+            EFWagons ef_wag = new EFWagons();
+            int count_vag = ef_wag.GetCountSTPR1InStVag(doc);
+            // Количество вагонов изменено
+            if (bis.count_wagons > 0 & count_vag > 0 & bis.count_wagons != count_vag)
+            {
+                // Изменим количество вагонов и отправим на переустановку вагонов
+                bis.count_wagons = count_vag;
+                bis.status = (int)statusSting.Update;
+                bis.close = null;
+                ef_tkis.SaveBufferInputSostav(bis);
+            }
+        }
+        /// <summary>
+        /// Найти и удалить из списка Oracle_InputSostav елемент doc
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        protected bool DelExistBufferInputSostav(ref List<BufferInputSostav> list, int doc)
+        {
+            bool Result = false;
+            int index = list.Count() - 1;
+            while (index >= 0)
+            {
+                if (list[index].doc_num == doc)
+                {
+                    CheckChangeExistBufferInputSostav(list[index], doc); // количество вагонов
+                    list.RemoveAt(index);
+                    Result = true;
+                }
+                index--;
+            }
+            return Result;
+        }
+        /// <summary>
+        /// Проверяет списки NumVagStpr1InStDoc и BufferInputSostav на повторяющие документы, оставляет в списке NumVagStpr1InStDoc - добавленные составы, BufferInputSostav - удаленные из КИС составы
+        /// </summary>
+        /// <param name="list_is"></param>
+        /// <param name="list_ois"></param>
+        protected void DelExistBufferInputSostav(ref List<NumVagStpr1InStDoc> list_is, ref List<BufferInputSostav> list_ois)
+        {
+            int index = list_is.Count() - 1;
+            while (index >= 0)
+            {
+                if (DelExistBufferInputSostav(ref list_ois, list_is[index].ID_DOC))
+                {
+                    list_is.RemoveAt(index);
+                }
+                index--;
+            }
+        }
+        /// <summary>
+        /// удалить строку состава отсутсвующего после переноса
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        protected int DeleteBufferInputSostav(List<BufferInputSostav> list)
+        {
+            EFRailCars ef_rc = new EFRailCars();
+            EFTKIS ef_tkis = new EFTKIS();
+            if (list == null || list.Count == 0) return 0;
+            int delete = 0;
+            int errors = 0;
+            foreach (BufferInputSostav bis in list)
+            {
+                // Удалим вагоны из системы RailCars
+                // TODO: Сделать код удаления вагонов из RailWay
+                // Удалим вагоны из системы RailCars
+                //transfer_rc.DeleteVagonsToDocInput(or_is.DocNum);
+                bis.close = DateTime.Now;
+                bis.close_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                bis.status = (int)statusSting.Delete;
+                int res = ef_tkis.SaveBufferInputSostav(bis);
+                if (res > 0) delete++;
+                if (res < 1)
+                {
+                    String.Format("Ошибка выполнения метода DeleteBufferInputSostav, удаление строки:{0} из таблицы состояния переноса составов (на подходах) по данным системы КИС", bis.id).WriteError(servece_owner, this.eventID);
+                    errors++;
+                }
+            }
+            String.Format("Таблица состояния переноса составов (на подходах) по данным системы КИС, определенно удаленных в системе КИС {0} составов, удалено из таблицы {1}, ошибок удаления {2}.", list.Count(), delete, errors).WriteWarning(servece_owner, this.eventID);
+            return delete;
+        }
+        /// <summary>
+        /// Добавить новые составы появившиеся после переноса
+        /// </summary>
+        /// <param name="list"></param>
+        protected int InsertBufferInputSostav(List<NumVagStpr1InStDoc> list)
+        {
+            if (list == null | list.Count == 0) return 0;
+            int insers = 0;
+            int errors = 0;
+            foreach (NumVagStpr1InStDoc inp_s in list)
+            {
+                int res = SaveBufferInputSostav(inp_s, statusSting.Insert);
+                if (res > 0) insers++;
+                if (res < 1)
+                {
+                    String.Format("Ошибка выполнения метода InsertBufferInputSostav, добавления строки состава по данным системы КИС(№ документа:{0}, дата:{1}) в таблицу состояния переноса составов по прибытию BufferInputSostav", inp_s.ID_DOC, inp_s.DATE_IN_ST).WriteError(servece_owner, this.eventID);
+                    errors++;
+                }
+            }
+            String.Format("Таблица состояния переноса составов (по прибытию) по данным системы КИС, определенно добавленных в системе КИС {0} составов, добавлено в таблицу {1}, ошибок добавления {2}.", list.Count(), insers, errors).WriteWarning(servece_owner, this.eventID);
+            return insers;
+        }
+        #endregion
+
+        #region Таблица переноса составов из КИС [BufferOutputSostav]
+        /// <summary>
+        /// Создать и сохранить строку BufferOutputSostav
+        /// </summary>
+        /// <param name="out_sostav"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        protected int SaveBufferOutputSostav(NumVagStpr1OutStDoc out_sostav, statusSting status)
+        {
+            EFTKIS ef_tkis = new EFTKIS();
+            try
+            {
+                return ef_tkis.SaveBufferOutputSostav(new BufferOutputSostav()
+                {
+                    id = 0,
+                    datetime = out_sostav.DATE_OUT_ST,
+                    doc_num = out_sostav.ID_DOC,
+                    id_station_on_kis = out_sostav.ST_OUT_ST != null ? (int)out_sostav.ST_OUT_ST : 0,
+                    way_num_kis = out_sostav.N_PUT_OUT_ST != null ? (int)out_sostav.N_PUT_OUT_ST : 0,
+                    napr = out_sostav.NAPR_OUT_ST != null ? (int)out_sostav.NAPR_OUT_ST : 0,
+                    id_station_from_kis = out_sostav.K_STAN != null ? (int)out_sostav.K_STAN : 0,
+                    count_wagons = null,
+                    count_set_wagons = null,
+                    close = null,
+                    close_user = null,
+                    status = (int)status,
+                    message = null,
+                });
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveBufferOutputSostav(out_sostav={0}, status={1})", out_sostav.GetFieldsAndValue(), status), servece_owner, eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Проверить изменения в количестве вагонов в составе
+        /// </summary>
+        /// <param name="bos"></param>
+        /// <param name="doc"></param>
+        protected void CheckChangeExistBufferOutputSostav(BufferOutputSostav bos, int doc)
+        {
+            EFTKIS ef_tkis = new EFTKIS();
+            EFWagons ef_wag = new EFWagons();
+            int count_vag = ef_wag.GetCountSTPR1OutStVag(doc);
+            // Количество вагонов изменено
+            if (bos.count_wagons > 0 & count_vag > 0 & bos.count_wagons != count_vag)
+            {
+                // Изменим количество вагонов и отправим на переустановку вагонов
+                bos.count_wagons = count_vag;
+                bos.status = (int)statusSting.Update;
+                bos.close = null;
+                ef_tkis.SaveBufferOutputSostav(bos);
+            }
+        }
+        /// <summary>
+        /// Найти и удалить из списка Oracle_OutputSostav елемент doc
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        protected bool DelExistBufferOutputSostav(ref List<BufferOutputSostav> list, int doc)
+        {
+            bool Result = false;
+            int index = list.Count() - 1;
+            while (index >= 0)
+            {
+                if (list[index].doc_num == doc)
+                {
+                    CheckChangeExistBufferOutputSostav(list[index], doc); // количество вагонов
+                    list.RemoveAt(index);
+                    Result = true;
+                }
+                index--;
+            }
+            return Result;
+        }
+        /// <summary>
+        /// Проверяет списки NumVagStpr1OutStDoc и Oracle_OutputSostav на повторяющие документы, оставляет в списке NumVagStpr1OutStDoc - добавленные составы, Oracle_OutputSostav - удаленные из КИС составы
+        /// </summary>
+        /// <param name="list_is"></param>
+        /// <param name="list_oos"></param>
+        protected void DelExistBufferOutputSostav(ref List<NumVagStpr1OutStDoc> list_is, ref List<BufferOutputSostav> list_oos)
+        {
+            int index = list_is.Count() - 1;
+            while (index >= 0)
+            {
+                if (DelExistBufferOutputSostav(ref list_oos, list_is[index].ID_DOC))
+                {
+                    list_is.RemoveAt(index);
+                }
+                index--;
+            }
+        }
+        /// <summary>
+        /// удалить строку состава отсутсвующего после переноса
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        protected int DeleteBufferOutputSostav(List<BufferOutputSostav> list)
+        {
+            EFRailCars ef_rc = new EFRailCars();
+            EFTKIS ef_tkis = new EFTKIS();
+            
+            if (list == null || list.Count == 0) return 0;
+            int delete = 0;
+            int errors = 0;
+            foreach (BufferOutputSostav bos in list)
+            {
+                // TODO: Сделать код удаления вагонов из RailWay
+                // Удалим вагоны из системы RailCars
+                //transfer_rc.DeleteVagonsToDocOutput(or_os.DocNum);
+                // TODO: Сделать код удаления вагонов из RailWay
+
+                bos.close = DateTime.Now;
+                bos.close_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                bos.status = (int)statusSting.Delete;
+                int res = ef_tkis.SaveBufferOutputSostav(bos);
+                if (res > 0) delete++;
+                if (res < 1)
+                {
+                    String.Format("Ошибка выполнения метода DeleteBufferOutputSostav, удаление строки:{0} из таблицы состояния переноса составов (по прибытию) по данным системы КИС", bos.id).WriteError(servece_owner, this.eventID);
+                    errors++;
+                }
+            }
+            String.Format("Таблица состояния переноса составов (по прибытию) по данным системы КИС, определенно удаленных в системе КИС {0} составов, удалено из таблицы {1}, ошибок удаления {2}.", list.Count(), delete, errors).WriteWarning(servece_owner, this.eventID);
+            return delete;
+        }
+        /// <summary>
+        /// Добавить новые составы появившиеся после переноса
+        /// </summary>
+        /// <param name="list"></param>
+        protected int InsertBufferOutputSostav(List<NumVagStpr1OutStDoc> list)
+        {
+            if (list == null | list.Count == 0) return 0;
+            int insers = 0;
+            int errors = 0;
+            foreach (NumVagStpr1OutStDoc out_s in list)
+            {
+                int res = SaveBufferOutputSostav(out_s, statusSting.Insert);
+                if (res > 0) insers++;
+                if (res < 1)
+                {
+                    String.Format("Ошибка выполнения метода InsertBufferOutputSostav, добавления строки состава по данным системы КИС(№ документа:{0}, дата:{1}) в таблицу состояния переноса составов по прибытию BufferOutputSostav", out_s.ID_DOC, out_s.DATE_OUT_ST).WriteError(servece_owner, this.eventID);
+                    errors++;
+                }
+            }
+            String.Format("Таблица состояния переноса составов (по отправке) по данным системы КИС, определенно добавленных в системе КИС {0} составов, добавлено в таблицу {1}, ошибок добавления {2}.", list.Count(), insers, errors).WriteWarning(servece_owner, this.eventID);
+            return insers;
+        }
+        #endregion
+
         #region Операции с списками номеров вагонов
         /// <summary>
         /// Пренадлежит указаный вагон списку вагонов
@@ -472,7 +784,10 @@ namespace KIS
 
         #region ПЕРЕНОС И ОБНАВЛЕНИЕ ВАГОНОВ ИЗ СИСТЕМЫ КИС в RailWay
 
-        #region Операции с таблицей переноса составов из КИС [ArrivalSostav]
+        #region Операции с таблицей переноса составов из КИС [BufferArrivalSostav]
+        public int CopyBufferArrivalSostavOfKIS() {
+            return CopyBufferArrivalSostavOfKIS(this.day_control_arrival_kis_add_data);
+        }
         /// <summary>
         /// Перенос информации о составах защедших на АМКР по системе КИС (с проверкой на изменение натуральных листов)
         /// </summary>
@@ -493,7 +808,7 @@ namespace KIS
             try
             {
                 // Считаем дату последненго состава
-                DateTime? lastDT = ef_tkis.GetLastDateTime();
+                DateTime? lastDT = ef_tkis.GetLastDateTimeBufferArrivalSostav();
                 if (lastDT != null)
                 {
                     // Данные есть получим новые
@@ -1079,12 +1394,178 @@ namespace KIS
 
         #endregion
 
+
+        #region ПЕРЕНОС ПРИБЫВШИХ СОСТАВОВ НА СТАНЦИЮ С ВАГОНАМИ ИЗ СИСТЕМЫ КИС в RailWay (перенос по прибытию)
+
+        #region Операции с таблицей переноса составов из КИС [BufferInputSostav]
+        public int CopyBufferInputSostavOfKIS() {
+            return CopyBufferInputSostavOfKIS(this.day_control_input_kis_add_data);
+        }
+        /// <summary>
+        /// Перенос информации о составах по внутреним станциям по прибытию
+        /// </summary>
+        /// <returns></returns>
+        public int CopyBufferInputSostavOfKIS(int day_control_ins)
+        {
+            EFTKIS ef_tkis = new EFTKIS();
+            EFWagons ef_wag = new EFWagons();
+            int errors = 0;
+            int normals = 0;
+            // список новых составов в системе КИС
+            List<NumVagStpr1InStDoc> list_newsostav = new List<NumVagStpr1InStDoc>();
+            // список уже перенесенных в RailWay составов в системе КИС (с учетом периода контроля dayControllingAddNatur)
+            List<NumVagStpr1InStDoc> list_oldsostav = new List<NumVagStpr1InStDoc>();
+            // список уже перенесенных в RailWay составов (с учетом периода контроля dayControllingAddNatur)
+            List<BufferInputSostav> list_inputsostav = new List<BufferInputSostav>();
+            try
+            {
+                // Считаем дату последненго состава
+                DateTime? lastDT = ef_tkis.GetLastDateTimeBufferInputSostav();
+                if (lastDT != null)
+                {
+                    // Данные есть получим новые
+                    list_newsostav = ef_wag.GetSTPR1InStDoc(((DateTime)lastDT).AddSeconds(1), DateTime.Now, false).ToList();
+                    list_oldsostav = ef_wag.GetSTPR1InStDoc(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1), false).ToList();
+                    list_inputsostav = ef_tkis.GetBufferInputSostav(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1)).ToList();
+                }
+                else
+                {
+                    // Таблица пуста получим первый раз
+                    list_newsostav = ef_wag.GetSTPR1InStDoc(DateTime.Now.AddDays(day_control_ins * -1), DateTime.Now, false).ToList();
+                }
+                // Переносим информацию по новым составам
+                if (list_newsostav.Count() > 0)
+                {
+                    foreach (NumVagStpr1InStDoc inps in list_newsostav)
+                    {
+
+                        int res = SaveBufferInputSostav(inps, statusSting.Normal);
+                        if (res > 0) normals++;
+                        if (res < 1) { errors++; }
+                    }
+                    string mess_new = String.Format("Таблица состояния переноса составов (перенос по прибытию), по данным системы КИС (определено новых составов:{0}, перенесено:{1}, ошибок переноса:{2}).", list_newsostav.Count(), normals, errors);
+                    mess_new.WriteInformation(servece_owner, this.eventID);
+                    if (list_newsostav.Count() > 0) mess_new.WriteEvents(errors > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
+                }
+                // Обновим информацию по составам которые были перенесены
+                if (list_oldsostav.Count() > 0 & list_inputsostav.Count() > 0)
+                {
+                    List<NumVagStpr1InStDoc> list_is = new List<NumVagStpr1InStDoc>();
+                    list_is = list_oldsostav;
+                    List<BufferInputSostav> list_ois = new List<BufferInputSostav>();
+                    list_ois = list_inputsostav.Where(a => a.status != (int)statusSting.Delete).ToList();
+                    DelExistBufferInputSostav(ref list_is, ref list_ois);
+                    int ins = InsertBufferInputSostav(list_is);
+                    int del = DeleteBufferInputSostav(list_ois);
+
+                    string mess_upd = String.Format("Таблица состояния переноса сосставов (по прибытию) по данным системы КИС (определено добавленных составов:{0}, перенесено:{1}, определено удаленных составов:{2}, удалено:{3}).",
+                    list_is.Count(), ins, list_ois.Count(), del);
+                    mess_upd.WriteInformation(servece_owner, this.eventID);
+                    if (list_is.Count() > 0 | list_is.Count() > 0) mess_upd.WriteEvents(EventStatus.Ok, servece_owner, eventID);
+                    normals += ins;
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CopyBufferInputSostavOfKIS(day_control_ins={0})", day_control_ins), servece_owner, eventID);
+                return -1;
+            }
+            return normals;
+        }
+        #endregion
+
+        #endregion
+
+        #region ПЕРЕНОС ОТПРАВЛЕНЫХ СОСТАВОВ НА СТАНЦИЮ С ВАГОНАМИ ИЗ СИСТЕМЫ КИС в RailWay (перенос по отправке)
+
+        #region Операции с таблицей переноса составов из КИС [BufferOutputSostav]
+        public int CopyBufferOutputSostavOfKIS() {
+            return CopyBufferOutputSostavOfKIS(this.day_control_output_kis_add_data);
+        }
+        /// <summary>
+        /// Перенос информации о составах по внутреним станциям по отправке
+        /// </summary>
+        /// <param name="day_control_ins"></param>
+        /// <returns></returns>
+        public int CopyBufferOutputSostavOfKIS(int day_control_ins)
+        {
+            EFTKIS ef_tkis = new EFTKIS();
+            EFWagons ef_wag = new EFWagons();
+            int errors = 0;
+            int normals = 0;
+            // список новых составов в системе КИС
+            List<NumVagStpr1OutStDoc> list_newsostav = new List<NumVagStpr1OutStDoc>();
+            // список уже перенесенных в RailWay составов в системе КИС (с учетом периода контроля dayControllingAddNatur)
+            List<NumVagStpr1OutStDoc> list_oldsostav = new List<NumVagStpr1OutStDoc>();
+            // список уже перенесенных в RailWay составов (с учетом периода контроля dayControllingAddNatur)
+            List<BufferOutputSostav> list_outputsostav = new List<BufferOutputSostav>();
+            try
+            {
+                // Считаем дату последненго состава
+                DateTime? lastDT = ef_tkis.GetLastDateTimeBufferOutputSostav();
+                if (lastDT != null)
+                {
+                    // Данные есть получим новые
+                    list_newsostav = ef_wag.GetSTPR1OutStDoc(((DateTime)lastDT).AddSeconds(1), DateTime.Now, false).ToList();
+                    list_oldsostav = ef_wag.GetSTPR1OutStDoc(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1), false).ToList();
+                    list_outputsostav = ef_tkis.GetBufferOutputSostav(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1)).ToList();
+                }
+                else
+                {
+                    // Таблица пуста получим первый раз
+                    list_newsostav = ef_wag.GetSTPR1OutStDoc(DateTime.Now.AddDays(day_control_ins * -1), DateTime.Now, false).ToList();
+                }
+                // Переносим информацию по новым составам
+                if (list_newsostav.Count() > 0)
+                {
+                    foreach (NumVagStpr1OutStDoc inps in list_newsostav)
+                    {
+
+                        int res = SaveBufferOutputSostav(inps, statusSting.Normal);
+                        if (res > 0) normals++;
+                        if (res < 1) { errors++; }
+                    }
+                    string mess_new = String.Format("Таблица состояния переноса составов (перенос по отправке), по данным системы КИС (определено новых составов:{0}, перенесено:{1}, ошибок переноса:{2}).", list_newsostav.Count(), normals, errors);
+                    mess_new.WriteInformation(servece_owner, this.eventID);
+                    if (list_newsostav.Count() > 0) mess_new.WriteEvents(errors > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
+                }
+                // Обновим информацию по составам которые были перенесены
+                if (list_oldsostav.Count() > 0 & list_outputsostav.Count() > 0)
+                {
+                    List<NumVagStpr1OutStDoc> list_os = new List<NumVagStpr1OutStDoc>();
+                    list_os = list_oldsostav;
+                    List<BufferOutputSostav> list_oos = new List<BufferOutputSostav>();
+                    list_oos = list_outputsostav.Where(a => a.status != (int)statusSting.Delete).ToList();
+                    DelExistBufferOutputSostav(ref list_os, ref list_oos);
+                    int ins = InsertBufferOutputSostav(list_os);
+                    int del = DeleteBufferOutputSostav(list_oos);
+                    string mess_upd = String.Format("Таблица состояния переноса сосставов (по прибытию) по данным системы КИС (определено добавленных составов:{0}, перенесено:{1}, определено удаленных составов:{2}, удалено:{3}).",
+                        list_os.Count(), ins, list_oos.Count(), del);
+                    mess_upd.WriteInformation(servece_owner, this.eventID);
+                    if (list_os.Count() > 0 | list_os.Count() > 0) mess_upd.WriteEvents(EventStatus.Ok, servece_owner, eventID);
+                    normals += ins;
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CopyBufferOutputSostavOfKIS(day_control_ins={0})", day_control_ins), servece_owner, eventID);
+                return -1;
+            }
+
+            return normals;
+        }
+        #endregion
+
+        #endregion
+
+
         #region Закрыть перенос составов
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public int CloseBufferArrivalSostav() {
+        public int CloseBufferArrivalSostav()
+        {
 
             EFTKIS ef_tkis = new EFTKIS();
             int close = 0;
@@ -1111,29 +1592,34 @@ namespace KIS
         /// </summary>
         /// <param name="bas"></param>
         /// <returns></returns>
-        public int CloseBufferArrivalSostav(BufferArrivalSostav bas) {
+        public int CloseBufferArrivalSostav(BufferArrivalSostav bas)
+        {
 
             EFWagons ef_wag = new EFWagons();
             EFTKIS ef_tkis = new EFTKIS();
             List<PromVagon> list_pv = ef_wag.GetVagon(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
             List<PromNatHist> list_pnh = ef_wag.GetNatHist(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
             // Ситуация-1. Проверим наличие вагонов в системе КИС (Могли отменить натурку данных нет в таблицах PromVagons, NanHist)
-            if ((list_pv == null || list_pv.Count() == 0) & (list_pnh == null || list_pnh.Count() == 0)) { 
+            if ((list_pv == null || list_pv.Count() == 0) & (list_pnh == null || list_pnh.Count() == 0))
+            {
                 // данных нет в двух таблицах
                 //if (bas.list_wagons != null) { 
-                    // вагоны были выставленны
-                    // удалим вагоны по этому составу, но проверим если была сосздана новая натурка с этими вагонми тогда сделаем коррекцию вагонов по прибытию
-                    return DeleteSostavBufferArrivalSostav(bas.id);
+                // вагоны были выставленны
+                // удалим вагоны по этому составу, но проверим если была сосздана новая натурка с этими вагонми тогда сделаем коррекцию вагонов по прибытию
+                return DeleteSostavBufferArrivalSostav(bas.id);
                 //}
             }
             // Ситуация-2.  Проверим наличие вагонов в системе КИС (Могли отменить натурку убрать данные из таблиц NanHist)
-            if ((list_pv != null && list_pv.Count() > 0) & (list_pnh == null || list_pnh.Count() == 0)) { 
-                    return DeleteSostavBufferArrivalSostav(bas.id);
+            if ((list_pv != null && list_pv.Count() > 0) & (list_pnh == null || list_pnh.Count() == 0))
+            {
+                return DeleteSostavBufferArrivalSostav(bas.id);
             }
             // Ситуация-3.  Не все вагоны обновились (нет годности и цеха))
-            if ((list_pv != null && list_pv.Count() > 0) & (list_pnh != null && list_pnh.Count() > 0)) { 
-                    //return DeleteSostavBufferArrivalSostav(bas.id);
-                if (bas.message != null) {
+            if ((list_pv != null && list_pv.Count() > 0) & (list_pnh != null && list_pnh.Count() > 0))
+            {
+                //return DeleteSostavBufferArrivalSostav(bas.id);
+                if (bas.message != null)
+                {
                     if (bas.message.Contains(((int)errorTransfer.no_stations).ToString())) return 0;
                     if (bas.message.Contains(((int)errorTransfer.no_ways).ToString())) return 0;
                     if (bas.message.Contains(((int)errorTransfer.no_wagons).ToString())) return 0;
@@ -1159,7 +1645,8 @@ namespace KIS
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public int DeleteSostavBufferArrivalSostav(int id) {
+        public int DeleteSostavBufferArrivalSostav(int id)
+        {
             EFTKIS ef_tkis = new EFTKIS();
             EFRailCars ef_rc = new EFRailCars();
             EFMetallurgTrans ef_mt = new EFMetallurgTrans();
@@ -1229,14 +1716,15 @@ namespace KIS
                         err_del_rc++;
                     }
                 }
-                if (err_del_rc == 0) {
+                if (err_del_rc == 0)
+                {
                     del_bas.close = DateTime.Now;
                     del_bas.close_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
                     del_bas.status = (int)statusSting.Delete;
                     ef_tkis.SaveArrivalSostav(del_bas);
                 }
                 String.Format(mess + "Из системы RailCars - удалено {0} вагонов, ошибок удаления {1}, из справочника САП вхю пост. удалено {2} строк, в прибытии МТ Скорректировано {3} строки."
-                    , del_rc, err_del_rc,del_sap,upd_mt).WriteEvents(err_del_rc > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
+                    , del_rc, err_del_rc, del_sap, upd_mt).WriteEvents(err_del_rc > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
             }
             catch (Exception e)
             {

@@ -71,5 +71,35 @@ namespace Testing
             KISThread kis_t = new KISThread(service.ServicesKIS);
             kis_t.StartCloseBufferArrivalSostav();
         }
+
+
+        /// <summary>
+        /// Тест копирования по прибытию
+        /// </summary>
+        public void Test_KISTransfer_CopyBufferInputSostavOfKIS()
+        {
+            KISTransfer kis_trans = new KISTransfer(service.ServicesKIS);
+            kis_trans.CopyBufferInputSostavOfKIS(1);
+        }
+
+        public void Test_KISThread_StartCopyBufferInputSostav()
+        {
+            KISThread kis_t = new KISThread(service.ServicesKIS);
+            kis_t.StartCopyBufferInputSostav();
+        }
+
+
+        public void Test_KISTransfer_CopyBufferOutputSostavOfKIS()
+        {
+            KISTransfer kis_trans = new KISTransfer(service.ServicesKIS);
+            kis_trans.CopyBufferOutputSostavOfKIS(1);
+        }
+
+        public void Test_KISThread_StartCopyBufferOutputSostav()
+        {
+            KISThread kis_t = new KISThread(service.ServicesKIS);
+            kis_t.StartCopyBufferOutputSostav();
+        }
+
     }
 }

@@ -24,18 +24,34 @@ namespace KISTServices
         private service thread_arrival = service.TransferArrivalKIS;
         private service thread_close_arrival = service.CloseArrivalSostavKIS;
 
+        private service thread_copy_input = service.CopyInputSostavKIS;
+
+        private service thread_copy_output = service.CopyOutputSostavKIS;
+
         private int interval_copy_arrival = 60; // секунд
         private int interval_transfer_arrival = 300; // секунд
         private int interval_close_arrival = 3600; // секунд
+
+        private int interval_copy_input = 60; // секунд
+
+        private int interval_copy_output = 60; // секунд
 
         bool active_copy_arrival = true;
         bool active_transfer_arrival = true;
         bool active_close_arrival = true;
 
+        bool active_copy_input = true;
+
+        bool active_copy_output = true;
+
         System.Timers.Timer timer_services = new System.Timers.Timer();
         System.Timers.Timer timer_services_copy_arrival = new System.Timers.Timer();
         System.Timers.Timer timer_services_arrival = new System.Timers.Timer();
         System.Timers.Timer timer_services_close_arrival = new System.Timers.Timer();
+
+        System.Timers.Timer timer_services_copy_input = new System.Timers.Timer();
+
+        System.Timers.Timer timer_services_copy_output = new System.Timers.Timer();
 
         private KISThread kist = new KISThread(service.ServicesKIS);
 
@@ -83,10 +99,19 @@ namespace KISTServices
                 this.interval_copy_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyArrivalSostavKIS", this.thread_copy_arrival, this.interval_copy_arrival, true);
                 this.interval_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrivalKIS", this.thread_arrival, this.interval_transfer_arrival, true);
                 this.interval_close_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseArrivalSostavKIS", this.thread_close_arrival, this.interval_close_arrival, true);
+
+                this.interval_copy_input = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyInputSostavKIS", this.thread_copy_input, this.interval_copy_input, true);
+
+                this.interval_copy_output = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyOutputSostavKIS", this.thread_copy_output, this.interval_copy_output, true);
+
                 // состояние активности
                 this.active_copy_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyArrivalSostavKIS", this.thread_copy_arrival, this.active_copy_arrival, true);
                 this.active_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrivalKIS", this.thread_arrival, this.active_transfer_arrival, true);
                 this.active_close_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveCloseArrivalSostavKIS", this.thread_close_arrival, this.active_close_arrival, true);
+
+                this.active_copy_input = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyInputSostavKIS", this.thread_copy_input, this.active_copy_input, true);
+
+                this.active_copy_output = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyOutputSostavKIS", this.thread_copy_output, this.active_copy_output, true);
                 
                 //// Настроем таймер контроля выполнения сервиса
                 timer_services.Interval = 30000;
@@ -100,6 +125,12 @@ namespace KISTServices
 
                 timer_services_close_arrival.Interval = this.interval_close_arrival * 1000;
                 timer_services_close_arrival.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesCloseBufferArrivalSostav);
+
+                timer_services_copy_input.Interval = this.interval_copy_input * 1000;
+                timer_services_copy_input.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesCopyBufferInputSostav);
+
+                timer_services_copy_output.Interval = this.interval_copy_output * 1000;
+                timer_services_copy_output.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesCopyBufferOutputSostav);
 
                 //Добавить инициализацию других таймеров
                 //...............
@@ -127,6 +158,10 @@ namespace KISTServices
             RunTimerCopyArrival();
             RunTimerTransferArrivalKIS();
             RunTimerCloseBufferArrivalSostav();
+
+            RunTimerCopyInput();
+            RunTimerCopyOutput();
+
             //TODO: Добавить запуск других таймеров
             //...............
 
@@ -134,12 +169,22 @@ namespace KISTServices
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
             // Отправить сообщение
-            string mes_service_start = String.Format("Сервис : {0} - запущен. Интервал выполнения сервиса {1}-{2} сек, сервиса {3}-{4} сек, сервиса {5}-{6} сек.",
-            this.servece_name, this.thread_copy_arrival, this.interval_copy_arrival, this.thread_arrival, this.interval_transfer_arrival, this.thread_close_arrival, this.interval_close_arrival);
+            string mes_service_start = String.Format("Сервис : {0} - запущен. Интервал выполнения сервиса {1}-{2} сек, сервиса {3}-{4} сек, сервиса {5}-{6} сек, сервиса {7}-{8} сек, сервиса {9}-{10} сек.",
+            this.servece_name, 
+            this.thread_copy_arrival, this.interval_copy_arrival, 
+            this.thread_arrival, this.interval_transfer_arrival, 
+            this.thread_close_arrival, this.interval_close_arrival,
+            this.thread_copy_input, this.interval_copy_input,
+            this.thread_copy_output, this.interval_copy_output
+            );
             mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
             this.thread_copy_arrival.WriteLogStatusServices();
             this.thread_arrival.WriteLogStatusServices();
             this.thread_close_arrival.WriteLogStatusServices();
+
+            this.thread_copy_input.WriteLogStatusServices();
+
+            this.thread_copy_output.WriteLogStatusServices();
         }
         /// <summary>
         /// 
@@ -164,11 +209,11 @@ namespace KISTServices
             try
             {
                 // CopyArrivalSostavKIS
-                bool active_copy = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyArrivalSostavKIS", this.thread_copy_arrival, this.active_copy_arrival, true);
-                int interval_copy = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyArrivalSostavKIS", this.thread_copy_arrival, this.interval_copy_arrival, true);
-                if (active_copy & interval_copy != this.interval_copy_arrival)
+                bool active_acopy = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyArrivalSostavKIS", this.thread_copy_arrival, this.active_copy_arrival, true);
+                int interval_acopy = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyArrivalSostavKIS", this.thread_copy_arrival, this.interval_copy_arrival, true);
+                if (active_acopy & interval_acopy != this.interval_copy_arrival)
                 {
-                    this.interval_copy_arrival = interval_copy;                    
+                    this.interval_copy_arrival = interval_acopy;                    
                     timer_services_copy_arrival.Stop();
                     timer_services_copy_arrival.Interval = this.interval_copy_arrival * 1000;
                     RunTimerCopyArrival();
@@ -200,6 +245,32 @@ namespace KISTServices
                     string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_close_arrival, this.interval_close_arrival);
                     mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
                 }
+                // CopyInputSostavKIS
+                bool active_icopy = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyInputSostavKIS", this.thread_copy_input, this.active_copy_input, true);
+                int interval_icopy = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyInputSostavKIS", this.thread_copy_input, this.interval_copy_input, true);
+                if (active_icopy & interval_icopy != this.interval_copy_input)
+                {
+                    this.interval_copy_input = interval_icopy;
+                    timer_services_copy_input.Stop();
+                    timer_services_copy_input.Interval = this.interval_copy_input * 1000;
+                    RunTimerCopyInput();
+                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_copy_input, this.interval_copy_input);
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+
+                // CopyOutputSostavKIS
+                bool active_ocopy = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyOutputSostavKIS", this.thread_copy_output, this.active_copy_output, true);
+                int interval_ocopy = RWSetting.GetDB_Config_DefaultSetting("IntervalCopyOutputSostavKIS", this.thread_copy_output, this.interval_copy_output, true);
+                if (active_ocopy & interval_ocopy != this.interval_copy_output)
+                {
+                    this.interval_copy_output = interval_ocopy;
+                    timer_services_copy_output.Stop();
+                    timer_services_copy_output.Interval = this.interval_copy_output * 1000;
+                    RunTimerCopyOutput();
+                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_copy_output, this.interval_copy_output);
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+
             }
             catch (Exception e)
             {
@@ -366,7 +437,7 @@ namespace KISTServices
             try
             {
                 bool active_close = RWSetting.GetDB_Config_DefaultSetting("ActiveCloseArrivalSostavKIS", this.thread_close_arrival, this.active_close_arrival, true);
-                StartCopyArrival(active_close);
+                StartCloseBufferArrivalSostav(active_close);
                 if (active_close != this.active_close_arrival) {
                     this.active_close_arrival = active_close;
                     string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_close_arrival, active_close ? "возабновленно":"остановленно");
@@ -376,6 +447,113 @@ namespace KISTServices
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("OnTimerServicesCopyBufferArrivalSostav(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
+            }
+        }
+        #endregion
+
+        #region CopyInput
+        /// <summary>
+        /// Запустить поток с учетом бита активности выполнения
+        /// </summary>
+        /// <param name="active"></param>
+        protected void StartCopyInput(bool active)
+        {
+            if (active)
+            {
+                kist.StartCopyBufferInputSostav();
+            }
+        }
+        /// <summary>
+        /// Запустить поток
+        /// </summary>
+        protected void StartCopyInput()
+        {
+            bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyInputSostavKIS", this.thread_copy_input, this.active_copy_input, true);
+            StartCopyInput(active_app);
+        }
+        /// <summary>
+        /// Первый запуск или перезапуск потока
+        /// </summary>
+        protected void RunTimerCopyInput()
+        {
+            StartCopyInput();
+            timer_services_copy_input.Start();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnTimerServicesCopyBufferInputSostav(object sender, System.Timers.ElapsedEventArgs args)
+        {
+            //String.Format("Сервис : {0} сработал таймер Approaches.", this.servece_name).WriteInformation(servece_name, eventID);
+            try
+            {
+                bool active_copy = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyInputSostavKIS", this.thread_copy_input, this.active_copy_input, true);
+                StartCopyInput(active_copy);
+                if (active_copy != this.active_copy_input)
+                {
+                    this.active_copy_input = active_copy;
+                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_copy_input, active_copy ? "возабновленно" : "остановленно");
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OnTimerServicesCopyBufferInputSostav(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
+            }
+        }
+        #endregion
+
+        #region CopyOutput
+        /// <summary>
+        /// Запустить поток с учетом бита активности выполнения
+        /// </summary>
+        /// <param name="active"></param>
+        protected void StartCopyOutput(bool active)
+        {
+            if (active)
+            {
+                kist.StartCopyBufferOutputSostav();
+            }
+        }
+        /// <summary>
+        /// Запустить поток
+        /// </summary>
+        protected void StartCopyOutput()
+        {
+            bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyOutputSostavKIS", this.thread_copy_output, this.active_copy_output, true);
+            StartCopyOutput(active_app);
+        }
+        /// <summary>
+        /// Первый запуск или перезапуск потока
+        /// </summary>
+        protected void RunTimerCopyOutput()
+        {
+            StartCopyOutput();
+            timer_services_copy_output.Start();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnTimerServicesCopyBufferOutputSostav(object sender, System.Timers.ElapsedEventArgs args)
+        {
+            try
+            {
+                bool active_copy = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyOutputSostavKIS", this.thread_copy_output, this.active_copy_output, true);
+                StartCopyOutput(active_copy);
+                if (active_copy != this.active_copy_output)
+                {
+                    this.active_copy_output = active_copy;
+                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_copy_output, active_copy ? "возабновленно" : "остановленно");
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OnTimerServicesCopyBufferInputSostav(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
             }
         }
         #endregion
