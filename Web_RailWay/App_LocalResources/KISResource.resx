@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалена</value>
+  </data>
   <data name="index_description" xml:space="preserve">
     <value>Отчетная документация, полученная по данным предоставленным информационной системой КИС. Информация о перемещении подвижного состава на территории АМКР.</value>
   </data>
@@ -141,6 +144,9 @@
   <data name="index_title" xml:space="preserve">
     <value>КИС</value>
   </data>
+  <data name="Insert" xml:space="preserve">
+    <value>Добавлена</value>
+  </data>
   <data name="kis_trnsfer_arrival_report_home" xml:space="preserve">
     <value>Перенос</value>
   </data>
@@ -161,5 +167,107 @@
   </data>
   <data name="link_kis_output_rules" xml:space="preserve">
     <value>Правила переноса по отправке</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Изменена</value>
+  </data>
+  <data name="kis_report_field_arrival_close" xml:space="preserve">
+    <value>Перенос выполнен\закрыт</value>
+  </data>
+  <data name="kis_report_field_arrival_count_wag" xml:space="preserve">
+    <value>Кол. вагонов. (Prom.Vagon)</value>
+  </data>
+  <data name="kis_report_field_arrival_napr" xml:space="preserve">
+    <value>Сторона</value>
+  </data>
+  <data name="kis_report_field_arrival_nathist" xml:space="preserve">
+    <value>таб. Prom.NatHist, кол.вагонов (перенесено)</value>
+  </data>
+  <data name="kis_report_field_arrival_nh_count_wag" xml:space="preserve">
+    <value>Кол. вагонов. (Prom.NatHist)</value>
+  </data>
+  <data name="kis_report_field_arrival_nh_set_count_wag" xml:space="preserve">
+    <value>Перенесено (Prom.NatHist)</value>
+  </data>
+  <data name="kis_report_field_arrival_set_count_wag" xml:space="preserve">
+    <value>Перенесено (Prom.Vagon)</value>
+  </data>
+  <data name="kis_report_field_arrival_station" xml:space="preserve">
+    <value>Прибыл на станцию</value>
+  </data>
+  <data name="kis_report_field_arrival_wagons" xml:space="preserve">
+    <value>таб. Prom.Vagon, кол.вагонов (перенесено)</value>
+  </data>
+  <data name="kis_report_field_arrival_way" xml:space="preserve">
+    <value>Путь</value>
+  </data>
+  <data name="kis_report_field_datetime" xml:space="preserve">
+    <value>Дата и время</value>
+  </data>
+  <data name="kis_report_field_natur" xml:space="preserve">
+    <value>№ Натурки</value>
+  </data>
+  <data name="kis_report_field_status" xml:space="preserve">
+    <value>Статус строки</value>
+  </data>
+  <data name="kis_report_field_car" xml:space="preserve">
+    <value>№</value>
+  </data>
+  <data name="kis_report_field_car_set" xml:space="preserve">
+    <value>Перенесен</value>
+  </data>
+  <data name="kis_report_field_car_upd" xml:space="preserve">
+    <value>Обнавлен</value>
+  </data>
+  <data name="global" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="no_del_input" xml:space="preserve">
+    <value>no_del_input</value>
+  </data>
+  <data name="no_del_output" xml:space="preserve">
+    <value>no_del_output</value>
+  </data>
+  <data name="no_godn" xml:space="preserve">
+    <value>Годность?</value>
+  </data>
+  <data name="no_gruz" xml:space="preserve">
+    <value>Груз?</value>
+  </data>
+  <data name="no_owner" xml:space="preserve">
+    <value>no_owner</value>
+  </data>
+  <data name="no_owner_country" xml:space="preserve">
+    <value>no_owner_country</value>
+  </data>
+  <data name="no_shop" xml:space="preserve">
+    <value>no_shop</value>
+  </data>
+  <data name="no_stations" xml:space="preserve">
+    <value>Станция?</value>
+  </data>
+  <data name="no_station_nazn" xml:space="preserve">
+    <value>no_station_nazn</value>
+  </data>
+  <data name="no_tupik" xml:space="preserve">
+    <value>no_tupik</value>
+  </data>
+  <data name="no_wagons" xml:space="preserve">
+    <value>no_wagons</value>
+  </data>
+  <data name="no_wagon_is_list" xml:space="preserve">
+    <value>no_wagon_is_list</value>
+  </data>
+  <data name="no_wagon_is_nathist" xml:space="preserve">
+    <value>NatHist-нет вагона</value>
+  </data>
+  <data name="no_ways" xml:space="preserve">
+    <value>Путь?</value>
+  </data>
+  <data name="set_table_arrival_sostav" xml:space="preserve">
+    <value>set_table_arrival_sostav</value>
   </data>
 </root>

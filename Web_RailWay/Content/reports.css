@@ -221,6 +221,12 @@ DIV#cls-operation {
     padding-top: 50px;
 }
 
+DIV#report-table {
+    float: left;
+    width: 80%;
+    padding: .3em;
+}
+
 DIV#report-detali {
     padding: 1em;
 }
@@ -310,4 +316,42 @@ text-align:left;
     text-align: left;
     text-transform: uppercase;
     color: darkblue;
+}
+
+/*table-detali*/
+#table-detali {
+
+}
+#table-detali thead tr th {
+    text-align:center;
+    font-weight:600;
+    text-transform:uppercase;
+    background-color:#cccccc;
+    color:#333;
+}
+
+#table-detali tbody tr td {
+    padding:4px;
+    text-align:center;
+}
+
+td a {
+    color: #3A41FF;
+    -webkit-transition: all .35s;
+    -moz-transition: all .35s;
+    transition: all .35s;
+}
+
+td a:hover,
+td a:focus {
+    color: #3A418C;
+    font-weight:600;
+}
+
+td.Ok {
+    color:#35c247;
+}
+
+td.Error {
+    color:#ff0000;
 }

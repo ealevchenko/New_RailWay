@@ -1,0 +1,13 @@
+﻿@using EFKIS.Entities;
+
+@model BufferArrivalSostav
+
+@if (Model.close != null)
+{
+    @Model.close
+    @Model.close_user
+}
+else
+{
+    Html.RenderAction("ButtonCloseBufferArrivalSostav", "KIST", new { id = @Model.id });
+}

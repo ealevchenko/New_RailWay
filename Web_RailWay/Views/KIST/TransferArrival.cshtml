@@ -1,10 +1,19 @@
 ﻿@using Web_RailWay.App_LocalResources;
 @using Web_RailWay.App_Code;
 
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("LinkKISControl", "KIS"); }
+}
+
+
 @{
     AjaxOptions ajaxOpts = new AjaxOptions
     {
-        OnSuccess = "selectGroupDateCars",
+        OnSuccess = "selectPeriod",
         OnBegin = "OnBegin",
         OnFailure = "OnFailure",
         OnComplete = "OnComplete"
@@ -15,19 +24,25 @@
 }
 @Scripts.Render("~/bundles/Ajax")
 @Scripts.Render("~/bundles/jqueryval")
-<link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
+@Styles.Render("~/datetime/css")
+@Scripts.Render("~/bundles/datetime")
+
+@*@Styles.Render("~/jquery-ui/css")
+@Scripts.Render("~/bundles/jquery-ui")*@
+
+@Styles.Render("~/table/css")
+@Scripts.Render("~/bundles/table")
 <script src="~/Scripts/jquery.cookie.js"></script>
+
+<link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
+<link rel="stylesheet" type="text/css" href="~/Content/reports.css">
 <div id="report" class="report-wide">
     <div id="header">
         <div class="title">@ViewBag.Title</div>
-        @Styles.Render("~/datetime/css")
-        @Scripts.Render("~/bundles/datetime")
-        @using (Ajax.BeginForm("ListGroupDateCars", "MTApproaches", ajaxOpts, new { @id = "fmList" })) //
+
+        @using (Ajax.BeginForm("ListBufferArrivalSostavOfDate", "KIST", ajaxOpts, new { @id = "fmList" })) //
         {
             <div id="select-rangedatetime">
-                @*@Html.Label(@GlobalResources.select_station)
-                    @{ int[] station = new int[] { 467004, 467201 }; }
-                    @Html.DropDownList("station", station.ToList().GetSelectListItem(ViewReferenceHelpers.GetReferenceStationsOfCodecs, @GlobalResources.all_stations, (int)@ViewBag.station), new { @id = "soflow", @onchange = "$('form#fmList').submit();" })*@
                 @Html.Label(@GlobalResources.select_date_range_title, new { @class = "title-label" })
                 <span id="select-range">
                     <input id="date-start" name="date_start" size="20"> 
@@ -43,9 +58,11 @@
         <a href='@Url.Action("Sostav", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_sostav_title</a>
         <a href='@Url.Action("Cars", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_cars_title</a>*@
     </div>
-    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
-    <div id="report-detali">
+    
+    <div id="report-table">
 
+    </div>    
+    <div id="report-detali">
     </div>
     <div id="cls"></div>
 </div>

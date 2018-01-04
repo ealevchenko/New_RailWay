@@ -1,0 +1,46 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+@using EFKIS.Entities;
+
+@model BufferArrivalSostav
+<tr id='@Model.id' class='@Html.GetKISStatus( @Model.status != null ?(int) @Model.status : 0 )' name="bas">
+    <td>
+        <a id='@Model.id' name="natur" href="#">@Model.natur</a>
+    </td>
+    <td>
+        @*<a id='@Model.id' name="detali-wagon" href="#"></a>*@
+        @Model.datetime.ToString("dd.MM.yyyy HH:mm:ss")
+    </td>
+    <td>
+        @Html.GetKometaStation((int)@Model.id_station_kis)
+    </td>
+    <td>
+        @Model.way_num
+    </td>
+    <td>
+        @Model.napr
+    </td>
+    <td>
+        @Model.count_wagons (@Model.count_set_wagons)
+    </td>
+    <td>
+        @Model.count_nathist (@Model.count_set_nathist)
+    </td>
+    <td>
+        @if (@Model.status != null)
+        {
+            @Html.GetKISStatusString((int)@Model.status)
+        }
+    </td>
+    <td name='button-close-@Model.id'>
+        @if (Model.close != null)
+        {
+            @Model.close
+            @Model.close_user
+        }
+        else
+        {
+            Html.RenderAction("ButtonCloseBufferArrivalSostav", "KIST", new { id = @Model.id });
+        }
+    </td>
+</tr>

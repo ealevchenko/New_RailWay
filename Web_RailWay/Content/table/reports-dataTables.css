@@ -1,0 +1,46 @@
+﻿/*table.dataTable tbody tr.Normal {
+    background-color: White;
+}*/
+
+table.dataTable tbody tr.Delete {
+    text-decoration:line-through;
+    background-color: #FFE8EB;
+}
+
+table.order-column.dataTable tbody tr.Delete > .sorting_1, table.order-column.dataTable tbody tr.Delete > .sorting_2, table.order-column.dataTable tbody tr.Delete > .sorting_3, table.display.dataTable tbody tr.Delete > .sorting_1, table.display.dataTable tbody tr.Delete > .sorting_2, table.display.dataTable tbody tr.Delete > .sorting_3{
+    background-color: #FFD9EB;
+}
+
+table.dataTable tbody tr.Insert {
+    background-color: #FEF2D9;
+}
+
+table.order-column.dataTable tbody tr.Insert > .sorting_1, table.order-column.dataTable tbody tr.Insert > .sorting_2, table.order-column.dataTable tbody tr.Insert > .sorting_3, table.display.dataTable tbody tr.Insert > .sorting_1, table.display.dataTable tbody tr.Insert > .sorting_2, table.display.dataTable tbody tr.Insert > .sorting_3{
+    background-color: #fef2b3;
+}
+
+table.dataTable tbody tr.Update {
+    background-color: #D9E5FF;
+}
+
+table.order-column.dataTable tbody tr.Update > .sorting_1, table.order-column.dataTable tbody tr.Update > .sorting_2, table.order-column.dataTable tbody tr.Update > .sorting_3, table.display.dataTable tbody tr.Update > .sorting_1, table.display.dataTable tbody tr.Update > .sorting_2, table.display.dataTable tbody tr.Update > .sorting_3{
+    background-color: #fef2b3;
+}
+
+table.dataTable tbody tr.selected {
+    background-color: #B0BED9;
+    color: #ffffff;
+}
+
+table.order-column.dataTable tbody tr.selected > .sorting_1, table.order-column.dataTable tbody tr.selected > .sorting_2, table.order-column.dataTable tbody tr.selected > .sorting_3, table.display.dataTable tbody tr.selected > .sorting_1, table.display.dataTable tbody tr.selected > .sorting_2, table.display.dataTable tbody tr.selected > .sorting_3 {
+    background-color:#acbad5;
+    color: #ffffff;
+}
+
+table.dataTable thead tr th.ui-state-default
+{
+    background-color:#cccccc;
+    color:#333;
+    text-align:center;
+    /*text-transform:uppercase;*/
+}

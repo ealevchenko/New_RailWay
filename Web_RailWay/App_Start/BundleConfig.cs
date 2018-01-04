@@ -8,6 +8,7 @@ namespace Web_RailWay
         // Дополнительные сведения об объединении см. по адресу: http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            //-----------------------------------------------------------------------
             //JS
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
@@ -48,8 +49,13 @@ namespace Web_RailWay
                 , "~/Scripts/datetime/jquery.daterangepicker.js"
                 , "~/Scripts/helpers/lib-datetime.js"
                 ));
+            // Плагин таблицы
+            bundles.Add(new ScriptBundle("~/bundles/table").Include(
+                "~/Scripts/table/jquery.dataTables.min.js",
+                "~/Scripts/table/dataTables.jqueryui.min.js"
+                ));
 
-
+            //-----------------------------------------------------------------------
             //CSS
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css",
@@ -67,6 +73,12 @@ namespace Web_RailWay
                         "~/Content/jquery-ui/jquery-ui.theme.css"));
 
             bundles.Add(new StyleBundle("~/datetime/css").Include("~/Content/datetime/daterangepicker.css"));
+            // Плагин таблицы
+            bundles.Add(new StyleBundle("~/table/css").Include(
+                "~/Content/table/jquery.dataTables.min.css",
+                "~/Content/table/reports-dataTables.css",
+                //"~/Content/jquery-ui/jquery-ui.css"));
+                "~/Content/table/jquery-ui.css"));
         }
     }
 }

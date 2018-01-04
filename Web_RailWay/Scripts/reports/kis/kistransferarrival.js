@@ -35,10 +35,10 @@
         });
     // Задать дату 
     var dt = new Date();
-    var d_start = new Date(dt.getFullYear(), dt.getMonth(), (dt.getDate()-1));
+    var d_start = new Date(dt.getFullYear(), dt.getMonth(), (dt.getDate() - 1));
     var d_stop = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 23, 59, 59);
-    var s_d_start = d_start.getDate() + '.' + (d_start.getMonth()+1) + '.' + d_start.getFullYear() + ' ' + d_start.getHours() + ':' + d_start.getMinutes();
-    var s_d_stop = d_stop.getDate() + '.' + (d_stop.getMonth()+1) + '.' + d_stop.getFullYear()+' '+d_stop.getHours()+':'+d_stop.getMinutes()
+    var s_d_start = d_start.getDate() + '.' + (d_start.getMonth() + 1) + '.' + d_start.getFullYear() + ' ' + d_start.getHours() + ':' + d_start.getMinutes();
+    var s_d_stop = d_stop.getDate() + '.' + (d_stop.getMonth() + 1) + '.' + d_stop.getFullYear() + ' ' + d_stop.getHours() + ':' + d_stop.getMinutes()
     $('#select-range').data('dateRangePicker').setDateRange(s_d_start, s_d_stop);
     //валидация
     $(function () {
@@ -83,50 +83,91 @@
     });
 
     //Первая выборка
-    //OnBegin();
-    //$.ajax({
-    //    url: '/railway/MTApproaches/ListSostav/',
-    //    type: 'GET',
-    //    data: { date_start: d_start.toISOString(), date_stop: d_stop.toISOString(), },
-    //    dataType: 'html',
-    //    success: function (data) {
-    //        selectPeriod(data);
-    //    },
-    //    error: function (x, y, z) {
-    //        LockScreenOff();
-    //        alert(x + '\n' + y + '\n' + z);
-    //    }
-    //});
+    OnBegin();
+    $.ajax({
+        url: '/railway/KIST/ListBufferArrivalSostavOfDate/',
+        type: 'GET',
+        data: { date_start: d_start.toISOString(), date_stop: d_stop.toISOString(), },
+        dataType: 'html',
+        success: function (data) {
+            selectPeriod(data);
+        },
+        error: function (x, y, z) {
+            LockScreenOff();
+            alert(x + '\n' + y + '\n' + z);
+        }
+    });
 
 
 });
 
 function selectPeriod(data) {
-    // Очистить 
-    $("#report-location").empty();
-    // Очистить 
-    $("#report-location-content").empty();
-    // Показать составы 
-    var target = $("#report-menu");
+    var target = $("#report-table");
     target.empty();
     target.append(data);
     LockScreenOff();
 
+    myVar = $.cookie('lang');
+
+    var table = $('#list-buffer-arrival-sostav').DataTable({
+        "paging": false,
+        "ordering": true,
+        "info": false,
+        language: {
+            decimal: myVar == 'en' ? "." : ",",
+            search: myVar == 'en' ? "Search" : "Найти",
+        },
+        columns: [
+            
+            null,
+            null,
+            { "orderData": [2,1] },
+            null,
+            null,
+            { "orderable": false },
+            { "orderable": false },
+            null,
+            null,
+        ],
+        initComplete: function () {
+            this.api().columns([2, 7]).every(function () {
+                var column = this;
+                var name = $(column.header()).attr('title');
+                var select = $('<select><option value="">Все</option></select>')
+                    .appendTo($(column.header()).empty().append(name))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+                        column
+                            .search(val ? '^' + val + '$' : '', true, false)
+                            .draw();
+                    });
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+        },
+        //jQueryUI: false,
+    });
+    table.order( [ 1, 'desc' ] )
+    table.draw();
+
     $(function () {
-        $('a[name ="link-operation"]').click(function (evt) {
+        $('#list-buffer-arrival-sostav tr[name="bas"]').click(function (evt) {
             evt.preventDefault();
-            OnBegin();
-            $('a[name ="link-operation"]').removeClass();
+            //OnBegin();
+            $('#list-buffer-arrival-sostav tr[name="bas"]').removeClass('selected');
             $(this).addClass('selected');
-            var id_sostav = $(this).attr("id")
+            var id = $(this).attr("id")
             // Получим движение состава
             $.ajax({
-                url: '/railway/MTApproaches/ListHistoryLocation/',
+                url: '/railway/KIST/ListCarsBufferArrivalSostav/',
                 type: 'GET',
-                data: { id_sostav: id_sostav, route: false },
+                data: { id: id },
                 dataType: 'html',
                 success: function (data) {
-                    listLocationSostav(data);
+                    listCars(data);
                 },
                 error: function (x, y, z) {
                     LockScreenOff();
@@ -136,39 +177,39 @@ function selectPeriod(data) {
         });
     })
 
-    $(document).ready(function () {
-        var el = $('a[name ="link-operation"]').first();
-        if (el != null) {
-            el.click();
-        }
-    });
+    //$(document).ready(function () {
+    //    var el = $('a[name ="link-operation"]').first();
+    //    if (el != null) {
+    //        el.click();
+    //    }
+    //});
 
 }
 
-function listLocationSostav(data) {
-    // Очистить operation-detali 
-    $("#report-location-content").empty();
+function listCars(data) {
     // Показать операции 
-    var target = $("#report-location");
+    var target = $("#report-detali");
     target.empty();
     target.append(data);
-    LockScreenOff();
+    //LockScreenOff();
 
     $(function () {
-        $('a[name ="link-sostav"]').click(function (evt) {
+        $('input[name ="close-sostav"]').click(function (evt) {
             evt.preventDefault();
             OnBegin();
-            $('a[name ="link-sostav"]').removeClass();
-            $(this).addClass('selected');
-            var id_sostav = $(this).attr("id")
+            //$('input[name ="close-sostav"]').removeClass();
+            var id = $(this).attr("id")
             // Получим движение состава
             $.ajax({
-                url: '/railway/MTApproaches/SostavDetali/',
-                type: 'GET',
-                data: { id_sostav: id_sostav },
+                url: '/railway/KIST/CloseBufferArrivalSostav/',
+                type: 'PUT',
+                data: { id: id },
                 dataType: 'html',
                 success: function (data) {
-                    detaliSostav(data);
+                    var target = $('td[name ="button-close-' + id + '"]');
+                    target.empty();
+                    target.append(data);
+                    LockScreenOff();
                 },
                 error: function (x, y, z) {
                     LockScreenOff();
@@ -177,23 +218,7 @@ function listLocationSostav(data) {
             });
         });
     })
-
-    $(document).ready(function () {
-        var el = $('a[name ="link-sostav"]').first();
-        if (el != null) {
-            el.click();
-        }
-    });
 }
-
-function detaliSostav(data) {
-    var target = $("#report-location-content");
-    target.empty();
-    target.append(data);
-    LockScreenOff();
-}
-
-
 
 function OnBegin() {
     myVar = $.cookie('lang');

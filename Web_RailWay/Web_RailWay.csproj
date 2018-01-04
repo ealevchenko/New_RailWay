@@ -162,6 +162,7 @@
     <Content Include="App_Code\ViewReferenceHelpers.cs" />
     <Content Include="App_Code\ElementsHelpers.cs" />
     <Content Include="App_Code\ViewSAPHelpers.cs" />
+    <Content Include="App_Code\ViewKISHelpers.cs" />
     <Compile Include="App_LocalResources\GlobalResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -239,6 +240,9 @@
     <Content Include="Content\jquery-ui\jquery-ui.theme.min.css" />
     <Content Include="Content\lockpanel\lockpanel.css" />
     <Content Include="Content\reports.css" />
+    <Content Include="Content\table\jquery-ui.css" />
+    <Content Include="Content\table\jquery.dataTables.min.css" />
+    <Content Include="Content\table\reports-dataTables.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -248,6 +252,9 @@
     <Content Include="Image\header.jpg" />
     <Content Include="Image\header1.jpg" />
     <Content Include="Image\Levchenko.jpg" />
+    <Content Include="Image\table\sort_asc.png" />
+    <Content Include="Image\table\sort_both.png" />
+    <Content Include="Image\table\sort_desc.png" />
     <Content Include="Scripts\admin\sap\sapisadmin.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
@@ -287,6 +294,8 @@
     <Content Include="Scripts\reports\mt\mtarrivalsostav.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\table\dataTables.jqueryui.min.js" />
+    <Content Include="Scripts\table\jquery.dataTables.min.js" />
     <Content Include="Scripts\wow.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -346,6 +355,12 @@
     <Content Include="Views\KIS\Index.cshtml" />
     <Content Include="Views\KIS\LinkKISControl.cshtml" />
     <Content Include="Views\KIST\TransferArrival.cshtml" />
+    <Content Include="Views\KIST\ListBufferArrivalSostav.cshtml" />
+    <Content Include="Views\KIST\ListBufferArrivalSostavOfDate.cshtml" />
+    <Content Include="Views\KIST\BufferArrivalSostav.cshtml" />
+    <Content Include="Views\KIST\ListCarsBufferArrivalSostav.cshtml" />
+    <Content Include="Views\KIST\ButtonCloseBufferArrivalSostav.cshtml" />
+    <Content Include="Views\KIST\CloseBufferArrivalSostav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFAccess\EFAccess.csproj">
@@ -371,6 +386,10 @@
     <ProjectReference Include="..\EFRW\EFRW.csproj">
       <Project>{9d7a67b0-932b-40b7-8f30-696832b5088d}</Project>
       <Name>EFRW</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KIS\KIS.csproj">
+      <Project>{27da4048-f46e-4c77-857b-2bd1809fea87}</Project>
+      <Name>KIS</Name>
     </ProjectReference>
     <ProjectReference Include="..\MessageLogs\WebLogs\WebLogs.csproj">
       <Project>{f89091ab-e2d5-465e-9702-39cfa3a46f51}</Project>
@@ -440,8 +459,6 @@
           <DevelopmentServerPort>52536</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:52469/railway</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:52469</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
