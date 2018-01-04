@@ -207,6 +207,27 @@ namespace EFKIS.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Закрыть строку
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int CloseBufferArrivalSostav(int id) {
+            try
+            {
+                BufferArrivalSostav bas = GetBufferArrivalSostav(id);
+                if (bas == null) return 0;
+                bas.close = DateTime.Now;
+                bas.close_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                return SaveArrivalSostav(bas);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseBufferArrivalSostav(id={0})", id), eventID);
+                return -1;
+            }
+
+        }
         #endregion
 
         #region BufferInputSostav Перенос прибывающих вагонов на станцию по данным КИС
