@@ -20,19 +20,23 @@ namespace MTTServices
     {
         private eventID eventID = eventID.MTTServices;
         private service servece_name = service.TransferMT;
+        private service thread_host = service.TransferHost;
         private service thread_approaches = service.TransferApproaches;
         private service thread_arrival = service.TransferArrival;
         private service thread_close_approaches = service.CloseTransferApproaches;
 
+        private int interval_transfer_host = 300; // секунд
         private int interval_transfer_approaches = 300; // секунд
         private int interval_transfer_arrival = 300; // секунд
         private int interval_close_approaches = 3600; // 1раз в час
 
+        bool active_transfer_host = true;        
         bool active_transfer_approaches = true;
         bool active_transfer_arrival = true;
         bool active_close_approaches = true;
 
         System.Timers.Timer timer_services = new System.Timers.Timer();
+        System.Timers.Timer timer_services_host = new System.Timers.Timer();
         System.Timers.Timer timer_services_approaches = new System.Timers.Timer();
         System.Timers.Timer timer_services_arrival = new System.Timers.Timer();
         System.Timers.Timer timer_services_close_approaches = new System.Timers.Timer();
@@ -80,11 +84,13 @@ namespace MTTServices
             try
             {
                 // интервалы
+                this.interval_transfer_host = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferHost", this.thread_host, this.interval_transfer_host, true);
                 this.interval_transfer_approaches = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
                 this.interval_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", this.thread_arrival, this.interval_transfer_arrival, true);
                 this.interval_close_approaches = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseApproachesCars", this.thread_close_approaches, this.interval_close_approaches, true);
 
                 // состояние активности
+                this.active_transfer_host = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferHost", this.thread_host, this.active_transfer_host, true);
                 this.active_transfer_approaches = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
                 this.active_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
                 this.active_close_approaches  = RWSetting.GetDB_Config_DefaultSetting("ActiveCloseApproachesCars", this.thread_close_approaches, this.active_close_approaches, true);
@@ -93,6 +99,9 @@ namespace MTTServices
                 timer_services.Interval = 30000;
                 timer_services.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServices);
 
+                timer_services_host.Interval = this.interval_transfer_host * 1000;
+                timer_services_host.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesHost);
+                
                 timer_services_approaches.Interval = this.interval_transfer_approaches * 1000;
                 timer_services_approaches.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesApproaches);
 
@@ -122,6 +131,7 @@ namespace MTTServices
             // Запустить таймер контроля сервиса
             timer_services.Start();
             // Запустить таймера потоков
+            RunTimerTransferHost();
             RunTimerTransferApproaches();
             RunTimerTransferArrival();
             RunTimerCloseApproachesCars();
@@ -132,9 +142,14 @@ namespace MTTServices
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
             // Отправить сообщение
-            string mes_service_start = String.Format("Сервис : {0} - запущен. Интервал выполнения сервиса {1}-{2} сек, сервиса {3}-{4} сек., сервиса {5}-{6} сек.", 
-                this.servece_name, this.thread_approaches, this.interval_transfer_approaches, this.thread_arrival, this.interval_transfer_arrival, this.thread_close_approaches, this.interval_close_approaches);
+            string mes_service_start = String.Format("Сервис : {0} - запущен. Интервал выполнения", this.servece_name);
+            mes_service_start += String.Format(" сервиса {0}-{1} сек.,", this.thread_host, this.interval_transfer_host);
+            mes_service_start += String.Format(" сервиса {0}-{1} сек.,", this.thread_approaches, this.interval_transfer_approaches);
+            mes_service_start += String.Format(" сервиса {0}-{1} сек.,", this.thread_arrival, this.interval_transfer_arrival);
+            mes_service_start += String.Format(" сервиса {0}-{1} сек.,", this.thread_close_approaches, this.interval_close_approaches);  
             mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+            // лог запуска
+            this.thread_host.WriteLogStatusServices();
             this.thread_approaches.WriteLogStatusServices();
             this.thread_arrival.WriteLogStatusServices();
             this.thread_close_approaches.WriteLogStatusServices();
@@ -155,6 +170,19 @@ namespace MTTServices
             //String.Format("Сервис : {0} сработал таймер OnTimerServices контроля сервиса.", this.servece_name).WriteInformation(servece_name, eventID);            
             try
             {
+                // TransferHost
+                bool active_host = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferHost", this.thread_host, this.active_transfer_host, true);
+                int interval_host = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferHost", this.thread_host, this.interval_transfer_host, true);
+                if (active_host & interval_host != this.interval_transfer_host)
+                {
+                    this.interval_transfer_host = interval_host;
+                    timer_services_host.Stop();
+                    timer_services_host.Interval = this.interval_transfer_host * 1000;
+                    RunTimerTransferHost();
+                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_host, this.interval_transfer_host);
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }   
+             
                 // TransferApproaches
                 bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
                 int interval_app = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
@@ -195,6 +223,47 @@ namespace MTTServices
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("OnTimerServices(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
+            }
+        }
+        #endregion
+
+        #region TransferHost
+        protected void StartTransferHost(bool active)
+        {
+            if (active)
+            {
+                mtt.StartTransferHost();
+            }
+        }
+
+        protected void StartTransferHost()
+        {
+            bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferHost", this.thread_host, this.active_transfer_host, true);
+            StartTransferHost(active_app);
+        }
+
+        protected void RunTimerTransferHost()
+        {
+            StartTransferHost();
+            timer_services_host.Start();
+        }
+
+        private void OnTimerServicesHost(object sender, System.Timers.ElapsedEventArgs args)
+        {
+            //String.Format("Сервис : {0} сработал таймер OnTimerServicesApproaches.", this.servece_name).WriteInformation(servece_name, eventID);
+            try
+            {
+                bool active_app = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferHost", this.thread_host, this.active_transfer_host, true);
+                StartTransferHost(active_app);
+                if (active_app != this.active_transfer_host) {
+                    this.active_transfer_host = active_app;
+                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_host, active_app ? "возабновленно" : "остановленно");
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OnTimerServicesHost(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
             }
         }
         #endregion

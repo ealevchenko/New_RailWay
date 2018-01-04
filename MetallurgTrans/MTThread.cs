@@ -1,5 +1,6 @@
 ﻿using MessageLog;
 using RWSettings;
+using RWConversionFunctions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,9 @@ namespace MetallurgTrans
         //protected static object locker_db_approaches = new object();
         //protected static object locker_db_arrival = new object();
 
+        protected Thread thTransferHost = null;
+        public bool statusTransferHost { get { return thTransferHost.IsAlive; } }
+
         protected Thread thTransferApproaches = null;
         public bool statusTransferApproaches { get { return thTransferApproaches.IsAlive; } }
 
@@ -36,6 +40,128 @@ namespace MetallurgTrans
         public MTThread(service servece_name) {
             servece_owner = servece_name;
         }
+
+        #region TransferHost
+        /// <summary>
+        /// Запустить поток переноса вагонов на подходах
+        /// </summary>
+        /// <returns></returns>
+        public bool StartTransferHost()
+        {
+            service service = service.TransferHost;
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
+            try
+            {
+                if ((thTransferHost == null) || (!thTransferHost.IsAlive && thTransferHost.ThreadState == ThreadState.Stopped))
+                {
+                    thTransferHost = new Thread(TransferHost);
+                    thTransferHost.Name = service.ToString();
+                    thTransferHost.Start();
+                    //mes_service_start += " - запущен.";
+                    //mes_service_start.WriteInformation(servece_owner, eventID);
+                }
+                return thTransferHost.IsAlive;
+            }
+            catch (Exception ex)
+            {
+                mes_service_start += " - ошибка запуска.";
+                ex.WriteError(mes_service_start, servece_owner, eventID);
+                //mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
+                return false;
+            }
+
+        }
+        /// <summary>
+        /// Поток переноса вагонов на подходах
+        /// </summary>
+        private static void TransferHost()
+        {
+            service service = service.TransferHost;
+            service service_host_approaches = service.TransferApproaches;
+            service service_host_arrival = service.TransferArrival;
+            DateTime dt_start = DateTime.Now;
+            try
+            {
+                connectSFTP connect_SFTP = new connectSFTP()
+                {
+                    Host = "www.metrans.com.ua",
+                    Port = 222,
+                    User = "arcelors",
+                    PSW = "$fh#ER2J63"
+                };
+                List<copyPropertySFTP> listProperty = new List<copyPropertySFTP>();
+                // считать настройки
+                //lock (locker_setting)
+                {
+                    try
+                    {
+                        // Если нет перенесем настройки в БД
+                        connect_SFTP = new connectSFTP()
+                        {
+                            Host = RWSetting.GetDB_Config_DefaultSetting<string>("Host", service.HostMT, "www.metrans.com.ua", true),
+                            Port = RWSetting.GetDB_Config_DefaultSetting<int>("Port", service.HostMT, 222, true),
+                            User = RWSetting.GetDB_Config_DefaultSetting<string>("User", service.HostMT, "arcelors", true),
+                            PSW = RWSetting.GetDB_Config_DefaultSetting<string>("PSW", service.HostMT, "$fh#ER2J63", true)
+                        };
+                        listProperty.Add(new copyPropertySFTP()
+                        {
+                            pathHost = RWSetting.GetDB_Config_DefaultSetting("fromPathHostTransferApproaches", service_host_approaches, "/inbox", true),
+                            filtrHost = RWSetting.GetDB_Config_DefaultSetting("FileFiltrHostTransferApproaches", service_host_approaches, "*.txt", true),
+                            pathReceiver = RWSetting.GetDB_Config_DefaultSetting("toDirPathTransferApproaches", service_host_approaches, @"C:\txt", true),
+                            pathTempReceiver = RWSetting.GetDB_Config_DefaultSetting("toTMPDirPathTransferApproaches", service_host_approaches, @"C:\RailWay\temp_txt", true),
+                            receiverDelete = RWSetting.GetDB_Config_DefaultSetting("DeleteFileHostTransferApproaches", service_host_approaches, true, true),
+                            receiverRewrite = RWSetting.GetDB_Config_DefaultSetting("RewriteFileTransferApproaches", service_host_approaches, false, true)
+                        });
+                        listProperty.Add(new copyPropertySFTP()
+                        {
+                            pathHost = RWSetting.GetDB_Config_DefaultSetting("fromPathHostTransferArrival", service_host_arrival, "/xmlin", true),
+                            filtrHost = RWSetting.GetDB_Config_DefaultSetting("FileFiltrHostTransferArrival", service_host_arrival, "*.xml", true),
+                            pathReceiver = RWSetting.GetDB_Config_DefaultSetting("toDirPathTransferArrival", service_host_arrival, @"C:\xml", true),
+                            pathTempReceiver = RWSetting.GetDB_Config_DefaultSetting("toTMPDirPathTransferArrival", service_host_arrival, @"C:\RailWay\temp_xml", true),
+                            receiverDelete = RWSetting.GetDB_Config_DefaultSetting("DeleteFileHostTransferArrival", service_host_arrival, true, true),
+                            receiverRewrite = RWSetting.GetDB_Config_DefaultSetting("RewriteFileTransferArrival", service_host_arrival, false, true)
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                    }
+                }
+                dt_start = DateTime.Now;
+                List<int> count_copy = null;
+                //lock (locker_sftp)
+                {
+                    // подключится считать и закрыть соединение
+                    SFTPClient csftp = new SFTPClient(connect_SFTP.Host,connect_SFTP.Port,connect_SFTP.User,connect_SFTP.PSW, service);
+                    count_copy = csftp.CopyToDir(listProperty);
+                }
+                TimeSpan ts = DateTime.Now - dt_start;
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy.IntsToString(';'));
+                mes_service_exec.WriteInformation(servece_owner, eventID);
+                int res = 0;
+                if (count_copy != null)
+                {
+                    foreach (int result in count_copy)
+                    {
+                       if (result < 0) { res = result; break; }
+                       if (result > 0) { res += result;}
+                    }
+                }
+                service.WriteServices(dt_start, DateTime.Now, res);
+            }
+            catch (ThreadAbortException exc)
+            {
+                String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
+            }
+            catch (Exception ex)
+            {
+                ex.WriteError(String.Format("Ошибка выполнения потока {0} сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, -1);
+
+            }
+        }
+        #endregion
+
         #region TransferApproaches
         /// <summary>
         /// Запустить поток переноса вагонов на подходах
@@ -82,13 +208,8 @@ namespace MetallurgTrans
                     User = "arcelors",
                     PSW = "$fh#ER2J63"
                 };
-                string fromPathHost = "/inbox";
-                string fileFiltrHost = "*.txt";
-                string toDirPath = @"C:\txt";
                 string toTMPDirPath = @"C:\RailWay\temp_txt";
-                bool deleteFileHost = true;
                 bool deleteFileMT = true;
-                bool rewriteFile = false;
                 // считать настройки
                 //lock (locker_setting)
                 {
@@ -102,43 +223,18 @@ namespace MetallurgTrans
                             User = RWSetting.GetDB_Config_DefaultSetting<string>("User", service.HostMT, "arcelors", true),
                             PSW = RWSetting.GetDB_Config_DefaultSetting<string>("PSW", service.HostMT, "$fh#ER2J63", true)
                         };
-                        // Путь для чтения файлов из host
-                        fromPathHost = RWSetting.GetDB_Config_DefaultSetting("fromPathHostTransferApproaches", service, "/inbox", true);
-                        // Фильтр файлов из host
-                        fileFiltrHost = RWSetting.GetDB_Config_DefaultSetting("FileFiltrHostTransferApproaches", service, "*.txt", true);
-                        // Путь для записи файлов из host для постоянного хранения
-                        toDirPath = RWSetting.GetDB_Config_DefaultSetting("toDirPathTransferApproaches", service, @"C:\txt", true);
                         // Путь к временной папки для записи файлов из host для дальнейшей обработки
-                        toTMPDirPath = RWSetting.GetDB_Config_DefaultSetting("toTMPDirPathTransferApproaches", service, @"C:\RailWay\temp_txt", true);
+                        toTMPDirPath = RWSetting.GetDB_Config_DefaultSetting("toTMPDirPathTransferApproaches", service, toTMPDirPath, true);
                         // Признак удалять файлы после переноса
-                        deleteFileHost = RWSetting.GetDB_Config_DefaultSetting("DeleteFileHostTransferApproaches", service, true, true);
-                        // Признак удалять файлы после переноса
-                        deleteFileMT = RWSetting.GetDB_Config_DefaultSetting("DeleteFileTransferApproaches", service, true, true);
-                        // Признак перезаписывать файлы при переносе
-                        rewriteFile = RWSetting.GetDB_Config_DefaultSetting("RewriteFileTransferApproaches", service, false, true);
+                        deleteFileMT = RWSetting.GetDB_Config_DefaultSetting("DeleteFileTransferApproaches", service, deleteFileMT, true);
                     }
                     catch (Exception ex)
                     {
                         ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
                     }
                 }
-                //"TransferApproaches - работаю".WriteInformation(servece_owner, eventID);
                 dt_start = DateTime.Now;
-                int count_copy = 0;
                 int res_transfer = 0;
-                //lock (locker_sftp)
-                {
-                    // подключится считать и закрыть соединение
-                    SFTPClient csftp = new SFTPClient(connect_SFTP.Host,connect_SFTP.Port,connect_SFTP.User,connect_SFTP.PSW, service);
-                    csftp.fromPathsHost = fromPathHost;
-                    csftp.FileFiltrHost = fileFiltrHost;
-                    csftp.toDirPath = toDirPath;
-                    csftp.toTMPDirPath = toTMPDirPath;
-                    csftp.DeleteFileHost = deleteFileHost;
-                    csftp.RewriteFile = rewriteFile;
-                    count_copy = csftp.CopyToDir();
-                }
-
                 //lock (locker_db_approaches)
                 {
                     MTTransfer mtt = new MTTransfer(service);
@@ -147,11 +243,9 @@ namespace MetallurgTrans
                     res_transfer = mtt.TransferApproaches();
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
-                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
-                int res = count_copy >= 0 ? res_transfer : count_copy;
-                service.WriteServices(dt_start, DateTime.Now, res);
-                //String.Format("Поток {0} сервиса {1} - выполнен.", service.ToString(), servece_owner).WriteWarning(servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, res_transfer);
             }
             catch (ThreadAbortException exc)
             {
@@ -202,7 +296,6 @@ namespace MetallurgTrans
         private static void TransferArrival()
         {
             service service = service.TransferArrival;
-            //"TransferArrival -1".WriteInformation(service.Test, eventID.Test);
             DateTime dt_start = DateTime.Now;
             try
             {
@@ -214,16 +307,9 @@ namespace MetallurgTrans
                     User = "arcelors",
                     PSW = "$fh#ER2J63"
                 };
-
-                string fromPathHost = "/xmlin";
-                string fileFiltrHost = "*.xml";
-                string toDirPath = @"C:\xml";
                 string toTMPDirPath = @"C:\RailWay\temp_xml";
-                bool deleteFileHost = true;
                 bool deleteFileMT = true;
-                bool rewriteFile = false;
                 int dayrangeArrivalCars = 10;
-                //"TransferArrival -2".WriteInformation(service.Test, eventID.Test);
                 // считать настройки
                 //lock (locker_setting)
                 {
@@ -238,50 +324,22 @@ namespace MetallurgTrans
                             User = RWSetting.GetDB_Config_DefaultSetting<string>("User", service.HostMT, "arcelors", true),
                             PSW = RWSetting.GetDB_Config_DefaultSetting<string>("PSW", service.HostMT, "$fh#ER2J63", true)
                         };
-                        // Путь для чтения файлов из host
-                        fromPathHost = RWSetting.GetDB_Config_DefaultSetting("fromPathHostTransferArrival", service, fromPathHost, true);
-                        // Фильтр файлов из host
-                        fileFiltrHost = RWSetting.GetDB_Config_DefaultSetting("FileFiltrHostTransferArrival", service, fileFiltrHost, true);
-                        // Путь для записи файлов из host для постоянного хранения
-                        toDirPath = RWSetting.GetDB_Config_DefaultSetting("toDirPathTransferArrival", service, toDirPath, true);
                         // Путь к временной папки для записи файлов из host для дальнейшей обработки
                         toTMPDirPath = RWSetting.GetDB_Config_DefaultSetting("toTMPDirPathTransferArrival", service, toTMPDirPath, true);
                         // Признак удалять файлы после переноса
-                        deleteFileHost = RWSetting.GetDB_Config_DefaultSetting("DeleteFileHostTransferArrival", service, deleteFileHost, true);
-                        // Признак удалять файлы после переноса
                         deleteFileMT = RWSetting.GetDB_Config_DefaultSetting("DeleteFileTransferArrival", service, deleteFileMT, true);
-                        // Признак перезаписывать файлы при переносе
-                        rewriteFile = RWSetting.GetDB_Config_DefaultSetting("RewriteFileTransferArrival", service, rewriteFile, true);
                         // Период для определения незакрытого состава и вагона 
-                        dayrangeArrivalCars = RWSetting.GetDB_Config_DefaultSetting<int>("AddControlPeriodCopyArrivalSostav", service, dayrangeArrivalCars, true);
-
-                        //"TransferArrival -3".WriteInformation(service.Test, eventID.Test);
+                        dayrangeArrivalCars = RWSetting.GetDB_Config_DefaultSetting<int>("DayRangeArrivalCars", service, dayrangeArrivalCars, true);
                     }
                     catch (Exception ex)
                     {
                         ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
                     }
                 }
-                        //_eventArrival.WaitOne(); // Здесь остановится
                         dt_start = DateTime.Now;
-                        int count_copy = 0;
                         int res_transfer = 0;
-                        //lock (locker_sftp)
-                        {
-                            //"TransferArrival -4".WriteInformation(service.Test, eventID.Test);
-                            // подключится считать и закрыть соединение
-                            SFTPClient csftp = new SFTPClient(connect_SFTP, service);
-                            csftp.fromPathsHost = fromPathHost;
-                            csftp.FileFiltrHost = fileFiltrHost;
-                            csftp.toDirPath = toDirPath;
-                            csftp.toTMPDirPath = toTMPDirPath;
-                            csftp.DeleteFileHost = deleteFileHost;
-                            csftp.RewriteFile = rewriteFile;
-                            count_copy = csftp.CopyToDir();
-                        }
                         //lock (locker_db_arrival)
                         {
-                            //"TransferArrival -5".WriteInformation(service.Test, eventID.Test);
                             MTTransfer mtt = new MTTransfer(service);
                             mtt.DayRangeArrivalCars = dayrangeArrivalCars;
                             mtt.ArrivalToRailWay = arrivalToRailWay;
@@ -289,16 +347,10 @@ namespace MetallurgTrans
                             mtt.DeleteFile = deleteFileMT;
                             res_transfer = mtt.TransferArrival();
                         }
-                            //"TransferArrival -6".WriteInformation(service.Test, eventID.Test);
-
                         TimeSpan ts = DateTime.Now - dt_start;
-                        string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6} res_transfer:{7}.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy, res_transfer);
+                        string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
                         mes_service_exec.WriteInformation(servece_owner, eventID);
-
-                        int res = count_copy >= 0 ? res_transfer : count_copy;
-                        service.WriteServices(dt_start, DateTime.Now, res);
-                        //String.Format("Поток {0} сервиса {1} - выполнен.", service.ToString(), servece_owner).WriteWarning(servece_owner, eventID);
-                        //"TransferArrival - Ok".WriteInformation(service.Test, eventID.Test);
+                        service.WriteServices(dt_start, DateTime.Now, res_transfer);
             }
             catch (ThreadAbortException exc)
             {

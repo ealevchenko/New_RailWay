@@ -12,6 +12,7 @@ namespace MessageLog
         Test = 1,
         // сервисы МеталлургТранса
         ServicesMT = 100,
+        TransferHost = 110,
         TransferApproaches = 111,
         TransferArrival = 112,        
         TransferMT = 121,

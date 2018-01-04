@@ -69,6 +69,10 @@
       <Project>{a1f50999-31d4-4793-a92f-4d0f436922cb}</Project>
       <Name>TransferRailCars</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RWConversionFunctions\RWConversionFunctions.csproj">
+      <Project>{d4c8d1c2-db0f-42d3-a432-94c0549907e4}</Project>
+      <Name>RWConversionFunctions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RWSettings\RWSettings.csproj">
       <Project>{00d9d515-6089-4334-af39-28db22cd7d20}</Project>
       <Name>RWSettings</Name>

@@ -44,6 +44,17 @@ namespace MetallurgTrans
         }
     }
 
+    [Serializable()]
+    public class copyPropertySFTP
+    {
+        public string pathHost  { get; set; }
+        public string filtrHost  { get; set; }
+        public string pathReceiver { get; set; }
+        public string pathTempReceiver { get; set; }
+        public bool receiverDelete { get; set; }
+        public bool receiverRewrite { get; set; }
+    }
+
     public class SFTPClient
     {
         private eventID eventID = eventID.MetallurgTrans_SFTPClient;
@@ -154,17 +165,12 @@ namespace MetallurgTrans
                     String.Format("Метод SFTPClient.CopySFTPFile() :Путь для постоянного хранения перенесённых файлов toDirPath:{0}, совпадает с временным хранилищем для обработки toTMPDirPath:{1}.", toDirPath, toTMPDirPath).WriteError(servece_owner, this.eventID);
                     return this.eventID.GetEventIDErrorCode((int)sftp_client_error.coincide_fromFilePaths_toDirPath);                    
                 }
-                //"TransferArrival -4.1".WriteInformation(servece_owner, eventID.Test);
                 if (this.client_sftp == null) return this.eventID.GetEventIDErrorCode((int)sftp_client_error.null_client_sftp);
                 string[] listfromFile = this.client_sftp.GetFileList(fromFilePaths + "//" + fromFileFiltr);
-                //"TransferArrival -4.2".WriteInformation(servece_owner, eventID.Test);
                 if (listfromFile == null || listfromFile.Count() == 0)
                 {
-                    //ServicesEventLog.LogInformation(String.Format("На сервере SFTP отсутствуют файлы для копирования"), this.eventID);
-                    //"TransferArrival -4.2 - files - 0".WriteInformation(servece_owner, eventID.Test);
                     return 0;
                 }
-                //("TransferArrival -4.2 - files - " + listfromFile.Count().ToString()).WriteInformation(servece_owner, eventID.Test);
                 int count = 0;
                 int cdel = 0;
                 foreach (string file in listfromFile)
@@ -190,8 +196,7 @@ namespace MetallurgTrans
                         cdel++;
                     }
                 }
-                //"TransferArrival -4.3".WriteInformation(servece_owner, eventID.Test);
-                string mess = String.Format("На сервере SFTP:{0} найдено {1} файлов, перенесено {2}", connect_SFTP.Host, listfromFile.Count(), count);
+                string mess = String.Format("На сервере SFTP:{0}{1}(филтр поиска:{2}) найдено {3} файлов, перенесено {4}", connect_SFTP.Host, fromFilePaths, fromFileFiltr, listfromFile.Count(), count);
                 if (fromDeleteFile) { mess = String.Format(mess + ", удаленно {0}", cdel); }
                 mess.WriteInformation(servece_owner, this.eventID);
                 if (listfromFile != null && listfromFile.Count() > 0) { mess.WriteEvents(listfromFile.Count() != count ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
@@ -251,6 +256,38 @@ namespace MetallurgTrans
         public int CopyToDir()
         {
             return CopyToDir(this._fromPathsHost, this._FileFiltrHost, this._toTMPDirPath, this._toDirPath, this._DeleteFileHost, this._RewriteFile);
+        }
+        /// <summary>
+        /// Групповое копирование данных
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public List<int> CopyToDir(List<copyPropertySFTP> list)
+        {
+            List<int> result = new List<int>();
+            if (list == null || list.Count == 0) return result;
+
+            try
+            {
+                if (Connect())
+                {
+                    foreach (copyPropertySFTP cp in list)
+                    {
+                        result.Add(CopySFTPFile(cp.pathHost, cp.filtrHost, cp.pathTempReceiver, cp.pathReceiver, cp.receiverDelete, cp.receiverRewrite));
+                    }
+                    Close();
+                }
+                else
+                {
+                    result.Add(this.eventID.GetEventIDErrorCode((int)sftp_client_error.not_connect));
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CopyToDir(list={0})", list), this.servece_owner, eventID);
+                result.Add(this.eventID.GetEventIDErrorCode((int)sftp_client_error.clobal_error));
+            }
+            return result;
         }
     }
 }

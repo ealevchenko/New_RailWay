@@ -341,16 +341,17 @@ namespace KISTServices
         {
             if (active)
             {
-                int interval_arr = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", service.TransferArrival, 300, false);
-                int? code_run_service = service.TransferArrival.GetCodeReturnServices(interval_arr+60);
+                // Проверка выполнения службы переноса из Хост
+                int interval_host = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferHost", service.TransferHost, 300, false);
+                int? code_run_service = service.TransferHost.GetCodeReturnServices(interval_host + 60);
                 if (code_run_service == null)
                 {
-                    String.Format("Поток {0} сервиса {1} - заблокирован, из-за остановки службы {2}", this.thread_arrival, this.servece_name, service.TransferArrival).WriteError(servece_name, eventID);
+                    String.Format("Поток {0} сервиса {1} - заблокирован, из-за остановки службы {2}", this.thread_arrival, this.servece_name, service.TransferHost).WriteError(servece_name, eventID);
                     return;
                 }
                 if (code_run_service < 0)
                 {
-                    String.Format("Поток {0} сервиса {1} - заблокирован, из-за ошибки {2} последнего выполнения службы {3}", this.thread_arrival, this.servece_name, code_run_service, service.TransferArrival).WriteError(servece_name, eventID);
+                    String.Format("Поток {0} сервиса {1} - заблокирован, из-за ошибки {2} последнего выполнения службы {3}", this.thread_arrival, this.servece_name, code_run_service, service.TransferHost).WriteError(servece_name, eventID);
                     return;
                 }
                 kist.StartTransferArrivalOfKIS();
