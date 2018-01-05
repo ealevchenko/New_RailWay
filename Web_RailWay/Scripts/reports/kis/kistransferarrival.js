@@ -1,6 +1,4 @@
 ﻿$(document).ready(function () {
-    //// Обнулим сокеты
-    //$.cookie('view-cars', '0');
 
     myVar = $.cookie('lang');
 
@@ -148,30 +146,29 @@ function selectPeriod(data) {
         },
         //jQueryUI: false,
     });
+    // Отсортируем по времени по убыванию
     table.order( [ 1, 'desc' ] )
     table.draw();
     // Обработчик кнопки закрыть
     $('input[name ="close-sostav"]').click(function (evt) {
         evt.preventDefault();
         OnBegin();
-        //$('input[name ="close-sostav"]').removeClass();
         var id = $(this).attr("id")
-        // Получим движение состава
+        // Закроем состав
         $.ajax({
             url: '/railway/KIST/CloseBufferArrivalSostav/',
             type: 'POST',
             data: { id: id },
             dataType: 'html',
             success: function (data) {
-                alert(data)
-                // Получим изменение
+                //alert(data)
+                // Получим изменение по закрытому составу
                 $.ajax({
-                    url: '/railway/KIST/GetBufferArrivalSostav/',
+                    url: '/railway/KIST/GetCloseBufferArrivalSostav/',
                     type: 'GET',
                     data: { id: id },
                     dataType: 'html',
                     success: function (data) {
-
                         var target = $('td[name ="button-close-' + id + '"]');
                         target.empty();
                         target.append(data);
@@ -182,11 +179,6 @@ function selectPeriod(data) {
                         alert(x + '\n' + y + '\n' + z);
                     }
                 });
-
-                //var target = $('td[name ="button-close-' + id + '"]');
-                //target.empty();
-                //target.append(data);
-                //LockScreenOff();
             },
             error: function (x, y, z) {
                 LockScreenOff();
@@ -201,25 +193,17 @@ function selectPeriod(data) {
             $('#list-buffer-arrival-sostav tr[name="bas"]').removeClass('selected');
             $(this).addClass('selected');
             var id = $(this).attr("id")
-            // Получим движение состава
+            // Получим список вагонов и состояние переноса
             $.ajax({
                 url: '/railway/KIST/ListCarsBufferArrivalSostav/',
                 type: 'GET',
                 data: { id: id },
                 dataType: 'html',
                 success: function (data) {
-                    //listCars(data);
-                    //--------------
                     // Показать операции 
                     var target = $("#report-detali");
                     target.empty();
                     target.append(data);
-                    //LockScreenOff();
-
-                    //$(function () {
-                        
-                    //})
-                    //----------------
                 },
                 error: function (x, y, z) {
                     LockScreenOff();
@@ -227,72 +211,7 @@ function selectPeriod(data) {
                 }
             });
         });
-    //$(function () {
-
-    //})
-
-    //$(document).ready(function () {
-    //    var el = $('a[name ="link-operation"]').first();
-    //    if (el != null) {
-    //        el.click();
-    //    }
-    //});
-
 }
-
-//function listCars(data) {
-//    // Показать операции 
-//    var target = $("#report-detali");
-//    target.empty();
-//    target.append(data);
-//    //LockScreenOff();
-
-//    $(function () {
-//        $('input[name ="close-sostav"]').click(function (evt) {
-//            evt.preventDefault();
-//            OnBegin();
-//            //$('input[name ="close-sostav"]').removeClass();
-//            var id = $(this).attr("id")
-//            // Получим движение состава
-//            $.ajax({
-//                url: '/railway/KIST/CloseBufferArrivalSostav/',
-//                type: 'POST',
-//                data: { id: id },
-//                dataType: 'html',
-//                success: function (data) {
-//                    alert(data)
-//                    // Получим изменение
-//                    $.ajax({
-//                        url: '/railway/KIST/GetBufferArrivalSostav/',
-//                        type: 'GET',
-//                        data: { id: id },
-//                        dataType: 'html',
-//                        success: function (data) {
-
-//                            var target = $('td[name ="button-close-' + id + '"]');
-//                            target.empty();
-//                            target.append(data);
-//                            LockScreenOff();
-//                        },
-//                        error: function (x, y, z) {
-//                            LockScreenOff();
-//                            alert(x + '\n' + y + '\n' + z);
-//                        }
-//                    });
-
-//                    //var target = $('td[name ="button-close-' + id + '"]');
-//                    //target.empty();
-//                    //target.append(data);
-//                    //LockScreenOff();
-//                },
-//                error: function (x, y, z) {
-//                    LockScreenOff();
-//                    alert(x + '\n' + y + '\n' + z);
-//                }
-//            });
-//        });
-//    })
-//}
 
 function OnBegin() {
     myVar = $.cookie('lang');

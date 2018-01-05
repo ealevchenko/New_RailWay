@@ -86,8 +86,12 @@ namespace Web_RailWay.Controllers
         {
             return this.ef_kis.CloseBufferArrivalSostav(id, this.Request.LogonUserIdentity.Name);
         }
-
-        public PartialViewResult GetBufferArrivalSostav(int id)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public PartialViewResult GetCloseBufferArrivalSostav(int id)
         {
             BufferArrivalSostav bas = this.ef_kis.GetBufferArrivalSostav(id);
             return PartialView(bas);

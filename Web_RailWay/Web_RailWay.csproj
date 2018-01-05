@@ -362,7 +362,7 @@
     <Content Include="Views\KIST\BufferArrivalSostav.cshtml" />
     <Content Include="Views\KIST\ListCarsBufferArrivalSostav.cshtml" />
     <Content Include="Views\KIST\ButtonCloseBufferArrivalSostav.cshtml" />
-    <Content Include="Views\KIST\GetBufferArrivalSostav.cshtml" />
+    <Content Include="Views\KIST\GetCloseBufferArrivalSostav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFAccess\EFAccess.csproj">
