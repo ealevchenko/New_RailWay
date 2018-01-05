@@ -202,14 +202,34 @@ function listCars(data) {
             // Получим движение состава
             $.ajax({
                 url: '/railway/KIST/CloseBufferArrivalSostav/',
-                type: 'GET',
+                type: 'POST',
                 data: { id: id },
                 dataType: 'html',
                 success: function (data) {
-                    var target = $('td[name ="button-close-' + id + '"]');
-                    target.empty();
-                    target.append(data);
-                    LockScreenOff();
+                    alert(data)
+                    // Получим изменение
+                    $.ajax({
+                        url: '/railway/KIST/GetBufferArrivalSostav/',
+                        type: 'GET',
+                        data: { id: id },
+                        dataType: 'html',
+                        success: function (data) {
+
+                            var target = $('td[name ="button-close-' + id + '"]');
+                            target.empty();
+                            target.append(data);
+                            LockScreenOff();
+                        },
+                        error: function (x, y, z) {
+                            LockScreenOff();
+                            alert(x + '\n' + y + '\n' + z);
+                        }
+                    });
+
+                    //var target = $('td[name ="button-close-' + id + '"]');
+                    //target.empty();
+                    //target.append(data);
+                    //LockScreenOff();
                 },
                 error: function (x, y, z) {
                     LockScreenOff();

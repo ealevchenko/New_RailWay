@@ -156,6 +156,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\tets\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\ViewMTHelpers.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Controllers\ParkStateController.cs" />
     <Compile Include="Controllers\SAPISAdminController.cs" />
     <Compile Include="Controllers\SAPISController.cs" />
+    <Compile Include="Controllers\tetsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -360,7 +362,7 @@
     <Content Include="Views\KIST\BufferArrivalSostav.cshtml" />
     <Content Include="Views\KIST\ListCarsBufferArrivalSostav.cshtml" />
     <Content Include="Views\KIST\ButtonCloseBufferArrivalSostav.cshtml" />
-    <Content Include="Views\KIST\CloseBufferArrivalSostav.cshtml" />
+    <Content Include="Views\KIST\GetBufferArrivalSostav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFAccess\EFAccess.csproj">

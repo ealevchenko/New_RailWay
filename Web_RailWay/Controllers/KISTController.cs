@@ -74,13 +74,24 @@ namespace Web_RailWay.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public PartialViewResult CloseBufferArrivalSostav(int id)
+        //public PartialViewResult CloseBufferArrivalSostav(int id)
+        //{
+        //    this.ef_kis.CloseBufferArrivalSostav(id);
+        //    BufferArrivalSostav bas = this.ef_kis.GetBufferArrivalSostav(id);
+        //    return PartialView(bas);
+        //}
+
+        [HttpPost]
+        public int CloseBufferArrivalSostav(int id)
         {
-            this.ef_kis.CloseBufferArrivalSostav(id);
+            return this.ef_kis.CloseBufferArrivalSostav(id);
+        }
+
+        public PartialViewResult GetBufferArrivalSostav(int id)
+        {
             BufferArrivalSostav bas = this.ef_kis.GetBufferArrivalSostav(id);
             return PartialView(bas);
         }
-
 
     }
 }
