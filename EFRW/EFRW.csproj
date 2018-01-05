@@ -41,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,14 +50,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\IRailWay.cs" />
     <Compile Include="Abstract\IReference.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
+    <Compile Include="Concrete\EFRailWay.cs" />
     <Compile Include="Concrete\EFReference.cs" />
     <Compile Include="Entities\ReferenceCargo.cs" />
     <Compile Include="Entities\ReferenceCountry.cs" />
     <Compile Include="Entities\ReferenceStation.cs" />
     <Compile Include="Entities\ReferenceGroupCargo.cs" />
     <Compile Include="Entities\ReferenceTypeCargo.cs" />
+    <Compile Include="Entities\Stations.cs" />
+    <Compile Include="Entities\StationsNodes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +77,9 @@
       <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
       <Name>MLogs</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

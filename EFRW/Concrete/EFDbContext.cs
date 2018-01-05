@@ -22,6 +22,10 @@ namespace EFRW.Concrete
         public virtual DbSet<ReferenceCountry> ReferenceCountry { get; set; }
         public virtual DbSet<ReferenceStation> ReferenceStation { get; set; }
 
+        // таблицы Railway
+        public virtual DbSet<Stations> Stations { get; set; }
+        public virtual DbSet<StationsNodes> StationsNodes { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 

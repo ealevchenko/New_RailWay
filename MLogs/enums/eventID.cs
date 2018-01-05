@@ -60,6 +60,7 @@ namespace MessageLog
 
         EFRW = 4100,                        // Библиотека доступа к данным БД RailWay
         EFRW_EFReference = 4101,            // Модуль доступа к БД справочников системы RailWay
+        EFRW_EFRailWay = 4102,              // Библиотека доступа к данным БД RailWay
 
         #endregion
 
