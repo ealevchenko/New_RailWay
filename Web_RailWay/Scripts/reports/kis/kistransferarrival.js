@@ -97,8 +97,6 @@
             alert(x + '\n' + y + '\n' + z);
         }
     });
-
-
 });
 
 function selectPeriod(data) {
@@ -133,7 +131,7 @@ function selectPeriod(data) {
             this.api().columns([2, 7]).every(function () {
                 var column = this;
                 var name = $(column.header()).attr('title');
-                var select = $('<select><option value="">Все</option></select>')
+                var select = $('<select><option value="">' + (myVar == 'en' ? 'All' : 'Все') + '</option></select>')
                     .appendTo($(column.header()).empty().append(name))
                     .on('change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
@@ -152,9 +150,52 @@ function selectPeriod(data) {
     });
     table.order( [ 1, 'desc' ] )
     table.draw();
+    // Обработчик кнопки закрыть
+    $('input[name ="close-sostav"]').click(function (evt) {
+        evt.preventDefault();
+        OnBegin();
+        //$('input[name ="close-sostav"]').removeClass();
+        var id = $(this).attr("id")
+        // Получим движение состава
+        $.ajax({
+            url: '/railway/KIST/CloseBufferArrivalSostav/',
+            type: 'POST',
+            data: { id: id },
+            dataType: 'html',
+            success: function (data) {
+                alert(data)
+                // Получим изменение
+                $.ajax({
+                    url: '/railway/KIST/GetBufferArrivalSostav/',
+                    type: 'GET',
+                    data: { id: id },
+                    dataType: 'html',
+                    success: function (data) {
 
-    $(function () {
-        $('#list-buffer-arrival-sostav tr[name="bas"]').click(function (evt) {
+                        var target = $('td[name ="button-close-' + id + '"]');
+                        target.empty();
+                        target.append(data);
+                        LockScreenOff();
+                    },
+                    error: function (x, y, z) {
+                        LockScreenOff();
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+
+                //var target = $('td[name ="button-close-' + id + '"]');
+                //target.empty();
+                //target.append(data);
+                //LockScreenOff();
+            },
+            error: function (x, y, z) {
+                LockScreenOff();
+                alert(x + '\n' + y + '\n' + z);
+            }
+        });
+    });
+    // Обработчик выбора строки таблицы
+    $('#list-buffer-arrival-sostav tr[name="bas"]').click(function (evt) {
             evt.preventDefault();
             //OnBegin();
             $('#list-buffer-arrival-sostav tr[name="bas"]').removeClass('selected');
@@ -167,7 +208,18 @@ function selectPeriod(data) {
                 data: { id: id },
                 dataType: 'html',
                 success: function (data) {
-                    listCars(data);
+                    //listCars(data);
+                    //--------------
+                    // Показать операции 
+                    var target = $("#report-detali");
+                    target.empty();
+                    target.append(data);
+                    //LockScreenOff();
+
+                    //$(function () {
+                        
+                    //})
+                    //----------------
                 },
                 error: function (x, y, z) {
                     LockScreenOff();
@@ -175,7 +227,9 @@ function selectPeriod(data) {
                 }
             });
         });
-    })
+    //$(function () {
+
+    //})
 
     //$(document).ready(function () {
     //    var el = $('a[name ="link-operation"]').first();
@@ -186,59 +240,59 @@ function selectPeriod(data) {
 
 }
 
-function listCars(data) {
-    // Показать операции 
-    var target = $("#report-detali");
-    target.empty();
-    target.append(data);
-    //LockScreenOff();
+//function listCars(data) {
+//    // Показать операции 
+//    var target = $("#report-detali");
+//    target.empty();
+//    target.append(data);
+//    //LockScreenOff();
 
-    $(function () {
-        $('input[name ="close-sostav"]').click(function (evt) {
-            evt.preventDefault();
-            OnBegin();
-            //$('input[name ="close-sostav"]').removeClass();
-            var id = $(this).attr("id")
-            // Получим движение состава
-            $.ajax({
-                url: '/railway/KIST/CloseBufferArrivalSostav/',
-                type: 'POST',
-                data: { id: id },
-                dataType: 'html',
-                success: function (data) {
-                    alert(data)
-                    // Получим изменение
-                    $.ajax({
-                        url: '/railway/KIST/GetBufferArrivalSostav/',
-                        type: 'GET',
-                        data: { id: id },
-                        dataType: 'html',
-                        success: function (data) {
+//    $(function () {
+//        $('input[name ="close-sostav"]').click(function (evt) {
+//            evt.preventDefault();
+//            OnBegin();
+//            //$('input[name ="close-sostav"]').removeClass();
+//            var id = $(this).attr("id")
+//            // Получим движение состава
+//            $.ajax({
+//                url: '/railway/KIST/CloseBufferArrivalSostav/',
+//                type: 'POST',
+//                data: { id: id },
+//                dataType: 'html',
+//                success: function (data) {
+//                    alert(data)
+//                    // Получим изменение
+//                    $.ajax({
+//                        url: '/railway/KIST/GetBufferArrivalSostav/',
+//                        type: 'GET',
+//                        data: { id: id },
+//                        dataType: 'html',
+//                        success: function (data) {
 
-                            var target = $('td[name ="button-close-' + id + '"]');
-                            target.empty();
-                            target.append(data);
-                            LockScreenOff();
-                        },
-                        error: function (x, y, z) {
-                            LockScreenOff();
-                            alert(x + '\n' + y + '\n' + z);
-                        }
-                    });
+//                            var target = $('td[name ="button-close-' + id + '"]');
+//                            target.empty();
+//                            target.append(data);
+//                            LockScreenOff();
+//                        },
+//                        error: function (x, y, z) {
+//                            LockScreenOff();
+//                            alert(x + '\n' + y + '\n' + z);
+//                        }
+//                    });
 
-                    //var target = $('td[name ="button-close-' + id + '"]');
-                    //target.empty();
-                    //target.append(data);
-                    //LockScreenOff();
-                },
-                error: function (x, y, z) {
-                    LockScreenOff();
-                    alert(x + '\n' + y + '\n' + z);
-                }
-            });
-        });
-    })
-}
+//                    //var target = $('td[name ="button-close-' + id + '"]');
+//                    //target.empty();
+//                    //target.append(data);
+//                    //LockScreenOff();
+//                },
+//                error: function (x, y, z) {
+//                    LockScreenOff();
+//                    alert(x + '\n' + y + '\n' + z);
+//                }
+//            });
+//        });
+//    })
+//}
 
 function OnBegin() {
     myVar = $.cookie('lang');
