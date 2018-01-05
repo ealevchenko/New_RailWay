@@ -19,6 +19,8 @@ namespace MetallurgTrans
         //protected static object locker_sftp = new object();
         //protected static object locker_db_approaches = new object();
         //protected static object locker_db_arrival = new object();
+        protected static object locker_xml_file = new object();
+        protected static object locker_txt_file = new object();
 
         protected Thread thTransferHost = null;
         public bool statusTransferHost { get { return thTransferHost.IsAlive; } }
@@ -129,11 +131,14 @@ namespace MetallurgTrans
                 }
                 dt_start = DateTime.Now;
                 List<int> count_copy = null;
-                //lock (locker_sftp)
+                lock (locker_xml_file) 
                 {
-                    // подключится считать и закрыть соединение
-                    SFTPClient csftp = new SFTPClient(connect_SFTP.Host,connect_SFTP.Port,connect_SFTP.User,connect_SFTP.PSW, service);
-                    count_copy = csftp.CopyToDir(listProperty);
+                    lock (locker_txt_file)
+                    {
+                        // подключится считать и закрыть соединение
+                        SFTPClient csftp = new SFTPClient(connect_SFTP.Host, connect_SFTP.Port, connect_SFTP.User, connect_SFTP.PSW, service);
+                        count_copy = csftp.CopyToDir(listProperty);
+                    }
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
                 string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: count_copy:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, count_copy.IntsToString(';'));
@@ -235,7 +240,7 @@ namespace MetallurgTrans
                 }
                 dt_start = DateTime.Now;
                 int res_transfer = 0;
-                //lock (locker_db_approaches)
+                lock (locker_txt_file) 
                 {
                     MTTransfer mtt = new MTTransfer(service);
                     mtt.FromPath = toTMPDirPath;
@@ -338,7 +343,7 @@ namespace MetallurgTrans
                 }
                         dt_start = DateTime.Now;
                         int res_transfer = 0;
-                        //lock (locker_db_arrival)
+                        lock (locker_xml_file)
                         {
                             MTTransfer mtt = new MTTransfer(service);
                             mtt.DayRangeArrivalCars = dayrangeArrivalCars;
