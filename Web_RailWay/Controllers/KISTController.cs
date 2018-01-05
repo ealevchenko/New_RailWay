@@ -84,7 +84,7 @@ namespace Web_RailWay.Controllers
         [HttpPost]
         public int CloseBufferArrivalSostav(int id)
         {
-            return this.ef_kis.CloseBufferArrivalSostav(id);
+            return this.ef_kis.CloseBufferArrivalSostav(id, this.Request.LogonUserIdentity.Name);
         }
 
         public PartialViewResult GetBufferArrivalSostav(int id)

@@ -20,6 +20,7 @@ namespace EFKIS.Abstract
         IQueryable<BufferArrivalSostav> GetBufferArrivalSostavNoClose();
         BufferArrivalSostav GetBufferArrivalSostavOfNatur(int natur);
         int CloseBufferArrivalSostav(int id);
+        int CloseBufferArrivalSostav(int id, string user);
         #endregion
 
         #region BufferInputSostav Перенос прибывающих вагонов на станцию по данным КИС
