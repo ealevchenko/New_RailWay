@@ -189,6 +189,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MTResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\RWResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RWResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\SAPResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -203,6 +208,7 @@
     <Compile Include="Controllers\api\KisPromController.cs" />
     <Compile Include="Controllers\api\MTController.cs" />
     <Compile Include="Controllers\api\ReferenceController.cs" />
+    <Compile Include="Controllers\api\RWController.cs" />
     <Compile Include="Controllers\api\RWEventController.cs" />
     <Compile Include="Controllers\api\RWReferenceController.cs" />
     <Compile Include="Controllers\api\ValuesController.cs" />
@@ -215,6 +221,7 @@
     <Compile Include="Controllers\MTApproachesController.cs" />
     <Compile Include="Controllers\MTArrivalController.cs" />
     <Compile Include="Controllers\ParkStateController.cs" />
+    <Compile Include="Controllers\RWStationsNodesController.cs" />
     <Compile Include="Controllers\SAPISAdminController.cs" />
     <Compile Include="Controllers\SAPISController.cs" />
     <Compile Include="Controllers\tetsController.cs" />
@@ -294,6 +301,7 @@
     <Content Include="Scripts\reports\mt\mtarrivalcars.js" />
     <Content Include="Scripts\reports\mt\mtarrivalreport.js" />
     <Content Include="Scripts\reports\mt\mtarrivalsostav.js" />
+    <Content Include="Scripts\reports\rw\stationsnodes.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\table\dataTables.jqueryui.min.js" />
@@ -363,6 +371,7 @@
     <Content Include="Views\KIST\ListCarsBufferArrivalSostav.cshtml" />
     <Content Include="Views\KIST\ButtonCloseBufferArrivalSostav.cshtml" />
     <Content Include="Views\KIST\GetCloseBufferArrivalSostav.cshtml" />
+    <Content Include="Views\RWStationsNodes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFAccess\EFAccess.csproj">
@@ -436,6 +445,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MTResource.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\RWResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RWResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\SAPResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

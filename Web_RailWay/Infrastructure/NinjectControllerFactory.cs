@@ -4,6 +4,8 @@ using EFMT.Abstract;
 using EFMT.Concrete;
 using EFRC.Abstract;
 using EFRC.Concrete;
+using EFRW.Abstract;
+using EFRW.Concrete;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -39,7 +41,8 @@ namespace Web_RailWay.Infrastructure
             // конфигурирование контейнера
             ninjectKernel.Bind<IMT>().To<EFMetallurgTrans>();
             ninjectKernel.Bind<ISAP>().To<EFSAP>();
-            ninjectKernel.Bind<ITKIS>().To<EFTKIS>();            
+            ninjectKernel.Bind<ITKIS>().To<EFTKIS>();
+            ninjectKernel.Bind<IRailWay>().To<EFRailWay>();            
         }
     }
 }

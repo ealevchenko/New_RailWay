@@ -1,0 +1,58 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@section Document {
+
+}
+
+@section Admin {
+
+}
+
+@{
+    ViewBag.Title = @RWResource.rw_stations_nodes_report_title;
+    ViewBag.ImageFone = "background-image: url(../Image/header1.jpg);";
+    ViewBag.Home = @RWResource.rw_stations_nodes_report_home;
+}
+
+@Scripts.Render("~/bundles/Ajax")
+@*@Scripts.Render("~/bundles/jqueryval")*@
+
+@*@Styles.Render("~/table/css")
+@Scripts.Render("~/bundles/table")*@
+
+<script src="~/Scripts/jquery.cookie.js"></script>
+
+<link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
+<link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        @Html.Label(@GlobalResources.select_station)
+        <select id="soflow">
+            <option></option>
+        </select>
+        @*@using (Ajax.BeginForm("ListBufferArrivalSostavOfDate", "KIST", ajaxOpts, new { @id = "fmList" })) //
+        {
+            <div id="select-rangedatetime">
+                @Html.Label(@GlobalResources.select_date_range_title, new { @class = "title-label" })
+                <span id="select-range">
+                    <input id="date-start" name="date_start" size="20">
+                    @Html.Label(@GlobalResources.to, new { @class = "title-label" })
+                    <input id="date-stop" name="date_stop" size="20">
+                </span>
+            </div>
+        }*@
+        @*@Html.Label(@MTResource.link_approaches, new { @class = "title-label" })&nbsp;
+            <a href='@Url.Action("Sostav", "MTApproaches")' class="btn btn-link">@MTResource.index_report_approaches_sostav_title</a>
+            <a href='@Url.Action("Cars", "MTApproaches")' class="btn btn-link">@MTResource.index_report_approaches_cars_title</a>
+            &nbsp;@Html.Label(@MTResource.link_arrival, new { @class = "title-label" })&nbsp;
+            <a href='@Url.Action("Sostav", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_sostav_title</a>
+            <a href='@Url.Action("Cars", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_cars_title</a>*@
+    </div>
+    <div id="report-detali">
+
+    </div>
+    <div id="cls"></div>
+</div>
+<script src="~/Scripts/reports/rw/stationsnodes.js"></script>
