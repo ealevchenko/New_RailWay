@@ -202,7 +202,7 @@ function listCars(data) {
             // Получим движение состава
             $.ajax({
                 url: '/railway/KIST/CloseBufferArrivalSostav/',
-                type: 'PUT',
+                type: 'GET',
                 data: { id: id },
                 dataType: 'html',
                 success: function (data) {
