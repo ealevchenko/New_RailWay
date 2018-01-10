@@ -117,10 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="rw_field_nodes" xml:space="preserve">
+    <value>Название узла</value>
+  </data>
+  <data name="rw_side_station_from" xml:space="preserve">
+    <value>Сторона</value>
+  </data>
+  <data name="rw_side_station_on" xml:space="preserve">
+    <value>Сторона</value>
+  </data>
   <data name="rw_stations_nodes_report_home" xml:space="preserve">
     <value>Список</value>
   </data>
   <data name="rw_stations_nodes_report_title" xml:space="preserve">
-    <value>Список перегонов между станциями</value>
+    <value>Список узлов прибытия и отправки между станциями.</value>
+  </data>
+  <data name="rw_station_from_label" xml:space="preserve">
+    <value>Станция отправления</value>
+  </data>
+  <data name="rw_station_on" xml:space="preserve">
+    <value>Станция прибытия</value>
+  </data>
+  <data name="rw_tab_title_arrival" xml:space="preserve">
+    <value>Прибытие</value>
+  </data>
+  <data name="rw_tab_title_sending" xml:space="preserve">
+    <value>Отправка</value>
+  </data>
+  <data name="rw_transfer_type" xml:space="preserve">
+    <value>Тип отправления</value>
+  </data>
+  <data name="kis_input" xml:space="preserve">
+    <value>Из системы КИС по прибытию</value>
+  </data>
+  <data name="kis_output" xml:space="preserve">
+    <value>Из системы КИС по отправке</value>
+  </data>
+  <data name="railway" xml:space="preserve">
+    <value>Из системы Railway</value>
+  </data>
+  <data name="even" xml:space="preserve">
+    <value>Четная</value>
+  </data>
+  <data name="odd" xml:space="preserve">
+    <value>Нечетная</value>
+  </data>
+  <data name="index_description" xml:space="preserve">
+    <value>Отчетная документация, полученная по данным предоставленным информационной системой RailWay. Информация о перемещении подвижного состава на территории АМКР.</value>
+  </data>
+  <data name="index_title" xml:space="preserve">
+    <value>RailWay</value>
+  </data>
+  <data name="link_rw_station_nodes_control" xml:space="preserve">
+    <value>Узлы прибытия и отправки</value>
   </data>
 </root>

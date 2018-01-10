@@ -144,7 +144,7 @@ function selectPeriod(data) {
                 });
             });
         },
-        //jQueryUI: false,
+        jQueryUI: true,
     });
     // Отсортируем по времени по убыванию
     table.order( [ 1, 'desc' ] )

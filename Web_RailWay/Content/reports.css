@@ -355,3 +355,8 @@ td.Ok {
 td.Error {
     color:#ff0000;
 }
+
+tr.selected {
+    background-color: #007fff;
+    color: #ffffff;
+}

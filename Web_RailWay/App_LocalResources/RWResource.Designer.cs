@@ -61,6 +61,123 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Четная.
+        /// </summary>
+        public static string even {
+            get {
+                return ResourceManager.GetString("even", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Отчетная документация, полученная по данным предоставленным информационной системой RailWay. Информация о перемещении подвижного состава на территории АМКР..
+        /// </summary>
+        public static string index_description {
+            get {
+                return ResourceManager.GetString("index_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на RailWay.
+        /// </summary>
+        public static string index_title {
+            get {
+                return ResourceManager.GetString("index_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Из системы КИС по прибытию.
+        /// </summary>
+        public static string kis_input {
+            get {
+                return ResourceManager.GetString("kis_input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Из системы КИС по отправке.
+        /// </summary>
+        public static string kis_output {
+            get {
+                return ResourceManager.GetString("kis_output", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Узлы прибытия и отправки.
+        /// </summary>
+        public static string link_rw_station_nodes_control {
+            get {
+                return ResourceManager.GetString("link_rw_station_nodes_control", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Нечетная.
+        /// </summary>
+        public static string odd {
+            get {
+                return ResourceManager.GetString("odd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Из системы Railway.
+        /// </summary>
+        public static string railway {
+            get {
+                return ResourceManager.GetString("railway", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Название узла.
+        /// </summary>
+        public static string rw_field_nodes {
+            get {
+                return ResourceManager.GetString("rw_field_nodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Сторона.
+        /// </summary>
+        public static string rw_side_station_from {
+            get {
+                return ResourceManager.GetString("rw_side_station_from", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Сторона.
+        /// </summary>
+        public static string rw_side_station_on {
+            get {
+                return ResourceManager.GetString("rw_side_station_on", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Станция отправления.
+        /// </summary>
+        public static string rw_station_from_label {
+            get {
+                return ResourceManager.GetString("rw_station_from_label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Станция прибытия.
+        /// </summary>
+        public static string rw_station_on {
+            get {
+                return ResourceManager.GetString("rw_station_on", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Список.
         /// </summary>
         public static string rw_stations_nodes_report_home {
@@ -70,11 +187,38 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Список перегонов между станциями.
+        ///   Ищет локализованную строку, похожую на Список узлов прибытия и отправки между станциями..
         /// </summary>
         public static string rw_stations_nodes_report_title {
             get {
                 return ResourceManager.GetString("rw_stations_nodes_report_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Прибытие.
+        /// </summary>
+        public static string rw_tab_title_arrival {
+            get {
+                return ResourceManager.GetString("rw_tab_title_arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Отправка.
+        /// </summary>
+        public static string rw_tab_title_sending {
+            get {
+                return ResourceManager.GetString("rw_tab_title_sending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Тип отправления.
+        /// </summary>
+        public static string rw_transfer_type {
+            get {
+                return ResourceManager.GetString("rw_transfer_type", resourceCulture);
             }
         }
     }

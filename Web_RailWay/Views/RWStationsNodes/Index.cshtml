@@ -16,43 +16,117 @@
 }
 
 @Scripts.Render("~/bundles/Ajax")
-@*@Scripts.Render("~/bundles/jqueryval")*@
+@Scripts.Render("~/bundles/jqueryval")
 
-@*@Styles.Render("~/table/css")
-@Scripts.Render("~/bundles/table")*@
+@Styles.Render("~/table/css")
+@Scripts.Render("~/bundles/table")
+
+@Styles.Render("~/jquery-ui/css")
+@Scripts.Render("~/bundles/jquery-ui")
 
 <script src="~/Scripts/jquery.cookie.js"></script>
-
 <link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
 <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+
+<div id="edit-panel" title="">
+    <p class="validateTips">Все поля необходимые к заполнению.</p>
+    <form id="edit">
+        <fieldset>
+            <input id="id-nodes" name="id-nodes" type="hidden" />
+            <table>
+                <tr><th><label for="nodes">@RWResource.rw_field_nodes: </label></th><td><input id="nodes" name="nodes" type="text" class="text ui-widget-content ui-corner-all" /></td></tr>
+                <tr>
+                    <th><label for="station-from">@RWResource.rw_station_from_label: </label></th>
+                    <td>
+                        <label id="station-from" name="station-from"></label>
+                        <select id="station-from" name="station-from" class="text ui-widget-content ui-corner-all"></select>
+                    </td>
+                </tr>
+                <tr><th><label for="side-station-from">@RWResource.rw_side_station_from: </label></th><td><select id="side-station-from" name="side-station-from" class="text ui-widget-content ui-corner-all"></select></td></tr>
+                <tr><th><label for="transfer-type">@RWResource.rw_transfer_type: </label></th><td><select id="transfer-type" name="transfer-type" class="text ui-widget-content ui-corner-all"></select></td></tr>
+                <tr>
+                    <th><label for="station-on">@RWResource.rw_station_on: </label></th>
+                    <td>
+                        <label id="station-on" name="station-on"></label>
+                        <select id="station-on" name="station-on" class="text ui-widget-content ui-corner-all"></select>
+                    </td>
+                </tr>
+                <tr><th><label for="side-station-on">@RWResource.rw_side_station_on: </label></th><td><select id="side-station-on" name="side-station-on" class="text ui-widget-content ui-corner-all"></select></td></tr>
+            </table>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+<div id="delete-confirm" title="">
+    <form id="delete">
+        <fieldset>
+            <input id="id-nodes" name="id-nodes" type="hidden" />
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+                <label id="delete-confirm-text" name="delete-confirm-text"></label>
+            </p>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+
 <div id="report" class="report-wide">
     <div id="header">
         <div class="title">@ViewBag.Title</div>
         @Html.Label(@GlobalResources.select_station)
-        <select id="soflow">
-            <option></option>
-        </select>
-        @*@using (Ajax.BeginForm("ListBufferArrivalSostavOfDate", "KIST", ajaxOpts, new { @id = "fmList" })) //
-        {
-            <div id="select-rangedatetime">
-                @Html.Label(@GlobalResources.select_date_range_title, new { @class = "title-label" })
-                <span id="select-range">
-                    <input id="date-start" name="date_start" size="20">
-                    @Html.Label(@GlobalResources.to, new { @class = "title-label" })
-                    <input id="date-stop" name="date_stop" size="20">
-                </span>
-            </div>
-        }*@
-        @*@Html.Label(@MTResource.link_approaches, new { @class = "title-label" })&nbsp;
-            <a href='@Url.Action("Sostav", "MTApproaches")' class="btn btn-link">@MTResource.index_report_approaches_sostav_title</a>
-            <a href='@Url.Action("Cars", "MTApproaches")' class="btn btn-link">@MTResource.index_report_approaches_cars_title</a>
-            &nbsp;@Html.Label(@MTResource.link_arrival, new { @class = "title-label" })&nbsp;
-            <a href='@Url.Action("Sostav", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_sostav_title</a>
-            <a href='@Url.Action("Cars", "MTArrival")' class="btn btn-link">@MTResource.index_report_arrival_cars_title</a>*@
+        <select id="stations-list" name="station"></select>
     </div>
     <div id="report-detali">
-
+        <div id="tabs-stations" style="float: left; width:60% ">
+            <ul>
+                <li><a href="#tabs1">@RWResource.rw_tab_title_sending</a></li>
+                <li><a href="#tabs2">@RWResource.rw_tab_title_arrival</a></li>
+            </ul>
+            <div id="tabs1" name="sending-station" style="text-align:left">
+                <button id="bt-add" name="bt-send-add" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">Добавить<span class="ui-icon ui-icon-plusthick"></span></button>
+                <button id="bt-edit" name="bt-send-edit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">Правка<span class="ui-icon ui-icon-pencil"></span></button>
+                <button id="bt-delete" name="bt-send-delete" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">Удалить<span class="ui-icon ui-icon-closethick"></span></button>
+                <table class='table-hover table-bordered' id="send-table">
+                    <thead>
+                        <tr>
+                            <th>@RWResource.rw_station_from_label</th>
+                            <th>@RWResource.rw_side_station_from</th>
+                            <th>@RWResource.rw_transfer_type</th>
+                            <th>@RWResource.rw_side_station_on</th>
+                            <th>@RWResource.rw_station_on</th>
+                            <th>@RWResource.rw_field_nodes</th>
+                        </tr>
+                    </thead>
+                    <tbody name="list-send-stations"></tbody>
+                </table>
+            </div>
+            <div id="tabs2" name="arrival-station" style="text-align:left">
+                <button id="bt-add" name="bt-arrival-add" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">Добавить<span class="ui-icon ui-icon-plusthick"></span></button>
+                <button id="bt-edit" name="bt-arrival-edit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">Правка<span class="ui-icon ui-icon-pencil"></span></button>
+                <button id="bt-delete" name="bt-arrival-delete" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only">Удалить<span class="ui-icon ui-icon-closethick"></span></button>
+                <table class='table-hover table-bordered' id="arrival-table">
+                    <thead>
+                        <tr>
+                            <th>@RWResource.rw_station_from_label</th>
+                            <th>@RWResource.rw_side_station_from</th>
+                            <th>@RWResource.rw_transfer_type</th>
+                            <th>@RWResource.rw_side_station_on</th>
+                            <th>@RWResource.rw_station_on</th>
+                            <th>@RWResource.rw_field_nodes</th>
+                        </tr>
+                    </thead>
+                    <tbody name="list-arrival-stations"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="cls"></div>
     </div>
-    <div id="cls"></div>
 </div>
+<script src="~/Scripts/api_helpers/railway.js"></script>
 <script src="~/Scripts/reports/rw/stationsnodes.js"></script>
+
+

@@ -77,8 +77,8 @@ namespace Web_RailWay
             bundles.Add(new StyleBundle("~/table/css").Include(
                 "~/Content/table/jquery.dataTables.min.css",
                 "~/Content/table/reports-dataTables.css",
-                //"~/Content/jquery-ui/jquery-ui.css"));
-                "~/Content/table/jquery-ui.css"));
+                "~/Content/jquery-ui/jquery-ui.css"));
+            //"~/Content/table/jquery-ui.css"));
         }
     }
 }
