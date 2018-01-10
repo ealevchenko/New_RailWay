@@ -83,10 +83,10 @@ function selectListStations(obj, value, cng, exceptions) {
 function getImageSideStation(side) {
     var value = "";
     if (side == 1) {
-        value = '<img src="../Image/railway/even.png" />';
+        value = '<img src="Image/railway/even.png" />';
     }
     if (side == 0) {
-        value = '<img src="../Image/railway/odd.png" />';
+        value = '<img src="Image/railway/odd.png" />';
     }
     return value;
 }
@@ -141,13 +141,13 @@ function selectListSideStation(obj, value, cng) {
 function getImageTransferType(type) {
     var value = "";
     if (type == 0) {
-        value = '<img src="../Image/railway/type_railway.png" />';
+        value = '<img src="Image/railway/type_railway.png" />';
     }
     if (type == 1) {
-        value = '<img src="../Image/railway/type_input.png" />';
+        value = '<img src="Image/railway/type_input.png" />';
     }
     if (type == 2) {
-        value = '<img src="../Image/railway/type_output.png" />';
+        value = '<img src="Image/railway/type_output.png" />';
     }
     return value;
 }
