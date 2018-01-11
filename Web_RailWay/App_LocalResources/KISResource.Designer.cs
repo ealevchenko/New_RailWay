@@ -268,7 +268,7 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Обнавлен.
+        ///   Ищет локализованную строку, похожую на Обновлен.
         /// </summary>
         public static string kis_report_field_car_upd {
             get {

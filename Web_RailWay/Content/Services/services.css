@@ -1,0 +1,362 @@
+﻿/*div {
+    border: 1px solid red;
+}*/
+body {
+    background-color: transparent;
+    background-repeat: repeat, no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-background-size: auto, cover;
+    -moz-background-size: auto, cover;
+    -o-background-size: auto, cover;
+    background-size: auto, cover;
+}
+
+.report-wide{
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1500px;
+}
+
+BODY {
+    font-family: Cambria, Georgia, "Times New Roman";
+    margin: 0;
+}
+
+DIV#header DIV.title {
+    font: bold 1em "Arial Narrow", "Franklin Gothic Medium", Arial;
+}
+.title-label {
+    text-transform: uppercase;
+    color: blanchedalmond;
+}
+/*Ссылки на header*/
+DIV#header a.btn-link {
+        font-weight: normal;
+        color: White;
+        cursor: pointer;
+        border-radius: 0;
+    }
+
+    DIV#header a.btn-link,
+    DIV#header a.btn-link:active,
+    DIV#header a.btn-link[disabled],
+    fieldset[disabled] DIV#header a.btn-link {
+        background-color: transparent;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+        DIV#header a.btn-link,
+        DIV#header a.btn-link:hover,
+        DIV#header a.btn-link:focus,
+        DIV#header a.btn-link:active {
+            border-color: transparent;
+        }
+
+            DIV#header a.btn-link:hover,
+            DIV#header a.btn-link:focus {
+                color: #fcfa7e;
+                text-decoration: underline;
+                background-color: transparent;
+                font-weight:400;
+            }
+
+            DIV#header a.btn-link[disabled]:hover,
+            fieldset[disabled] DIV#header a.btn-link:hover,
+            DIV#header a.btn-link[disabled]:focus,
+            fieldset[disabled] DIV#header a.btn-link:focus {
+                color: #999999;
+                text-decoration: none;
+            }
+
+DIV#report {
+    color: #666;
+    background: White;
+}
+
+DIV#header {
+    background-color: #444;
+    border-bottom: 2px solid #111;
+    color: White;
+}
+
+    DIV#header DIV.title {
+        font-size: 2em;
+        padding: .6em;
+    }
+
+DIV#report-content {
+    padding: 1em;
+    border-left: 2px solid gray;
+}
+/*report-menu*/
+DIV#report-menu {
+    float: left;
+    width: 18em;
+    padding: .3em;
+}
+
+    DIV#report-menu A {
+        font: bold 1.1em "Arial Narrow","Franklin Gothic Medium",Arial;
+        display: block;
+        text-decoration: none;
+        padding: .6em;
+        color: Black;
+        border-bottom: 1px solid silver;
+    }
+
+        DIV#report-menu A.selected {
+            background-color: #666;
+            color: White;
+        }
+
+        DIV#report-menu A:hover {
+            background-color: #CCC;
+        }
+
+        DIV#report-menu A.selected:hover {
+            background-color: #666;
+        }
+
+DIV#report-menu-content {
+    margin-left: 19em;
+    padding: 1em;
+    border-left: 2px solid gray;
+}
+
+/*report-operation*/
+DIV#report-operation {
+}
+
+    DIV#report-operation A {
+        font: bold 1.1em "Arial Narrow","Franklin Gothic Medium",Arial;
+        display: block;
+        text-decoration: none;
+        padding: .6em;
+        margin-right: 5px;
+        color: Black;
+        border: 1px solid silver;
+        float: left;
+    }
+
+        DIV#report-operation A.selected {
+            background-color: #666;
+            color: White;
+        }
+
+        DIV#report-operation A:hover {
+            background-color: #CCC;
+        }
+
+        DIV#report-operation A.selected:hover {
+            background-color: #666;
+        }
+
+DIV#report-operation {
+}
+/*report-select-detali*/
+DIV#report-select-detali A {
+    font: bold 1.1em "Arial Narrow","Franklin Gothic Medium",Arial;
+    display: block;
+    text-decoration: none;
+    padding: .6em;
+    margin-right: 5px;
+    color: Black;
+    border: 1px solid silver;
+    float: left;
+    text-transform: uppercase;
+}
+
+    DIV#report-select-detali A.selected {
+        background-color: #666;
+        color: White;
+    }
+
+    DIV#report-select-detali A:hover {
+        background-color: #CCC;
+    }
+
+    DIV#report-select-detali A.selected:hover {
+        background-color: #666;
+    }
+
+
+/*sostav-location*/
+DIV#report-location {
+    float: left;
+    width: 19em;
+    padding: .3em;
+}
+
+    DIV#report-location A {
+        font: bold 1.1em "Arial Narrow","Franklin Gothic Medium",Arial;
+        display: block;
+        text-decoration: none;
+        padding: .6em;
+        color: Black;
+        border-bottom: 1px solid silver;
+    }
+
+        DIV#report-location A.selected {
+            background-color: #666;
+            color: White;
+        }
+
+        DIV#report-location A:hover {
+            background-color: #CCC;
+        }
+
+        DIV#report-location A.selected:hover {
+            background-color: #666;
+        }
+
+DIV#report-location-content {
+    margin-left: 20em;
+    padding: 1em;
+    border-left: 2px solid gray;
+}
+
+DIV#cls-operation {
+    padding-top: 50px;
+}
+
+DIV#report-table {
+    float: left;
+    width: 80%;
+    padding: .3em;
+}
+
+DIV#report-detali {
+    padding: 1em;
+}
+
+div#cls {
+    clear: left;
+}
+
+
+form#fmDetali {
+text-align:left;
+}
+
+/*Отчет вагоны по прибытию*/
+#cars-arrival TR.amkr, #cars-arrival TR.delivered, #list-approaches-cars TR.delivered {
+    background-color: #fcfa7e;
+}
+
+#cars-arrival TR.amkr-taken, #cars-arrival TR.delivered-taken, #list-approaches-cars TR.amkr-taken, #list-approaches-cars TR.delivered-taken {
+    background-color: #91cb6a;
+}
+
+#cars-arrival TR.normal, #list-approaches-cars TR.normal {
+    background-color: White;
+}
+
+/*Сворачивающееся меню*/
+.a-show-detali {
+    /*border: 0;*/
+    /*border-radius: 300px;*/
+    text-decoration:none;
+    text-transform: uppercase;
+    font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
+    font-weight: 700;
+    color: #666;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+    .a-show-detali:hover {
+        text-decoration:none;
+        text-transform: uppercase;
+        color: #111;
+    }
+
+    .a-show-detali:focus {
+        text-decoration:none;
+        text-transform: uppercase;
+        color: #111;
+    }
+
+    .a-show-detali:active {
+        text-transform: uppercase;
+        color: #111;
+    }
+
+.detali-object {
+    display: none;
+    border-left: 6px solid #8ae;
+    border-top: 1px solid #8ae;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    background-color: #eee;
+    border-radius: 4px;
+}
+
+#list-group-date td.group-date {
+    text-align: left;
+}
+
+#list-approaches-cars td.group-cargo {
+    text-align: left;
+    text-transform: uppercase;
+    color: darkblue;
+}
+
+/*table-detali*/
+#table-detali {
+
+}
+#table-detali thead tr th {
+    text-align:center;
+    font-weight:600;
+    text-transform:uppercase;
+    background-color:#cccccc;
+    color:#333;
+}
+
+#table-detali tbody tr td {
+    padding:4px;
+    text-align:center;
+}
+
+td a {
+    color: #3A41FF;
+    -webkit-transition: all .35s;
+    -moz-transition: all .35s;
+    transition: all .35s;
+}
+
+td a:hover,
+td a:focus {
+    color: #3A418C;
+    font-weight:600;
+}
+
+td.Ok {
+    color:#35c247;
+}
+
+td.Error {
+    color:#ff0000;
+}
+
+tr.selected {
+    background-color: #007fff;
+    color: #ffffff;
+}

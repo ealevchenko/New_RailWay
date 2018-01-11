@@ -21,7 +21,7 @@ namespace EFRW.Concrete
 
         protected EFDbContext context = new EFDbContext();
         // Перечисление типов отправки составов на другую станцию
-        public enum typeSendTransfer : int { railway = 0, kis_output = 1, kis_input = 2 }
+        public enum typeSendTransfer : int { railway = 0, kis_output = 1, kis_input = 2, railway_buffer =3 }
         // Перечисление типов стороны (четная, нечетная)
         public enum Side : int { odd = 0, even = 1}
 

@@ -181,6 +181,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>KISResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\LogResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_LocalResources\MTResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -203,6 +208,7 @@
     <Compile Include="Controllers\api\KisKometaController.cs" />
     <Compile Include="Controllers\api\KisNumVagController.cs" />
     <Compile Include="Controllers\api\KisPromController.cs" />
+    <Compile Include="Controllers\api\LogController.cs" />
     <Compile Include="Controllers\api\MTController.cs" />
     <Compile Include="Controllers\api\ReferenceController.cs" />
     <Compile Include="Controllers\api\RWController.cs" />
@@ -222,6 +228,7 @@
     <Compile Include="Controllers\RWStationsNodesController.cs" />
     <Compile Include="Controllers\SAPISAdminController.cs" />
     <Compile Include="Controllers\SAPISController.cs" />
+    <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\tetsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -242,20 +249,18 @@
     <Content Include="Content\datetime\daterangepicker.css" />
     <Content Include="Content\dropdownlist.css" />
     <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\jquery-ui\images\ui-icons_444444_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_555555_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_777620_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_777777_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_cc0000_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Content\jquery-ui\jquery-ui.css" />
-    <Content Include="Content\jquery-ui\jquery-ui.min.css" />
-    <Content Include="Content\jquery-ui\jquery-ui.structure.css" />
-    <Content Include="Content\jquery-ui\jquery-ui.structure.min.css" />
-    <Content Include="Content\jquery-ui\jquery-ui.theme.css" />
-    <Content Include="Content\jquery-ui\jquery-ui.theme.min.css" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\lockpanel\lockpanel.css" />
     <Content Include="Content\reports.css" />
+    <Content Include="Content\Services\services.css" />
     <Content Include="Content\table\dataTables.jqueryui.min.css" />
     <Content Include="Content\table\jquery.dataTables.min.css" />
     <Content Include="Content\table\reports-dataTables.css" />
@@ -309,11 +314,14 @@
     <Content Include="Image\header.jpg" />
     <Content Include="Image\header1.jpg" />
     <Content Include="Image\Levchenko.jpg" />
+    <Content Include="Image\log.jpg" />
     <Content Include="Image\railway\even.png" />
     <Content Include="Image\railway\odd.png" />
+    <Content Include="Image\railway\type_buffer.png" />
     <Content Include="Image\railway\type_input.png" />
     <Content Include="Image\railway\type_output.png" />
     <Content Include="Image\railway\type_railway.png" />
+    <Content Include="Image\Statistic.jpg" />
     <Content Include="Image\table\add.png" />
     <Content Include="Image\table\cancel.png" />
     <Content Include="Image\table\delete.png" />
@@ -322,6 +330,7 @@
     <Content Include="Image\table\sort_both.png" />
     <Content Include="Image\table\sort_desc.png" />
     <Content Include="Scripts\admin\sap\sapisadmin.js" />
+    <Content Include="Scripts\api_helpers\logs.js" />
     <Content Include="Scripts\api_helpers\railway.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
@@ -356,7 +365,6 @@
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
-    <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.easing.min.js" />
     <Content Include="Scripts\jquery.fittext.js" />
@@ -372,6 +380,7 @@
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\reports\kis\kistransferarrival.js" />
+    <Content Include="Scripts\Services\services.js" />
     <Content Include="Scripts\reports\mt\mtapproachescars.js" />
     <Content Include="Scripts\reports\mt\mtapproachessostav.js" />
     <Content Include="Scripts\reports\mt\mtarrivalcars.js" />
@@ -450,6 +459,7 @@
     <Content Include="Views\RWStationsNodes\Index.cshtml" />
     <Content Include="Views\RW\Index.cshtml" />
     <Content Include="Views\RW\LinkRWControl.cshtml" />
+    <Content Include="Views\Services\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFAccess\EFAccess.csproj">
@@ -480,6 +490,10 @@
       <Project>{27da4048-f46e-4c77-857b-2bd1809fea87}</Project>
       <Name>KIS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MessageLogs\EFServicesLogs\EFServicesLogs.csproj">
+      <Project>{e387bd1c-61f3-413b-a222-cbe8cc4ca532}</Project>
+      <Name>EFServicesLogs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MessageLogs\WebLogs\WebLogs.csproj">
       <Project>{f89091ab-e2d5-465e-9702-39cfa3a46f51}</Project>
       <Name>WebLogs</Name>
@@ -487,6 +501,10 @@
     <ProjectReference Include="..\MetallurgTrans\MetallurgTrans.csproj">
       <Project>{fa3408e4-c498-4f7b-a22e-b909e45c40e9}</Project>
       <Name>MetallurgTrans</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MLogs\MLogs.csproj">
+      <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
+      <Name>MLogs</Name>
     </ProjectReference>
     <ProjectReference Include="..\OLDVersion\TransferRailCars\TransferRailCars.csproj">
       <Project>{a1f50999-31d4-4793-a92f-4d0f436922cb}</Project>
@@ -515,6 +533,10 @@
     <EmbeddedResource Include="App_LocalResources\KISResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>KISResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\LogResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LogResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="App_LocalResources\MTResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

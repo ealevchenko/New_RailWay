@@ -17,7 +17,7 @@ namespace Web_RailWay
             "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
-            "~/Scripts/jquery-ui.min.js"));
+            "~/Scripts/jquery-ui.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Ajax").Include(
             "~/Scripts/jquery.unobtrusive-ajax.min.js"));
@@ -68,17 +68,15 @@ namespace Web_RailWay
                         "~/Content/creative.css"));
 
             bundles.Add(new StyleBundle("~/jquery-ui/css").Include(
-                        "~/Content/jquery-ui/jquery-ui.css",
-                        "~/Content/jquery-ui/jquery-ui.structure.css",
-                        "~/Content/jquery-ui/jquery-ui.theme.css"));
+                        "~/Content/jquery-ui.css",
+                        "~/Content/jquery-ui.structure.css",
+                        "~/Content/jquery-ui.theme.css"));
 
             bundles.Add(new StyleBundle("~/datetime/css").Include("~/Content/datetime/daterangepicker.css"));
             // Плагин таблицы
             bundles.Add(new StyleBundle("~/table/css").Include(
                 "~/Content/table/jquery.dataTables.min.css",
-                "~/Content/table/reports-dataTables.css",
-                "~/Content/jquery-ui/jquery-ui.css"));
-            //"~/Content/table/jquery-ui.css"));
+                "~/Content/table/reports-dataTables.css"));
         }
     }
 }

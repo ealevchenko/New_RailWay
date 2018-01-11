@@ -124,11 +124,20 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Из системы Railway.
+        ///   Ищет локализованную строку, похожую на Между системой Railway.
         /// </summary>
         public static string railway {
             get {
                 return ResourceManager.GetString("railway", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Из системы RailWay в буфер.
+        /// </summary>
+        public static string railway_buffer {
+            get {
+                return ResourceManager.GetString("railway_buffer", resourceCulture);
             }
         }
         
