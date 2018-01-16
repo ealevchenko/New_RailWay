@@ -19,7 +19,7 @@ namespace Web_RailWay.App_LocalResources {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class LogResource {
@@ -57,6 +57,51 @@ namespace Web_RailWay.App_LocalResources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Дата и время.
+        /// </summary>
+        public static string log_datetime {
+            get {
+                return ResourceManager.GetString("log_datetime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ошибка.
+        /// </summary>
+        public static string log_errors_datetime_user_message {
+            get {
+                return ResourceManager.GetString("log_errors_datetime_user_message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Модуль.
+        /// </summary>
+        public static string log_eventID {
+            get {
+                return ResourceManager.GetString("log_eventID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Событие.
+        /// </summary>
+        public static string log_events_event {
+            get {
+                return ResourceManager.GetString("log_events_event", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Статус выполнения.
+        /// </summary>
+        public static string log_events_status {
+            get {
+                return ResourceManager.GetString("log_events_status", resourceCulture);
             }
         }
         
@@ -174,6 +219,15 @@ namespace Web_RailWay.App_LocalResources {
         public static string log_tab_title_services {
             get {
                 return ResourceManager.GetString("log_tab_title_services", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Настройки.
+        /// </summary>
+        public static string log_tab_title_setup {
+            get {
+                return ResourceManager.GetString("log_tab_title_setup", resourceCulture);
             }
         }
     }

@@ -11,13 +11,16 @@ namespace Web_RailWay
             //-----------------------------------------------------------------------
             //JS
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-3.2.1.min.js"));
+                        //"~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-            "~/Scripts/jquery.validate*"));
+            "~/Scripts/jquery.validate.min.js"));
+            //"~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
-            "~/Scripts/jquery-ui.js"));
+            "~/Scripts/jquery-ui-1.12.1.min.js"));
+            //"~/Scripts/jquery-ui.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Ajax").Include(
             "~/Scripts/jquery.unobtrusive-ajax.min.js"));
@@ -28,7 +31,8 @@ namespace Web_RailWay
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
+                      //"~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap.min.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/creative").Include(
@@ -58,11 +62,13 @@ namespace Web_RailWay
             //-----------------------------------------------------------------------
             //CSS
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                        "~/Content/bootstrap.css",
+                        //"~/Content/bootstrap.css",
+                        "~/Content/bootstrap.min.css",
                         "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Creative/css").Include(
-                        "~/Content/bootstrap.css",
+                //"~/Content/bootstrap.css",
+                "~/Content/bootstrap.min.css",
                         "~/Content/font-awesome.min.css",
                         "~/Content/animate.min.css",
                         "~/Content/creative.css"));

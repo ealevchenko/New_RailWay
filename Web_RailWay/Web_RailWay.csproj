@@ -715,6 +715,10 @@
       <Project>{27da4048-f46e-4c77-857b-2bd1809fea87}</Project>
       <Name>KIS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MessageLogs\EFLogs\EFLogs.csproj">
+      <Project>{e7c42b84-183e-4241-816d-26abe5181b53}</Project>
+      <Name>EFLogs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MessageLogs\EFServicesLogs\EFServicesLogs.csproj">
       <Project>{e387bd1c-61f3-413b-a222-cbe8cc4ca532}</Project>
       <Name>EFServicesLogs</Name>
