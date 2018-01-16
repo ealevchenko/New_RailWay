@@ -50,9 +50,9 @@ namespace Web_RailWay
                 , "~/Scripts/helpers/lib-datetime.js"
                 ));
             // Плагин таблицы
-            bundles.Add(new ScriptBundle("~/bundles/table").Include(
-                "~/Scripts/table/jquery.dataTables.min.js",
-                "~/Scripts/table/dataTables.jqueryui.min.js"
+            bundles.Add(new ScriptBundle("~/bundles/DataTables").Include(
+                "~/Scripts/DataTables/jquery.dataTables.min.js",
+                "~/Scripts/DataTables/dataTables.jqueryui.min.js"
                 ));
 
             //-----------------------------------------------------------------------
@@ -74,9 +74,11 @@ namespace Web_RailWay
 
             bundles.Add(new StyleBundle("~/datetime/css").Include("~/Content/datetime/daterangepicker.css"));
             // Плагин таблицы
-            bundles.Add(new StyleBundle("~/table/css").Include(
-                "~/Content/table/jquery.dataTables.min.css",
-                "~/Content/table/reports-dataTables.css"));
+            bundles.Add(new StyleBundle("~/DataTables/css").Include(
+                "~/Content/DataTables/css/jquery.dataTables.min.css",
+                "~/Content/DataTables/css/datatables.css"));
+
+                //"~/Content/table/reports-dataTables.css"));
         }
     }
 }

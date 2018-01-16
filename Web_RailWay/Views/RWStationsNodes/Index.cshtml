@@ -11,15 +11,15 @@
 
 @{
     ViewBag.Title = @RWResource.rw_stations_nodes_report_title;
-    ViewBag.ImageFone = "background-image: url(.../../../Image/header1.jpg);";
+    ViewBag.ImageFone = "background-image: url(~/../Image/header1.jpg);";
     ViewBag.Home = @RWResource.rw_stations_nodes_report_home;
 }
 
 @Scripts.Render("~/bundles/Ajax")
 @Scripts.Render("~/bundles/jqueryval")
 
-@Styles.Render("~/table/css")
-@Scripts.Render("~/bundles/table")
+@Styles.Render("~/DataTables/css")
+@Scripts.Render("~/bundles/DataTables")
 
 @Styles.Render("~/jquery-ui/css")
 @Scripts.Render("~/bundles/jquery-ui")

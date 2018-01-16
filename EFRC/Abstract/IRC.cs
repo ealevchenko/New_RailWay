@@ -42,6 +42,8 @@ namespace EFRC.Abstract
         IQueryable<VAGON_OPERATIONS> GetWagonsOfStation(int id_stat);
         int OffSetCars(int way, int start_num);
         IQueryable<VAGON_OPERATIONS> GetVagonsAMKRToUZ(int[] idstation_uz);
+        IQueryable<VAGON_OPERATIONS> GetVagonsOperationsOfPresentWay(int num_vag);
+        IQueryable<VAGON_OPERATIONS> GetVagonsOperationsOfPresentArrival(int num_vag);
         #endregion
 
         #region VAGONS

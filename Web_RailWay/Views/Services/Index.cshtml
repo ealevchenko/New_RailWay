@@ -22,8 +22,8 @@
 @Styles.Render("~/datetime/css")
 @Scripts.Render("~/bundles/datetime")
 
-@Styles.Render("~/table/css")
-@Scripts.Render("~/bundles/table")
+@Styles.Render("~/DataTables/css")
+@Scripts.Render("~/bundles/DataTables")
 
 
 <script src="~/Scripts/jquery.cookie.js"></script>
@@ -42,7 +42,7 @@
 
     </div>
     <div id="report-detali">
-        <table class='' id="services-table">
+        <table class='display' id="services-table">
             <thead>
                 <tr>
                     <th>@LogResource.log_services_name</th>
@@ -53,8 +53,58 @@
                     <th>@LogResource.log_services_min</th>
                 </tr>
             </thead>
-            <tbody name="list-status-services"></tbody>
+            <tbody>
+
+            </tbody>
         </table>
+        <div id="tabs-log" style="float: left; width:60% ">
+            <ul>
+                <li><a href="#tabs1">@LogResource.log_tab_title_services</a></li>
+                <li><a href="#tabs2">@LogResource.log_tab_title_errors</a></li>
+                <li><a href="#tabs2">@LogResource.log_tab_title_event</a></li>
+            </ul>
+            <div id="tabs1" style="text-align:left">
+                <table class='table-hover table-bordered' id="table-log-services">
+                    <thead>
+                        <tr>
+                            <th>@LogResource.log_services_name</th>
+                            <th>@LogResource.log_services_start</th>
+                            <th>@LogResource.log_services_duration</th>
+                            <th>@LogResource.log_services_code_return</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div id="tabs2" style="text-align:left">
+                @*<table class='table-hover table-bordered' id="table-log-services">
+                    <thead>
+                        <tr>
+                            <th>@LogResource.log_services_name</th>
+                            <th>@LogResource.log_services_start</th>
+                            <th>@LogResource.log_services_duration</th>
+                            <th>@LogResource.log_services_code_return</th>
+                        </tr>
+                    </thead>
+                    <tbody name="list-send-stations"></tbody>
+                </table>*@
+            </div>
+            <div id="tabs3" style="text-align:left">
+                @*<table class='table-hover table-bordered' id="table-log-services">
+                    <thead>
+                        <tr>
+                            <th>@LogResource.log_services_name</th>
+                            <th>@LogResource.log_services_start</th>
+                            <th>@LogResource.log_services_duration</th>
+                            <th>@LogResource.log_services_code_return</th>
+                        </tr>
+                    </thead>
+                    <tbody name="list-send-stations"></tbody>
+                </table>*@
+            </div>
+        </div>
         <div id="cls"></div>
     </div>
 </div>

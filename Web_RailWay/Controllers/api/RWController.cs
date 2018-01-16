@@ -124,13 +124,13 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Option))]
         public IHttpActionResult GetTypeSendTransfer()
         {
-            List<Option> options = new List<Option>();
-            List<Option> list = this.rep_rw.GetTypeSendTransfer();
+            List<EFRW.Concrete.Option> options = new List<EFRW.Concrete.Option>();
+            List<EFRW.Concrete.Option> list = this.rep_rw.GetTypeSendTransfer();
             if (list == null)
             {
                 return NotFound();
             }
-            list.ForEach(c => options.Add(new Option() {  value = c.value, text = GetResource(c.text)}));
+            list.ForEach(c => options.Add(new EFRW.Concrete.Option() { value = c.value, text = GetResource(c.text) }));
             return Ok(options);
         }   
 
@@ -147,13 +147,13 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Option))]
         public IHttpActionResult GetSide()
         {
-            List<Option> options = new List<Option>();
-            List<Option> list = this.rep_rw.GetSide();
+            List<EFRW.Concrete.Option> options = new List<EFRW.Concrete.Option>();
+            List<EFRW.Concrete.Option> list = this.rep_rw.GetSide();
             if (list == null)
             {
                 return NotFound();
             }
-            list.ForEach(c => options.Add(new Option() {  value = c.value, text = GetResource(c.text)}));
+            list.ForEach(c => options.Add(new EFRW.Concrete.Option() { value = c.value, text = GetResource(c.text) }));
             return Ok(options);
         }   
      

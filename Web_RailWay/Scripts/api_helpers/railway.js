@@ -144,12 +144,12 @@ function getImageTransferType(type) {
         value = '<img src=".../../../Image/railway/type_railway.png" />';
     }
     if (type == 1) {
-        value = '<img src=".../../../Image/railway/type_input.png" />';
-    }
-    if (type == 2) {
         value = '<img src=".../../../Image/railway/type_output.png" />';
     }
     if (type == 2) {
+        value = '<img src=".../../../Image/railway/type_input.png" />';
+    }
+    if (type == 3) {
         value = '<img src=".../../../Image/railway/type_buffer.png" />';
     }
     return value;

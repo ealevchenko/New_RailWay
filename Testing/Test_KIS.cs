@@ -92,13 +92,48 @@ namespace Testing
         public void Test_KISTransfer_CopyBufferOutputSostavOfKIS()
         {
             KISTransfer kis_trans = new KISTransfer(service.ServicesKIS);
-            kis_trans.CopyBufferOutputSostavOfKIS(1);
+            kis_trans.CopyBufferOutputSostavOfKIS(1, false);
         }
 
         public void Test_KISThread_StartCopyBufferOutputSostav()
         {
             KISThread kis_t = new KISThread(service.ServicesKIS);
             kis_t.StartCopyBufferOutputSostav();
+        }
+
+        public void Test_KISTransfer_TransferArrivalToStation()
+        {
+            KISTransfer kis_trans = new KISTransfer();
+            EFTKIS ef_tkis = new EFTKIS();
+            EFKIS.Entities.BufferInputSostav bis = ef_tkis.GetBufferInputSostav(1379);
+            kis_trans.TransferArrivalToStation(ref bis);
+        }
+
+        public void Test_KISTransfer_TransferArrivalOfKISInput()
+        {
+            KISTransfer kis_trans = new KISTransfer();
+            int res = kis_trans.TransferArrivalOfKISInput();
+
+        }
+
+        public void Test_KISThread_StartTransferInputKIS()
+        {
+            KISThread kis_t = new KISThread(service.ServicesKIS);
+            kis_t.StartTransferInputKIS();
+        }
+
+        public void Test_KISThread_StartTransferOutputKIS()
+        {
+            KISThread kis_t = new KISThread(service.ServicesKIS);
+            kis_t.StartTransferOutputKIS();
+        }
+
+        public void Test_KISTransfer_TransferOutputArrivalToStation()
+        {
+            KISTransfer kis_trans = new KISTransfer();
+            EFTKIS ef_tkis = new EFTKIS();
+            EFKIS.Entities.BufferOutputSostav bos = ef_tkis.GetBufferOutputSostav(1112);
+            kis_trans.TransferArrivalToStation(ref bos);
         }
 
     }

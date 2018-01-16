@@ -97,6 +97,14 @@ namespace RCReferences
             }
             return null;
         }
+
+        public int? DefinitionIDWays(int id_station)
+        {
+            EFRailCars efrc = new EFRailCars();    
+            WAYS ws = efrc.GetWaysOfStations(id_station).OrderBy(w => w.num).FirstOrDefault();
+            return ws != null ? (int?)ws.id_way : null;
+        }
+
         /// <summary>
         /// Получить ID вагона системы Railcars (если id нет создать из данных КИС или создать временную строку)
         /// </summary>

@@ -100,7 +100,13 @@ namespace Testing
             //tst_kis.Test_KISTransfer_CopyBufferInputSostavOfKIS(); // Копирование в буфер прибытия
             //tst_kis.Test_KISTransfer_CopyBufferOutputSostavOfKIS(); // Копирование в буфер отправки
             //tst_kis.Test_KISThread_StartCopyBufferInputSostav(); // Запуск потока Копирование в буфер прибытия
-            tst_kis.Test_KISThread_StartCopyBufferOutputSostav(); // Запуск потока Копирование в буфер отправки
+            //tst_kis.Test_KISThread_StartCopyBufferOutputSostav(); // Запуск потока Копирование в буфер отправки
+            //tst_kis.Test_KISTransfer_TransferArrivalToStation(); // Тест переноса вагонов из КИС в прибытие станции RC по данным КИС по прибытию
+            //tst_kis.Test_KISTransfer_TransferArrivalOfKISInput(); // Тест всех переносов вагонов из КИС в прибытие станции RC по данным КИС по прибытию
+            //tst_kis.Test_KISThread_StartTransferInputKIS(); // тест потока всех переносов вагонов из КИС в прибытие станции RC по данным КИС по прибытию
+            //tst_kis.Test_KISThread_StartTransferOutputKIS(); // тест потока всех переносов вагонов из КИС в прибытие станции RC по данным КИС по отправке
+            tst_kis.Test_KISTransfer_TransferOutputArrivalToStation(); // Тест переноса вагонов из КИС в прибытие станции RC по данным КИС по отправке
+
             #endregion
 
             #region Test_Reference

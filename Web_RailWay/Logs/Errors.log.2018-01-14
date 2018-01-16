@@ -1,0 +1,18 @@
+2018-01-14 15:10:53,962 ERROR 8 LOGGER - Ошибка выполнения метода WriteError(Exception=System.Web.HttpException (0x80004005): Обнаружено потенциально опасное значение Request.Path, полученное от клиента (:).
+   в System.Web.HttpRequest.ValidateInputIfRequiredByConfig()
+   в System.Web.HttpApplication.PipelineStepManager.ValidateHelper(HttpContext context), HttpCode=400, Request=System.Web.HttpRequest)
+System.InvalidOperationException: Этот метод можно вызвать только после события проверки аутентификации.
+   в System.Web.HttpRequest.get_LogonUserIdentity()
+   в MessageLog.WebLogs.WriteError(Exception Exception, Nullable`1 HttpCode, HttpRequest Request) в D:\edik\Visual Studio 2017\Projects\Work\New RailWay\MessageLogs\WebLogs\WebLog.cs:строка 122
+2018-01-14 15:11:06,354 ERROR 13 LOGGER - Ошибка выполнения метода WriteError(Exception=System.Web.HttpException (0x80004005): Обнаружено потенциально опасное значение Request.Path, полученное от клиента (:).
+   в System.Web.HttpRequest.ValidateInputIfRequiredByConfig()
+   в System.Web.HttpApplication.PipelineStepManager.ValidateHelper(HttpContext context), HttpCode=400, Request=System.Web.HttpRequest)
+System.InvalidOperationException: Этот метод можно вызвать только после события проверки аутентификации.
+   в System.Web.HttpRequest.get_LogonUserIdentity()
+   в MessageLog.WebLogs.WriteError(Exception Exception, Nullable`1 HttpCode, HttpRequest Request) в D:\edik\Visual Studio 2017\Projects\Work\New RailWay\MessageLogs\WebLogs\WebLog.cs:строка 122
+2018-01-14 15:11:52,240 ERROR 10 LOGGER - Ошибка выполнения метода WriteError(Exception=System.Web.HttpException (0x80004005): Обнаружено потенциально опасное значение Request.Path, полученное от клиента (:).
+   в System.Web.HttpRequest.ValidateInputIfRequiredByConfig()
+   в System.Web.HttpApplication.PipelineStepManager.ValidateHelper(HttpContext context), HttpCode=400, Request=System.Web.HttpRequest)
+System.InvalidOperationException: Этот метод можно вызвать только после события проверки аутентификации.
+   в System.Web.HttpRequest.get_LogonUserIdentity()
+   в MessageLog.WebLogs.WriteError(Exception Exception, Nullable`1 HttpCode, HttpRequest Request) в D:\edik\Visual Studio 2017\Projects\Work\New RailWay\MessageLogs\WebLogs\WebLog.cs:строка 122

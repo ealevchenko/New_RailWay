@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="log_services_code_return" xml:space="preserve">
+    <value>Код выполнения</value>
+  </data>
   <data name="log_services_current" xml:space="preserve">
     <value>Время выполнения</value>
+  </data>
+  <data name="log_services_duration" xml:space="preserve">
+    <value>Время выполнения (мсек.)</value>
   </data>
   <data name="log_services_execution" xml:space="preserve">
     <value>Последнее выполнение</value>
@@ -140,5 +146,14 @@
   </data>
   <data name="log_services_start" xml:space="preserve">
     <value>Запущен</value>
+  </data>
+  <data name="log_tab_title_errors" xml:space="preserve">
+    <value>Ошибки</value>
+  </data>
+  <data name="log_tab_title_event" xml:space="preserve">
+    <value>События</value>
+  </data>
+  <data name="log_tab_title_services" xml:space="preserve">
+    <value>Отработка</value>
   </data>
 </root>

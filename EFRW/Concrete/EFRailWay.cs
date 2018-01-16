@@ -217,6 +217,19 @@ namespace EFRW.Concrete
                 return null;
             }
         }
+
+        public Stations GetStationsOfKis(int id_kis)
+        {
+            try
+            {
+                return GetStations().Where(s => s.id_kis == id_kis).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStationsOfKis(id_kis={0})", id_kis), eventID);
+                return null;
+            }
+        }
         #endregion
 
         #region StationsNodes
@@ -346,12 +359,44 @@ namespace EFRW.Concrete
             }
         }
 
+        public IQueryable<StationsNodes> GetStationsNodes(int id_station_from, int id_station_on, typeSendTransfer st)
+        {
+            try
+            {
+                return GetStationsNodes().Where(n => n.id_station_from == id_station_from & n.id_station_on == id_station_on & n.transfer_type == (int)st);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalStationsNodes(id_station_from={0}, id_station_on={1}, transfer_type={2})", id_station_from, id_station_on, st), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Проверка соответствия станций к правилам по коду станций RailWay
+        /// </summary>
+        /// <param name="id_station_from"></param>
+        /// <param name="id_station_on"></param>
+        /// <param name="st"></param>
+        /// <returns></returns>
+        public bool IsRulesTransfer(int id_station_from, int id_station_on, typeSendTransfer st) { 
+            List<StationsNodes> list = GetStationsNodes(id_station_from, id_station_on, st).ToList();
+            return list != null && list.Count() > 0 ? true : false;
+        }
+        /// <summary>
+        /// Проверка соответствия станций к правилам по коду станций КИС
+        /// </summary>
+        /// <param name="id_station_from_kis"></param>
+        /// <param name="id_station_on_kis"></param>
+        /// <param name="st"></param>
+        /// <returns></returns>
+        public bool IsRulesTransferOfKis(int id_station_from_kis, int id_station_on_kis, typeSendTransfer st)
+        {
+
+            Stations id_station_from = GetStationsOfKis(id_station_from_kis);
+            Stations id_station_on = GetStationsOfKis(id_station_on_kis);
+            return IsRulesTransfer((id_station_from != null ? id_station_from.id : 0), (id_station_on != null ? id_station_on.id : 0), st);
+        }
+
         #endregion
-
-
-
-
-
-
     }
 }

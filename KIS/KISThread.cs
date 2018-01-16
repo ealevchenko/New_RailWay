@@ -16,6 +16,8 @@ namespace KIS
 
         protected static object locker_setting = new object();
         protected static object locker_tas = new object();
+        protected static object locker_bis = new object(); // блокировка доступа к таблице bufferInputSostav
+        protected static object locker_bos = new object(); // блокировка доступа к таблице bufferOutputSostav
 
         protected Thread thCopyBufferArrivalSostav = null;
         public bool statusCopyBufferArrivalSostav { get { return thCopyBufferArrivalSostav.IsAlive; } }
@@ -29,8 +31,14 @@ namespace KIS
         protected Thread thCopyBufferInputSostav = null;
         public bool statusCopyBufferInputSostav { get { return thCopyBufferInputSostav.IsAlive; } }
 
+        protected Thread thTransferInputKIS = null;
+        public bool statusTransferInputKIS { get { return thTransferInputKIS.IsAlive; } }
+
         protected Thread thCopyBufferOutputSostav = null;
         public bool statusCopyBufferOutputSostav { get { return thCopyBufferOutputSostav.IsAlive; } }
+
+        protected Thread thTransferOutputKIS = null;
+        public bool statusTransferOutputKIS { get { return thTransferOutputKIS.IsAlive; } }
 
         public KISThread()
         {
@@ -330,7 +338,7 @@ namespace KIS
                 }
                 dt_start = DateTime.Now;
                 int res_copy = 0;
-                lock (locker_tas)
+                lock (locker_bis)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
                     KISTransfer kis_trans = new KISTransfer(service);
@@ -354,6 +362,84 @@ namespace KIS
             }
         }
         #endregion
+
+        #region TransferInputKIS
+        /// <summary>
+        /// Запустить поток переноса вагонов состава принятых в системе КИС
+        /// </summary>
+        /// <returns></returns>
+        public bool StartTransferInputKIS()
+        {
+            service service = service.TransferInputKIS;
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
+            try
+            {
+                if ((thTransferInputKIS == null) || (!thTransferInputKIS.IsAlive && thTransferInputKIS.ThreadState == ThreadState.Stopped))
+                {
+                    thTransferInputKIS = new Thread(TransferInputKIS);
+                    thTransferInputKIS.Name = service.ToString();
+                    thTransferInputKIS.Start();
+                }
+                return thTransferInputKIS.IsAlive;
+            }
+            catch (Exception ex)
+            {
+                mes_service_start += " - ошибка запуска.";
+                ex.WriteError(mes_service_start, servece_owner, eventID);
+                return false;
+            }
+
+        }
+        /// <summary>
+        /// Поток переноса вагонов состава принятых в системе КИС
+        /// </summary>
+        private static void TransferInputKIS()
+        {
+            service service = service.TransferInputKIS;
+            DateTime dt_start = DateTime.Now;
+            try
+            {
+                bool transfer_kis = false;
+                // считать настройки
+                lock (locker_setting)
+                {
+                    try
+                    {
+                        // Бит перосить данные из кис или просто закрыть строку
+                        transfer_kis = RWSetting.GetDB_Config_DefaultSetting<bool>("TransferInputKIS", service, transfer_kis, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                    }
+                }
+                dt_start = DateTime.Now;
+                int res_transfer = 0;
+                lock (locker_bis)
+                {
+                    // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
+                    KISTransfer kis_trans = new KISTransfer(service);
+                    kis_trans.TransferInputKis = transfer_kis;
+                    res_transfer = kis_trans.TransferArrivalOfKISInput();
+                }
+                TimeSpan ts = DateTime.Now - dt_start;
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
+                mes_service_exec.WriteInformation(servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, res_transfer);
+            }
+            catch (ThreadAbortException exc)
+            {
+                String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
+            }
+            catch (Exception ex)
+            {
+                ex.WriteError(String.Format("Ошибка выполнения потока {0} сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, -1);
+
+            }
+        }
+        #endregion
+
         #endregion
 
         #region TransferOutput (Копирование по отправке на станцию АМКР)
@@ -394,6 +480,7 @@ namespace KIS
             try
             {
                 int day_control_output_kis_add_data = 1;
+                bool status_control_output_kis = false; // Контроль состояния закрытия строки системы КИС вагоны по отправке.
                 // считать настройки
                 lock (locker_setting)
                 {
@@ -401,6 +488,8 @@ namespace KIS
                     {
                         // Период контроля добавления новых строк
                         day_control_output_kis_add_data = RWSetting.GetDB_Config_DefaultSetting<int>("DayControlOutputKisAddData", service, day_control_output_kis_add_data, true);
+                        // Контроль состояния закрытия строки системы КИС вагоны по отправке.
+                        status_control_output_kis = RWSetting.GetDB_Config_DefaultSetting<bool>("StatusControlOutputKis", service, status_control_output_kis, true);
                     }
                     catch (Exception ex)
                     {
@@ -409,17 +498,95 @@ namespace KIS
                 }
                 dt_start = DateTime.Now;
                 int res_copy = 0;
-                lock (locker_tas)
+                lock (locker_bos)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
                     KISTransfer kis_trans = new KISTransfer(service);
                     kis_trans.DayControlOutputKisAddData = day_control_output_kis_add_data;
+                    kis_trans.StatusControlOutputKis = status_control_output_kis;
                     res_copy = kis_trans.CopyBufferOutputSostavOfKIS();
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
                 string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_copy:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_copy);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
                 service.WriteServices(dt_start, DateTime.Now, res_copy);
+            }
+            catch (ThreadAbortException exc)
+            {
+                String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
+            }
+            catch (Exception ex)
+            {
+                ex.WriteError(String.Format("Ошибка выполнения потока {0} сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, -1);
+
+            }
+        }
+        #endregion
+
+        #region TransferOutputKIS
+        /// <summary>
+        /// Запустить поток переноса вагонов состава принятых в системе КИС
+        /// </summary>
+        /// <returns></returns>
+        public bool StartTransferOutputKIS()
+        {
+            service service = service.TransferOutputKIS;
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
+            try
+            {
+                if ((thTransferOutputKIS == null) || (!thTransferOutputKIS.IsAlive && thTransferOutputKIS.ThreadState == ThreadState.Stopped))
+                {
+                    thTransferOutputKIS = new Thread(TransferOutputKIS);
+                    thTransferOutputKIS.Name = service.ToString();
+                    thTransferOutputKIS.Start();
+                }
+                return thTransferOutputKIS.IsAlive;
+            }
+            catch (Exception ex)
+            {
+                mes_service_start += " - ошибка запуска.";
+                ex.WriteError(mes_service_start, servece_owner, eventID);
+                return false;
+            }
+
+        }
+        /// <summary>
+        /// Поток переноса вагонов состава принятых в системе КИС
+        /// </summary>
+        private static void TransferOutputKIS()
+        {
+            service service = service.TransferOutputKIS;
+            DateTime dt_start = DateTime.Now;
+            try
+            {
+                bool transfer_kis = false;
+                // считать настройки
+                lock (locker_setting)
+                {
+                    try
+                    {
+                        // Бит перосить данные из кис или просто закрыть строку
+                        transfer_kis = RWSetting.GetDB_Config_DefaultSetting<bool>("TransferOutputKIS", service, transfer_kis, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                    }
+                }
+                dt_start = DateTime.Now;
+                int res_transfer = 0;
+                lock (locker_bos)
+                {
+                    // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
+                    KISTransfer kis_trans = new KISTransfer(service);
+                    kis_trans.TransferOutputKis = transfer_kis;
+                    res_transfer = kis_trans.TransferArrivalOfKISOutput();
+                }
+                TimeSpan ts = DateTime.Now - dt_start;
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
+                mes_service_exec.WriteInformation(servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, res_transfer);
             }
             catch (ThreadAbortException exc)
             {

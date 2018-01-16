@@ -61,11 +61,29 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Код выполнения.
+        /// </summary>
+        public static string log_services_code_return {
+            get {
+                return ResourceManager.GetString("log_services_code_return", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Время выполнения.
         /// </summary>
         public static string log_services_current {
             get {
                 return ResourceManager.GetString("log_services_current", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Время выполнения (мсек.).
+        /// </summary>
+        public static string log_services_duration {
+            get {
+                return ResourceManager.GetString("log_services_duration", resourceCulture);
             }
         }
         
@@ -129,6 +147,33 @@ namespace Web_RailWay.App_LocalResources {
         public static string log_services_start {
             get {
                 return ResourceManager.GetString("log_services_start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ошибки.
+        /// </summary>
+        public static string log_tab_title_errors {
+            get {
+                return ResourceManager.GetString("log_tab_title_errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на События.
+        /// </summary>
+        public static string log_tab_title_event {
+            get {
+                return ResourceManager.GetString("log_tab_title_event", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Отработка.
+        /// </summary>
+        public static string log_tab_title_services {
+            get {
+                return ResourceManager.GetString("log_tab_title_services", resourceCulture);
             }
         }
     }

@@ -513,6 +513,98 @@ namespace EFRC.Concrete
             return SaveVAGON_OPERATIONS(vo);
         }
         /// <summary>
+        /// Поставить вагон в прибытие станции
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="num_doc"></param>
+        /// <param name="natur"></param>
+        /// <param name="id_vagon"></param>
+        /// <param name="num_vagon"></param>
+        /// <param name="dt_uz"></param>
+        /// <param name="dt_amkr"></param>
+        /// <param name="dt_imp"></param>
+        /// <param name="id_station_from"></param>
+        /// <param name="position"></param>
+        /// <param name="id_gruz"></param>
+        /// <param name="note"></param>
+        /// <param name="id_station_in"></param>
+        /// <param name="num_train"></param>
+        /// <param name="id_cond"></param>
+        /// <param name="id_oper_parent"></param>
+        /// <param name="id_ways"></param>
+        /// <returns></returns>
+        public int InsertInputVagon(int id_sostav, 
+            int num_doc, 
+            int natur, 
+            int id_vagon, 
+            int num_vagon, 
+            DateTime dt_uz, 
+            DateTime dt_amkr, 
+            DateTime dt_imp, 
+            int id_station_from, 
+            int position, 
+            int? id_gruz, 
+            string note, 
+            int id_station_in, 
+            int num_train, 
+            int? id_cond, 
+            int? id_oper_parent, 
+            int? id_ways)
+        {
+            //TODO: !!ДОРАБОТАТЬ (ДОБАВИТЬ В ПРИБЫТИЕ С УЗ) - убрать id_vagon,id_gruz,weight_gruz (эти данные берутся из справочника САП входящие поставки по (dt_uz)dt_amkr и num_vagon)
+            VAGON_OPERATIONS vo = new VAGON_OPERATIONS()
+            {
+                id_oper = 0,
+                dt_uz = dt_uz,
+                dt_amkr = dt_amkr, // 
+                dt_out_amkr = null,
+                n_natur = natur,
+                id_vagon = id_vagon,  //TODO: Удалить после создания справвочника по номеру вагона и дате захода 
+                id_stat = id_station_from,
+                dt_from_stat = dt_imp,
+                dt_on_stat = null,
+                id_way = id_ways, //TODO: добавить путь
+                dt_from_way = dt_imp,
+                dt_on_way = null,
+                num_vag_on_way = position,
+                is_present = 0,
+                id_locom = null,
+                id_locom2 = null,
+                id_cond2 = null, //id_cond2, // 15
+                id_gruz = id_gruz,
+                id_gruz_amkr = null,
+                id_shop_gruz_for = null,
+                weight_gruz = null,
+                id_tupik = null,
+                id_nazn_country = null,
+                id_gdstait = null,
+                id_cond = id_cond,
+                note = note,
+                is_hist = 0,
+                id_oracle = null,
+                lock_id_way = null,
+                lock_order = null,
+                lock_side = null,
+                lock_id_locom = null,
+                st_lock_id_stat = id_station_in,
+                st_lock_order = position,
+                st_lock_train = num_train,
+                st_lock_side = null,
+                st_gruz_front = null,
+                st_shop = null,
+                oracle_k_st = null,
+                st_lock_locom1 = null,
+                st_lock_locom2 = null,
+                id_oper_parent = id_oper_parent,
+                grvu_SAP = null,
+                ngru_SAP = null,
+                id_ora_23_temp = num_doc,
+                IDSostav = id_sostav,
+                num_vagon = num_vagon,
+            };
+            return SaveVAGON_OPERATIONS(vo);
+        }
+        /// <summary>
         /// Обновить информацию по вагону поставленному на путь или принятому вручную.
         /// </summary>
         /// <param name="dt_amkr"></param>
@@ -934,6 +1026,42 @@ namespace EFRC.Concrete
                 return false;
             }
         }
+        /// <summary>
+        /// Вернуть список вагонов находящихся на пути 
+        /// </summary>
+        /// <param name="num_vag"></param>
+        /// <returns></returns>
+        public IQueryable<VAGON_OPERATIONS> GetVagonsOperationsOfPresentWay(int num_vag)
+        {
+            try
+            {
+                return GetVAGON_OPERATIONS().Where(o => o.num_vagon == num_vag & o.is_present == 1).OrderByDescending(o => o.id_oper);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetVagonsOperations(num_vag:{0})", num_vag), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть список вагонов в прибытии на станции 
+        /// </summary>
+        /// <param name="num_vag"></param>
+        /// <returns></returns>
+        public IQueryable<VAGON_OPERATIONS> GetVagonsOperationsOfPresentArrival(int num_vag)
+        {
+            try
+            {
+                return GetVAGON_OPERATIONS().Where(o => o.num_vagon == num_vag & o.is_present == 0 & o.is_hist == 0 & o.st_lock_id_stat != null).OrderByDescending(o => o.id_oper);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetVagonsOperations(num_vag:{0})", num_vag), eventID);
+                return null;
+            }
+        }
+
+
         #endregion
 
         #region VAGONS
