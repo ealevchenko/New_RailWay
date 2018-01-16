@@ -388,6 +388,23 @@ namespace EFKIS.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Вернуть не закрытые составы
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<BufferInputSostav> GetBufferInputSostavNoClose()
+        {
+            try
+            {
+                return GetBufferInputSostav().Where(i => i.close == null).OrderBy(i => i.datetime);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferInputSostavNoClose()"), eventID);
+                return null;
+            }
+        }
+
         #endregion
 
         #region BufferOutputSostav Перенос отправленных вагонов на станцию по данным КИС
@@ -411,22 +428,15 @@ namespace EFKIS.Concrete
 
         public BufferOutputSostav GetBufferOutputSostav(int id)
         {
-            BufferOutputSostav dbEntry = context.BufferOutputSostav.Find(id);
-            if (dbEntry != null)
+            try
             {
-                try
-                {
-                    context.BufferOutputSostav.Remove(dbEntry);
-
-                    context.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetBufferOutputSostav(id={0})", id), eventID);
-                    return null;
-                }
+                return GetBufferOutputSostav().Where(s => s.id == id).FirstOrDefault();
             }
-            return dbEntry;
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferOutputSostav(id={0})", id), eventID);
+                return null;
+            }
         }
 
         public int SaveBufferOutputSostav(BufferOutputSostav BufferOutputSostav)
@@ -527,6 +537,22 @@ namespace EFKIS.Concrete
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("GetBufferOutputSostav(start={0}, stop={1})",start,stop), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть не закрытые составы
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<BufferOutputSostav> GetBufferOutputSostavNoClose()
+        {
+            try
+            {
+                return GetBufferOutputSostav().Where(i => i.close == null).OrderBy(i => i.datetime);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferOutputSostavNoClose()"), eventID);
                 return null;
             }
         }

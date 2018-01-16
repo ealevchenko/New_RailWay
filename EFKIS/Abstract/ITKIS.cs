@@ -32,6 +32,7 @@ namespace EFKIS.Abstract
 
         DateTime? GetLastDateTimeBufferInputSostav();
         IQueryable<BufferInputSostav> GetBufferInputSostav(DateTime start, DateTime stop);
+        IQueryable<BufferInputSostav> GetBufferInputSostavNoClose();
         #endregion
 
         #region BufferOutputSostav Перенос отправленных вагонов на станцию по данным КИС
@@ -43,6 +44,7 @@ namespace EFKIS.Abstract
 
         DateTime? GetLastDateTimeBufferOutputSostav();
         IQueryable<BufferOutputSostav> GetBufferOutputSostav(DateTime start, DateTime stop);
+        IQueryable<BufferOutputSostav> GetBufferOutputSostavNoClose();
         #endregion
 
     }
