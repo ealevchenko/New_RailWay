@@ -138,6 +138,14 @@ namespace EFKIS.Abstract
         int GetCountSTPR1OutStVag(int doc);
         #endregion
 
+        #region NumVagStan (справочник станций)
+
+        IQueryable<NumVagStan> NumVagStan { get; }
+        IQueryable<NumVagStan> GetNumVagStations();
+        NumVagStan GetNumVagStations(int id_stan);
+
+        #endregion
+
         #endregion
     }
 }

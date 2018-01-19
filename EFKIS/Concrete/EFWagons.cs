@@ -1313,6 +1313,31 @@ namespace EFKIS.Concrete
         }
         #endregion
 
+        #region NumVagStan (справочник станций)
+
+        public IQueryable<NumVagStan> NumVagStan
+        {
+            get { return context.NumVagStan; }
+        }
+        /// <summary>
+        /// Получить все станции КИС
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStan> GetNumVagStations()
+        {
+            return NumVagStan;
+        }
+        /// <summary>
+        /// Получить информацию по станции по  id
+        /// </summary>
+        /// <param name="id_stan"></param>
+        /// <returns></returns>
+        public NumVagStan GetNumVagStations(int id_stan)
+        {
+            return GetNumVagStations().Where(s => s.K_STAN == id_stan).FirstOrDefault();
+        }
+        #endregion
+
         #endregion
 
 
