@@ -32,7 +32,7 @@ function getNumVagStationName(id) {
     var value = "?";  //значение по умолчанию умолчанию
     $.ajax({
         type: 'GET',
-        url: id != null ? '/railway/api/kis/num_vag/station/' + id + '/name' : '/api/kis/num_vag/station/name',
+        url: id != null ? '/api/kis/num_vag/station/' + id + '/name' : '/api/kis/num_vag/station/name',
         async: false,
         dataType: 'json',
         success: function (data) {
@@ -45,7 +45,7 @@ function getNumVagStationName(id) {
 function getAsyncNumVagStationName(id, callback) {
     $.ajax({
         type: 'GET',
-        url: id != null ? '/railway/api/kis/num_vag/station/' + id + '/name' : '/api/kis/num_vag/station/name',
+        url: id != null ? '/railway/api/kis/num_vag/station/' + id + '/name' : '/railway/api/kis/num_vag/station/name',
         async: true,
         dataType: 'json',
         success: function (data) {
