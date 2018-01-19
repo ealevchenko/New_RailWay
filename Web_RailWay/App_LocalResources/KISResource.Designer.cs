@@ -295,11 +295,56 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на № документа.
+        /// </summary>
+        public static string kis_report_field_num_doc {
+            get {
+                return ResourceManager.GetString("kis_report_field_num_doc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Перенесено.
+        /// </summary>
+        public static string kis_report_field_set_wagons {
+            get {
+                return ResourceManager.GetString("kis_report_field_set_wagons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Станция отправки.
+        /// </summary>
+        public static string kis_report_field_station_from {
+            get {
+                return ResourceManager.GetString("kis_report_field_station_from", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Станция прибытия.
+        /// </summary>
+        public static string kis_report_field_station_on {
+            get {
+                return ResourceManager.GetString("kis_report_field_station_on", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Статус строки.
         /// </summary>
         public static string kis_report_field_status {
             get {
                 return ResourceManager.GetString("kis_report_field_status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Кол по документу.
+        /// </summary>
+        public static string kis_report_field_wagons {
+            get {
+                return ResourceManager.GetString("kis_report_field_wagons", resourceCulture);
             }
         }
         
@@ -313,7 +358,7 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Копирование данных из КИС прибытие составов с УЗ Кривого Рога.
+        ///   Ищет локализованную строку, похожую на Перенос данных из системы КИС в систему RailWay..
         /// </summary>
         public static string kis_trnsfer_arrival_report_title {
             get {
@@ -507,6 +552,33 @@ namespace Web_RailWay.App_LocalResources {
         public static string set_table_arrival_sostav {
             get {
                 return ResourceManager.GetString("set_table_arrival_sostav", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Прибытие с УЗ.
+        /// </summary>
+        public static string transfer_tab_title_arrival {
+            get {
+                return ResourceManager.GetString("transfer_tab_title_arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на По прибытию.
+        /// </summary>
+        public static string transfer_tab_title_input {
+            get {
+                return ResourceManager.GetString("transfer_tab_title_input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на По отправке.
+        /// </summary>
+        public static string transfer_tab_title_output {
+            get {
+                return ResourceManager.GetString("transfer_tab_title_output", resourceCulture);
             }
         }
         

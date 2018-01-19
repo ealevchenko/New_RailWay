@@ -85,6 +85,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFServicesLogs", "MessageLo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFLogs", "MessageLogs\EFLogs\EFLogs.csproj", "{E7C42B84-183E-4241-816D-26ABE5181B53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSettings", "AppSettings\EFSettings\EFSettings.csproj", "{375BC2B8-2CD2-4801-9F84-54916CA8A310}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -211,6 +213,10 @@ Global
 		{E7C42B84-183E-4241-816D-26ABE5181B53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7C42B84-183E-4241-816D-26ABE5181B53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7C42B84-183E-4241-816D-26ABE5181B53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{375BC2B8-2CD2-4801-9F84-54916CA8A310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375BC2B8-2CD2-4801-9F84-54916CA8A310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375BC2B8-2CD2-4801-9F84-54916CA8A310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375BC2B8-2CD2-4801-9F84-54916CA8A310}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,6 +253,7 @@ Global
 		{D7893364-DFA2-4618-9D10-E4C28DC7227F} = {C74166C3-459F-4931-BFC6-AA4708E7E340}
 		{E387BD1C-61F3-413B-A222-CBE8CC4CA532} = {5F57B36F-18B4-4AD7-8BBB-EB737932A1B0}
 		{E7C42B84-183E-4241-816D-26ABE5181B53} = {5F57B36F-18B4-4AD7-8BBB-EB737932A1B0}
+		{375BC2B8-2CD2-4801-9F84-54916CA8A310} = {5F57B36F-18B4-4AD7-8BBB-EB737932A1B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A356AE68-D58C-4CF0-9078-E5D69D44254C}

@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace Web_RailWay.Controllers
+namespace Web_RailWay.Controllers.api
 {
     [Authorize]
     public class ValuesController : ApiController

@@ -208,12 +208,14 @@
     <Compile Include="Controllers\api\KisKometaController.cs" />
     <Compile Include="Controllers\api\KisNumVagController.cs" />
     <Compile Include="Controllers\api\KisPromController.cs" />
+    <Compile Include="Controllers\api\KISTController.cs" />
     <Compile Include="Controllers\api\LogController.cs" />
     <Compile Include="Controllers\api\MTController.cs" />
     <Compile Include="Controllers\api\ReferenceController.cs" />
     <Compile Include="Controllers\api\RWController.cs" />
     <Compile Include="Controllers\api\RWEventController.cs" />
     <Compile Include="Controllers\api\RWReferenceController.cs" />
+    <Compile Include="Controllers\api\SettingController.cs" />
     <Compile Include="Controllers\api\ValuesController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -395,13 +397,13 @@
     <Content Include="Content\DataTables\css\select.jqueryui.min.css" />
     <Content Include="Content\DataTables\css\select.semanticui.css" />
     <Content Include="Content\DataTables\css\select.semanticui.min.css" />
-    <Content Include="Content\DataTables\images\details_close.png" />
-    <Content Include="Content\DataTables\images\details_open.png" />
-    <Content Include="Content\DataTables\images\sort_asc.png" />
-    <Content Include="Content\DataTables\images\sort_asc_disabled.png" />
-    <Content Include="Content\DataTables\images\sort_both.png" />
-    <Content Include="Content\DataTables\images\sort_desc.png" />
-    <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
+    <Content Include="Content\DataTables\images1\details_close.png" />
+    <Content Include="Content\DataTables\images1\details_open.png" />
+    <Content Include="Content\DataTables\images1\sort_asc.png" />
+    <Content Include="Content\DataTables\images1\sort_asc_disabled.png" />
+    <Content Include="Content\DataTables\images1\sort_both.png" />
+    <Content Include="Content\DataTables\images1\sort_desc.png" />
+    <Content Include="Content\DataTables\images1\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
     <Content Include="Content\datetime\daterangepicker.css" />
     <Content Include="Content\dropdownlist.css" />
@@ -415,6 +417,7 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\KIST\kist.css" />
     <Content Include="Content\lockpanel\lockpanel.css" />
     <Content Include="Content\reports.css" />
     <Content Include="Content\Services\services.css" />
@@ -478,6 +481,8 @@
     <Content Include="Image\railway\type_railway.png" />
     <Content Include="Image\Statistic.jpg" />
     <Content Include="Scripts\admin\sap\sapisadmin.js" />
+    <Content Include="Scripts\api_helpers\kis.js" />
+    <Content Include="Scripts\api_helpers\kist.js" />
     <Content Include="Scripts\api_helpers\logs.js" />
     <Content Include="Scripts\api_helpers\railway.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
@@ -500,6 +505,7 @@
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
+    <Content Include="Scripts\api_helpers\settings.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\creative.js" />
@@ -604,6 +610,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\KIST\transfer_kis.js" />
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\reports\kis\kistransferarrival.js" />
@@ -616,6 +623,7 @@
     <Content Include="Scripts\reports\rw\stationsnodes.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Shared\search_json.js" />
     <Content Include="Scripts\wow.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -685,8 +693,17 @@
     <Content Include="Views\RW\Index.cshtml" />
     <Content Include="Views\RW\LinkRWControl.cshtml" />
     <Content Include="Views\Services\Index.cshtml" />
+    <Content Include="Views\KIST\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AppSettings\DBSettings\DBSettings.csproj">
+      <Project>{25455657-0e7c-4399-81ae-1c8e6a3587ea}</Project>
+      <Name>DBSettings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AppSettings\EFSettings\EFSettings.csproj">
+      <Project>{375bc2b8-2cd2-4801-9f84-54916ca8a310}</Project>
+      <Name>EFSettings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EFAccess\EFAccess.csproj">
       <Project>{d7893364-dfa2-4618-9d10-e4c28dc7227f}</Project>
       <Name>EFAccess</Name>

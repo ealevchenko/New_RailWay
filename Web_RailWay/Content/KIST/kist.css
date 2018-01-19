@@ -1,0 +1,116 @@
+﻿/*div {
+    border: 1px solid red;
+}*/
+
+.report-wide{
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1500px;
+}
+
+BODY {
+
+    background-color: transparent;
+    background-repeat: repeat, no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-background-size: auto, cover;
+    -moz-background-size: auto, cover;
+    -o-background-size: auto, cover;
+    background-size: auto, cover;
+    font-family: Cambria, Georgia, "Times New Roman";
+    margin: 0;
+}
+
+DIV#header DIV.title {
+    font: bold 1em "Arial Narrow", "Franklin Gothic Medium", Arial;
+}
+.title-label {
+    text-transform: uppercase;
+    color: blanchedalmond;
+}
+
+DIV#report {
+    color: #666;
+    background: White;
+}
+
+DIV#header {
+    background-color: #444;
+    border-bottom: 2px solid #111;
+    color: White;
+}
+
+    DIV#header DIV.title {
+        font-size: 2em;
+        padding: .6em;
+    }
+
+
+div#tabs1, div#tabs2, div#tabs3 {
+    text-align:left; 
+    width:78%; 
+    float: left;
+}
+
+DIV#report-detali {
+    float: left; 
+    width: auto; 
+    margin-left:5px; 
+    margin-top:15px
+}
+
+div#cls {
+    clear: left;
+}
+
+table.dataTable tbody tr:not(.selected).Delete.odd, table.dataTable tbody tr:not(.selected).Delete.even {
+    text-decoration:line-through;
+    background-color: #FFE8EB;
+}
+
+table.order-column.dataTable tbody tr.Delete > .sorting_1, table.order-column.dataTable tbody tr.Delete > .sorting_2, table.order-column.dataTable tbody tr.Delete > .sorting_3, table.display.dataTable tbody tr.Delete > .sorting_1, table.display.dataTable tbody tr.Delete > .sorting_2, table.display.dataTable tbody tr.Delete > .sorting_3{
+    background-color: #FFD9EB;
+}
+
+table.dataTable tbody tr:not(.selected).Insert.odd, table.dataTable tbody tr:not(.selected).Insert.even{
+    background-color: #FEF2D9;
+}
+
+table.order-column.dataTable tbody tr.Insert > .sorting_1, table.order-column.dataTable tbody tr.Insert > .sorting_2, table.order-column.dataTable tbody tr.Insert > .sorting_3, table.display.dataTable tbody tr.Insert > .sorting_1, table.display.dataTable tbody tr.Insert > .sorting_2, table.display.dataTable tbody tr.Insert > .sorting_3{
+    background-color: #fef2b3;
+}
+
+table.dataTable tbody tr:not(.selected).Update.odd, table.dataTable tbody tr:not(.selected).Update.even {
+    background-color: #D9E5FF;
+}
+
+table.order-column.dataTable tbody tr.Update > .sorting_1, table.order-column.dataTable tbody tr.Update > .sorting_2, table.order-column.dataTable tbody tr.Update > .sorting_3, table.display.dataTable tbody tr.Update > .sorting_1, table.display.dataTable tbody tr.Update > .sorting_2, table.display.dataTable tbody tr.Update > .sorting_3{
+    background-color: #fef2b3;
+}
+
+td a {
+    color: #3A41FF;
+    -webkit-transition: all .35s;
+    -moz-transition: all .35s;
+    transition: all .35s;
+}
+
+td a:hover,
+td a:focus {
+    color: #3A418C;
+    font-weight:600;
+}
+
+td.Ok {
+    color:#35c247;
+}
+
+td.Error {
+    color:#ff0000;
+}
+
+tr.selected {
+    background-color: #007fff;
+    color: #ffffff;
+}

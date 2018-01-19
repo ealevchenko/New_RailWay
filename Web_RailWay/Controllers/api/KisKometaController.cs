@@ -1,6 +1,7 @@
 ﻿using EFKIS.Abstract;
 using EFKIS.Concrete;
 using EFKIS.Entities;
+using MessageLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,13 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace Web_RailWay.Controllers
+namespace Web_RailWay.Controllers.api
 {
     [RoutePrefix("api/kis/kometa")]
     public class KisKometaController : ApiController
     {
+        private eventID eventID = eventID.Web_API_KisKometaController;
+
         protected IKIS rep_kis;
         public KisKometaController()
         {
@@ -73,7 +76,7 @@ namespace Web_RailWay.Controllers
             }
             return Ok(list);
         }
-
+        
         // GET: api/kis/kometa/sobstv_for_nakl/sob/10
         [Route("sobstv_for_nakl/sob/{kod:int}")]
         [ResponseType(typeof(KometaSobstvForNakl))]
@@ -87,5 +90,35 @@ namespace Web_RailWay.Controllers
             return Ok(nakl);
         }
 
+        // GET: api/kis/kometa/station/name
+        [Route("station/name")]
+        [ResponseType(typeof(Option))]
+        public IHttpActionResult GetKometaStan()
+        {
+            List<Option> list = new List<Option>();
+            try
+            {
+                this.rep_kis.GetKometaStan().ToList().ForEach(s => list.Add(new Option() { value = s.K_STAN, text = s.NAME }));
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaStan()"), eventID);
+                return NotFound();
+            }
+            if (list == null || list.Count()==0)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+
+        // GET: api/kis/kometa/station/10/name
+        [Route("station/{id:int}/name")]
+        [ResponseType(typeof(string))]
+        public string GetKometaStan(int id)
+        {
+            KometaStan kstan = this.rep_kis.GetKometaStan(id);
+            return kstan != null ? kstan.NAME : id.ToString();
+        }
     }
 }

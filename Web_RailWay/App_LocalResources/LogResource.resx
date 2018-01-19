@@ -174,4 +174,16 @@
   <data name="log_tab_title_setup" xml:space="preserve">
     <value>Настройки</value>
   </data>
+  <data name="setting_description" xml:space="preserve">
+    <value>Описание настройки</value>
+  </data>
+  <data name="setting_key" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="setting_type" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="setting_value" xml:space="preserve">
+    <value>Значение</value>
+  </data>
 </root>

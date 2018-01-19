@@ -84,6 +84,9 @@ namespace MessageLog
         OLDVersion_TRailCars = 10100,       // Библиотека переноса вагонов в старую систему RailCars
         #endregion
 
+        Web_API_KisKometaController = 11101,
+        Web_API_KisNumVagController = 11102,
+
 
     }
 }

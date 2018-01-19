@@ -230,5 +230,41 @@ namespace Web_RailWay.App_LocalResources {
                 return ResourceManager.GetString("log_tab_title_setup", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Описание настройки.
+        /// </summary>
+        public static string setting_description {
+            get {
+                return ResourceManager.GetString("setting_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Key.
+        /// </summary>
+        public static string setting_key {
+            get {
+                return ResourceManager.GetString("setting_key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Тип.
+        /// </summary>
+        public static string setting_type {
+            get {
+                return ResourceManager.GetString("setting_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Значение.
+        /// </summary>
+        public static string setting_value {
+            get {
+                return ResourceManager.GetString("setting_value", resourceCulture);
+            }
+        }
     }
 }

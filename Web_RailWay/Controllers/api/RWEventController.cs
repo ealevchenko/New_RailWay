@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using TransferRailCars;
 
-namespace Web_RailWay.Controllers
+namespace Web_RailWay.Controllers.api
 {
     [RoutePrefix("api/rw/event")]
     public class RWEventController : ApiController

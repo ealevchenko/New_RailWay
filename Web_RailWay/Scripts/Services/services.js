@@ -4,7 +4,7 @@
     var dateRange,
         date_start, date_stop,
         service_select = null,
-        table_status_services, table_log_services, table_log_errors, table_log_events,
+        table_status_services, table_log_services, table_log_errors, table_log_events, table_log_setup,
         tabs_logs,
         tabs_active = 0;
 
@@ -193,6 +193,52 @@
                 ],
                 initComplete: function () {
                     this.api().columns([1, 2]).every(function () {
+                        var column = this;
+                        var name = $(column.header()).attr('title');
+                        var select = $('<select><option value="">' + (lang == 'en' ? 'All' : 'Все') + '</option></select>')
+                            .appendTo($(column.header()).empty().append(name))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                },
+            });
+        }
+        if (tabs_active == 3) {
+            table_log_setup = $('#table-setup').DataTable({
+                "paging": true,
+                //"processing": true,
+                "ordering": true,
+                "info": false,
+                "destroy": true,
+                "select": true,
+                "order": [[0, 'desc']],
+                language: {
+                    decimal: lang == 'en' ? "." : ",",
+                    search: lang == 'en' ? "Search" : "Найти",
+                },
+                jQueryUI: true,
+                data: getSetting(true, service_select),
+                "createdRow": function (row, data, index) {
+                    $(row).attr('id', data.ID);
+                },
+                columns: [
+                    { data: "servicename" },
+                    { data: "Description" },
+                    { data: "Key" },
+                    { data: "Value" },
+                    { data: "typevalue" },
+                ],
+                initComplete: function () {
+                    this.api().columns([0]).every(function () {
                         var column = this;
                         var name = $(column.header()).attr('title');
                         var select = $('<select><option value="">' + (lang == 'en' ? 'All' : 'Все') + '</option></select>')

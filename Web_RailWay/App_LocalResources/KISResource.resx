@@ -151,7 +151,7 @@
     <value>Перенос</value>
   </data>
   <data name="kis_trnsfer_arrival_report_title" xml:space="preserve">
-    <value>Копирование данных из КИС прибытие составов с УЗ Кривого Рога</value>
+    <value>Перенос данных из системы КИС в систему RailWay.</value>
   </data>
   <data name="link_kis_arrival_control" xml:space="preserve">
     <value>Перенос данных по прибытию с УЗ</value>
@@ -269,5 +269,29 @@
   </data>
   <data name="set_table_arrival_sostav" xml:space="preserve">
     <value>set_table_arrival_sostav</value>
+  </data>
+  <data name="transfer_tab_title_arrival" xml:space="preserve">
+    <value>Прибытие с УЗ</value>
+  </data>
+  <data name="transfer_tab_title_input" xml:space="preserve">
+    <value>По прибытию</value>
+  </data>
+  <data name="transfer_tab_title_output" xml:space="preserve">
+    <value>По отправке</value>
+  </data>
+  <data name="kis_report_field_num_doc" xml:space="preserve">
+    <value>№ документа</value>
+  </data>
+  <data name="kis_report_field_set_wagons" xml:space="preserve">
+    <value>Перенесено</value>
+  </data>
+  <data name="kis_report_field_station_from" xml:space="preserve">
+    <value>Станция отправки</value>
+  </data>
+  <data name="kis_report_field_station_on" xml:space="preserve">
+    <value>Станция прибытия</value>
+  </data>
+  <data name="kis_report_field_wagons" xml:space="preserve">
+    <value>Кол по документу</value>
   </data>
 </root>

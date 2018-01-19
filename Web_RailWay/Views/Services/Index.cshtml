@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="~/Content/Services/services.css">
 <script src="~/Scripts/Services/services.js" type="text/javascript"></script>
 <script src="~/Scripts/api_helpers/logs.js" type="text/javascript"></script>
+<script src="~/Scripts/api_helpers/settings.js" type="text/javascript"></script>
 
 <div id="report" class="report-wide">
     <div id="header">
@@ -102,6 +103,20 @@
                             <th>@LogResource.log_eventID</th>
                             <th>@LogResource.log_events_event</th>
                             <th>@LogResource.log_events_status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="tabs4" style="text-align:left">
+                <table class='display compact' id="table-setup" width="100%" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th>@LogResource.log_services_name</th>
+                            <th>@LogResource.setting_description</th>
+                            <th>@LogResource.setting_key</th>
+                            <th>@LogResource.setting_value</th>
+                            <th>@LogResource.setting_type</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace Web_RailWay.Controllers
+namespace Web_RailWay.Controllers.api
 {
     [RoutePrefix("api/reference")]
     public class ReferenceController : ApiController
