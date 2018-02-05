@@ -28,5 +28,8 @@ namespace EFRW.Entities
         public int? id_rs { get; set; }
 
         public int? id_kis { get; set; }
+
+        public bool? default_side { get; set; }
+
     }
 }

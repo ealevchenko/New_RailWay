@@ -23,7 +23,7 @@ namespace EFRW.Concrete
         // Перечисление типов отправки составов на другую станцию
         public enum typeSendTransfer : int { railway = 0, kis_output = 1, kis_input = 2, railway_buffer =3 }
         // Перечисление типов стороны (четная, нечетная)
-        public enum Side : int { odd = 0, even = 1}
+        public enum Side : int { odd = 1, even = 0}
 
         public List<Option> GetTypeSendTransfer()
         {
@@ -136,7 +136,8 @@ namespace EFRW.Concrete
                         exit_uz = Stations.exit_uz ,
                         station_uz = Stations.station_uz ,
                         id_rs = Stations.id_rs ,
-                        id_kis = Stations.id_kis
+                        id_kis = Stations.id_kis, 
+                        default_side = Stations.default_side
                     };
                     context.Stations.Add(dbEntry);
                 }
@@ -152,6 +153,7 @@ namespace EFRW.Concrete
                         dbEntry.station_uz = Stations.station_uz;
                         dbEntry.id_rs = Stations.id_rs;
                         dbEntry.id_kis = Stations.id_kis;
+                        dbEntry.default_side = Stations.default_side;
                     }
                 }
                 context.SaveChanges();
