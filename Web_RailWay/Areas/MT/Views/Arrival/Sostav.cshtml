@@ -15,6 +15,14 @@
     ViewBag.Home = @MTResource.mt_arrival_sostsv_report_home;
 }
 
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("LinkAdmin", "Home", new { area = "" }); }
+}
+
 @section styles {
     <link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
     @Styles.Render("~/datetime/css")
