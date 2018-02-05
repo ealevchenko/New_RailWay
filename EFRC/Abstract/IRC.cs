@@ -1,6 +1,7 @@
 ﻿using EFRC.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,9 @@ namespace EFRC.Abstract
 {
     public interface IRC
     {
+        
+        Database Database { get; }
+
         #region VAGON_OPERATIONS
         IQueryable<VAGON_OPERATIONS> VAGON_OPERATIONS { get; }
         IQueryable<VAGON_OPERATIONS> GetVAGON_OPERATIONS();

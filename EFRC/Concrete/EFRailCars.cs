@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using libClass;
 using System.Data.SqlClient;
 using RWConversionFunctions;
+using System.Data.Entity;
 
 
 namespace EFRC.Concrete
@@ -18,6 +19,11 @@ namespace EFRC.Concrete
         private eventID eventID = eventID.EFRailCars;
 
         protected EFDbContext context = new EFDbContext();
+
+        public Database Database
+        {
+            get { return context.Database; }
+        }
 
         #region VAGON_OPERATIONS
 
