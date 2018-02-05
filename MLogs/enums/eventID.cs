@@ -22,6 +22,9 @@ namespace MessageLog
 
         EFAccess = 1300,                // Библиотеки доступа к данным системы RailWay
         EFAccess_EFWebAcces = 1301,     // Библиотеки доступа к данным web-сайта RailWay
+
+        WebApi = 1400,                      // Библиотеки доступа к WebApi через Token
+        WebApi_ClientMetallurgTrans = 1401, // Библиотеки доступа к WebApi MT
         #endregion
 
         //RWSettings_RWDBSetting = 1110,    
@@ -86,6 +89,8 @@ namespace MessageLog
 
         Web_API_KisKometaController = 11101,
         Web_API_KisNumVagController = 11102,
+
+        Web_API_RCController = 11110,
 
 
     }
