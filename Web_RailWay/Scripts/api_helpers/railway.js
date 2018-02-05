@@ -1,4 +1,8 @@
-﻿//---------------------------------------------
+﻿//-------------------------------------------------------
+// Для работы с модулем добавте файл common.js
+//-------------------------------------------------------
+
+//---------------------------------------------
 // Station
 //---------------------------------------------
 // Вернуть название станци
@@ -6,7 +10,7 @@ function getStationName(id) {
     var value = "?";  //значение по умолчанию умолчанию
     $.ajax({
         type: 'GET',
-        url: '/railway/api/rw/station_name/' + id,
+        url: '/railway/api/rw/station/' + id + '/name',
         async: false,
         dataType: 'json',
         success: function (data) {
@@ -35,8 +39,7 @@ function selectStations(name, value) {
                 .selectmenu("refresh");
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
 }
@@ -71,23 +74,92 @@ function selectListStations(obj, value, cng, exceptions) {
                 .selectmenu("refresh");
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
 }
+// Веруть список станций открытых для работы
+function getAsyncViewStations(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/stations/view/amkr',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+function getAsyncStation(id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/station/' + id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Получить название станции по id
+function getAsyncStationName(id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/station/' + id + '/name',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 //---------------------------------------------
 // SideStation
 //---------------------------------------------
 // Вернуть изображение стороны станции
 function getImageSideStation(side) {
     var value = "";
-    if (side == 1) {
-        value = '<img src=".../../../Image/railway/even.png" />';
-    }
-    if (side == 0) {
-        value = '<img src=".../../../Image/railway/odd.png" />';
-    }
+    //if (side == 1) {
+    //    value = '<img src=".../../../Image/railway/even.png" />';
+    //}
+    //if (side == 0) {
+    //    value = '<img src=".../../../Image/railway/odd.png" />';
+    //}
     return value;
 }
 // Вернуть определение стороны станции
@@ -129,9 +201,31 @@ function selectListSideStation(obj, value, cng) {
                 .selectmenu("refresh");
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
+    });
+}
+// Загрузить список сторон
+function getAsyncSide(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/side',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
     });
 }
 //---------------------------------------------
@@ -140,18 +234,18 @@ function selectListSideStation(obj, value, cng) {
 // Вернуть изображение типа передачи составов
 function getImageTransferType(type) {
     var value = "";
-    if (type == 0) {
-        value = '<img src=".../../../Image/railway/type_railway.png" />';
-    }
-    if (type == 1) {
-        value = '<img src=".../../../Image/railway/type_output.png" />';
-    }
-    if (type == 2) {
-        value = '<img src=".../../../Image/railway/type_input.png" />';
-    }
-    if (type == 3) {
-        value = '<img src=".../../../Image/railway/type_buffer.png" />';
-    }
+    //if (type == 0) {
+    //    value = '<img src=".../../../Image/railway/type_railway.png" />';
+    //}
+    //if (type == 1) {
+    //    value = '<img src=".../../../Image/railway/type_output.png" />';
+    //}
+    //if (type == 2) {
+    //    value = '<img src=".../../../Image/railway/type_input.png" />';
+    //}
+    //if (type == 3) {
+    //    value = '<img src=".../../../Image/railway/type_buffer.png" />';
+    //}
     return value;
 }
 // Вернуть определение типа передачи составов
@@ -193,8 +287,7 @@ function selectListTransferType(obj, value, cng) {
                 .selectmenu("refresh");
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
 }
@@ -220,8 +313,7 @@ function getListIDStationsOfSendStationsNodes(id, id_exceptions) {
             value = id_stations;
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
     return value
@@ -245,8 +337,7 @@ function getListIDStationsOfArrivalStationsNodes(id, id_exceptions) {
             value = id_stations;
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
     return value
@@ -264,8 +355,7 @@ function getSendStationsNodes(id) {
             value = jsondata;
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
     return value;
@@ -280,9 +370,13 @@ function getTbodySendStationsNodes(id, tbody, id_select) {
             var node = jsondata[i];
             tab += "<tr id='" + node.id + "' name='send-station' " + (id_select == node.id ? "class='selected'" : "") + ">";
             tab += "<td>" + getStationName(node.id_station_from) + "</td>";
-            tab += "<td>" + getImageSideStation(node.side_station_from) + "</td>";
-            tab += "<td>" + getImageTransferType(node.transfer_type) + "</td>";
-            tab += "<td>" + getImageSideStation(node.side_station_on) + "</td>";
+            //tab += "<td>" + getImageSideStation(node.side_station_from) + "</td>";
+            tab += "<td class='img-side" + Number(node.side_station_from) + "'></td>";
+            tab += "<td class='img-transfer-type" + node.transfer_type + "'></td>";
+            //tab += "<td><div class='img-transfer-type" + node.transfer_type + "'></div></td>";
+            //tab += "<td><span class='img-transfer-type" + node.transfer_type + "'></span>" + getImageTransferType(node.transfer_type) + "</td>";
+            //tab += "<td>" + getImageSideStation(node.side_station_on) + "</td>";
+            tab += "<td class='img-side" + Number(node.side_station_on) + "'></td>";
             tab += "<td>" + getStationName(node.id_station_on) + "</td>";
             tab += "<td>" + node.nodes + "</td>";
             tab += "</tr>";
@@ -302,8 +396,7 @@ function getArrivalStationsNodes(id) {
             value = jsondata;
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
     return value;
@@ -318,9 +411,12 @@ function getTbodyArrivalStationsNodes(id, tbody, id_select) {
             var node = jsondata[i];
             tab += "<tr id='" + node.id + "' name='arrival-station' " + (id_select == node.id ? "class='selected'" : "") + ">";
             tab += "<td>" + getStationName(node.id_station_from) + "</td>";
-            tab += "<td>" + getImageSideStation(node.side_station_from) + "</td>";
-            tab += "<td>" + getImageTransferType(node.transfer_type) + "</td>";
-            tab += "<td>" + getImageSideStation(node.side_station_on) + "</td>";
+            //tab += "<td>" + getImageSideStation(node.side_station_from) + "</td>";
+            tab += "<td class='img-side" + Number(node.side_station_from) + "'></td>";
+            //tab += "<td>" + getImageTransferType(node.transfer_type) + "</td>";
+            tab += "<td class='img-transfer-type" + node.transfer_type + "'></td>";
+            //tab += "<td>" + getImageSideStation(node.side_station_on) + "</td>";
+            tab += "<td class='img-side" + Number(node.side_station_on) + "'></td>";
             tab += "<td>" + getStationName(node.id_station_on) + "</td>";
             tab += "<td>" + node.nodes + "</td>";
             tab += "</tr>";

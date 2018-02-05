@@ -1,0 +1,78 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    Layout = "~/Views/Shared/_RailWayUI.cshtml";
+    ViewBag.Title = @RWResource.rw_railwayui_report_title;
+    ViewBag.Home = @RWResource.rw_railwayui_report_home;
+}
+
+@section styles {
+    @Styles.Render("~/jquery-ui/css")
+    @Styles.Render("~/DataTables/css")
+    <link rel="stylesheet" type="text/css" href="~/Content/RW/rwui.css">
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/Ajax")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/DataTables")
+    <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/railway.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/railcars.js" type="text/javascript"></script>
+    <script src="~/Scripts/RW/rwui.js" type="text/javascript"></script>
+}
+
+<div id="container">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        <label class="title-label">@RWResource.rwui_title_select_station</label>
+        <select id="stations-list" name="station"></select>
+        <label class="title-label">@RWResource.rwui_title_number</label>
+        <select id="stations-sise" name="side"></select>
+        <label class="title-label">@RWResource.rwui_title_side</label>
+    </div>
+    <div id="tabs-operation">
+        <ul>
+            <li><a href="#tabs1">@RWResource.rwui_tab_title_cars</a></li>
+            <li><a href="#tabs2">@RWResource.rwui_tab_title_maneuvers</a></li>
+            <li><a href="#tabs3">@RWResource.rwui_tab_title_dispatch</a></li>
+            <li><a href="#tabs4">@RWResource.rwui_tab_title_arrival_uz</a></li>
+            <li><a href="#tabs5">@RWResource.rwui_tab_title_arrival_amkr</a></li>
+            <li><a href="#tabs6">@RWResource.rwui_tab_title_pending</a></li>
+        </ul>
+        <div id="operation-detali">
+            <div id="left-operation">
+                <table class='display compact' id="table-list-ways" style="width:100%" cellpadding="0"></table>
+            </div>
+            <div id="right-operation">
+            </div>
+            <div id="content-operation">
+                <table class='table-cars cell-border' id="table-list-cars" cellpadding="0"></table>
+            </div>
+        </div>
+        <div id="tabs1" style="display:none">
+
+        </div>
+        <div id="tabs2" style="display:none">
+
+        </div>
+        <div id="tabs3" style="display:none">
+
+        </div>
+        <div id="tabs4" style="display:none">
+
+        </div>
+        <div id="tabs5" style="display:none">
+
+        </div>
+        <div id="tabs6" style="display:none">
+
+        </div>
+    </div>
+
+</div>
+
+
+

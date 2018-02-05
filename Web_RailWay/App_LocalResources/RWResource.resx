@@ -174,4 +174,88 @@
   <data name="railway_buffer" xml:space="preserve">
     <value>Из системы RailWay в буфер</value>
   </data>
+  <data name="rw_railwayui_report_home" xml:space="preserve">
+    <value>Станция</value>
+  </data>
+  <data name="rw_railwayui_report_title" xml:space="preserve">
+    <value>Система мониторинга вагонов АМКР.</value>
+  </data>
+  <data name="rwui_car_field_country" xml:space="preserve">
+    <value>Страна</value>
+  </data>
+  <data name="rwui_car_field_num" xml:space="preserve">
+    <value>№ вагона</value>
+  </data>
+  <data name="rwui_car_field_order" xml:space="preserve">
+    <value>№</value>
+  </data>
+  <data name="rwui_car_field_owner" xml:space="preserve">
+    <value>Владелец</value>
+  </data>
+  <data name="rwui_car_field_rod" xml:space="preserve">
+    <value>Род вагона</value>
+  </data>
+  <data name="rwui_station_name" xml:space="preserve">
+    <value>Информация по станции :</value>
+  </data>
+  <data name="rwui_tab_title_arrival_amkr" xml:space="preserve">
+    <value>Прибытие вагонов</value>
+  </data>
+  <data name="rwui_tab_title_arrival_uz" xml:space="preserve">
+    <value>Принять с УЗ</value>
+  </data>
+  <data name="rwui_tab_title_cars" xml:space="preserve">
+    <value>Вагоны на станции</value>
+  </data>
+  <data name="rwui_tab_title_dispatch" xml:space="preserve">
+    <value>Отправка на станцию\цех</value>
+  </data>
+  <data name="rwui_tab_title_maneuvers" xml:space="preserve">
+    <value>Маневры на станции</value>
+  </data>
+  <data name="rwui_tab_title_pending" xml:space="preserve">
+    <value>Ожидающие зачисления</value>
+  </data>
+  <data name="rwui_ways_field_count" xml:space="preserve">
+    <value>Кол. вагонов</value>
+  </data>
+  <data name="rwui_ways_field_name" xml:space="preserve">
+    <value>Наименование</value>
+  </data>
+  <data name="rwui_ways_field_num" xml:space="preserve">
+    <value>№</value>
+  </data>
+  <data name="rwui_car_field_cond" xml:space="preserve">
+    <value>Род груза</value>
+  </data>
+  <data name="rwui_car_field_cond2" xml:space="preserve">
+    <value>Состояние</value>
+  </data>
+  <data name="rwui_car_field_country_mt" xml:space="preserve">
+    <value>Страна (МТ)</value>
+  </data>
+  <data name="rwui_car_field_dtamkr" xml:space="preserve">
+    <value>Дата и время прибытия на АМКР</value>
+  </data>
+  <data name="rwui_car_field_dtuz_mt" xml:space="preserve">
+    <value>Дата и время гот. отправки с УЗ КР (МТ)</value>
+  </data>
+  <data name="rwui_car_field_shop" xml:space="preserve">
+    <value>Цех-получатель груза</value>
+  </data>
+  <data name="rwui_car_field_stotpr" xml:space="preserve">
+    <value>Станция отправления груза</value>
+  </data>
+  <data name="rwui_car_field_сargo_name_mt" xml:space="preserve">
+    <value>Груз (МТ)</value>
+  </data>
+  <data name="rwui_title_number" xml:space="preserve">
+    <value>Нумерация</value>
+  </data>
+  <data name="rwui_title_select_station" xml:space="preserve">
+    <value>Выберите станцию:</value>
+  </data>
+  <data name="rwui_title_side" xml:space="preserve">
+    <value>сторона</value>
+  </data>
 </root>

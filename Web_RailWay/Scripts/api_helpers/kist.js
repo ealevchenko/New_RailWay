@@ -1,4 +1,7 @@
-﻿// Получить статус строки
+﻿//-------------------------------------------------------
+// Для работы с модулем добавте файл common.js
+//-------------------------------------------------------
+// Получить статус строки
 function getStatus(status) {
     var value = "?";  //значение по умолчанию умолчанию
     $.ajax({
@@ -19,11 +22,20 @@ function getAsyncStatus(status, callback) {
         url: status != null ? '/railway/api/kis/transfer/status/' + status : '/railway/api/kis/transfer/status',
         async: true,
         dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
         success: function (data) {
             if (typeof callback === 'function') {
                 callback(data);
             }
-        }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
     });
 
 }
@@ -47,11 +59,20 @@ function getAsyncStatusName(status, callback) {
         url: status != null ? '/railway/api/kis/transfer/status/' + status + '/name' : '/railway/api/kis/transfer/status/name',
         async: true,
         dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
         success: function (data) {
             if (typeof callback === 'function') {
                 callback(data);
             }
-        }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
     });
 }
 
@@ -125,7 +146,7 @@ function getBufferArrivalSostav(correct, start, stop) {
         async: false,
         dataType: 'json',
         beforeSend: function () {
-            //OnBegin();
+            AJAXBeforeSend();
         },
         success: function (jsondata) {
             if (correct) {
@@ -164,11 +185,10 @@ function getBufferArrivalSostav(correct, start, stop) {
             value = list_log;
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         },
         complete: function () {
-            //LockScreenOff();
+            AJAXComplete();
         },
     });
     //LockScreenOff();
@@ -215,20 +235,18 @@ function getAsyncBufferArrivalSostav(start, stop, callback) {
         async: true,
         dataType: 'json',
         beforeSend: function () {
-            OnBegin();
+            AJAXBeforeSend();
         },
         success: function (jsondata) {
-            //OnBegin();
             if (typeof callback === 'function') {
                 callback(jsondata);
             }
         },
         error: function (x, y, z) {
-            //LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         },
         complete: function () {
-            LockScreenOff();
+            AJAXComplete();
         },
     });
 }
@@ -247,7 +265,7 @@ function getBufferInputSostav(correct, start, stop) {
         async: false,
         dataType: 'json',
         beforeSend: function () {
-
+            AJAXBeforeSend();
         },
         success: function (jsondata) {
             if (correct) {
@@ -277,11 +295,10 @@ function getBufferInputSostav(correct, start, stop) {
             value = list_log;
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         },
         complete: function () {
-
+            AJAXComplete();
         },
     });
     return value;
@@ -332,51 +349,6 @@ function getBufferInputSostavXMLHttpRequest(correct, start, stop, callback) {
         };
     };
     xhr.send();
-
-    //$.ajax({
-    //    url: '/railway/api/kis/transfer/bis/' + start.toISOString() + '/' + stop.toISOString(),
-    //    type: 'GET',
-    //    async: false,
-    //    dataType: 'json',
-    //    beforeSend: function () {
-
-    //    },
-    //    success: function (jsondata) {
-    //        if (correct) {
-    //            var list_log = [];
-    //            for (var i = 0; i < jsondata.length; i++) {
-    //                list_log.push({
-    //                    id: jsondata[i].id,
-    //                    datetime: jsondata[i].datetime != null ? jsondata[i].datetime.replace("T", " ") : null,
-    //                    doc_num: jsondata[i].doc_num,
-    //                    id_station_from_kis: jsondata[i].id_station_from_kis,
-    //                    station_from_name: getTextOption(list_numvag_stan, jsondata[i].id_station_from_kis),
-    //                    way_num_kis: jsondata[i].way_num_kis,
-    //                    napr: jsondata[i].napr,
-    //                    id_station_on_kis: jsondata[i].id_station_on_kis,
-    //                    station_on_name: getTextOption(list_numvag_stan, jsondata[i].id_station_on_kis),
-    //                    count_wagons: jsondata[i].count_wagons,
-    //                    count_set_wagons: jsondata[i].count_set_wagons,
-    //                    natur: jsondata[i].natur,
-    //                    close: jsondata[i].close != null ? jsondata[i].close.replace("T", " ") : null,
-    //                    close_user: jsondata[i].close_user,
-    //                    status: getTextOption(list_status, jsondata[i].status),
-    //                    statusname: getTextOption(list_status_name, jsondata[i].status),
-    //                    message: jsondata[i].message,
-    //                });
-    //            }
-    //        }
-    //        value = list_log;
-    //    },
-    //    error: function (x, y, z) {
-    //        LockScreenOff();
-    //        alert(x + '\n' + y + '\n' + z);
-    //    },
-    //    complete: function () {
-
-    //    },
-    //});
-    //return value;
 }
 
 function getCorrectBufferInputSostav(jsondata,list_numvag_stan,list_status,list_status_name) {
@@ -412,20 +384,18 @@ function getAsyncBufferInputSostav(start, stop, callback) {
         async: true,
         dataType: 'json',
         beforeSend: function () {
-            OnBegin();
+            AJAXBeforeSend();
         },
         success: function (jsondata) {
-            //OnBegin();
             if (typeof callback === 'function') {
                 callback(jsondata);
             }
         },
         error: function (x, y, z) {
-            //LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         },
         complete: function () {
-            LockScreenOff();
+            AJAXComplete();
         },
     });
 }
@@ -463,20 +433,18 @@ function getAsyncBufferOutputSostav(start, stop, callback) {
         async: true,
         dataType: 'json',
         beforeSend: function () {
-            OnBegin();
+            AJAXBeforeSend();
         },
         success: function (jsondata) {
-            //OnBegin();
             if (typeof callback === 'function') {
                 callback(jsondata);
             }
         },
         error: function (x, y, z) {
-            //LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         },
         complete: function () {
-            LockScreenOff();
+            AJAXComplete();
         },
     });
 }

@@ -12,7 +12,10 @@ namespace Web_RailWay
             //JS
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-3.2.1.min.js"));
-                        //"~/Scripts/jquery-{version}.js"));
+            //"~/Scripts/jquery-{version}.js"));
+
+            //bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+            //    "~/Scripts/DataTables/jquery-1.12.4.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
             "~/Scripts/jquery.validate.min.js"));
@@ -56,15 +59,24 @@ namespace Web_RailWay
             // Плагин таблицы
             bundles.Add(new ScriptBundle("~/bundles/DataTables").Include(
                 "~/Scripts/DataTables/jquery.dataTables.min.js",
+                "~/Scripts/DataTables/dataTables.buttons.min.js",
+                "~/Scripts/DataTables/buttons.jqueryui.js",
+                "~/Scripts/DataTables/dataTables.select.min.js",
                 "~/Scripts/DataTables/dataTables.jqueryui.min.js"
+
                 ));
 
             //-----------------------------------------------------------------------
             //CSS
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                        //"~/Content/bootstrap.css",
+            bundles.Add(new StyleBundle("~/layout_railway/css").Include(
+                        "~/Content/lockpanel/lockpanel.css",
+                        "~/Content/layout_railway.css"));
+
+            bundles.Add(new StyleBundle("~/layout_railway_ui/css").Include(
                         "~/Content/bootstrap.min.css",
-                        "~/Content/site.css"));
+                        "~/Content/lockpanel/lockpanel.css",
+                        "~/Content/layout_railway_ui.css"));
+
 
             bundles.Add(new StyleBundle("~/Creative/css").Include(
                 //"~/Content/bootstrap.css",
@@ -82,6 +94,8 @@ namespace Web_RailWay
             // Плагин таблицы
             bundles.Add(new StyleBundle("~/DataTables/css").Include(
                 "~/Content/DataTables/css/jquery.dataTables.min.css",
+                "~/Content/DataTables/css/buttons.dataTables.min.css",
+                "~/Content/DataTables/css/select.dataTables.min.css",
                 "~/Content/DataTables/css/datatables.css"));
 
                 //"~/Content/table/reports-dataTables.css"));

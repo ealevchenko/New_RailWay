@@ -360,3 +360,40 @@ tr.selected {
     background-color: #007fff;
     color: #ffffff;
 }
+
+.img-transfer-type0 {
+    height:60px;
+    background-image: url(../Image/railway/type_railway.png);
+    background-repeat: no-repeat;
+    background-position:center;
+}
+.img-transfer-type1 {
+    height:60px;
+    background-image: url(../Image/railway/type_output.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.img-transfer-type2 {
+    height:60px;
+    background-image: url(../Image/railway/type_input.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.img-transfer-type3 {
+    height:60px;
+    background-image: url(../Image/railway/type_buffer.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.img-side0 {
+
+    background-image: url(../Image/railway/odd.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.img-side1 {
+
+    background-image: url(../Image/railway/even.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}

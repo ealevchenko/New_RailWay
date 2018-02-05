@@ -1,0 +1,61 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        OnSuccess = "selectGroupDateCars",
+        OnBegin = "OnBegin",
+        OnFailure = "OnFailure",
+        OnComplete = "OnComplete"
+    };
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @MTResource.mt_approaches_cars_report_title;
+    ViewBag.Home = @MTResource.mt_approaches_cars_report_home;
+}
+
+@section styles {
+<link rel="stylesheet" type="text/css" href="~/Content/dropdownlist.css">
+<link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+}
+
+@section scripts {
+@Scripts.Render("~/bundles/Ajax")
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/jquery.cookie.js"></script>
+<script src="~/Scripts/MT/approachescars.js"></script>
+<script>
+            $('header').addClass('img-header-mt');
+</script>
+}
+
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        @using (Ajax.BeginForm("ListGroupDateCars", "Approaches", new { area = "MT" }, ajaxOpts, new { @id = "fmList" })) //
+        {
+            <div id="select-rangedatetime">
+                @*@Html.Label(@GlobalResources.select_station)
+                @{ int[] station = new int[] { 467004, 467201 }; }
+                @Html.DropDownList("station", station.ToList().GetSelectListItem(ViewReferenceHelpers.GetReferenceStationsOfCodecs, @GlobalResources.all_stations, (int)@ViewBag.station), new { @id = "soflow", @onchange = "$('form#fmList').submit();" })*@
+            </div>
+        }
+        @Html.Label(@MTResource.link_approaches, new { @class = "title-label" })&nbsp;
+        <a href='@Url.Action("Sostav", "Approaches", new { area = "MT" })' class="btn btn-link">@MTResource.index_report_approaches_sostav_title</a>
+        @*<a href='@Url.Action("Cars", "Approaches")' class="btn btn-link">@MTResource.index_report_approaches_cars_title</a>*@
+        &nbsp;@Html.Label(@MTResource.link_arrival, new { @class = "title-label" })&nbsp;
+        <a href='@Url.Action("Sostav", "Arrival", new { area = "MT" })' class="btn btn-link">@MTResource.index_report_arrival_sostav_title</a>
+        <a href='@Url.Action("Cars", "Arrival", new { area = "MT" })' class="btn btn-link">@MTResource.index_report_arrival_cars_title</a>   
+    </div>
+
+    <div id="report-detali">
+
+    </div>
+    <div id="cls"></div>
+</div>
+
+
+
+
+
+

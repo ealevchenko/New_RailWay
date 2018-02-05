@@ -26,6 +26,7 @@ namespace Web_RailWay.Controllers
         protected override void HandleError(ErrorDescription errorDescription)
         {
             // TODO: Add a logging code here (just a reminder).
+
             errorDescription.WriteError();
         }
 

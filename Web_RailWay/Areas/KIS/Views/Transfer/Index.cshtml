@@ -1,0 +1,195 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@section Document {
+
+}
+
+@section Admin {
+@{ Html.RenderAction("LinkKISControl", "Home", new { area = "KIS" }); }
+}
+
+@{
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @KISResource.kis_trnsfer_arrival_report_title;
+    ViewBag.Home = @KISResource.kis_trnsfer_arrival_report_home;
+}
+
+@section styles {
+    @Styles.Render("~/jquery-ui/css")
+    @Styles.Render("~/datetime/css")
+    @Styles.Render("~/DataTables/css")
+    <link rel="stylesheet" type="text/css" href="~/Content/KIST/kist.css">
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/Ajax")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/datetime")
+    @Scripts.Render("~/bundles/DataTables")
+    <script src="~/Scripts/jquery.cookie.js" type="text/javascript">></script>
+    <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/KIS/transfer_kis.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/kist.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/kis.js" type="text/javascript"></script>
+}
+
+<div id="delete-confirm" title="">
+    <form id="delete">
+        <fieldset></fieldset>
+    </form>
+</div>
+
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        <div id="select-rangedatetime">
+            @Html.Label(@GlobalResources.select_date_range_title, new { @class = "title-label" })
+            <span id="select-range">
+                <input id="date-start" name="date_start" size="20"> @Html.Label(@GlobalResources.to, new { @class = "title-label" })
+                <input id="date-stop" name="date_stop" size="20">
+            </span>
+        </div>
+
+    </div>
+    <div id="tabs-log">
+        <ul>
+            <li><a href="#tabs1">@KISResource.transfer_tab_title_arrival</a></li>
+            <li><a href="#tabs2">@KISResource.transfer_tab_title_input</a></li>
+            <li><a href="#tabs3">@KISResource.transfer_tab_title_output</a></li>
+        </ul>
+        <div id="tabs1">
+            <table class='display compact' id="table-arrival" width="100%" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th>
+                            @KISResource.kis_report_field_natur
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_datetime
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_station
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_way
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_napr
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_wagons
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_nathist
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_status
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_close
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="tabs2">
+            <table class='display compact' id="table-input" width="100%" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th>
+                            @KISResource.kis_report_field_num_doc
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_datetime
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_station_from
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_way
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_napr
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_station_on
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_wagons
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_set_wagons
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_natur
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_status
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_close
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="tabs3">
+            <table class='display compact' id="table-output" width="100%" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th>
+                            @KISResource.kis_report_field_num_doc
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_datetime
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_station_on
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_way
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_napr
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_station_from
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_wagons
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_set_wagons
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_status
+                        </th>
+                        <th>
+                            @KISResource.kis_report_field_arrival_close
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="report-detali">
+            <table class='display compact' id="table-detali-cars" style="display:none">
+                <thead>
+                    <tr>
+                        <th>@KISResource.kis_report_field_car</th>
+                        <th>@KISResource.kis_report_field_car_set</th>
+                        <th>@KISResource.kis_report_field_car_upd</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="cls">
+
+        </div>
+    </div>
+</div>

@@ -91,8 +91,35 @@ namespace Web_RailWay.Controllers.api
         #endregion
 
         #region Stations
-        // GET: api/rw/station_name/1
-        [Route("station_name/{id:int}")]
+
+        // GET: api/rw/station/1
+        [Route("station/{id:int}")]
+        [ResponseType(typeof(Stations))]
+        public IHttpActionResult GetStation(int id)
+        {
+            Stations station = this.rep_rw.GetStations(id);
+            if (station == null)
+            {
+                return NotFound();
+            }
+            return Ok(station);
+        }
+
+        //// GET: api/rw/station_name/1
+        //[Route("station_name/{id:int}")]
+        //[ResponseType(typeof(string))]
+        //public string GetStationName(int id)
+        //{
+        //    Stations station = this.rep_rw.GetStations(id);
+        //    if (station == null)
+        //    {
+        //        return id.ToString();
+        //    }
+        //    return Thread.CurrentThread.CurrentUICulture.Name == "en-US" ? station.name_en : station.name_ru;
+        //}
+
+        // GET: api/rw/station/1/name
+        [Route("station/{id:int}/name")]
         [ResponseType(typeof(string))]
         public string GetStationName(int id)
         {
@@ -103,6 +130,7 @@ namespace Web_RailWay.Controllers.api
             }
             return Thread.CurrentThread.CurrentUICulture.Name == "en-US" ? station.name_en : station.name_ru;
         }
+
 
         // GET: api/rw/stations/view/amkr
         [Route("stations/view/amkr")]

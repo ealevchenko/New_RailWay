@@ -1,0 +1,31 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+
+@model List<string>
+<table class="table" id="cars-group">
+    <tbody>
+        @foreach (string gr in Model)
+        {
+            <tr>
+                <th>
+                    <a href="#" class="show-detali-object a-show-detali">№ док: @Html.GetNumDocOfSAPISIndex((string)@gr), от: @Html.GetDateTimeDocOfSAPISIndex((string)@gr)</a>
+                    @{
+                        int natur = ((string)@gr).GetNumDocOfIndex() ;
+                        }  
+                    <div class="status detali-object" id='group-index-@natur'>
+                        @{ Html.RenderAction("ListCorrectCars", "SAPIS", new { index = @gr, manual = true }); }
+                    </div>
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+<script>
+    $('a.show-detali-object').click(function (evt) {
+        evt.preventDefault();
+        $(this).siblings('.detali-object').slideToggle();
+    });
+</script>
+    }

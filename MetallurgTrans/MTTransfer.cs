@@ -640,7 +640,7 @@ namespace MetallurgTrans
             return list;
         }
         /// <summary>
-        /// Перенос списка вагонов в БД MTArrival
+        /// Перенос списка вагонов в БД Arrival
         /// </summary>
         /// <param name="list"></param>
         /// <param name="set_arrival"></param>
@@ -679,7 +679,7 @@ namespace MetallurgTrans
             }
         }
         /// <summary>
-        /// Перенести БД MTArrival вагоны состава из файла xml.
+        /// Перенести БД Arrival вагоны состава из файла xml.
         /// </summary>
         /// <param name="new_id"></param>
         /// <param name="file"></param>
@@ -752,7 +752,7 @@ namespace MetallurgTrans
             return listfs;
         }
         /// <summary>
-        /// Перености xml-файлы из указанной папки  в таблицы MTArrival
+        /// Перености xml-файлы из указанной папки  в таблицы Arrival
         /// </summary>
         /// <param name="fromPath"></param>
         /// <param name="delete_file"></param>
@@ -863,7 +863,7 @@ namespace MetallurgTrans
             return files.Count();
         }
         /// <summary>
-        /// Перености xml-файлы из папки по умолчанию  в таблицы MTArrival
+        /// Перености xml-файлы из папки по умолчанию  в таблицы Arrival
         /// </summary>
         /// <returns></returns>
         public int TransferArrival()

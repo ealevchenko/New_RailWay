@@ -1,0 +1,25 @@
+﻿using EFRW.Abstract;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace Web_RailWay.Areas.RW.Controllers
+{
+    public class StationsNodesController : Controller
+    {
+        IRailWay ef_rw;
+
+        public StationsNodesController(IRailWay rw)
+        {
+                    this.ef_rw = rw;
+        }
+        
+        // GET: RWStationsNodes
+        public ActionResult Index()
+        {
+            return View();
+        }
+    }
+}

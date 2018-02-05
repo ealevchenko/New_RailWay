@@ -151,6 +151,24 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Станция.
+        /// </summary>
+        public static string rw_railwayui_report_home {
+            get {
+                return ResourceManager.GetString("rw_railwayui_report_home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Система мониторинга вагонов АМКР..
+        /// </summary>
+        public static string rw_railwayui_report_title {
+            get {
+                return ResourceManager.GetString("rw_railwayui_report_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Сторона.
         /// </summary>
         public static string rw_side_station_from {
@@ -228,6 +246,240 @@ namespace Web_RailWay.App_LocalResources {
         public static string rw_transfer_type {
             get {
                 return ResourceManager.GetString("rw_transfer_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Род груза.
+        /// </summary>
+        public static string rwui_car_field_cond {
+            get {
+                return ResourceManager.GetString("rwui_car_field_cond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Состояние.
+        /// </summary>
+        public static string rwui_car_field_cond2 {
+            get {
+                return ResourceManager.GetString("rwui_car_field_cond2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Страна.
+        /// </summary>
+        public static string rwui_car_field_country {
+            get {
+                return ResourceManager.GetString("rwui_car_field_country", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Страна (МТ).
+        /// </summary>
+        public static string rwui_car_field_country_mt {
+            get {
+                return ResourceManager.GetString("rwui_car_field_country_mt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Дата и время прибытия на АМКР.
+        /// </summary>
+        public static string rwui_car_field_dtamkr {
+            get {
+                return ResourceManager.GetString("rwui_car_field_dtamkr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Дата и время гот. отправки с УЗ КР (МТ).
+        /// </summary>
+        public static string rwui_car_field_dtuz_mt {
+            get {
+                return ResourceManager.GetString("rwui_car_field_dtuz_mt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на № вагона.
+        /// </summary>
+        public static string rwui_car_field_num {
+            get {
+                return ResourceManager.GetString("rwui_car_field_num", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на №.
+        /// </summary>
+        public static string rwui_car_field_order {
+            get {
+                return ResourceManager.GetString("rwui_car_field_order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Владелец.
+        /// </summary>
+        public static string rwui_car_field_owner {
+            get {
+                return ResourceManager.GetString("rwui_car_field_owner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Род вагона.
+        /// </summary>
+        public static string rwui_car_field_rod {
+            get {
+                return ResourceManager.GetString("rwui_car_field_rod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Цех-получатель груза.
+        /// </summary>
+        public static string rwui_car_field_shop {
+            get {
+                return ResourceManager.GetString("rwui_car_field_shop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Станция отправления груза.
+        /// </summary>
+        public static string rwui_car_field_stotpr {
+            get {
+                return ResourceManager.GetString("rwui_car_field_stotpr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Груз (МТ).
+        /// </summary>
+        public static string rwui_car_field_сargo_name_mt {
+            get {
+                return ResourceManager.GetString("rwui_car_field_сargo_name_mt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Информация по станции :.
+        /// </summary>
+        public static string rwui_station_name {
+            get {
+                return ResourceManager.GetString("rwui_station_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Прибытие вагонов.
+        /// </summary>
+        public static string rwui_tab_title_arrival_amkr {
+            get {
+                return ResourceManager.GetString("rwui_tab_title_arrival_amkr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Принять с УЗ.
+        /// </summary>
+        public static string rwui_tab_title_arrival_uz {
+            get {
+                return ResourceManager.GetString("rwui_tab_title_arrival_uz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны на станции.
+        /// </summary>
+        public static string rwui_tab_title_cars {
+            get {
+                return ResourceManager.GetString("rwui_tab_title_cars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Отправка на станцию\цех.
+        /// </summary>
+        public static string rwui_tab_title_dispatch {
+            get {
+                return ResourceManager.GetString("rwui_tab_title_dispatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Маневры на станции.
+        /// </summary>
+        public static string rwui_tab_title_maneuvers {
+            get {
+                return ResourceManager.GetString("rwui_tab_title_maneuvers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ожидающие зачисления.
+        /// </summary>
+        public static string rwui_tab_title_pending {
+            get {
+                return ResourceManager.GetString("rwui_tab_title_pending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Нумерация.
+        /// </summary>
+        public static string rwui_title_number {
+            get {
+                return ResourceManager.GetString("rwui_title_number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Выберите станцию:.
+        /// </summary>
+        public static string rwui_title_select_station {
+            get {
+                return ResourceManager.GetString("rwui_title_select_station", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на сторона.
+        /// </summary>
+        public static string rwui_title_side {
+            get {
+                return ResourceManager.GetString("rwui_title_side", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Кол. вагонов.
+        /// </summary>
+        public static string rwui_ways_field_count {
+            get {
+                return ResourceManager.GetString("rwui_ways_field_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Наименование.
+        /// </summary>
+        public static string rwui_ways_field_name {
+            get {
+                return ResourceManager.GetString("rwui_ways_field_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на №.
+        /// </summary>
+        public static string rwui_ways_field_num {
+            get {
+                return ResourceManager.GetString("rwui_ways_field_num", resourceCulture);
             }
         }
     }

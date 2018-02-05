@@ -1,27 +1,6 @@
-﻿function OnBegin() {
-    var lang = $.cookie('lang');
-    LockScreen(lang == 'en' ? 'We are processing your request ...' : 'Мы обрабатываем ваш запрос...');
-}
-//  
-function getObjects(obj, key, val) {
-    var objects = [];
-    for (var i in obj) {
-        if (!obj.hasOwnProperty(i)) continue;
-        if (typeof obj[i] == 'object') {
-            objects = objects.concat(getObjects(obj[i], key, val));
-        } else if (i == key && obj[key] == val) {
-            objects.push(obj);
-        }
-    }
-    return objects;
-}
-// Получить значение атрибута text по атрибуту value
-function getTextOption(obj, val) {
-    for (var i = 0; i < obj.length; i++) {
-        if (obj[i].value == val) return obj[i].text;
-    }
-    return val;
-}
+﻿//-------------------------------------------------------
+// Для работы с модулем добавте файл common.js
+//-------------------------------------------------------
 // Получить название сервиса или список сервисов
 function getServicesName(service) {
     var value = "?";  //значение по умолчанию умолчанию
@@ -52,7 +31,6 @@ function getModulesName(service) {
 }
 // Получить список узлов (json) отправки на другие станции
 function getStatusServices(correct) {
-    OnBegin();
     var value = null;  //значение по умолчанию умолчанию
     var list_serv = getServicesName();
     $.ajax({
@@ -79,11 +57,9 @@ function getStatusServices(correct) {
             value = list_services;
         },
         error: function (x, y, z) {
-            LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
-    LockScreenOff();
     return value;
 }
 // Заполнить компонент tbody списком узлов отправки на другие станции
@@ -108,7 +84,6 @@ function getTbodyStatusServices(tbody, id_select) {
 }
 
 function getLogServices(correct, service, start, stop) {
-    OnBegin();
     var value = null;  //значение по умолчанию умолчанию
     var list_serv = getServicesName();
     $.ajax({
@@ -134,16 +109,13 @@ function getLogServices(correct, service, start, stop) {
             value = list_log;
         },
         error: function (x, y, z) {
-            //LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
-    LockScreenOff();
     return value;
 }
 
 function getLogErrors(correct, service, start, stop) {
-    OnBegin();
     var value = null;  //значение по умолчанию умолчанию
     var list_serv = getServicesName();
     var list_modul = getModulesName();
@@ -181,16 +153,13 @@ function getLogErrors(correct, service, start, stop) {
             value = list_log;
         },
         error: function (x, y, z) {
-            //LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
-    LockScreenOff();
     return value;
 }
 
 function getLogEvent(correct, service, start, stop) {
-    OnBegin();
     var value = null;  //значение по умолчанию умолчанию
     var list_serv = getServicesName();
     var list_modul = getModulesName();
@@ -221,10 +190,8 @@ function getLogEvent(correct, service, start, stop) {
             value = list_log;
         },
         error: function (x, y, z) {
-            //LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
-    LockScreenOff();
     return value;
 }

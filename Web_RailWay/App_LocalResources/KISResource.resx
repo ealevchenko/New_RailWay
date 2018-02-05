@@ -153,14 +153,8 @@
   <data name="kis_trnsfer_arrival_report_title" xml:space="preserve">
     <value>Перенос данных из системы КИС в систему RailWay.</value>
   </data>
-  <data name="link_kis_arrival_control" xml:space="preserve">
-    <value>Перенос данных по прибытию с УЗ</value>
-  </data>
-  <data name="link_kis_input_control" xml:space="preserve">
-    <value>Перенос данных по прибытию</value>
-  </data>
-  <data name="link_kis_input_rules" xml:space="preserve">
-    <value>Правила переноса по прибытию</value>
+  <data name="link_kis_transfer_control" xml:space="preserve">
+    <value>Перенос данных из системы КИС</value>
   </data>
   <data name="link_kis_output_control" xml:space="preserve">
     <value>Перенос данных по отправке</value>

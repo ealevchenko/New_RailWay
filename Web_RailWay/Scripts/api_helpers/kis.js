@@ -1,4 +1,7 @@
-﻿// Получить название станций из схемы Kometa
+﻿//-------------------------------------------------------
+// Для работы с модулем добавте файл common.js
+//-------------------------------------------------------
+// Получить название станций из схемы Kometa
 function getKometaStationName(id) {
     var value = "?";  //значение по умолчанию умолчанию
     $.ajax({
@@ -19,11 +22,20 @@ function getAsyncKometaStationName(id, callback) {
         url: id !=null ? '/railway/api/kis/kometa/station/' + id + '/name' : '/railway/api/kis/kometa/station/name',
         async: true,
         dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
         success: function (data) {
             if (typeof callback === 'function') {
                 callback(data);
             }
-        }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
     });
 }
 
@@ -32,7 +44,7 @@ function getNumVagStationName(id) {
     var value = "?";  //значение по умолчанию умолчанию
     $.ajax({
         type: 'GET',
-        url: id != null ? '/api/kis/num_vag/station/' + id + '/name' : '/api/kis/num_vag/station/name',
+        url: id != null ? '/railway/api/kis/num_vag/station/' + id + '/name' : '/railway/api/kis/num_vag/station/name',
         async: false,
         dataType: 'json',
         success: function (data) {
@@ -48,10 +60,19 @@ function getAsyncNumVagStationName(id, callback) {
         url: id != null ? '/railway/api/kis/num_vag/station/' + id + '/name' : '/railway/api/kis/num_vag/station/name',
         async: true,
         dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
         success: function (data) {
             if (typeof callback === 'function') {
                 callback(data);
             }
-        }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
     });
 }

@@ -1,27 +1,6 @@
-﻿function OnBegin() {
-    var lang = $.cookie('lang');
-    LockScreen(lang == 'en' ? 'We are processing your request ...' : 'Мы обрабатываем ваш запрос...');
-}
-//  
-function getObjects(obj, key, val) {
-    var objects = [];
-    for (var i in obj) {
-        if (!obj.hasOwnProperty(i)) continue;
-        if (typeof obj[i] == 'object') {
-            objects = objects.concat(getObjects(obj[i], key, val));
-        } else if (i == key && obj[key] == val) {
-            objects.push(obj);
-        }
-    }
-    return objects;
-}
-// Получить значение атрибута text по атрибуту value
-function getTextOption(obj, val) {
-    for (var i = 0; i < obj.length; i++) {
-        if (obj[i].value == val) return obj[i].text;
-    }
-    return val;
-}
+﻿//-------------------------------------------------------
+// Для работы с модулем добавте файл common.js
+//-------------------------------------------------------
 // Получить название сервиса или список сервисов
 function getServicesName(service) {
     var value = "?";  //значение по умолчанию умолчанию
@@ -51,7 +30,6 @@ function getTypeValue(type) {
     return value;
 }
 function getSetting(correct, service) {
-    OnBegin();
     var value = null;  //значение по умолчанию умолчанию
     var list_serv = getServicesName();
     var list_type = getTypeValue();
@@ -79,10 +57,8 @@ function getSetting(correct, service) {
             value = list_log;
         },
         error: function (x, y, z) {
-            //LockScreenOff();
-            alert(x + '\n' + y + '\n' + z);
+            OnAJAXError(x, y, z);
         }
     });
-    LockScreenOff();
     return value;
 }

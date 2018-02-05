@@ -19,7 +19,7 @@ namespace Web_RailWay.App_LocalResources {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class KISResource {
@@ -367,33 +367,6 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Перенос данных по прибытию с УЗ.
-        /// </summary>
-        public static string link_kis_arrival_control {
-            get {
-                return ResourceManager.GetString("link_kis_arrival_control", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Перенос данных по прибытию.
-        /// </summary>
-        public static string link_kis_input_control {
-            get {
-                return ResourceManager.GetString("link_kis_input_control", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Правила переноса по прибытию.
-        /// </summary>
-        public static string link_kis_input_rules {
-            get {
-                return ResourceManager.GetString("link_kis_input_rules", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Перенос данных по отправке.
         /// </summary>
         public static string link_kis_output_control {
@@ -408,6 +381,15 @@ namespace Web_RailWay.App_LocalResources {
         public static string link_kis_output_rules {
             get {
                 return ResourceManager.GetString("link_kis_output_rules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Перенос данных из системы КИС.
+        /// </summary>
+        public static string link_kis_transfer_control {
+            get {
+                return ResourceManager.GetString("link_kis_transfer_control", resourceCulture);
             }
         }
         

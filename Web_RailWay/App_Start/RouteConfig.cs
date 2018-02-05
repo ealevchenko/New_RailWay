@@ -12,11 +12,11 @@ namespace Web_RailWay
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            //routes.MapRoute("MTArrivalSostav", "MTArrival/Sostav/{index}", new { controller = "MTArrival", action = "Sostav", index = UrlParameter.Optional  });              // Прибытие составов металлургтранс
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "Web_RailWay.Controllers" }
             );
         }
     }

@@ -1,0 +1,240 @@
+﻿@using Web_RailWay.App_Code;
+@using Web_RailWay.App_LocalResources;
+@using EFRC.Entities;
+@using EFRC.Concrete;
+
+
+@model List<SAPIncSupply>
+
+<input type="checkbox" name='total-@ViewBag.natur' value="Отметить все">
+Поиск решения:
+<input id='bt-fix-quick-@ViewBag.natur' type="button" value="Быстрый" />
+<input id='bt-fix-detailed-@ViewBag.natur' type="button" value="Детальный" />
+<input id='bt-fix-@ViewBag.natur' type="button" value="Исправить" />
+@*<table class="table" id='cars-arrival-@ViewBag.natur'>*@
+    <table class="table" id='cars-arrival' name='@ViewBag.natur'>
+    <thead>
+        <tr>
+            <th>
+                @SAPResource.sap_report_correct
+            </th>
+            <th>
+                @SAPResource.sap_date_amkr
+            </th>
+            <th>
+                @SAPResource.sap_index
+            </th>
+            <th>
+                @SAPResource.sap_report_field_npp
+            </th>
+            <th>
+                @SAPResource.sap_report_field_num_wag
+            </th>
+            <th>
+                @SAPResource.sap_report_field_country
+            </th>
+            <th>
+                @SAPResource.sap_report_field_weight
+            </th>
+            <th>
+                @SAPResource.sap_report_field_cargo_code
+            </th>
+            <th>
+                @SAPResource.sap_report_field_doc_arrival
+            </th>
+            <th>
+                @SAPResource.sap_report_field_data_arrival
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (SAPIncSupply cars in @Model)
+        {
+            <tr>
+                <td rowspan="2">
+                    <input id='@cars.ID' name='@ViewBag.natur' type="checkbox" />
+                </td>
+                <td>
+                    @Html.GetDateTimeDocOfSAPISIndex((string)@cars.CompositionIndex)
+                </td>
+                <td>
+                    @cars.CompositionIndex
+                </td>
+                <td>
+                    @cars.Position
+                </td>
+                <td>
+                    @cars.CarriageNumber
+                </td>
+                <td>
+                    @Html.GetReferenceCountryOfCountryCode((int)@cars.CountryCode)
+                </td>
+                <td>
+                    @cars.WeightDoc
+                </td>
+                <td>
+                    @Html.GetReferenceCargoOfCode((int)@cars.CodeCargo)
+                </td>
+                <td>
+                    @Html.GetNumDocOfSAPISIndex((string)@cars.CompositionIndex)
+                </td>
+                <td>
+                    @Html.GetDateTimeDocOfSAPISIndex((string)@cars.CompositionIndex)
+                </td>
+            </tr>
+            @*<tr id='@cars.CarriageNumber' name='decision-@ViewBag.natur'>*@
+            <tr id='@cars.ID' name='decision-@ViewBag.natur'></tr>
+        }
+    </tbody>
+</table>
+<!--секция скриптов-->
+@section scripts {
+<script type="text/javascript">
+
+
+    $(function () {
+        test();
+
+            // выборка
+            $('input[name="total-' +@ViewBag.natur +'"]').change(function () {
+                $('input[name="' +@ViewBag.natur +'"]').prop('checked', this.checked);
+            });
+            // применить решение
+            $('#bt-fix-' +@ViewBag.natur +'').click(function (evt) {
+                evt.preventDefault();
+                OnBegin();
+
+                var tr = $('TR[name="decision-' +@ViewBag.natur +'"]');
+
+                $('input[name="' +@ViewBag.natur +'"]:checkbox:checked').each(function () {
+                    var id_sap = $(this).attr('id');
+                    var tr_sel = tr.filter('#' + id_sap + '');
+
+
+                    alert("tr_sel " + tr_sel.attr('id'));
+                    //alert($(this).attr('id'));
+
+                    //$('#' + id_sap + '').each(function () {
+                    //    alert($(this).attr('id'));
+                    //});
+                    @*$('TR[name="decision-' +@ViewBag.natur +'"]').each(function () {
+                    alert($(this).attr('id'));
+                });*@
+                    //$.ajax({
+                    //    url: '/SAPIS/Correct/' + id_sap,
+                    //    type: 'POST',
+                    //    dataType: 'json',
+                    //    success: function (data) {
+
+                    //    },
+                    //    error: function (x, y, z) {
+                    //        LockScreenOff();
+                    //        alert(x + '\n' + y + '\n' + z);
+                    //    }
+                    //});
+                });
+
+                $.ajax({
+                    url: '/SAPIS/ListCorrectCars/',
+                    type: 'POST',
+                    data: { index: '@ViewBag.index', manual: '@ViewBag.manual' },
+                    //dataType: 'json',
+                    success: function (data) {
+                        var target = $('#group-index-' +@ViewBag.natur +'');
+                        target.empty();
+                        target.append(data);
+                        LockScreenOff();
+                    },
+                    error: function (x, y, z) {
+                        LockScreenOff();
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            });
+
+            // применить быстрое решение
+            $('#bt-fix-quick-' +@ViewBag.natur +'').click(function (evt) {
+                evt.preventDefault();
+                OnBegin();
+                $('TR[name="decision-' +@ViewBag.natur +'"]').each(function () {
+                    var tr = $(this);
+                    //alert(tr);
+                    var id_sap = $(this).attr('id');
+                    // получить номер вагона
+                    $.ajax({
+                        url: '/SAPIS/GetCarriageNumberCar/',
+                        type: 'GET',
+                        data: { id: id_sap },
+                        //dataType: 'int',
+                        success: function (data) {
+                            // Получить прибытие по номеру вагона
+                            var num_vag = data;
+                            $.ajax({
+                                url: '/Arrival/QuickCorrectArrivalCars/',
+                                type: 'GET',
+                                data: { num: num_vag },
+                                dataType: 'html',
+                                success: function (data) {
+                                    tr.empty();
+                                    tr.append(data);
+                                    LockScreenOff();
+                                },
+                                error: function (x, y, z) {
+                                    LockScreenOff();
+                                    alert(x + '\n' + y + '\n' + z);
+                                }
+                            });
+                        },
+                        error: function (x, y, z) {
+                            LockScreenOff();
+                            alert(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                });
+            });
+
+            // применить детальное решение
+            $('#bt-fix-detailed-' +@ViewBag.natur +'').click(function (evt) {
+                evt.preventDefault();
+                OnBegin();
+                $('TR[name="decision-' +@ViewBag.natur +'"]').each(function () {
+                    var tr = $(this);
+                    //alert(tr);
+                    var id_sap = $(this).attr('id');
+                    // получить номер вагона
+                    $.ajax({
+                        url: '/SAPIS/GetCarriageNumberCar/',
+                        type: 'GET',
+                        data: { id: id_sap },
+                        //dataType: 'int',
+                        success: function (data) {
+                            // Получить прибытие по номеру вагона
+                            var num_vag = data;
+                            $.ajax({
+                                url: '/Arrival/DetailedCorrectArrivalCars/',
+                                type: 'GET',
+                                data: { num: num_vag },
+                                dataType: 'html',
+                                success: function (data) {
+                                    tr.empty();
+                                    tr.append(data);
+                                    LockScreenOff();
+                                },
+                                error: function (x, y, z) {
+                                    LockScreenOff();
+                                    alert(x + '\n' + y + '\n' + z);
+                                }
+                            });
+                        },
+                        error: function (x, y, z) {
+                            LockScreenOff();
+                            alert(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                });
+            });
+        });
+</script>
+    }
+
+

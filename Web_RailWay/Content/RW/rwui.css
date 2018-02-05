@@ -1,0 +1,96 @@
+﻿/*div {
+    border: 1px solid red;
+}*/
+
+#container {
+    margin: 0 auto; /* Выравниваем по центру */
+    background: #FCE600; /* Цвет колонок */
+}
+
+DIV#header {
+    background-color: #444;
+    border-bottom: 2px solid #111;
+    color: White;
+    padding-left:15px;
+    padding-right:15px;
+}
+    DIV#header DIV.title {
+        font-size: 2em;
+        text-align:center;
+    }
+
+.title-label {
+    text-transform: uppercase;
+    color: blanchedalmond;
+    padding:5px;
+}
+
+.setup-label {
+    text-transform: uppercase;
+    color:#808080
+}
+.title-label-text {
+    text-transform: uppercase;
+    color: #ffffff;
+    padding:5px;
+}
+
+#operation-detali {
+    font-size:12px;
+}
+
+#left-operation {
+    float: left;
+    width: 300px;
+    padding: 5px;
+
+}
+
+#right-operation {
+    float: right;
+    width: 300px;
+    padding: 5px;
+}
+
+#content-operation {
+    float:left;
+    padding: 10px;
+    width:1250px;
+}
+
+.setup-operation {
+    padding:5px;
+}
+
+.setup-operation button {
+    margin-left:5px;
+}
+
+.setup-operation label {
+    margin-left:5px;
+    margin-right:5px;
+}
+
+DIV#tabs-operation {
+    float: left;
+    width: 100%;
+    /*margin: 5px;*/
+}
+
+/*div#cls {
+    clear: left;
+}*/
+
+table.dataTable tbody th, table.dataTable tbody td {
+        padding: 0px;
+        margin: 0px;
+    }
+
+table.table-cars.dataTable tbody td {
+    /*font-size:10px;*/
+    white-space:nowrap;
+}
+
+/*table.table-list-ways.dataTable{
+    font-size:12px;
+}*/
