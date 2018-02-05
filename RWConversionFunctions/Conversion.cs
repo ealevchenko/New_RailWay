@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace RWConversionFunctions
 {
@@ -22,6 +23,25 @@ namespace RWConversionFunctions
                 list += i.ToString() + sep;
             }
             if (!String.IsNullOrWhiteSpace(list)) { return list.Remove(list.Length - 1); } else { return null; }
+        }
+
+        public static DateTime? DateNullConversion(this string date)
+        {
+            if (String.IsNullOrWhiteSpace(date)) return null;
+            try
+            {
+                return (DateTime?)XmlConvert.ToDateTime(date);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public static DateTime DateConversion(this string date)
+        {
+            DateTime? new_date = date.DateNullConversion();
+            return new_date != null ? (DateTime)new_date : new DateTime();
         }
 
     }
