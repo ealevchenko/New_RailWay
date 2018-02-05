@@ -3,9 +3,11 @@ using RWCorrection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using WebAPI;
 
 namespace Testing
 {
@@ -32,7 +34,8 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            CorrectionTransfer corr = new CorrectionTransfer();
+            
+            //CorrectionTransfer corr = new CorrectionTransfer();
             //corr.CorrSAPIncSupplyArrival("N:6742 D:13.12.2017 5-0");
             //corr.CorrSAPIncSupply(2356);
             //corr.CorrSAPIncSupply();
@@ -69,6 +72,8 @@ namespace Testing
             //tst_rw_api.Wagons_GetSTPR1GR();
             //Wagons_GetSTPR1GR(291);
             //tst_rw_api.Reference_GetCountryOfCodeSNG();
+            //tst_rw_api.WebAPIToken();
+            tst_rw_api.WebAPIMT();
 
             #endregion
 
@@ -105,7 +110,7 @@ namespace Testing
             //tst_kis.Test_KISTransfer_TransferArrivalOfKISInput(); // Тест всех переносов вагонов из КИС в прибытие станции RC по данным КИС по прибытию
             //tst_kis.Test_KISThread_StartTransferInputKIS(); // тест потока всех переносов вагонов из КИС в прибытие станции RC по данным КИС по прибытию
             //tst_kis.Test_KISThread_StartTransferOutputKIS(); // тест потока всех переносов вагонов из КИС в прибытие станции RC по данным КИС по отправке
-            tst_kis.Test_KISTransfer_TransferOutputArrivalToStation(); // Тест переноса вагонов из КИС в прибытие станции RC по данным КИС по отправке
+            //tst_kis.Test_KISTransfer_TransferOutputArrivalToStation(); // Тест переноса вагонов из КИС в прибытие станции RC по данным КИС по отправке
 
             #endregion
 
