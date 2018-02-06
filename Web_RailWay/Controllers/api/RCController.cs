@@ -34,6 +34,20 @@ namespace Web_RailWay.Controllers.api
             public int? id_cond_after {get;set;}
         }
 
+        public class ShopsStation {
+
+            public int id_shop { get; set; }
+            public string name {get;set;}
+            public int? vag_amount { get; set; }
+        }
+
+        public class WagonOverturnsStation {
+
+            public int id_gruz_front { get; set; }
+            public string name {get;set;}
+            public int? vag_amount { get; set; }
+        }
+
         public class CarInfo { 
             public int id_oper {get;set;}
             public DateTime? dt_amkr {get;set;}
@@ -130,7 +144,7 @@ namespace Web_RailWay.Controllers.api
         // GET: api/rc/ways/station/4/rospusk/false
         [Route("ways/station/{id:int}/rospusk/{rosp:bool}")]
         [ResponseType(typeof(WaysStation))]
-        public IHttpActionResult GetWays(int id, bool rosp)
+        public IHttpActionResult GetWaysOfStation(int id, bool rosp)
         {
             try
             {
@@ -145,10 +159,55 @@ namespace Web_RailWay.Controllers.api
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetWays(id={0}, rosp={1})", id, rosp), eventID);
+                e.WriteErrorMethod(String.Format("GetWaysOfStation(id={0}, rosp={1})", id, rosp), eventID);
                 return InternalServerError(e);
             }
         }
+
+        // GET: api/rc/shops/station/5
+        [Route("shops/station/{id:int}")]
+        [ResponseType(typeof(ShopsStation))]
+        public IHttpActionResult GetShopsOfStation(int id)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@idstation", id);
+                List<ShopsStation> ss = this.rep_rc.Database.SqlQuery<ShopsStation>("EXEC [RailCars].[GetShop] @idstation", i_id).ToList();
+                if (ss == null)
+                {
+                    return NotFound();
+                }
+                return Ok(ss);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetShopsOfStation(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/rc/wagon_overturns/station/5
+        [Route("wagon_overturns/station/{id:int}")]
+        [ResponseType(typeof(WagonOverturnsStation))]
+        public IHttpActionResult GetWagonOverturnsOfStation(int id)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@idstation", id);
+                List<WagonOverturnsStation> ss = this.rep_rc.Database.SqlQuery<WagonOverturnsStation>("EXEC [RailCars].[GetGruzFront] @idstation", i_id).ToList();
+                if (ss == null)
+                {
+                    return NotFound();
+                }
+                return Ok(ss);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWagonOverturnsOfStation(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
 
         // GET: api/rc/cars/way/52/side/0
         [Route("cars/way/{id:int}/side/{side:int}")]
@@ -173,5 +232,48 @@ namespace Web_RailWay.Controllers.api
             }
         }
 
+        // GET: api/rc/cars/wagon_overturn/2
+        [Route("cars/wagon_overturn/{id:int}")]
+        [ResponseType(typeof(CarInfo))]
+        public IHttpActionResult GetCarsOfWagonOverturns(int id)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@idwo", id);
+                List<CarInfo> ws = this.rep_rc.Database.SqlQuery<CarInfo>("EXEC [RailCars].[GetOnStatGruzFrontWagons] @idwo", i_id).ToList();
+                if (ws == null)
+                {
+                    return NotFound();
+                }
+                return Ok(ws);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfWagonOverturns(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/rc/cars/shop/2
+        [Route("cars/shop/{id:int}")]
+        [ResponseType(typeof(CarInfo))]
+        public IHttpActionResult GetCarsOfShop(int id)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@idshop", id);
+                List<CarInfo> ws = this.rep_rc.Database.SqlQuery<CarInfo>("EXEC [RailCars].[GetOnStatShopWagons] @idshop", i_id).ToList();
+                if (ws == null)
+                {
+                    return NotFound();
+                }
+                return Ok(ws);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfShop(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
     }
 }

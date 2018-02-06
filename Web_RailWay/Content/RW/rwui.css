@@ -77,6 +77,10 @@ DIV#tabs-operation {
     /*margin: 5px;*/
 }
 
+div#group-list-ways, div#group-list-wagonoverturns, div#group-list-shops {
+    padding:0;
+}
+
 /*div#cls {
     clear: left;
 }*/

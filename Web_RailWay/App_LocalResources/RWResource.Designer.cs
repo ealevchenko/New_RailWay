@@ -367,6 +367,33 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Цеха:.
+        /// </summary>
+        public static string rwui_group_list_shops {
+            get {
+                return ResourceManager.GetString("rwui_group_list_shops", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоноопрокиды:.
+        /// </summary>
+        public static string rwui_group_list_wagonoverturns {
+            get {
+                return ResourceManager.GetString("rwui_group_list_wagonoverturns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пути:.
+        /// </summary>
+        public static string rwui_group_list_ways {
+            get {
+                return ResourceManager.GetString("rwui_group_list_ways", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Информация по станции :.
         /// </summary>
         public static string rwui_station_name {

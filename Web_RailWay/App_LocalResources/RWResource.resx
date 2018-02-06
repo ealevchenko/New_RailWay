@@ -258,4 +258,13 @@
   <data name="rwui_title_side" xml:space="preserve">
     <value>сторона</value>
   </data>
+  <data name="rwui_group_list_shops" xml:space="preserve">
+    <value>Цеха:</value>
+  </data>
+  <data name="rwui_group_list_wagonoverturns" xml:space="preserve">
+    <value>Вагоноопрокиды:</value>
+  </data>
+  <data name="rwui_group_list_ways" xml:space="preserve">
+    <value>Пути:</value>
+  </data>
 </root>
