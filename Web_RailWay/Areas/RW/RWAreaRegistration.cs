@@ -17,7 +17,8 @@ namespace Web_RailWay.Areas.RW
             context.MapRoute(
                 "RW_default",
                 "RW/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "Web_RailWay.Areas.RW.Controllers" }
             );
         }
     }

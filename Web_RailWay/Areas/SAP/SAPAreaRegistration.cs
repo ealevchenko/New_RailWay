@@ -17,7 +17,8 @@ namespace Web_RailWay.Areas.SAP
             context.MapRoute(
                 "SAP_default",
                 "SAP/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "Web_RailWay.Areas.SAP.Controllers" }
             );
         }
     }
