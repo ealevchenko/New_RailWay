@@ -2131,6 +2131,131 @@ namespace EFRC.Concrete
                 return null;
             }
         }
+
+        public IQueryable<SHOPS> GetShopsOfStation(int id_station)
+        {
+            try
+            {
+                return GetSHOPS().Where(s => s.id_stat == id_station);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetShopsOfStation(id_station={0})", id_station), eventID);
+                return null;
+            }
+        }
         #endregion
+
+        #region GRUZ_FRONTS
+        /// <summary>
+        /// Получить
+        /// </summary>
+        public IQueryable<GRUZ_FRONTS> GRUZ_FRONTS
+        {
+            get { return context.GRUZ_FRONTS; }
+        }
+        public IQueryable<GRUZ_FRONTS> GetGRUZ_FRONTS()
+        {
+            try
+            {
+                return GRUZ_FRONTS;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetGRUZ_FRONTS()"), eventID);
+                return null;
+            }
+        }
+        public GRUZ_FRONTS GetGRUZ_FRONTS(int id_gruz_front)
+        {
+            try
+            {
+                return GetGRUZ_FRONTS().Where(s => s.id_gruz_front == id_gruz_front).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetGRUZ_FRONTS(id_gruz_front={0})", id_gruz_front), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Добавить или править
+        /// </summary>
+        /// <param name="SHOPS"></param>
+        /// <returns></returns>
+        public int SaveGRUZ_FRONTS(GRUZ_FRONTS GRUZ_FRONTS)
+        {
+            GRUZ_FRONTS dbEntry;
+            try
+            {
+                if (GRUZ_FRONTS.id_gruz_front == 0)
+                {
+                    dbEntry = new GRUZ_FRONTS()
+                    {
+                         id_gruz_front = GRUZ_FRONTS.id_gruz_front, 
+                         name = GRUZ_FRONTS.name, 
+                         id_stat = GRUZ_FRONTS.id_stat
+
+                    };
+                    context.GRUZ_FRONTS.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.GRUZ_FRONTS.Find(GRUZ_FRONTS.id_gruz_front);
+                    if (dbEntry != null)
+                    {
+                         dbEntry.id_gruz_front = GRUZ_FRONTS.id_gruz_front;
+                         dbEntry.name = GRUZ_FRONTS.name;
+                         dbEntry.id_stat = GRUZ_FRONTS.id_stat;
+                    }
+                }
+
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveGRUZ_FRONTS(GRUZ_FRONTS={0})", GRUZ_FRONTS.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id_gruz_front;
+        }
+        /// <summary>
+        /// Удалить
+        /// </summary>
+        /// <param name="id_shop"></param>
+        /// <returns></returns>
+        public GRUZ_FRONTS DeleteGRUZ_FRONTS(int id_gruz_front)
+        {
+            GRUZ_FRONTS dbEntry = context.GRUZ_FRONTS.Find(id_gruz_front);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.GRUZ_FRONTS.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteGRUZ_FRONTS(id_gruz_front={0})", id_gruz_front), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+
+        public IQueryable<GRUZ_FRONTS> GetGRUZ_FRONTSOfStation(int id_station)
+        {
+            try
+            {
+                return GetGRUZ_FRONTS().Where(s => s.id_stat == id_station);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetGRUZ_FRONTSOfStation(id_station={0})", id_station), eventID);
+                return null;
+            }
+        }
+        #endregion
+
     }
 }

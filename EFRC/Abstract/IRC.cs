@@ -130,6 +130,18 @@ namespace EFRC.Abstract
         SHOPS DeleteSHOPS(int id_shop);
         SHOPS GetShopsOfKis(int id_shop_kis);
         int? GetIDShopsOfKis(int id_shop_kis);
+        IQueryable<SHOPS> GetShopsOfStation(int id_station);
         #endregion
+
+        #region GRUZ_FRONTS
+        IQueryable<GRUZ_FRONTS> GRUZ_FRONTS { get; }
+        IQueryable<GRUZ_FRONTS> GetGRUZ_FRONTS();
+        GRUZ_FRONTS GetGRUZ_FRONTS(int id_gruz_front);
+        int SaveGRUZ_FRONTS(GRUZ_FRONTS GRUZ_FRONTS);
+        GRUZ_FRONTS DeleteGRUZ_FRONTS(int id_gruz_front);
+
+        IQueryable<GRUZ_FRONTS> GetGRUZ_FRONTSOfStation(int id_station);
+        #endregion
+
     }
 }
