@@ -6,12 +6,24 @@
     //allVars = $.getUrlVars(),   // Получить параметры get запроса
     var lang = $.cookie('lang'),
         panel_setup_operation = {
-            panel_view: null,
+            panel_view: {
+                obj: $('<div class="dt-buttons setup-operation" id="property_view_cars"></div>'),
+                initPanel: function () {
+                    
+                },
+            },
             panel_manevr: null,
             panel_sent: null,
             panel_arrival: null,
-            initPanel: function () {
-
+            label_view_select: $('<label id="view-info">Информация:</label>'),
+            label_view_mt: $('<label for="view-mt">' + (lang == 'en' ? "MetallurgTrans " : "МеталургТранс ") + '</label>'),
+            checkbox_view_mt: $('<input type="checkbox" name="view-mt" id="view-mt">'),
+            label_view_sap: $('<label for="view-sap">' + (lang == 'en' ? "SAP " : "САП ") + '</label>'),
+            checkbox_view_sap: $('<input type="checkbox" name="view-sap" id="view-sap">'),
+            label_view_email: $('<label for="view-email">' + (lang == 'en' ? "Writing  " : "Письма ") + '</label>'),
+            checkbox_view_email: $('<input type="checkbox" name="view-email" id="view-email">'),
+            initPanel: function (obj) {
+                //obj.appe
             }
         },
         //Панель групп списков
@@ -43,7 +55,7 @@
             },
             enableGroup: function (exit_uz, count_shops, count_wo) {
                 this.list_ways.show();
-                if (count_wo > 0) { this.list_wagonoverturns.show(); } else { this.list_wagonoverturns.hide();}  // Группа элементов отображения информации о вагоноопрокидах
+                if (count_wo > 0) { this.list_wagonoverturns.show(); } else { this.list_wagonoverturns.hide(); }  // Группа элементов отображения информации о вагоноопрокидах
                 if (count_shops > 0) { this.list_shops.show(); } else { this.list_shops.hide(); }
                 this.list_arrival.show();
                 if (exit_uz) { this.list_arrivaluz.show(); } else { this.list_arrivaluz.hide(); }
@@ -97,7 +109,7 @@
                     });
 
 
-                    
+
                     ways.clearWays();
                     wagonoverturns.clearWays();
                     shops.clearWays();
