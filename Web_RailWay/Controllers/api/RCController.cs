@@ -1,5 +1,6 @@
 ﻿using EFRC.Abstract;
 using EFRC.Concrete;
+using EFRC.Entities;
 using MessageLog;
 using System;
 using System.Collections.Generic;
@@ -141,6 +142,18 @@ namespace Web_RailWay.Controllers.api
             public bool? Step2 {get;set;}
         }
 
+        protected SHOPS CreateSHOPS(SHOPS shops)
+        {
+            return new SHOPS()
+            {
+                id_shop = shops.id_shop,
+                name = shops.name,
+                name_full = shops.name_full,
+                id_stat = shops.id_stat,
+                id_ora = shops.id_ora,
+            };
+        }
+
         // GET: api/rc/ways/station/4/rospusk/false
         [Route("ways/station/{id:int}/rospusk/{rosp:bool}")]
         [ResponseType(typeof(WaysStation))]
@@ -164,10 +177,10 @@ namespace Web_RailWay.Controllers.api
             }
         }
 
-        // GET: api/rc/shops/station/5
-        [Route("shops/station/{id:int}")]
+        // GET: api/rc/shops/station/5/cars
+        [Route("shops/station/{id:int}/cars")]
         [ResponseType(typeof(ShopsStation))]
-        public IHttpActionResult GetShopsOfStation(int id)
+        public IHttpActionResult GetShopsCarsOfStation(int id)
         {
             try
             {
@@ -186,10 +199,10 @@ namespace Web_RailWay.Controllers.api
             }
         }
 
-        // GET: api/rc/wagon_overturns/station/5
-        [Route("wagon_overturns/station/{id:int}")]
+        // GET: api/rc/wagon_overturns/station/5/cars
+        [Route("wagon_overturns/station/{id:int}/cars")]
         [ResponseType(typeof(WagonOverturnsStation))]
-        public IHttpActionResult GetWagonOverturnsOfStation(int id)
+        public IHttpActionResult GetWagonOverturnsCarsOfStation(int id)
         {
             try
             {
@@ -275,5 +288,50 @@ namespace Web_RailWay.Controllers.api
                 return InternalServerError(e);
             }
         }
+
+        // GET: api/rc/shops/station/5
+        [Route("shops/station/{id:int}")]
+        [ResponseType(typeof(SHOPS))]
+        public IHttpActionResult GetShopsOfStation(int id)
+        {
+            try
+            {
+                List<SHOPS> list = this.rep_rc.GetShopsOfStation(id).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                List<SHOPS> list_correct = new List<SHOPS>();
+                list.ForEach(s => list_correct.Add(CreateSHOPS(s)));
+                return Ok(list_correct);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfShop(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/rc/wagon_overturns/station/5
+        [Route("wagon_overturns/station/{id:int}")]
+        [ResponseType(typeof(GRUZ_FRONTS))]
+        public IHttpActionResult GetWagonOverturnsOfStation(int id)
+        {
+            try
+            {
+                List<GRUZ_FRONTS> list = this.rep_rc.GetGRUZ_FRONTSOfStation(id).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWagonOverturnsOfStation(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
     }
 }

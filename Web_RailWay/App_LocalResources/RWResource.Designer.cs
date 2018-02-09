@@ -367,6 +367,33 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Прибывают с АМКР.
+        /// </summary>
+        public static string rwui_group_list_arrival {
+            get {
+                return ResourceManager.GetString("rwui_group_list_arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Прибывают с УЗ.
+        /// </summary>
+        public static string rwui_group_list_arrival_uz {
+            get {
+                return ResourceManager.GetString("rwui_group_list_arrival_uz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Отправленые.
+        /// </summary>
+        public static string rwui_group_list_sent {
+            get {
+                return ResourceManager.GetString("rwui_group_list_sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Цеха:.
         /// </summary>
         public static string rwui_group_list_shops {

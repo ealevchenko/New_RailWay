@@ -267,4 +267,13 @@
   <data name="rwui_group_list_ways" xml:space="preserve">
     <value>Пути:</value>
   </data>
+  <data name="rwui_group_list_arrival" xml:space="preserve">
+    <value>Прибывают с АМКР</value>
+  </data>
+  <data name="rwui_group_list_arrival_uz" xml:space="preserve">
+    <value>Прибывают с УЗ</value>
+  </data>
+  <data name="rwui_group_list_sent" xml:space="preserve">
+    <value>Отправленые</value>
+  </data>
 </root>

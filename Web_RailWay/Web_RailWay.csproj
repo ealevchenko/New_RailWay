@@ -232,6 +232,7 @@
     <Compile Include="Controllers\api\RWReferenceController.cs" />
     <Compile Include="Controllers\api\SettingController.cs" />
     <Compile Include="Controllers\api\ValuesController.cs" />
+    <Compile Include="Controllers\AWASController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Areas\KIS\Controllers\HomeController.cs" />
@@ -434,6 +435,7 @@
     <Content Include="Content\KIST\kist.css" />
     <Content Include="Content\lockpanel\lockpanel.css" />
     <Content Include="Content\reports.css" />
+    <Content Include="Content\RW\awas.css" />
     <Content Include="Content\RW\rwui.css" />
     <Content Include="Content\Services\services.css" />
     <Content Include="Content\DataTables\css\reports-dataTables.css" />
@@ -637,6 +639,7 @@
     <Content Include="Scripts\KIS\transfer_kis.js" />
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\RW\awas.js" />
     <Content Include="Scripts\RW\rwui.js" />
     <Content Include="Scripts\Services\services.js" />
     <Content Include="Scripts\MT\approachescars.js" />
@@ -711,6 +714,7 @@
     <Content Include="Areas\Admin\Views\Services\Index.cshtml" />
     <Content Include="Areas\KIS\Views\Transfer\Index.cshtml" />
     <Content Include="Views\RWUI\Index.cshtml" />
+    <Content Include="Views\AWAS\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppSettings\DBSettings\DBSettings.csproj">

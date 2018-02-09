@@ -77,3 +77,4 @@
 /// <reference path="api_helpers/railcars.js" />
 /// <reference path="shared/common.js" />
 /// <reference path="datatables/jquery-1.12.4.js" />
+/// <reference path="rw/awas.js" />

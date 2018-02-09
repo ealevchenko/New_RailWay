@@ -104,7 +104,7 @@ namespace WebApiClient
 
         public List<mt_info> GetMT()
         {
-            return wapi.GetJSONSelect<List<mt_info>>(@"/api/WagonsTracking?note&st_form&nsost&st_nazn&from=2&st_disl&dt1&dt2&vagonlg_id");
+            return wapi.GetJSONSelect<List<mt_info>>(@"/api/WagonsTracking?note&st_form&nsost&st_nazn&from=2&st_disl&dt1&dt2&vagonlg_id&nvagon=56119142");
         }
     }
 }

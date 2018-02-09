@@ -28,7 +28,7 @@ function getAsyncWaysStation(id_station, rospusk, callback) {
 function getAsyncShopStation(id_station, rospusk, callback) {
     $.ajax({
         type: 'GET',
-        url: '/railway/api/rc/shops/station/' + id_station,
+        url: '/railway/api/rc/shops/station/' + id_station + '/cars',
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -51,7 +51,7 @@ function getAsyncShopStation(id_station, rospusk, callback) {
 function getAsyncWagonOverturnsStation(id_station, rospusk, callback) {
     $.ajax({
         type: 'GET',
-        url: '/railway/api/rc/wagon_overturns/station/' + id_station,
+        url: '/railway/api/rc/wagon_overturns/station/' + id_station + '/cars',
         async: true,
         dataType: 'json',
         beforeSend: function () {
@@ -142,4 +142,49 @@ function getAsyncCarsOfShop(id_shop, callback) {
     });
 }
 
-
+// Получить список цехов по указанной станции
+function getAsyncShopsOfStation(id_station, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rc/shops/station/' + id_station,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Получить список вагоноопрокидов по указанной станции
+function getAsyncWagonOverturnsOfStation(id_station, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rc/wagon_overturns/station/' + id_station,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}

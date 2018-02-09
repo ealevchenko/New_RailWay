@@ -22,19 +22,29 @@ $(function () {
         operation_panel = $('div#content-operation'),
         panel_detali = $('div#operation-detali'),
         panel_setup_operation,                          // Панель для элементов настройки операций
+
         tabs_active = 0,
+        group_active = 0,
 
         list_ways_station,                  // список путей станции
         list_shops_station,                 // список цехов станции
         list_wagonoverturn_station,         // список вагоноопрокидов станции
         list_cars,                          // список вагонов на пути
         list_gorlov,                        // список горловин
+
         table_list_ways = $('#table-list-ways'),
+        div_table_list_ways,
         obj_table_list_ways,                                            // Таблица путей станции
+
         table_list_wagonoverturns = $('#table-list-wagonoverturns'),
+        div_table_list_wagonoverturns,
         obj_table_list_wagonoverturns,                                  // Таблица вагоноопрокидов станции
+
         table_list_shops = $('#table-list-shops'),
-        obj_table_list_shops,                                           // Таблица цехов станции
+        div_table_list_shops,
+        obj_table_list_shops,
+
+        // Таблица цехов станции
         table_list_cars = $('#table-list-cars'),            // Таблица вагонов
         obj_table_list_cars,
         way_select_id = null,                               // Выбранный путь
@@ -130,10 +140,9 @@ $(function () {
         table_list_shops.find('tbody tr').removeClass('selected');
     }
 
-    // Показать таблицу путей
+    // Обновить данными таблицу путей
     function viewTableWaysStations(data) {
 
-        table_list_ways.show();
         obj_table_list_ways.clear();
         for (i = 0; i < data.length; i++) {
             obj_table_list_ways.row.add({
@@ -148,20 +157,23 @@ $(function () {
         visibleTableWaysStations()
     };
 
+    // Показать\спрятать таблицу путей 
     function visibleTableWaysStations() {
         if (list_ways_station != null && list_ways_station.length > 0 & (tabs_active == 0 | tabs_active == 1 | tabs_active == 2)) {
             group_list_ways.show();
+            div_table_list_ways.show()
             //if (tabs_active == 0) {
             //    $("#group-list").accordion({ active: 0 });
             //}
         } else {
             group_list_ways.hide();
+            div_table_list_ways.hide();
         }
     }
-    // Показать таблицу вагоноопрокидов
+
+    // Обновить данными таблицу вагоноопрокидов
     function viewTableWagonOverturnsStations(data) {
 
-        table_list_wagonoverturns.show();
         obj_table_list_wagonoverturns.clear();
         for (i = 0; i < data.length; i++) {
             obj_table_list_wagonoverturns.row.add({
@@ -174,17 +186,20 @@ $(function () {
         visibleTableWagonOverturnsStations();
     };
 
+    // Показать\спрятать таблицу вагоноопрокидов
     function visibleTableWagonOverturnsStations() {
         if (list_wagonoverturn_station != null && list_wagonoverturn_station.length > 0 & tabs_active == 0) {
             group_list_wagonoverturns.show();
+            div_table_list_wagonoverturns.show();
+
         } else {
             group_list_wagonoverturns.hide();
+            div_table_list_wagonoverturns.hide();
         }
     }
-    // Показать таблицу цехов
-    function viewTableShopsStations(data) {
 
-        table_list_shops.show();
+    // Обновить данными таблицу цехов
+    function viewTableShopsStations(data) {
         obj_table_list_shops.clear();
         for (i = 0; i < data.length; i++) {
             obj_table_list_shops.row.add({
@@ -197,11 +212,14 @@ $(function () {
         visibleTableShopsStations();
     };
 
+    // Показать\спрятать таблицу цехов
     function visibleTableShopsStations() {
         if (list_shops_station != null && list_shops_station.length > 0 & tabs_active == 0) {
             group_list_shops.show();
+            div_table_list_shops.show();
         } else {
             group_list_shops.hide();
+            div_table_list_shops.hide();
         }
     }
     // Показать таблицу вагонов на путях
@@ -437,7 +455,11 @@ $(function () {
 
     // Показать группированный список (путей\вагоноопрокидов\цехов) -----------------------------------------------
     group_list = $("#group-list").accordion({
-        heightStyle: "content"
+        heightStyle: "content",
+        activate: function (event, ui) {
+            group_active = group_list.accordion("option", "active");
+        }
+
     });
     // Скрыть все группы
     group_list_ways.hide();
@@ -472,7 +494,9 @@ $(function () {
             { data: "vag_capacity", title: "Вмест. ваг.", width: "30px" },
         ],
     });
-    table_list_ways.hide();
+    // инициализировали переменную div_table
+    div_table_list_ways = $('DIV#table-list-ways_wrapper');
+    div_table_list_ways.hide();
 
     // Определим событие выбора пути станции
     table_list_ways.find('tbody')
@@ -506,8 +530,9 @@ $(function () {
             { data: "vag_amount", title: "Кол. ваг.", width: "30px" },
         ],
     });
-
-    //table_list_wagonoverturns.hide();
+    // инициализировали переменную div_table
+    div_table_list_wagonoverturns = $('DIV#table-list-wagonoverturns_wrapper');
+    div_table_list_wagonoverturns.hide();
 
     // Определим событие выбора вагоноопрокида станции
     table_list_wagonoverturns.find('tbody')
@@ -541,9 +566,10 @@ $(function () {
             { data: "vag_amount", title: "Кол. ваг.", width: "30px" },
         ],
     });
-
-    //table_list_shops.hide();
-
+    // инициализировали переменную div_table
+    div_table_list_shops = $('DIV#table_list_shops_wrapper');
+    div_table_list_shops.hide();
+    
     // Определим событие выбора цеха
     table_list_shops.find('tbody')
     .on('click', 'tr', function () {

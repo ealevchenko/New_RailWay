@@ -16,6 +16,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 # [Ll]ogs/
+Web_RailWay/[Ll]ogs
 
 # Roslyn cache directories
 *.ide/
