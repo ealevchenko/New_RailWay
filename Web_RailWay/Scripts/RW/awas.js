@@ -5,6 +5,15 @@
     //-----------------------------------------------------------------------------------------
     //allVars = $.getUrlVars(),   // Получить параметры get запроса
     var lang = $.cookie('lang'),
+        panel_setup_operation = {
+            panel_view: null,
+            panel_manevr: null,
+            panel_sent: null,
+            panel_arrival: null,
+            initPanel: function () {
+
+            }
+        },
         //Панель групп списков
         group_list = {
             active: 0,
