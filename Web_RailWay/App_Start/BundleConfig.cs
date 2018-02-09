@@ -11,8 +11,8 @@ namespace Web_RailWay
             //-----------------------------------------------------------------------
             //JS
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-3.2.1.js"));
-                        //"~/Scripts/jquery-3.2.1.min.js"));
+                        //"~/Scripts/jquery-3.2.1.js"));
+                        "~/Scripts/jquery-3.2.1.min.js"));
             //"~/Scripts/jquery-{version}.js"));
 
             //bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -35,8 +35,8 @@ namespace Web_RailWay
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      //"~/Scripts/bootstrap.min.js",
+                      //"~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap.min.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/creative").Include(

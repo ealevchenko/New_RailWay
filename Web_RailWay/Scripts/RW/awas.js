@@ -9,7 +9,10 @@
             panel_view: {
                 obj: $('<div class="dt-buttons setup-operation" id="property_view_cars"></div>'),
                 initPanel: function () {
-                    
+                    this.obj.append(panel_setup_operation.label_view_select)
+                            .append(panel_setup_operation.label_view_mt).append(panel_setup_operation.checkbox_view_mt)
+                            .append(panel_setup_operation.label_view_sap).append(panel_setup_operation.checkbox_view_sap)
+                            .append(panel_setup_operation.label_view_email).append(panel_setup_operation.checkbox_view_email)
                 },
             },
             panel_manevr: null,
@@ -23,7 +26,8 @@
             label_view_email: $('<label for="view-email">' + (lang == 'en' ? "Writing  " : "Письма ") + '</label>'),
             checkbox_view_email: $('<input type="checkbox" name="view-email" id="view-email">'),
             initPanel: function (obj) {
-                //obj.appe
+                panel_setup_operation.panel_view.initPanel();
+                obj.prepend(panel_setup_operation.panel_view);
             }
         },
         //Панель групп списков
@@ -482,6 +486,8 @@
                     ],
                 });
                 this.obj_table = $('DIV#table-list-cars_wrapper');
+
+                panel_setup_operation.initPanel(this.obj_table);
                 this.initEventSelect();
                 this.obj_table.hide();
             },
