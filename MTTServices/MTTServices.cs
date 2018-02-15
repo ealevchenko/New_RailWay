@@ -23,22 +23,26 @@ namespace MTTServices
         private service thread_host = service.TransferHost;
         private service thread_approaches = service.TransferApproaches;
         private service thread_arrival = service.TransferArrival;
+        private service thread_tracking = service.TransferWagonsTracking;
         private service thread_close_approaches = service.CloseTransferApproaches;
 
         private int interval_transfer_host = 300; // секунд
         private int interval_transfer_approaches = 300; // секунд
         private int interval_transfer_arrival = 300; // секунд
+        private int interval_transfer_tracking = 600; // секунд
         private int interval_close_approaches = 3600; // 1раз в час
 
         bool active_transfer_host = true;        
         bool active_transfer_approaches = true;
         bool active_transfer_arrival = true;
+        bool active_transfer_tracking = true;
         bool active_close_approaches = true;
 
         System.Timers.Timer timer_services = new System.Timers.Timer();
         System.Timers.Timer timer_services_host = new System.Timers.Timer();
         System.Timers.Timer timer_services_approaches = new System.Timers.Timer();
         System.Timers.Timer timer_services_arrival = new System.Timers.Timer();
+        System.Timers.Timer timer_services_tracking = new System.Timers.Timer();
         System.Timers.Timer timer_services_close_approaches = new System.Timers.Timer();
 
         private MTThread mtt = new MTThread(service.TransferMT);
@@ -87,12 +91,14 @@ namespace MTTServices
                 this.interval_transfer_host = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferHost", this.thread_host, this.interval_transfer_host, true);
                 this.interval_transfer_approaches = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferApproaches", this.thread_approaches, this.interval_transfer_approaches, true);
                 this.interval_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferArrival", this.thread_arrival, this.interval_transfer_arrival, true);
+                this.interval_transfer_tracking = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferWagonsTracking", this.thread_tracking, this.interval_transfer_tracking, true);
                 this.interval_close_approaches = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseApproachesCars", this.thread_close_approaches, this.interval_close_approaches, true);
 
                 // состояние активности
                 this.active_transfer_host = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferHost", this.thread_host, this.active_transfer_host, true);
                 this.active_transfer_approaches = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferApproaches", this.thread_approaches, this.active_transfer_approaches, true);
                 this.active_transfer_arrival = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferArrival", this.thread_arrival, this.active_transfer_arrival, true);
+                this.active_transfer_tracking = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferWagonsTracking", this.thread_tracking, this.active_transfer_tracking, true);
                 this.active_close_approaches  = RWSetting.GetDB_Config_DefaultSetting("ActiveCloseApproachesCars", this.thread_close_approaches, this.active_close_approaches, true);
                 
                 //// Настроем таймер контроля выполнения сервиса
@@ -107,6 +113,9 @@ namespace MTTServices
 
                 timer_services_arrival.Interval = this.interval_transfer_arrival * 1000;
                 timer_services_arrival.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesArrival);
+
+                timer_services_tracking.Interval = this.interval_transfer_tracking * 1000;
+                timer_services_tracking.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesTracking);
 
                 timer_services_close_approaches.Interval = this.interval_close_approaches * 1000;
                 timer_services_close_approaches.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimerServicesCloseApproachesCars);
@@ -134,6 +143,7 @@ namespace MTTServices
             RunTimerTransferHost();
             RunTimerTransferApproaches();
             RunTimerTransferArrival();
+            RunTimerTransferWagonsTracking();
             RunTimerCloseApproachesCars();
             //TODO: Добавить запуск других таймеров
             //...............
@@ -146,12 +156,14 @@ namespace MTTServices
             mes_service_start += String.Format(" сервиса {0}-{1} сек.,", this.thread_host, this.interval_transfer_host);
             mes_service_start += String.Format(" сервиса {0}-{1} сек.,", this.thread_approaches, this.interval_transfer_approaches);
             mes_service_start += String.Format(" сервиса {0}-{1} сек.,", this.thread_arrival, this.interval_transfer_arrival);
+            mes_service_start += String.Format(" сервиса {0}-{1} сек.,", this.thread_tracking, this.interval_transfer_tracking);
             mes_service_start += String.Format(" сервиса {0}-{1} сек.,", this.thread_close_approaches, this.interval_close_approaches);  
             mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
             // лог запуска
             this.thread_host.WriteLogStatusServices();
             this.thread_approaches.WriteLogStatusServices();
             this.thread_arrival.WriteLogStatusServices();
+            this.thread_tracking.WriteLogStatusServices();
             this.thread_close_approaches.WriteLogStatusServices();
         }
 
@@ -207,6 +219,19 @@ namespace MTTServices
                     string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_arrival, this.interval_transfer_arrival);
                     mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
                 }
+                // TransferWagonsTracking
+                bool active_trac = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferWagonsTracking", this.thread_tracking, this.active_transfer_tracking, true);
+                int interval_trac = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferWagonsTracking", this.thread_tracking, this.interval_transfer_tracking, true);
+                if (active_arr & interval_trac != this.interval_transfer_tracking)
+                {
+                    this.interval_transfer_tracking = interval_trac;
+                    timer_services_tracking.Stop();
+                    timer_services_tracking.Interval = this.interval_transfer_tracking * 1000;
+                    RunTimerTransferWagonsTracking();
+                    string mes_service_start = String.Format("Сервис : {0}, интервал выполнения потока {1} изменен на {2} сек.", this.servece_name, this.thread_tracking, this.interval_transfer_tracking);
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+
                 // CloseApproachesCars
                 bool active_close = RWSetting.GetDB_Config_DefaultSetting("ActiveCloseApproachesCars", this.thread_close_approaches, this.active_close_approaches, true);
                 int interval_close = RWSetting.GetDB_Config_DefaultSetting("IntervalCloseApproachesCars", this.thread_close_approaches, this.interval_close_approaches, true);
@@ -347,6 +372,48 @@ namespace MTTServices
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("OnTimerServicesArrival(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
+            }
+        }
+        #endregion
+
+        #region TransferWagonsTracking
+        protected void StartTransferWagonsTracking(bool active)
+        {
+            if (active)
+            {
+                mtt.StartTransferWagonsTracking();
+            }
+        }
+
+        protected void StartTransferWagonsTracking()
+        {
+            bool active_trac = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferWagonsTracking", this.thread_tracking, this.active_transfer_tracking, true);
+            StartTransferWagonsTracking(active_trac);
+        }
+
+        protected void RunTimerTransferWagonsTracking()
+        {
+            StartTransferWagonsTracking();
+            timer_services_tracking.Start();
+        }
+
+        private void OnTimerServicesTracking(object sender, System.Timers.ElapsedEventArgs args)
+        {
+            //String.Format("Сервис : {0} сработал таймер OnTimerServicesArrival.", this.servece_name).WriteInformation(servece_name, eventID);
+            try
+            {
+                bool active_trac = RWSetting.GetDB_Config_DefaultSetting("ActiveTransferWagonsTracking", this.thread_tracking, this.active_transfer_tracking, true);
+                StartTransferWagonsTracking(active_trac);
+                if (active_trac != this.active_transfer_tracking)
+                {
+                    this.active_transfer_tracking = active_trac;
+                    string mes_service_start = String.Format("Сервис : {0}, выполнение потока {1} - {2}", this.servece_name, this.thread_tracking, active_trac ? "возабновленно" : "остановленно");
+                    mes_service_start.WriteEvents(EventStatus.Ok, servece_name, eventID);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OnTimerServicesTracking(sender={0}, args={1})", sender, args.ToString()), this.servece_name, eventID);
             }
         }
         #endregion

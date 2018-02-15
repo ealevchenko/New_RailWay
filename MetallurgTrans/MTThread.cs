@@ -31,15 +31,19 @@ namespace MetallurgTrans
         protected Thread thTransferArrival = null;
         public bool statusTransferArrival { get { return thTransferArrival.IsAlive; } }
 
-        protected Thread thCloseTransferApproaches = null; 
+        protected Thread thCloseTransferApproaches = null;
         public bool statusCloseTransferApproaches { get { return thCloseTransferApproaches.IsAlive; } }
 
+        protected Thread thTransferWagonsTracking = null;
+        public bool statusTransferWagonsTracking { get { return thTransferWagonsTracking.IsAlive; } }
+
         public MTThread()
-        { 
-       
+        {
+
         }
 
-        public MTThread(service servece_name) {
+        public MTThread(service servece_name)
+        {
             servece_owner = servece_name;
         }
 
@@ -131,7 +135,7 @@ namespace MetallurgTrans
                 }
                 dt_start = DateTime.Now;
                 List<int> count_copy = null;
-                lock (locker_xml_file) 
+                lock (locker_xml_file)
                 {
                     lock (locker_txt_file)
                     {
@@ -148,8 +152,8 @@ namespace MetallurgTrans
                 {
                     foreach (int result in count_copy)
                     {
-                       if (result < 0) { res = result; break; }
-                       if (result > 0) { res += result;}
+                        if (result < 0) { res = result; break; }
+                        if (result > 0) { res += result; }
                     }
                 }
                 service.WriteServices(dt_start, DateTime.Now, res);
@@ -195,7 +199,7 @@ namespace MetallurgTrans
                 //mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
                 return false;
             }
-            
+
         }
         /// <summary>
         /// Поток переноса вагонов на подходах
@@ -240,7 +244,7 @@ namespace MetallurgTrans
                 }
                 dt_start = DateTime.Now;
                 int res_transfer = 0;
-                lock (locker_txt_file) 
+                lock (locker_txt_file)
                 {
                     MTTransfer mtt = new MTTransfer(service);
                     mtt.FromPath = toTMPDirPath;
@@ -341,25 +345,25 @@ namespace MetallurgTrans
                         ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
                     }
                 }
-                        dt_start = DateTime.Now;
-                        int res_transfer = 0;
-                        lock (locker_xml_file)
-                        {
-                            MTTransfer mtt = new MTTransfer(service);
-                            mtt.DayRangeArrivalCars = dayrangeArrivalCars;
-                            mtt.ArrivalToRailWay = arrivalToRailWay;
-                            mtt.FromPath = toTMPDirPath;
-                            mtt.DeleteFile = deleteFileMT;
-                            res_transfer = mtt.TransferArrival();
-                        }
-                        TimeSpan ts = DateTime.Now - dt_start;
-                        string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
-                        mes_service_exec.WriteInformation(servece_owner, eventID);
-                        service.WriteServices(dt_start, DateTime.Now, res_transfer);
+                dt_start = DateTime.Now;
+                int res_transfer = 0;
+                lock (locker_xml_file)
+                {
+                    MTTransfer mtt = new MTTransfer(service);
+                    mtt.DayRangeArrivalCars = dayrangeArrivalCars;
+                    mtt.ArrivalToRailWay = arrivalToRailWay;
+                    mtt.FromPath = toTMPDirPath;
+                    mtt.DeleteFile = deleteFileMT;
+                    res_transfer = mtt.TransferArrival();
+                }
+                TimeSpan ts = DateTime.Now - dt_start;
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
+                mes_service_exec.WriteInformation(servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, res_transfer);
             }
             catch (ThreadAbortException exc)
             {
-                    String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
+                String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
             }
             catch (Exception ex)
             {
@@ -413,7 +417,7 @@ namespace MetallurgTrans
                 //lock (locker_setting)
                 {
                     try
-                    {   
+                    {
                         // тайм аут (дней) по времени для вагонов на подходе
                         day_range_approaches_cars = RWSetting.GetDB_Config_DefaultSetting<int>("DayRangeApproachesCars", service, day_range_approaches_cars, true);
                         // тайм аут (дней) по времени для вагонов на подходе прибывших на конечную станцию
@@ -447,6 +451,97 @@ namespace MetallurgTrans
                 ex.WriteError(String.Format("Ошибка выполнения потока {0} сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
                 service.WriteServices(dt_start, DateTime.Now, -1);
 
+            }
+        }
+        #endregion
+
+        #region TransferWagonsTracking
+        /// <summary>
+        /// Запустить поток переноса вагонов по прибытию
+        /// </summary>
+        /// <param name="delay"></param>
+        /// <returns></returns>
+        public bool StartTransferWagonsTracking()
+        {
+            service service = service.TransferWagonsTracking;
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
+            try
+            {
+                if ((thTransferWagonsTracking == null) || (!thTransferWagonsTracking.IsAlive && thTransferWagonsTracking.ThreadState == ThreadState.Stopped))
+                {
+                    thTransferWagonsTracking = new Thread(TransferWagonsTracking);
+                    thTransferWagonsTracking.Name = service.ToString();
+                    thTransferWagonsTracking.Start();
+                    //mes_service_start += " - запущен.";
+                    //mes_service_start.WriteEvents(EventStatus.Ok, servece_owner, eventID);
+                }
+                return thTransferWagonsTracking.IsAlive;
+            }
+            catch (Exception ex)
+            {
+                mes_service_start += " - ошибка запуска.";
+                ex.WriteError(mes_service_start, servece_owner, eventID);
+                //mes_service_start.WriteEvents(EventStatus.Error, servece_owner, eventID);
+                return false;
+            }
+        }
+        /// <summary>
+        /// Поток переноса вагонов по прибытию
+        /// </summary>
+        private static void TransferWagonsTracking()
+        {
+            service service = service.TransferWagonsTracking;
+            DateTime dt_start = DateTime.Now;
+            try
+            {
+                DateTime datetime_start_new_tracking = new DateTime(2018, 01, 01, 0, 0, 0);
+                string url_wagons_tracking = @"http://umtrans.com.ua:81";
+                string user_wagons_tracking = "RailWayAMKR";
+                string psw_wagons_tracking = "Lbvrf_2709";
+                string api_wagons_tracking = @"/api/WagonsTracking";
+
+                // считать настройки
+                //lock (locker_setting)
+                {
+                    try
+                    {
+                        // Если нет перенесем настройки в БД
+                        datetime_start_new_tracking = RWSetting.GetDB_Config_DefaultSetting("DateTimeStartNewTracking", service, datetime_start_new_tracking, true);
+                        url_wagons_tracking = RWSetting.GetDB_Config_DefaultSetting<string>("WebApiMTURL", service.WebAPIMT, url_wagons_tracking, true);
+                        user_wagons_tracking = RWSetting.GetDB_Config_DefaultSetting<string>("WebApiMTUser", service.WebAPIMT, user_wagons_tracking, true);
+                        psw_wagons_tracking = RWSetting.GetDB_Config_DefaultSetting<string>("WebApiMTPSW", service.WebAPIMT, psw_wagons_tracking, true);
+                        api_wagons_tracking = RWSetting.GetDB_Config_DefaultSetting<string>("WebApiMTApi", service.WebAPIMT, api_wagons_tracking, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                    }
+                }
+                dt_start = DateTime.Now;
+                int res_transfer = 0;
+                //lock (locker_xml_file)
+                //{
+                MTTransfer mtt = new MTTransfer(service);
+                mtt.DateTimeStartNewTracking = datetime_start_new_tracking;
+                mtt.URLWagonsTracking = url_wagons_tracking;
+                mtt.UserWagonsTracking = user_wagons_tracking;
+                mtt.PSWWagonsTracking = psw_wagons_tracking;
+                mtt.APIWagonsTracking = api_wagons_tracking;
+                res_transfer = mtt.TransferWagonsTracking();
+                //}
+                TimeSpan ts = DateTime.Now - dt_start;
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
+                mes_service_exec.WriteInformation(servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, res_transfer);
+            }
+            catch (ThreadAbortException exc)
+            {
+                String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
+            }
+            catch (Exception ex)
+            {
+                ex.WriteError(String.Format("Ошибка выполнения цикла переноса, потока {0} сервис {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, -1);
             }
         }
         #endregion

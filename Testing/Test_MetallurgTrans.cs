@@ -135,5 +135,28 @@ namespace Testing
             mtt.CorrectCloseArrivalSostav(id);
         }
 
+        public void EFMetallurgTrans_GetWagonsTracking()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            List<WagonsTracking> list =  efmt.GetWagonsTracking().ToList();
+        }
+        /// <summary>
+        /// Тест проверки переноса информации слежения по вагонам АМКР
+        /// </summary>
+        public void MTTransfer_TransferWagonsTracking()
+        {
+            MTTransfer mtt = new MTTransfer();
+            int res = mtt.TransferWagonsTracking();
+            Console.WriteLine("Перенесено {0}", res);
+        }
+        /// <summary>
+        /// Тест выполнения потока переноса информации слежения по вагонам АМКР
+        /// </summary>
+        public void MTThread_TransferWagonsTracking()
+        {
+            MTThread mth = new MTThread(service.ServicesMT);
+            mth.StartTransferWagonsTracking();
+        }
+
     }
 }

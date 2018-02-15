@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TransferRailCars;
+using WebApiClient;
 //using EFKIS.Concrete;
 //using EFKIS.Entities;
 
@@ -21,17 +22,18 @@ namespace MetallurgTrans
     /// </summary>
     public enum mtt_err : int
     {
-            global_error = -1,
-            not_fromPath = -2,
-            not_listApproachesCars = -3,
-            not_listArrivalCars = -4,
-            file_error = -5
+        global_error = -1,
+        not_fromPath = -2,
+        not_listApproachesCars = -3,
+        not_listArrivalCars = -4,
+        file_error = -5
         //not_listStartArrivalSostav = -5,
     }
     /// <summary>
     /// Коды ошибок истории движения вагонов
     /// </summary>
-    public enum mtt_err_arrival : int { 
+    public enum mtt_err_arrival : int
+    {
         close_car = 0,
         close_manual = -1,
         close_new_route = -2,
@@ -86,7 +88,7 @@ namespace MetallurgTrans
         }
 
     }
-    
+
     public class MTTransfer
     {
         private eventID eventID = eventID.MetallurgTrans_MTTransfer;
@@ -105,6 +107,17 @@ namespace MetallurgTrans
         public int DayRangeArrivalCars { get { return this.day_range_arrival_cars; } set { this.day_range_arrival_cars = value; } }
         private bool arrival_to_railway = true;
         public bool ArrivalToRailWay { get { return this.arrival_to_railway; } set { this.arrival_to_railway = value; } }
+
+        private DateTime datetime_start_new_tracking = new DateTime(2018,01,01,0,0,0); // Время начала запроса информации по вагону которого нет в базе АМКР
+        public DateTime DateTimeStartNewTracking { get { return this.datetime_start_new_tracking; } set { this.datetime_start_new_tracking = value; } }
+        private string url_wagons_tracking;
+        public string URLWagonsTracking { get { return this.url_wagons_tracking; } set { this.url_wagons_tracking = value; } }
+        private string user_wagons_tracking;
+        public string UserWagonsTracking { get { return this.user_wagons_tracking; } set { this.user_wagons_tracking = value; } }
+        private string psw_wagons_tracking;
+        public string PSWWagonsTracking { get { return this.psw_wagons_tracking; } set { this.psw_wagons_tracking = value; } }
+        private string api_wagons_tracking;
+        public string APIWagonsTracking { get { return this.api_wagons_tracking; } set { this.api_wagons_tracking = value; } }
 
         public MTTransfer()
         {
@@ -127,8 +140,8 @@ namespace MetallurgTrans
             int? parentid = null;
             EFMetallurgTrans efmt = new EFMetallurgTrans();
             ApproachesCars old_car = efmt.GetApproachesCarsOfNumCar(car.Num, true).FirstOrDefault();
-            if (old_car==null) return null; // нет историии движения, первая операция над вагоном
-            if (old_car.Arrival!=null) return null; // история закрыта, первая операция над вагоном 
+            if (old_car == null) return null; // нет историии движения, первая операция над вагоном
+            if (old_car.Arrival != null) return null; // история закрыта, первая операция над вагоном 
 
             if (old_car.CargoCode == car.CargoCode)
             {
@@ -148,9 +161,10 @@ namespace MetallurgTrans
                         {
                             parentid = old_car.ID;
                         }
-                        else { 
+                        else
+                        {
                             // вагон начал движение по новому маршруту
-                            old_car.NumDocArrival = (int)mtt_err_arrival.close_new_route; 
+                            old_car.NumDocArrival = (int)mtt_err_arrival.close_new_route;
                         }
                     }
                 }
@@ -160,10 +174,11 @@ namespace MetallurgTrans
                     old_car.NumDocArrival = (int)mtt_err_arrival.close_timeout;
                 }
             }
-            else { 
+            else
+            {
                 // грузы в вагонах разные
                 old_car.NumDocArrival = (int)mtt_err_arrival.close_different_cargo;
-            } 
+            }
             // закрываем старый вагон
             old_car.Arrival = car.DateOperation;
             efmt.SaveApproachesCars(old_car); // сохранить изменение
@@ -327,7 +342,7 @@ namespace MetallurgTrans
             }
             catch (Exception e)
             {
-                e.WriteError(String.Format("Ошибка операции добавления вагонов в БД MT.Approaches, сотава на подходе :{0}", new_id),servece_owner,eventID);
+                e.WriteError(String.Format("Ошибка операции добавления вагонов в БД MT.Approaches, сотава на подходе :{0}", new_id), servece_owner, eventID);
             }
             return false;
         }
@@ -592,7 +607,8 @@ namespace MetallurgTrans
                     try
                     {
                         int code_cargo = -1;
-                        if (!String.IsNullOrWhiteSpace((string)element.Element("IDCargo"))) {
+                        if (!String.IsNullOrWhiteSpace((string)element.Element("IDCargo")))
+                        {
                             EFReference.Entities.Cargo corect_cargo_code = ef_reference.GetCargoOfCodeETSNG((int)element.Element("IDCargo"));
                             code_cargo = corect_cargo_code != null ? corect_cargo_code.code_etsng : (int)element.Element("IDCargo");
                         }
@@ -617,7 +633,7 @@ namespace MetallurgTrans
                             NumDocArrival = null,
                             Arrival = null,
                             UserName = null,
-                             
+
                         };
                         // Получить parent_id
                         mtarr.ParentID = GetParentID(mtarr, this.day_range_arrival_cars);
@@ -695,13 +711,14 @@ namespace MetallurgTrans
                 {
                     // Переносим вагоны
                     count_wagons = TransferListArrivalCarsToDB(TransferXMLToListArrivalCars(file, new_id));
-                    if (count_wagons > 0) { countCopy++;} 
+                    if (count_wagons > 0) { countCopy++; }
                     if (count_wagons < 0) { countError++; } // Счетчик ошибок при переносе
                 }
                 if (new_id < 0) { countError++; } // Счетчик ошибок при переносе
                 if (count_wagons > 0 & new_id > 0)
                 {
-                    if (arrival_to_railway) { 
+                    if (arrival_to_railway)
+                    {
                         //TODO: Убрать старый метод переноса составов в прибытие, добаить новый переносить из службы КИС
                         TRailCars trc = new TRailCars();
                         int res = trc.ArrivalToRailCars(new_id);
@@ -741,7 +758,7 @@ namespace MetallurgTrans
                             Operation = operation,
                             File = file
                         });
-                        
+
                     }
                 }
                 catch (Exception e)
@@ -781,7 +798,7 @@ namespace MetallurgTrans
                 try
                 {
                     Console.WriteLine("Переносим файл {0}", fs.File);
-                    XDocument doc= XDocument.Load(fs.File);
+                    XDocument doc = XDocument.Load(fs.File);
                     // защита от записи повторов
                     FileInfo fi = new FileInfo(fs.File);
                     ArrivalSostav exs_sostav = efmt.GetArrivalSostavOfFile(fi.Name);
@@ -872,21 +889,157 @@ namespace MetallurgTrans
         }
         #endregion
 
+        #region TransferWagonsTracking
+        /// <summary>
+        /// Добавить список изменений по вагону
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public int TransferWagonsTracking(List<WagonsTracking> list)
+        {
+            if (list == null || list.Count() == 0) return 0;
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            int countCopy = 0;
+            int countError = 0;
+            int res = 0;
+            //string trans_id = "";
+            try
+            {
+                foreach (WagonsTracking wt in list.OrderBy(l=>l.dt))
+                {
+                    try
+                    {
+                        res = efmt.SaveWagonsTracking(wt);
+                        if (res >= 0)
+                        {
+                            countCopy++;
+                        }
+                        else
+                        {
+                            countError++;
+                        }
+                        //trans_id+= res.ToString() + "; ";
+                    }
+                    catch (Exception e)
+                    {
+                        e.WriteError(String.Format("Ошибка переноса информации по вагону {0} дата операции {1} в БД MT.WagonsTracking", wt.nvagon, wt.dt), servece_owner, eventID);
+                        countError++;
+                    }
+                }
+                string mess = String.Format("Вагон №{0}, Определенно: {1} новых операций, перенесено в БД MT.WagonsTracking : {2}, пропущено по ошибке : {3}", (list != null && list.Count() > 0 ? list[0].nvagon : -1), list.Count(), countCopy, countError);
+                mess.WriteInformation(servece_owner, this.eventID);
+                if (list != null && list.Count() > 0) { mess.WriteEvents(countError > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+                return countError == 0 ? countCopy : -1;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferWagonsTracking(list={0})", list), servece_owner, eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Перенести информацию слежения за вагонами
+        /// </summary>
+        /// <returns></returns>
+        public int TransferWagonsTracking(DateTime datetime_start_new_tracking, string url, string user, string psw, string api)
+        {
+            int countCopy = 0;
+            int countSkip = 0;
+            int countError = 0;
+            int res = 0;
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            try
+            {
+                WebApiClientMetallurgTrans client = new WebApiClientMetallurgTrans(url, user, psw, api);                
+                List<WagonsTracking> list_tracking = client.GetWagonsTracking();
+                foreach (WagonsTracking wt in list_tracking)
+                {
+                    try
+                    {
+                        WagonsTracking wt_old = efmt.GetWagonsTrackingOfNumCars(wt.nvagon).OrderByDescending(t => t.dt).FirstOrDefault();
+                        if (wt_old == null)
+                        {
+                            // Обновляем информацию переносим все
+                            List<WagonsTracking> list_new = client.GetWagonsTracking(wt.nvagon, datetime_start_new_tracking);
+                            if (list_new == null || list_new.Count() == 0) {
+                                list_new.Add(wt);
+                            }
+                            res = TransferWagonsTracking(list_new);
+                            if (res >= 0)
+                            {
+                                countCopy++;
+                            }
+                            else
+                            {
+                                countError++;
+                            }
+                        }
+                        else
+                        {
+                            if (wt_old.dt != wt.dt)
+                            {
+                                // Обновляем информацию добавим новое
+                                List<WagonsTracking> list_new = client.GetWagonsTracking(wt.nvagon, ((DateTime)wt_old.dt).AddSeconds(1));
+                                res = TransferWagonsTracking(list_new);
+                                if (res >= 0)
+                                {
+                                    countCopy++;
+                                }
+                                else
+                                {
+                                    countError++;
+                                }
+                            }
+                            else {
+                                countSkip++;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.WriteError(String.Format("Ошибка переноса информации по вагону {0} дата операции {1} в БД MT.WagonsTracking", wt.nvagon, wt.dt), servece_owner, eventID);
+                        countError++;
+                    }
+                }
+                string mess = String.Format("Перенос информации о слежении за вагонами в БД MT.WagonsTracking выполнен, доступна информация о {0} вагонах, перенесено новых данных {1}, пропущено {2}, ошибки при переносе {3}."
+                    , list_tracking.Count(), countCopy, countSkip, countError);
+                mess.WriteInformation(servece_owner, this.eventID);
+                if (list_tracking != null && list_tracking.Count() > 0) { mess.WriteEvents(countError > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+                return list_tracking.Count();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferWagonsTracking()"), servece_owner, eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Перенести информацию слежения за вагонами
+        /// </summary>
+        /// <returns></returns>
+        public int TransferWagonsTracking()
+        {
+            return TransferWagonsTracking(this.datetime_start_new_tracking, this.url_wagons_tracking, this.user_wagons_tracking, this.psw_wagons_tracking, this.api_wagons_tracking);
+        }
+        #endregion
+
         #region Автозакрытие вагонов на подходах
         /// <summary>
         /// проверить все вагоны
         /// </summary>
         /// <returns></returns>
-        public int CloseApproachesCars() {
+        public int CloseApproachesCars()
+        {
             EFMetallurgTrans efmt = new EFMetallurgTrans();
             int close = 0;
             int skip = 0;
             int error = 0;
 
             List<ApproachesCars> list = new List<ApproachesCars>();
-            DateTime dt = DateTime.Now.AddDays(-1*this.day_range_approaches_cars_arrival);
+            DateTime dt = DateTime.Now.AddDays(-1 * this.day_range_approaches_cars_arrival);
             list = efmt.GetNoCloseApproachesCars().Where(c => c.DateOperation < dt).OrderBy(c => c.DateOperation).ToList();
-            foreach (ApproachesCars car in list.ToList()) {
+            foreach (ApproachesCars car in list.ToList())
+            {
                 //ApproachesCars car_close = car;
                 int res = CloseApproachesCar(car);
                 if (res > 0) { close++; }
@@ -900,7 +1053,8 @@ namespace MetallurgTrans
             return close;
         }
 
-        public int CloseApproachesCar(ApproachesCars car) {
+        public int CloseApproachesCar(ApproachesCars car)
+        {
             EFMetallurgTrans efmt = new EFMetallurgTrans();
             int result = 0;
             try
@@ -953,7 +1107,8 @@ namespace MetallurgTrans
                 //-----------------------------------------------------------------------------
                 // Проверим есть продолжение истории с вагоном в таблице прибыл на УЗ
                 ArrivalCars car_arrival = efmt.GetArrivalCarsOfNextCar(car.Num, car.DateOperation);
-                if (car_arrival != null) {
+                if (car_arrival != null)
+                {
 
                     int num = car_arrival.NumDocArrival > 0 ? (int)car_arrival.NumDocArrival : (int)mtt_err_arrival.close_arrival_uz;
                     DateTime dt_oper = car_arrival.DateOperation;
@@ -976,7 +1131,7 @@ namespace MetallurgTrans
 
                 //EFWagons ef_wag = new EFWagons();
                 //List<PromNatHist> list = ef_wag.GetNatHistOfVagonGreater(car.Num, car.DateOperation).ToList();
-                
+
                 //if (list != null && list.Count() > 0) { 
                 //    car.NumDocArrival = (int)mtt_err_arrival.close_arrival_station_on;
                 //    car.Arrival = list[0].DAT_VVOD != null ? list[0].DAT_VVOD : DateTime.Now;
@@ -1000,7 +1155,8 @@ namespace MetallurgTrans
         /// 
         /// </summary>
         /// <param name="interval"></param>
-        public void CorrectCloseArrivalSostav(int interval) {
+        public void CorrectCloseArrivalSostav(int interval)
+        {
             EFMetallurgTrans efmt = new EFMetallurgTrans();
             List<int> list = efmt.GetArrivalSostav().OrderBy(s => s.IDArrival).Select(s => s.IDArrival).Distinct().ToList();
             if (list == null || list.Count() == 0) return;
@@ -1015,9 +1171,10 @@ namespace MetallurgTrans
         /// </summary>
         /// <param name="id_arrival"></param>
         /// <returns></returns>
-        public void CorrectCloseArrivalSostav(int id_arrival, int interval) {
+        public void CorrectCloseArrivalSostav(int id_arrival, int interval)
+        {
 
-            EFMetallurgTrans efmt = new EFMetallurgTrans();   
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
             List<ArrivalSostav> list = efmt.GetArrivalSostavOfIDArrival(id_arrival).ToList();
             if (list == null || list.Count() <= 1) return;
 
@@ -1034,20 +1191,23 @@ namespace MetallurgTrans
         /// <param name="car"></param>
         /// <param name="list"></param>
         /// <param name="interval"></param>
-        public void CorrectCloseArrivalSostav(ArrivalSostav car, ref List<ArrivalSostav> list, int interval) { 
+        public void CorrectCloseArrivalSostav(ArrivalSostav car, ref List<ArrivalSostav> list, int interval)
+        {
 
-            EFMetallurgTrans efmt = new EFMetallurgTrans();                
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
             ArrivalSostav car_next = list.Where(c => c.ParentID == car.ID).FirstOrDefault();
-                if (car_next != null) {
-                    DateTime date = car.DateTime.AddDays(interval);
-                    if (car_next.DateTime > date) {
-                        car_next.ParentID = null;
-                        efmt.SaveArrivalSostav(car_next);
-                        return;
-                    }
-                    CorrectCloseArrivalSostav(car_next, ref list, interval);
+            if (car_next != null)
+            {
+                DateTime date = car.DateTime.AddDays(interval);
+                if (car_next.DateTime > date)
+                {
+                    car_next.ParentID = null;
+                    efmt.SaveArrivalSostav(car_next);
+                    return;
                 }
-                return;
+                CorrectCloseArrivalSostav(car_next, ref list, interval);
+            }
+            return;
         }
 
         #endregion

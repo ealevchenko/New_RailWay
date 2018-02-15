@@ -14,9 +14,11 @@ namespace MessageLog
         ServicesMT = 100,
         TransferHost = 110,
         TransferApproaches = 111,
-        TransferArrival = 112,        
+        TransferArrival = 112,
+        TransferWagonsTracking = 113,
         TransferMT = 121,
         HostMT = 122,
+        WebAPIMT = 123,
         CloseTransferApproaches = 131,
         CloseTransferArrival = 132,
 

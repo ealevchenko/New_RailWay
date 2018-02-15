@@ -73,7 +73,7 @@ namespace Testing
             //Wagons_GetSTPR1GR(291);
             //tst_rw_api.Reference_GetCountryOfCodeSNG();
             //tst_rw_api.WebAPIToken();
-            tst_rw_api.WebAPIMT();
+            //tst_rw_api.WebAPIMT();
 
             #endregion
 
@@ -90,6 +90,10 @@ namespace Testing
             //tst_tr_app.MTThread_CloseApproachesCars(); // поток автозакрытие вагонов на подходах
             //tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(); // Коррекция составов по прибытию
             //tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(10);// Коррекция составов по прибытию всех составов
+            //tst_tr_app.EFMetallurgTrans_GetWagonsTracking();
+            //tst_tr_app.MTTransfer_TransferWagonsTracking(); // Тест переноса информации слежения за вагонами
+            tst_tr_app.MTThread_TransferWagonsTracking(); // Тест работы потока переноса информации слежения за вагонами
+
             #endregion
 
             #region Test_KIS
