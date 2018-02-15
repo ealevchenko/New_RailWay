@@ -76,6 +76,20 @@ namespace Web_RailWay.Controllers.api
             return Ok(nodes);
         }
 
+
+        // GET: api/rw/stations_nodes
+        [Route("stations_nodes")]
+        [ResponseType(typeof(StationsNodes))]
+        public IHttpActionResult GetStationsNodes()
+        {
+            List<StationsNodes> nodes = this.rep_rw.GetStationsNodes().ToList();
+            if (nodes == null)
+            {
+                return NotFound();
+            }
+            return Ok(nodes);
+        }
+
         // GET: api/rw/stations_nodes/id/196
         [Route("stations_nodes/id/{id:int}")]
         [ResponseType(typeof(StationsNodes))]
@@ -138,6 +152,19 @@ namespace Web_RailWay.Controllers.api
         public IHttpActionResult GetStationsOfViewAMKR()
         {
             List<Stations> stations = this.rep_rw.GetStationsOfViewAMKR().ToList();
+            if (stations == null)
+            {
+                return NotFound();
+            }
+            return Ok(stations);
+        }
+
+        // GET: api/rw/stations
+        [Route("stations")]
+        [ResponseType(typeof(Stations))]
+        public IHttpActionResult GetStations()
+        {
+            List<Stations> stations = this.rep_rw.GetStations().ToList();
             if (stations == null)
             {
                 return NotFound();

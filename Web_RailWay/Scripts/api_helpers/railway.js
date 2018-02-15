@@ -101,7 +101,30 @@ function getAsyncViewStations(callback) {
         },
     });
 }
-
+// Веруть список станций открытых для работы
+function getAsyncStations(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/stations/',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Веруть cтанцию по id
 function getAsyncStation(id, callback) {
     $.ajax({
         type: 'GET',
@@ -423,6 +446,29 @@ function getTbodyArrivalStationsNodes(id, tbody, id_select) {
         }
         tbody.append(tab);
     }
+}
+// Получить список станций для отправки
+function getAsyncStationsNodes(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/stations_nodes',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
 }
 
 

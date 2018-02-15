@@ -25,7 +25,7 @@ function getAsyncWaysStation(id_station, rospusk, callback) {
     });
 }
 // Получить спиок цехов по указанной станции
-function getAsyncShopStation(id_station, rospusk, callback) {
+function getAsyncShopStation(id_station, callback) {
     $.ajax({
         type: 'GET',
         url: '/railway/api/rc/shops/station/' + id_station + '/cars',
@@ -48,7 +48,7 @@ function getAsyncShopStation(id_station, rospusk, callback) {
     });
 }
 // Получить спиок цехов по указанной станции
-function getAsyncWagonOverturnsStation(id_station, rospusk, callback) {
+function getAsyncWagonOverturnsStation(id_station, callback) {
     $.ajax({
         type: 'GET',
         url: '/railway/api/rc/wagon_overturns/station/' + id_station + '/cars',
@@ -70,6 +70,53 @@ function getAsyncWagonOverturnsStation(id_station, rospusk, callback) {
         },
     });
 }
+// Получить спиок прибывающих составов по указанной станции
+function getAsyncArrivalAMKRStation(id_station, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rc/arrival_amkr/station/' + id_station + '/cars',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+function getAsyncSendingStation(id_station, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rc/sending/station/' + id_station + '/cars',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 // Получить список вагонов на указанном пути
 function getAsyncCarsOfWay(id_way, side, callback) {
     $.ajax({
@@ -123,6 +170,33 @@ function getAsyncCarsOfShop(id_shop, callback) {
     $.ajax({
         type: 'GET',
         url: '/railway/api/rc/cars/shop/' + id_shop,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+// Получить список вагонов по указанному прибытию
+function getAsyncCarsOfArrivalAMKR(id_station, train, dt, side, callback) {
+    if (typeof dt != 'string') {
+        dt = dt.toISOString();
+    }
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rc/arrival_amkr/'+ id_station +'/'+ train +'/'+dt+'/'+side,
         async: true,
         dataType: 'json',
         beforeSend: function () {

@@ -4,6 +4,7 @@ using EFRC.Entities;
 using MessageLog;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -46,6 +47,34 @@ namespace Web_RailWay.Controllers.api
 
             public int id_gruz_front { get; set; }
             public string name {get;set;}
+            public int? vag_amount { get; set; }
+        }
+
+        public class ArrivalAMKRStation {
+            public int id_stat { get; set; }
+            public string stat {get;set;}
+            public int st_lock_id_stat { get; set; }
+            public int st_lock_train { get; set; }
+            public string dt_from_stat { get; set; }
+            public int? vag_amount { get; set; }
+        }
+
+        public class ArrivalAMKRStation1 {
+            public int id_stat { get; set; }
+            public string stat {get;set;}
+            public int st_lock_id_stat { get; set; }
+            public int st_lock_train { get; set; }
+            public DateTime dt_from_stat { get; set; }
+            public int? vag_amount { get; set; }
+        }
+
+        public class SendingStation
+        {
+            public int st_lock_id_stat { get; set; }
+            public string stat {get;set;}
+            public int id_stat { get; set; }
+            public int st_lock_train { get; set; }
+            public DateTime dt_from_stat { get; set; }
             public int? vag_amount { get; set; }
         }
 
@@ -154,6 +183,19 @@ namespace Web_RailWay.Controllers.api
             };
         }
 
+        protected ArrivalAMKRStation1 CreateArrivalAMKRStation(ArrivalAMKRStation aas)
+        {
+            return new ArrivalAMKRStation1()
+            {
+                id_stat = aas.id_stat,
+                stat = aas.stat,
+                st_lock_id_stat = aas.st_lock_id_stat,
+                st_lock_train = aas.st_lock_train,
+                dt_from_stat = DateTime.Parse(aas.dt_from_stat),
+                vag_amount = aas.vag_amount,
+            };
+        }
+
         // GET: api/rc/ways/station/4/rospusk/false
         [Route("ways/station/{id:int}/rospusk/{rosp:bool}")]
         [ResponseType(typeof(WaysStation))]
@@ -221,6 +263,53 @@ namespace Web_RailWay.Controllers.api
             }
         }
 
+        // GET: api/rc/arrival_amkr/station/4/cars
+        [Route("arrival_amkr/station/{id:int}/cars")]
+        [ResponseType(typeof(ArrivalAMKRStation1))]
+        public IHttpActionResult GetArrivalAMKRCarsOfStation(int id)
+        {
+            try
+            {
+                int type = 0;
+                SqlParameter i_id = new SqlParameter("@idstation", id);
+                SqlParameter i_type = new SqlParameter("@type", type);
+                List<ArrivalAMKRStation> ss = this.rep_rc.Database.SqlQuery<ArrivalAMKRStation>("EXEC [RailCars].[GetAdmissTrains] @idstation, @type", i_id, i_type).ToList();
+                if (ss == null)
+                {
+                    return NotFound();
+                }
+                List<ArrivalAMKRStation1> list = new List<ArrivalAMKRStation1>();
+                ss.ForEach(s=>list.Add(CreateArrivalAMKRStation(s)));
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalAMKRCarsOfStation(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/rc/sending/station/4/cars
+        [Route("sending/station/{id:int}/cars")]
+        [ResponseType(typeof(SendingStation))]
+        public IHttpActionResult GetSendingCarsOfStation(int id)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@idstation", id);
+                List<SendingStation> ss = this.rep_rc.Database.SqlQuery<SendingStation>("EXEC [RailCars].[GetRemoveTrains] @idstation", i_id).ToList();
+                if (ss == null)
+                {
+                    return NotFound();
+                }
+                return Ok(ss);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSendingCarsOfStation(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
 
         // GET: api/rc/cars/way/52/side/0
         [Route("cars/way/{id:int}/side/{side:int}")]
@@ -285,6 +374,39 @@ namespace Web_RailWay.Controllers.api
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("GetCarsOfShop(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/rc/arrival_amkr/4/30697/2018-02-11T08:26:05/0
+        [Route("arrival_amkr/{station:int}/{train:int}/{dt:datetime}/{side:int}")]
+        [ResponseType(typeof(CarInfo))]
+        public IHttpActionResult GetCarsOfArrivalAMKR(int station, int train, DateTime dt, int side)
+        {
+            try
+            {
+                SqlParameter i_station = new SqlParameter("@idstation", station);
+                SqlParameter i_train = new SqlParameter("@trainNum", train);
+                SqlParameter d_dt = new SqlParameter("@dt", dt);
+                SqlParameter i_shop = new SqlParameter();
+                i_shop.ParameterName = "@shop";
+                i_shop.SqlDbType = SqlDbType.Int;
+                i_shop.SqlValue = DBNull.Value;
+                SqlParameter i_gf = new SqlParameter();
+                i_gf.ParameterName = "@gf";
+                i_gf.SqlDbType = SqlDbType.Int;
+                i_gf.SqlValue = DBNull.Value;
+                SqlParameter i_side = new SqlParameter("@side", side);
+                List<CarInfo> ws = this.rep_rc.Database.SqlQuery<CarInfo>("EXEC [RailCars].[GetAdmissWagons] @idstation, @trainNum, @dt, @shop, @gf, @side", i_station, i_train, d_dt, i_shop, i_gf, i_side).ToList();
+                if (ws == null)
+                {
+                    return NotFound();
+                }
+                return Ok(ws);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfArrivalAMKR(station={0}, train={1}, dt={2}, side={3})", station, train, dt, side), eventID);
                 return InternalServerError(e);
             }
         }

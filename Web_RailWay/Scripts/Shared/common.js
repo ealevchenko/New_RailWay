@@ -78,13 +78,14 @@ function initSelect(obj_select, property, data, callback_option, value_select, e
             if (typeof callback_option === 'function') {
                 option = callback_option(data[i]);
             }
-
-            if (exceptions_value != null) {
-                if (exceptions_value.indexOf(option.value) == -1) {
+            if (option != null) {
+                if (exceptions_value != null) {
+                    if (exceptions_value.indexOf(option.value) == -1) {
+                        options.push("<option value='" + option.value + "' >" + option.text + "</option>");
+                    }
+                } else {
                     options.push("<option value='" + option.value + "' >" + option.text + "</option>");
                 }
-            } else {
-                options.push("<option value='" + option.value + "' >" + option.text + "</option>");
             }
         }
     }

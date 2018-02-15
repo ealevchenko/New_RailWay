@@ -157,7 +157,6 @@
     <Folder Include="Areas\KIS\Models\" />
     <Folder Include="Areas\KIS\Views\Shared\" />
     <Folder Include="Areas\MT\Models\" />
-    <Folder Include="Areas\MT\Views\Shared\" />
     <Folder Include="Areas\MT\Views\Test\" />
     <Folder Include="Areas\RW\Models\" />
     <Folder Include="Areas\RW\Views\Shared\" />
@@ -217,6 +216,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\KIS\KISAreaRegistration.cs" />
+    <Compile Include="Areas\MT\Controllers\WagonsTrackingController.cs" />
     <Compile Include="Areas\MT\MTAreaRegistration.cs" />
     <Compile Include="Areas\RW\RWAreaRegistration.cs" />
     <Compile Include="Areas\SAP\SAPAreaRegistration.cs" />
@@ -434,11 +434,13 @@
     <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\KIST\kist.css" />
     <Content Include="Content\lockpanel\lockpanel.css" />
+    <Content Include="Content\MT\wagons_tracking.css" />
     <Content Include="Content\reports.css" />
     <Content Include="Content\RW\awas.css" />
     <Content Include="Content\RW\rwui.css" />
     <Content Include="Content\Services\services.css" />
     <Content Include="Content\DataTables\css\reports-dataTables.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -502,6 +504,7 @@
     <Content Include="Scripts\api_helpers\kis.js" />
     <Content Include="Scripts\api_helpers\kist.js" />
     <Content Include="Scripts\api_helpers\logs.js" />
+    <Content Include="Scripts\api_helpers\metallurgtrans.js" />
     <Content Include="Scripts\api_helpers\railcars.js" />
     <Content Include="Scripts\api_helpers\railway.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
@@ -528,6 +531,9 @@
     <Content Include="Areas\RW\Views\web.config" />
     <Content Include="Areas\SAP\Views\web.config" />
     <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\MT\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\MT\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\MT\Views\WagonsTracking\Index.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
     <Content Include="Scripts\api_helpers\settings.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -639,6 +645,7 @@
     <Content Include="Scripts\KIS\transfer_kis.js" />
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\MT\wagons_tracking.js" />
     <Content Include="Scripts\RW\awas.js" />
     <Content Include="Scripts\RW\rwui.js" />
     <Content Include="Scripts\Services\services.js" />
@@ -776,6 +783,10 @@
     <ProjectReference Include="..\OLDVersion\TransferRailCars\TransferRailCars.csproj">
       <Project>{a1f50999-31d4-4793-a92f-4d0f436922cb}</Project>
       <Name>TransferRailCars</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebApiClient\WebApiClient.csproj">
+      <Project>{4dfb537d-a480-47d9-8d3c-29124822d02a}</Project>
+      <Name>WebApiClient</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

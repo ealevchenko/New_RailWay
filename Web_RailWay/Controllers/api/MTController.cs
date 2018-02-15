@@ -1,6 +1,7 @@
 ﻿using EFMT.Abstract;
 using EFMT.Concrete;
 using EFMT.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+//using System.Web.Mvc;
+using WebApiClient;
 
 namespace Web_RailWay.Controllers.api
 {
@@ -100,6 +103,19 @@ namespace Web_RailWay.Controllers.api
             List<ApproachesCars> new_cars = new List<ApproachesCars>();
             cars.ToList().ForEach(c => new_cars.Add(CreateCorectApproachesCars(c)));
             return Ok(new_cars);
+        }
+
+        // GET: api/mt/wagons_tracking
+        [Route("wagons_tracking")]
+        public IHttpActionResult GetWagonsTracking()
+        {
+            WebApiClientMetallurgTrans client = new WebApiClientMetallurgTrans();
+            string result = client.GetJSONWagonsTracking();
+            if (result == null || result.ToList().Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(JsonConvert.DeserializeObject(result));
         }
     }
 }

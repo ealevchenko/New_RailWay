@@ -1,0 +1,65 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @MTResource.index_report_cars_amkr_desc;
+    ViewBag.Home = @MTResource.index_report_cars_amkr_title;
+}
+
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("LinkAdmin", "Home", new { area = "" }); }
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    @Styles.Render("~/jquery-ui/css")
+    @Styles.Render("~/DataTables/css")
+    <link rel="stylesheet" type="text/css" href="~/Content/MT/wagons_tracking.css">
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/Ajax")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/DataTables")
+    <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/metallurgtrans.js" type="text/javascript"></script>
+    <script src="~/Scripts/MT/wagons_tracking.js" type="text/javascript"></script>
+    <script>
+        $('header').addClass('img-header-mt');
+    </script>
+}
+
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        @*@using (Ajax.BeginForm("ListGroupDateCars", "Approaches", new { area = "MT" }, ajaxOpts, new { @id = "fmList" })) //
+            {
+                <div id="select-rangedatetime">
+                </div>
+            }
+            @Html.Label(@MTResource.link_approaches, new { @class = "title-label" })&nbsp;
+            <a href='@Url.Action("Sostav", "Approaches", new { area = "MT" })' class="btn btn-link">@MTResource.index_report_approaches_sostav_title</a>
+            @*<a href='@Url.Action("Cars", "Approaches")' class="btn btn-link">@MTResource.index_report_approaches_cars_title</a>
+            &nbsp;@Html.Label(@MTResource.link_arrival, new { @class = "title-label" })&nbsp;
+            <a href='@Url.Action("Sostav", "Arrival", new { area = "MT" })' class="btn btn-link">@MTResource.index_report_arrival_sostav_title</a>
+            <a href='@Url.Action("Cars", "Arrival", new { area = "MT" })' class="btn btn-link">@MTResource.index_report_arrival_cars_title</a>*@
+    </div>
+    <div id="report-detali">
+        <table class='display compact' id="table-list-wagons-tracking" style="width:100%" cellpadding="0"></table>
+    </div>
+    <div id="cls"></div>
+</div>
+
+
+
+
+
+
+
+

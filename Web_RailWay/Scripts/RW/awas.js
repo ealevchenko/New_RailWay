@@ -3,31 +3,275 @@
     //-----------------------------------------------------------------------------------------
     // Объявление глобальных переменных
     //-----------------------------------------------------------------------------------------
-    //allVars = $.getUrlVars(),   // Получить параметры get запроса
     var lang = $.cookie('lang'),
-        panel_setup_operation = {
-            panel_view: {
-                obj: $('<div class="dt-buttons setup-operation" id="property_view_cars"></div>'),
-                initPanel: function () {
-                    this.obj.append(panel_setup_operation.label_view_select)
-                            .append(panel_setup_operation.label_view_mt).append(panel_setup_operation.checkbox_view_mt)
-                            .append(panel_setup_operation.label_view_sap).append(panel_setup_operation.checkbox_view_sap)
-                            .append(panel_setup_operation.label_view_email).append(panel_setup_operation.checkbox_view_email)
+        panel = {
+            mode: {
+                active: null,
+                obj: $('<div class="dt-buttons setup-operation" id="property_view_mode"></div>'),
+                selectToggle: function (e) {
+                    var target = $(e.target);
+                    if (target.is("#mode-view")) {
+                        panel.mode.activeView();
+                    }
+                    if (target.is("#mode-manevr")) {
+                        panel.mode.activeManevr();
+                    }
+                    if (target.is("#mode-sending")) {
+                        panel.mode.activeSending();
+                    }
+                    if (target.is("#mode-correction")) {
+                        panel.mode.activeCorrection();
+                    }
+                    if (target.is("#mode-statepark")) {
+                        panel.mode.activeStatepark();
+                    }
+                },
+                initPanel: function (view, manevr, sending, correction, statepark) {
+                    this.obj.empty();
+                    //this.obj.append('<legend>Select a Location: </legend>')
+                    if (view) {
+                        this.obj.append(panel.element.label_mode_view).append(panel.element.radio_mode_view);
+                    };
+                    if (manevr) {
+                        this.obj.append(panel.element.label_mode_manevr).append(panel.element.radio_mode_manevr);
+                    };
+                    if (sending) {
+                        this.obj.append(panel.element.label_mode_sending).append(panel.element.radio_mode_sending);
+                    };
+                    if (correction) {
+                        this.obj.append(panel.element.label_mode_correction).append(panel.element.radio_mode_correction);
+                    };
+                    if (statepark) {
+                        this.obj.append(panel.element.label_mode_statepark).append(panel.element.radio_mode_statepark);
+                    };
+                    this.obj.controlgroup();
+                    // Выберем режим просмотра
+                    $("#mode-view").prop('checked', true);
+                    panel.mode.activeView();
+                    // определим событие выбора режима
+                    $("[name='mode']").on("change", panel.mode.selectToggle);
+                    panel.mode.obj.controlgroup("refresh"); // Обновим 
+                },
+                activeView: function () {
+                    panel.mode.active = 0;
+                    panel.manevr.obj.hide();
+                    panel.sent.obj.hide();
+                    panel.arrival.obj.hide();
+                    cars.clearSelect();
+                },
+                activeManevr: function () {
+                    panel.mode.active = 1;
+                    panel.manevr.obj.show(); panel.manevr.initPanel();
+                    panel.sent.obj.hide();
+                    panel.arrival.obj.hide();
+                    cars.clearSelect();
+                },
+                activeSending: function () {
+                    panel.mode.active = 2;
+                    panel.manevr.obj.hide();
+                    panel.sent.obj.show(); panel.sent.initPanel();
+                    panel.arrival.obj.hide();
+                    cars.clearSelect();
+                },
+                activeCorrection: function () {
+                    panel.mode.active = 3;
+                    panel.manevr.obj.hide();
+                    panel.sent.obj.hide();
+                    panel.arrival.obj.hide();
+                    cars.clearSelect();
+                },
+                activeStatepark: function () {
+                    panel.mode.active = 4;
+                    panel.manevr.obj.hide();
+                    panel.sent.obj.hide();
+                    panel.arrival.obj.hide();
+                    cars.clearSelect();
                 },
             },
-            panel_manevr: null,
-            panel_sent: null,
-            panel_arrival: null,
-            label_view_select: $('<label id="view-info">Информация:</label>'),
-            label_view_mt: $('<label for="view-mt">' + (lang == 'en' ? "MetallurgTrans " : "МеталургТранс ") + '</label>'),
-            checkbox_view_mt: $('<input type="checkbox" name="view-mt" id="view-mt">'),
-            label_view_sap: $('<label for="view-sap">' + (lang == 'en' ? "SAP " : "САП ") + '</label>'),
-            checkbox_view_sap: $('<input type="checkbox" name="view-sap" id="view-sap">'),
-            label_view_email: $('<label for="view-email">' + (lang == 'en' ? "Writing  " : "Письма ") + '</label>'),
-            checkbox_view_email: $('<input type="checkbox" name="view-email" id="view-email">'),
+            view: {
+                obj: $('<div class="dt-buttons setup-operation" id="property_view_cars"></div>'),
+                initPanel: function () {
+                    this.obj.append(panel.element.label_view_select)
+                            .append(panel.element.label_view_mt).append(panel.element.checkbox_view_mt)
+                            .append(panel.element.label_view_sap).append(panel.element.checkbox_view_sap)
+                            .append(panel.element.label_view_email).append(panel.element.checkbox_view_email);
+                    this.obj.controlgroup();
+                },
+            },
+            manevr: {
+                obj: $('<div class="dt-buttons setup-operation" id="property_manevr_operation"></div>'),
+                initPanel: function () {
+                    this.obj.empty();
+                    panel.element.button_manevr_select_all.on('click', function () {
+                        cars.allSelect();
+                    });
+                    panel.element.button_manevr_clear_all.on('click', function () {
+                        cars.clearSelect();
+                    });
+                    this.obj.append(panel.element.button_manevr_select_all)
+                            .append(panel.element.button_manevr_clear_all)
+                            .append(panel.element.label_gorlov_manevr)
+                            .append(panel.element.select_manevr_side)
+                            .append(panel.element.label_way_manevr)
+                            .append(panel.element.select_manevr_way)
+                            .append(panel.element.button_ok_manevr);
+                    initSelect(panel.element.select_manevr_side, { width: 150 }, side.list, null, 0, function (event, ui) { event.preventDefault(); }, null);
+                    initSelect(panel.element.select_manevr_way, { width: 300 }, ways.list, function (row) { return { value: row.id_way, text: row.num + '-' + row.name }; }, -1, function (event, ui) { event.preventDefault(); }, null);
+
+                },
+            },
+            sent: {
+                obj: $('<div class="dt-buttons setup-operation" id="property_sent_operation"></div>'),
+                initPanel: function () {
+                    this.obj.empty();
+                    panel.element.button_sent_select_all.on('click', function () {
+                        cars.allSelect();
+                    });
+                    panel.element.button_sent_clear_all.on('click', function () {
+                        cars.clearSelect();
+                    });
+                    this.obj.append(panel.element.button_sent_select_all)
+                            .append(panel.element.button_sent_clear_all)
+                            .append(panel.element.label_sent_station)
+                            .append(panel.element.select_sent_station);
+                    initSelect(panel.element.select_sent_station, { width: 300 }, nodes.getListSend(station), function (row) {
+                        var stat = getObjects(station.list, 'id', row.id_station_on);
+                        return { value: stat[0].id, text: (lang == 'en' ? stat[0].name_en : stat[0].name_ru) };
+                    }, -1, function (event, ui) { event.preventDefault(); }, null);
+                    if (station.list_wo.length > 0) {
+                        this.obj.append(panel.element.label_sent_wo)
+                        .append(panel.element.select_sent_wo);
+                        initSelect(panel.element.select_sent_wo, { width: 200 }, station.list_wo, function (row) { return { value: row.id_gruz_front, text: row.name }; }, -1, function (event, ui) { event.preventDefault(); }, null);
+                    }
+                    if (station.list_shops.length > 0) {
+                        this.obj.append(panel.element.label_sent_shop)
+                        .append(panel.element.select_sent_shop);
+                        initSelect(panel.element.select_sent_shop, { width: 200 }, station.list_shops, function (row) { return { value: row.id_shop, text: row.name }; }, -1, function (event, ui) { event.preventDefault(); }, null);
+                    }
+
+                    this.obj.append(panel.element.label_sent_side)
+                    .append(panel.element.select_sent_side)
+                    .append(panel.element.button_ok_sent);
+                    initSelect(panel.element.select_sent_side, { width: 150 }, side.list, null, 0, function (event, ui) { event.preventDefault(); }, null);
+
+
+                    //nodes.getListSend(station);
+                },
+            },
+            arrival: {
+                obj: $('<div class="dt-buttons setup-operation" id="property_arrival_operation"></div>'),
+                initPanel: function () {
+                    //this.obj.append(panel.element.button_sent_select_all)
+                    //        .append(panel.element.button_sent_clear_all)
+                    //        .append(panel.element.label_sent_station)
+                    //        .append(panel.element.select_sent_station)
+                    //        .append(panel.element.label_sent_wo)
+                    //        .append(panel.element.select_sent_wo)
+                    //        .append(panel.element.label_sent_shop)
+                    //        .append(panel.element.select_sent_shop)
+                    //        .append(panel.element.label_sent_side)
+                    //        .append(panel.element.select_sent_side)
+                    //        .append(panel.element.button_ok_sent);
+                },
+            },
+            element: {
+                // панель режимов
+                label_mode_view: $('<label for="mode-view">' + (lang == 'en' ? "View" : "Просмотр") + '</label>'),
+                radio_mode_view: $('<input type="radio" name="mode" id="mode-view" checked="checked" >'),
+                label_mode_manevr: $('<label for="mode-manevr">' + (lang == 'en' ? "Maneuvers " : "Маневры") + '</label>'),
+                radio_mode_manevr: $('<input type="radio" name="mode" id="mode-manevr">'),
+                label_mode_sending: $('<label for="mode-sending">' + (lang == 'en' ? "Sending " : "Отправка") + '</label>'),
+                radio_mode_sending: $('<input type="radio" name="mode" id="mode-sending">'),
+                label_mode_correction: $('<label for="mode-correction">' + (lang == 'en' ? "Correction " : "Коррекция") + '</label>'),
+                radio_mode_correction: $('<input type="radio" name="mode" id="mode-correction">'),
+                label_mode_statepark: $('<label for="mode-statepark">' + (lang == 'en' ? "State of the park " : "Состояние парка") + '</label>'),
+                radio_mode_statepark: $('<input type="radio" name="mode" id="mode-statepark">'),
+
+                // панель просмотра
+                label_view_select: $('<label id="view-info">Информация:</label>'),
+                label_view_mt: $('<label for="view-mt">' + (lang == 'en' ? "MetallurgTrans " : "МеталургТранс ") + '</label>'),
+                checkbox_view_mt: $('<input type="checkbox" name="view-mt" id="view-mt" checked="checked" >'),
+                label_view_sap: $('<label for="view-sap">' + (lang == 'en' ? "SAP " : "САП ") + '</label>'),
+                checkbox_view_sap: $('<input type="checkbox" name="view-sap" id="view-sap" checked="checked" >'),
+                label_view_email: $('<label for="view-email">' + (lang == 'en' ? "Writing  " : "Письма ") + '</label>'),
+                checkbox_view_email: $('<input type="checkbox" name="view-email" id="view-email" checked="checked" >'),
+                // панель настроек маневра
+                button_manevr_select_all: $('<button class="ui-button ui-widget ui-corner-all">' + (lang == 'en' ? "Select All" : "Выбрать все вагоны") + '</button>'),
+                button_manevr_clear_all: $('<button class="ui-button ui-widget ui-corner-all">' + (lang == 'en' ? "Clear All" : "Убрать все вагоны") + '</button>'),
+                label_gorlov_manevr: $('<label class="setup-label">' + (lang == 'en' ? "The throat of maneuver:" : "Горловина маневра:") + '</label>'),
+                label_way_manevr: $('<label class="setup-label">' + (lang == 'en' ? "Maneuver on the way:" : "Маневр на путь:") + '</label>'),
+                select_manevr_side: $('<select id="manevr-side" name="station"></select>'),
+                select_manevr_way: $('<select id="manevr-way" name="station"></select>'),
+                button_ok_manevr: $('<button class="ui-button ui-widget ui-corner-all">' + (lang == 'en' ? "Perform a maneuver" : "Выполнить маневр") + '</button>'),
+                // панель настроек отправки на другие станции
+                button_sent_select_all: $('<button class="ui-button ui-widget ui-corner-all">' + (lang == 'en' ? "Select All" : "Выбрать все вагоны") + '</button>'),
+                button_sent_clear_all: $('<button class="ui-button ui-widget ui-corner-all">' + (lang == 'en' ? "Clear All" : "Убрать все вагоны") + '</button>'),
+                label_sent_station: $('<label class="setup-label" for="sent-station">' + (lang == 'en' ? "Receiving station:" : "Станция приема:") + '</label>'),
+                select_sent_station: $('<select id="sent-station" name="sent-station"></select>'),
+                label_sent_wo: $('<label class="setup-label" for="sent-wo">' + (lang == 'en' ? "Wagon overturns:" : "Вагоноопрокид:") + '</label>'),
+                select_sent_wo: $('<select id="sent-wo" name="sent-wo"></select>'),
+                label_sent_shop: $('<label class="setup-label" for="sent-shop">' + (lang == 'en' ? "Shops:" : "Цех:") + '</label>'),
+                select_sent_shop: $('<select id="sent-shop" name="sent-shop"></select>'),
+                label_sent_side: $('<label class="setup-label" for="sent-side">' + (lang == 'en' ? "Sending neck:" : "Горловина отправки:") + '</label>'),
+                select_sent_side: $('<select id="sent-side" name="sent-side"></select>'),
+                button_ok_sent: $('<button class="ui-button ui-widget ui-corner-all">' + (lang == 'en' ? "Send and" : "Выполнить отправку") + '</button>'),
+            },
             initPanel: function (obj) {
-                panel_setup_operation.panel_view.initPanel();
-                obj.prepend(panel_setup_operation.panel_view);
+                //panel.mode.initPanel(true, true, true, true, true);
+                panel.view.initPanel();
+                //panel.manevr.initPanel();
+                //panel.sent.initPanel();
+                obj.prepend(panel.mode.obj);
+                obj.prepend(panel.view.obj);
+                obj.prepend(panel.manevr.obj);
+                obj.prepend(panel.sent.obj);
+            },
+            //активировать панель 
+            activePanel: function (active_group) {
+                panel.view.obj.show();
+                switch (active_group) {
+                    case 0:
+                        panel.mode.obj.show();
+                        panel.mode.initPanel(true, true, true, true, true);
+
+                        panel.arrival.obj.hide();
+                        break;
+                    case 1:
+                        panel.mode.obj.show();
+                        panel.mode.initPanel(true, false, false, true, true);
+
+                        panel.arrival.obj.hide();
+                        break;
+                    case 2:
+                        panel.mode.obj.show();
+                        panel.mode.initPanel(true, false, false, true, true);
+
+                        panel.arrival.obj.hide();
+                        break;
+                    case 3:
+                        panel.mode.obj.hide();
+                        panel.manevr.obj.hide();
+                        panel.sent.obj.hide();
+                        panel.arrival.obj.hide();
+                        break;
+                    case 4:
+                        panel.mode.obj.hide();
+                        panel.manevr.obj.hide();
+                        panel.sent.obj.hide();
+                        panel.arrival.obj.hide();
+                        break;
+                    case 5:
+                        panel.mode.obj.hide();
+                        panel.manevr.obj.hide();
+                        panel.sent.obj.hide();
+                        panel.arrival.obj.hide();
+                        break;
+                    default:
+                        // Группы закрыты
+
+                        break;
+                }
+
             }
         },
         //Панель групп списков
@@ -38,9 +282,9 @@
             list_ways: $('#group-list-ways'),
             list_wagonoverturns: $('#group-list-wagonoverturns'),    // Группа элементов отображения информации о вагоноопрокидах
             list_shops: $('#group-list-shops'),
-            list_arrival: $('#group-list-arrival'),
+            list_arrival: $('#group-list-arrival-amkr'),
             list_arrivaluz: $('#group-list-arrivaluz'),
-            list_sent: $('#group-list-sent'),
+            list_sending: $('#group-list-sending'),
             initGroup: function () {
                 this.obj = $("#group-list").accordion({
                     collapsible: true,
@@ -55,7 +299,7 @@
                 this.list_shops.hide();
                 this.list_arrival.hide();
                 this.list_arrivaluz.hide();
-                this.list_sent.hide();
+                this.list_sending.hide();
             },
             enableGroup: function (exit_uz, count_shops, count_wo) {
                 this.list_ways.show();
@@ -63,7 +307,7 @@
                 if (count_shops > 0) { this.list_shops.show(); } else { this.list_shops.hide(); }
                 this.list_arrival.show();
                 if (exit_uz) { this.list_arrivaluz.show(); } else { this.list_arrivaluz.hide(); }
-                this.list_sent.show();
+                this.list_sending.show();
             }
         },
         //Горловина станции
@@ -95,6 +339,8 @@
             exit_uz: false,
             obj: $('select[name ="station"]'),
             list: null,
+            list_wo: null,
+            list_shops: null,
             // Получить новые свойства выбранной станции
             setStationProperty: function (id) {
                 station.select = id;
@@ -107,17 +353,61 @@
                     side.setSideOfStation(stat[0].default_side);
                     // Показать панели групп
                     getAsyncShopsOfStation(station.id_rc, function (result_shop) {
+                        station.list_shops = result_shop;
                         getAsyncWagonOverturnsOfStation(station.id_rc, function (result_wo) {
+                            station.list_wo = result_wo;
                             group_list.enableGroup(station.exit_uz, result_shop.length, result_wo.length);
                         });
                     });
-
-
-
-                    ways.clearWays();
-                    wagonoverturns.clearWays();
-                    shops.clearWays();
+                    ways.clearListSelect();
+                    wagonoverturns.clearListSelect();
+                    shops.clearListSelect();
+                    arrival_amkr.clearListSelect();
+                    sending.clearListSelect();
+                    //!!!
                 }
+            },
+            initStation: function (select) {
+                getAsyncStations(function (result) {
+                    station.list = result;
+                    if (select) {
+                        station.initSelect(result);
+                    }
+                });
+            },
+
+            initSelect: function (data) {
+                initSelect(
+                    station.obj,
+                    { width: 300 },
+                    data,
+                    function (row) {
+                        if (row.view == 1 & row.station_uz == 0) {
+                            return { value: row.id, text: (lang == 'en' ? row.name_en : row.name_ru) };
+                        }
+                    },
+                station.select,
+                function (event, ui) {
+                    event.preventDefault();
+                    var id = Number(ui.item.value);
+                    // Должны выбрать станцию
+                    if (id > 0) {
+                        station.setStationProperty(id);
+                        // Показывать группу пути по умолчанию
+                        $("#group-list").accordion({ active: 0 });
+                        viewGroup(group_list.active, station.id_rc, false);
+                    }
+                },
+                null);
+            }
+        },
+        nodes = {
+            list: null,
+            initNodes: function () {
+                getAsyncStationsNodes(function (result) { nodes.list = result; });
+            },
+            getListSend: function (station) {
+                return getObjects(nodes.list, 'id_station_from', station.select)
             }
         },
         // Группа списков путей станции
@@ -203,7 +493,7 @@
                     cars.viewTable(ways, false);
                 }
             },
-            clearWays: function () {
+            clearListSelect: function () {
                 this.list = null;
                 this.select = null;
             }
@@ -232,7 +522,7 @@
                         $(row).attr('id', data.id_gruz_front);
                         if (data.id_gruz_front == this.select) {
                             $(row).addClass('selected');
-                            //viewCars(way_select_id, wagonoverturns_select_id, shops_select_id, side_station, default_side);
+
                         }
                     },
                     columns: [
@@ -283,7 +573,6 @@
                     this.station_id = station_id;
                     getAsyncWagonOverturnsStation(
                         station_id,
-                        false,
                         function (result) {
                             wagonoverturns.loadData(result);
                             wagonoverturns.enableTable(result.length);
@@ -301,7 +590,7 @@
                     }
                 };
             },
-            clearWays: function () {
+            clearListSelect: function () {
                 this.list = null;
                 this.select = null;
             }
@@ -338,7 +627,7 @@
                         { data: "vag_amount", title: "Кол. ваг.", width: "30px" },
                     ],
                 });
-                this.obj_table = $('DIV#table_list_shops_wrapper');
+                this.obj_table = $('DIV#table-list-shops_wrapper');
                 this.initEventSelect();
                 this.obj_table.hide();
             },
@@ -381,7 +670,6 @@
                     this.station_id = station_id;
                     getAsyncShopStation(
                         station_id,
-                        false,
                         function (result) {
                             shops.loadData(result);
                             shops.enableTable(result.length);
@@ -399,11 +687,225 @@
                     }
                 };
             },
-            clearWays: function () {
+            clearListSelect: function () {
                 this.list = null;
                 this.select = null;
             }
         },
+        arrival_amkr = {
+            name: 'list_arrival_amkr',
+            station_id: null,
+            train: null,
+            dt: null,
+            table: null,
+            obj_table: null,
+            obj: null,
+            list: null,
+            initTable: function () {
+                this.table = $('#table-list-arrival-amkr');
+                this.obj = this.table.DataTable({
+                    "paging": false,
+                    "ordering": false,
+                    "info": false,
+                    "select": false,
+                    "filter": false,
+                    language: {
+                        emptyTable: lang == 'en' ? "No data available in table" : "Данные отсутствуют",
+                    },
+                    jQueryUI: true,
+                    "createdRow": function (row, data, index) {
+                        $(row).attr('train', data.st_lock_train).attr('dt', data.dt_from_stat);
+
+                        if (data.st_lock_train == this.train) {
+                            $(row).addClass('selected');
+
+                        }
+                    },
+                    columns: [
+                        { data: "dt_from_stat", title: "Отправлен" },
+                        { data: "stat", title: "Станция" },
+                        { data: "vag_amount", title: "Кол. ваг.", width: "30px" },
+                    ],
+                });
+                this.obj_table = $('DIV#table-list-arrival-amkr_wrapper');
+                this.initEventSelect();
+                this.obj_table.hide();
+            },
+            initEventSelect: function () {
+                this.table.find('tbody')
+                        .on('click', 'tr', function () {
+                            arrival_amkr.clearSelect();
+                            $(this).addClass('selected');
+                            arrival_amkr.train = $(this).attr("train");
+                            arrival_amkr.dt = $(this).attr("dt");
+                            cars.viewTable(arrival_amkr, false);
+                        });
+            },
+            clearSelect: function () {
+                this.table.find('tbody tr').removeClass('selected');
+            },
+            loadData: function (data) {
+                this.list = data;
+                this.obj.clear();
+                for (i = 0; i < data.length; i++) {
+                    // Исключим станции Кривого Рога
+                    var stat = getObjects(station.list, 'id_rs', data[i].id_stat)
+                    if (stat != null && stat.length > 0) {
+                        if (stat[0].station_uz == 0) {
+                            // Добавим данные о станциях
+                            this.obj.row.add({
+                                "id_stat": data[i].id_stat,
+                                "stat": data[i].stat,
+                                "st_lock_train": data[i].st_lock_train,
+                                "dt_from_stat": data[i].dt_from_stat,
+                                "vag_amount": data[i].vag_amount,
+                            });
+                        }
+                    };
+                };
+                this.obj.draw();
+            },
+            enableTable: function (length) {
+                if (length > 0) {
+                    this.obj_table.show();
+                } else {
+                    this.obj_table.hide();
+                }
+            },
+            viewTable: function (station_id, data_refresh, callback) {
+
+                if (this.list == null | this.station_id != station_id | data_refresh == true) {
+                    // Обновим данные
+                    this.station_id = station_id;
+                    getAsyncArrivalAMKRStation(
+                        station_id,
+                        function (result) {
+                            arrival_amkr.loadData(result);
+                            arrival_amkr.enableTable(result.length);
+                            cars.viewTable(arrival_amkr, false);
+                            if (typeof callback === 'function') {
+                                callback(result.length);
+                            }
+                        }
+                        );
+                } else {
+                    this.enableTable(this.list.length);
+                    cars.viewTable(arrival_amkr, false);
+                    if (typeof callback === 'function') {
+                        callback(this.list.length);
+                    }
+                };
+            },
+            clearListSelect: function () {
+                this.list = null;
+                this.select = null;
+            }
+        },
+        sending = {
+            name: 'list_sending',
+            station_id: null,
+            //train: null,
+            //dt: null,
+            table: null,
+            obj_table: null,
+            obj: null,
+            list: null,
+            initTable: function () {
+                this.table = $('#table-list-sending');
+                this.obj = this.table.DataTable({
+                    "paging": false,
+                    "ordering": false,
+                    "info": false,
+                    "select": false,
+                    "filter": false,
+                    language: {
+                        emptyTable: lang == 'en' ? "No data available in table" : "Данные отсутствуют",
+                    },
+                    jQueryUI: true,
+                    "createdRow": function (row, data, index) {
+                        $(row).attr('train', data.st_lock_train).attr('dt', data.dt_from_stat);
+
+                        if (data.st_lock_train == this.train) {
+                            $(row).addClass('selected');
+
+                        }
+                    },
+                    columns: [
+                        { data: "dt_from_stat", title: "Отправлен" },
+                        { data: "stat", title: "Станция" },
+                        { data: "vag_amount", title: "Кол. ваг.", width: "30px" },
+                    ],
+                });
+                this.obj_table = $('DIV#table-list-sending_wrapper');
+                this.initEventSelect();
+                this.obj_table.hide();
+            },
+            initEventSelect: function () {
+                this.table.find('tbody')
+                        .on('click', 'tr', function () {
+                            sending.clearSelect();
+                            $(this).addClass('selected');
+                            //sending.train = $(this).attr("train");
+                            //sending.dt = $(this).attr("dt");
+                            //cars.viewTable(sending, false);
+                        });
+            },
+            clearSelect: function () {
+                this.table.find('tbody tr').removeClass('selected');
+            },
+            loadData: function (data) {
+                this.list = data;
+                this.obj.clear();
+                for (i = 0; i < data.length; i++) {
+                    // Добавим данные о станциях
+                    this.obj.row.add({
+                        "st_lock_id_stat": data[i].st_lock_id_stat,
+                        "stat": data[i].stat,
+                        "id_stat": data[i].id_stat,
+                        "st_lock_train": data[i].st_lock_train,
+                        "dt_from_stat": data[i].dt_from_stat,
+                        "vag_amount": data[i].vag_amount,
+                    });
+                };
+                this.obj.draw();
+            },
+            enableTable: function (length) {
+                if (length > 0) {
+                    this.obj_table.show();
+                } else {
+                    this.obj_table.hide();
+                }
+            },
+            viewTable: function (station_id, data_refresh, callback) {
+
+                if (this.list == null | this.station_id != station_id | data_refresh == true) {
+                    // Обновим данные
+                    this.station_id = station_id;
+                    getAsyncSendingStation(
+                        station_id,
+                        function (result) {
+                            sending.loadData(result);
+                            sending.enableTable(result.length);
+                            //cars.viewTable(sending, false);
+                            if (typeof callback === 'function') {
+                                callback(result.length);
+                            }
+                        }
+                        );
+                } else {
+                    this.enableTable(this.list.length);
+                    cars.viewTable(sending, false);
+                    if (typeof callback === 'function') {
+                        callback(this.list.length);
+                    }
+                };
+            },
+            clearListSelect: function () {
+                this.list = null;
+                this.select = null;
+            }
+        },
+
         cars = {
             table: null,
             obj_table: null,
@@ -487,21 +989,29 @@
                 });
                 this.obj_table = $('DIV#table-list-cars_wrapper');
 
-                panel_setup_operation.initPanel(this.obj_table);
-                this.initEventSelect();
+                panel.initPanel(this.obj_table);
                 this.obj_table.hide();
             },
             initEventSelect: function () {
-                //this.table.find('tbody')
-                //        .on('click', 'tr', function () {
-                //            //clearSelectedGroup();
-                //            $(this).addClass('selected');
-                //            this.select = $(this).attr("id");
-                //            //viewCars(way_select_id, wagonoverturns_select_id, shops_select_id, side_station, default_side);
-                //        });
+                // Определим события выбора вагонов из таблицы
+                cars.table.find('tbody tr')
+                    .mousedown(function () {
+                        if (panel.mode.active >= 1 & panel.mode.active <= 2) {
+                            $(this).toggleClass('selected');
+                            cars.table.find('tbody tr').on('mouseenter', function () {
+                                $(this).toggleClass('selected');
+                            });
+                        }
+                    });
+                cars.table.mouseup(function () {
+                    cars.table.find('tbody tr').off('mouseenter');
+                });
             },
             clearSelect: function () {
                 this.table.find('tbody tr').removeClass('selected');
+            },
+            allSelect: function () {
+                this.table.find('tbody tr').addClass('selected');
             },
             sortPosition: function () {
                 if (group_list.active == 0) {
@@ -571,6 +1081,7 @@
                     });
                 }
                 this.sortPosition();
+                this.initEventSelect();
                 //this.obj.draw();
             },
             enableTable: function (length) {
@@ -639,6 +1150,31 @@
                             cars.enableTable(cars.list.length);
                         }
                     }
+                    // Показать прибытие
+                    if (obj_select.name == 'list_arrival_amkr' & group_list.active == 3) {
+                        if (cars.list == null | data_refresh == true | cars.group != 'list_arrival_amkr' | (cars.group == 'list_arrival_amkr' & cars.group_select != obj_select.train)) {
+                            cars.group_select = obj_select.train;
+                            cars.group = 'list_arrival_amkr';
+                            // Загружаем
+                            getAsyncCarsOfArrivalAMKR(
+                                (obj_select.station_id != null ? obj_select.station_id : 0),
+                                (obj_select.train != null ? obj_select.train : 0),
+                                (obj_select.dt != null ? obj_select.dt : new Date()),
+                                0,
+                                function (result) {
+                                    // Коррекция нумерации вагонов
+                                    for (i = 0; i < result.length; i++) {
+                                        result[i].num_vag_on_way = i + 1;
+                                    }
+                                    cars.loadData(result);
+                                    cars.enableTable(result.length);
+                                });
+                        } else {
+                            //cars.loadData(cars.list);
+                            cars.enableTable(cars.list.length);
+                        }
+                    }
+
                 }
             },
         }
@@ -654,6 +1190,7 @@
     }
     //  Показать группу списков
     function viewGroup(active_group, station_id, data_refresh) {
+        panel.activePanel(active_group);
         switch (active_group) {
             case 0:
                 viewGroupWays(station_id, data_refresh);
@@ -664,6 +1201,16 @@
             case 2:
                 viewGroupShops(station_id, data_refresh);
                 break;
+            case 3:
+                viewGroupArrivalAMKR(station_id, data_refresh);
+                break;
+            case 4:
+                //viewGroupArrivalUZ(station_id, data_refresh);
+                break;
+            case 5:
+                viewGroupSending(station_id, data_refresh);
+                break;
+
             default:
                 // Группы закрыты
                 cars.enableTable(-1);
@@ -703,42 +1250,51 @@
             }
             );
     }
-
+    // Показать группу прибытие с АМКР
+    function viewGroupArrivalAMKR(station_id, data_refresh) {
+        arrival_amkr.viewTable(
+            station_id,
+            data_refresh,
+            function (result) {
+                if (result > 0) {
+                    group_list.list_arrival.show();
+                } else {
+                    group_list.list_arrival.hide();
+                }
+            }
+            );
+    }
+    // Показать группу отправки вагонов
+    function viewGroupSending(station_id, data_refresh) {
+        sending.viewTable(
+            station_id,
+            data_refresh,
+            function (result) {
+                if (result > 0) {
+                    group_list.list_sending.show();
+                } else {
+                    group_list.list_sending.hide();
+                }
+            }
+            );
+    }
 
     //-----------------------------------------------------------------------------------------
     // Инициализация объектов
     //-----------------------------------------------------------------------------------------
 
+    station.initStation(true);
+    nodes.initNodes();
+
     group_list.initGroup();             // Инициализируем групы списков
     ways.initTable();                   // Инициализируем таблицу путей
     wagonoverturns.initTable();         // Инициализируем таблицу вагоноопрокидов
     shops.initTable();                  // Инициализируем таблицу цеха тупики
+    arrival_amkr.initTable();           // Инициализируем таблицу прибытие амкр
+    sending.initTable();                // Инициализируем таблицу отправки амкр
+
     cars.initTable();                   // Инициализируем таблицу вагоны
 
-    //Загрузим выбор станций
-    getAsyncViewStations(function (result) {
-        station.list = result; // Сохраним список станций
-        initSelect(
-            station.obj,
-            { width: 300 },
-            result,
-            function (row) {
-                return { value: row.id, text: (lang == 'en' ? row.name_en : row.name_ru) };
-            },
-            station.select,
-            function (event, ui) {
-                event.preventDefault();
-                var id = Number(ui.item.value);
-                // Должны выбрать станцию
-                if (id > 0) {
-                    station.setStationProperty(id);
-                    // Показывать группу пути по умолчанию
-                    $("#group-list").accordion({ active: 0 });
-                    viewGroup(group_list.active, station.id_rc, false);
-                }
-            },
-            null);
-    });
     //Загрузим горловину
     getAsyncSide(function (result) {
         side.list = result;
@@ -762,8 +1318,4 @@
             },
             null);
     });
-
-
-
-
 });

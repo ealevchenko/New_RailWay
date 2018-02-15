@@ -398,7 +398,6 @@ $(function () {
             if (list_shops_station == null) {
                 getAsyncShopStation(
                     id_station_rc,
-                    false,
                     function (result) {
                         list_shops_station = result;
                         //if (list_shops_station.length > 0 & tabs_active == 0) { group_list_shops.show(); } else { group_list_shops.hide(); }
@@ -414,7 +413,6 @@ $(function () {
             if (list_wagonoverturn_station == null) {
                 getAsyncWagonOverturnsStation(
                     id_station_rc,
-                    false,
                     function (result) {
                         list_wagonoverturn_station = result;
                         //if (list_wagonoverturn_station.length > 0 & tabs_active == 0) { group_list_wagonoverturns.show(); } else { group_list_wagonoverturns.hide(); }

@@ -54,7 +54,12 @@ DIV#header {
     width:1550px;
 }
 
-/*.setup-operation {
+div#property_view_cars {
+
+    width:100%;
+}
+
+.setup-operation {
     padding:5px;
 }
 
@@ -67,13 +72,8 @@ DIV#header {
     margin-right:5px;
 }
 
-DIV#tabs-operation {
-    float: left;
-    width: 100%;
-    /*margin: 5px;*
-}*/
 
-div#group-list-ways, div#group-list-wagonoverturns, div#group-list-shops {
+div#group-list-ways, div#group-list-wagonoverturns, div#group-list-shops, div#group-list-arrival-amkr, div#group-list-sending {
     padding:0;
 }
 

@@ -78,3 +78,5 @@
 /// <reference path="shared/common.js" />
 /// <reference path="datatables/jquery-1.12.4.js" />
 /// <reference path="rw/awas.js" />
+/// <reference path="mt/wagons_tracking.js" />
+/// <reference path="api_helpers/metallurgtrans.js" />
