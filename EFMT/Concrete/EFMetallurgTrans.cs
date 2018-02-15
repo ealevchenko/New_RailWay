@@ -1275,11 +1275,154 @@ namespace EFMT.Concrete
 
         #endregion
 
+        #region WagonsTracking
+
+        public IQueryable<WagonsTracking> WagonsTracking
+        {
+            get { return context.WagonsTracking; }
+        }
+
+        public IQueryable<WagonsTracking> GetWagonsTracking()
+        {
+            try
+            {
+                return WagonsTracking;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWagonsTracking()"), eventID);
+                return null;
+            }
+        }
+
+        public WagonsTracking GetWagonsTracking(int id)
+        {
+            try
+            {
+                return GetWagonsTracking().Where(t => t.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWagonsTracking(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveWagonsTracking(WagonsTracking WagonsTracking)
+        {
+            //EFDbContext context1 = new EFDbContext();
+            WagonsTracking dbEntry;
+            try
+            {
+                if (WagonsTracking.id == 0)
+                {
+                    dbEntry = new WagonsTracking()
+                    {
+                        id = WagonsTracking.id,
+                        nvagon = WagonsTracking.nvagon,
+                        st_disl = WagonsTracking.st_disl,
+                        nst_disl = WagonsTracking.nst_disl,
+                        kodop = WagonsTracking.kodop,
+                        nameop = WagonsTracking.nameop,
+                        full_nameop = WagonsTracking.full_nameop,
+                        dt = WagonsTracking.dt,
+                        st_form = WagonsTracking.st_form,
+                        nst_form = WagonsTracking.nst_form,
+                        idsost = WagonsTracking.idsost,
+                        nsost = WagonsTracking.nsost,
+                        st_nazn = WagonsTracking.st_nazn,
+                        nst_nazn = WagonsTracking.nst_nazn,
+                        ntrain = WagonsTracking.ntrain,
+                        st_end = WagonsTracking.st_end,
+                        nst_end = WagonsTracking.nst_end,
+                        kgr = WagonsTracking.kgr,
+                        nkgr = WagonsTracking.nkgr,
+                        kgrp = WagonsTracking.kgrp,
+                        ves = WagonsTracking.ves,
+                        updated = WagonsTracking.updated,
+                        kgro = WagonsTracking.kgro,
+                        km = WagonsTracking.km,
+                    };
+                    context.WagonsTracking.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.WagonsTracking.Find(WagonsTracking.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.nvagon = WagonsTracking.nvagon;
+                        dbEntry.st_disl = WagonsTracking.st_disl;
+                        dbEntry.nst_disl = WagonsTracking.nst_disl;
+                        dbEntry.kodop = WagonsTracking.kodop;
+                        dbEntry.nameop = WagonsTracking.nameop;
+                        dbEntry.full_nameop = WagonsTracking.full_nameop;
+                        dbEntry.dt = WagonsTracking.dt;
+                        dbEntry.st_form = WagonsTracking.st_form;
+                        dbEntry.nst_form = WagonsTracking.nst_form;
+                        dbEntry.idsost = WagonsTracking.idsost;
+                        dbEntry.nsost = WagonsTracking.nsost;
+                        dbEntry.st_nazn = WagonsTracking.st_nazn;
+                        dbEntry.nst_nazn = WagonsTracking.nst_nazn;
+                        dbEntry.ntrain = WagonsTracking.ntrain;
+                        dbEntry.st_end = WagonsTracking.st_end;
+                        dbEntry.nst_end = WagonsTracking.nst_end;
+                        dbEntry.kgr = WagonsTracking.kgr;
+                        dbEntry.nkgr = WagonsTracking.nkgr;
+                        dbEntry.kgrp = WagonsTracking.kgrp;
+                        dbEntry.ves = WagonsTracking.ves;
+                        dbEntry.updated = WagonsTracking.updated;
+                        dbEntry.kgro = WagonsTracking.kgro;
+                        dbEntry.km = WagonsTracking.km;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveWagonsTracking(WagonsTracking={0})", WagonsTracking.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public WagonsTracking DeleteWagonsTracking(int id)
+        {
+            WagonsTracking dbEntry = context.WagonsTracking.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.WagonsTracking.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteWagonsTracking(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        /// <summary>
+        /// Вернуть список операций по номеру вагона
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public IQueryable<WagonsTracking> GetWagonsTrackingOfNumCars(int num)
+        {
+            try
+            {
+                return GetWagonsTracking().Where(t => t.nvagon == num);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWagonsTrackingOfNumCars(num={0})", num), eventID);
+                return null;
+            }
+        }
 
 
-
-
-
+        #endregion
 
     }
 }

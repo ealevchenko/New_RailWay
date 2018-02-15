@@ -99,5 +99,15 @@ namespace EFMT.Abstract
         //Consignee GetConsignee(int Code);
         //bool IsConsignee(int Code, mtConsignee type);
         #endregion
+
+        #region WagonsTracking
+        IQueryable<WagonsTracking> WagonsTracking { get; }
+        IQueryable<WagonsTracking> GetWagonsTracking();
+        WagonsTracking GetWagonsTracking(int id);
+        int SaveWagonsTracking(WagonsTracking WagonsTracking);
+        WagonsTracking DeleteWagonsTracking(int id);
+
+        IQueryable<WagonsTracking> GetWagonsTrackingOfNumCars(int num);
+        #endregion
     }
 }

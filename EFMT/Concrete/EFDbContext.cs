@@ -22,6 +22,8 @@ namespace EFMT.Concrete
         public virtual DbSet<ArrivalSostav> ArrivalSostav { get; set; }
         public virtual DbSet<Consignee> Consignee { get; set; }
 
+        public virtual DbSet<WagonsTracking> WagonsTracking { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApproachesSostav>()
@@ -35,6 +37,10 @@ namespace EFMT.Concrete
                 .WithRequired(e => e.ArrivalSostav)
                 .HasForeignKey(e => e.IDSostav)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<WagonsTracking>()
+                .Property(e => e.ves)
+                .HasPrecision(18, 3);
         }
 
     }

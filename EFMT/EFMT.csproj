@@ -53,6 +53,7 @@
     <Compile Include="Abstract\IMT.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFMetallurgTrans.cs" />
+    <Compile Include="Entities\WagonsTracking.cs" />
     <Compile Include="Entities\ApproachesCars.cs" />
     <Compile Include="Entities\ApproachesSostav.cs" />
     <Compile Include="Entities\ArrivalCars.cs" />
