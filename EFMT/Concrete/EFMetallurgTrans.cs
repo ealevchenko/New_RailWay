@@ -15,7 +15,7 @@ namespace EFMT.Concrete
     public enum mtOperation : int { not = 0, coming = 1, tsp = 2 }
 
     public enum mtConsignee : int { AMKR = 1 }
-    
+
     public class EFMetallurgTrans : IMT
     {
         private eventID eventID = eventID.EFMetallurgTrans;
@@ -51,7 +51,7 @@ namespace EFMT.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetApproachesCars(id={0})",id), eventID);
+                e.WriteErrorMethod(String.Format("GetApproachesCars(id={0})", id), eventID);
                 return null;
             }
         }
@@ -87,7 +87,7 @@ namespace EFMT.Concrete
                         NumDocArrival = ApproachesCars.NumDocArrival,
                         Arrival = ApproachesCars.Arrival,
                         ParentID = ApproachesCars.ParentID,
-                        ApproachesSostav = ApproachesCars.ApproachesSostav, 
+                        ApproachesSostav = ApproachesCars.ApproachesSostav,
                         UserName = ApproachesCars.UserName
                     };
                     context.ApproachesCars.Add(dbEntry);
@@ -137,8 +137,8 @@ namespace EFMT.Concrete
             if (dbEntry != null)
             {
                 try
-                {                
-                context.ApproachesCars.Remove(dbEntry);
+                {
+                    context.ApproachesCars.Remove(dbEntry);
 
                     context.SaveChanges();
                 }
@@ -268,7 +268,7 @@ namespace EFMT.Concrete
         {
             try
             {
-               return context.Database.SqlQuery<DateTime>("SELECT Distinct(Convert(date,DateOperation,120)) FROM MT.ApproachesCars where(Arrival IS NULL) ORDER BY Convert(date, DateOperation, 120) DESC").ToList();
+                return context.Database.SqlQuery<DateTime>("SELECT Distinct(Convert(date,DateOperation,120)) FROM MT.ApproachesCars where(Arrival IS NULL) ORDER BY Convert(date, DateOperation, 120) DESC").ToList();
             }
             catch (Exception e)
             {
@@ -439,7 +439,7 @@ namespace EFMT.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetNoCloseApproachesSostav(index={0}, date={1})", index, date), eventID); 
+                e.WriteErrorMethod(String.Format("GetNoCloseApproachesSostav(index={0}, date={1})", index, date), eventID);
                 return null;
             }
         }
@@ -600,9 +600,9 @@ namespace EFMT.Concrete
                         DateOperation = ArrivalCars.DateOperation,
                         TrainNumber = ArrivalCars.TrainNumber,
                         NumDocArrival = ArrivalCars.NumDocArrival,
-                        Arrival = ArrivalCars.Arrival, 
-                        ParentID = ArrivalCars.ParentID, 
-                        ArrivalSostav = ArrivalCars.ArrivalSostav, 
+                        Arrival = ArrivalCars.Arrival,
+                        ParentID = ArrivalCars.ParentID,
+                        ArrivalSostav = ArrivalCars.ArrivalSostav,
                         UserName = ArrivalCars.UserName
                     };
                     context.ArrivalCars.Add(dbEntry);
@@ -751,7 +751,7 @@ namespace EFMT.Concrete
                 SqlParameter idoc = new SqlParameter("@doc", doc);
                 SqlParameter inum = new SqlParameter("@num", num);
                 SqlParameter dt_amkr = new SqlParameter("@dt", dt);
-                SqlParameter iweight = new SqlParameter("@weight", Math.Round((weight!=null ? (decimal) weight: 0),0));
+                SqlParameter iweight = new SqlParameter("@weight", Math.Round((weight != null ? (decimal)weight : 0), 0));
                 SqlParameter user_name = new SqlParameter("@UserName", System.Environment.UserDomainName + @"\" + System.Environment.UserName);
 
                 return context.Database.ExecuteSqlCommand("UPDATE [MT].[ArrivalCars] SET NumDocArrival = @doc, Arrival = @dt , UserName = @UserName" +
@@ -777,7 +777,7 @@ namespace EFMT.Concrete
             {
                 SqlParameter idoc = new SqlParameter("@doc", doc);
                 SqlParameter inum = new SqlParameter("@num", num);
-                SqlParameter dt_start = new SqlParameter("@dt_start", dt.AddDays(day*-1));
+                SqlParameter dt_start = new SqlParameter("@dt_start", dt.AddDays(day * -1));
                 SqlParameter dt_stop = new SqlParameter("@dt_stop", dt);
                 SqlParameter user_name = new SqlParameter("@UserName", System.Environment.UserDomainName + @"\" + System.Environment.UserName);
                 return context.Database.ExecuteSqlCommand("UPDATE [MT].[ArrivalCars] SET NumDocArrival = @doc, Arrival = @dt_stop , UserName = @UserName" +
@@ -805,7 +805,7 @@ namespace EFMT.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetArrivalCarsOfConsignees(id_sostav={0}, Consignees={1})", id_sostav, Consignees.IntsToString(';')), eventID);                
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfConsignees(id_sostav={0}, Consignees={1})", id_sostav, Consignees.IntsToString(';')), eventID);
                 return null;
             }
         }
@@ -820,7 +820,7 @@ namespace EFMT.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetArrivalCarsOfConsignees(Consignees={0})", Consignees.IntsToString(';')), eventID);                
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfConsignees(Consignees={0})", Consignees.IntsToString(';')), eventID);
                 return null;
             }
         }
@@ -887,7 +887,6 @@ namespace EFMT.Concrete
                 return -1;
             }
         }
-
         #endregion
 
         #region ArrivalSostav
@@ -1019,7 +1018,7 @@ namespace EFMT.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetNoCloseArrivalSostav(index={0}, date={1})", index, date), eventID); 
+                e.WriteErrorMethod(String.Format("GetNoCloseArrivalSostav(index={0}, date={1})", index, date), eventID);
                 return null;
             }
         }
@@ -1039,7 +1038,7 @@ namespace EFMT.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetNoCloseArrivalSostav(index={0}, date={1},  period={2})", index, date, period), eventID); 
+                e.WriteErrorMethod(String.Format("GetNoCloseArrivalSostav(index={0}, date={1},  period={2})", index, date, period), eventID);
                 return null;
             }
         }
@@ -1169,9 +1168,9 @@ namespace EFMT.Concrete
                 }
                 else
                 {
-                        dbEntry.description = Consignee.description;
-                        dbEntry.consignee1 = Consignee.consignee1;
-                        dbEntry.send = Consignee.send;
+                    dbEntry.description = Consignee.description;
+                    dbEntry.consignee1 = Consignee.consignee1;
+                    dbEntry.send = Consignee.send;
                 }
                 context.SaveChanges();
             }
@@ -1210,7 +1209,7 @@ namespace EFMT.Concrete
         {
             try
             {
-                return GetConsignee().Where(c=>c.send == send & c.consignee1 == (int)Consignee);
+                return GetConsignee().Where(c => c.send == send & c.consignee1 == (int)Consignee);
             }
             catch (Exception e)
             {
@@ -1219,7 +1218,8 @@ namespace EFMT.Concrete
             }
         }
 
-        public bool IsConsigneeSend(bool send, int code, mtConsignee Consignee) {
+        public bool IsConsigneeSend(bool send, int code, mtConsignee Consignee)
+        {
             Consignee consignee = GetConsignee().Where(c => c.send == send & c.code == code & c.consignee1 == (int)Consignee).FirstOrDefault();
             return consignee != null ? true : false;
         }
@@ -1424,5 +1424,44 @@ namespace EFMT.Concrete
 
         #endregion
 
+        #region CountCarsOfSostav
+        /// <summary>
+        /// Вернуть список составов по которым есть не закрытые вагоны
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public List<CountCarsOfSostav> GetNoCloseArrivalCarsOfStationUZ(int code)
+        {
+            try
+            {
+                return GetArrivalCarsOfStationUZ(code, true);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNoCloseArrivalCarsOfStationUZ(code={0})", code), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть список составов по станциям УЗ КР с выбором показать все или только не закрытые
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="close"></param>
+        /// <returns></returns>
+        public List<CountCarsOfSostav> GetArrivalCarsOfStationUZ(int code, bool close)
+        {
+            try
+            {
+                SqlParameter icode = new SqlParameter("@code", code);
+                SqlParameter bclose = new SqlParameter("@close", close);
+                return context.Database.SqlQuery<CountCarsOfSostav>("EXEC [MT].[GetArrivalCarsOfStationUZ] @code, @close", icode, bclose).ToList();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfStationUZ(code={0}, close={0})", code, close), eventID);
+                return null;
+            }
+        }
+        #endregion
     }
 }

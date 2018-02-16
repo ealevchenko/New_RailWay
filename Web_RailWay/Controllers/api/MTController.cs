@@ -90,20 +90,7 @@ namespace Web_RailWay.Controllers.api
             return Ok(new_cars);
         }
 
-        // GET: api/mt/approaches/cars/sostav/12
-        [Route("approaches/cars/sostav/{id:int?}")]
-        [ResponseType(typeof(ApproachesCars))]
-        public IHttpActionResult GetApproachesCarsOfSostav(int id)
-        {
-            IEnumerable<ApproachesCars> cars = this.rep_MT.GetApproachesCarsOfSostav(id);
-            if (cars == null || cars.ToList().Count() == 0)
-            {
-                return NotFound();
-            }
-            List<ApproachesCars> new_cars = new List<ApproachesCars>();
-            cars.ToList().ForEach(c => new_cars.Add(CreateCorectApproachesCars(c)));
-            return Ok(new_cars);
-        }
+
 
         // GET: api/mt/wagons_tracking
         [Route("wagons_tracking")]
@@ -117,5 +104,19 @@ namespace Web_RailWay.Controllers.api
             }
             return Ok(JsonConvert.DeserializeObject(result));
         }
+
+        // GET: api/mt/arrival/cars/station_uz/4670
+        [Route("arrival/cars/station_uz/{code:int?}")]
+        [ResponseType(typeof(CountCarsOfSostav))]
+        public IHttpActionResult GetNoCloseArrivalCarsOfStationUZ(int code)
+        {
+            List<CountCarsOfSostav> cars = this.rep_MT.GetNoCloseArrivalCarsOfStationUZ(code);
+            if (cars == null || cars.ToList().Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(cars);
+        }
+
     }
 }

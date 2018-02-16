@@ -616,7 +616,6 @@
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
-    <Content Include="Scripts\datetime\jquery-1.11.2.min.js" />
     <Content Include="Scripts\datetime\jquery.daterangepicker.js" />
     <Content Include="Scripts\datetime\moment.min.js" />
     <Content Include="Scripts\Home\home.js" />

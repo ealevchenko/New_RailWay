@@ -51,11 +51,10 @@ namespace Web_RailWay
             bundles.Add(new ScriptBundle("~/bundles/wow").Include(
                 "~/Scripts/wow.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/datetime")
-                .Include(
+            bundles.Add(new ScriptBundle("~/bundles/datetime").Include(
                  "~/Scripts/datetime/moment.min.js"
                 , "~/Scripts/datetime/jquery.daterangepicker.js"
-                , "~/Scripts/helpers/lib-datetime.js"
+                //, "~/Scripts/helpers/lib-datetime.js"
                 ));
             // Плагин таблицы
             bundles.Add(new ScriptBundle("~/bundles/DataTables").Include(

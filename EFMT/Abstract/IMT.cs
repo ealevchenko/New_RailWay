@@ -37,7 +37,6 @@ namespace EFMT.Abstract
         ApproachesSostav GetNoCloseApproachesSostav(string index, DateTime date);
         ApproachesSostav GetApproachesSostavOfParentID(int parent_id);
         List<ApproachesSostav> GetApproachesSostavLocation(int id_sostav, bool destinct);
-
         #endregion
 
         #region На станциях УЗ КР
@@ -58,7 +57,6 @@ namespace EFMT.Abstract
         IQueryable<ArrivalCars> GetArrivalCars(int num, DateTime dt);
         ArrivalCars GetArrivalCarsOfNextCar(int num, DateTime dt);
         int CloseArrivalCars(int num, DateTime dt, int code_close);
-
 
         IQueryable<ArrivalSostav> ArrivalSostav { get; }
         IQueryable<ArrivalSostav> GetArrivalSostav();
@@ -108,6 +106,12 @@ namespace EFMT.Abstract
         WagonsTracking DeleteWagonsTracking(int id);
 
         IQueryable<WagonsTracking> GetWagonsTrackingOfNumCars(int num);
+        #endregion
+
+        #region CountCarsOfSostav
+        List<CountCarsOfSostav> GetNoCloseArrivalCarsOfStationUZ(int code);
+        List<CountCarsOfSostav> GetArrivalCarsOfStationUZ(int code, bool close);
+
         #endregion
     }
 }

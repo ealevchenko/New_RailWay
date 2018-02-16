@@ -15,7 +15,6 @@
 /// <reference path="creative.js" />
 /// <reference path="jquery-ui-1.12.1.min.js" />
 /// <reference path="datetime/moment.min.js" />
-/// <reference path="datetime/jquery-1.11.2.min.js" />
 /// <reference path="datetime/jquery.daterangepicker.js" />
 /// <reference path="jquery.cookie.js" />
 /// <reference path="MT/arrivalcars.js" />

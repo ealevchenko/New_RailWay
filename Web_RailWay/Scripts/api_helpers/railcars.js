@@ -216,6 +216,33 @@ function getAsyncCarsOfArrivalAMKR(id_station, train, dt, side, callback) {
     });
 }
 
+// Получить список вагонов по указанной отправке
+function getAsyncCarsOfSending(id_station, train, dt, station_to, callback) {
+    if (typeof dt != 'string') {
+        dt = dt.toISOString();
+    }
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rc/sending/' + id_station + '/' + train + '/' + dt + '/' + station_to,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 // Получить список цехов по указанной станции
 function getAsyncShopsOfStation(id_station, callback) {
     $.ajax({

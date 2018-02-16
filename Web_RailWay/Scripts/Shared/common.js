@@ -100,3 +100,37 @@ function initSelect(obj_select, property, data, callback_option, value_select, e
         .val(value_select)
         .selectmenu("refresh");
 }
+// Инициализация компонента DateTime
+function initDateTime(obj_select, property) {
+    var lang = $.cookie('lang');
+    obj_select.dateRangePicker(
+        {
+            startOfWeek: 'monday',
+            separator: lang == 'en' ? 'to' : 'по',
+            language: lang,
+            format: lang == 'en' ? 'MM/DD/YYYY HH:mm' : 'DD.MM.YYYY HH:mm',
+            autoClose: true,
+            singleDate: true,
+            showShortcuts: false,
+            //getValue: function () {
+            //    if ($('#date-start').val() && $('#date-stop').val())
+            //        return $('#date-start').val() + ' to ' + $('#date-stop').val();
+            //    else
+            //        return '';
+            //},
+            //setValue: function (s, s1, s2) {
+            //    $('#date-start').val(s1);
+            //    $('#date-stop').val(s2);
+            //},
+            time: {
+                enabled: true
+            },
+            swapTime: true,
+        }).bind('datepicker-closed', function () {
+
+        });
+    // Задать дату 
+    var dt = new Date();
+    var s_dt = dt.getDate() + '.' + (dt.getMonth() + 1) + '.' + dt.getFullYear() + ' ' + dt.getHours() + ':' + dt.getMinutes();
+    obj_select.data('dateRangePicker').setDateRange(s_dt, s_dt);
+}

@@ -5,35 +5,37 @@
 #container {
     margin: 0 auto; /* Выравниваем по центру */
     background: #ffffff; /* Цвет колонок */
-    font-size:12px;
+    font-size: 12px;
 }
 
 DIV#header {
     background-color: #444;
     border-bottom: 2px solid #111;
     color: White;
-    padding-left:15px;
-    padding-right:15px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
+
     DIV#header DIV.title {
         font-size: 2em;
-        text-align:center;
+        text-align: center;
     }
 
 .title-label {
     text-transform: uppercase;
     color: blanchedalmond;
-    padding:5px;
+    padding: 5px;
 }
 
 .setup-label {
     text-transform: uppercase;
-    color:#808080
+    color: #808080;
 }
+
 .title-label-text {
     text-transform: uppercase;
     color: #ffffff;
-    padding:5px;
+    padding: 5px;
 }
 
 /*#operation-detali {
@@ -44,37 +46,35 @@ DIV#header {
     float: left;
     width: 300px;
     padding: 5px;
-
 }
 
 #detali-group {
-    border-left:1px solid #808080;
-    float:left;
+    border-left: 1px solid #808080;
+    float: left;
     padding: 10px;
-    width:1550px;
+    width: 1550px;
 }
 
-div#property_view_cars {
-
+div#property_info {
     width:100%;
 }
 
 .setup-operation {
-    padding:5px;
+    padding: 5px;
 }
 
-.setup-operation button {
-    margin-left:5px;
-}
+    .setup-operation button {
+        margin-left: 5px;
+    }
 
-.setup-operation label {
-    margin-left:5px;
-    margin-right:5px;
-}
+    .setup-operation label {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
 
 
-div#group-list-ways, div#group-list-wagonoverturns, div#group-list-shops, div#group-list-arrival-amkr, div#group-list-sending {
-    padding:0;
+div#group-list-ways, div#group-list-wagonoverturns, div#group-list-shops, div#group-list-arrival-amkr, div#group-list-arrival-uz, div#group-list-sending {
+    padding: 0;
 }
 
 div#cls {
@@ -82,15 +82,44 @@ div#cls {
 }
 
 table.dataTable tbody th, table.dataTable tbody td {
-        padding: 0px;
-        margin: 0px;
-    }
+    padding: 0px;
+    margin: 0px;
+}
 
 table.table-cars.dataTable tbody td {
     /*font-size:10px;*/
-    white-space:nowrap;
+    white-space: nowrap;
 }
 
 /*table.table-list-ways.dataTable{
     font-size:12px;
 }*/
+
+.dataTables_wrapper .dataTables_filter {
+    float: none;
+    text-align: right;
+}
+/*Установка режимов*/
+.mode-manevr {
+    background-color: blanchedalmond;
+}
+
+.mode-sending {
+    background-color: #c5ffff;
+}
+
+.mode-accept {
+    background-color: #d6eaa5;
+}
+
+.mode-transit {
+    background-color: #d6eaa5;
+}
+
+.mode-correction {
+    background-color: #fcd9d9;
+}
+
+.mode-statepark {
+    background-color: #fcd9d9;
+}

@@ -411,6 +411,32 @@ namespace Web_RailWay.Controllers.api
             }
         }
 
+        // GET: api/rc/sending/4/30297/2018-01-13T06:50:00/34
+        [Route("sending/{station:int}/{train:int}/{dt:datetime}/{station_to:int}")]
+        [ResponseType(typeof(CarInfo))]
+        public IHttpActionResult GetCarsOfSending(int station, int train, DateTime dt, int station_to)
+        {
+            try
+            {
+                SqlParameter i_station = new SqlParameter("@idstation", station);
+                SqlParameter i_train = new SqlParameter("@trainNum", train);
+                SqlParameter d_dt = new SqlParameter("@dt", dt);
+                SqlParameter i_station_to = new SqlParameter("@idstationTo", station_to);
+                List<CarInfo> ws = this.rep_rc.Database.SqlQuery<CarInfo>("EXEC [RailCars].[GetRemoveWagons] @idstation, @dt, @idstationTo, @trainNum", i_station, d_dt, i_station_to, i_train).ToList();
+                if (ws == null)
+                {
+                    return NotFound();
+                }
+                return Ok(ws);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfSending(station={0}, train={1}, dt={2}, side={3})", station, train, dt, station_to), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+
         // GET: api/rc/shops/station/5
         [Route("shops/station/{id:int}")]
         [ResponseType(typeof(SHOPS))]
