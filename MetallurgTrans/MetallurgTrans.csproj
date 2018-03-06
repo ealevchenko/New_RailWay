@@ -77,6 +77,10 @@
       <Project>{00d9d515-6089-4334-af39-28db22cd7d20}</Project>
       <Name>RWSettings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RW\RW.csproj">
+      <Project>{1da8ddff-bd6c-4102-897d-55911a9f87ab}</Project>
+      <Name>RW</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebApiClient\WebApiClient.csproj">
       <Project>{4dfb537d-a480-47d9-8d3c-29124822d02a}</Project>
       <Name>WebApiClient</Name>

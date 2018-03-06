@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using TransferRailCars;
 using WebApiClient;
+using RW;
 //using EFKIS.Concrete;
 //using EFKIS.Entities;
 
@@ -107,6 +108,9 @@ namespace MetallurgTrans
         public int DayRangeArrivalCars { get { return this.day_range_arrival_cars; } set { this.day_range_arrival_cars = value; } }
         private bool arrival_to_railway = true;
         public bool ArrivalToRailWay { get { return this.arrival_to_railway; } set { this.arrival_to_railway = value; } }
+
+        private bool arrival_to_railcars = true;
+        public bool ArrivalToRailCars { get { return this.arrival_to_railcars; } set { this.arrival_to_railcars = value; } }
 
         private DateTime datetime_start_new_tracking = new DateTime(2018,01,01,0,0,0); // Время начала запроса информации по вагону которого нет в базе АМКР
         public DateTime DateTimeStartNewTracking { get { return this.datetime_start_new_tracking; } set { this.datetime_start_new_tracking = value; } }
@@ -717,11 +721,16 @@ namespace MetallurgTrans
                 if (new_id < 0) { countError++; } // Счетчик ошибок при переносе
                 if (count_wagons > 0 & new_id > 0)
                 {
-                    if (arrival_to_railway)
+                    if (arrival_to_railcars)
                     {
                         //TODO: Убрать старый метод переноса составов в прибытие, добаить новый переносить из службы КИС
                         TRailCars trc = new TRailCars();
                         int res = trc.ArrivalToRailCars(new_id);
+                    }
+                    if (arrival_to_railway)
+                    {
+                        RWOperation rw_operations = new RWOperation(this.servece_owner);
+                        int res = rw_operations.TransferArrivalSostavToRailWay(new_id);
                     }
                     return true;
                 }

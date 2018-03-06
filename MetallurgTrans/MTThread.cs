@@ -309,6 +309,7 @@ namespace MetallurgTrans
             try
             {
                 bool arrivalToRailWay = true;
+                bool arrivalToRailCars = true;
                 connectSFTP connect_SFTP = new connectSFTP()
                 {
                     Host = "www.metrans.com.ua",
@@ -326,6 +327,7 @@ namespace MetallurgTrans
                     {
                         // Если нет перенесем настройки в БД
                         arrivalToRailWay = RWSetting.GetDB_Config_DefaultSetting("ArrivalToRailWay", service, arrivalToRailWay, true);
+                        arrivalToRailCars = RWSetting.GetDB_Config_DefaultSetting("ArrivalToRailCars", service, arrivalToRailCars, true);
                         connect_SFTP = new connectSFTP()
                         {
                             Host = RWSetting.GetDB_Config_DefaultSetting<string>("Host", service.HostMT, "www.metrans.com.ua", true),
@@ -352,6 +354,7 @@ namespace MetallurgTrans
                     MTTransfer mtt = new MTTransfer(service);
                     mtt.DayRangeArrivalCars = dayrangeArrivalCars;
                     mtt.ArrivalToRailWay = arrivalToRailWay;
+                    mtt.ArrivalToRailCars = arrivalToRailCars;
                     mtt.FromPath = toTMPDirPath;
                     mtt.DeleteFile = deleteFileMT;
                     res_transfer = mtt.TransferArrival();
