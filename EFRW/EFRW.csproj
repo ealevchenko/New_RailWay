@@ -62,6 +62,25 @@
     <Compile Include="Entities\ReferenceTypeCargo.cs" />
     <Compile Include="Entities\Stations.cs" />
     <Compile Include="Entities\StationsNodes.cs" />
+    <Compile Include="Entities\CarConditions.cs" />
+    <Compile Include="Entities\CarOperations.cs" />
+    <Compile Include="Entities\Cars.cs" />
+    <Compile Include="Entities\CarsInpDelivery.cs" />
+    <Compile Include="Entities\CarsOutDelivery.cs" />
+    <Compile Include="Entities\CarStatus.cs" />
+    <Compile Include="Entities\ReferenceCars.cs" />
+    <Compile Include="Entities\ReferenceGroupCars.cs" />
+    <Compile Include="Entities\ReferenceOwnerCars.cs" />
+    <Compile Include="Entities\ReferenceOwners.cs" />
+    <Compile Include="Entities\ReferenceTypeCars.cs" />
+    <Compile Include="Entities\Ways.cs" />
+    <Compile Include="Model\CarConditions.cs" />
+    <Compile Include="Model\CarOperations.cs" />
+    <Compile Include="Model\Cars.cs" />
+    <Compile Include="Model\CarsInpDelivery.cs" />
+    <Compile Include="Model\CarsOutDelivery.cs" />
+    <Compile Include="Model\CarStatus.cs" />
+    <Compile Include="Model\Model1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,9 +97,7 @@
       <Name>MLogs</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

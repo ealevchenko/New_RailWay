@@ -65,6 +65,10 @@ namespace MessageLog
         EFRW_EFReference = 4101,            // Модуль доступа к БД справочников системы RailWay
         EFRW_EFRailWay = 4102,              // Библиотека доступа к данным БД RailWay
 
+        RW = 4200,                          // Библиотека сервисов обработки данных RailWay
+        RW_RWTransfer = 4201,               // Модуль переноса данных системы RailWay
+        RW_RWOperation = 4202,              // Модуль операций системы RailWay
+        RW_RWReference = 4203,              // Модуль спрвочных данных системы RailWay
         #endregion
 
         #region Служба общей справочной системы 5000
@@ -92,6 +96,7 @@ namespace MessageLog
 
         Web_API_RCController = 11110,
 
+        Web_API_MTController = 11120,
 
     }
 }
