@@ -82,7 +82,7 @@ namespace WebApiClient
     public class WebApiClientMetallurgTrans 
     {
         private eventID eventID = eventID.WebApi_ClientMetallurgTrans;
-        private WebApi wapi;
+        public WebApi wapi;
         private string url;
         private string user;
         private string psw;

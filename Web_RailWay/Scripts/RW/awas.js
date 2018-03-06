@@ -143,11 +143,34 @@
             },
             view: {
                 obj: $('<div class="dt-buttons setup-operation" id="property_view_cars"></div>'),
+                handleToggle: function (e) {
+                    var target = $(e.target);
+                    if (target.is("#view-mt")) {
+                        cars.enableColumsMT(target[0].checked);
+                    }
+                    if (target.is("#view-sap")) {
+                        cars.enableColumsSAP(target[0].checked);
+                    }
+                    if (target.is("#view-email")) {
+                        cars.enableColumsEMAIL(target[0].checked);
+                    }
+                    if (target.is("#view-outcars")) {
+                        cars.enableColumsOutCars(target[0].checked);
+                    }
+                },
+
                 initPanel: function () {
+                    this.obj.empty();
                     this.obj.append(panel.element.label_view_mt).append(panel.element.checkbox_view_mt)
                             .append(panel.element.label_view_sap).append(panel.element.checkbox_view_sap)
-                            .append(panel.element.label_view_email).append(panel.element.checkbox_view_email);
+                            .append(panel.element.label_view_email).append(panel.element.checkbox_view_email)
+                            .append(panel.element.label_view_outcars).append(panel.element.checkbox_view_outcars)
+                    ;
                     this.obj.controlgroup();
+                    panel.element.checkbox_view_mt.on("change", panel.view.handleToggle);
+                    panel.element.checkbox_view_sap.on("change", panel.view.handleToggle);
+                    panel.element.checkbox_view_email.on("change", panel.view.handleToggle);
+                    panel.element.checkbox_view_outcars.on("change", panel.view.handleToggle);
                 }
             },
             info: {
@@ -333,12 +356,14 @@
                 radio_mode_transit: $('<input type="radio" name="mode" id="mode-transit">'),
                 // панель просмотра
                 label_info: $('<label id="view-info">Информация:</label>'),
-                label_view_mt: $('<label for="view-mt">' + (lang == 'en' ? "MetallurgTrans " : "МеталургТранс ") + '</label>'),
-                checkbox_view_mt: $('<input type="checkbox" name="view-mt" id="view-mt" checked="checked" >'),
-                label_view_sap: $('<label for="view-sap">' + (lang == 'en' ? "SAP " : "САП ") + '</label>'),
-                checkbox_view_sap: $('<input type="checkbox" name="view-sap" id="view-sap" checked="checked" >'),
-                label_view_email: $('<label for="view-email">' + (lang == 'en' ? "Writing  " : "Письма ") + '</label>'),
-                checkbox_view_email: $('<input type="checkbox" name="view-email" id="view-email" checked="checked" >'),
+                label_view_mt: $('<label for="view-mt">' + (lang == 'en' ? "MetallurgTrans" : "МеталургТранс") + '</label>'),
+                checkbox_view_mt: $('<input type="checkbox" name="view" id="view-mt" checked="checked" >'),
+                label_view_sap: $('<label for="view-sap">' + (lang == 'en' ? "SAP" : "САП") + '</label>'),
+                checkbox_view_sap: $('<input type="checkbox" name="view" id="view-sap" checked="checked" >'),
+                label_view_email: $('<label for="view-email">' + (lang == 'en' ? "Writing" : "Письма") + '</label>'),
+                checkbox_view_email: $('<input type="checkbox" name="view" id="view-email" checked="checked" >'),
+                label_view_outcars: $('<label for="view-outcars">' + (lang == 'en' ? "Shipped goods" : "Отправляемые грузы") + '</label>'),
+                checkbox_view_outcars: $('<input type="checkbox" name="view" id="view-outcars" checked="checked" >'),
                 // панель настроек маневра
                 button_manevr_select_all: $('<button class="ui-button ui-widget ui-corner-all">' + (lang == 'en' ? "Select All" : "Выбрать все вагоны") + '</button>'),
                 button_manevr_clear_all: $('<button class="ui-button ui-widget ui-corner-all">' + (lang == 'en' ? "Clear All" : "Убрать все вагоны") + '</button>'),
@@ -1248,7 +1273,7 @@
                     "filter": true,
                     "scrollY": "600px",
                     "scrollX": true,
-                    buttons: ['copy', 'excel', 'pdf'],
+                    //buttons: ['copy', 'excel', 'pdf'],
                     language: {
                         decimal: lang == 'en' ? "." : ",",
                         search: lang == 'en' ? "Search" : "Найти вагон:",
@@ -1407,6 +1432,22 @@
                 this.initEventSelect();
                 //this.obj.draw();
             },
+            enableColumsMT: function (view) {
+                this.obj.columns([5, 8]).visible(view, true);
+                this.obj.draw(false);
+            },
+            enableColumsSAP: function (view) {
+                this.obj.columns([28,29,30,31,32,33,34,35,36,37,38,39,40,41,42]).visible(view, true);
+                this.obj.draw(false);
+            },
+            enableColumsEMAIL: function (view) {
+                this.obj.columns([16, 17, 18, 19, 20]).visible(view, true);
+                this.obj.draw(false);
+            },
+            enableColumsOutCars: function (view) {
+                this.obj.columns([21, 22, 23, 24, 25, 26]).visible(view, true);
+                this.obj.draw(false);
+            },
             enableTable: function (length) {
                 if (length >= 0) {
                     this.obj_table.show();
@@ -1501,7 +1542,29 @@
                             cars.enableTable(cars.list.length);
                         }
                     }
-
+                    // Показать прибытие УЗ
+                    if (obj_select.name == 'list_arrival_uz' & group_list.active == 4) {
+                        if (cars.list == null | data_refresh == true | cars.group != 'list_arrival_uz' | (cars.group == 'list_arrival_uz' & cars.group_select != obj_select.select)) {
+                            cars.group_select = obj_select.select;
+                            cars.group = 'list_arrival_uz';
+                            // Загружаем
+                            getAsyncCarsOfArrivalUZ(
+                                (obj_select.select != null ? obj_select.select : 0),
+                                true,
+                                function (result) {
+                                    panel.info.viewInfo(obj_select);
+                                    // Коррекция нумерации вагонов
+                                    for (i = 0; i < result.length; i++) {
+                                        result[i].num_vag_on_way = i + 1;
+                                    }
+                                    cars.loadData(result);
+                                    cars.enableTable(result.length);
+                                });
+                        } else {
+                            //cars.loadData(cars.list);
+                            cars.enableTable(cars.list.length);
+                        }
+                    }
                     // Показать отправление
                     if (obj_select.name == 'list_sending' & group_list.active == 5) {
                         if (cars.list == null | data_refresh == true | cars.group != 'list_sending' | (cars.group == 'list_sending' & cars.group_select != obj_select.train + obj_select.dt)) {
