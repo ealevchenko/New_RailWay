@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using TransferRailCars;
+using EFRC.Concrete;
+using EFRC.Entities;
 
 namespace Testing
 {
@@ -32,6 +34,7 @@ namespace Testing
             MTTransfer mtt = new MTTransfer();
             mtt.FromPath = @"D:\xlm_new";
             mtt.DeleteFile = false;
+            mtt.ArrivalToRailWay = false;
             int res_transfer = mtt.TransferArrival();
         }
 
@@ -156,6 +159,23 @@ namespace Testing
         {
             MTThread mth = new MTThread(service.ServicesMT);
             mth.StartTransferWagonsTracking();
+        }
+
+        public void MTArrivalCarsClose()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            EFRailCars ef_rc = new EFRailCars();
+            List<ArrivalCars> list = efmt.ArrivalCars.Where(c=>c.Arrival == null & c.IDSostav>7234).OrderBy(c=>c.ID).ToList();
+            foreach (ArrivalCars car in list) {
+                VAGON_OPERATIONS vag = ef_rc.VAGON_OPERATIONS.Where(o => o.IDSostav == car.IDSostav & o.num_vagon == car.Num & o.n_natur != null).FirstOrDefault();
+                    if (vag!=null){
+                        car.Arrival = vag.dt_amkr;
+                        car.NumDocArrival = vag.n_natur;
+                        int res = efmt.SaveArrivalCars(car);
+                        Console.WriteLine("Добавим закроем вагон {0}, состава {1} - {2}", car.Num, car.IDSostav, res);
+                    }
+            }
+
         }
 
     }

@@ -212,13 +212,27 @@ namespace Testing
         public void WebAPIMT()
         {
             WebApiClientMetallurgTrans clientMT = new WebApiClientMetallurgTrans();
+            //Console.WriteLine(clientMT.wapi.to);
             EFMetallurgTrans efmt = new EFMetallurgTrans();
-            //List<WagonsTracking> list1 =  clientMT.GetWagonsTracking();
-            List<WagonsTracking> list2 = clientMT.GetWagonsTracking(56858111);
-            //List<WagonsTracking> list3 = clientMT.GetWagonsTracking(56858111, DateTime.Now.AddMonths(-1));
-            //List<WagonsTracking> list4 = clientMT.GetWagonsTracking(56858111, DateTime.Now.AddDays(-15), DateTime.Now.AddDays(-5));
-            foreach (WagonsTracking wt in list2) {
-                efmt.SaveWagonsTracking(wt);
+            Console.WriteLine("Запрос....");
+            List<WagonsTracking> list1 =  clientMT.GetWagonsTracking();
+            //List<WagonsTracking> list2 = clientMT.GetWagonsTracking(56858111);
+            ////List<WagonsTracking> list3 = clientMT.GetWagonsTracking(56858111, DateTime.Now.AddMonths(-1));
+            ////List<WagonsTracking> list4 = clientMT.GetWagonsTracking(56858111, DateTime.Now.AddDays(-15), DateTime.Now.AddDays(-5));
+            foreach (WagonsTracking wt in list1) {
+                Console.WriteLine(wt.nvagon);
+                //efmt.SaveWagonsTracking(wt);
+            }
+        }
+
+        public void WebAPIMTStart()
+        {
+
+            for (int i = 1; i <= 10; i++)
+            {
+                Console.WriteLine("Press any key to start...");
+                Console.ReadKey();
+                WebAPIMT();
             }
         }
 

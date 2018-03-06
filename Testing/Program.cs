@@ -57,6 +57,19 @@ namespace Testing
 
 
 
+            #region Test_RW
+            Test_RW tst_rw = new Test_RW();
+            tst_rw.RWTransfer_ArrivalMTToRailway(); // Тест переноса данных МТ (по id_sostav) в систему RailWay
+            //tst_rw.RWReference_GetReferenceCarsOfNum(); // Тест справочника вагонов
+            //tst_rw.RWReference_GetReferenceCars(); // Тест чтения\записи\удаления ef вагонов
+            //tst_rw.RWReference_GetReferenceCountry(); // Тест справочника стран
+            //tst_rw.RWReference_GetReferenceCargo(); // Тест справочника грузов
+            //tst_rw.RWOperation_TransferArrivalSostavToRailWay(); // Тест переноса вагонов из МТ в систему railway
+
+            //tst_rw.EFRailWay_GetCars(); // Тест проверки CARS
+
+            #endregion
+
 
             #region Test_RWWebAPI
             Test_RWWebAPI tst_rw_api = new Test_RWWebAPI();
@@ -74,6 +87,7 @@ namespace Testing
             //tst_rw_api.Reference_GetCountryOfCodeSNG();
             //tst_rw_api.WebAPIToken();
             //tst_rw_api.WebAPIMT();
+            //tst_rw_api.WebAPIMTStart();
 
             #endregion
 
@@ -92,7 +106,8 @@ namespace Testing
             //tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(10);// Коррекция составов по прибытию всех составов
             //tst_tr_app.EFMetallurgTrans_GetWagonsTracking();
             //tst_tr_app.MTTransfer_TransferWagonsTracking(); // Тест переноса информации слежения за вагонами
-            tst_tr_app.MTThread_TransferWagonsTracking(); // Тест работы потока переноса информации слежения за вагонами
+            //tst_tr_app.MTThread_TransferWagonsTracking(); // Тест работы потока переноса информации слежения за вагонами
+            //tst_tr_app.MTArrivalCarsClose(); // Закроем вагоны натурками
 
             #endregion
 

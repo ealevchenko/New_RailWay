@@ -80,6 +80,7 @@
     <Compile Include="Test_Logs.cs" />
     <Compile Include="Test_MetallurgTrans.cs" />
     <Compile Include="Test_Reference.cs" />
+    <Compile Include="Test_RW.cs" />
     <Compile Include="Test_RWWebAPI.cs" />
     <Compile Include="Test_RW_Reference.cs" />
     <Compile Include="Test_Settings.cs" />
@@ -99,6 +100,10 @@
     <ProjectReference Include="..\EFMT\EFMT.csproj">
       <Project>{415f94aa-63df-4538-9552-fc9a22b61636}</Project>
       <Name>EFMT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFRC\EFRC.csproj">
+      <Project>{89a9bc62-6912-4df8-a7f6-1c9a4beac8dd}</Project>
+      <Name>EFRC</Name>
     </ProjectReference>
     <ProjectReference Include="..\EFReference\EFReference.csproj">
       <Project>{09d0b7b9-79e7-4df8-ad4f-99df5e9083f8}</Project>
@@ -155,6 +160,10 @@
     <ProjectReference Include="..\RWWebAPI\RWWebAPI.csproj">
       <Project>{6f2c206c-b26c-4c3c-81ed-676d5e828f9b}</Project>
       <Name>RWWebAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RW\RW.csproj">
+      <Project>{1da8ddff-bd6c-4102-897d-55911a9f87ab}</Project>
+      <Name>RW</Name>
     </ProjectReference>
     <ProjectReference Include="..\WebApiClient\WebApiClient.csproj">
       <Project>{4dfb537d-a480-47d9-8d3c-29124822d02a}</Project>
