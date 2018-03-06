@@ -22,6 +22,11 @@ namespace EFMT.Concrete
 
         protected EFDbContext context = new EFDbContext();
 
+        public System.Data.Entity.Database Database
+        {
+            get { return context.Database; }
+        }
+
         #region Составы на подходах
 
         #region ApproachesCars
@@ -689,7 +694,24 @@ namespace EFMT.Concrete
                 return null;
             }
         }
-
+        /// <summary>
+        /// Получить вагон по id состава и номеру вагона
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public ArrivalCars GetArrivalCarsOfSostavNum(int id_sostav, int num)
+        {
+            try
+            {
+                return GetArrivalCars().Where(c => c.IDSostav == id_sostav & c.Num == num).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfSostavNum(id_sostav={0}, num={0})", id_sostav, num), eventID);
+                return null;
+            }
+        }
         /// <summary>
         /// Получить список вагонов по номеру с сортировкой по поступлению
         /// </summary>
@@ -1104,6 +1126,49 @@ namespace EFMT.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Вернуть список отсутсвующих номеров вагонов в новом составе
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <returns></returns>
+        public List<int> GetNotCarsOfOldArrivalSostav(int id_sostav)
+        {
+            try
+            {
+                return GetNotCarsOfOldArrivalSostav(GetArrivalSostav(id_sostav));
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNotCarsOfOldArrivalSostav(id_sostav={0})", id_sostav), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть список отсутсвующих номеров вагонов в новом составе 
+        /// </summary>
+        /// <param name="sostav"></param>
+        /// <returns></returns>
+        public List<int> GetNotCarsOfOldArrivalSostav(ArrivalSostav sostav)
+        {
+            try
+            {
+                List<int> list_num_car = new List<int>();
+                if (sostav.ParentID == null) return list_num_car ;
+                ArrivalSostav sostav_old = GetArrivalSostav((int)sostav.ParentID);
+                foreach (ArrivalCars car in sostav_old.ArrivalCars.ToList()) {
+                    if (sostav.ArrivalCars.ToList().Find(c => c.Num == car.Num) == null) {
+                        list_num_car.Add(car.Num);
+                    }
+                }
+                return list_num_car;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNotCarsOfOldArrivalSostav(sostav={0})", sostav.GetFieldsAndValue()), eventID);
+                return null;
+            }
+        }
+
 
         public int GetNextIDArrival()
         {
@@ -1463,5 +1528,6 @@ namespace EFMT.Concrete
             }
         }
         #endregion
+
     }
 }

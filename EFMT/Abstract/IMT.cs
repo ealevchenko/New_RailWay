@@ -2,6 +2,7 @@
 using EFMT.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace EFMT.Abstract
 {
     public interface IMT
     {
+        Database Database { get; }
+        
         #region На подходах
         IQueryable<ApproachesCars> ApproachesCars { get; }
         IQueryable<ApproachesCars> GetApproachesCars();
@@ -48,6 +51,7 @@ namespace EFMT.Abstract
         int DeleteArrivalCarsOfSostav(int id_sostav);
 
         IQueryable<ArrivalCars> GetArrivalCarsOfSostav(int id_sostav);
+        ArrivalCars GetArrivalCarsOfSostavNum(int id_sostav, int num);
         IQueryable<ArrivalCars> GetArrivalCarsOfNumCar(int num_car, bool order);
         List<ArrivalCars> GetArrivalCarsOfConsignees(int id_sostav, int[] Consignees);
         List<ArrivalCars> GetArrivalCarsOfConsignees(int[] Consignees);
@@ -71,6 +75,8 @@ namespace EFMT.Abstract
         IQueryable<ArrivalSostav> GetArrivalSostavOfIDArrival(int id_arrival, bool order);
         ArrivalSostav GetFirstArrivalSostavOfIDArrival(int id_arrival);
         IQueryable<ArrivalSostav> GetArrivalSostavOfIDArrival(int id_arrival);
+        List<int> GetNotCarsOfOldArrivalSostav(int id_sostav);
+        List<int> GetNotCarsOfOldArrivalSostav(ArrivalSostav sostav);
         int GetNextIDArrival();
 
 
