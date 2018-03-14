@@ -149,6 +149,10 @@ namespace Testing
         public void MTTransfer_TransferWagonsTracking()
         {
             MTTransfer mtt = new MTTransfer();
+            mtt.APIWagonsTracking = "/api/WagonsTracking";
+            mtt.URLWagonsTracking = "http://umtrans.com.ua:81";
+            mtt.UserWagonsTracking = "RailWayAMKR";
+            mtt.PSWWagonsTracking = "Lbvrf_2709";
             int res = mtt.TransferWagonsTracking();
             Console.WriteLine("Перенесено {0}", res);
         }

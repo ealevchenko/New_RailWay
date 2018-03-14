@@ -11,11 +11,12 @@ using System.Data.Entity;
 
 namespace EFRW.Concrete
 {
-    public class Option {
+    public class Option
+    {
         public int value { get; set; }
         public string text { get; set; }
     }
-    
+
     public class EFRailWay : IRailWay
     {
         private eventID eventID = eventID.EFRW_EFRailWay;
@@ -23,9 +24,9 @@ namespace EFRW.Concrete
         protected EFDbContext context = new EFDbContext();
 
         // Перечисление типов отправки составов на другую станцию
-        public enum typeSendTransfer : int { railway = 0, kis_output = 1, kis_input = 2, railway_buffer =3 }
+        public enum typeSendTransfer : int { railway = 0, kis_output = 1, kis_input = 2, railway_buffer = 3 }
         // Перечисление типов стороны (четная, нечетная)
-        public enum Side : int { odd = 1, even = 0}
+        public enum Side : int { odd = 1, even = 0 }
 
         public Database Database
         {
@@ -68,7 +69,8 @@ namespace EFRW.Concrete
             List<Option> list = new List<Option>();
             try
             {
-                foreach (Side side in Enum.GetValues(typeof(Side))) {
+                foreach (Side side in Enum.GetValues(typeof(Side)))
+                {
                     list.Add(new Option() { value = (int)side, text = side.ToString() });
                 }
                 return list;
@@ -113,6 +115,36 @@ namespace EFRW.Concrete
             }
         }
 
+        public IQueryable<Stations> GetStations(bool link)
+        {
+            try
+            {
+                List<Stations> list = Stations.ToList().Select(c => new Stations
+                    {
+                        id = c.id,
+                        name_ru = c.name_ru,
+                        name_en = c.name_en,
+                        view = c.view,
+                        exit_uz = c.exit_uz,
+                        station_uz = c.station_uz,
+                        id_rs = c.id_rs,
+                        id_kis = c.id_kis,
+                        default_side = c.default_side,
+                        code_uz = c.code_uz,
+                        Ways = link ? c.Ways : null,
+                        CarOperations = link ? c.CarOperations : null,
+                        StationsNodes = link ? c.StationsNodes : null,
+                        StationsNodes1 = link ? c.StationsNodes1 : null
+                    }).ToList();
+                return (IQueryable<Stations>)list.AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStations()"), eventID);
+                return null;
+            }
+        }
+
         public Stations GetStations(int id)
         {
             try
@@ -121,7 +153,20 @@ namespace EFRW.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetStations(id={0})",id), eventID);
+                e.WriteErrorMethod(String.Format("GetStations(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public Stations GetStations(int id, bool link)
+        {
+            try
+            {
+                return GetStations(link).Where(s => s.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStations(id={0})", id), eventID);
                 return null;
             }
         }
@@ -136,19 +181,19 @@ namespace EFRW.Concrete
                     dbEntry = new Stations()
                     {
                         id = 0,
-                        name_ru = Stations.name_ru ,
-                        name_en = Stations.name_en ,
-                        view = Stations.view ,
-                        exit_uz = Stations.exit_uz ,
-                        station_uz = Stations.station_uz ,
-                        id_rs = Stations.id_rs ,
-                        id_kis = Stations.id_kis, 
-                        default_side = Stations.default_side,  
-                        code_uz = Stations.code_uz, 
-                        Ways = Stations.Ways, 
-                        CarOperations = Stations.CarOperations, 
-                        StationsNodes = Stations.StationsNodes, 
-                        StationsNodes1 = Stations.StationsNodes1 
+                        name_ru = Stations.name_ru,
+                        name_en = Stations.name_en,
+                        view = Stations.view,
+                        exit_uz = Stations.exit_uz,
+                        station_uz = Stations.station_uz,
+                        id_rs = Stations.id_rs,
+                        id_kis = Stations.id_kis,
+                        default_side = Stations.default_side,
+                        code_uz = Stations.code_uz,
+                        Ways = Stations.Ways,
+                        CarOperations = Stations.CarOperations,
+                        StationsNodes = Stations.StationsNodes,
+                        StationsNodes1 = Stations.StationsNodes1
                     };
                     context.Stations.Add(dbEntry);
                 }
@@ -167,7 +212,7 @@ namespace EFRW.Concrete
                         dbEntry.default_side = Stations.default_side;
                         dbEntry.code_uz = Stations.code_uz;
                         dbEntry.Ways = Stations.Ways;
-                        dbEntry.CarOperations = Stations.CarOperations; 
+                        dbEntry.CarOperations = Stations.CarOperations;
                         dbEntry.StationsNodes = Stations.StationsNodes;
                         dbEntry.StationsNodes1 = Stations.StationsNodes1;
                     }
@@ -309,14 +354,14 @@ namespace EFRW.Concrete
                 {
                     dbEntry = new StationsNodes()
                     {
-                        id = 0,  
-                        nodes = StationsNodes.nodes ,   
-                        id_station_from = StationsNodes.id_station_from , 
-                        side_station_from = StationsNodes.side_station_from , 
-                        id_station_on = StationsNodes.id_station_on , 
-                        side_station_on = StationsNodes.side_station_on , 
-                        transfer_type = StationsNodes.transfer_type, 
-                        Stations = StationsNodes.Stations, 
+                        id = 0,
+                        nodes = StationsNodes.nodes,
+                        id_station_from = StationsNodes.id_station_from,
+                        side_station_from = StationsNodes.side_station_from,
+                        id_station_on = StationsNodes.id_station_on,
+                        side_station_on = StationsNodes.side_station_on,
+                        transfer_type = StationsNodes.transfer_type,
+                        Stations = StationsNodes.Stations,
                         Stations1 = StationsNodes.Stations1
                     };
                     context.StationsNodes.Add(dbEntry);
@@ -326,11 +371,11 @@ namespace EFRW.Concrete
                     dbEntry = context.StationsNodes.Find(StationsNodes.id);
                     if (dbEntry != null)
                     {
-                        dbEntry.nodes = StationsNodes.nodes;                       
-                        dbEntry.id_station_from = StationsNodes.id_station_from; 
-                        dbEntry.side_station_from = StationsNodes.side_station_from; 
-                        dbEntry.id_station_on = StationsNodes.id_station_on; 
-                        dbEntry.side_station_on = StationsNodes.side_station_on; 
+                        dbEntry.nodes = StationsNodes.nodes;
+                        dbEntry.id_station_from = StationsNodes.id_station_from;
+                        dbEntry.side_station_from = StationsNodes.side_station_from;
+                        dbEntry.id_station_on = StationsNodes.id_station_on;
+                        dbEntry.side_station_on = StationsNodes.side_station_on;
                         dbEntry.transfer_type = StationsNodes.transfer_type;
                         dbEntry.Stations = StationsNodes.Stations;
                         dbEntry.Stations1 = StationsNodes.Stations1;
@@ -418,7 +463,8 @@ namespace EFRW.Concrete
         /// <param name="id_station_on"></param>
         /// <param name="st"></param>
         /// <returns></returns>
-        public bool IsRulesTransfer(int id_station_from, int id_station_on, typeSendTransfer st) { 
+        public bool IsRulesTransfer(int id_station_from, int id_station_on, typeSendTransfer st)
+        {
             List<StationsNodes> list = GetStationsNodes(id_station_from, id_station_on, st).ToList();
             return list != null && list.Count() > 0 ? true : false;
         }
@@ -462,7 +508,7 @@ namespace EFRW.Concrete
         {
             try
             {
-                return GetWays().Where(w=> w.id == id).FirstOrDefault();
+                return GetWays().Where(w => w.id == id).FirstOrDefault();
             }
             catch (Exception e)
             {
@@ -554,6 +600,41 @@ namespace EFRW.Concrete
             return dbEntry;
         }
         /// <summary>
+        /// Получить пути пренадлежащие указанной станции
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <returns></returns>
+        public IQueryable<Ways> GetWaysOfStation(int id_station)
+        {
+            try
+            {
+                return GetWays().Where(w => w.id_station == id_station);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWaysOfStation(id_station={0})", id_station), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить путь по станции и номеру пути
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public Ways GetWaysOfStation(int id_station, string num)
+        {
+            try
+            {
+                return GetWays().Where(w => w.id_station == id_station & w.num == num).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWaysOfStation(id_station={0}, num={1})", id_station, num), eventID);
+                return null;
+            }
+        }
+        /// <summary>
         /// Получить путь для отправки на АМКР из станции УЗ
         /// </summary>
         /// <param name="id_station"></param>
@@ -562,7 +643,7 @@ namespace EFRW.Concrete
         {
             try
             {
-                return GetWays().Where(w => w.id_station == id_station & w.num == "1").FirstOrDefault();
+                return GetWaysOfStation(id_station, "1");
             }
             catch (Exception e)
             {
@@ -570,10 +651,26 @@ namespace EFRW.Concrete
                 return null;
             }
         }
-
+        /// <summary>
+        /// Получить путь станции УЗ для принятия из АМКР
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <returns></returns>
+        public Ways GetWaysOfSendingUZ(int id_station)
+        {
+            try
+            {
+                return GetWaysOfStation(id_station, "2");
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWaysOfSendingUZ(id_station={0})", id_station), eventID);
+                return null;
+            }
+        }
         #endregion
 
-        #endregion 
+        #endregion
 
         #region ВАГОНЫ (СОСТОЯНИЕ, ОПЕРАЦИИ, ВХОД. ПОСТАВКИ, ИСХ. ПОСТАВКИ)
         #region Cars
@@ -624,7 +721,8 @@ namespace EFRW.Concrete
                         dt_uz = Cars.dt_uz,
                         dt_inp_amkr = Cars.dt_inp_amkr,
                         dt_out_amkr = Cars.dt_out_amkr,
-                        natur = Cars.natur,
+                        natur_kis = Cars.natur_kis,
+                        natur = Cars.natur, 
                         dt_user = Cars.dt_user != null ? Cars.dt_user : DateTime.Now,
                         user = Cars.user != null ? Cars.user : System.Environment.UserDomainName + @"\" + System.Environment.UserName,
                         ReferenceCars = Cars.ReferenceCars,
@@ -645,6 +743,7 @@ namespace EFRW.Concrete
                         dbEntry.dt_uz = Cars.dt_uz;
                         dbEntry.dt_inp_amkr = Cars.dt_inp_amkr;
                         dbEntry.dt_out_amkr = Cars.dt_out_amkr;
+                        dbEntry.natur_kis = Cars.natur_kis;
                         dbEntry.natur = Cars.natur;
                         dbEntry.dt_user = Cars.dt_user != null ? Cars.dt_user : DateTime.Now;
                         dbEntry.user = Cars.user != null ? Cars.user : System.Environment.UserDomainName + @"\" + System.Environment.UserName;
@@ -712,7 +811,8 @@ namespace EFRW.Concrete
         /// </summary>
         /// <param name="id_sostav"></param>
         /// <returns></returns>
-        public IQueryable<Cars> GetCarsOfSostav(int id_sostav) {
+        public IQueryable<Cars> GetCarsOfSostav(int id_sostav)
+        {
             try
             {
                 return GetCars().Where(с => с.id_sostav == id_sostav);
@@ -728,7 +828,8 @@ namespace EFRW.Concrete
         /// </summary>
         /// <param name="id_sostav"></param>
         /// <returns></returns>
-        public IQueryable<Cars> GetCarsOfArrival(int id_arrival) {
+        public IQueryable<Cars> GetCarsOfArrival(int id_arrival)
+        {
             try
             {
                 return GetCars().Where(с => с.id_arrival == id_arrival);
@@ -736,6 +837,23 @@ namespace EFRW.Concrete
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("GetCarsOfArrival(id={0})", id_arrival), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить все вагоны (заходившие, текущие) вагоны пренадлежащие указаному номеру
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public IQueryable<Cars> GetCarsOfNum(int num)
+        {
+            try
+            {
+                return GetCars().Where(c => c.num == num);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfNum(num={0})", num), eventID);
                 return null;
             }
         }
@@ -781,13 +899,15 @@ namespace EFRW.Concrete
         /// <param name="id_arrival"></param>
         /// <param name="nums"></param>
         /// <returns></returns>
-        public List<Cars> GetCarsOfArrivalNum(int id_arrival, int[] nums) {
+        public List<Cars> GetCarsOfArrivalNum(int id_arrival, int[] nums)
+        {
             try
             {
                 List<Cars> list_result = new List<Cars>();
                 List<Cars> list_arrivals = GetCarsOfArrival(id_arrival).ToList();
                 if (list_arrivals == null || list_arrivals.Count() == 0) return list_result;
-                foreach (int num in nums) {
+                foreach (int num in nums)
+                {
                     Cars car = list_arrivals.Find(c => c.num == num);
                     if (car != null) { list_result.Add(car); }
                 }
@@ -844,33 +964,33 @@ namespace EFRW.Concrete
                     dbEntry = new CarOperations()
                     {
                         id = 0,
-                        id_car = CarOperations.id_car, 
-                        id_car_conditions = CarOperations.id_car_conditions, 
-                        id_car_status = CarOperations.id_car_status, 
-                        id_station = CarOperations.id_station, 
-                        dt_inp_station = CarOperations.dt_inp_station, 
-                        dt_out_station = CarOperations.dt_out_station, 
-                        id_way = CarOperations.id_way, 
-                        dt_inp_way = CarOperations.dt_inp_way, 
-                        dt_out_way = CarOperations.dt_out_way, 
-                        position = CarOperations.position, 
-                        send_id_station = CarOperations.send_id_station, 
-                        send_id_overturning = CarOperations.send_id_overturning, 
-                        send_id_shop = CarOperations.send_id_shop, 
-                        send_dt_inp_way = CarOperations.send_dt_inp_way, 
-                        send_dt_out_way = CarOperations.send_dt_out_way, 
-                        send_id_position = CarOperations.send_id_position, 
-                        send_train1 = CarOperations.send_train1, 
-                        send_train2 = CarOperations.send_train2, 
+                        id_car = CarOperations.id_car,
+                        id_car_conditions = CarOperations.id_car_conditions,
+                        id_car_status = CarOperations.id_car_status,
+                        id_station = CarOperations.id_station,
+                        dt_inp_station = CarOperations.dt_inp_station,
+                        dt_out_station = CarOperations.dt_out_station,
+                        id_way = CarOperations.id_way,
+                        dt_inp_way = CarOperations.dt_inp_way,
+                        dt_out_way = CarOperations.dt_out_way,
+                        position = CarOperations.position,
+                        send_id_station = CarOperations.send_id_station,
+                        send_id_overturning = CarOperations.send_id_overturning,
+                        send_id_shop = CarOperations.send_id_shop,
+                        send_dt_inp_way = CarOperations.send_dt_inp_way,
+                        send_dt_out_way = CarOperations.send_dt_out_way,
+                        send_id_position = CarOperations.send_id_position,
+                        send_train1 = CarOperations.send_train1,
+                        send_train2 = CarOperations.send_train2,
                         send_side = CarOperations.send_side,
                         edit_user = CarOperations.edit_user != null ? CarOperations.edit_user : System.Environment.UserDomainName + @"\" + System.Environment.UserName,
                         edit_dt = CarOperations.edit_dt != null ? CarOperations.edit_dt : DateTime.Now,
-                        parent_id = CarOperations.parent_id, 
-                        CarConditions = CarOperations.CarConditions, 
-                        Cars = CarOperations.Cars, 
-                        CarStatus = CarOperations.CarStatus, 
-                        Stations = CarOperations.Stations, 
-                        Ways = CarOperations.Ways,  
+                        parent_id = CarOperations.parent_id,
+                        CarConditions = CarOperations.CarConditions,
+                        Cars = CarOperations.Cars,
+                        CarStatus = CarOperations.CarStatus,
+                        Stations = CarOperations.Stations,
+                        Ways = CarOperations.Ways,
                     };
                     context.CarOperations.Add(dbEntry);
                 }
@@ -880,17 +1000,17 @@ namespace EFRW.Concrete
                     if (dbEntry != null)
                     {
                         dbEntry.id_car = CarOperations.id_car;
-                        dbEntry.id_car_conditions = CarOperations.id_car_conditions; 
+                        dbEntry.id_car_conditions = CarOperations.id_car_conditions;
                         dbEntry.id_car_status = CarOperations.id_car_status;
                         dbEntry.id_station = CarOperations.id_station;
-                        dbEntry.dt_inp_station = CarOperations.dt_inp_station; 
-                        dbEntry.dt_out_station = CarOperations.dt_out_station; 
+                        dbEntry.dt_inp_station = CarOperations.dt_inp_station;
+                        dbEntry.dt_out_station = CarOperations.dt_out_station;
                         dbEntry.id_way = CarOperations.id_way;
                         dbEntry.dt_inp_way = CarOperations.dt_inp_way;
-                        dbEntry.dt_out_way = CarOperations.dt_out_way; 
+                        dbEntry.dt_out_way = CarOperations.dt_out_way;
                         dbEntry.position = CarOperations.position;
                         dbEntry.send_id_station = CarOperations.send_id_station;
-                        dbEntry.send_id_overturning = CarOperations.send_id_overturning; 
+                        dbEntry.send_id_overturning = CarOperations.send_id_overturning;
                         dbEntry.send_id_shop = CarOperations.send_id_shop;
                         dbEntry.send_dt_inp_way = CarOperations.send_dt_inp_way;
                         dbEntry.send_dt_out_way = CarOperations.send_dt_out_way;
@@ -902,10 +1022,10 @@ namespace EFRW.Concrete
                         dbEntry.edit_dt = CarOperations.edit_dt != null ? CarOperations.edit_dt : DateTime.Now;
                         //dbEntry.edit_user = CarOperations.edit_user;
                         //dbEntry.edit_dt = CarOperations.edit_dt; 
-                        dbEntry.parent_id = CarOperations.parent_id; 
+                        dbEntry.parent_id = CarOperations.parent_id;
                         dbEntry.CarConditions = CarOperations.CarConditions;
                         dbEntry.Cars = CarOperations.Cars;
-                        dbEntry.CarStatus = CarOperations.CarStatus; 
+                        dbEntry.CarStatus = CarOperations.CarStatus;
                         dbEntry.Stations = CarOperations.Stations;
                         dbEntry.Ways = CarOperations.Ways;
                     }
@@ -943,7 +1063,8 @@ namespace EFRW.Concrete
         /// </summary>
         /// <param name="id_car"></param>
         /// <returns></returns>
-        public IQueryable<CarOperations> GetCarOperationsOfCar(int id_car) {
+        public IQueryable<CarOperations> GetCarOperationsOfCar(int id_car)
+        {
             try
             {
                 return GetCarOperations().Where(o => o.id_car == id_car).OrderByDescending(o => o.id);
@@ -959,7 +1080,8 @@ namespace EFRW.Concrete
         /// </summary>
         /// <param name="id_car"></param>
         /// <returns></returns>
-        public CarOperations GetCurrentCarOperationsOfCar(int id_car) {
+        public CarOperations GetCurrentCarOperationsOfCar(int id_car)
+        {
             try
             {
                 return GetCarOperationsOfCar(id_car).FirstOrDefault();
@@ -975,7 +1097,8 @@ namespace EFRW.Concrete
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        public IQueryable<CarOperations> GetCarOperationsOfNumCar(int num) {
+        public IQueryable<CarOperations> GetCarOperationsOfNumCar(int num)
+        {
             try
             {
                 return GetCarOperations().Where(o => o.Cars.num == num);
@@ -991,15 +1114,51 @@ namespace EFRW.Concrete
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        public CarOperations GetLastCarOperationsOfNumCar(int num) {
+        public CarOperations GetLastCarOperationsOfNumCar(int num)
+        {
             try
             {
-                return GetCarOperationsOfNumCar(num).OrderByDescending(o=>o.id).FirstOrDefault();
+                return GetCarOperationsOfNumCar(num).OrderByDescending(o => o.id).FirstOrDefault();
             }
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("GetCarOperationsOfNumCar(num={0})", num), eventID);
                 return null;
+            }
+        }
+        /// <summary>
+        /// Получить список незакрытых операций по указаному пути 
+        /// </summary>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public IQueryable<CarOperations> GetOpenCarOperationsOfWay(int id_way)
+        {
+            try
+            {
+                return GetCarOperations().Where(o => o.id_way == id_way & o.dt_inp_way != null & o.dt_out_way == null).OrderBy(o => o.position);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOpenCarOperationsOfWay(id_way={0})", id_way), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить последнюю позицию на указанном пути
+        /// </summary>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public int GetLastPositionOpenCarOperationsOfWay(int id_way){
+
+            try
+            {
+            List<CarOperations> open_operation = GetOpenCarOperationsOfWay(id_way).ToList();
+            return open_operation != null && open_operation.Count() > 0 ? (int)open_operation.Max(o => o.position) : 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastPositionOpenCarOperationsOfWay(id_way={0})", id_way), eventID);
+                return -1;
             }
         }
         #endregion
@@ -1247,7 +1406,7 @@ namespace EFRW.Concrete
                         material_name_sap = CarsInpDelivery.material_name_sap,
                         station_shipment = CarsInpDelivery.station_shipment,
                         station_shipment_code_sap = CarsInpDelivery.station_shipment_code_sap,
-                        station_shipment_name_sap = CarsInpDelivery.station_shipment_name_sap, 
+                        station_shipment_name_sap = CarsInpDelivery.station_shipment_name_sap,
                         consignee = CarsInpDelivery.consignee,
                         shop_code_sap = CarsInpDelivery.shop_code_sap,
                         shop_name_sap = CarsInpDelivery.shop_name_sap,
@@ -1257,7 +1416,7 @@ namespace EFRW.Concrete
                         step1_sap = CarsInpDelivery.step1_sap,
                         step2_sap = CarsInpDelivery.step2_sap,
                         Cars = CarsInpDelivery.Cars,
-                        ReferenceCargo = CarsInpDelivery.ReferenceCargo, 
+                        ReferenceCargo = CarsInpDelivery.ReferenceCargo,
                     };
                     context.CarsInpDelivery.Add(dbEntry);
                 }
@@ -1424,7 +1583,7 @@ namespace EFRW.Concrete
                         post_reweighing_sap = CarsOutDelivery.post_reweighing_sap,
                         Cars = CarsOutDelivery.Cars,
                         ReferenceCargo = CarsOutDelivery.ReferenceCargo,
-                        ReferenceCountry = CarsOutDelivery.ReferenceCountry, 
+                        ReferenceCountry = CarsOutDelivery.ReferenceCountry,
                         ReferenceStation = CarsOutDelivery.ReferenceStation
                     };
                     context.CarsOutDelivery.Add(dbEntry);

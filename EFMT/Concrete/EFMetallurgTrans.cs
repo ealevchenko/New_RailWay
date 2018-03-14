@@ -1402,6 +1402,7 @@ namespace EFMT.Concrete
                         nst_end = WagonsTracking.nst_end,
                         kgr = WagonsTracking.kgr,
                         nkgr = WagonsTracking.nkgr,
+                        id_cargo = WagonsTracking.id_cargo,
                         kgrp = WagonsTracking.kgrp,
                         ves = WagonsTracking.ves,
                         updated = WagonsTracking.updated,
@@ -1433,6 +1434,7 @@ namespace EFMT.Concrete
                         dbEntry.nst_end = WagonsTracking.nst_end;
                         dbEntry.kgr = WagonsTracking.kgr;
                         dbEntry.nkgr = WagonsTracking.nkgr;
+                        dbEntry.id_cargo = WagonsTracking.id_cargo;
                         dbEntry.kgrp = WagonsTracking.kgrp;
                         dbEntry.ves = WagonsTracking.ves;
                         dbEntry.updated = WagonsTracking.updated;

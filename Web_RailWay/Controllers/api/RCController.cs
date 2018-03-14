@@ -19,7 +19,8 @@ namespace Web_RailWay.Controllers.api
     {
         private eventID eventID = eventID.Web_API_RCController;
         protected IRC rep_rc;
-        public RCController()
+
+                public RCController()
         {
             this.rep_rc = new EFRailCars();  
         }

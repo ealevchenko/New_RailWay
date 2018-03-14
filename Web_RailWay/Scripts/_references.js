@@ -79,3 +79,5 @@
 /// <reference path="rw/awas.js" />
 /// <reference path="mt/wagons_tracking.js" />
 /// <reference path="api_helpers/metallurgtrans.js" />
+/// <reference path="rw/awas1.js" />
+/// <reference path="rw/awas.json" />

@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +22,8 @@ namespace WebApiClient
         private string password;
         private static string token;
 
-        public WebApi(string url, string userName, string password) {
+        public WebApi(string url, string userName, string password)
+        {
             this.APP_PATH = url;
             this.userName = userName;
             this.password = password;
@@ -31,24 +34,50 @@ namespace WebApiClient
         // получение токена
         public Dictionary<string, string> GetTokenDictionary(string userName, string password)
         {
-            if (String.IsNullOrWhiteSpace(APP_PATH)) return null;
-            var pairs = new List<KeyValuePair<string, string>>
+            try
+            {
+                if (String.IsNullOrWhiteSpace(APP_PATH)) return null;
+                var pairs = new List<KeyValuePair<string, string>>
                 {
                     new KeyValuePair<string, string>( "grant_type", "password" ), 
                     new KeyValuePair<string, string>( "username", userName ), 
                     new KeyValuePair<string, string> ( "Password", password )
                 };
-            var content = new FormUrlEncodedContent(pairs);
+                var content = new FormUrlEncodedContent(pairs);
 
-            using (var client = new HttpClient())
+                //HttpClientHandler handler = new HttpClientHandler()
+                //{
+                //    Proxy = new WebProxy("http://krr-sec-proxy00.europe.mittalco.com:8080", false),
+                //    PreAuthenticate = false,
+                //    UseDefaultCredentials = false,
+                //    //Credentials = new System.Net.NetworkCredential(@"europe\ealevchenko1", "Yfcnz_04201601"),
+                //    UseProxy = true,
+                //};
+                //handler.Proxy.Credentials = new NetworkCredential(@"europe\ealevchenko1", "Yfcnz_04201601");
+                //handler.UseDefaultCredentials = false;
+                //handler.PreAuthenticate = true;
+                //handler.UseProxy = true;
+
+                //using (var client = new HttpClient(handler))
+                using (var client = new HttpClient())
+                {
+                    //var encoding = new ASCIIEncoding();
+                    //var authHeader = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(encoding.GetBytes(string.Format("{0}:{1}", @"europe\ealevchenko1", "Yfcnz_04201601"))));
+                    //client.DefaultRequestHeaders.Authorization = authHeader;
+                    
+                    var response =
+                        client.PostAsync(APP_PATH + "/Token", content).Result;
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    // Десериализация полученного JSON-объекта
+                    Dictionary<string, string> tokenDictionary =
+                        JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+                    return tokenDictionary;
+                }
+            }
+            catch (Exception e)
             {
-                var response =
-                    client.PostAsync(APP_PATH + "/Token", content).Result;
-                var result = response.Content.ReadAsStringAsync().Result;
-                // Десериализация полученного JSON-объекта
-                Dictionary<string, string> tokenDictionary =
-                    JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
-                return tokenDictionary;
+                e.WriteErrorMethod(String.Format("GetTokenDictionary()"), eventID);
+                return null;
             }
         }
 

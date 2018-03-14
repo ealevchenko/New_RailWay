@@ -1,0 +1,32 @@
+﻿[
+  {
+    "tag": "table_message_emptyTable",
+    "ru": "Данные отсутствуют.",
+    "en": "No data available in table."
+  },
+  {
+    "tag": "link_tabs_1",
+    "ru": "Отчет№1",
+    "en": "Reports#1"
+  },
+  {
+    "tag": "link_tabs_2",
+    "ru": "Отчет№2",
+    "en": "Reports#2"
+  },
+  {
+    "tag": "link_tabs_3",
+    "ru": "Отчет№3",
+    "en": "Reports#3"
+  },
+  {
+    "tag": "link_tabs_4",
+    "ru": "Отчет№4",
+    "en": "Reports#4"
+  },
+  {
+    "tag": "link_tabs_5",
+    "ru": "Отчет№5",
+    "en": "Reports#5"
+  }
+]

@@ -1,0 +1,5 @@
+﻿[
+    { "tag": "odd", "ru": "Нечетная", "en": "odd" },
+    { "tag": "even", "ru": "Четная", "en": "even" },
+    { "tag": "table_message_emptyTable", "ru": "Данные отсутствуют.", "en": "No data available in table." }
+]

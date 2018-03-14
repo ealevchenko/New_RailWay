@@ -20,11 +20,12 @@ namespace Testing
 
         public void RWTransfer_ArrivalMTToRailway() {
             RWOperation rw_oper = new RWOperation();
-            rw_oper.TransferArrivalSostavToRailWay(7393);
-            rw_oper.TransferArrivalSostavToRailWay(7394);
+            rw_oper.TransferArrivalSostavToRailWay(7681);
+            //rw_oper.TransferArrivalSostavToRailWay(7394);
             
-            rw_oper.SaveChanges(rw_oper.ExecOperation(2441, new int[] {52736956, 56671670}, rw_oper.OperationSendingStation, new OperationSendingStation(6,20,DateTime.Now,null) ));
-            rw_oper.TransferArrivalSostavToRailWay(7404);
+            //rw_oper.SaveChanges(rw_oper.ExecOperation(2441, new int[] {52736956, 56671670}, rw_oper.OperationSendingStation, new OperationSendingStation(6,20,DateTime.Now,null) ));
+            //rw_oper.TransferArrivalSostavToRailWay(7404);
+            //rw_oper.TransferArrivalSostavToRailWay(7505);
         }
 
         public void RWReference_GetReferenceCarsOfNum()
@@ -111,6 +112,8 @@ namespace Testing
             car1.dt_user = dt2;
             int id_res1 = ef_rw.SaveCars(car1);
         }
+
+
 
     }
 }

@@ -74,13 +74,6 @@
     <Compile Include="Entities\ReferenceOwners.cs" />
     <Compile Include="Entities\ReferenceTypeCars.cs" />
     <Compile Include="Entities\Ways.cs" />
-    <Compile Include="Model\CarConditions.cs" />
-    <Compile Include="Model\CarOperations.cs" />
-    <Compile Include="Model\Cars.cs" />
-    <Compile Include="Model\CarsInpDelivery.cs" />
-    <Compile Include="Model\CarsOutDelivery.cs" />
-    <Compile Include="Model\CarStatus.cs" />
-    <Compile Include="Model\Model1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,7 +90,9 @@
       <Name>MLogs</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

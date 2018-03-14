@@ -215,11 +215,12 @@ namespace Testing
             //Console.WriteLine(clientMT.wapi.to);
             EFMetallurgTrans efmt = new EFMetallurgTrans();
             Console.WriteLine("Запрос....");
-            List<WagonsTracking> list1 =  clientMT.GetWagonsTracking();
-            //List<WagonsTracking> list2 = clientMT.GetWagonsTracking(56858111);
-            ////List<WagonsTracking> list3 = clientMT.GetWagonsTracking(56858111, DateTime.Now.AddMonths(-1));
-            ////List<WagonsTracking> list4 = clientMT.GetWagonsTracking(56858111, DateTime.Now.AddDays(-15), DateTime.Now.AddDays(-5));
-            foreach (WagonsTracking wt in list1) {
+            List<WagonsTrackingMT> list1 =  clientMT.GetWagonsTracking();
+            //List<WagonsTrackingMT> list2 = clientMT.GetWagonsTracking(56858111);
+            ////List<WagonsTrackingMT> list3 = clientMT.GetWagonsTracking(56858111, DateTime.Now.AddMonths(-1));
+            ////List<WagonsTrackingMT> list4 = clientMT.GetWagonsTracking(56858111, DateTime.Now.AddDays(-15), DateTime.Now.AddDays(-5));
+            foreach (WagonsTrackingMT wt in list1)
+            {
                 Console.WriteLine(wt.nvagon);
                 //efmt.SaveWagonsTracking(wt);
             }
@@ -228,10 +229,10 @@ namespace Testing
         public void WebAPIMTStart()
         {
 
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= 100; i++)
             {
-                Console.WriteLine("Press any key to start...");
-                Console.ReadKey();
+                //Console.WriteLine("Press any key to start...");
+                //Console.ReadKey();
                 WebAPIMT();
             }
         }

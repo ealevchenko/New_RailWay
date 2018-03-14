@@ -1,17 +1,48 @@
-﻿//------------------------------------------------------------------------
-// Поиск элемента массива по ключу
-function getObjects(obj, key, val) {
+﻿
+//------------------------------------------------------------------------
+// Поиск элемента массива по ключу по всем объектам включая и вложенные
+function getAllObjects(obj, key, val) {
     var objects = [];
     for (var i in obj) {
         if (!obj.hasOwnProperty(i)) continue;
         if (typeof obj[i] == 'object') {
-            objects = objects.concat(getObjects(obj[i], key, val));
+            objects = objects.concat(getAllObjects(obj[i], key, val));
         } else if (i == key && obj[key] == val) {
             objects.push(obj);
         }
     }
     return objects;
 }
+// Поиск элемента массива по ключу по первому уровню 
+function getObjects(obj, key, val) {
+    var objects = [];
+    for (var i in obj) {
+        if (!obj.hasOwnProperty(i)) continue;
+        if (typeof obj[i] == 'object') {
+            objects = objects.concat(getChildObjects(obj[i], key, val));
+        } else
+            if (i == key && obj[key] == val) {
+            objects.push(obj);
+        }
+    }
+    return objects;
+}
+// Поиск элемента массива во вложенных обектах второго уровня 
+function getChildObjects(obj, key, val) {
+    var objects = [];
+    for (var i in obj) {
+        if (!obj.hasOwnProperty(i)) continue;
+        if (typeof obj[i] == 'object' & false == true) {
+            objects = objects.concat(getObjects(obj[i], key, val));
+        } else
+            if (i == key && obj[key] == val) {
+            objects.push(obj);
+        }
+    }
+    return objects;
+}
+
+
 // Получить значение атрибута text по атрибуту value
 function getTextOption(obj, val) {
     if (obj != null) {
@@ -134,3 +165,20 @@ function initDateTime(obj_select, property) {
     var s_dt = dt.getDate() + '.' + (dt.getMonth() + 1) + '.' + dt.getFullYear() + ' ' + dt.getHours() + ':' + dt.getMinutes();
     obj_select.data('dateRangePicker').setDateRange(s_dt, s_dt);
 }
+
+//
+function initLang(file, callback) {
+    $.getJSON(file, function (json) {
+        if (typeof callback === 'function') {
+            callback(json);
+        }
+    });
+    //.done(function ()
+    //{ console.log("second success"); })
+    //.fail(function (x, y, z)
+    //{ console.log("error"); })
+    //.always(function ()
+    //{ console.log("complete"); });
+}
+
+

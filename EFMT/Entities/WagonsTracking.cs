@@ -9,8 +9,8 @@ namespace EFMT.Entities
     using RWConversionFunctions;
 
     [Table("MT.WagonsTracking")]
-    [Serializable]
-    public partial class WagonsTracking : ISerializable
+    //[Serializable]
+    public partial class WagonsTracking //: ISerializable
     {
         public int id { get; set; }
 
@@ -58,6 +58,8 @@ namespace EFMT.Entities
         [StringLength(500)]
         public string nkgr { get; set; }
 
+        public int id_cargo { get; set; }
+
         public int? kgrp { get; set; }
 
         [Column(TypeName = "numeric")]
@@ -69,42 +71,43 @@ namespace EFMT.Entities
 
         public int? km { get; set; }
 
-        public WagonsTracking() { 
+        //public WagonsTracking() { 
         
-        }
+        //}
         
-        public WagonsTracking(SerializationInfo info, StreamingContext context)
-        {
-            this.nvagon = (int)info.GetValue("nvagon", typeof(int));//
-            this.st_disl = (int?)info.GetValue("st_disl", typeof(int?));//
-            this.nst_disl = (string)info.GetValue("nst_disl", typeof(string));
-            this.kodop = (int?)info.GetValue("kodop", typeof(int?));//
-            this.nameop = (string)info.GetValue("nameop", typeof(string));//
-            this.dt = ((string)info.GetValue("dt", typeof(string))).DateNullConversion();//
-            this.nst_form = (string)info.GetValue("nst_form", typeof(string));//
-            this.st_form = (int?)info.GetValue("st_form", typeof(int?));
-            this.nsost = (string)info.GetValue("nsost", typeof(string));//
-            this.st_nazn = (int?)info.GetValue("st_nazn", typeof(int?));//
-            this.nst_nazn = (string)info.GetValue("nst_nazn", typeof(string));//
-            this.ntrain = (int?)info.GetValue("ntrain", typeof(int?));//
-            this.st_end = (int?)info.GetValue("st_end", typeof(int?));//
-            this.nst_end = (string)info.GetValue("nst_end", typeof(string));//
-            this.idsost = (int?)info.GetValue("idsost", typeof(int?));//
-            this.kgr = (int?)info.GetValue("kgr", typeof(int?));//
-            this.nkgr = (string)info.GetValue("nkgr", typeof(string));//
-            this.kgrp = (int?)info.GetValue("kgrp", typeof(int?));
-            this.ves = (decimal?)info.GetValue("ves", typeof(decimal?));
-            this.updated = ((string)info.GetValue("updated", typeof(string))).DateNullConversion();
-            //this.note = (string)info.GetValue("note", typeof(string));
-            this.full_nameop = (string)info.GetValue("full_nameop", typeof(string));
-            //this.nquest = (string)info.GetValue("nquest", typeof(string));
-            this.kgro = (int?)info.GetValue("kgro", typeof(int?));
-            this.km = (int?)info.GetValue("km", typeof(int?));
-        }
+        //public WagonsTracking(SerializationInfo info, StreamingContext context)
+        //{
+        //    this.nvagon = (int)info.GetValue("nvagon", typeof(int));//
+        //    this.st_disl = (int?)info.GetValue("st_disl", typeof(int?));//
+        //    this.nst_disl = (string)info.GetValue("nst_disl", typeof(string));
+        //    this.kodop = (int?)info.GetValue("kodop", typeof(int?));//
+        //    this.nameop = (string)info.GetValue("nameop", typeof(string));//
+        //    this.dt = ((string)info.GetValue("dt", typeof(string))).DateNullConversion();//
+        //    this.nst_form = (string)info.GetValue("nst_form", typeof(string));//
+        //    this.st_form = (int?)info.GetValue("st_form", typeof(int?));
+        //    this.nsost = (string)info.GetValue("nsost", typeof(string));//
+        //    this.st_nazn = (int?)info.GetValue("st_nazn", typeof(int?));//
+        //    this.nst_nazn = (string)info.GetValue("nst_nazn", typeof(string));//
+        //    this.ntrain = (int?)info.GetValue("ntrain", typeof(int?));//
+        //    this.st_end = (int?)info.GetValue("st_end", typeof(int?));//
+        //    this.nst_end = (string)info.GetValue("nst_end", typeof(string));//
+        //    this.idsost = (int?)info.GetValue("idsost", typeof(int?));//
+        //    this.kgr = (int?)info.GetValue("kgr", typeof(int?));//
+        //    this.nkgr = (string)info.GetValue("nkgr", typeof(string));//
+        //    this.id_cargo = (int)info.GetValue("id_cargo", typeof(int));//
+        //    this.kgrp = (int?)info.GetValue("kgrp", typeof(int?));
+        //    this.ves = (decimal?)info.GetValue("ves", typeof(decimal?));
+        //    this.updated = ((string)info.GetValue("updated", typeof(string))).DateNullConversion();
+        //    //this.note = (string)info.GetValue("note", typeof(string));
+        //    this.full_nameop = (string)info.GetValue("full_nameop", typeof(string));
+        //    //this.nquest = (string)info.GetValue("nquest", typeof(string));
+        //    this.kgro = (int?)info.GetValue("kgro", typeof(int?));
+        //    this.km = (int?)info.GetValue("km", typeof(int?));
+        //}
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            throw new NotImplementedException();
-        }
+        //public void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

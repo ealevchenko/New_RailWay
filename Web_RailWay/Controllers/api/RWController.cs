@@ -1,8 +1,11 @@
-﻿using EFRW.Abstract;
+﻿using EFMT.Abstract;
+using EFRW.Abstract;
 using EFRW.Concrete;
 using EFRW.Entities;
+using MessageLog;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -18,10 +21,21 @@ namespace Web_RailWay.Controllers.api
     [RoutePrefix("api/rw")]
     public class RWController : ApiController
     {
+        private eventID eventID = eventID.Web_API_RWController;
         protected IRailWay rep_rw;
+
+        public class ArrivalSostav
+        { 
+            public int id_sostav {get;set;}           
+            public int id_arrival {get;set;}
+            public string index {get;set;}
+            public DateTime dt_inp_station {get;set;}
+            public int cars {get;set;}  
+        }
+
         public RWController()
         {
-            this.rep_rw = new EFRailWay();  
+            this.rep_rw = new EFRailWay();
         }
 
         /// Вернуть текстовое сообщение из ресурса
@@ -47,7 +61,7 @@ namespace Web_RailWay.Controllers.api
         public int DeleteStationsNodes(int id)
         {
             StationsNodes sn = this.rep_rw.DeleteStationsNodes(id);
-            return sn!=null ? sn.id : -1;
+            return sn != null ? sn.id : -1;
         }
 
         // GET: api/rw/stations_nodes/send/station/1
@@ -82,12 +96,32 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(StationsNodes))]
         public IHttpActionResult GetStationsNodes()
         {
-            List<StationsNodes> nodes = this.rep_rw.GetStationsNodes().ToList();
-            if (nodes == null)
+            try
             {
-                return NotFound();
+                //List<StationsNodes> nodes = this.rep_rw.GetStationsNodes().ToList();
+                List<StationsNodes> nodes = this.rep_rw.StationsNodes
+                    .ToList()
+                    .Select(n => new StationsNodes
+                        {
+                            id = n.id,
+                            nodes = n.nodes,
+                            id_station_from = n.id_station_from,
+                            side_station_from = n.side_station_from,
+                            id_station_on = n.id_station_on,
+                            side_station_on = n.side_station_on,
+                            transfer_type = n.transfer_type,
+                        }).ToList();
+                if (nodes == null)
+                {
+                    return NotFound();
+                }
+                return Json(nodes);
             }
-            return Ok(nodes);
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStationsNodes()"), eventID);
+                return InternalServerError(e);
+            }
         }
 
         // GET: api/rw/stations_nodes/id/196
@@ -111,13 +145,110 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Stations))]
         public IHttpActionResult GetStation(int id)
         {
-            Stations station = this.rep_rw.GetStations(id);
-            if (station == null)
+            try
             {
-                return NotFound();
+                Stations station = this.rep_rw.Stations
+                    .Where(s => s.id == id)
+                    .ToList()
+                    .Select(c => new Stations
+                         {
+                             id = c.id,
+                             name_ru = c.name_ru,
+                             name_en = c.name_en,
+                             view = c.view,
+                             exit_uz = c.exit_uz,
+                             station_uz = c.station_uz,
+                             id_rs = c.id_rs,
+                             id_kis = c.id_kis,
+                             default_side = c.default_side,
+                             code_uz = c.code_uz,
+                             Ways = c.Ways
+                                .ToList()
+                                .Select(w => new Ways
+                                        {
+                                            id = w.id,
+                                            id_station = w.id_station,
+                                            num = w.num,
+                                            name_ru = w.name_ru,
+                                            name_en = w.name_en,
+                                            position = w.position,
+                                            capacity = w.capacity,
+                                            id_car_status = w.id_car_status,
+                                            tupik = w.tupik,
+                                            dissolution = w.dissolution,
+                                            defrosting = w.defrosting,
+                                            overturning = w.overturning,
+                                            pto = w.pto,
+                                            cleaning = w.cleaning,
+                                            rest = w.rest,
+                                            id_rc = w.id_rc
+                                        }).ToList(),
+                             CarOperations = null,
+                             StationsNodes = c.StationsNodes
+                                .ToList()
+                                .Select(n => new StationsNodes
+                                        {
+                                            id = n.id,
+                                            nodes = n.nodes,
+                                            id_station_from = n.id_station_from,
+                                            side_station_from = n.side_station_from,
+                                            id_station_on = n.id_station_on,
+                                            side_station_on = n.side_station_on,
+                                            transfer_type = n.transfer_type,
+                                        }).ToList(),
+                             StationsNodes1 = c.StationsNodes1
+                                .ToList()
+                                .Select(n => new StationsNodes
+                                        {
+                                            id = n.id,
+                                            nodes = n.nodes,
+                                            id_station_from = n.id_station_from,
+                                            side_station_from = n.side_station_from,
+                                            id_station_on = n.id_station_on,
+                                            side_station_on = n.side_station_on,
+                                            transfer_type = n.transfer_type,
+                                        }).ToList(),
+                         })
+                         .FirstOrDefault();
+                if (station == null)
+                {
+                    return NotFound();
+                }
+                return Json(station);
             }
-            return Ok(station);
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStation(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
         }
+        //public IHttpActionResult GetStation(int id)
+        //{
+        //    Stations station = this.rep_rw.GetStations(id);
+        //    if (station == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    //Stations st = new Stations() {
+        //    //    id = station.id,
+        //    //    name_ru = station.name_ru,
+        //    //    name_en = station.name_en,
+        //    //    view = station.view,
+        //    //    exit_uz = station.exit_uz,
+        //    //    station_uz = station.station_uz,
+        //    //    id_rs = station.id_rs,
+        //    //    id_kis = station.id_kis,
+        //    //    default_side = station.default_side,
+        //    //    code_uz = station.code_uz,
+        //    //    //Ways = station.Ways,
+        //    //    //CarOperations = station.CarOperations,
+        //    //    //StationsNodes = station.StationsNodes,
+        //    //    //StationsNodes1 = station.StationsNodes1 
+        //    //};
+
+        //    return Ok(station);
+        //}
 
         //// GET: api/rw/station_name/1
         //[Route("station_name/{id:int}")]
@@ -164,12 +295,83 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Stations))]
         public IHttpActionResult GetStations()
         {
-            List<Stations> stations = this.rep_rw.GetStations().ToList();
-            if (stations == null)
+            try
             {
-                return NotFound();
+                //List<Stations> stations = this.rep_rw.GetStations().ToList();
+                List<Stations> stations = this.rep_rw.Stations
+        .ToList()
+        .Select(c => new Stations
+        {
+            id = c.id,
+            name_ru = c.name_ru,
+            name_en = c.name_en,
+            view = c.view,
+            exit_uz = c.exit_uz,
+            station_uz = c.station_uz,
+            id_rs = c.id_rs,
+            id_kis = c.id_kis,
+            default_side = c.default_side,
+            code_uz = c.code_uz,
+            Ways = c.Ways
+               .ToList()
+               .Select(w => new Ways
+               {
+                   id = w.id,
+                   id_station = w.id_station,
+                   num = w.num,
+                   name_ru = w.name_ru,
+                   name_en = w.name_en,
+                   position = w.position,
+                   capacity = w.capacity,
+                   id_car_status = w.id_car_status,
+                   tupik = w.tupik,
+                   dissolution = w.dissolution,
+                   defrosting = w.defrosting,
+                   overturning = w.overturning,
+                   pto = w.pto,
+                   cleaning = w.cleaning,
+                   rest = w.rest,
+                   id_rc = w.id_rc
+               }).ToList(),
+            CarOperations = null,
+            StationsNodes = c.StationsNodes
+               .ToList()
+               .Select(n => new StationsNodes
+               {
+                   id = n.id,
+                   nodes = n.nodes,
+                   id_station_from = n.id_station_from,
+                   side_station_from = n.side_station_from,
+                   id_station_on = n.id_station_on,
+                   side_station_on = n.side_station_on,
+                   transfer_type = n.transfer_type,
+               }).ToList(),
+            StationsNodes1 = c.StationsNodes1
+               .ToList()
+               .Select(n => new StationsNodes
+               {
+                   id = n.id,
+                   nodes = n.nodes,
+                   id_station_from = n.id_station_from,
+                   side_station_from = n.side_station_from,
+                   id_station_on = n.id_station_on,
+                   side_station_on = n.side_station_on,
+                   transfer_type = n.transfer_type,
+               }).ToList(),
+                })
+             .ToList();
+
+                if (stations == null)
+                {
+                    return NotFound();
+                }
+                return Ok(stations);
             }
-            return Ok(stations);
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStations()"), eventID);
+                return InternalServerError(e);
+            }
         }
         #endregion
 
@@ -187,7 +389,7 @@ namespace Web_RailWay.Controllers.api
             }
             list.ForEach(c => options.Add(new EFRW.Concrete.Option() { value = c.value, text = GetResource(c.text) }));
             return Ok(options);
-        }   
+        }
 
         // GET: api/rw/send_transfer/type/0
         [Route("send_transfer/type/{type:int}")]
@@ -202,16 +404,36 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Option))]
         public IHttpActionResult GetSide()
         {
-            List<EFRW.Concrete.Option> options = new List<EFRW.Concrete.Option>();
-            List<EFRW.Concrete.Option> list = this.rep_rw.GetSide();
-            if (list == null)
+            try
             {
-                return NotFound();
+                List<Option> sides = new List<Option>();
+                foreach (EFRailWay.Side side in Enum.GetValues(typeof(EFRailWay.Side)))
+                {
+                    sides.Add(new Option() { value = (int)side, text = side.ToString() });
+                }
+                if (sides == null)
+                {
+                    return NotFound();
+                }
+                return Json(sides);
             }
-            list.ForEach(c => options.Add(new EFRW.Concrete.Option() { value = c.value, text = GetResource(c.text) }));
-            return Ok(options);
-        }   
-     
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSide()"), eventID);
+                return InternalServerError(e);
+            }
+        }
+        //public IHttpActionResult GetSide()
+        //{
+        //    List<EFRW.Concrete.Option> options = new List<EFRW.Concrete.Option>();
+        //    List<EFRW.Concrete.Option> list = this.rep_rw.GetSide();
+        //    if (list == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    list.ForEach(c => options.Add(new EFRW.Concrete.Option() { value = c.value, text = GetResource(c.text) }));
+        //    return Ok(options);
+        //}
         // GET: api/rw/side/0
         [Route("side/{side:int}")]
         [ResponseType(typeof(string))]
@@ -220,6 +442,28 @@ namespace Web_RailWay.Controllers.api
             return GetResource(this.rep_rw.GetSide(side));
         }
         #endregion
+
+        // GET: api/rw/arrival/sostav/station/16
+        [Route("arrival/sostav/station/{id:int}")]
+        [ResponseType(typeof(ArrivalSostav))]
+        public IHttpActionResult GetArrivalSostavOfStationUZ(int id)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@id", id);
+                List<ArrivalSostav> arr_cars = this.rep_rw.Database.SqlQuery<ArrivalSostav>("EXEC [RailWay].[GetArrivalSostavOfStationUZ] @id", i_id).ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalSostavOfStationUZ(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
 
     }
 }

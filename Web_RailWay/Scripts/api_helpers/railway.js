@@ -472,3 +472,28 @@ function getAsyncStationsNodes(callback) {
 }
 
 
+// Получить список составов на станции уз
+function getAsyncArrivalSostavOfStationUZ(id_station_uz, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/arrival/sostav/station/'+id_station_uz,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+

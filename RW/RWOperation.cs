@@ -491,7 +491,7 @@ namespace RW
                 new_car.dt_inp_amkr = null;
                 new_car.dt_out_amkr = null;
                 new_car.natur = null;
-
+                new_car.natur_kis = null;
                 // Создадим или изменяем входящую поставку
                 //CarsInpDelivery cid = AddCarsInpDelivery(new_car);
 

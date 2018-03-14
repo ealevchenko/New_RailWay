@@ -3,20 +3,70 @@
     // Объявление глобальных переменных
     //-----------------------------------------------------------------------------------------
     var lang = $.cookie('lang'),
+        resurses = {
+            list: null,
+            initObject: function (file, callback) {
+                initLang(file, function (json) {
+                    resurses.list = json;
+                    if (typeof callback === 'function') {
+                        callback(json);
+                    }
+                })
+            },
+            getText: function (tag) {
+                var result = null;
+                var str = getObjects(resurses.list, 'tag', tag);
+                if (str != null) {
+                    result = lang == 'en' ? str[0].en : str[0].ru;
+                }
+                return result;
+            }
+        },
+        // Группы спиков
+        tab_group_reports = {
+            html_div: $("#tabs-report"),
+            active: 0,
+            initObject: function () {
+                $('#link-tabs-1').text(resurses.getText("link_tabs_1"));
+                $('#link-tabs-2').text(resurses.getText("link_tabs_2"));
+                $('#link-tabs-3').text(resurses.getText("link_tabs_3"));
+                $('#link-tabs-4').text(resurses.getText("link_tabs_4"));
+                $('#link-tabs-5').text(resurses.getText("link_tabs_5"));
+                this.html_div.tabs({
+                    collapsible: true,
+                    activate: function (event, ui) {
+                        tab_group_reports.active = tab_group_reports.html_div.tabs("option", "active");
+                        wagons_tracking.viewReport(tab_group_reports.active, false);
+                    },
+                });
+                wagons_tracking.viewReport(tab_group_reports.active, false);
+            },
+        },
+
         wagons_tracking = {
-            table: null,
+            html_table: $('#table-list-wagons-tracking'),
             obj_table: null,
             obj: null,
             list: null,
-            initTable: function () {
-                this.table = $('#table-list-wagons-tracking');
-                this.obj = this.table.DataTable({
+            loadData: function (callback) {
+                getAsyncWagonsTracking(function (result) {
+                    wagons_tracking.list = result;
+                    if (typeof callback === 'function') {
+                        callback(result);
+                    }
+                });
+            },
+            initObject: function () {
+                this.initTableReport1();
+            },
+            initTableReport1: function () {
+                this.obj = this.html_table.DataTable({
                     "paging": false,
                     "ordering": true,
                     "info": false,
                     "select": false,
                     "filter": true,
-                    "scrollY": "600px",
+                    //"scrollY": "600px",
                     "scrollX": true,
                     language: {
                         decimal: lang == 'en' ? "." : ",",
@@ -24,52 +74,84 @@
                     },
                     jQueryUI: true,
                     "createdRow": function (row, data, index) {
-                        //$(row).attr('id', data.id_oper);
-                        //if (data.id_oper == this.select) {
-                        //    //$(row).addClass('selected');
-                        //}
+                        $(row).attr('id', data.nvagon);
+                        $('td', row).eq(0).html('<a id=' + data.nvagon + ' name="nvagon" href="#">' + data.nvagon + '</a>')
+                        if (data.st_form != null & data.nsost != undefined & data.st_nazn != null & data.nsost!="000")
+                        {
+                            $('td', row).eq(6).html(data.st_form + '-' + data.nsost + '-' + data.st_nazn);
+                        };
+                        if (data.id_oper == this.select) {
+                            //$(row).addClass('selected');
+                        }
                     },
                     columns: [
-                        { data: "nvagon", title: "№ вагона", orderable: false, searchable: false },
-                        { data: "st_disl", title: "Код ст. дислокации", orderable: false, searchable: true },
-                        { data: "nst_disl", title: "Станция дислокации", orderable: false, searchable: false },
-                        { data: "dt", title: "Дата и время операции", width: "150px", orderable: false, searchable: false },
-
+                        { data: "nvagon", title: "ВАГОН", orderable: true, searchable: true },
+                        { data: "type_vagon", title: "ТИП", orderable: true, searchable: true },
+                        { data: "nameop", title: "ОПЕР.", orderable: true, searchable: false },
+                        { data: "dt", title: "ДАТА/ВРЕМЯ", orderable: true, searchable: false },
+                        { data: "st_disl", title: "КСДТ", orderable: true, searchable: false },
+                        { data: "nst_disl", title: "ДИСЛОКАЦИЯ", width: "150px", orderable: true, searchable: false },
+                        { data: "index", title: "ИНДЕКСПОЕЗДА", orderable: true, searchable: false },
+                        { data: "st_nazn", title: "КСТН", orderable: true, searchable: false },
+                        { data: "nst_nazn", title: "НАЗНАЧЕНИЕ", width: "150px", orderable: true, searchable: false },
+                        { data: "kgrp", title: "КГРП", orderable: true, searchable: false },
+                        { data: "st_form", title: "КСТО", orderable: true, searchable: false },
+                        { data: "nst_form", title: "ОТПРАВЛЕНИЯ", width: "150px", orderable: true, searchable: false },
+                        { data: "ves", title: "ВЕС", orderable: true, searchable: false },
+                        { data: "kgr", title: "КГР", orderable: true, searchable: false },
+                        { data: "cargo", title: "ГРУЗ", orderable: true, searchable: false },
+                        { data: "ntrain", title: "ПОЕЗД", orderable: true, searchable: false },
                     ],
                 });
                 this.obj_table = $('DIV#table-list-wagons-tracking_wrapper');
-                //this.obj_table.hide();
             },
             initWagonsTracking: function () {
                 getAsyncWagonsTracking(function (result) {
                     wagons_tracking.list = result;
                 });
             },
-            loadData: function (data) {
+
+            viewReport: function (tab, data_refresh) {
+                if (this.list == null | data_refresh == true) {
+                    // Обновим данные
+                    this.loadData(function (data) {
+                        wagons_tracking.viewTable(data,tab)
+                    });
+                } else {
+                    // Не обновим данные
+                    wagons_tracking.viewTable(wagons_tracking.list,tab)
+                }
+            },
+            viewTable: function (data, tab) {
+
+                wagons_tracking.loadDataTable1(data);
+            },
+            loadDataTable1: function (data) {
                 this.list = data;
                 this.obj.clear();
                 for (i = 0; i < data.length; i++) {
                     this.obj.row.add({
-                        "id": data[i].id,
                         "nvagon": data[i].nvagon,
+                        "type_vagon": "ПВ",
+                        "nameop": data[i].nameop,
+                        "dt": data[i].dt,
                         "st_disl": data[i].st_disl,
                         "nst_disl": data[i].nst_disl,
-                        "dt": data[i].dt,
+                        "index": "-",
+                        "st_nazn": data[i].st_nazn,
+                        "nst_nazn": data[i].nst_nazn,
+                        "kgrp": data[i].kgrp,
+                        "st_form": data[i].st_form,
+                        "nst_form": data[i].nst_form,
+                        "ves": data[i].ves,
+                        "kgr": data[i].kgr,
+                        "kgr": data[i].kgr,
+                        "cargo": data[i].nkgr,
+                        "ntrain": data[i].ntrain,
+                        "nsost": data[i].nsost,
                     });
                 }
                 this.obj.draw();
-            },
-            viewTable: function (data_refresh) {
-                this.obj_table.show();
-                if (this.list == null | data_refresh == true) {
-                    // Обновим данные
-                    getAsyncWagonsTracking(function (result) {
-                        wagons_tracking.loadData(result);
-                    });
-                } else {
-                    // Не обновим данные
-
-                }
             },
         }
 
@@ -80,6 +162,14 @@
     //-----------------------------------------------------------------------------------------
     // Инициализация объектов
     //-----------------------------------------------------------------------------------------
-    wagons_tracking.initTable();
-    wagons_tracking.viewTable(false);
+    resurses.initObject("../../Scripts/MT/wagons_tracking.json",
+        function () {
+            // Загружаем дальше
+            tab_group_reports.initObject();
+            wagons_tracking.initObject();
+            //wagons_tracking.initTable();
+            //wagons_tracking.viewTable(false);
+
+        }); // локализация
+
 });

@@ -136,5 +136,15 @@ namespace Testing
             kis_trans.TransferArrivalToStation(ref bos);
         }
 
+        public void Test_KISTransfer_SetCarToWayRailWay()
+        {
+            KISTransfer kis_trans = new KISTransfer();
+            //EFTKIS ef_tkis = new EFTKIS();
+            //EFKIS.Entities.BufferOutputSostav bos = ef_tkis.GetBufferOutputSostav(1112);
+            //kis_trans.TransferArrivalToStation(ref bos);
+
+            kis_trans.SetCarToWayRailWay(807, 54645593, DateTime.Parse("2018-03-11 18:30:00"), 6, 103, 0);
+        }
+
     }
 }

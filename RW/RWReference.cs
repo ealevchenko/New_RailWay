@@ -403,6 +403,7 @@ namespace RW
                 if (ref_cargo == null)
                 {
                     EFReference.Entities.Cargo cargo = reference.GetCargoOfCodeETSNG(code_etsng);
+                    //EFReference.Entities.Cargo cargo = reference.GetCorrectCargo(code_etsng);
                     ReferenceCargo new_cargo;
                     if (cargo != null & create)
                     {
@@ -451,6 +452,7 @@ namespace RW
         /// <param name="code_etsng"></param>
         /// <returns></returns>
         public int GetIDReferenceCargoOfCodeETSNG(int code_etsng)
+
         {
             try
             {
@@ -463,6 +465,12 @@ namespace RW
                 return 0;
             }
         }
+        public int GetIDReferenceCargoOfCorrectCodeETSNG(int code_etsng)
+        {
+            EFReference.Concrete.EFReference reference = new EFReference.Concrete.EFReference();
+            return GetIDReferenceCargoOfCodeETSNG(reference.GetCodeCorrectCargo(code_etsng));
+        }
+
         #endregion
 
         #region Справочник "Станций railway"
@@ -552,6 +560,191 @@ namespace RW
                 return null;
             }
         }
+        /// <summary>
+        /// Вернуть строку станции справочника "Станций railway" по id kis, если нет создать по данным КИС
+        /// </summary>
+        /// <param name="id_kis"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public Stations GetStations(int id_kis, bool create)
+        {
+            try
+            {
+                EFRailWay ef_rw = new EFRailWay();
+                EFWagons kis = new EFWagons();
+                Stations station = ef_rw.GetStationsOfKis(id_kis);
+                // Если нет станции создадим
+                if (station == null & create)
+                {
+                    KometaStan st = kis.GetKometaStan(id_kis);
+                    station = new Stations()
+                    {
+                        id = 0,
+                        name_ru = st!=null ? st.NAME : "?",
+                        name_en = st != null ? st.NAME : "?",
+                        view = false,
+                        exit_uz = false,
+                        station_uz = st != null && st.MPS != null ? (bool)st.MPS : false,
+                        id_rs = null,
+                        id_kis = id_kis,
+                        default_side = null,
+                        code_uz = null,
+                    };
+                    int res_st = ef_rw.SaveStations(station);
+                    station = ef_rw.GetStationsOfKis(res_st);
+                }
+                return station;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStations(id_kis={0}, create={1})", id_kis, create), servece_owner, eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть id станции справочника "Станций railway" по id kis, если нет создать по данным КИС 
+        /// </summary>
+        /// <param name="id_kis"></param>
+        /// <returns></returns>
+        public int GetIDStationsOfKIS(int id_kis)
+        {
+            try
+            {
+                Stations station = GetStations(id_kis, this.reference_kis == true ? true: false);
+                return station != null ? station.id : 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDStationsOfKIS(id_kis={0})", id_kis), servece_owner, eventID);
+                return 0;
+            }
+        }
+        #endregion
+
+        #region Справочник "Путей railway"
+        /// <summary>
+        /// Вернуть строку пути справочника "Пути railway" по id станции и номеру пути, если нет создать по данным КИС
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <param name="num"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public Ways GetWay(int id_station, string num, bool create)
+        {
+            try
+            {
+                if (String.IsNullOrWhiteSpace(num)) return null;
+                EFRailWay ef_rw = new EFRailWay();
+                EFWagons kis = new EFWagons();
+                Ways way = ef_rw.GetWaysOfStation(id_station, num);
+                // Если нет станции создадим
+                if (way == null & create)
+                {
+                    // Создадим путь для отправки на АМКР
+                    way = new Ways()
+                    {
+                        id = 0,
+                        id_station = id_station,
+                        num = num,
+                        name_ru = "Путь создан по данным КИС",
+                        name_en = "The path is based on the KIS data",
+                        position = 0,
+                        capacity = null,
+                        id_car_status = null,
+                        tupik = null,
+                        dissolution = null,
+                        defrosting = null,
+                        overturning = null,
+                        pto = null,
+                        cleaning = null,
+                        rest = null,
+                        id_rc = null,
+                    };
+                    int res_w = ef_rw.SaveWays(way);
+                    way = ef_rw.GetWays(res_w);
+                }
+                return way;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWay(id_station={0}, num={1}, create={2})", id_station, num, create), servece_owner, eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть id пути справочника "Пути railway" по id станции и номеру пути, если нет создать по данным КИС
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public int GetIDWayOfStation(int id_station, string num) {
+            try
+            {
+                Ways way = GetWay(id_station, num, this.reference_kis == true ? true : false);
+                return way != null ? way.id : 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDWayOfStation(id_station={0}, num={1})", id_station, num), servece_owner, eventID);
+                return 0;
+            }
+        }
+        /// <summary>
+        /// Вернуть id пути справочника "Пути railway" по id станции и номеру пути, если нет создать по данным КИС, если не создан вернуть первый путь по умолчанию
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public int GetIDDefaultWayOfStation(int id_station, string num) {
+            try
+            {
+                EFRailWay ef_rw = new EFRailWay();
+                int id = GetIDWayOfStation(id_station, num);
+                if (id == 0)
+                {
+                    Ways Way = ef_rw.GetWaysOfStation(id_station).OrderBy(w => w.num).FirstOrDefault();
+                    if (Way != null) { id = Way.id; }
+                }
+                return id;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDDefaultWayOfStation(id_station={0}, num={1})", id_station, num), servece_owner, eventID);
+                return 0;
+            }
+        }
+
+        //public int? DefinitionIDWays(int id_station, int? num_way)
+        //{
+        //    EFRailCars efrc = new EFRailCars();
+        //    if (num_way != null)
+        //    {
+        //        int? way = efrc.GetIDWaysToStations(id_station, ((int)num_way).ToString());
+        //        if (way == null)
+        //        {
+        //            int res = efrc.SaveWAYS(new WAYS()
+        //            {
+        //                id_way = 0,
+        //                id_stat = id_station,
+        //                id_park = null,
+        //                num = ((int)num_way).ToString(),
+        //                name = "?",
+        //                vag_capacity = null,
+        //                order = null,
+        //                bind_id_cond = null,
+        //                for_rospusk = null,
+        //            });
+        //            if (res > 0) return res;
+        //        }
+        //        return way;
+        //    }
+        //    else
+        //    {
+        //        WAYS ws = efrc.GetWaysOfStations(id_station).OrderBy(w => w.num).FirstOrDefault();
+        //        if (ws != null) return ws.id_way;
+        //    }
+        //    return null;
+        //}
         #endregion
 
         #region Справочник "Путей railway"

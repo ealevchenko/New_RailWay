@@ -98,5 +98,7 @@ namespace MessageLog
 
         Web_API_MTController = 11120,
 
+        Web_API_RWController = 11130,
+
     }
 }

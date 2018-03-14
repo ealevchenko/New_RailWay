@@ -59,7 +59,7 @@ namespace Testing
 
             #region Test_RW
             Test_RW tst_rw = new Test_RW();
-            tst_rw.RWTransfer_ArrivalMTToRailway(); // Тест переноса данных МТ (по id_sostav) в систему RailWay
+            //tst_rw.RWTransfer_ArrivalMTToRailway(); // Тест переноса данных МТ (по id_sostav) в систему RailWay
             //tst_rw.RWReference_GetReferenceCarsOfNum(); // Тест справочника вагонов
             //tst_rw.RWReference_GetReferenceCars(); // Тест чтения\записи\удаления ef вагонов
             //tst_rw.RWReference_GetReferenceCountry(); // Тест справочника стран
@@ -86,7 +86,7 @@ namespace Testing
             //Wagons_GetSTPR1GR(291);
             //tst_rw_api.Reference_GetCountryOfCodeSNG();
             //tst_rw_api.WebAPIToken();
-            //tst_rw_api.WebAPIMT();
+            tst_rw_api.WebAPIMT();
             //tst_rw_api.WebAPIMTStart();
 
             #endregion
@@ -130,7 +130,7 @@ namespace Testing
             //tst_kis.Test_KISThread_StartTransferInputKIS(); // тест потока всех переносов вагонов из КИС в прибытие станции RC по данным КИС по прибытию
             //tst_kis.Test_KISThread_StartTransferOutputKIS(); // тест потока всех переносов вагонов из КИС в прибытие станции RC по данным КИС по отправке
             //tst_kis.Test_KISTransfer_TransferOutputArrivalToStation(); // Тест переноса вагонов из КИС в прибытие станции RC по данным КИС по отправке
-
+            //tst_kis.Test_KISTransfer_SetCarToWayRailWay(); // Тест принимаем на путь станции из УЗ
             #endregion
 
             #region Test_Reference

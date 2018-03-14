@@ -645,6 +645,7 @@
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\MT\wagons_tracking.js" />
+    <Content Include="Scripts\RW\awas1.js" />
     <Content Include="Scripts\RW\awas.js" />
     <Content Include="Scripts\RW\rwui.js" />
     <Content Include="Scripts\Services\services.js" />
@@ -721,6 +722,8 @@
     <Content Include="Areas\KIS\Views\Transfer\Index.cshtml" />
     <Content Include="Views\RWUI\Index.cshtml" />
     <Content Include="Views\AWAS\Index.cshtml" />
+    <Content Include="Scripts\RW\awas.json" />
+    <Content Include="Scripts\MT\wagons_tracking.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppSettings\DBSettings\DBSettings.csproj">

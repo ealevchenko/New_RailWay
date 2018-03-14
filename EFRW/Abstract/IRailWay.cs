@@ -21,7 +21,9 @@ namespace EFRW.Abstract
         #region Stations
         IQueryable<Stations> Stations { get; }
         IQueryable<Stations> GetStations();
+        IQueryable<Stations> GetStations(bool link);
         Stations GetStations(int id);
+        Stations GetStations(int id, bool link);
         int SaveStations(Stations Stations);
         Stations DeleteStations(int id);
 
@@ -55,6 +57,10 @@ namespace EFRW.Abstract
         Ways GetWays(int id);
         int SaveWays(Ways Ways);
         Ways DeleteWays(int id);
+        IQueryable<Ways> GetWaysOfStation(int id_station);
+        Ways GetWaysOfStation(int id_station, string num);
+        Ways GetWaysOfArrivalUZ(int id_station);
+        Ways GetWaysOfSendingUZ(int id_station);
         #endregion
 
         #region Cars
@@ -66,6 +72,7 @@ namespace EFRW.Abstract
         Cars DeleteCars(int id);
         IQueryable<Cars> GetCarsOfSostav(int id_sostav);
         IQueryable<Cars> GetCarsOfArrival(int id_arrival);
+        IQueryable<Cars> GetCarsOfNum(int num);
         Cars GetCarsOfSostavNum(int id_sostav, int num);
         Cars GetCarsOfArrivalNum(int id_arrival, int num);
         List<Cars> GetCarsOfArrivalNum(int id_arrival, int[] nums);
@@ -79,6 +86,9 @@ namespace EFRW.Abstract
         CarOperations DeleteCarOperations(int id);
         IQueryable<CarOperations> GetCarOperationsOfNumCar(int num);
         CarOperations GetLastCarOperationsOfNumCar(int num);
+        IQueryable<CarOperations> GetOpenCarOperationsOfWay(int id_way);
+        int GetLastPositionOpenCarOperationsOfWay(int id_way);
+
         #endregion
 
         #region CarConditions

@@ -904,9 +904,10 @@ namespace MetallurgTrans
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        public int TransferWagonsTracking(List<WagonsTracking> list)
+        public int TransferWagonsTracking(List<WagonsTrackingMT> list)
         {
             if (list == null || list.Count() == 0) return 0;
+            RWReference rw_ref = new RWReference(true);
             EFMetallurgTrans efmt = new EFMetallurgTrans();
             int countCopy = 0;
             int countError = 0;
@@ -914,11 +915,42 @@ namespace MetallurgTrans
             //string trans_id = "";
             try
             {
-                foreach (WagonsTracking wt in list.OrderBy(l=>l.dt))
+                foreach (WagonsTrackingMT wt in list.OrderBy(l => l.dt))
                 {
                     try
                     {
-                        res = efmt.SaveWagonsTracking(wt);
+                        int id_cargo =0;
+                        if (wt.kgr != null && wt.kgr > 0)
+                        {
+                            id_cargo = rw_ref.GetIDReferenceCargoOfCorrectCodeETSNG((int)wt.kgr);
+                        }
+                        res = efmt.SaveWagonsTracking(new WagonsTracking() {
+                            id = 0,
+                            nvagon = wt.nvagon,
+                            st_disl = wt.st_disl,
+                            nst_disl = wt.nst_disl,
+                            kodop = wt.kodop,
+                            nameop = wt.nameop,
+                            full_nameop = wt.full_nameop,
+                            dt = wt.dt,
+                            st_form = wt.st_form,
+                            nst_form = wt.nst_form,
+                            idsost = wt.idsost,
+                            nsost = wt.nsost,
+                            st_nazn = wt.st_nazn,
+                            nst_nazn = wt.nst_nazn,
+                            ntrain = wt.ntrain,
+                            st_end = wt.st_end,
+                            nst_end = wt.nst_end,
+                            kgr = wt.kgr,
+                            nkgr = wt.nkgr,
+                            id_cargo = id_cargo,
+                            kgrp = wt.kgrp,
+                            ves = wt.ves,
+                            updated = wt.updated,
+                            kgro = wt.kgro,
+                            km = wt.km,
+                        });
                         if (res >= 0)
                         {
                             countCopy++;
@@ -959,9 +991,9 @@ namespace MetallurgTrans
             EFMetallurgTrans efmt = new EFMetallurgTrans();
             try
             {
-                WebApiClientMetallurgTrans client = new WebApiClientMetallurgTrans(url, user, psw, api);                
-                List<WagonsTracking> list_tracking = client.GetWagonsTracking();
-                foreach (WagonsTracking wt in list_tracking)
+                WebApiClientMetallurgTrans client = new WebApiClientMetallurgTrans(url, user, psw, api);
+                List<WagonsTrackingMT> list_tracking = client.GetWagonsTracking();
+                foreach (WagonsTrackingMT wt in list_tracking)
                 {
                     try
                     {
@@ -969,7 +1001,7 @@ namespace MetallurgTrans
                         if (wt_old == null)
                         {
                             // Обновляем информацию переносим все
-                            List<WagonsTracking> list_new = client.GetWagonsTracking(wt.nvagon, datetime_start_new_tracking);
+                            List<WagonsTrackingMT> list_new = client.GetWagonsTracking(wt.nvagon, datetime_start_new_tracking);
                             if (list_new == null || list_new.Count() == 0) {
                                 list_new.Add(wt);
                             }
@@ -988,7 +1020,7 @@ namespace MetallurgTrans
                             if (wt_old.dt != wt.dt)
                             {
                                 // Обновляем информацию добавим новое
-                                List<WagonsTracking> list_new = client.GetWagonsTracking(wt.nvagon, ((DateTime)wt_old.dt).AddSeconds(1));
+                                List<WagonsTrackingMT> list_new = client.GetWagonsTracking(wt.nvagon, ((DateTime)wt_old.dt).AddSeconds(1));
                                 res = TransferWagonsTracking(list_new);
                                 if (res >= 0)
                                 {
