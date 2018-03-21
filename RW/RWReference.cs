@@ -471,6 +471,21 @@ namespace RW
             return GetIDReferenceCargoOfCodeETSNG(reference.GetCodeCorrectCargo(code_etsng));
         }
 
+        public int GetCorrectCodeETSNGOfKis(int? code_kis)
+        {
+            if (code_kis != null)
+            {
+                EFWagons kis = new EFWagons();
+                PromGruzSP pg = kis.GetGruzSP((int)code_kis);
+                if (pg != null && pg.TAR_GR != null)
+                {
+                    EFReference.Concrete.EFReference reference = new EFReference.Concrete.EFReference();
+                    return reference.GetCodeCorrectCargo((int)pg.TAR_GR);
+                }
+            }
+            return 0;
+        }
+
         #endregion
 
         #region Справочник "Станций railway"

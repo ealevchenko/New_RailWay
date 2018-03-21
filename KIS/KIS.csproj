@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="KISThread.cs" />
     <Compile Include="KISTransfer.cs" />
+    <Compile Include="KIS_RC_Transfer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SAPTransfer.cs" />
   </ItemGroup>

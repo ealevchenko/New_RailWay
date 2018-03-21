@@ -496,4 +496,51 @@ function getAsyncArrivalSostavOfStationUZ(id_station_uz, callback) {
     });
 }
 
+// Веруть cтанцию по id
+function getAsyncDefaultReferenceCargo(code_etsng, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/reference/cargo/code/etsng/' + code_etsng + '/all',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+function getDefaultReferenceCargo(code_etsng) {
+    var value = null;
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/reference/cargo/code/etsng/' + code_etsng + '/all',
+        async: false,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            value = data;
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+    return value;
+}
+
 

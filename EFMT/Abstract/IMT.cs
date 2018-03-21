@@ -61,7 +61,7 @@ namespace EFMT.Abstract
         IQueryable<ArrivalCars> GetArrivalCars(int num, DateTime dt);
         ArrivalCars GetArrivalCarsOfNextCar(int num, DateTime dt);
         int CloseArrivalCars(int num, DateTime dt, int code_close);
-
+        int CloseArrivalCars(int id_sostav, int num, int doc, DateTime dt);
         IQueryable<ArrivalSostav> ArrivalSostav { get; }
         IQueryable<ArrivalSostav> GetArrivalSostav();
         ArrivalSostav GetArrivalSostav(int id);

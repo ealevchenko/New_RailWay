@@ -58,9 +58,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\IBufferArrivalSostav.cs" />
     <Compile Include="Abstract\IKIS.cs" />
     <Compile Include="Abstract\ITKIS.cs" />
-    <Compile Include="Concrete\EFTDbContext.cs" />
+    <Compile Include="Concrete\EFTRWdbContext.cs" />
+    <Compile Include="Concrete\EFTRCdbContext.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFTKIS.cs" />
     <Compile Include="Concrete\EFWagons.cs" />
@@ -85,10 +87,13 @@
     <Compile Include="Entities\PromNatHist.cs" />
     <Compile Include="Entities\PromSostav.cs" />
     <Compile Include="Entities\PromVagon.cs" />
-    <Compile Include="Entities\BufferArrivalSostav.cs" />
+    <Compile Include="Entities\RWBufferArrivalSostav.cs" />
+    <Compile Include="Entities\RCBufferArrivalSostav.cs" />
+    <Compile Include="Entities\RWBufferInputSostav.cs" />
+    <Compile Include="Entities\RWBufferOutputSostav.cs" />
     <Compile Include="Helpers\Filters.cs" />
-    <Compile Include="Entities\BufferInputSostav.cs" />
-    <Compile Include="Entities\BufferOutputSostav.cs" />
+    <Compile Include="Entities\RCBufferInputSostav.cs" />
+    <Compile Include="Entities\RCBufferOutputSostav.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -14,126 +14,129 @@ namespace EFKIS.Concrete
     {
         private eventID eventID = eventID.EFTKIS;
 
-        protected EFTDbContext context = new EFTDbContext();
+        protected EFTRCdbContext context_rc = new EFTRCdbContext();
+        protected EFTRWdbContext context_rw = new EFTRWdbContext();
+
+        #region RC
 
         #region BufferArrivalSostav Перенос прибывших с УЗ вагонов по данным КИС
-        public IQueryable<BufferArrivalSostav> BufferArrivalSostav
+        public IQueryable<RCBufferArrivalSostav> RCBufferArrivalSostav
         {
-            get { return context.BufferArrivalSostav; }
+            get { return context_rc.RCBufferArrivalSostav; }
         }
 
-        public IQueryable<BufferArrivalSostav> GetBufferArrivalSostav()
+        public IQueryable<RCBufferArrivalSostav> GetRCBufferArrivalSostav()
         {
             try
             {
-                return BufferArrivalSostav;
+                return RCBufferArrivalSostav;
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferArrivalSostav()"), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferArrivalSostav()"), eventID);
                 return null;
             }
         }
 
-        public BufferArrivalSostav GetBufferArrivalSostav(int id)
+        public RCBufferArrivalSostav GetRCBufferArrivalSostav(int id)
         {
             try
             {
-                return GetBufferArrivalSostav().Where(s => s.id == id).FirstOrDefault();
+                return GetRCBufferArrivalSostav().Where(s => s.id == id).FirstOrDefault();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferArrivalSostav(id={0})", id), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferArrivalSostav(id={0})", id), eventID);
                 return null;
             }
         }
 
-        public int SaveArrivalSostav(BufferArrivalSostav ArrivalSostav)
+        public int SaveRCBufferArrivalSostav(RCBufferArrivalSostav RCBufferArrivalSostav)
         {
-            BufferArrivalSostav dbEntry;
+            RCBufferArrivalSostav dbEntry;
             try
             {
-                if (ArrivalSostav.id == 0)
+                if (RCBufferArrivalSostav.id == 0)
                 {
-                    dbEntry = new BufferArrivalSostav()
+                    dbEntry = new RCBufferArrivalSostav()
                     {
-                        id = ArrivalSostav.id,
-                        datetime = ArrivalSostav.datetime,
-                        day = ArrivalSostav.day,
-                        month = ArrivalSostav.month,
-                        year = ArrivalSostav.year,
-                        hour = ArrivalSostav.hour,
-                        minute = ArrivalSostav.minute,
-                        natur = ArrivalSostav.natur,
-                        id_station_kis = ArrivalSostav.id_station_kis,
-                        way_num = ArrivalSostav.way_num,
-                        napr = ArrivalSostav.napr,
-                        count_wagons = ArrivalSostav.count_wagons,
-                        count_nathist = ArrivalSostav.count_nathist,
-                        count_set_wagons = ArrivalSostav.count_set_wagons,
-                        count_set_nathist = ArrivalSostav.count_set_nathist,
-                        close = ArrivalSostav.close,
-                        close_user = ArrivalSostav.close_user,
-                        status = ArrivalSostav.status,
-                        list_wagons = ArrivalSostav.list_wagons,
-                        list_no_set_wagons = ArrivalSostav.list_no_set_wagons,
-                        list_no_update_wagons = ArrivalSostav.list_no_update_wagons,
-                        message = ArrivalSostav.message,
+                        id = RCBufferArrivalSostav.id,
+                        datetime = RCBufferArrivalSostav.datetime,
+                        day = RCBufferArrivalSostav.day,
+                        month = RCBufferArrivalSostav.month,
+                        year = RCBufferArrivalSostav.year,
+                        hour = RCBufferArrivalSostav.hour,
+                        minute = RCBufferArrivalSostav.minute,
+                        natur = RCBufferArrivalSostav.natur,
+                        id_station_kis = RCBufferArrivalSostav.id_station_kis,
+                        way_num = RCBufferArrivalSostav.way_num,
+                        napr = RCBufferArrivalSostav.napr,
+                        count_wagons = RCBufferArrivalSostav.count_wagons,
+                        count_nathist = RCBufferArrivalSostav.count_nathist,
+                        count_set_wagons = RCBufferArrivalSostav.count_set_wagons,
+                        count_set_nathist = RCBufferArrivalSostav.count_set_nathist,
+                        close = RCBufferArrivalSostav.close,
+                        close_user = RCBufferArrivalSostav.close_user,
+                        status = RCBufferArrivalSostav.status,
+                        list_wagons = RCBufferArrivalSostav.list_wagons,
+                        list_no_set_wagons = RCBufferArrivalSostav.list_no_set_wagons,
+                        list_no_update_wagons = RCBufferArrivalSostav.list_no_update_wagons,
+                        message = RCBufferArrivalSostav.message,
                     };
-                    context.BufferArrivalSostav.Add(dbEntry);
+                    context_rc.RCBufferArrivalSostav.Add(dbEntry);
                 }
                 else
                 {
-                    dbEntry = context.BufferArrivalSostav.Find(ArrivalSostav.id);
+                    dbEntry = context_rc.RCBufferArrivalSostav.Find(RCBufferArrivalSostav.id);
                     if (dbEntry != null)
                     {
-                        dbEntry.datetime = ArrivalSostav.datetime;
-                        dbEntry.day = ArrivalSostav.day;
-                        dbEntry.month = ArrivalSostav.month;
-                        dbEntry.year = ArrivalSostav.year;
-                        dbEntry.hour = ArrivalSostav.hour;
-                        dbEntry.minute = ArrivalSostav.minute;
-                        dbEntry.natur = ArrivalSostav.natur;
-                        dbEntry.id_station_kis = ArrivalSostav.id_station_kis;
-                        dbEntry.way_num = ArrivalSostav.way_num;
-                        dbEntry.napr = ArrivalSostav.napr;
-                        dbEntry.count_wagons = ArrivalSostav.count_wagons;
-                        dbEntry.count_nathist = ArrivalSostav.count_nathist;
-                        dbEntry.count_set_wagons = ArrivalSostav.count_set_wagons;
-                        dbEntry.count_set_nathist = ArrivalSostav.count_set_nathist;
-                        dbEntry.close = ArrivalSostav.close;
-                        dbEntry.close_user = ArrivalSostav.close_user;
-                        dbEntry.status = ArrivalSostav.status;
-                        dbEntry.list_wagons = ArrivalSostav.list_wagons;
-                        dbEntry.list_no_set_wagons = ArrivalSostav.list_no_set_wagons;
-                        dbEntry.list_no_update_wagons = ArrivalSostav.list_no_update_wagons;
-                        dbEntry.message = ArrivalSostav.message;
+                        dbEntry.datetime = RCBufferArrivalSostav.datetime;
+                        dbEntry.day = RCBufferArrivalSostav.day;
+                        dbEntry.month = RCBufferArrivalSostav.month;
+                        dbEntry.year = RCBufferArrivalSostav.year;
+                        dbEntry.hour = RCBufferArrivalSostav.hour;
+                        dbEntry.minute = RCBufferArrivalSostav.minute;
+                        dbEntry.natur = RCBufferArrivalSostav.natur;
+                        dbEntry.id_station_kis = RCBufferArrivalSostav.id_station_kis;
+                        dbEntry.way_num = RCBufferArrivalSostav.way_num;
+                        dbEntry.napr = RCBufferArrivalSostav.napr;
+                        dbEntry.count_wagons = RCBufferArrivalSostav.count_wagons;
+                        dbEntry.count_nathist = RCBufferArrivalSostav.count_nathist;
+                        dbEntry.count_set_wagons = RCBufferArrivalSostav.count_set_wagons;
+                        dbEntry.count_set_nathist = RCBufferArrivalSostav.count_set_nathist;
+                        dbEntry.close = RCBufferArrivalSostav.close;
+                        dbEntry.close_user = RCBufferArrivalSostav.close_user;
+                        dbEntry.status = RCBufferArrivalSostav.status;
+                        dbEntry.list_wagons = RCBufferArrivalSostav.list_wagons;
+                        dbEntry.list_no_set_wagons = RCBufferArrivalSostav.list_no_set_wagons;
+                        dbEntry.list_no_update_wagons = RCBufferArrivalSostav.list_no_update_wagons;
+                        dbEntry.message = RCBufferArrivalSostav.message;
                     }
                 }
-                context.SaveChanges();
+                context_rc.SaveChanges();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("SaveBufferArrivalSostav(ArrivalSostav={0})", BufferArrivalSostav.GetFieldsAndValue()), eventID);
+                e.WriteErrorMethod(String.Format("SaveRCBufferArrivalSostav(RCBufferArrivalSostav={0})", RCBufferArrivalSostav.GetFieldsAndValue()), eventID);
                 return -1;
             }
             return dbEntry.id;
         }
 
-        public BufferArrivalSostav DeleteBufferArrivalSostav(int id)
+        public RCBufferArrivalSostav DeleteRCBufferArrivalSostav(int id)
         {
-            BufferArrivalSostav dbEntry = context.BufferArrivalSostav.Find(id);
+            RCBufferArrivalSostav dbEntry = context_rc.RCBufferArrivalSostav.Find(id);
             if (dbEntry != null)
             {
                 try
                 {
-                    context.BufferArrivalSostav.Remove(dbEntry);
+                    context_rc.RCBufferArrivalSostav.Remove(dbEntry);
 
-                    context.SaveChanges();
+                    context_rc.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("DeleteBufferArrivalSostav(id={0})", id), eventID);
+                    e.WriteErrorMethod(String.Format("DeleteRCBufferArrivalSostav(id={0})", id), eventID);
                     return null;
                 }
             }
@@ -143,16 +146,16 @@ namespace EFKIS.Concrete
         /// Вернуть последнее время по которому перенесли состав
         /// </summary>
         /// <returns></returns>
-        public DateTime? GetLastDateTimeBufferArrivalSostav()
+        public DateTime? GetLastDateTimeRCBufferArrivalSostav()
         {
             try
             {
-                BufferArrivalSostav oas = GetBufferArrivalSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
+                RCBufferArrivalSostav oas = GetRCBufferArrivalSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
                 return oas != null ? (DateTime?)oas.datetime : null;
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetLastDateTimeBufferArrivalSostav()"), eventID);
+                e.WriteErrorMethod(String.Format("GetLastDateTimeRCBufferArrivalSostav()"), eventID);
                 return null;
             }
         }
@@ -162,15 +165,15 @@ namespace EFKIS.Concrete
         /// <param name="start"></param>
         /// <param name="stop"></param>
         /// <returns></returns>
-        public IQueryable<BufferArrivalSostav> GetBufferArrivalSostav(DateTime start, DateTime stop)
+        public IQueryable<RCBufferArrivalSostav> GetRCBufferArrivalSostav(DateTime start, DateTime stop)
         {
             try
             {
-                return GetBufferArrivalSostav().Where(o => o.datetime >= start & o.datetime <= stop);
+                return GetRCBufferArrivalSostav().Where(o => o.datetime >= start & o.datetime <= stop);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferArrivalSostav()"), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferArrivalSostav()"), eventID);
                 return null;
             }
         }
@@ -178,15 +181,15 @@ namespace EFKIS.Concrete
         /// Выбрать не закрытые перенесеные составы
         /// </summary>
         /// <returns></returns>
-        public IQueryable<BufferArrivalSostav> GetBufferArrivalSostavNoClose()
+        public IQueryable<RCBufferArrivalSostav> GetRCBufferArrivalSostavNoClose()
         {
             try
             {
-                return GetBufferArrivalSostav().Where(o => o.close == null).OrderBy(o => o.datetime);
+                return GetRCBufferArrivalSostav().Where(o => o.close == null).OrderBy(o => o.datetime);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferArrivalSostavNoClose()"), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferArrivalSostavNoClose()"), eventID);
                 return null;
             }
         }
@@ -195,15 +198,15 @@ namespace EFKIS.Concrete
         /// </summary>
         /// <param name="natur"></param>
         /// <returns></returns>
-        public BufferArrivalSostav GetBufferArrivalSostavOfNatur(int natur)
+        public RCBufferArrivalSostav GetRCBufferArrivalSostavOfNatur(int natur)
         {
             try
             {
-                return GetBufferArrivalSostav().Where(o => o.natur == natur).OrderByDescending(o => o.datetime).FirstOrDefault();
+                return GetRCBufferArrivalSostav().Where(o => o.natur == natur).OrderByDescending(o => o.datetime).FirstOrDefault();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferArrivalSostavOfNatur(natur={0})", natur), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferArrivalSostavOfNatur(natur={0})", natur), eventID);
                 return null;
             }
         }
@@ -212,32 +215,32 @@ namespace EFKIS.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public int CloseBufferArrivalSostav(int id) {
+        public int CloseRCBufferArrivalSostav(int id) {
             try
             {
-                return CloseBufferArrivalSostav(id, System.Environment.UserDomainName + @"\" + System.Environment.UserName);
+                return CloseRCBufferArrivalSostav(id, System.Environment.UserDomainName + @"\" + System.Environment.UserName);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("CloseBufferArrivalSostav(id={0})", id), eventID);
+                e.WriteErrorMethod(String.Format("CloseRCBufferArrivalSostav(id={0})", id), eventID);
                 return -1;
             }
 
         }
 
-        public int CloseBufferArrivalSostav(int id, string user)
+        public int CloseRCBufferArrivalSostav(int id, string user)
         {
             try
             {
-                BufferArrivalSostav bas = GetBufferArrivalSostav(id);
+                RCBufferArrivalSostav bas = GetRCBufferArrivalSostav(id);
                 if (bas == null) return 0;
                 bas.close = DateTime.Now;
                 bas.close_user = user;
-                return SaveArrivalSostav(bas);
+                return SaveRCBufferArrivalSostav(bas);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("CloseBufferArrivalSostav(id={0}, user={1})", id, user), eventID);
+                e.WriteErrorMethod(String.Format("CloseRCBufferArrivalSostav(id={0}, user={1})", id, user), eventID);
                 return -1;
             }
 
@@ -246,108 +249,108 @@ namespace EFKIS.Concrete
         #endregion
 
         #region BufferInputSostav Перенос прибывающих вагонов на станцию по данным КИС
-        public IQueryable<BufferInputSostav> BufferInputSostav
+        public IQueryable<RCBufferInputSostav> RCBufferInputSostav
         {
-            get { return context.BufferInputSostav; }
+            get { return context_rc.RCBufferInputSostav; }
         }
 
-        public IQueryable<BufferInputSostav> GetBufferInputSostav()
+        public IQueryable<RCBufferInputSostav> GetRCBufferInputSostav()
         {
             try
             {
-                return BufferInputSostav;
+                return RCBufferInputSostav;
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferInputSostav()"), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferInputSostav()"), eventID);
                 return null;
             }
         }
 
-        public BufferInputSostav GetBufferInputSostav(int id)
+        public RCBufferInputSostav GetRCBufferInputSostav(int id)
         {
             try
             {
-                return GetBufferInputSostav().Where(s => s.id == id).FirstOrDefault();
+                return GetRCBufferInputSostav().Where(s => s.id == id).FirstOrDefault();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferInputSostav(id={0})", id), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferInputSostav(id={0})", id), eventID);
                 return null;
             }
         }
 
-        public int SaveBufferInputSostav(BufferInputSostav BufferInputSostav)
+        public int SaveRCBufferInputSostav(RCBufferInputSostav RCBufferInputSostav)
         {
-            BufferInputSostav dbEntry;
+            RCBufferInputSostav dbEntry;
             try
             {
-                if (BufferInputSostav.id == 0)
+                if (RCBufferInputSostav.id == 0)
                 {
-                    dbEntry = new BufferInputSostav()
+                    dbEntry = new RCBufferInputSostav()
                     {
-                        id = BufferInputSostav.id,
-                        datetime = BufferInputSostav.datetime,
-                        doc_num = BufferInputSostav.doc_num,
-                        id_station_from_kis = BufferInputSostav.id_station_from_kis,
-                        way_num_kis = BufferInputSostav.way_num_kis,
-                        napr = BufferInputSostav.napr,
-                        id_station_on_kis = BufferInputSostav.id_station_on_kis,
-                        count_wagons = BufferInputSostav.count_wagons,
-                        count_set_wagons = BufferInputSostav.count_set_wagons,
-                        natur = BufferInputSostav.natur,
-                        close = BufferInputSostav.close,
-                        close_user = BufferInputSostav.close_user,
-                        status = BufferInputSostav.status,
-                        message = BufferInputSostav.message
+                        id = RCBufferInputSostav.id,
+                        datetime = RCBufferInputSostav.datetime,
+                        doc_num = RCBufferInputSostav.doc_num,
+                        id_station_from_kis = RCBufferInputSostav.id_station_from_kis,
+                        way_num_kis = RCBufferInputSostav.way_num_kis,
+                        napr = RCBufferInputSostav.napr,
+                        id_station_on_kis = RCBufferInputSostav.id_station_on_kis,
+                        count_wagons = RCBufferInputSostav.count_wagons,
+                        count_set_wagons = RCBufferInputSostav.count_set_wagons,
+                        natur = RCBufferInputSostav.natur,
+                        close = RCBufferInputSostav.close,
+                        close_user = RCBufferInputSostav.close_user,
+                        status = RCBufferInputSostav.status,
+                        message = RCBufferInputSostav.message
                     };
-                    context.BufferInputSostav.Add(dbEntry);
+                    context_rc.RCBufferInputSostav.Add(dbEntry);
                 }
                 else
                 {
-                    dbEntry = context.BufferInputSostav.Find(BufferInputSostav.id);
+                    dbEntry = context_rc.RCBufferInputSostav.Find(RCBufferInputSostav.id);
                     if (dbEntry != null)
                     {
-                        dbEntry.id = BufferInputSostav.id;
-                        dbEntry.datetime = BufferInputSostav.datetime;
-                        dbEntry.doc_num = BufferInputSostav.doc_num;
-                        dbEntry.id_station_from_kis = BufferInputSostav.id_station_from_kis;
-                        dbEntry.way_num_kis = BufferInputSostav.way_num_kis;
-                        dbEntry.napr = BufferInputSostav.napr;
-                        dbEntry.id_station_on_kis = BufferInputSostav.id_station_on_kis;
-                        dbEntry.count_wagons = BufferInputSostav.count_wagons;
-                        dbEntry.count_set_wagons = BufferInputSostav.count_set_wagons;
-                        dbEntry.natur = BufferInputSostav.natur;
-                        dbEntry.close = BufferInputSostav.close;
-                        dbEntry.close_user = BufferInputSostav.close_user;
-                        dbEntry.status = BufferInputSostav.status;
-                        dbEntry.message = BufferInputSostav.message;
+                        dbEntry.id = RCBufferInputSostav.id;
+                        dbEntry.datetime = RCBufferInputSostav.datetime;
+                        dbEntry.doc_num = RCBufferInputSostav.doc_num;
+                        dbEntry.id_station_from_kis = RCBufferInputSostav.id_station_from_kis;
+                        dbEntry.way_num_kis = RCBufferInputSostav.way_num_kis;
+                        dbEntry.napr = RCBufferInputSostav.napr;
+                        dbEntry.id_station_on_kis = RCBufferInputSostav.id_station_on_kis;
+                        dbEntry.count_wagons = RCBufferInputSostav.count_wagons;
+                        dbEntry.count_set_wagons = RCBufferInputSostav.count_set_wagons;
+                        dbEntry.natur = RCBufferInputSostav.natur;
+                        dbEntry.close = RCBufferInputSostav.close;
+                        dbEntry.close_user = RCBufferInputSostav.close_user;
+                        dbEntry.status = RCBufferInputSostav.status;
+                        dbEntry.message = RCBufferInputSostav.message;
                     }
                 }
-                context.SaveChanges();
+                context_rc.SaveChanges();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("SaveBufferInputSostav(BufferInputSostav={0})", BufferInputSostav.GetFieldsAndValue()), eventID);
+                e.WriteErrorMethod(String.Format("SaveRCBufferInputSostav(RCBufferInputSostav={0})", RCBufferInputSostav.GetFieldsAndValue()), eventID);
                 return -1;
             }
             return dbEntry.id;
         }
 
-        public BufferInputSostav DeleteBufferInputSostav(int id)
+        public RCBufferInputSostav DeleteRCBufferInputSostav(int id)
         {
-            BufferInputSostav dbEntry = context.BufferInputSostav.Find(id);
+            RCBufferInputSostav dbEntry = context_rc.RCBufferInputSostav.Find(id);
             if (dbEntry != null)
             {
                 try
                 {
-                    context.BufferInputSostav.Remove(dbEntry);
+                    context_rc.RCBufferInputSostav.Remove(dbEntry);
 
-                    context.SaveChanges();
+                    context_rc.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("DeleteBufferInputSostav(id={0})", id), eventID);
+                    e.WriteErrorMethod(String.Format("DeleteRCBufferInputSostav(id={0})", id), eventID);
                     return null;
                 }
             }
@@ -357,16 +360,16 @@ namespace EFKIS.Concrete
         /// Вернуть последнее время по которому перенесли состав
         /// </summary>
         /// <returns></returns>
-        public DateTime? GetLastDateTimeBufferInputSostav()
+        public DateTime? GetLastDateTimeRCBufferInputSostav()
         {
             try
             {
-                BufferInputSostav bis = GetBufferInputSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
+                RCBufferInputSostav bis = GetRCBufferInputSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
                 return bis != null ? (DateTime?)bis.datetime : null;
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetLastDateTimeBufferInputSostav()"), eventID);
+                e.WriteErrorMethod(String.Format("GetLastDateTimeRCBufferInputSostav()"), eventID);
                 return null;
             }
         }
@@ -376,15 +379,15 @@ namespace EFKIS.Concrete
         /// <param name="start"></param>
         /// <param name="stop"></param>
         /// <returns></returns>
-        public IQueryable<BufferInputSostav> GetBufferInputSostav(DateTime start, DateTime stop)
+        public IQueryable<RCBufferInputSostav> GetRCBufferInputSostav(DateTime start, DateTime stop)
         {
             try
             {
-                return GetBufferInputSostav().Where(o => o.datetime >= start & o.datetime <= stop);
+                return GetRCBufferInputSostav().Where(o => o.datetime >= start & o.datetime <= stop);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferInputSostav(start={0}, stop={1})", start, stop), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferInputSostav(start={0}, stop={1})", start, stop), eventID);
                 return null;
             }
         }
@@ -392,15 +395,15 @@ namespace EFKIS.Concrete
         /// Вернуть не закрытые составы
         /// </summary>
         /// <returns></returns>
-        public IQueryable<BufferInputSostav> GetBufferInputSostavNoClose()
+        public IQueryable<RCBufferInputSostav> GetRCBufferInputSostavNoClose()
         {
             try
             {
-                return GetBufferInputSostav().Where(i => i.close == null).OrderBy(i => i.datetime);
+                return GetRCBufferInputSostav().Where(i => i.close == null).OrderBy(i => i.datetime);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferInputSostavNoClose()"), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferInputSostavNoClose()"), eventID);
                 return null;
             }
         }
@@ -408,135 +411,135 @@ namespace EFKIS.Concrete
         #endregion
 
         #region BufferOutputSostav Перенос отправленных вагонов на станцию по данным КИС
-        public IQueryable<BufferOutputSostav> BufferOutputSostav
+        public IQueryable<RCBufferOutputSostav> RCBufferOutputSostav
         {
-            get { return context.BufferOutputSostav; }
+            get { return context_rc.RCBufferOutputSostav; }
         }
 
-        public IQueryable<BufferOutputSostav> GetBufferOutputSostav()
+        public IQueryable<RCBufferOutputSostav> GetRCBufferOutputSostav()
         {
             try
             {
-                return BufferOutputSostav;
+                return RCBufferOutputSostav;
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferOutputSostav()"), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferOutputSostav()"), eventID);
                 return null;
             }
         }
 
-        public BufferOutputSostav GetBufferOutputSostav(int id)
+        public RCBufferOutputSostav GetRCBufferOutputSostav(int id)
         {
             try
             {
-                return GetBufferOutputSostav().Where(s => s.id == id).FirstOrDefault();
+                return GetRCBufferOutputSostav().Where(s => s.id == id).FirstOrDefault();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferOutputSostav(id={0})", id), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferOutputSostav(id={0})", id), eventID);
                 return null;
             }
         }
 
-        public int SaveBufferOutputSostav(BufferOutputSostav BufferOutputSostav)
+        public int SaveRCBufferOutputSostav(RCBufferOutputSostav RCBufferOutputSostav)
         {
-            BufferOutputSostav dbEntry;
+            RCBufferOutputSostav dbEntry;
             try
             {
-                if (BufferOutputSostav.id == 0)
+                if (RCBufferOutputSostav.id == 0)
                 {
-                    dbEntry = new BufferOutputSostav()
+                    dbEntry = new RCBufferOutputSostav()
                     {
-                        id = BufferOutputSostav.id,
-                        datetime = BufferOutputSostav.datetime,
-                        doc_num = BufferOutputSostav.doc_num,
-                        id_station_on_kis = BufferOutputSostav.id_station_on_kis,
-                        way_num_kis = BufferOutputSostav.way_num_kis,
-                        napr = BufferOutputSostav.napr,
-                        id_station_from_kis = BufferOutputSostav.id_station_from_kis,
-                        count_wagons = BufferOutputSostav.count_wagons,
-                        count_set_wagons = BufferOutputSostav.count_set_wagons,
-                        close = BufferOutputSostav.close,
-                        close_user = BufferOutputSostav.close_user,
-                        status = BufferOutputSostav.status,
-                        message = BufferOutputSostav.message
+                        id = RCBufferOutputSostav.id,
+                        datetime = RCBufferOutputSostav.datetime,
+                        doc_num = RCBufferOutputSostav.doc_num,
+                        id_station_on_kis = RCBufferOutputSostav.id_station_on_kis,
+                        way_num_kis = RCBufferOutputSostav.way_num_kis,
+                        napr = RCBufferOutputSostav.napr,
+                        id_station_from_kis = RCBufferOutputSostav.id_station_from_kis,
+                        count_wagons = RCBufferOutputSostav.count_wagons,
+                        count_set_wagons = RCBufferOutputSostav.count_set_wagons,
+                        close = RCBufferOutputSostav.close,
+                        close_user = RCBufferOutputSostav.close_user,
+                        status = RCBufferOutputSostav.status,
+                        message = RCBufferOutputSostav.message
                     };
-                    context.BufferOutputSostav.Add(dbEntry);
+                    context_rc.RCBufferOutputSostav.Add(dbEntry);
                 }
                 else
                 {
-                    dbEntry = context.BufferOutputSostav.Find(BufferOutputSostav.id);
+                    dbEntry = context_rc.RCBufferOutputSostav.Find(RCBufferOutputSostav.id);
                     if (dbEntry != null)
                     {
-                        dbEntry.id = BufferOutputSostav.id;
-                        dbEntry.datetime = BufferOutputSostav.datetime;
-                        dbEntry.doc_num = BufferOutputSostav.doc_num;
-                        dbEntry.id_station_on_kis = BufferOutputSostav.id_station_on_kis;
-                        dbEntry.way_num_kis = BufferOutputSostav.way_num_kis;
-                        dbEntry.napr = BufferOutputSostav.napr;
-                        dbEntry.id_station_from_kis = BufferOutputSostav.id_station_from_kis;
-                        dbEntry.count_wagons = BufferOutputSostav.count_wagons;
-                        dbEntry.count_set_wagons = BufferOutputSostav.count_set_wagons;
-                        dbEntry.close = BufferOutputSostav.close;
-                        dbEntry.close_user = BufferOutputSostav.close_user;
-                        dbEntry.status = BufferOutputSostav.status;
-                        dbEntry.message = BufferOutputSostav.message;
+                        dbEntry.id = RCBufferOutputSostav.id;
+                        dbEntry.datetime = RCBufferOutputSostav.datetime;
+                        dbEntry.doc_num = RCBufferOutputSostav.doc_num;
+                        dbEntry.id_station_on_kis = RCBufferOutputSostav.id_station_on_kis;
+                        dbEntry.way_num_kis = RCBufferOutputSostav.way_num_kis;
+                        dbEntry.napr = RCBufferOutputSostav.napr;
+                        dbEntry.id_station_from_kis = RCBufferOutputSostav.id_station_from_kis;
+                        dbEntry.count_wagons = RCBufferOutputSostav.count_wagons;
+                        dbEntry.count_set_wagons = RCBufferOutputSostav.count_set_wagons;
+                        dbEntry.close = RCBufferOutputSostav.close;
+                        dbEntry.close_user = RCBufferOutputSostav.close_user;
+                        dbEntry.status = RCBufferOutputSostav.status;
+                        dbEntry.message = RCBufferOutputSostav.message;
                     }
                 }
-                context.SaveChanges();
+                context_rc.SaveChanges();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("SaveBufferOutputSostav(BufferOutputSostav={0})", BufferOutputSostav.GetFieldsAndValue()), eventID);
+                e.WriteErrorMethod(String.Format("SaveRCBufferOutputSostav(RCBufferOutputSostav={0})", RCBufferOutputSostav.GetFieldsAndValue()), eventID);
                 return -1;
             }
             return dbEntry.id;
         }
 
-        public BufferOutputSostav DeleteBufferOutputSostav(int id)
+        public RCBufferOutputSostav DeleteRCBufferOutputSostav(int id)
         {
-            BufferOutputSostav dbEntry = context.BufferOutputSostav.Find(id);
+            RCBufferOutputSostav dbEntry = context_rc.RCBufferOutputSostav.Find(id);
             if (dbEntry != null)
             {
                 try
                 {
-                    context.BufferOutputSostav.Remove(dbEntry);
+                    context_rc.RCBufferOutputSostav.Remove(dbEntry);
 
-                    context.SaveChanges();
+                    context_rc.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("DeleteBufferOutputSostav(id={0})", id), eventID);
+                    e.WriteErrorMethod(String.Format("DeleteRCBufferOutputSostav(id={0})", id), eventID);
                     return null;
                 }
             }
             return dbEntry;
         }
 
-        public DateTime? GetLastDateTimeBufferOutputSostav()
+        public DateTime? GetLastDateTimeRCBufferOutputSostav()
         {
             try
             {
-                BufferOutputSostav bos = GetBufferOutputSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
+                RCBufferOutputSostav bos = GetRCBufferOutputSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
                 return bos != null ? (DateTime?)bos.datetime : null;
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetLastDateTimeBufferOutputSostav()"), eventID);
+                e.WriteErrorMethod(String.Format("GetLastDateTimeRCBufferOutputSostav()"), eventID);
                 return null;
             }
         }
 
-        public IQueryable<BufferOutputSostav> GetBufferOutputSostav(DateTime start, DateTime stop)
+        public IQueryable<RCBufferOutputSostav> GetRCBufferOutputSostav(DateTime start, DateTime stop)
         {
             try
             {
-                return GetBufferOutputSostav().Where(o => o.datetime >= start & o.datetime <= stop);
+                return GetRCBufferOutputSostav().Where(o => o.datetime >= start & o.datetime <= stop);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferOutputSostav(start={0}, stop={1})",start,stop), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferOutputSostav(start={0}, stop={1})",start,stop), eventID);
                 return null;
             }
         }
@@ -544,18 +547,250 @@ namespace EFKIS.Concrete
         /// Вернуть не закрытые составы
         /// </summary>
         /// <returns></returns>
-        public IQueryable<BufferOutputSostav> GetBufferOutputSostavNoClose()
+        public IQueryable<RCBufferOutputSostav> GetRCBufferOutputSostavNoClose()
         {
             try
             {
-                return GetBufferOutputSostav().Where(i => i.close == null).OrderBy(i => i.datetime);
+                return GetRCBufferOutputSostav().Where(i => i.close == null).OrderBy(i => i.datetime);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetBufferOutputSostavNoClose()"), eventID);
+                e.WriteErrorMethod(String.Format("GetRCBufferOutputSostavNoClose()"), eventID);
                 return null;
             }
         }
+        #endregion
+        #endregion
+
+        #region RW
+        #region BufferArrivalSostav Перенос прибывших с УЗ вагонов по данным КИС
+        public IQueryable<RWBufferArrivalSostav> RWBufferArrivalSostav
+        {
+            get { return context_rw.RWBufferArrivalSostav; }
+        }
+
+        public IQueryable<RWBufferArrivalSostav> GetRWBufferArrivalSostav()
+        {
+            try
+            {
+                return RWBufferArrivalSostav;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferArrivalSostav()"), eventID);
+                return null;
+            }
+        }
+
+        public RWBufferArrivalSostav GetRWBufferArrivalSostav(int id)
+        {
+            try
+            {
+                return GetRWBufferArrivalSostav().Where(s => s.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferArrivalSostav(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveRWBufferArrivalSostav(RWBufferArrivalSostav RWBufferArrivalSostav)
+        {
+            RWBufferArrivalSostav dbEntry;
+            try
+            {
+                if (RWBufferArrivalSostav.id == 0)
+                {
+                    dbEntry = new RWBufferArrivalSostav()
+                    {
+                        id = RWBufferArrivalSostav.id,
+                        datetime = RWBufferArrivalSostav.datetime,
+                        day = RWBufferArrivalSostav.day,
+                        month = RWBufferArrivalSostav.month,
+                        year = RWBufferArrivalSostav.year,
+                        hour = RWBufferArrivalSostav.hour,
+                        minute = RWBufferArrivalSostav.minute,
+                        natur = RWBufferArrivalSostav.natur,
+                        id_station_kis = RWBufferArrivalSostav.id_station_kis,
+                        way_num = RWBufferArrivalSostav.way_num,
+                        napr = RWBufferArrivalSostav.napr,
+                        count_wagons = RWBufferArrivalSostav.count_wagons,
+                        count_nathist = RWBufferArrivalSostav.count_nathist,
+                        count_set_wagons = RWBufferArrivalSostav.count_set_wagons,
+                        count_set_nathist = RWBufferArrivalSostav.count_set_nathist,
+                        close = RWBufferArrivalSostav.close,
+                        close_user = RWBufferArrivalSostav.close_user,
+                        status = RWBufferArrivalSostav.status,
+                        list_wagons = RWBufferArrivalSostav.list_wagons,
+                        list_no_set_wagons = RWBufferArrivalSostav.list_no_set_wagons,
+                        list_no_update_wagons = RWBufferArrivalSostav.list_no_update_wagons,
+                        message = RWBufferArrivalSostav.message,
+                    };
+                    context_rw.RWBufferArrivalSostav.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context_rw.RWBufferArrivalSostav.Find(RWBufferArrivalSostav.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.datetime = RWBufferArrivalSostav.datetime;
+                        dbEntry.day = RWBufferArrivalSostav.day;
+                        dbEntry.month = RWBufferArrivalSostav.month;
+                        dbEntry.year = RWBufferArrivalSostav.year;
+                        dbEntry.hour = RWBufferArrivalSostav.hour;
+                        dbEntry.minute = RWBufferArrivalSostav.minute;
+                        dbEntry.natur = RWBufferArrivalSostav.natur;
+                        dbEntry.id_station_kis = RWBufferArrivalSostav.id_station_kis;
+                        dbEntry.way_num = RWBufferArrivalSostav.way_num;
+                        dbEntry.napr = RWBufferArrivalSostav.napr;
+                        dbEntry.count_wagons = RWBufferArrivalSostav.count_wagons;
+                        dbEntry.count_nathist = RWBufferArrivalSostav.count_nathist;
+                        dbEntry.count_set_wagons = RWBufferArrivalSostav.count_set_wagons;
+                        dbEntry.count_set_nathist = RWBufferArrivalSostav.count_set_nathist;
+                        dbEntry.close = RWBufferArrivalSostav.close;
+                        dbEntry.close_user = RWBufferArrivalSostav.close_user;
+                        dbEntry.status = RWBufferArrivalSostav.status;
+                        dbEntry.list_wagons = RWBufferArrivalSostav.list_wagons;
+                        dbEntry.list_no_set_wagons = RWBufferArrivalSostav.list_no_set_wagons;
+                        dbEntry.list_no_update_wagons = RWBufferArrivalSostav.list_no_update_wagons;
+                        dbEntry.message = RWBufferArrivalSostav.message;
+                    }
+                }
+                context_rw.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveRWBufferArrivalSostav(RWBufferArrivalSostav={0})", RWBufferArrivalSostav.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public RWBufferArrivalSostav DeleteRWBufferArrivalSostav(int id)
+        {
+            RWBufferArrivalSostav dbEntry = context_rw.RWBufferArrivalSostav.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context_rw.RWBufferArrivalSostav.Remove(dbEntry);
+                    context_rw.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteRWBufferArrivalSostav(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        /// <summary>
+        /// Вернуть последнее время по которому перенесли состав
+        /// </summary>
+        /// <returns></returns>
+        public DateTime? GetLastDateTimeRWBufferArrivalSostav()
+        {
+            try
+            {
+                RWBufferArrivalSostav bas = GetRWBufferArrivalSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
+                return bas != null ? (DateTime?)bas.datetime : null;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastDateTimeRWBufferArrivalSostav()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Выбрать перенесеные составы за указанный период
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public IQueryable<RWBufferArrivalSostav> GetRWBufferArrivalSostav(DateTime start, DateTime stop)
+        {
+            try
+            {
+                return GetRWBufferArrivalSostav().Where(o => o.datetime >= start & o.datetime <= stop);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferArrivalSostav()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Выбрать не закрытые перенесеные составы
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<RWBufferArrivalSostav> GetRWBufferArrivalSostavNoClose()
+        {
+            try
+            {
+                return GetRWBufferArrivalSostav().Where(o => o.close == null).OrderBy(o => o.datetime);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferArrivalSostavNoClose()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить строку по натурке
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <returns></returns>
+        public RWBufferArrivalSostav GetRWBufferArrivalSostavOfNatur(int natur)
+        {
+            try
+            {
+                return GetRWBufferArrivalSostav().Where(o => o.natur == natur).OrderByDescending(o => o.datetime).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferArrivalSostavOfNatur(natur={0})", natur), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Закрыть строку
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int CloseRWBufferArrivalSostav(int id)
+        {
+            try
+            {
+                return CloseRWBufferArrivalSostav(id, System.Environment.UserDomainName + @"\" + System.Environment.UserName);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseRWBufferArrivalSostav(id={0})", id), eventID);
+                return -1;
+            }
+
+        }
+
+        public int CloseRWBufferArrivalSostav(int id, string user)
+        {
+            try
+            {
+                RWBufferArrivalSostav bas = GetRWBufferArrivalSostav(id);
+                if (bas == null) return 0;
+                bas.close = DateTime.Now;
+                bas.close_user = user;
+                return SaveRWBufferArrivalSostav(bas);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseRWBufferArrivalSostav(id={0}, user={1})", id, user), eventID);
+                return -1;
+            }
+
+        }
+
+        #endregion
         #endregion
     }
 }

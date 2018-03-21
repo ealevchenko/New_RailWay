@@ -50,22 +50,60 @@
             list: null,
             loadData: function (callback) {
                 getAsyncWagonsTracking(function (result) {
-                    wagons_tracking.list = result;
+                    var list_wt = [];
+                    for (var i = 0; i < result.length; i++) {
+                        var res = getDefaultReferenceCargo(result[i].kgr);
+
+                                list_wt.push({
+                                    nvagon: result[i].nvagon,
+                                    st_disl: result[i].st_disl,
+                                    nst_disl: result[i].nst_disl,
+                                    kodop: result[i].kodop,
+                                    nameop: result[i].nameop,
+                                    dt: result[i].dt,
+                                    nst_form: result[i].nst_form,
+                                    st_form: result[i].st_form,
+                                    nsost: result[i].nsost,
+                                    st_nazn: result[i].st_nazn,
+                                    nst_nazn: result[i].nst_nazn,
+                                    ntrain: result[i].ntrain,
+                                    st_end: result[i].st_end,
+                                    nst_end: result[i].nst_end,
+                                    idsost: result[i].idsost,
+                                    kgr: result[i].kgr,
+                                    nkgr: result[i].nkgr,
+                                    kgrp: result[i].kgrp,
+                                    ves: result[i].ves,
+                                    updated: result[i].updated,
+                                    full_nameop: result[i].full_nameop,
+                                    kgro: result[i].kgro,
+                                    km: result[i].km,
+                                    rod_cargo: res != null ? res.ReferenceTypeCargo.type_name_ru : null,
+                                    index: result[i].st_form != null & result[i].nsost != undefined & result[i].st_nazn != null & result[i].nsost != "000" ? result[i].st_form + '-' + result[i].nsost + '-' + result[i].st_nazn : "-"
+                                });
+                    }
+                    wagons_tracking.list = list_wt;
                     if (typeof callback === 'function') {
-                        callback(result);
+                        callback(list_wt);
                     }
                 });
+                //getAsyncWagonsTracking(function (result) {
+                //    wagons_tracking.list = result;
+                //    if (typeof callback === 'function') {
+                //        callback(result);
+                //    }
+                //});
             },
             initObject: function () {
                 this.initTableReport1();
             },
             initTableReport1: function () {
                 this.obj = this.html_table.DataTable({
-                    "paging": false,
+                    "paging": true,
                     "ordering": true,
                     "info": false,
-                    "select": false,
-                    "filter": true,
+                    "select": true,
+                    //"filter": true,
                     //"scrollY": "600px",
                     "scrollX": true,
                     language: {
@@ -76,10 +114,9 @@
                     "createdRow": function (row, data, index) {
                         $(row).attr('id', data.nvagon);
                         $('td', row).eq(0).html('<a id=' + data.nvagon + ' name="nvagon" href="#">' + data.nvagon + '</a>')
-                        if (data.st_form != null & data.nsost != undefined & data.st_nazn != null & data.nsost!="000")
-                        {
-                            $('td', row).eq(6).html(data.st_form + '-' + data.nsost + '-' + data.st_nazn);
-                        };
+                        //if (data.st_form != null & data.nsost != undefined & data.st_nazn != null & data.nsost != "000") {
+                        //    $('td', row).eq(6).html(data.st_form + '-' + data.nsost + '-' + data.st_nazn);
+                        //};
                         if (data.id_oper == this.select) {
                             //$(row).addClass('selected');
                         }
@@ -105,21 +142,75 @@
                 });
                 this.obj_table = $('DIV#table-list-wagons-tracking_wrapper');
             },
-            initWagonsTracking: function () {
-                getAsyncWagonsTracking(function (result) {
-                    wagons_tracking.list = result;
-                });
-            },
+            //initWagonsTracking: function () {
+            //    //getAsyncWagonsTracking(function (result) {
+            //    //    var list_wt = [];
+            //    //    for (var i = 0; i < result.length; i++) {
+            //    //        getAsyncDefaultReferenceCargo(result[i].kgr, function (data) {
+            //    //            list_wt.push({
+            //    //                nvagon: result[i].nvagon,
+            //    //                st_disl: result[i].st_disl,
+            //    //                nst_disl: result[i].nst_disl,
+            //    //                kodop: result[i].kodop,
+            //    //                nameop: result[i].nameop,
+            //    //                dt: result[i].dt,
+            //    //                nst_form: result[i].nst_form,
+            //    //                st_form: result[i].st_form,
+            //    //                nsost: result[i].nsost,
+            //    //                st_nazn: result[i].st_nazn,
+            //    //                nst_nazn: result[i].nst_nazn,
+            //    //                ntrain: result[i].ntrain,
+            //    //                st_end: result[i].st_end,
+            //    //                nst_end: result[i].nst_end,
+            //    //                idsost: result[i].idsost,
+            //    //                kgr: result[i].kgr,
+            //    //                nkgr: result[i].nkgr,
+            //    //                kgrp: result[i].kgrp,
+            //    //                ves: result[i].ves,
+            //    //                updated: result[i].updated,
+            //    //                full_nameop: result[i].full_nameop,
+            //    //                kgro: result[i].kgro,
+            //    //                km: result[i].km,
+            //    //                rod_cargo: data
+            //    //            });
+            //    //        })
+
+
+
+            //    //    }
+            //    //    wagons_tracking.list = list_wt;
+            //    //});
+            //},
 
             viewReport: function (tab, data_refresh) {
                 if (this.list == null | data_refresh == true) {
                     // Обновим данные
                     this.loadData(function (data) {
-                        wagons_tracking.viewTable(data,tab)
+
+                        wagons_tracking.viewTable(data, tab);
+                        //initComplete: function () {
+                        wagons_tracking.obj.columns([2, 5, 8, 11]).every(function (i) {
+                            var column = wagons_tracking.obj.column(i);
+                            var name = $(column.header()).attr('');
+                                var select = $('<select><option value="">' + (lang == 'en' ? 'All' : 'Все') + '</option></select>')
+                                    .appendTo($(column.header()).empty().append(name))
+                                    .on('change', function () {
+                                        var val = $.fn.dataTable.util.escapeRegex(
+                                            $(this).val()
+                                        );
+                                        column.data()
+                                            .search(val ? '^' + val + '$' : '', true, false)
+                                            .draw();
+                                    });
+                                column.data().unique().sort().each(function (d, j) {
+                                    select.append('<option value="' + d + '">' + d + '</option>')
+                                });
+                            });
+                        //},
                     });
                 } else {
                     // Не обновим данные
-                    wagons_tracking.viewTable(wagons_tracking.list,tab)
+                    wagons_tracking.viewTable(wagons_tracking.list, tab)
                 }
             },
             viewTable: function (data, tab) {
@@ -137,7 +228,7 @@
                         "dt": data[i].dt,
                         "st_disl": data[i].st_disl,
                         "nst_disl": data[i].nst_disl,
-                        "index": "-",
+                        "index": data[i].index,
                         "st_nazn": data[i].st_nazn,
                         "nst_nazn": data[i].nst_nazn,
                         "kgrp": data[i].kgrp,
@@ -145,8 +236,8 @@
                         "nst_form": data[i].nst_form,
                         "ves": data[i].ves,
                         "kgr": data[i].kgr,
-                        "kgr": data[i].kgr,
-                        "cargo": data[i].nkgr,
+                        //"kgr": data[i].kgr,
+                        "cargo": data[i].rod_cargo,
                         "ntrain": data[i].ntrain,
                         "nsost": data[i].nsost,
                     });

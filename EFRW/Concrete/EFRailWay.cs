@@ -722,18 +722,24 @@ namespace EFRW.Concrete
                         dt_inp_amkr = Cars.dt_inp_amkr,
                         dt_out_amkr = Cars.dt_out_amkr,
                         natur_kis = Cars.natur_kis,
-                        natur = Cars.natur, 
-                        dt_user = Cars.dt_user != null ? Cars.dt_user : DateTime.Now,
-                        user = Cars.user != null ? Cars.user : System.Environment.UserDomainName + @"\" + System.Environment.UserName,
+                        natur = Cars.natur,
+                        dt_create = Cars.dt_create != DateTime.Parse("01.01.0001") ? Cars.dt_create : DateTime.Now,
+                        user_create = Cars.user_create != null ? Cars.user_create : System.Environment.UserDomainName + @"\" + System.Environment.UserName, 
+                        dt_close = null, 
+                        user_close = null,
                         ReferenceCars = Cars.ReferenceCars,
                         CarOperations = Cars.CarOperations,
                         CarsInpDelivery = Cars.CarsInpDelivery,
-                        CarsOutDelivery = Cars.CarsOutDelivery
+                        CarsOutDelivery = Cars.CarsOutDelivery,
+                        parent_id = Cars.parent_id
                     };
                     context.Cars.Add(dbEntry);
                 }
                 else
                 {
+                    // Сделано для отмены изменения даты создания строки
+                    EFDbContext context_real = new EFDbContext();
+                    Cars old_Cars = context_real.Cars.Where(c => c.id == Cars.id).FirstOrDefault();
                     dbEntry = context.Cars.Find(Cars.id);
                     if (dbEntry != null)
                     {
@@ -745,14 +751,15 @@ namespace EFRW.Concrete
                         dbEntry.dt_out_amkr = Cars.dt_out_amkr;
                         dbEntry.natur_kis = Cars.natur_kis;
                         dbEntry.natur = Cars.natur;
-                        dbEntry.dt_user = Cars.dt_user != null ? Cars.dt_user : DateTime.Now;
-                        dbEntry.user = Cars.user != null ? Cars.user : System.Environment.UserDomainName + @"\" + System.Environment.UserName;
-                        //dbEntry.user = Cars.user;
-                        //dbEntry.dt_user = Cars.dt_user;
+                        dbEntry.dt_create = old_Cars.dt_create;
+                        dbEntry.user_create = old_Cars.user_create;
+                        dbEntry.dt_close = Cars.dt_close;
+                        dbEntry.user_close = Cars.user_close;                       
                         dbEntry.ReferenceCars = Cars.ReferenceCars;
                         dbEntry.CarOperations = Cars.CarOperations;
                         dbEntry.CarsInpDelivery = Cars.CarsInpDelivery;
                         dbEntry.CarsOutDelivery = Cars.CarsOutDelivery;
+                        dbEntry.parent_id = Cars.parent_id;
                     }
                 }
                 context.SaveChanges();
@@ -856,6 +863,15 @@ namespace EFRW.Concrete
                 e.WriteErrorMethod(String.Format("GetCarsOfNum(num={0})", num), eventID);
                 return null;
             }
+        }
+        /// <summary>
+        /// Вернуть последнюю запись по входящему вагону
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public Cars GetLastCarsOfNum(int num)
+        {
+            return GetCarsOfNum(num).OrderByDescending(c => c.id).FirstOrDefault();
         }
         /// <summary>
         /// Вернуть вагон по id sostav и номеру вагона
@@ -1521,6 +1537,14 @@ namespace EFRW.Concrete
                 e.WriteErrorMethod(String.Format("GetCarsInpDeliveryOfNumArrival(num={0}, id_arrival={1})", num, id_arrival), eventID);
                 return null;
             }
+        }
+        /// <summary>
+        ///  Вернуть id прибытия по умолчанию если нет данных MT
+        /// </summary>
+        /// <returns></returns>
+        public int GetDefaultIDArrival() {
+            CarsInpDelivery delivery = GetCarsInpDelivery().Where(s => s.id_arrival < 0).OrderBy(s => s.id_arrival).FirstOrDefault();
+            return delivery != null ? delivery.id_arrival - 1 : -1;
         }
 
         #endregion

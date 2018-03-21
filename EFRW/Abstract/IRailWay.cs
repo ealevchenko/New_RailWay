@@ -73,6 +73,7 @@ namespace EFRW.Abstract
         IQueryable<Cars> GetCarsOfSostav(int id_sostav);
         IQueryable<Cars> GetCarsOfArrival(int id_arrival);
         IQueryable<Cars> GetCarsOfNum(int num);
+        Cars GetLastCarsOfNum(int num);
         Cars GetCarsOfSostavNum(int id_sostav, int num);
         Cars GetCarsOfArrivalNum(int id_arrival, int num);
         List<Cars> GetCarsOfArrivalNum(int id_arrival, int[] nums);
@@ -115,6 +116,7 @@ namespace EFRW.Abstract
         CarsInpDelivery DeleteCarsInpDelivery(int id);
         CarsInpDelivery GetCarsInpDeliveryOfCar(int id_car);
         CarsInpDelivery GetCarsInpDeliveryOfNumArrival(int num, int id_arrival);
+        int GetDefaultIDArrival();
         #endregion
 
         #region CarsOutDelivery

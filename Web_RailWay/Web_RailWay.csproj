@@ -786,6 +786,10 @@
       <Project>{a1f50999-31d4-4793-a92f-4d0f436922cb}</Project>
       <Name>TransferRailCars</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RW\RW.csproj">
+      <Project>{1DA8DDFF-BD6C-4102-897D-55911A9F87AB}</Project>
+      <Name>RW</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebApiClient\WebApiClient.csproj">
       <Project>{4dfb537d-a480-47d9-8d3c-29124822d02a}</Project>
       <Name>WebApiClient</Name>

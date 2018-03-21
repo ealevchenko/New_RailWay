@@ -35,7 +35,7 @@ namespace RWCorrection
                 decimal? width = sap_string.WeightDoc;
                 int oldsostav = sap_string.IDMTSostav;
                 int natur = int.Parse(sap_string.CompositionIndex.Substring(2, 4));
-                BufferArrivalSostav bas = ef_kis.GetBufferArrivalSostavOfNatur(natur);
+                RCBufferArrivalSostav bas = ef_kis.GetRCBufferArrivalSostavOfNatur(natur);
                 if (bas == null) return -4;
                 DateTime dt_amkr = bas.datetime;
                 int newidsostav = 0;

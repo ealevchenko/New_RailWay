@@ -909,6 +909,32 @@ namespace EFMT.Concrete
                 return -1;
             }
         }
+        /// <summary>
+        /// Закрыть прибытие вагона из станции УЗ КР
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <param name="num"></param>
+        /// <param name="doc"></param>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public int CloseArrivalCars(int id_sostav, int num, int doc, DateTime dt)
+        {
+            try
+            {
+                ArrivalCars arr_car = GetArrivalCarsOfSostavNum(id_sostav, num);
+                if (arr_car != null) {
+                    arr_car.Arrival = dt;
+                    arr_car.NumDocArrival = doc;
+                    return SaveArrivalCars(arr_car);
+                }
+                return 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseArrivalCars(id_sostav={0}, num={1}, doc={2}, dt={3})", id_sostav, num, doc, dt), eventID);
+                return -1;
+            }
+        }
         #endregion
 
         #region ArrivalSostav

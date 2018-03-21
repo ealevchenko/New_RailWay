@@ -114,10 +114,10 @@ namespace Web_RailWay.Controllers.api
 
         // GET: api/kis/transfer/bas/2018-01-13T22:00:00.000Z/2018-01-15T21:59:59.000Z
         [Route("bas/{start:datetime}/{stop:datetime}")]
-        [ResponseType(typeof(BufferArrivalSostav))]
+        [ResponseType(typeof(RCBufferArrivalSostav))]
         public IHttpActionResult GetBufferArrivalSostav(DateTime start, DateTime stop)
         {
-            List<BufferArrivalSostav> list = this.rep_kist.GetBufferArrivalSostav(start,stop)
+            List<RCBufferArrivalSostav> list = this.rep_kist.GetRCBufferArrivalSostav(start,stop)
                                                 .OrderByDescending(x => x.datetime)
                                                 .ToList();
             if (list == null)
@@ -131,7 +131,7 @@ namespace Web_RailWay.Controllers.api
         [Route("bas/{id:int}/close")]
         public int CloseBufferArrivalSostav(int id)
         {
-            return this.rep_kist.CloseBufferArrivalSostav(id, User.Identity.Name); 
+            return this.rep_kist.CloseRCBufferArrivalSostav(id, User.Identity.Name); 
         }
 
         #endregion
@@ -140,10 +140,10 @@ namespace Web_RailWay.Controllers.api
 
         // GET: api/kis/transfer/bis/2018-01-13T22:00:00.000Z/2018-01-15T21:59:59.000Z
         [Route("bis/{start:datetime}/{stop:datetime}")]
-        [ResponseType(typeof(BufferInputSostav))]
+        [ResponseType(typeof(RCBufferInputSostav))]
         public IHttpActionResult GetBufferInputSostav(DateTime start, DateTime stop)
         {
-            List<BufferInputSostav> list = this.rep_kist.GetBufferInputSostav(start, stop)
+            List<RCBufferInputSostav> list = this.rep_kist.GetRCBufferInputSostav(start, stop)
                                                 .OrderByDescending(x => x.datetime)
                                                 .ToList();
             if (list == null)
@@ -158,10 +158,10 @@ namespace Web_RailWay.Controllers.api
 
         // GET: api/kos/transfer/bis/2018-01-13T22:00:00.000Z/2018-01-15T21:59:59.000Z
         [Route("bos/{start:datetime}/{stop:datetime}")]
-        [ResponseType(typeof(BufferOutputSostav))]
+        [ResponseType(typeof(RCBufferOutputSostav))]
         public IHttpActionResult GetBufferOutputSostav(DateTime start, DateTime stop)
         {
-            List<BufferOutputSostav> list = this.rep_kist.GetBufferOutputSostav(start, stop)
+            List<RCBufferOutputSostav> list = this.rep_kist.GetRCBufferOutputSostav(start, stop)
                                                 .OrderByDescending(x => x.datetime)
                                                 .ToList();
             if (list == null)

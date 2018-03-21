@@ -10,41 +10,55 @@ namespace EFKIS.Abstract
     public interface ITKIS
     {
         #region Перенос прибывших с УЗ вагонов по данным КИС
-        IQueryable<BufferArrivalSostav> BufferArrivalSostav { get; }
-        IQueryable<BufferArrivalSostav> GetBufferArrivalSostav();
-        BufferArrivalSostav GetBufferArrivalSostav(int id);
-        int SaveArrivalSostav(BufferArrivalSostav BufferArrivalSostav);
-        BufferArrivalSostav DeleteBufferArrivalSostav(int id);
-        DateTime? GetLastDateTimeBufferArrivalSostav();
-        IQueryable<BufferArrivalSostav> GetBufferArrivalSostav(DateTime start, DateTime stop);
-        IQueryable<BufferArrivalSostav> GetBufferArrivalSostavNoClose();
-        BufferArrivalSostav GetBufferArrivalSostavOfNatur(int natur);
-        int CloseBufferArrivalSostav(int id);
-        int CloseBufferArrivalSostav(int id, string user);
+        IQueryable<RCBufferArrivalSostav> RCBufferArrivalSostav { get; }
+        IQueryable<RCBufferArrivalSostav> GetRCBufferArrivalSostav();
+        RCBufferArrivalSostav GetRCBufferArrivalSostav(int id);
+        int SaveRCBufferArrivalSostav(RCBufferArrivalSostav BufferArrivalSostav);
+        RCBufferArrivalSostav DeleteRCBufferArrivalSostav(int id);
+        DateTime? GetLastDateTimeRCBufferArrivalSostav();
+        IQueryable<RCBufferArrivalSostav> GetRCBufferArrivalSostav(DateTime start, DateTime stop);
+        IQueryable<RCBufferArrivalSostav> GetRCBufferArrivalSostavNoClose();
+        RCBufferArrivalSostav GetRCBufferArrivalSostavOfNatur(int natur);
+        int CloseRCBufferArrivalSostav(int id);
+        int CloseRCBufferArrivalSostav(int id, string user);
         #endregion
 
         #region BufferInputSostav Перенос прибывающих вагонов на станцию по данным КИС
-        IQueryable<BufferInputSostav> BufferInputSostav { get; }
-        IQueryable<BufferInputSostav> GetBufferInputSostav();
-        BufferInputSostav GetBufferInputSostav(int id);
-        int SaveBufferInputSostav(BufferInputSostav BufferInputSostav);
-        BufferInputSostav DeleteBufferInputSostav(int id);
+        IQueryable<RCBufferInputSostav> RCBufferInputSostav { get; }
+        IQueryable<RCBufferInputSostav> GetRCBufferInputSostav();
+        RCBufferInputSostav GetRCBufferInputSostav(int id);
+        int SaveRCBufferInputSostav(RCBufferInputSostav BufferInputSostav);
+        RCBufferInputSostav DeleteRCBufferInputSostav(int id);
 
-        DateTime? GetLastDateTimeBufferInputSostav();
-        IQueryable<BufferInputSostav> GetBufferInputSostav(DateTime start, DateTime stop);
-        IQueryable<BufferInputSostav> GetBufferInputSostavNoClose();
+        DateTime? GetLastDateTimeRCBufferInputSostav();
+        IQueryable<RCBufferInputSostav> GetRCBufferInputSostav(DateTime start, DateTime stop);
+        IQueryable<RCBufferInputSostav> GetRCBufferInputSostavNoClose();
         #endregion
 
         #region BufferOutputSostav Перенос отправленных вагонов на станцию по данным КИС
-        IQueryable<BufferOutputSostav> BufferOutputSostav { get; }
-        IQueryable<BufferOutputSostav> GetBufferOutputSostav();
-        BufferOutputSostav GetBufferOutputSostav(int id);
-        int SaveBufferOutputSostav(BufferOutputSostav BufferOutputSostav);
-        BufferOutputSostav DeleteBufferOutputSostav(int id);
+        IQueryable<RCBufferOutputSostav> RCBufferOutputSostav { get; }
+        IQueryable<RCBufferOutputSostav> GetRCBufferOutputSostav();
+        RCBufferOutputSostav GetRCBufferOutputSostav(int id);
+        int SaveRCBufferOutputSostav(RCBufferOutputSostav BufferOutputSostav);
+        RCBufferOutputSostav DeleteRCBufferOutputSostav(int id);
 
-        DateTime? GetLastDateTimeBufferOutputSostav();
-        IQueryable<BufferOutputSostav> GetBufferOutputSostav(DateTime start, DateTime stop);
-        IQueryable<BufferOutputSostav> GetBufferOutputSostavNoClose();
+        DateTime? GetLastDateTimeRCBufferOutputSostav();
+        IQueryable<RCBufferOutputSostav> GetRCBufferOutputSostav(DateTime start, DateTime stop);
+        IQueryable<RCBufferOutputSostav> GetRCBufferOutputSostavNoClose();
+        #endregion
+
+        #region Перенос прибывших с УЗ вагонов по данным КИС
+        IQueryable<RWBufferArrivalSostav> RWBufferArrivalSostav { get; }
+        IQueryable<RWBufferArrivalSostav> GetRWBufferArrivalSostav();
+        RWBufferArrivalSostav GetRWBufferArrivalSostav(int id);
+        int SaveRWBufferArrivalSostav(RWBufferArrivalSostav RWBufferArrivalSostav);
+        RWBufferArrivalSostav DeleteRWBufferArrivalSostav(int id);
+        DateTime? GetLastDateTimeRWBufferArrivalSostav();
+        IQueryable<RWBufferArrivalSostav> GetRWBufferArrivalSostav(DateTime start, DateTime stop);
+        IQueryable<RWBufferArrivalSostav> GetRWBufferArrivalSostavNoClose();
+        RWBufferArrivalSostav GetRWBufferArrivalSostavOfNatur(int natur);
+        int CloseRWBufferArrivalSostav(int id);
+        int CloseRWBufferArrivalSostav(int id, string user);
         #endregion
 
     }

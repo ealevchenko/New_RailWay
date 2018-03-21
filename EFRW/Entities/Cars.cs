@@ -38,11 +38,18 @@ namespace EFRW.Entities
        
         public int? natur { get; set; }
 
-        [StringLength(50)]
-        public string user { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public DateTime? dt_user { get; set; }
+        public DateTime dt_create { get; set; }
+
+        [StringLength(50)]
+        public string user_create { get; set; }
+
+        public DateTime? dt_close { get; set; }
+
+        [StringLength(50)]
+        public string user_close { get; set; }
+
+        public int? parent_id { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CarOperations> CarOperations { get; set; }

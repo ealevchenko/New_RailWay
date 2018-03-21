@@ -1,5 +1,6 @@
 namespace EFKIS.Entities
 {
+    using EFKIS.Abstract;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ namespace EFKIS.Entities
     using System.Data.Entity.Spatial;
 
     [Table("KIS.BufferArrivalSostav")]
-    public partial class BufferArrivalSostav
+    public partial class RCBufferArrivalSostav : IBufferArrivalSostav
     {
         public int id { get; set; }
 

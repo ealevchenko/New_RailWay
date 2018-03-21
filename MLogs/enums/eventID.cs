@@ -66,7 +66,7 @@ namespace MessageLog
         EFRW_EFRailWay = 4102,              // Библиотека доступа к данным БД RailWay
 
         RW = 4200,                          // Библиотека сервисов обработки данных RailWay
-        RW_RWTransfer = 4201,               // Модуль переноса данных системы RailWay
+        RW_RWFilters = 4201,               // Модуль переноса данных системы RailWay
         RW_RWOperation = 4202,              // Модуль операций системы RailWay
         RW_RWReference = 4203,              // Модуль спрвочных данных системы RailWay
         #endregion

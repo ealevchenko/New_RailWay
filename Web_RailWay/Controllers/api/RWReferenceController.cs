@@ -1,5 +1,6 @@
 ﻿using EFRW.Abstract;
 using EFRW.Entities;
+using RW;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,9 @@ namespace Web_RailWay.Controllers.api
     [RoutePrefix("api/rw/reference")]
     public class RWReferenceController : ApiController
     {
-        IReference rep_ref;
+        protected IReference rep_ref;
+
+        //protected IRailWay rep_rw;
 
         #region cargo
         public RWReferenceController()
@@ -52,6 +55,49 @@ namespace Web_RailWay.Controllers.api
                 return NotFound();
             }
 
+            return Ok(cargo);
+        }
+
+        // GET: api/rw/reference/cargo/code/etsng/0/all
+        [Route("cargo/code/etsng/{code:int}/all")]
+        [ResponseType(typeof(ReferenceCargo))]
+        public IHttpActionResult GetDefaultReferenceCargo(int code)
+        {
+            RWReference rw_ref = new RWReference(true);
+            int id = rw_ref.GetIDReferenceCargoOfCorrectCodeETSNG(code);
+            ReferenceCargo cargo = rep_ref.ReferenceCargo
+                .Where(c => c.id == id)
+                .ToList()
+                .Select(c => new ReferenceCargo
+                {
+                    id = c.id,
+                    name_ru = c.name_ru,
+                    name_en = c.name_en,
+                    name_full_ru = c.name_full_ru,
+                    name_full_en = c.name_full_en,
+                    etsng = c.etsng,
+                    id_type = c.id_type,
+                    create_dt = c.create_dt,
+                    create_user = c.create_user,
+                    change_dt = c.change_dt,
+                    change_user = c.change_user,
+                    //CarsInpDelivery = null,
+                    //CarsOutDelivery = null,
+                    ReferenceTypeCargo = new ReferenceTypeCargo
+                    {
+                        id = c.ReferenceTypeCargo.id,
+                        id_group = c.ReferenceTypeCargo.id_group,
+                        type_name_en = c.ReferenceTypeCargo.type_name_en,
+                        type_name_ru = c.ReferenceTypeCargo.type_name_ru,
+                        //ReferenceCargo = null,
+                        //ReferenceGroupCargo = null
+                    },
+                })
+                .FirstOrDefault();
+            if (cargo == null)
+            {
+                return NotFound();
+            }
             return Ok(cargo);
         }
         #endregion

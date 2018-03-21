@@ -7,7 +7,7 @@ namespace EFKIS.Entities
     using System.Data.Entity.Spatial;
 
     [Table("KIS.BufferInputSostav")]
-    public partial class BufferInputSostav
+    public partial class RCBufferInputSostav
     {
         public int id { get; set; }
 

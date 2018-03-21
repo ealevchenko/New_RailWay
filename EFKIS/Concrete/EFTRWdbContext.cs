@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace EFKIS.Concrete
 {
-    public class EFTDbContext : DbContext
+    public class EFTRWdbContext : DbContext
     {
-        public EFTDbContext()
-            : base("name=TKIS")
+        public EFTRWdbContext()
+            : base("name=TRWKIS")
         {
 
         }
 
-        public virtual DbSet<BufferArrivalSostav> BufferArrivalSostav { get; set; }
-        public virtual DbSet<BufferInputSostav> BufferInputSostav { get; set; }
-        public virtual DbSet<BufferOutputSostav> BufferOutputSostav { get; set; }
+        public virtual DbSet<RWBufferArrivalSostav> RWBufferArrivalSostav { get; set; }
+        public virtual DbSet<RWBufferInputSostav> RWBufferInputSostav { get; set; }
+        public virtual DbSet<RWBufferOutputSostav> RWBufferOutputSostav { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -20,11 +20,19 @@ namespace Testing
 
         public void RWTransfer_ArrivalMTToRailway() {
             RWOperation rw_oper = new RWOperation();
-            rw_oper.TransferArrivalSostavToRailWay(7681);
-            //rw_oper.TransferArrivalSostavToRailWay(7394);
-            
+
+            //rw_oper.TransferArrivalSostavToRailWay(7290);
+            //rw_oper.TransferArrivalSostavToRailWay(7291);
+            //rw_oper.TransferArrivalSostavToRailWay(7293);
+            //rw_oper.TransferArrivalSostavToRailWay(7295); 
+
+            rw_oper.TransferArrivalSostavToRailWay(7461);
+            rw_oper.TransferArrivalSostavToRailWay(7462);
+            rw_oper.TransferArrivalSostavToRailWay(7463);
+             rw_oper.TransferArrivalSostavToRailWay(7464);    
+       
             //rw_oper.SaveChanges(rw_oper.ExecOperation(2441, new int[] {52736956, 56671670}, rw_oper.OperationSendingStation, new OperationSendingStation(6,20,DateTime.Now,null) ));
-            //rw_oper.TransferArrivalSostavToRailWay(7404);
+            //rw_oper.TransferArrivalSostavToRailWay(7861);
             //rw_oper.TransferArrivalSostavToRailWay(7505);
         }
 
@@ -109,8 +117,25 @@ namespace Testing
             //int id_res = ef_rw.SaveCars(car);
             Cars car1 = ef_rw.GetCars(266);
             car1.dt_uz = DateTime.Now.AddHours(+3);
-            car1.dt_user = dt2;
+            //car1.dt_user = dt2;
             int id_res1 = ef_rw.SaveCars(car1);
+        }
+
+        public void RWOperation_IsOpenOperation()
+        {
+            RWOperation rw_oper = new RWOperation();
+            List<CarOperations> list = rw_oper.IsOpenAllOperation(54645593);
+            List<CarOperations> list1 = rw_oper.IsOpenAllOperation(0);
+        }
+
+        public void RWTransfer_TransferArivalCarsToRailWay()
+        {
+            RWOperation rw_oper = new RWOperation();
+            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+            List<ArrivalSostav> list  = ef_mt.ArrivalSostav.Where(s=>s.ID >=7828).OrderBy(s=>s.ID).ToList();
+            foreach (ArrivalSostav s in list) {
+                rw_oper.TransferArrivalSostavToRailWay(s.ID);
+            }
         }
 
 
