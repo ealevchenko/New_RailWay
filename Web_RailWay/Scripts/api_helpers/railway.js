@@ -495,6 +495,75 @@ function getAsyncArrivalSostavOfStationUZ(id_station_uz, callback) {
         },
     });
 }
+// Получить информацию по вагонам на указаном пути
+function getAsyncCarsOnWayUZ(id_way, id_arrival, side, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/cars_on_way/way/' + id_way + '/arrival/' + id_arrival + '/side/' + side,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Получить количество вагонов на путях станции
+function getAsyncCountCarsOnWayOfStation(id_station, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/cars_on_way/station/' + id_station,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Получить информацию по вагонам на указаном пути
+function getAsyncCarsOnWay(id_way, side, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/cars_on_way/way/'+id_way+'/side/' + side,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
 
 // Веруть cтанцию по id
 function getAsyncDefaultReferenceCargo(code_etsng, callback) {

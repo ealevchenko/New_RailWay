@@ -331,6 +331,24 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на История движения вагона собственного парка, по данным ООО «МеталлургТранс».
+        /// </summary>
+        public static string index_report_hist_cars_amkr_desc {
+            get {
+                return ResourceManager.GetString("index_report_hist_cars_amkr_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Движение вагона.
+        /// </summary>
+        public static string index_report_hist_cars_amkr_title {
+            get {
+                return ResourceManager.GetString("index_report_hist_cars_amkr_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на ООО Металлургтранс.
         /// </summary>
         public static string index_title {

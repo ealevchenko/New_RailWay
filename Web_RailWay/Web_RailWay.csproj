@@ -217,6 +217,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\KIS\KISAreaRegistration.cs" />
     <Compile Include="Areas\MT\Controllers\WagonsTrackingController.cs" />
+    <Compile Include="Areas\MT\Controllers\WTController.cs" />
     <Compile Include="Areas\MT\MTAreaRegistration.cs" />
     <Compile Include="Areas\RW\RWAreaRegistration.cs" />
     <Compile Include="Areas\SAP\SAPAreaRegistration.cs" />
@@ -534,6 +535,7 @@
     <Content Include="Areas\MT\Views\_ViewStart.cshtml" />
     <Content Include="Areas\MT\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\MT\Views\WagonsTracking\Index.cshtml" />
+    <Content Include="Areas\MT\Views\WT\Index.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
     <Content Include="Scripts\api_helpers\settings.js" />
     <Content Include="Scripts\bootstrap.js" />

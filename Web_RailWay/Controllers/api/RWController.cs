@@ -25,12 +25,129 @@ namespace Web_RailWay.Controllers.api
         protected IRailWay rep_rw;
 
         public class ArrivalSostav
-        { 
+        {
+            public int id_way { get; set; }
             public int id_sostav {get;set;}           
             public int id_arrival {get;set;}
             public string index {get;set;}
             public DateTime dt_inp_station {get;set;}
             public int cars {get;set;}  
+        }
+
+        public class CarsOnWay
+        { 
+            public int id {get;set;}           
+            public string num {get;set;}
+            public string name_ru {get;set;}
+            public string name_en {get;set;}
+            public int cars {get;set;}
+            public int? capacity {get;set;}  
+        }
+
+        public class CarsDetails { 
+            public int id_operations {get;set;}
+            public int? operations_parent_id {get;set;} 
+            public int position {get;set;}
+            public int id_cars {get;set;}
+            public int? parent_id_cars {get;set;} 
+            public int id_sostav {get;set;}
+            public int id_arrival {get;set;}
+            public int num {get;set;}
+            public DateTime dt_uz {get;set;}
+            public DateTime? dt_inp_amkr {get;set;}
+            public DateTime? dt_out_amkr {get;set;}
+            public int? natur_kis {get;set;} 
+            public int? natur {get;set;} 
+            public int id_group_cars {get;set;}
+            public string group_cars_ru {get;set;}
+            public string group_cars_en {get;set;}
+            public int id_type_cars {get;set;}
+            public string type_cars_ru {get;set;}
+            public string type_cars_en {get;set;}
+            public string  type_cars_abr_ru {get;set;}
+            public string type_cars_abr_en {get;set;}
+            public decimal? lifting_capacity {get;set;}
+            public decimal? tare {get;set;}
+            public int id_country {get;set;}
+            public string country_ru {get;set;}
+            public string country_en {get;set;}
+            public int country_code_sng {get;set;}
+            public int country_code_iso {get;set;}
+            public int? count_axles {get;set;} 
+            public bool? is_output_uz {get;set;} 
+            public int id_owners {get;set;}
+            public string owner_name {get;set;}
+            public string owner_abr {get;set;}
+            public DateTime? start_lease {get;set;}
+            public DateTime? end_lease {get;set;}
+            public int? id_status {get;set;}
+            public string status_ru {get;set;}
+            public string status_en {get;set;}
+            public int? id_status_next {get;set;}
+            public int? id_conditions {get;set;}
+            public string conditions_ru { get; set; }
+            public string conditions_en { get; set; }
+            public int? id_station {get;set;}
+            public DateTime? dt_inp_station {get;set;}
+            public DateTime? dt_out_station {get;set;}
+            public int? id_way {get;set;}
+            public DateTime? dt_inp_way {get;set;}
+            public DateTime? dt_out_way {get;set;}
+            //public int position {get;set;}
+            public int? send_id_station {get;set;}
+            public int? send_id_overturning {get;set;}
+            public int? send_id_shop {get;set;}
+            public DateTime? send_dt_inp_way {get;set;}
+            public DateTime? send_dt_out_way {get;set;}
+            public int? send_id_position {get;set;}
+            public int? send_train1 {get;set;}
+            public int? send_train2 {get;set;}
+            public int? send_side {get;set;}
+            public string edit_user {get;set;}
+            public DateTime? edit_dt {get;set;}
+            public string inp_sostav_index {get;set;}
+            public string inp_num_nakl_sap {get;set;}
+            public decimal? inp_weight_cargo {get;set;}
+            public int? inp_num_doc_reweighing_sap {get;set;}
+            public DateTime? inp_dt_doc_reweighing_sap {get;set;}
+            public decimal? inp_weight_reweighing_sap {get;set;}
+            public DateTime? inp_dt_reweighing_sap {get;set;}
+            public int? inp_post_reweighing_sap {get;set;}
+            public int inp_cargo_code {get;set;}
+            public int inp_id_group_cargo {get;set;}
+            public string inp_group_cargo_ru { get; set; }
+            public string inp_group_cargo_en { get; set; }
+            public int inp_id_type_cargo {get;set;}
+            public string inp_type_cargo_ru { get; set; }
+            public string inp_type_cargo_en { get; set; }
+            public int inp_id_cargo {get;set;}
+            public string inp_cargo_ru {get;set;}
+            public string inp_cargo_en {get;set;}
+            public string inp_cargo_full_ru {get;set;}
+            public string inp_cargo_full_en {get;set;}
+            public int inp_cargo_etsng {get;set;}
+            public string inp_material_code_sap {get;set;}
+            public string inp_material_name_sap {get;set;}
+            public string inp_station_shipment {get;set;}
+            public string inp_station_shipment_code_sap {get;set;} 
+            public string inp_station_shipment_name_sap {get;set;}   
+            public int inp_consignee {get;set;}
+            public int? inp_id_consignee {get;set;}
+            public string inp_consignee_name_ru {get;set;}
+            public string inp_consignee_name_en {get;set;}
+            public string inp_consignee_name_full_ru {get;set;}
+            public string inp_consignee_name_full_en {get;set;}
+            public string inp_consignee_name_abr_ru {get;set;}
+            public string inp_consignee_name_abr_en {get;set;}
+            public int? inp_id_shop {get;set;}
+            public int? inp_shop_code_amkr {get;set;}
+            public string inp_shop_code_sap {get;set;}
+            public string inp_shop_name_sap {get;set;}
+            public string inp_new_shop_code_sap {get;set;}
+            public string inp_new_shop_name_sap {get;set;}
+            public bool? inp_permission_unload_sap {get;set;}
+            public bool? inp_step1_sap {get;set;}
+            public bool? inp_step2_sap {get;set;}
         }
 
         public RWController()
@@ -109,7 +226,7 @@ namespace Web_RailWay.Controllers.api
                             side_station_from = n.side_station_from,
                             id_station_on = n.id_station_on,
                             side_station_on = n.side_station_on,
-                            transfer_type = n.transfer_type,
+                            transfer_type = n.transfer_type, 
                         }).ToList();
                 if (nodes == null)
                 {
@@ -195,6 +312,8 @@ namespace Web_RailWay.Controllers.api
                                             id_station_on = n.id_station_on,
                                             side_station_on = n.side_station_on,
                                             transfer_type = n.transfer_type,
+                                            //Stations = n.Stations, 
+                                            //Stations1 = n.Stations1
                                         }).ToList(),
                              StationsNodes1 = c.StationsNodes1
                                 .ToList()
@@ -207,6 +326,8 @@ namespace Web_RailWay.Controllers.api
                                             id_station_on = n.id_station_on,
                                             side_station_on = n.side_station_on,
                                             transfer_type = n.transfer_type,
+                                            //Stations = n.Stations, 
+                                            //Stations1 = n.Stations1
                                         }).ToList(),
                          })
                          .FirstOrDefault();
@@ -344,7 +465,7 @@ namespace Web_RailWay.Controllers.api
                    side_station_from = n.side_station_from,
                    id_station_on = n.id_station_on,
                    side_station_on = n.side_station_on,
-                   transfer_type = n.transfer_type,
+                   transfer_type = n.transfer_type, 
                }).ToList(),
             StationsNodes1 = c.StationsNodes1
                .ToList()
@@ -465,5 +586,73 @@ namespace Web_RailWay.Controllers.api
             }
         }
 
+        // GET: api/rw/cars_on_way/station/6
+        [Route("cars_on_way/station/{id:int}")]
+        [ResponseType(typeof(CarsOnWay))]
+        public IHttpActionResult GetCountCarsOnWayOfStation(int id)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@id", id);
+                List<CarsOnWay> arr_cars = this.rep_rw.Database.SqlQuery<CarsOnWay>("EXEC [RailWay].[GetCountCarsOnWayOfStation] @id", i_id).ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCountCarsOnWayOfStation(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/rw/cars_on_way/way/108/side/0
+        [Route("cars_on_way/way/{id:int}/side/{side:int}")]
+        [ResponseType(typeof(CarsDetails))]
+        public IHttpActionResult GetCarsOnWay(int id, int side)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@idway", id);
+                SqlParameter i_side = new SqlParameter("@side", side);
+                List<CarsDetails> arr_cars = this.rep_rw.Database.SqlQuery<CarsDetails>("EXEC [RailWay].[GetCarsOnWay] @idway, @side", i_id, i_side).ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOnWay(id={0}, side={1})", id, side), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/rw/cars_on_way/way/294/arrival/2700/side/0
+        [Route("cars_on_way/way/{id:int}/arrival/{id_arrival:int}/side/{side:int}")]
+        [ResponseType(typeof(CarsDetails))]
+        public IHttpActionResult GetCarsOnWayUZ(int id, int id_arrival, int side)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@idway", id);
+                SqlParameter i_idarrival = new SqlParameter("@idarrival", id_arrival);
+                SqlParameter i_side = new SqlParameter("@side", id);
+                List<CarsDetails> arr_cars = this.rep_rw.Database.SqlQuery<CarsDetails>("EXEC [RailWay].[GetCarsOnWayUZ] @idway, @idarrival, @side", i_id, i_idarrival, i_side).ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOnWay(id={0}, id_arrival={1}, side={2})", id, id_arrival, side), eventID);
+                return InternalServerError(e);
+            }
+        }
     }
 }

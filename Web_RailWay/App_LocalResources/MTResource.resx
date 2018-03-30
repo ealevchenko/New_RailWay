@@ -369,4 +369,10 @@
   <data name="link_arrival" xml:space="preserve">
     <value>По прибытию:</value>
   </data>
+  <data name="index_report_hist_cars_amkr_desc" xml:space="preserve">
+    <value>История движения вагона собственного парка, по данным ООО «МеталлургТранс»</value>
+  </data>
+  <data name="index_report_hist_cars_amkr_title" xml:space="preserve">
+    <value>Движение вагона</value>
+  </data>
 </root>
