@@ -57,6 +57,10 @@
       <Project>{09d0b7b9-79e7-4df8-ad4f-99df5e9083f8}</Project>
       <Name>EFReference</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Helpers\libClass\libClass.csproj">
+      <Project>{38a8fe37-55f2-4357-a59d-d8c8a8755aa5}</Project>
+      <Name>libClass</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MessageLogs\DBLogs\DBLogs.csproj">
       <Project>{56b38018-2e35-42f4-87d8-273dd38a9899}</Project>
       <Name>DBLogs</Name>
