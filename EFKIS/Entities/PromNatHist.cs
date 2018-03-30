@@ -37,6 +37,7 @@ namespace EFKIS.Entities
         public int? K_OP { get; set; }
         public int? K_FRONT { get; set; }
         public int? KOD_STRAN { get; set; }
+        public string ST_OTPR { get; set; }
 
         public DateTime? DAT_VVOD { get; set; }
     }
