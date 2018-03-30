@@ -17,7 +17,7 @@ namespace Testing
         
         public void Test_KISTransfer_TransferArrivalKISToRailWay()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
             kis_trans.CopyRCBufferArrivalSostavOfKIS(1);
         }
         /// <summary>
@@ -25,7 +25,7 @@ namespace Testing
         /// </summary>
         public void Test_KISTransfer_PutCarsToStation()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
             EFKIS.Entities.RCBufferArrivalSostav arr_s = ef_tkis.GetRCBufferArrivalSostav(1940);
             kis_trans.PutCarsToStation(ref arr_s);
@@ -33,7 +33,7 @@ namespace Testing
 
         public void Test_KISTransfer_UpdateCarsToStation()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
             EFKIS.Entities.RCBufferArrivalSostav arr_s = ef_tkis.GetRCBufferArrivalSostav(44);
             kis_trans.UpdateCarsToStation(ref arr_s);
@@ -56,13 +56,13 @@ namespace Testing
         /// </summary>
         public void Test_KISTransfer_DeleteSostavBufferArrivalSostav()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
             kis_trans.DeleteSostavRCBufferArrivalSostav(217);
         }
 
         public void Test_KISTransfer_CloseBufferArrivalSostav()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
             kis_trans.CloseBufferArrivalSostav();
         }
 
@@ -78,7 +78,7 @@ namespace Testing
         /// </summary>
         public void Test_KISTransfer_CopyBufferInputSostavOfKIS()
         {
-            KISTransfer kis_trans = new KISTransfer(service.ServicesKIS);
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer(service.ServicesKIS);
             kis_trans.CopyBufferInputSostavOfKIS(1);
         }
 
@@ -91,7 +91,7 @@ namespace Testing
 
         public void Test_KISTransfer_CopyBufferOutputSostavOfKIS()
         {
-            KISTransfer kis_trans = new KISTransfer(service.ServicesKIS);
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer(service.ServicesKIS);
             kis_trans.CopyBufferOutputSostavOfKIS(1, false);
         }
 
@@ -103,7 +103,7 @@ namespace Testing
 
         public void Test_KISTransfer_TransferArrivalToStation()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
             EFKIS.Entities.RCBufferInputSostav bis = ef_tkis.GetRCBufferInputSostav(1379);
             kis_trans.TransferArrivalToStation(ref bis);
@@ -111,7 +111,7 @@ namespace Testing
 
         public void Test_KISTransfer_TransferArrivalOfKISInput()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
             int res = kis_trans.TransferArrivalOfKISInput();
 
         }
@@ -130,7 +130,7 @@ namespace Testing
 
         public void Test_KISTransfer_TransferOutputArrivalToStation()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
             EFKIS.Entities.RCBufferOutputSostav bos = ef_tkis.GetRCBufferOutputSostav(1112);
             kis_trans.TransferArrivalToStation(ref bos);
@@ -138,7 +138,7 @@ namespace Testing
 
         public void Test_KISTransfer_SetCarToWayRailWay()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             //EFTKIS ef_tkis = new EFTKIS();
             //EFKIS.Entities.BufferOutputSostav bos = ef_tkis.GetBufferOutputSostav(1112);
             //kis_trans.TransferArrivalToStation(ref bos);
@@ -148,10 +148,18 @@ namespace Testing
 
         public void Test_KISTransfer_SetWayRailWayOfKIS()
         {
-            KISTransfer kis_trans = new KISTransfer();
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(1939);
+            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(1941);
             kis_trans.SetWayRailWayOfKIS(ref arr_s);
+        }
+
+        public void Test_KISTransfer_UpdWayRailWayOfKIS()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+            EFTKIS ef_tkis = new EFTKIS();
+            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(1949);
+            kis_trans.UpdWayRailWayOfKIS(ref arr_s);
         }
 
     }

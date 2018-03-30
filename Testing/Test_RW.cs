@@ -138,7 +138,35 @@ namespace Testing
             }
         }
 
+        public void RWReference_GetShopOfKis()
+        {
+            RWReference rw_ref = new RWReference(true);
+            int? id = rw_ref.GetIDShopOfKis(10,true);
+            int? id1 = rw_ref.GetIDShopOfKis(11,true);
+        }
 
+        public void RWReference_GetReferenceConsigneeOfKis()
+        {
+            RWReference rw_ref = new RWReference(true);
+            //int id = rw_ref.GetIDReferenceConsigneeOfKis(10, true);
+            //int id1 = rw_ref.GetIDReferenceConsigneeOfKis(20, true);
+            int id2 = rw_ref.GetIDReferenceConsigneeOfKis(800, true);
+        }
+
+        public void RWOperation_CorrectPositionCarsOnWay()
+        {
+            RWOperation rw_oper = new RWOperation();
+
+            int id2 = rw_oper.SaveChanges(rw_oper.CorrectPositionCarsOnWay(107));
+        }
+
+        public void RWOperation_SetWayCorrectPosition()
+        {
+            RWOperation rw_oper = new RWOperation();
+            //EFRailWay ef_rw = new EFRailWay();
+            Cars car = rw_oper.GetCars(8194);
+            int res = rw_oper.ExecSaveOperation(car, rw_oper.OperationSetWay, new  OperationSetWay(106,DateTime.Now,null,null));
+        }
 
     }
 }

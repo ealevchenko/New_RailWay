@@ -372,13 +372,23 @@ namespace Testing
         //{
         //    WL(promsostav.GetNatHist(natur, station, day, month, year, wag));
         //}
+        public void Test_PROM_GetPromNatHist()
+        {
+            EFWagons ef_wag = new EFWagons();
+            List<PromNatHist> list = ef_wag.GetPromNatHist().Where(n => n.N_VAG == 54604095).ToList();
+            foreach (PromNatHist t in list)
+            {
+                WL(t);
+            }  
+        }
 
-        //public void WL(PromNatHist t)
-        //{
-        //    //if (t == null) { Console.WriteLine(" = Null"); return; }
-        //    //Console.WriteLine("NPP: {0},\t NAME: {1},\t ABREV_STRAN: {2},\t KOD_EUROP: {3},\t KOD_STRAN: {4},\t KOD_OLD: {5}",
-        //    //        t.NPP, t.NAME, t.ABREV_STRAN, t.KOD_EUROP, t.KOD_STRAN, t.KOD_OLD);
-        //}
+        public void WL(PromNatHist t)
+        {
+            if (t == null) { Console.WriteLine(" = Null"); return; }
+
+            Console.WriteLine("N_VAG: {0},\t NPP: {1},\t GODN: {2},\t K_ST: {3},\t KOD_STRAN: {4},\t N_NATUR: {5},\t ST_OTPR: {6}",
+                    t.N_VAG, t.NPP, t.GODN, t.K_ST, t.KOD_STRAN, t.N_NATUR, t.ST_OTPR);
+        }
 
         //public void Test_PromContent_GetCex()
         //{

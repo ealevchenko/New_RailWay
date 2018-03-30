@@ -69,6 +69,10 @@ namespace Testing
             //tst_rw.EFRailWay_GetCars(); // Тест проверки CARS
             //tst_rw.RWOperation_IsOpenOperation();// Тест проверки открытой операции над вагоном
             //tst_rw.RWTransfer_TransferArivalCarsToRailWay(); // Перенести составы в систему RAILWAY с указанной позиции
+            //tst_rw.RWReference_GetShopOfKis(); // Получить id цеха по данным КИС, если нет создать.
+            //tst_rw.RWReference_GetReferenceConsigneeOfKis(); // Получить id грузополучателя по данным КИС, если нет создать.
+            //tst_rw.RWOperation_CorrectPositionCarsOnWay(); // Скорректировать позицию на пути.
+            tst_rw.RWOperation_SetWayCorrectPosition(); // Переставить вагон + скорректировать позиции.
             #endregion
 
 
@@ -132,7 +136,8 @@ namespace Testing
             //tst_kis.Test_KISThread_StartTransferOutputKIS(); // тест потока всех переносов вагонов из КИС в прибытие станции RC по данным КИС по отправке
             //tst_kis.Test_KISTransfer_TransferOutputArrivalToStation(); // Тест переноса вагонов из КИС в прибытие станции RC по данным КИС по отправке
             //tst_kis.Test_KISTransfer_SetCarToWayRailWay(); // Тест принимаем на путь станции из УЗ
-            tst_kis.Test_KISTransfer_SetWayRailWayOfKIS(); // тест постановки вагонов по данным КИС(buffer) в систему RailWay
+            //tst_kis.Test_KISTransfer_SetWayRailWayOfKIS(); // тест постановки вагонов по данным КИС(buffer) в систему RailWay
+            //tst_kis.Test_KISTransfer_UpdWayRailWayOfKIS(); // тест обновления вагонов по данным КИС(buffer) в систему RailWay
             #endregion
 
             #region Test_Reference
@@ -168,6 +173,7 @@ namespace Testing
             //tst_wag.Test_EFKometaParkState_KometaParkStateToStation(DateTime.Now);
             //tst_wag.Test_EFKometaParkState_KometaParkState(DateTime.Now, 4); // Данные по состояние парка за указаный день
             //tst_wag.Test_EFKometaParkState_KometaParkStateToWay(DateTime.Now, 1); // Данные по состояние парка за указаный день
+            //tst_wag.Test_PROM_GetPromNatHist();
             #endregion
 
             #region Test_Logs тест логирования
