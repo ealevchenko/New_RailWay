@@ -107,9 +107,13 @@ namespace KIS
                 lock (locker_tas)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
-                    KISTransfer kis_trans = new KISTransfer(service);
-                    kis_trans.DayControlArrivalKisAddData = day_control_arrival_kis_add_data;
-                    res_copy = kis_trans.CopyBufferArrivalSostavOfKIS();
+                    KIS_RC_Transfer kis_rc_trans = new KIS_RC_Transfer(service);
+                    kis_rc_trans.DayControlArrivalKisAddData = day_control_arrival_kis_add_data;
+                    res_copy = kis_rc_trans.CopyBufferArrivalSostavOfKIS();
+                    // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
+                    KIS_RW_Transfer kis_rw_trans = new KIS_RW_Transfer(service);
+                    kis_rw_trans.DayControlArrivalKisAddData = day_control_arrival_kis_add_data;
+                    res_copy += kis_rw_trans.CopyBufferArrivalSostavOfKIS();
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
                 string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_copy:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_copy);
@@ -180,17 +184,21 @@ namespace KIS
                     }
                 }
                 dt_start = DateTime.Now;
-                int res_transfer = 0;
+                int res_transfer_rc = 0;
+                int res_transfer_rw = 0;
                 lock (locker_tas)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
-                    KISTransfer kis_trans = new KISTransfer(service);
-                    res_transfer = kis_trans.TransferArrivalOfKIS();
+                    KIS_RC_Transfer kis_rc_trans = new KIS_RC_Transfer(service);
+                    res_transfer_rc = kis_rc_trans.TransferArrivalOfKIS();
+                    // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
+                    KIS_RW_Transfer kis_rw_trans = new KIS_RW_Transfer(service);
+                    res_transfer_rw = kis_rw_trans.TransferArrivalKISToRailWay();
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
-                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: RC: {6} , RW: {7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer_rc, res_transfer_rw);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
-                service.WriteServices(dt_start, DateTime.Now, res_transfer);
+                service.WriteServices(dt_start, DateTime.Now, res_transfer_rw);
             }
             catch (ThreadAbortException exc)
             {
@@ -260,9 +268,14 @@ namespace KIS
                 lock (locker_tas)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
-                    KISTransfer kis_trans = new KISTransfer(service);
-                    kis_trans.DayRangeArrivalKisCopy = day_range_arrival_kis_copy; //тайм аут (суток) по времени для составов перенесеных из КИС для копирования в систему RailCars
-                    res_close = kis_trans.CloseBufferArrivalSostav();
+                    KIS_RC_Transfer kis_rc_trans = new KIS_RC_Transfer(service);
+                    kis_rc_trans.DayRangeArrivalKisCopy = day_range_arrival_kis_copy; //тайм аут (суток) по времени для составов перенесеных из КИС для копирования в систему RailCars
+                    res_close = kis_rc_trans.CloseBufferArrivalSostav();
+
+                    KIS_RW_Transfer kis_rw_trans = new KIS_RW_Transfer(service);
+                    kis_rw_trans.DayRangeArrivalKisCopy = day_range_arrival_kis_copy; //тайм аут (суток) по времени для составов перенесеных из КИС для копирования в систему RailCars
+                    res_close += kis_rw_trans.CloseBufferArrivalSostav();
+
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
                 string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_close:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_close);
@@ -341,7 +354,7 @@ namespace KIS
                 lock (locker_bis)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
-                    KISTransfer kis_trans = new KISTransfer(service);
+                    KIS_RC_Transfer kis_trans = new KIS_RC_Transfer(service);
                     kis_trans.DayControlInputKisAddData = day_control_input_kis_add_data;
                     res_copy = kis_trans.CopyBufferInputSostavOfKIS();
                 }
@@ -418,7 +431,7 @@ namespace KIS
                 lock (locker_bis)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
-                    KISTransfer kis_trans = new KISTransfer(service);
+                    KIS_RC_Transfer kis_trans = new KIS_RC_Transfer(service);
                     kis_trans.TransferInputKis = transfer_kis;
                     res_transfer = kis_trans.TransferArrivalOfKISInput();
                 }
@@ -501,7 +514,7 @@ namespace KIS
                 lock (locker_bos)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
-                    KISTransfer kis_trans = new KISTransfer(service);
+                    KIS_RC_Transfer kis_trans = new KIS_RC_Transfer(service);
                     kis_trans.DayControlOutputKisAddData = day_control_output_kis_add_data;
                     kis_trans.StatusControlOutputKis = status_control_output_kis;
                     res_copy = kis_trans.CopyBufferOutputSostavOfKIS();
@@ -575,18 +588,20 @@ namespace KIS
                     }
                 }
                 dt_start = DateTime.Now;
-                int res_transfer = 0;
+                int res_transfer_rc = 0;
+                //int res_transfer_rw = 0;
                 lock (locker_bos)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
-                    KISTransfer kis_trans = new KISTransfer(service);
-                    kis_trans.TransferOutputKis = transfer_kis;
-                    res_transfer = kis_trans.TransferArrivalOfKISOutput();
+                    KIS_RC_Transfer kis_rc_trans = new KIS_RC_Transfer(service);
+                    kis_rc_trans.TransferOutputKis = transfer_kis;
+                    res_transfer_rc = kis_rc_trans.TransferArrivalOfKISOutput();
+
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
-                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer_rc:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer_rc);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
-                service.WriteServices(dt_start, DateTime.Now, res_transfer);
+                service.WriteServices(dt_start, DateTime.Now, res_transfer_rc);
             }
             catch (ThreadAbortException exc)
             {

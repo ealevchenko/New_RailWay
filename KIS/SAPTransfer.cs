@@ -13,6 +13,41 @@ using System.Threading.Tasks;
 
 namespace KIS
 {
+
+    public class trWagon
+    {
+        public int Position { get; set; }
+        public int CarriageNumber { get; set; }
+        public int CountryCode { get; set; }
+        public float Weight { get; set; }
+        public int IDCargo { get; set; }
+        public string Cargo { get; set; }
+        public int IDStation { get; set; }
+        public string Station { get; set; }
+        public int Consignee { get; set; }
+        public string Operation { get; set; }
+        public string CompositionIndex { get; set; }
+        public DateTime DateOperation { get; set; }
+        public int TrainNumber { get; set; }
+        public int Conditions { get; set; }
+    }
+
+    public class trSostav
+    {
+        public int id { get; set; }
+        public int? codecs_in_station { get; set; } // Станция получатель состава
+        public int? codecs_from_station { get; set; } // Станция отравитель состава
+        //public string FileName { get; set; }
+        //public string CompositionIndex { get; set; }
+        public DateTime DateTime_on { get; set; }
+        public DateTime DateTime_from { get; set; }
+        //public int Operation { get; set; }
+        //public DateTime Create { get; set; }
+        //public DateTime? Close { get; set; }
+        public int? ParentID { get; set; }
+        public trWagon[] Wagons { get; set; }
+    }
+    
     public class SAPTransfer
     {
         private eventID eventID = eventID.KIS_SAPTransfer;
