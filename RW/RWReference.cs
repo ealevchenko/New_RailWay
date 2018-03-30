@@ -762,8 +762,102 @@ namespace RW
         //}
         #endregion
 
-        #region Справочник "Путей railway"
+        
+        #region Справочник "Цехов"
+        /// <summary>
+        /// Получить id цеха по id цеха системы кис, если нет создать по данным КИС
+        /// </summary>
+        /// <param name="id_kis"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public int? GetIDShopOfKis(int id_kis, bool create)
+        {
+            try
+            {
+                EFRailWay ef_rw = new EFRailWay();
+                Shops shop = ef_rw.GetShopsOfKis(id_kis);
+                if (shop == null & create & this.reference_kis)
+                {
+                    EFWagons kis = new EFWagons();
+                    PromCex cex = kis.GetCex(id_kis);
+                    if (cex != null)
+                    {
+                        Shops new_shop = new Shops()
+                        {
+                            id = 0,
+                            id_station = null,
+                            name_ru = cex.ABREV_P,
+                            name_en = cex.ABREV_P,
+                            name_full_ru = cex.NAME_P,
+                            name_full_en = cex.NAME_P,
+                            code_amkr = null,
+                            id_kis = id_kis,
+                            parent_id = null,
+                        };
+                        int res = ef_rw.SaveShops(new_shop);
+                        if (res > 0)
+                        {
+                            shop = ef_rw.GetShops(res);
+                        }
+                    }
+                }
+                return shop != null ? (int?)shop.id : null;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDShopOfKis(id_kis={0}, create={1})", id_kis, create), servece_owner, eventID);
+                return 0;
+            }
+        }
+        #endregion        
+        #region Справочник "Грузополучателей"
 
+        public int GetIDReferenceConsigneeOfKis(int id_kis, bool create)
+        {
+            try
+            {
+                EFRW.Concrete.EFReference ef_ref = new EFRW.Concrete.EFReference();
+                ReferenceConsignee consignee = ef_ref.GetReferenceConsigneeOfKis(id_kis);
+                if (consignee == null & create & this.reference_kis)
+                {
+                    EFWagons kis = new EFWagons();
+                    PromCex cex = kis.GetCex(id_kis);
+                    if (cex != null)
+                    {
+
+
+                        ReferenceConsignee new_consignee = new ReferenceConsignee()
+                        {
+                            id = 0,
+                            name_ru = cex.ABREV_P,
+                            name_en = cex.ABREV_P,
+                            name_full_ru = cex.NAME_P,
+                            name_full_en = cex.NAME_P,
+                            name_abr_ru = cex.ABREV_P,
+                            name_abr_en = cex.ABREV_P,
+                            id_shop = id_kis>=10 & id_kis<800 ? GetIDShopOfKis(id_kis, true) : null,
+                            create_dt = DateTime.Now,
+                            create_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName,
+                            change_dt = null,
+                            change_user = null,
+                            id_kis = id_kis,
+                        };
+                        int res = ef_ref.SaveReferenceConsignee(new_consignee);
+                        if (res > 0)
+                        {
+                            consignee = ef_ref.GetReferenceConsignee(res);
+                        }
+
+                    }
+                }
+                return consignee != null ? consignee.id : 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDReferenceConsigneeOfKis(id_kis={0}, create={1})", id_kis, create), servece_owner, eventID);
+                return 0;
+            }
+        }
         #endregion
     }
 }

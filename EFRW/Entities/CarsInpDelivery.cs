@@ -7,13 +7,14 @@ namespace EFRW.Entities
     using System.Data.Entity.Spatial;
 
     [Table("RailWay.CarsInpDelivery")]
+
     public partial class CarsInpDelivery
     {
         public int id { get; set; }
 
         public int id_car { get; set; }
 
-         [Column(TypeName = "datetime")]
+        [Column(TypeName = "datetime")]
         public DateTime? datetime { get; set; }
 
         [Required]
@@ -38,13 +39,13 @@ namespace EFRW.Entities
 
         public int? num_doc_reweighing_sap { get; set; }
 
-         [Column(TypeName = "datetime")]
+        [Column(TypeName = "datetime")]
         public DateTime? dt_doc_reweighing_sap { get; set; }
 
         [Column(TypeName = "numeric")]
         public decimal? weight_reweighing_sap { get; set; }
 
-         [Column(TypeName = "datetime")]
+        [Column(TypeName = "datetime")]
         public DateTime? dt_reweighing_sap { get; set; }
 
         public int? post_reweighing_sap { get; set; }
@@ -70,6 +71,8 @@ namespace EFRW.Entities
 
         public int consignee { get; set; }
 
+        public int? id_consignee { get; set; }
+
         [StringLength(4)]
         public string shop_code_sap { get; set; }
 
@@ -91,5 +94,7 @@ namespace EFRW.Entities
         public virtual Cars Cars { get; set; }
 
         public virtual ReferenceCargo ReferenceCargo { get; set; }
+
+        public virtual ReferenceConsignee Reference_Consignee { get; set; }
     }
 }

@@ -74,6 +74,8 @@
     <Compile Include="Entities\ReferenceOwners.cs" />
     <Compile Include="Entities\ReferenceTypeCars.cs" />
     <Compile Include="Entities\Ways.cs" />
+    <Compile Include="Entities\ReferenceConsignee.cs" />
+    <Compile Include="Entities\Shops.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

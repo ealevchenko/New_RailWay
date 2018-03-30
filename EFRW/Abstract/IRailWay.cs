@@ -63,6 +63,15 @@ namespace EFRW.Abstract
         Ways GetWaysOfSendingUZ(int id_station);
         #endregion
 
+        #region Shops
+        IQueryable<Shops> Shops { get; }
+        IQueryable<Shops> GetShops();
+        Shops GetShops(int id);
+        Shops GetShopsOfKis(int id_kis);
+        int SaveShops(Shops Shops);
+        Shops DeleteShops(int id);
+        #endregion
+
         #region Cars
         IQueryable<Cars> Cars { get; }
         IQueryable<Cars> GetCars();
@@ -77,6 +86,7 @@ namespace EFRW.Abstract
         Cars GetCarsOfSostavNum(int id_sostav, int num);
         Cars GetCarsOfArrivalNum(int id_arrival, int num);
         List<Cars> GetCarsOfArrivalNum(int id_arrival, int[] nums);
+        Cars GetCarsOfSetKIS(int num, DateTime dt_amkr, int natur);
         #endregion
 
         #region CarOperations

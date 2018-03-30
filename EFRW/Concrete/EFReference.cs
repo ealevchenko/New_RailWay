@@ -1079,5 +1079,131 @@ namespace EFRW.Concrete
         #endregion
         #endregion
 
+        #region ReferenceConsignee
+        public IQueryable<ReferenceConsignee> ReferenceConsignee
+        {
+            get { return context.ReferenceConsignee; }
+        }
+
+        public IQueryable<ReferenceConsignee> GetReferenceConsignee()
+        {
+            try
+            {
+                return ReferenceConsignee;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetReferenceConsignee()"), eventID);
+                return null;
+            }
+        }
+
+        public ReferenceConsignee GetReferenceConsignee(int id)
+        {
+            try
+            {
+                return GetReferenceConsignee().Where(c => c.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetReferenceConsignee()"), eventID);
+                return null;
+            }
+        }
+
+        public ReferenceConsignee GetReferenceConsigneeOfKis(int id_kis)
+        {
+            try
+            {
+                return GetReferenceConsignee().Where(c => c.id_kis == id_kis).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetReferenceConsignee()"), eventID);
+                return null;
+            }
+        }
+
+        public int SaveReferenceConsignee(ReferenceConsignee ReferenceConsignee)
+        {
+            ReferenceConsignee dbEntry;
+            try
+            {
+                if (ReferenceConsignee.id == 0)
+                {
+                    dbEntry = new ReferenceConsignee()
+                    {
+                        id = 0,
+                        name_ru = ReferenceConsignee.name_ru,
+                        name_en = ReferenceConsignee.name_en,
+                        name_full_ru = ReferenceConsignee.name_full_ru,
+                        name_full_en = ReferenceConsignee.name_full_en,
+                        name_abr_ru = ReferenceConsignee.name_abr_ru, 
+                        name_abr_en = ReferenceConsignee.name_abr_en,
+                        id_shop = ReferenceConsignee.id_shop,
+                        create_dt = ReferenceConsignee.create_dt != DateTime.Parse("01.01.0001") ? ReferenceConsignee.create_dt : DateTime.Now,
+                        create_user = ReferenceConsignee.create_user != null ? ReferenceConsignee.create_user : System.Environment.UserDomainName + @"\" + System.Environment.UserName,
+                        change_dt = null,
+                        change_user = null,
+                        id_kis = ReferenceConsignee.id_kis,
+                        CarsInpDelivery = ReferenceConsignee.CarsInpDelivery,
+                        Shops = ReferenceConsignee.Shops,
+                    };
+                    context.ReferenceConsignee.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.ReferenceConsignee.Find(ReferenceConsignee.id);
+                    // Сделано для отмены изменения даты создания строки
+                    EFDbContext context_real = new EFDbContext();
+                    ReferenceConsignee old_ReferenceConsignee = context_real.ReferenceConsignee.Where(c => c.id == ReferenceConsignee.id).FirstOrDefault();
+                    if (dbEntry != null)
+                    {
+                        dbEntry.name_ru = ReferenceConsignee.name_ru;
+                        dbEntry.name_en = ReferenceConsignee.name_en;
+                        dbEntry.name_full_ru = ReferenceConsignee.name_full_ru;
+                        dbEntry.name_full_en = ReferenceConsignee.name_full_en;
+                        dbEntry.name_abr_ru = ReferenceConsignee.name_abr_ru; 
+                        dbEntry.name_abr_en = ReferenceConsignee.name_abr_en;
+                        dbEntry.id_shop = ReferenceConsignee.id_shop;
+                        dbEntry.create_dt = old_ReferenceConsignee.create_dt;
+                        dbEntry.create_user = old_ReferenceConsignee.create_user;
+                        dbEntry.change_dt = ReferenceConsignee.change_dt != null ? ReferenceConsignee.change_dt : DateTime.Now;
+                        dbEntry.change_user = ReferenceConsignee.change_user != null ? ReferenceConsignee.change_user : System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                        dbEntry.CarsInpDelivery = ReferenceConsignee.CarsInpDelivery;
+                        dbEntry.Shops = ReferenceConsignee.Shops;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveReferenceCargo(ReferenceCargo={0})", ReferenceConsignee.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public ReferenceConsignee DeleteReferenceConsignee(int id)
+        {
+            ReferenceConsignee dbEntry = context.ReferenceConsignee.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.ReferenceConsignee.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteReferenceConsignee(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        #endregion
+
+
     }
 }

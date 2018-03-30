@@ -495,6 +495,20 @@ namespace RW
                 return -1;
             }        
         }
+        /// <summary>
+        /// Коррекция номера позиции вагона на пути
+        /// </summary>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public List<CarOperations> CorrectPositionCarsOnWay(int id_way) { 
+            List<CarOperations> list_position = ef_rw.GetOpenCarOperationsOfWay(id_way).OrderBy(p=>p.position).ToList();
+            int position = 1;
+            foreach(CarOperations operation in list_position){
+                operation.position = position;
+                position++;
+            }
+            return list_position;
+        }
 
         #endregion
 
@@ -841,6 +855,7 @@ namespace RW
                     station_shipment = null,
                     station_shipment_code_sap = null,
                     station_shipment_name_sap = null,
+                    id_consignee = null,
                     shop_code_sap = null,
                     shop_name_sap = null,
                     new_shop_code_sap = null,
@@ -929,6 +944,10 @@ namespace RW
 
         }
         #endregion
+
+        public Cars GetCars(int id_car) {
+            return ef_rw.GetCars(id_car);
+        }
 
 
 

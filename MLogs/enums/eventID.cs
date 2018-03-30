@@ -82,8 +82,10 @@ namespace MessageLog
         EFTKIS = 6200,                          // Библиотека доступа к таблицам переноса данных из системы КИС в систему RailCars, RailWay 
         KIS = 6300,                             // Библиотека сервисов обработки данных КИС
         KIS_KISTransfer = 6301,                 // Модуль переноса данных КИС
-        KIS_SAPTransfer = 6302,                 // Модуль переноса данных SAP
-        KIS_KISThread = 6303,                   // Модуль потоков сервисов КИС
+        KIS_RCTransfer = 6302,
+        KIS_RWTransfer = 6303, 
+        KIS_SAPTransfer = 6305,                 // Модуль переноса данных SAP
+        KIS_KISThread = 6306,                   // Модуль потоков сервисов КИС
         #endregion
 
         #region Модуля согласования старой ситемы Railcars c новой Railway 10000

@@ -63,12 +63,15 @@ namespace EFRW.Concrete
         // Владельцы
         public virtual DbSet<ReferenceOwnerCars> ReferenceOwnerCars { get; set; }
         public virtual DbSet<ReferenceOwners> ReferenceOwners { get; set; }
+        // Грузополучатели на АМКР
+        public virtual DbSet<ReferenceConsignee> ReferenceConsignee { get; set; }
 
         // таблицы Railway
-        // Станции, узлы и пути
+        // Станции, узлы и пути, цеха
         public virtual DbSet<Stations> Stations { get; set; }
         public virtual DbSet<StationsNodes> StationsNodes { get; set; }
         public virtual DbSet<Ways> Ways { get; set; }
+        public virtual DbSet<Shops> Shops { get; set; }
         // Вагоны и опрерации
         public virtual DbSet<Cars> Cars { get; set; }
         public virtual DbSet<CarOperations> CarOperations { get; set; }
@@ -90,12 +93,6 @@ namespace EFRW.Concrete
                 .WithRequired(e => e.Cars)
                 .HasForeignKey(e => e.id_car)
                 .WillCascadeOnDelete(false);
-
-            //modelBuilder.Entity<Cars>()
-            //    .HasMany(e => e.CarOperations)
-            //    .WithOptional(e => e.Cars)
-            //    .HasForeignKey(e => e.id_car)
-            //    .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Cars>()
                 .HasMany(e => e.CarsInpDelivery)
@@ -225,10 +222,25 @@ namespace EFRW.Concrete
                 .HasForeignKey(e => e.id_station)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Stations>()
+                .HasMany(e => e.Shops)
+                .WithOptional(e => e.Stations)
+                .HasForeignKey(e => e.id_station);
+
             modelBuilder.Entity<Ways>()
                 .HasMany(e => e.CarOperations)
                 .WithOptional(e => e.Ways)
                 .HasForeignKey(e => e.id_way);
+
+            modelBuilder.Entity<ReferenceConsignee>()
+                .HasMany(e => e.CarsInpDelivery)
+                .WithOptional(e => e.Reference_Consignee)
+                .HasForeignKey(e => e.id_consignee);
+
+            modelBuilder.Entity<Shops>()
+                .HasMany(e => e.Reference_Consignee)
+                .WithOptional(e => e.Shops)
+                .HasForeignKey(e => e.id_shop);
         }
 
     }

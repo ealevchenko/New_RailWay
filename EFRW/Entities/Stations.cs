@@ -18,6 +18,7 @@ namespace EFRW.Entities
             StationsNodes = new HashSet<StationsNodes>();
             StationsNodes1 = new HashSet<StationsNodes>();
             Ways = new HashSet<Ways>();
+            Shops = new HashSet<Shops>();
         }
 
         public int id { get; set; }
@@ -55,6 +56,9 @@ namespace EFRW.Entities
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ways> Ways { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Shops> Shops { get; set; }
 
         //public Stations(SerializationInfo info, StreamingContext context)
         //{

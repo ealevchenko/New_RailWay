@@ -97,5 +97,14 @@ namespace EFRW.Abstract
         ReferenceOwnerCars DeleteReferenceOwnerCars(int id);
         int DeleteReferenceOwnerCarsOfNum(int num);
         #endregion
+
+        #region ReferenceConsignee
+        IQueryable<ReferenceConsignee> ReferenceConsignee { get; }
+        IQueryable<ReferenceConsignee> GetReferenceConsignee();
+        ReferenceConsignee GetReferenceConsignee(int id);
+        ReferenceConsignee GetReferenceConsigneeOfKis(int id_kis);
+        int SaveReferenceConsignee(ReferenceConsignee ReferenceConsignee);
+        ReferenceConsignee DeleteReferenceConsignee(int id);
+        #endregion
     }
 }

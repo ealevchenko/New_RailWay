@@ -193,7 +193,8 @@ namespace EFRW.Concrete
                         Ways = Stations.Ways,
                         CarOperations = Stations.CarOperations,
                         StationsNodes = Stations.StationsNodes,
-                        StationsNodes1 = Stations.StationsNodes1
+                        StationsNodes1 = Stations.StationsNodes1,
+                        Shops = Stations.Shops, 
                     };
                     context.Stations.Add(dbEntry);
                 }
@@ -215,6 +216,7 @@ namespace EFRW.Concrete
                         dbEntry.CarOperations = Stations.CarOperations;
                         dbEntry.StationsNodes = Stations.StationsNodes;
                         dbEntry.StationsNodes1 = Stations.StationsNodes1;
+                        dbEntry.Shops = Stations.Shops; 
                     }
                 }
                 context.SaveChanges();
@@ -670,6 +672,117 @@ namespace EFRW.Concrete
         }
         #endregion
 
+        #region Shops
+        public IQueryable<Shops> Shops
+        {
+            get { return context.Shops; }
+        }
+
+        public IQueryable<Shops> GetShops()
+        {
+            try
+            {
+                return Shops;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetShops()"), eventID);
+                return null;
+            }
+        }
+
+        public Shops GetShops(int id)
+        {
+            try
+            {
+                return GetShops().Where(s => s.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetShops(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public Shops GetShopsOfKis(int id_kis)
+        {
+            try
+            {
+                return GetShops().Where(s => s.id_kis == id_kis).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetShopsOfKis(id_kis={0})", id_kis), eventID);
+                return null;
+            }
+        }
+
+        public int SaveShops(Shops Shops)
+        {
+            Shops dbEntry;
+            try
+            {
+                if (Shops.id == 0)
+                {
+                    dbEntry = new Shops()
+                    {
+                        id = 0,
+                        id_station = Shops.id_station,
+                        name_ru = Shops.name_ru,
+                        name_en = Shops.name_en,
+                        name_full_ru = Shops.name_full_ru,
+                        name_full_en = Shops.name_full_en,
+                        code_amkr = Shops.code_amkr,
+                        id_kis = Shops.id_kis,
+                        parent_id = Shops.parent_id
+                    };
+                    context.Shops.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.Shops.Find(Shops.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.id_station = Shops.id_station;
+                        dbEntry.name_ru = Shops.name_ru;
+                        dbEntry.name_en = Shops.name_en;
+                        dbEntry.name_full_ru = Shops.name_full_ru;
+                        dbEntry.name_full_en = Shops.name_full_en;
+                        dbEntry.code_amkr = Shops.code_amkr;
+                        dbEntry.id_kis = Shops.id_kis;
+                        dbEntry.parent_id = Shops.parent_id;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveShops(Shops={0})", Shops.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public Shops DeleteShops(int id)
+        {
+            Shops dbEntry = context.Shops.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.Shops.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteShops(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        #endregion
+
         #endregion
 
         #region ВАГОНЫ (СОСТОЯНИЕ, ОПЕРАЦИИ, ВХОД. ПОСТАВКИ, ИСХ. ПОСТАВКИ)
@@ -934,6 +1047,26 @@ namespace EFRW.Concrete
                 e.WriteErrorMethod(String.Format("GetCarsOfArrivalNum(id_arrival={0}, nums={1})", id_arrival, nums), eventID);
                 return null;
             }
+        }
+        /// <summary>
+        /// Найти вагон перенесеный по данным КИС
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="dt_amkr"></param>
+        /// <param name="natur"></param>
+        /// <returns></returns>
+        public Cars GetCarsOfSetKIS(int num, DateTime dt_amkr, int natur)
+        {
+            try
+            {
+                return GetCarsOfNum(num).Where(c => c.dt_inp_amkr == dt_amkr & c.natur_kis == natur).OrderByDescending(c => c.id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastCarsOfSetKIS(num={0}, dt_amkr={1}, natur={3})", num, dt_amkr, natur), eventID);
+                return null;
+            }
+
         }
 
         #endregion
@@ -1424,6 +1557,7 @@ namespace EFRW.Concrete
                         station_shipment_code_sap = CarsInpDelivery.station_shipment_code_sap,
                         station_shipment_name_sap = CarsInpDelivery.station_shipment_name_sap,
                         consignee = CarsInpDelivery.consignee,
+                        id_consignee = CarsInpDelivery.id_consignee,
                         shop_code_sap = CarsInpDelivery.shop_code_sap,
                         shop_name_sap = CarsInpDelivery.shop_name_sap,
                         new_shop_code_sap = CarsInpDelivery.new_shop_code_sap,
@@ -1433,6 +1567,7 @@ namespace EFRW.Concrete
                         step2_sap = CarsInpDelivery.step2_sap,
                         Cars = CarsInpDelivery.Cars,
                         ReferenceCargo = CarsInpDelivery.ReferenceCargo,
+                        Reference_Consignee = CarsInpDelivery.Reference_Consignee, 
                     };
                     context.CarsInpDelivery.Add(dbEntry);
                 }
@@ -1464,6 +1599,7 @@ namespace EFRW.Concrete
                         dbEntry.station_shipment_code_sap = CarsInpDelivery.station_shipment_code_sap;
                         dbEntry.station_shipment_name_sap = CarsInpDelivery.station_shipment_name_sap;
                         dbEntry.consignee = CarsInpDelivery.consignee;
+                        dbEntry.id_consignee = CarsInpDelivery.id_consignee;
                         dbEntry.shop_code_sap = CarsInpDelivery.shop_code_sap;
                         dbEntry.shop_name_sap = CarsInpDelivery.shop_name_sap;
                         dbEntry.new_shop_code_sap = CarsInpDelivery.new_shop_code_sap;
@@ -1473,6 +1609,7 @@ namespace EFRW.Concrete
                         dbEntry.step2_sap = CarsInpDelivery.step2_sap;
                         dbEntry.Cars = CarsInpDelivery.Cars;
                         dbEntry.ReferenceCargo = CarsInpDelivery.ReferenceCargo;
+                        dbEntry.Reference_Consignee = CarsInpDelivery.Reference_Consignee;
                     }
                 }
                 context.SaveChanges();

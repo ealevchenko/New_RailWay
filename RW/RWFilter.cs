@@ -300,10 +300,25 @@ namespace RW
         {
             try
             {
+                List<CarOperations> list = null;
                 if (operations == null) return null;
                 if (operations.dt_inp_station != null & operations.dt_out_station == null) { operations.dt_out_station = dt_close != null ? dt_close : DateTime.Now; }
-                if (operations.dt_inp_way != null & operations.dt_out_way == null) { operations.dt_out_way = dt_close != null ? dt_close : DateTime.Now; }
-                if (operations.send_dt_inp_way != null & operations.send_dt_out_way == null) { operations.send_dt_out_way = dt_close != null ? dt_close : DateTime.Now; }
+                if (operations.dt_inp_way != null & operations.dt_out_way == null) { 
+                    operations.dt_out_way = dt_close != null ? dt_close : DateTime.Now; 
+                    list = operations.Ways.CarOperations.Where(w=>w.dt_inp_way != null & w.dt_out_way == null).OrderBy(w=>w.position).ToList();
+                }
+                if (operations.send_dt_inp_way != null & operations.send_dt_out_way == null) { 
+                    operations.send_dt_out_way = dt_close != null ? dt_close : DateTime.Now; 
+                    list = operations.Ways.CarOperations.Where(w=>w.send_dt_inp_way != null & w.send_dt_out_way == null).OrderBy(w=>w.position).ToList();                
+                }
+
+                int position = 1;
+                foreach (CarOperations operation in list)
+                {
+                    operation.position = position;
+                    position++;
+                }
+
                 return operations;
             }
             catch (Exception e)
@@ -388,6 +403,27 @@ namespace RW
             { car.natur = natur; }
             return car;
         }
+        /// <summary>
+        /// Присвоить грузополучателя и готовность
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="id_consignee"></param>
+        /// <param name="id_status"></param>
+        /// <returns></returns>
+        //public static Cars SetCar(this Cars car, int? id_consignee, int? id_status)
+        //{
+        //    if (car == null) return null;
+            
+            
+            
+        //    car.CarsInpDelivery = dt_inp_amkr;
+        //    if (car.natur_kis == null & natur_kis != null) 
+        //    { car.natur_kis = natur_kis; }
+        //    if (car.natur == null & natur != null) 
+        //    { car.natur = natur; }
+        //    return car;
+        //}
+
 
         //public delegate bool flOperation<T>(T ps, int id_station);
 
