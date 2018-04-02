@@ -304,11 +304,47 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Положение вагонов собственного парка, по данным ООО «МеталлургТранс» БД АМКР.
+        /// </summary>
+        public static string index_report_cars_amkr_db_desc {
+            get {
+                return ResourceManager.GetString("index_report_cars_amkr_db_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны БД АМКР.
+        /// </summary>
+        public static string index_report_cars_amkr_db_title {
+            get {
+                return ResourceManager.GetString("index_report_cars_amkr_db_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Положение вагонов собственного парка, по данным ООО «МеталлургТранс».
         /// </summary>
         public static string index_report_cars_amkr_desc {
             get {
                 return ResourceManager.GetString("index_report_cars_amkr_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Положение вагонов собственного парка, по данным ООО «МеталлургТранс» в режиме OnLine.
+        /// </summary>
+        public static string index_report_cars_amkr_ol_desc {
+            get {
+                return ResourceManager.GetString("index_report_cars_amkr_ol_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вагоны OnLine.
+        /// </summary>
+        public static string index_report_cars_amkr_ol_title {
+            get {
+                return ResourceManager.GetString("index_report_cars_amkr_ol_title", resourceCulture);
             }
         }
         

@@ -20,10 +20,11 @@ namespace Web_RailWay.Controllers.api
     public class MTController : ApiController
     {
         private eventID eventID = eventID.Web_API_MTController;
-        
+
         protected IMT rep_MT;
-        public MTController() {
-            this.rep_MT = new EFMetallurgTrans();  
+        public MTController()
+        {
+            this.rep_MT = new EFMetallurgTrans();
         }
 
         protected ApproachesCars CreateCorectApproachesCars(ApproachesCars app_car)
@@ -58,51 +59,51 @@ namespace Web_RailWay.Controllers.api
 
         public class awasArrivalCars
         {
-//            ac.[ID] as [id_oper],
-//ac.[Position] as num_vag_on_way,
-//ac.[Num] as num,
-//v.rod, 
-//o.abr as owner_, 
-//c.name as country, 
-//rcountry.Country as wagon_country,
-//cond = null,
-//ac.[Cargo] as gruz,
-//rcargo.Name as CargoName,
-//shop = null,
-//cond2 = N'ожидаем прибытия с УЗ',
-//ac.[DateOperation] as dt_uz,
-//dt_amkr = null,
-//v.st_otpr, --  ?
-//gruz_amkr = null,
-//ac.[Weight] as weight_gruz,
-//p.date_mail, 
-//p.n_mail, 
-//p.[text], 
-//p.nm_stan, 
-//p.nm_sobstv,
-//gdstait = null,
-//note = null,
-//nazn_country = null,
-//tupik = null,
-//grvu_SAP = null,
-//ngru_SAP = null,
-//ac.[DateOperation] as dt_on_way,
-//sapis.NumNakl,
-//sapis.WeightDoc,
-//sapis.DocNumReweighing,
-//sapis.DocDataReweighing,
-//sapis.WeightReweighing,
-//sapis.DateTimeReweighing,
-//sapis.CodeMaterial,
-//sapis.NameMaterial,
-//sapis.CodeStationShipment,
-//sapis.NameStationShipment,
-//sapis.CodeShop,
-//sapis.NameShop,
-//sapis.CodeNewShop,
-//sapis.NameNewShop,
-//sapis.PermissionUnload
-            
+            //            ac.[ID] as [id_oper],
+            //ac.[Position] as num_vag_on_way,
+            //ac.[Num] as num,
+            //v.rod, 
+            //o.abr as owner_, 
+            //c.name as country, 
+            //rcountry.Country as wagon_country,
+            //cond = null,
+            //ac.[Cargo] as gruz,
+            //rcargo.Name as CargoName,
+            //shop = null,
+            //cond2 = N'ожидаем прибытия с УЗ',
+            //ac.[DateOperation] as dt_uz,
+            //dt_amkr = null,
+            //v.st_otpr, --  ?
+            //gruz_amkr = null,
+            //ac.[Weight] as weight_gruz,
+            //p.date_mail, 
+            //p.n_mail, 
+            //p.[text], 
+            //p.nm_stan, 
+            //p.nm_sobstv,
+            //gdstait = null,
+            //note = null,
+            //nazn_country = null,
+            //tupik = null,
+            //grvu_SAP = null,
+            //ngru_SAP = null,
+            //ac.[DateOperation] as dt_on_way,
+            //sapis.NumNakl,
+            //sapis.WeightDoc,
+            //sapis.DocNumReweighing,
+            //sapis.DocDataReweighing,
+            //sapis.WeightReweighing,
+            //sapis.DateTimeReweighing,
+            //sapis.CodeMaterial,
+            //sapis.NameMaterial,
+            //sapis.CodeStationShipment,
+            //sapis.NameStationShipment,
+            //sapis.CodeShop,
+            //sapis.NameShop,
+            //sapis.CodeNewShop,
+            //sapis.NameNewShop,
+            //sapis.PermissionUnload
+
             public int id_oper { get; set; }
             public DateTime? dt_amkr { get; set; }
             public int? n_natur { get; set; }
@@ -195,6 +196,44 @@ namespace Web_RailWay.Controllers.api
             //public bool? Step2 { get; set; }
         }
 
+        public class DBWagonsTracking
+        {
+            public int id { get; set; }
+            public int nvagon { get; set; }
+            public string type_car_ru { get; set; }
+            public string type_car_en { get; set; }
+            public DateTime? dt { get; set; }
+            public int? st_disl { get; set; }
+            public string nst_disl { get; set; }
+            public int? kodop { get; set; }
+            public string nameop { get; set; }
+            public string full_nameop { get; set; }
+            public int? st_form { get; set; }
+            public string nst_form { get; set; }
+            public int? idsost { get; set; }
+            public string nsost { get; set; }
+            public string index { get; set; }
+            public int? st_nazn { get; set; }
+            public string nst_nazn { get; set; }
+            public int? ntrain { get; set; }
+            public int? st_end { get; set; }
+            public string nst_end { get; set; }
+            public int? kgr { get; set; }
+            public string nkgr { get; set; }
+            public int id_cargo { get; set; }
+            public string cargo_ru { get; set; }
+            public string cargo_en { get; set; }
+            public string type_cargo_ru { get; set; }
+            public string type_cargo_en { get; set; }
+            public string group_cargo_ru { get; set; }
+            public string group_cargo_en { get; set; }
+            public int? kgrp { get; set; }
+            public decimal? ves { get; set; }
+            public DateTime? updated { get; set; }
+            public int? kgro { get; set; }
+            public int? km { get; set; }
+        }
+
         // GET: api/mt/approaches/sostav
         //[Route("approaches/sostav")]
         //public IEnumerable<ApproachesSostav> GetApproachesSostav()
@@ -246,6 +285,51 @@ namespace Web_RailWay.Controllers.api
                 return NotFound();
             }
             return Ok(JsonConvert.DeserializeObject(result));
+        }
+
+        // GET: api/mt/wagons_tracking_arhiv
+        [Route("wagons_tracking_arhiv")]
+        [ResponseType(typeof(DBWagonsTracking))]
+        public IHttpActionResult GetDBWagonsTracking()
+        {
+            try
+            {
+                List<DBWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<DBWagonsTracking>("EXEC [MT].[GetDBWagonsTracking]").ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDBWagonsTracking()"), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/mt/wagons_tracking_arhiv/car/52921004/start/2018-03-29T00:00:00.000Z/stop/2018-03-29T23:59:59.000Z
+        [Route("wagons_tracking_arhiv/car/{num:int}/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(DBWagonsTracking))]
+        public IHttpActionResult GetDBCarWagonsTracking(int num, DateTime start, DateTime stop)
+        {
+            try
+            {
+                SqlParameter i_num = new SqlParameter("@num", num);
+                SqlParameter dt_start = new SqlParameter("@start", start);
+                SqlParameter dt_stop = new SqlParameter("@stop", stop);
+                List<DBWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<DBWagonsTracking>("EXEC [MT].[GetDBCarWagonsTracking] @num, @start, @stop",i_num,dt_start,dt_stop).ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDBCarWagonsTracking(num={0}, start={1}, stop={2})",num,start,stop), eventID);
+                return InternalServerError(e);
+            }
         }
 
         // GET: api/mt/arrival/cars/station_uz/4670

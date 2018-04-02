@@ -972,7 +972,7 @@
 						}
 						else
 						{
-							if (offset.left < 460) //left to right
+						    if (offset.left < 460) //left to right
 							{
 								box.css(
 								{

@@ -24,9 +24,19 @@
     "ru": "Отчет№4",
     "en": "Reports#4"
   },
-  {
-    "tag": "link_tabs_5",
-    "ru": "Отчет№5",
-    "en": "Reports#5"
-  }
+    {
+        "tag": "link_tabs_5",
+        "ru": "Отчет№5",
+        "en": "Reports#5"
+    },
+    { "tag": "table_field_nameop", "ru": "Операция", "en": "Operation" },
+    { "tag": "table_field_dt", "ru": "Дата и время", "en": "Date And Time" },
+    { "tag": "table_field_nst_disl", "ru": "Станция дислокации", "en": "Dislocation station" },
+    { "tag": "table_field_index", "ru": "Индекс поезда", "en": "Train index" },
+    { "tag": "table_field_nst_nazn", "ru": "Станция назначения", "en": "Station of destination" },
+    { "tag": "table_field_kgrp", "ru": "Грузополучатель", "en": "Consignee" },
+    { "tag": "table_field_nst_form", "ru": "Станция отправления", "en": "Station of departure" },
+    { "tag": "table_field_ves", "ru": "Вес", "en": "The weight" },
+    { "tag": "table_field_type_cargo_code", "ru": "Тип груза(код ЕТСНГ)", "en": "Type of cargo (ETSNG code)" }
+
 ]

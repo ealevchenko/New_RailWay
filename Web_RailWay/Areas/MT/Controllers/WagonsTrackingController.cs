@@ -13,5 +13,15 @@ namespace Web_RailWay.Areas.MT.Controllers
         {
             return View();
         }
+
+        public ActionResult ReportOnline()
+        {
+            return View();
+        }
+
+        public ActionResult ReportArhive()
+        {
+            return View();
+        }
     }
 }

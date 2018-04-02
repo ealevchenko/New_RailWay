@@ -25,6 +25,55 @@ function getAsyncWagonsTracking(callback) {
     });
 }
 
+// Веруть список всех вагонов за которыми установлено слижение
+function getAsyncDBWagonsTracking(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+// Веруть список всех вагонов за которыми установлено слижение
+function getAsyncDBCarWagonsTracking(num, start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/car/' + num + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+
 // Веруть список составов на УЗ КР по которым есть не принятые вагоны
 function getNoCloseArrivalCarsOfStationUZ(code, callback) {
     $.ajax({

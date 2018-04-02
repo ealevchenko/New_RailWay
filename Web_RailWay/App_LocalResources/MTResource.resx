@@ -375,4 +375,16 @@
   <data name="index_report_hist_cars_amkr_title" xml:space="preserve">
     <value>Движение вагона</value>
   </data>
+  <data name="index_report_cars_amkr_db_desc" xml:space="preserve">
+    <value>Положение вагонов собственного парка, по данным ООО «МеталлургТранс» БД АМКР</value>
+  </data>
+  <data name="index_report_cars_amkr_db_title" xml:space="preserve">
+    <value>Вагоны БД АМКР</value>
+  </data>
+  <data name="index_report_cars_amkr_ol_desc" xml:space="preserve">
+    <value>Положение вагонов собственного парка, по данным ООО «МеталлургТранс» в режиме OnLine</value>
+  </data>
+  <data name="index_report_cars_amkr_ol_title" xml:space="preserve">
+    <value>Вагоны OnLine</value>
+  </data>
 </root>
