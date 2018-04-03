@@ -157,7 +157,6 @@
     <Folder Include="Areas\KIS\Models\" />
     <Folder Include="Areas\KIS\Views\Shared\" />
     <Folder Include="Areas\MT\Models\" />
-    <Folder Include="Areas\MT\Views\Test\" />
     <Folder Include="Areas\RW\Models\" />
     <Folder Include="Areas\RW\Views\Shared\" />
     <Folder Include="Areas\SAP\Models\" />

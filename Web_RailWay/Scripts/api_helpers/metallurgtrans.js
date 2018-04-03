@@ -49,6 +49,29 @@ function getAsyncDBWagonsTracking(callback) {
     });
 }
 
+function getAsyncDBWagonsTrackingOfReports(id_reports, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/report/'+ id_reports,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 // Веруть список всех вагонов за которыми установлено слижение
 function getAsyncDBCarWagonsTracking(num, start, stop, callback) {
     $.ajax({
@@ -72,7 +95,6 @@ function getAsyncDBCarWagonsTracking(num, start, stop, callback) {
         },
     });
 }
-
 
 // Веруть список составов на УЗ КР по которым есть не принятые вагоны
 function getNoCloseArrivalCarsOfStationUZ(code, callback) {
@@ -121,3 +143,28 @@ function getAsyncCarsOfArrivalUZ(id_sostav, is_close, callback) {
         },
     });
 }
+
+// Веруть список всех вагонов за которыми установлено слижение
+function getAsyncWTReports(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking/reports',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+

@@ -234,6 +234,157 @@ namespace Web_RailWay.Controllers.api
             public int? km { get; set; }
         }
 
+        #region WT
+
+        // GET: api/mt/wagons_tracking
+        [Route("wagons_tracking")]
+        public IHttpActionResult GetWagonsTracking()
+        {
+            WebApiClientMetallurgTrans client = new WebApiClientMetallurgTrans();
+            string result = client.GetJSONWagonsTracking();
+            if (result == null || result.ToList().Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(JsonConvert.DeserializeObject(result));
+        }
+
+        // GET: api/mt/wagons_tracking_arhiv
+        [Route("wagons_tracking_arhiv")]
+        [ResponseType(typeof(DBWagonsTracking))]
+        public IHttpActionResult GetDBWagonsTracking()
+        {
+            try
+            {
+                List<DBWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<DBWagonsTracking>("EXEC [MT].[GetDBWagonsTracking]").ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDBWagonsTracking()"), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/mt/wagons_tracking_arhiv/report/2
+        [Route("wagons_tracking_arhiv/report/{id_report:int}")]
+        [ResponseType(typeof(DBWagonsTracking))]
+        public IHttpActionResult GetDBWagonsTrackingOfCarsReports(int id_report)
+        {
+            try
+            {
+                SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+                List<DBWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<DBWagonsTracking>("EXEC [MT].[GetDBWagonsTrackingOfCarsReports] @idreport", i_id_report).ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDBWagonsTrackingOfCarsReports(id_report={0})", id_report), eventID);
+                return InternalServerError(e);
+            }
+        }
+        // GET: api/mt/wagons_tracking_arhiv/car/52921004/start/2018-03-29T00:00:00.000Z/stop/2018-03-29T23:59:59.000Z
+        [Route("wagons_tracking_arhiv/car/{num:int}/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(DBWagonsTracking))]
+        public IHttpActionResult GetDBCarWagonsTracking(int num, DateTime start, DateTime stop)
+        {
+            try
+            {
+                SqlParameter i_num = new SqlParameter("@num", num);
+                SqlParameter dt_start = new SqlParameter("@start", start);
+                SqlParameter dt_stop = new SqlParameter("@stop", stop);
+                List<DBWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<DBWagonsTracking>("EXEC [MT].[GetDBCarWagonsTracking] @num, @start, @stop", i_num, dt_start, dt_stop).ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDBCarWagonsTracking(num={0}, start={1}, stop={2})", num, start, stop), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/mt/wagons_tracking/reports
+        [Route("wagons_tracking/reports")]
+        [ResponseType(typeof(WTReports))]
+        public IHttpActionResult GetWTReports()
+        {
+            try
+            {
+                List<WTReports> list = this.rep_MT.WTReports
+                    .ToList()
+                    .Select(r => new WTReports
+                    {
+                        id = r.id,
+                        Report = r.Report,
+                        Description = r.Description
+                    }).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWTReports()"), eventID);
+                return InternalServerError(e);
+            }
+        }
+        #endregion
+
+        #region Arrival
+
+        // GET: api/mt/arrival/cars/station_uz/4670
+        [Route("arrival/cars/station_uz/{code:int?}")]
+        [ResponseType(typeof(CountCarsOfSostav))]
+        public IHttpActionResult GetNoCloseArrivalCarsOfStationUZ(int code)
+        {
+            List<CountCarsOfSostav> cars = this.rep_MT.GetNoCloseArrivalCarsOfStationUZ(code);
+            if (cars == null || cars.ToList().Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(cars);
+        }
+
+        // GET: api/mt/arrival/cars/sostav/7109/close/True
+        [Route("arrival/cars/sostav/{id_sostav:int}/close/{close:bool}")]
+        [ResponseType(typeof(awasArrivalCars))]
+        public IHttpActionResult GetArrivalCarsOfSostav(int id_sostav, bool close)
+        {
+            try
+            {
+                SqlParameter i_id = new SqlParameter("@idsostav", id_sostav);
+                SqlParameter b_close = new SqlParameter("@close", close);
+                List<awasArrivalCars> arr_cars = this.rep_MT.Database.SqlQuery<awasArrivalCars>("EXEC [MT].[GetArrivalCarsOfSostav] @idsostav, @close", i_id, b_close).ToList();
+                if (arr_cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(arr_cars);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfSostav(id_sostav={0}, close={1})", id_sostav, close), eventID);
+                return InternalServerError(e);
+            }
+        }
+        #endregion
+
+        #region Approaches
+
         // GET: api/mt/approaches/sostav
         //[Route("approaches/sostav")]
         //public IEnumerable<ApproachesSostav> GetApproachesSostav()
@@ -271,102 +422,8 @@ namespace Web_RailWay.Controllers.api
             ApproachesCars new_cars = CreateCorectApproachesCars(cars);
             return Ok(new_cars);
         }
+        #endregion
 
-
-
-        // GET: api/mt/wagons_tracking
-        [Route("wagons_tracking")]
-        public IHttpActionResult GetWagonsTracking()
-        {
-            WebApiClientMetallurgTrans client = new WebApiClientMetallurgTrans();
-            string result = client.GetJSONWagonsTracking();
-            if (result == null || result.ToList().Count() == 0)
-            {
-                return NotFound();
-            }
-            return Ok(JsonConvert.DeserializeObject(result));
-        }
-
-        // GET: api/mt/wagons_tracking_arhiv
-        [Route("wagons_tracking_arhiv")]
-        [ResponseType(typeof(DBWagonsTracking))]
-        public IHttpActionResult GetDBWagonsTracking()
-        {
-            try
-            {
-                List<DBWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<DBWagonsTracking>("EXEC [MT].[GetDBWagonsTracking]").ToList();
-                if (arr_cars == null)
-                {
-                    return NotFound();
-                }
-                return Ok(arr_cars);
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetDBWagonsTracking()"), eventID);
-                return InternalServerError(e);
-            }
-        }
-
-        // GET: api/mt/wagons_tracking_arhiv/car/52921004/start/2018-03-29T00:00:00.000Z/stop/2018-03-29T23:59:59.000Z
-        [Route("wagons_tracking_arhiv/car/{num:int}/start/{start:datetime}/stop/{stop:datetime}")]
-        [ResponseType(typeof(DBWagonsTracking))]
-        public IHttpActionResult GetDBCarWagonsTracking(int num, DateTime start, DateTime stop)
-        {
-            try
-            {
-                SqlParameter i_num = new SqlParameter("@num", num);
-                SqlParameter dt_start = new SqlParameter("@start", start);
-                SqlParameter dt_stop = new SqlParameter("@stop", stop);
-                List<DBWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<DBWagonsTracking>("EXEC [MT].[GetDBCarWagonsTracking] @num, @start, @stop",i_num,dt_start,dt_stop).ToList();
-                if (arr_cars == null)
-                {
-                    return NotFound();
-                }
-                return Ok(arr_cars);
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetDBCarWagonsTracking(num={0}, start={1}, stop={2})",num,start,stop), eventID);
-                return InternalServerError(e);
-            }
-        }
-
-        // GET: api/mt/arrival/cars/station_uz/4670
-        [Route("arrival/cars/station_uz/{code:int?}")]
-        [ResponseType(typeof(CountCarsOfSostav))]
-        public IHttpActionResult GetNoCloseArrivalCarsOfStationUZ(int code)
-        {
-            List<CountCarsOfSostav> cars = this.rep_MT.GetNoCloseArrivalCarsOfStationUZ(code);
-            if (cars == null || cars.ToList().Count() == 0)
-            {
-                return NotFound();
-            }
-            return Ok(cars);
-        }
-
-        // GET: api/mt/arrival/cars/sostav/7109/close/True
-        [Route("arrival/cars/sostav/{id_sostav:int}/close/{close:bool}")]
-        [ResponseType(typeof(awasArrivalCars))]
-        public IHttpActionResult GetArrivalCarsOfSostav(int id_sostav, bool close)
-        {
-            try
-            {
-                SqlParameter i_id = new SqlParameter("@idsostav", id_sostav);
-                SqlParameter b_close = new SqlParameter("@close", close);
-                List<awasArrivalCars> arr_cars = this.rep_MT.Database.SqlQuery<awasArrivalCars>("EXEC [MT].[GetArrivalCarsOfSostav] @idsostav, @close", i_id, b_close).ToList();
-                if (arr_cars == null)
-                {
-                    return NotFound();
-                }
-                return Ok(arr_cars);
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetArrivalCarsOfSostav(id_sostav={0}, close={1})", id_sostav, close), eventID);
-                return InternalServerError(e);
-            }
-        }
 
 
     }
