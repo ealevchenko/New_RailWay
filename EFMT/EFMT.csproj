@@ -60,6 +60,9 @@
     <Compile Include="Entities\ArrivalCars.cs" />
     <Compile Include="Entities\ArrivalSostav.cs" />
     <Compile Include="Entities\Consignee.cs" />
+    <Compile Include="Entities\ListWagonsTracking.cs" />
+    <Compile Include="Entities\WTCarsReports.cs" />
+    <Compile Include="Entities\WTReports.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -23,6 +23,9 @@ namespace EFMT.Concrete
         public virtual DbSet<Consignee> Consignee { get; set; }
 
         public virtual DbSet<WagonsTracking> WagonsTracking { get; set; }
+        public virtual DbSet<ListWagonsTracking> ListWagonsTracking { get; set; }
+        public virtual DbSet<WTCarsReports> WTCarsReports { get; set; }
+        public virtual DbSet<WTReports> WTReports { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -41,6 +44,19 @@ namespace EFMT.Concrete
             modelBuilder.Entity<WagonsTracking>()
                 .Property(e => e.ves)
                 .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ListWagonsTracking>()
+                .HasMany(e => e.WTCarsReports)
+                .WithRequired(e => e.ListWagonsTracking)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<WTReports>()
+                .HasMany(e => e.WTCarsReports)
+                .WithRequired(e => e.WTReports)
+                .HasForeignKey(e => e.id_wtreport)
+                .WillCascadeOnDelete(false);
+
+
         }
 
     }

@@ -114,6 +114,30 @@ namespace EFMT.Abstract
         IQueryable<WagonsTracking> GetWagonsTrackingOfNumCars(int num);
         #endregion
 
+        #region ListWagonsTracking
+        IQueryable<ListWagonsTracking> ListWagonsTracking { get; }
+        IQueryable<ListWagonsTracking> GetListWagonsTracking();
+        ListWagonsTracking GetListWagonsTracking(int nvagon);
+        int SaveListWagonsTracking(ListWagonsTracking ListWagonsTracking);
+        ListWagonsTracking DeleteListWagonsTracking(int nvagon);
+        #endregion
+
+        #region WTReports
+        IQueryable<WTReports> WTReports { get; }
+        IQueryable<WTReports> GetWTReports();
+        WTReports GetWTReports(int id);
+        int SaveWTReports(WTReports WTReports);
+        WTReports DeleteWTReports(int id);
+        #endregion
+
+        #region WTCarsReports
+        IQueryable<WTCarsReports> WTCarsReports { get; }
+        IQueryable<WTCarsReports> GetWTCarsReports();
+        WTCarsReports GetWTCarsReports(int id);
+        int SaveWTCarsReports(WTCarsReports WTCarsReports);
+        WTCarsReports DeleteWTCarsReports(int id);
+        #endregion
+
         #region CountCarsOfSostav
         List<CountCarsOfSostav> GetNoCloseArrivalCarsOfStationUZ(int code);
         List<CountCarsOfSostav> GetArrivalCarsOfStationUZ(int code, bool close);
