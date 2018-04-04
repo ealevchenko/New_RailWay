@@ -46,7 +46,7 @@ function selectStations(name, value) {
 // Заполнить компонент select списком станций 
 function selectListStations(obj, value, cng, exceptions) {
     $.ajax({
-        url: '/railway/api/rw/stations/view/amkr',
+        url: '/railway/api/rw/stations/view',
         type: 'GET',
         async: false,
         dataType: 'json',
@@ -495,6 +495,30 @@ function getAsyncArrivalSostavOfStationUZ(id_station_uz, callback) {
         },
     });
 }
+// Получить список составов на станции уз (15,16)
+function getAsyncArrivalSostavOfStationsUZ(list_station_uz, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/arrival/sostav/stations/' + list_station_uz,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 // Получить информацию по вагонам на указаном пути
 function getAsyncCarsOnWayUZ(id_way, id_arrival, side, callback) {
     $.ajax({

@@ -2,7 +2,11 @@
     { "tag": "odd", "ru": "Нечетная", "en": "odd" },
     { "tag": "even", "ru": "Четная", "en": "even" },
 
-    { "tag": "label_title_view_sap", "ru": "САП", "en": "SAP" },
+    { "tag": "label_view_inp_cargo", "ru": "Вх. груз", "en": "In. cargo" },
+    { "tag": "label_view_inp_sap", "ru": "Вх. САП", "en": "In. SAP" },
+    { "tag": "label_view_out_cargo", "ru": "Исх. груз", "en": "Out. cargo" },
+    { "tag": "label_view_out_sap", "ru": "Исх. САП", "en": "Out. SAP" },
+    { "tag": "label_view_email", "ru": "Письма", "en": "Letters" },
 
     { "tag": "table_message_emptyTable", "ru": "Данные отсутствуют.", "en": "No data available in table." },
     { "tag": "table_field_num", "ru": "№", "en": "#" },

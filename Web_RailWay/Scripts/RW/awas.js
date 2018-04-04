@@ -3,6 +3,7 @@
     // Объявление глобальных переменных
     //-----------------------------------------------------------------------------------------
     var lang = $.cookie('lang'),
+        //------------------------------------
         // Ресурс локализации 
         resurses = {
             list: null,
@@ -24,45 +25,54 @@
             }
         },
         // Элементы 
-        //label_view_mt = $('<label for="view-mt">' + (lang == 'en' ? "MetallurgTrans" : "МеталургТранс") + '</label>'),
-        //checkbox_view_mt = $('<input type="checkbox" name="view" id="view-mt" checked="checked" >'),
-        label_view_sap = $('<label for="view-sap"></label>'),
-        checkbox_view_sap = $('<input type="checkbox" name="view" id="view-sap" checked="checked" >'),
-        //label_view_email = $('<label for="view-email">' + (lang == 'en' ? "Writing" : "Письма") + '</label>'),
-        //checkbox_view_email = $('<input type="checkbox" name="view" id="view-email" checked="checked" >'),
-        //label_view_outcars = $('<label for="view-outcars">' + (lang == 'en' ? "Shipped goods" : "Отправляемые грузы") + '</label>'),
-        //checkbox_view_outcars = $('<input type="checkbox" name="view" id="view-outcars" checked="checked" >'),
+        label_view_inp_cargo = $('<label for="view-inp-cargo"></label>'),
+        checkbox_view_inp_cargo = $('<input type="checkbox" name="view" id="view-inp-cargo" checked="checked" >'),
+        label_view_out_cargo = $('<label for="view-out-cargo"></label>'),
+        checkbox_view_out_cargo = $('<input type="checkbox" name="view" id="view-out-cargo" checked="checked" >'),
+        label_view_inp_sap = $('<label for="view-inp-sap"></label>'),
+        checkbox_view_inp_sap = $('<input type="checkbox" name="view" id="view-inp-sap">'),
+        label_view_out_sap = $('<label for="view-out-sap"></label>'),
+        checkbox_view_out_sap = $('<input type="checkbox" name="view" id="view-out-sap">'),
+        label_view_email = $('<label for="view-email"></label>'),
+        checkbox_view_email = $('<input type="checkbox" name="view" id="view-email">'),
         // Панель нстроек отображения информации
         panel_view = {
             html_div: $('<div class="dt-buttons setup-operation" id="property_view_cars"></div>'),
             handleToggle: function (e) {
                 var target = $(e.target);
-                //if (target.is("#view-mt")) {
-                //    cars.enableColumsMT(target[0].checked);
-                //}
-                if (target.is("#view-sap")) {
-                    table_cars_details.enableColumsSAP(target[0].checked);
+                if (target.is("#view-inp-cargo")) {
+                    table_cars_details.enableColumsInpCargo(target[0].checked);
                 }
-                //if (target.is("#view-email")) {
-                //    cars.enableColumsEMAIL(target[0].checked);
-                //}
-                //if (target.is("#view-outcars")) {
-                //    cars.enableColumsOutCars(target[0].checked);
-                //}
+                if (target.is("#view-inp-sap")) {
+                    table_cars_details.enableColumsInpSAP(target[0].checked);
+                }
+                if (target.is("#view-out-cargo")) {
+                    table_cars_details.enableColumsOutCargo(target[0].checked);
+                }
+                if (target.is("#view-out-sap")) {
+                    table_cars_details.enableColumsOutSAP(target[0].checked);
+                }
+                if (target.is("#view-email")) {
+                    table_cars_details.enableColumsEmail(target[0].checked);
+                }
             },
             initPanel: function () {
                 this.html_div.empty();
                 this.html_div
-                    //.append(panel.element.label_view_mt).append(panel.element.checkbox_view_mt)
-                    .append(label_view_sap.text(resurses.getText("label_title_view_sap"))).append(checkbox_view_sap)
-                        //.append(panel.element.label_view_email).append(panel.element.checkbox_view_email)
-                        //.append(panel.element.label_view_outcars).append(panel.element.checkbox_view_outcars)
-                ;
+                    .append(label_view_inp_cargo.text(resurses.getText("label_view_inp_cargo"))).append(checkbox_view_inp_cargo)
+                    .append(label_view_inp_sap.text(resurses.getText("label_view_inp_sap"))).append(checkbox_view_inp_sap)
+                    .append(label_view_out_cargo.text(resurses.getText("label_view_out_cargo"))).append(checkbox_view_out_cargo)
+                    .append(label_view_out_sap.text(resurses.getText("label_view_out_sap"))).append(checkbox_view_out_sap)
+                    .append(label_view_email.text(resurses.getText("label_view_email"))).append(checkbox_view_email);
                 this.html_div.controlgroup();
-                //panel.element.checkbox_view_mt.on("change", panel.view.handleToggle);
-                checkbox_view_sap.on("change", panel_view.handleToggle);
-                //panel.element.checkbox_view_email.on("change", panel.view.handleToggle);
-                //panel.element.checkbox_view_outcars.on("change", panel.view.handleToggle);
+                checkbox_view_inp_cargo.on("change", panel_view.handleToggle);
+                checkbox_view_inp_sap.on("change", panel_view.handleToggle);
+                checkbox_view_out_cargo.on("change", panel_view.handleToggle);
+                checkbox_view_out_sap.on("change", panel_view.handleToggle);
+                checkbox_view_email.on("change", panel_view.handleToggle);
+
+                //checkbox_view_inp_sap.checked = false;
+
             },
             show: function () {
                 this.html_div.show();
@@ -128,12 +138,12 @@
     //    },
     //},
 
-
+    //------------------------------------
     // Панель управления и отображения
     panel = {
         initObject: function (obj) {
             // Всегда показывать
-            panel_view.initPanel(); 
+            panel_view.initPanel();
             //panel.info.initPanel();
             //obj.prepend(panel.accept.obj);
             //obj.prepend(panel.sent.obj);
@@ -147,6 +157,7 @@
             panel_view.show();
         }
     },
+    //------------------------------------
     // Группы спиков
     tab_group_list = {
         html_div: $("#group-list"),
@@ -211,6 +222,7 @@
             }
         },
     },
+    //------------------------------------
     // class CarsOnWay
     cars_on_way = {
         id: null,
@@ -220,11 +232,12 @@
         cars: null,
         capacity: null,
     },
+    //------------------------------------
+    // Таблица вагоны на пути станции
     table_ways = {
         name: 'ways',
         station_id: null,
         select: cars_on_way,
-        //select_obj: null,
         html_table: $('#table-list-ways'),
         html_div_table: null,
         obj: null,
@@ -242,7 +255,7 @@
                 jQueryUI: true,
                 "createdRow": function (row, data, index) {
                     $(row).attr('id', data.id);
-                    if (data.id == table_ways.select.id) {
+                    if (table_ways.select != null && data.id == table_ways.select.id) {
                         $(row).addClass('selected');
                     }
                 },
@@ -324,12 +337,12 @@
                 }
             };
         },
-        //clearListSelect: function () {
-        //    this.list = null;
-        //    this.select = null;
-        //    this.select_obj = null;
-        //}
+        clearListSelect: function () {
+            this.list = null;
+            this.select = null;
+        }
     },
+    //------------------------------------
     // группа список путей
     group_list_ways = {
         html_div: $("#group-list-ways"),
@@ -341,6 +354,7 @@
             table_ways.viewTable(id_station, false, null);
         },
     },
+    //------------------------------------
     // группа список вогоноопрокидов
     group_list_wo = {
         html_div: $("#group-list-wagonoverturns"),
@@ -351,6 +365,7 @@
             this.html_div.show();
         },
     },
+    //------------------------------------
     // группа список цехов
     group_list_shops = {
         html_div: $("#group-list-shops"),
@@ -361,6 +376,7 @@
             this.html_div.show();
         },
     },
+    //------------------------------------
     // группа список прибытия по АМКР
     group_list_arrival = {
         html_div: $("#group-list-arrival-amkr"),
@@ -371,21 +387,25 @@
             this.html_div.show();
         },
     },
+    //------------------------------------
     // class ArrivalSostav
     arrival_sostav = {
-        id_way: null,
         id_sostav: null,
         id_arrival: null,
         index: null,
         dt_inp_station: null,
+        id_station: null,
+        name_ru: null,
+        name_en: null,
+        id_way: null,
         cars: null,
     },
+    //------------------------------------
     // таблица прибытия на станци УЗ
     table_arrival_uz = {
         name: 'arrival_uz',
         station_id: null,
         select: arrival_sostav,
-        //select_obj: null,
         html_table: $('#table-list-arrival-uz'),
         html_div_table: null,
         obj: null,
@@ -403,11 +423,12 @@
                 jQueryUI: true,
                 "createdRow": function (row, data, index) {
                     $(row).attr('id', data.id_sostav);
-                    if (data.id_sostav == table_arrival_uz.select.id_sostav) {
+                    if (table_arrival_uz.select != null && data.id_sostav == table_arrival_uz.select.id_sostav) {
                         $(row).addClass('selected');
                     }
                 },
                 columns: [
+                    { data: "station", title: "Станция" },
                     { data: "index", title: "Состав" },
                     { data: "dt_inp_station", title: "Дата и время" },
                     { data: "cars", title: "Кол. ваг.", width: "30px" },
@@ -444,6 +465,7 @@
             for (i = 0; i < data.length; i++) {
                 // Добавим данные о станциях
                 this.obj.row.add({
+                    "station": lang == 'en' ? data[i].name_en : data[i].name_ru,
                     "id_sostav": data[i].id_sostav,
                     "index": data[i].index,
                     "dt_inp_station": data[i].dt_inp_station,
@@ -459,13 +481,21 @@
                 this.html_div_table.hide();
             }
         },
-        viewTable: function (station_id, data_refresh, callback) {
-
-            if (this.list == null | this.station_id != station_id | data_refresh == true) {
+        // Показать таблицу 
+        viewTable: function (station, data_refresh, callback) {
+            if (data_refresh == true || table_arrival_uz.station_id == null || table_arrival_uz.station_id != station.id || table_arrival_uz.list == null) {
                 // Обновим данные
-                this.station_id = station_id;
-                getAsyncArrivalSostavOfStationUZ(
-                    station_id,
+                table_arrival_uz.station_id = station.id;
+                var list_id_uz = '';
+                for (i = 0; i < station.arrival_uz.length; i++) {
+                    list_id_uz += station.arrival_uz[i].id;
+
+                    if (i < station.arrival_uz.length - 1) {
+                        list_id_uz += ',';
+                    }
+                }
+                getAsyncArrivalSostavOfStationsUZ(
+                    list_id_uz,
                     function (result) {
                         table_arrival_uz.loadData(result);
                         table_arrival_uz.enableTable(result.length);
@@ -483,12 +513,12 @@
                 }
             };
         },
-        //clearListSelect: function () {
-        //    this.list = null;
-        //    this.select = null;
-        //    this.select_obj = null;
-        //}
+        clearListSelect: function () {
+            this.list = null;
+            this.select = null;
+        }
     },
+    //------------------------------------
     // группа список прибытия по УЗ
     group_list_arrival_uz = {
         html_div: $("#group-list-arrival-uz"),
@@ -497,11 +527,11 @@
         },
         show: function (station, refresh) {
             this.html_div.show();
-            //!!!!!!!!!!!!!выполнить механизм распознования сопряженных станций УЗ
-            table_arrival_uz.viewTable(15, false, null);
+            table_arrival_uz.viewTable(station, false, null);
         },
 
     },
+    //------------------------------------
     // группа список прибытия по УЗ
     group_list_sending = {
         html_div: $("#group-list-sending"),
@@ -512,10 +542,10 @@
             this.html_div.show();
         },
     },
+    //------------------------------------
     // Таблица вагоны детально
     table_cars_details = {
         select: null,
-        //select_obj: null,
         html_table: $('#table-list-cars'),
         html_div_table: null,
         obj: null,
@@ -589,6 +619,18 @@
             this.html_div_table = $('DIV#table-list-cars_wrapper');
             panel.initObject(this.html_div_table); // Инициализируем панель 
             this.initEventSelect();
+            // Отображение полей по умолчанию
+            var view_inp_cargo = checkbox_view_inp_cargo.attr('checked');
+            this.enableColumsInpCargo(view_inp_cargo != null ? view_inp_cargo : false);
+            var view_out_cargo = checkbox_view_out_cargo.attr('checked');
+            this.enableColumsOutCargo(view_out_cargo != null ? view_out_cargo : false);
+            var view_inp_sap = checkbox_view_inp_sap.attr('checked');
+            this.enableColumsInpSAP(view_inp_sap != null ? view_inp_sap : false);
+            var view_out_sap = checkbox_view_out_sap.attr('checked');
+            this.enableColumsOutSAP(view_out_sap != null ? view_out_sap : false);
+            var view_email = checkbox_view_email.attr('checked');
+            this.enableColumsEmail(view_email != null ? view_email : false);
+
             this.html_div_table.hide();
         },
         initEventSelect: function () {
@@ -616,13 +658,25 @@
         allSelect: function () {
             this.table.find('tbody tr').addClass('selected');
         },
+        sortPosition: function () {
+            if (tab_group_list.active == 0) {
+                if (rw_side.select_side.id == rw_side.out_default) {
+                    this.obj.order([0, 'desc']);
+                } else {
+                    this.obj.order([0, 'asc']);
+                }
+            } else {
+                this.obj.order([0, 'asc']);
+            }
+            this.obj.draw();
+        },
         loadData: function (data) {
             this.list = data;
             this.obj.clear();
             for (i = 0; i < data.length; i++) {
                 // Добавим данные о станциях
                 this.obj.row.add({
-                    "id_operations": data[i].id_operations,
+                    "id_operations": data[i].id_operations, //0
                     "position": data[i].position,
                     "num": data[i].num,
                     "type_cars_abr": lang == 'en' ? data[i].type_cars_abr_en : data[i].type_cars_abr_ru,
@@ -654,7 +708,9 @@
                     "inp_new_shop_name_sap": data[i].inp_new_shop_name_sap,
                 });
             };
-            this.obj.draw();
+            // Перестроить последовательность нумерации вагонов
+            this.sortPosition();
+            //this.obj.draw(); - это делается в this.sortPosition();
         },
         // Показать таблицу ессли есть значения
         enableTable: function (length) {
@@ -711,19 +767,32 @@
 
             }
         },
-        enableColumsSAP: function (view) {
+        enableColumsInpCargo: function (view) {
+            this.obj.columns([9,10,11,13]).visible(view, true);
+            this.obj.draw(false);
+        },
+        enableColumsInpSAP: function (view) {
             this.obj.columns([15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]).visible(view, true);
             this.obj.draw(false);
         },
-        //clearListSelect: function () {
-        //    this.list = null;
-        //    this.select = null;
-        //    this.select_obj = null;
-        //}
+        enableColumsOutCargo: function (view) {
+            //this.obj.columns([]).visible(view, true);
+            //this.obj.draw(false);
+        },
+        enableColumsOutSAP: function (view) {
+            //this.obj.columns([]).visible(view, true);
+            //this.obj.draw(false);
+        },
+        enableColumsEmail: function (view) {
+            //this.obj.columns([]).visible(view, true);
+            //this.obj.draw(false);
+        },
+        clearListSelect: function () {
+            //this.list = null;
+            //this.select = null;
+        }
     },
-
-
-
+    //------------------------------------
     //class station
     station = {
         id: -1,
@@ -737,6 +806,7 @@
         code_uz: null,
         arrival_uz: null
     },
+    //------------------------------------
     // Объект станции системы
     rw_stations = {
         html_select: $('select[name ="station"]'),
@@ -806,6 +876,10 @@
                 rw_side.setSideOfStation(rw_stations.select_station.default_side);
                 // Показать панели групп
                 tab_group_list.activeOfStation(rw_stations.select_station);
+                // При выборе новой станции очистить данные по таблицам
+                table_cars_details.clearListSelect();
+                table_ways.clearListSelect();
+                table_arrival_uz.clearListSelect();
 
                 //getAsyncShopsOfStation(station.id_rc, function (result_shop) {
                 //    station.list_shops = result_shop;
@@ -829,6 +903,7 @@
         id: 0,
         side: null,
     },
+    //------------------------------------
     //Горловина станции
     rw_side = {
         select_side: side,
@@ -870,8 +945,8 @@
             if (side != null && side.length > 0) {
                 rw_side.select_side.id = side[0].value;
                 rw_side.select_side.side = side[0].text;
-                //
-                //cars.sortPosition();
+                // Перестроить позицию вагонов
+                table_cars_details.sortPosition();
             }
         },
         // Определить горловину выхода при выборе станции
@@ -902,17 +977,13 @@
     // Инициализация объектов
     //-----------------------------------------------------------------------------------------
 
-    resurses.initObject("../Scripts/RW/awas.json",
+    resurses.initObject("/railway/Scripts/RW/awas.json",
         function () {
             // Загружаем дальше
-
-
-            tab_group_list.initObject();        // Панель переключения групп
+            tab_group_list.initObject();    // Панель переключения групп
             table_cars_details.initTable(); // таблица информация по вагонам детально
             table_ways.initTable();         // таблица вагоны на путях станций
             table_arrival_uz.initTable();   // таблица прибытия на станции УЗ
-
-
 
             rw_stations.initObject(true);       // Выбор станций системы RailWay
             rw_side.initObject(true);           // Выбор горловины станций системы RailWay
