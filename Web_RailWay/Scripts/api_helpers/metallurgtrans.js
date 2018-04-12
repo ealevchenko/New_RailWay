@@ -168,3 +168,50 @@ function getAsyncWTReports(callback) {
     });
 }
 
+// Веруть список всех вагонов за которыми установлено слижение
+function getAsyncLastWagonTrackingOfReports(id_reports, start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/last/report/' + id_reports + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+// Веруть список всех вагонов за которыми установлено слижение
+function getAsyncLastWagonTrackingAndDateTimeOfReports(id_reports, start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/last_dt/report/' + id_reports + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}

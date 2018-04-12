@@ -7,12 +7,12 @@
     },
     {
         "tag": "link_tabs_1",
-        "ru": "Отчет№1",
+        "ru": "Операции",
         "en": "Reports#1"
     },
     {
         "tag": "link_tabs_2",
-        "ru": "Отчет№2",
+        "ru": "Маршруты",
         "en": "Reports#2"
     },
     {
@@ -30,6 +30,11 @@
         "ru": "Отчет№5",
         "en": "Reports#5"
     },
+
+    { "tag": "link_tabs_routes_1", "ru": "Все маршруты", "en": "All routes" },
+    { "tag": "link_tabs_routes_2", "ru": "Текущее местоположение", "en": "Current location" },
+    { "tag": "link_tabs_routes_3", "ru": "Текущая оборачиваемость", "en": "Current turnover" },
+
     { "tag": "table_field_nameop", "ru": "Операция", "en": "Operation" },
     { "tag": "table_field_dt", "ru": "Дата и время", "en": "Date And Time" },
     { "tag": "table_field_nst_disl", "ru": "Станция дислокации", "en": "Dislocation station" },

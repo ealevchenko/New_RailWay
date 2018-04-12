@@ -24,7 +24,9 @@
                 return result;
             }
         },
+        //------------------------------------
         // Элементы 
+        //  - панель отображения
         label_view_inp_cargo = $('<label for="view-inp-cargo"></label>'),
         checkbox_view_inp_cargo = $('<input type="checkbox" name="view" id="view-inp-cargo" checked="checked" >'),
         label_view_out_cargo = $('<label for="view-out-cargo"></label>'),
@@ -35,6 +37,168 @@
         checkbox_view_out_sap = $('<input type="checkbox" name="view" id="view-out-sap">'),
         label_view_email = $('<label for="view-email"></label>'),
         checkbox_view_email = $('<input type="checkbox" name="view" id="view-email">'),
+        //  - панель информации
+        label_info = $('<label id="view-info"></label>'),
+        //  - режимы работы 
+        label_mode_view = $('<label for="mode-view"></label>'),
+        radio_mode_view = ('<input type="radio" name="mode" id="mode-view" checked="checked" >'),
+        label_mode_manevr = $('<label for="mode-manevr"></label>'),
+        radio_mode_manevr = $('<input type="radio" name="mode" id="mode-manevr">'),
+        label_mode_sending = $('<label for="mode-sending"></label>'),
+        radio_mode_sending = $('<input type="radio" name="mode" id="mode-sending">'),
+        label_mode_correction = $('<label for="mode-correction"></label>'),
+        radio_mode_correction = $('<input type="radio" name="mode" id="mode-correction">'),
+        label_mode_statepark = $('<label for="mode-statepark"></label>'),
+        radio_mode_statepark = $('<input type="radio" name="mode" id="mode-statepark">'),
+        label_mode_accept = $('<label for="mode-accept"></label>'),
+        radio_mode_accept = $('<input type="radio" name="mode" id="mode-accept">'),
+        label_mode_transit = $('<label for="mode-transit"></label>'),
+        radio_mode_transit = $('<input type="radio" name="mode" id="mode-transit">'),
+
+        panel_detali = $('#detali-group'), // Панель отображения данных по группам
+        //------------------------------------
+        // Панель режимов 
+        panel_mode = {
+            active: 0,
+            html_div: $('<div class="dt-buttons setup-operation" id="property_view_mode"></div>'),
+            initPanel: function (view, manevr, sending, accept, transit, correction, statepark) {
+                this.html_div.empty();
+                if (view) {
+                    this.html_div.append(label_mode_view.text(resurses.getText("label_mode_view"))).append(radio_mode_view);
+                };
+                if (manevr) {
+                    this.html_div.append(label_mode_manevr.text(resurses.getText("label_mode_manevr"))).append(radio_mode_manevr);
+                };
+                if (sending) {
+                    this.html_div.append(label_mode_sending.text(resurses.getText("label_mode_sending"))).append(radio_mode_sending);
+                };
+                if (accept) {
+                    this.html_div.append(label_mode_accept.text(resurses.getText("label_mode_accept"))).append(radio_mode_accept);
+                };
+                if (transit) {
+                    this.html_div.append(label_mode_transit.text(resurses.getText("label_mode_transit"))).append(radio_mode_transit);
+                };
+                if (correction) {
+                    this.html_div.append(label_mode_correction.text(resurses.getText("label_mode_correction"))).append(radio_mode_correction);
+                };
+                if (statepark) {
+                    this.html_div.append(label_mode_statepark.text(resurses.getText("label_mode_statepark"))).append(radio_mode_statepark);
+                };
+                this.html_div.controlgroup();
+                // Выберем режим просмотра
+                $("#mode-view").prop('checked', true);
+                //panel_mode.activeView();
+                // определим событие выбора режима
+                $("[name='mode']").on("change", panel_mode.selectToggle);
+                panel_mode.html_div.controlgroup("refresh"); // Обновим 
+            },
+            selectToggle: function (e) {
+                var target = $(e.target);
+                if (target.is("#mode-view")) {
+                    panel_mode.activeView();
+                }
+                if (target.is("#mode-manevr")) {
+                    panel_mode.activeManevr();
+                }
+                if (target.is("#mode-sending")) {
+                    panel_mode.activeSending();
+                }
+                if (target.is("#mode-correction")) {
+                    panel_mode.activeCorrection();
+                }
+                if (target.is("#mode-statepark")) {
+                    panel_mode.activeStatepark();
+                }
+                if (target.is("#mode-accept")) {
+                    panel_mode.activeAccept();
+                }
+                if (target.is("#mode-transit")) {
+                    panel_mode.activeTransit();
+                }
+            },
+            show: function () {
+                this.html_div.show();
+            },
+            hide: function () {
+                this.html_div.hide();
+            },
+            activeView: function () {
+                panel_mode.active = 0;
+                //panel.manevr.obj.hide();
+                //panel.sent.obj.hide();
+                //panel.arrival.obj.hide();
+                //panel.accept.obj.hide();
+                //cars.clearSelect();
+                //panel_detali.removeClass();
+            },
+            activeManevr: function () {
+                panel_mode.active = 1;
+                //panel.manevr.obj.show(); panel.manevr.initPanel();
+                //panel.sent.obj.hide();
+                //panel.arrival.obj.hide();
+                //panel.accept.obj.hide();
+                ////panel.transit.obj.hide();
+                //cars.clearSelect();
+                //panel_detali.removeClass();
+                //panel_detali.addClass('mode-manevr');
+            },
+            activeSending: function () {
+                panel_mode.active = 2;
+                //panel.manevr.obj.hide();
+                //panel.sent.obj.show(); panel.sent.initPanel();
+                //panel.arrival.obj.hide();
+                //panel.accept.obj.hide();
+                ////panel.transit.obj.hide();
+                //cars.clearSelect();
+                //panel_detali.removeClass();
+                //panel_detali.addClass('mode-sending');
+            },
+            activeAccept: function () {
+                panel_mode.active = 3;
+                //panel.manevr.obj.hide();
+                //panel.sent.obj.hide();
+                //panel.arrival.obj.hide();
+                //panel.accept.obj.show(); panel.accept.initPanel();
+                ////panel.transit.obj.hide();
+                //cars.clearSelect();
+                //panel_detali.removeClass();
+                //panel_detali.addClass('mode-accept');
+            },
+            activeTransit: function () {
+                panel_mode.active = 4;
+                //panel.manevr.obj.hide();
+                //panel.sent.obj.hide();
+                //panel.arrival.obj.hide();
+                //panel.accept.obj.show(); panel.accept.initPanel();
+                ////panel.transit.obj.show(); panel.transit.initPanel();
+                //cars.clearSelect();
+                //panel_detali.removeClass();
+                //panel_detali.addClass('mode-transit');
+            },
+            activeCorrection: function () {
+                panel_mode.active = 5;
+                //panel.manevr.obj.hide();
+                //panel.sent.obj.hide();
+                //panel.arrival.obj.hide();
+                //panel.accept.obj.hide();
+                ////panel.transit.obj.hide();
+                //cars.clearSelect();
+                //panel_detali.removeClass();
+                //panel_detali.addClass('mode-correction');
+            },
+            activeStatepark: function () {
+                panel_mode.active = 6;
+                //panel.manevr.obj.hide();
+                //panel.sent.obj.hide();
+                //panel.arrival.obj.hide();
+                //panel.accept.obj.hide();
+                ////panel.transit.obj.hide();
+                //cars.clearSelect();
+                //panel_detali.removeClass();
+                //panel_detali.addClass('mode-statepark');
+            },
+        },
+        //------------------------------------
         // Панель нстроек отображения информации
         panel_view = {
             html_div: $('<div class="dt-buttons setup-operation" id="property_view_cars"></div>'),
@@ -81,147 +245,154 @@
                 this.html_div.hide();
             },
         },
-    // Панель отображения информации
-    //panel_info = {
-    //    html_div: $('<div class="dt-buttons setup-operation" id="property_info"></div>'),
-    //    initPanel: function () {
-    //        this.obj.append(panel.element.label_info);
-    //    },
-    //    viewInfo: function (obj_select) {
-    //        switch (obj_select.name) {
-    //            case 'list_ways':
-    //                if (obj_select.select_obj != null) {
-    //                    panel.info.viewInfoText('Выбран путь : ' + obj_select.select_obj.num + ' - ' + obj_select.select_obj.name);
-    //                } else {
-    //                    panel.info.viewInfoText('Путь не выбран');
-    //                };
-    //                break;
-    //            case 'list_wagonoverturns':
-    //                if (obj_select.select_obj != null) {
-    //                    panel.info.viewInfoText('Выбран вагоноопрокид : ' + obj_select.select_obj.name);
-    //                } else {
-    //                    panel.info.viewInfoText('Вагоноопрокид не выбран');
-    //                };
-    //                break;
-    //            case 'list_shops':
-    //                if (obj_select.select_obj != null) {
-    //                    panel.info.viewInfoText('Выбран цех : ' + obj_select.select_obj.name);
-    //                } else {
-    //                    panel.info.viewInfoText('Цех не выбран');
-    //                };
-    //                break;
-    //            case 'list_arrival_amkr':
-    //                if (obj_select.select_obj != null) {
-    //                    panel.info.viewInfoText('Выбран прибывающий состав, станция отправления :' + obj_select.select_obj.stat
-    //                        + ', № поезда :' + obj_select.select_obj.st_lock_train
-    //                        + ', Дата и время отправления :' + obj_select.select_obj.dt_from_stat);
-    //                } else {
-    //                    panel.info.viewInfoText('Состав не выбран');
-    //                };
-    //                break;
-    //            case 'list_sending':
-    //                if (obj_select.select_obj != null) {
-    //                    panel.info.viewInfoText('Выбран отправленный ранее состав, станция назначения :' + obj_select.select_obj.stat
-    //                        + ', № поезда :' + obj_select.select_obj.st_lock_train
-    //                        + ', Дата и время отправления :' + obj_select.select_obj.dt_from_stat);
-    //                } else {
-    //                    panel.info.viewInfoText('Состав не выбран');
-    //                };
-    //                break;
-    //            default:
-    //                panel.info.viewInfoText('');
-    //                break;
-    //        }
-    //    },
-    //    viewInfoText: function (value) {
-    //        panel.element.label_info.text(value);
-    //    },
-    //},
+        //------------------------------------
+        // Панель отображения информации
+        panel_info = {
+            html_div: $('<div class="dt-buttons setup-operation" id="property_info"></div>'),
+            initPanel: function () {
+                this.html_div.append(label_info.text('Информация'));
+            },
+            viewInfoText: function (value) {
+                label_info.text(value);
+            },
+        },
+        //panel_manevr = {
+        //    html_div: $('<div class="dt-buttons setup-operation" id="property_manevr_operation"></div>'),
+        //    initPanel: function () {
+        //        this.obj.empty();
+        //        panel.element.button_manevr_select_all.on('click', function () {
+        //            cars.allSelect();
+        //        });
+        //        panel.element.button_manevr_clear_all.on('click', function () {
+        //            cars.clearSelect();
+        //        });
+        //        this.obj.append(panel.element.button_manevr_select_all)
+        //                .append(panel.element.button_manevr_clear_all)
+        //                .append(panel.element.label_gorlov_manevr)
+        //                .append(panel.element.select_manevr_side)
+        //                .append(panel.element.label_way_manevr)
+        //                .append(panel.element.select_manevr_way)
+        //                .append(panel.element.button_ok_manevr);
+        //        initSelect(panel.element.select_manevr_side, { width: 150 }, side.list, null, 0, function (event, ui) { event.preventDefault(); }, null);
+        //        initSelect(panel.element.select_manevr_way, { width: 300 }, ways.list, function (row) { return { value: row.id_way, text: row.num + '-' + row.name }; }, -1, function (event, ui) { event.preventDefault(); }, null);
 
-    //------------------------------------
-    // Панель управления и отображения
-    panel = {
-        initObject: function (obj) {
-            // Всегда показывать
-            panel_view.initPanel();
-            //panel.info.initPanel();
-            //obj.prepend(panel.accept.obj);
-            //obj.prepend(panel.sent.obj);
-            //obj.prepend(panel.manevr.obj);
-            //obj.prepend(panel.info.obj);
-            obj.prepend(panel_view.html_div);
-            //obj.prepend(panel.mode.obj);
-            //obj.prepend(panel.transit.obj);
-        },
-        activePanel: function (active_group) {
-            panel_view.show();
-        }
-    },
-    //------------------------------------
-    // Группы спиков
-    tab_group_list = {
-        html_div: $("#group-list"),
-        active: 0,
-        initObject: function () {
-            this.html_div.accordion({
-                collapsible: true,
-                heightStyle: "content",
-                activate: function (event, ui) {
-                    tab_group_list.active = tab_group_list.html_div.accordion("option", "active");
-                    tab_group_list.viewGroup(tab_group_list.active, station, false);
-                },
-            });
-            group_list_ways.hide();
-            group_list_wo.hide();
-            group_list_shops.hide();
-            group_list_arrival.hide();
-            group_list_arrival_uz.hide();
-            group_list_sending.hide();
-            tab_group_list.viewGroup(tab_group_list.active, station, false);
-        },
-        //Активация групп списков, в соответсвии с указаной станции
-        activeOfStation: function (station) {
-            // Показать пути
-            group_list_ways.show(station.id, false);
-            if (station != null) {
-                if (station.exit_uz) {
-                    group_list_arrival_uz.show(station, false);
-                } else { group_list_arrival_uz.hide() }
+        //    },
+        //}
+        //------------------------------------
+        // Панель управления и отображения
+        panel = {
+            initObject: function (obj) {
+                // Всегда показывать
+                panel_view.initPanel();
+                panel_info.initPanel();
+                //obj.prepend(panel.accept.obj);
+                //obj.prepend(panel.sent.obj);
+                //obj.prepend(panel.manevr.obj);
+                obj.prepend(panel_info.html_div);
+                obj.prepend(panel_view.html_div);
+                obj.prepend(panel_mode.html_div);
+                //obj.prepend(panel.transit.obj);
+            },
+            activePanel: function (active_group) {
+                panel_view.show();
+                panel_mode.hide();
+                //....
+                switch (active_group) {
+                    case 0:
+                        panel_mode.show();
+                        panel_mode.initPanel(true, true, true, false, false, true, true);
+                        break;
+                    case 1:
+                        panel_mode.show();
+                        panel_mode.initPanel(true, false, false, true, true, true, true);
+                        break;
+                    case 2:
+                        panel_mode.show();
+                        panel_mode.initPanel(true, false, false, true, true, true, true);
+                        break;
+                    case 3:
+                        panel_mode.show();
+                        panel_mode.initPanel(true, false, false, true, true, false, false);
+                        break;
+                    case 4:
+                        panel_mode.show();
+                        panel_mode.initPanel(true, false, false, true, false, false, false);
+                        break;
+                    case 5:
+                        panel_mode.hide();
+                        break;
+                    default:
+                        // Группы закрыты
+
+                        break;
+                }
             }
         },
-        //Активировать группу
-        viewGroup: function (active, station, data_refresh) {
-            panel.activePanel(active);
-            switch (active) {
-                case 0:
-                    //viewGroupWays(station_id, data_refresh);
-                    group_list_ways.show(station.id, data_refresh);
-                    break;
-                case 1:
-                    //viewGroupWagonOverturns(station_id, data_refresh);
-                    break;
-                case 2:
-                    //viewGroupShops(station_id, data_refresh);
-                    break;
-                case 3:
-                    //viewGroupArrivalAMKR(station_id, data_refresh);
-                    break;
-                case 4:
-                    group_list_arrival_uz.show(station, data_refresh);
-                    //viewGroupArrivalUZ(station_id, data_refresh);
-                    break;
-                case 5:
-                    //viewGroupSending(station_id, data_refresh);
-                    break;
+        //------------------------------------
+        // Группы спиков
+        tab_group_list = {
+            html_div: $("#group-list"),
+            active: 0,
+            initObject: function () {
+                this.html_div.accordion({
+                    collapsible: true,
+                    heightStyle: "content",
+                    activate: function (event, ui) {
+                        tab_group_list.active = tab_group_list.html_div.accordion("option", "active");
+                        tab_group_list.viewGroup(tab_group_list.active, station, false);
+                    },
+                });
+                group_list_ways.hide();
+                group_list_wo.hide();
+                group_list_shops.hide();
+                group_list_arrival.hide();
+                group_list_arrival_uz.hide();
+                group_list_sending.hide();
+                tab_group_list.viewGroup(tab_group_list.active, station, false);
+            },
+            //Активация групп списков, в соответсвии с указаной станции
+            activeOfStation: function (station) {
+                // Показать пути
+                group_list_ways.show(station.id, false);
+                if (station != null) {
+                    if (station.exit_uz) {
+                        group_list_arrival_uz.show(station, false);
+                    } else { group_list_arrival_uz.hide() }
+                }
+            },
+            //Активировать группу
+            viewGroup: function (active, station, data_refresh) {
+                panel.activePanel(active);
+                switch (active) {
+                    case 0:
+                        //viewGroupWays(station_id, data_refresh);
+                        group_list_ways.show(station.id, data_refresh);
+                        break;
+                    case 1:
+                        //viewGroupWagonOverturns(station_id, data_refresh);
+                        break;
+                    case 2:
+                        //viewGroupShops(station_id, data_refresh);
+                        break;
+                    case 3:
+                        //viewGroupArrivalAMKR(station_id, data_refresh);
+                        break;
+                    case 4:
+                        group_list_arrival_uz.show(station, data_refresh);
+                        //viewGroupArrivalUZ(station_id, data_refresh);
+                        break;
+                    case 5:
+                        //viewGroupSending(station_id, data_refresh);
+                        break;
 
-                default:
-                    // Группы закрыты
-                    table_cars_details.enableTable(-1);
-                    //panel_detali.removeClass(); // Убрать подкраску режимов
-                    break;
-            }
+                    default:
+                        // Группы закрыты
+                        table_cars_details.enableTable(-1);
+                        //panel_detali.removeClass(); // Убрать подкраску режимов
+                        break;
+                }
+            },
         },
-    },
     //------------------------------------
     // class CarsOnWay
     cars_on_way = {
@@ -768,7 +939,7 @@
             }
         },
         enableColumsInpCargo: function (view) {
-            this.obj.columns([9,10,11,13]).visible(view, true);
+            this.obj.columns([9, 10, 11, 13]).visible(view, true);
             this.obj.draw(false);
         },
         enableColumsInpSAP: function (view) {

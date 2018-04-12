@@ -40,3 +40,26 @@ tr.shown td.details-control {
         margin-left: 5px;
         margin-right: 5px;
     }
+
+#panel-select-routes {
+    text-align:left;
+}
+
+#table-list-wt-last {
+    font-size:11px
+}
+
+#table-list-wt-last th {
+    text-align:center;
+}
+
+#table-list-wt-last td {
+    text-align:center;
+    font-size:13px;
+}
+.not-limit {
+    background :#e0ab85;
+}
+.ok-limit{
+    background :#a0ce77;
+}

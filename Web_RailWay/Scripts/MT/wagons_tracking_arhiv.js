@@ -72,16 +72,16 @@
             }
         }
     },
-    // Группы спиков
+    // Группы отчотов
     tab_group_reports = {
         html_div: $("#tabs-report"),
         active: 0,
         initObject: function () {
             $('#link-tabs-1').text(resurses.getText("link_tabs_1"));
             $('#link-tabs-2').text(resurses.getText("link_tabs_2"));
-            $('#link-tabs-3').text(resurses.getText("link_tabs_3"));
-            $('#link-tabs-4').text(resurses.getText("link_tabs_4"));
-            $('#link-tabs-5').text(resurses.getText("link_tabs_5"));
+            //$('#link-tabs-3').text(resurses.getText("link_tabs_3"));
+            //$('#link-tabs-4').text(resurses.getText("link_tabs_4"));
+            //$('#link-tabs-5').text(resurses.getText("link_tabs_5"));
             this.html_div.tabs({
                 collapsible: true,
                 activate: function (event, ui) {
@@ -95,8 +95,315 @@
             if (active == 0) {
                 table_wt.viewTable(data_refresh);
             }
+            if (active == 1) {
+                tab_type_routes.activeTable(tab_type_routes.active, false);
+            }
         }
     },
+    // Типы отчетов
+    tab_type_routes = {
+        html_div: $("#tabs-report-routes"),
+        html_panel_select_div: $("#panel-select-routes"),
+        label_select_date: $('<label>' + (lang == 'en' ? "Select period:" : "Выберите период:") + '</label>'),
+        span_select_range: $('<span id="select-range-last"></span>'),
+        label_to: $('<label>' + (lang == 'en' ? "to" : "до") + '</label>'),
+        input_data_start: $('<input id="date-start-last" name="date_start-last" size="20">'),
+        input_data_stop: $('<input id="date-stop-last" name="date-stop-last" size="20">'),
+        button_excel: $('<button class="ui-button ui-widget ui-corner-all">' + (lang == 'en' ? "Excel" : "Excel") + '</button>'),
+        obj_range: null,
+        start: null,
+        stop: null,
+        active: 0,
+        initObject: function () {
+            $('#link-tabs-routes-1').text(resurses.getText("link_tabs_routes_1"));
+            $('#link-tabs-routes-2').text(resurses.getText("link_tabs_routes_2"));
+            $('#link-tabs-routes-3').text(resurses.getText("link_tabs_routes_3"));
+            // Настроим панель
+            tab_type_routes.span_select_range
+                .append(tab_type_routes.input_data_start)
+                .append(tab_type_routes.label_to)
+                .append(tab_type_routes.input_data_stop);
+            tab_type_routes.html_panel_select_div
+                .append(tab_type_routes.button_excel)
+                .append(tab_type_routes.label_select_date)
+                .append(tab_type_routes.span_select_range);
+            // настроим компонент выбора времени
+            tab_type_routes.obj_range = $('#select-range-last').dateRangePicker(
+                {
+                    startOfWeek: 'monday',
+                    separator: lang == 'en' ? 'to' : 'по',
+                    language: lang,
+                    format: lang == 'en' ? 'MM/DD/YYYY HH:mm' : 'DD.MM.YYYY HH:mm',
+                    autoClose: false,
+                    showShortcuts: false,
+                    getValue: function () {
+                        if ($('#date-start').val() && $('#date-stop-last').val())
+                            return $('#date-start-last').val() + ' to ' + $('#date-stop-last').val();
+                        else
+                            return '';
+                    },
+                    setValue: function (s, s1, s2) {
+                        $('#date-start-last').val(s1);
+                        $('#date-stop-last').val(s2);
+                    },
+                    time: {
+                        enabled: true
+                    },
+                }).
+                bind('datepicker-change', function (evt, obj) {
+                    tab_type_routes.start = obj.date1;
+                    tab_type_routes.stop = obj.date2;
+                })
+                .bind('datepicker-closed', function () {
+                    //var trs = $('tr.shown');
+                    //for (i = 0; i < trs.length; i++) {
+                    //    var row = table_wt_last.obj.row(trs[i]);
+                    //    if (row.child.isShown()) {
+                    //        table_wt_last.loadChildDataTable(row.data());
+                    //    }
+                    //}
+                    //table_wt_last.viewTable(true);
+                    tab_type_routes.activeTable(tab_type_routes.active, true);
+                });
+            var dt = new Date();
+            tab_type_routes.start = new Date(dt.getFullYear(), 00, 01, 00, 00, 00);
+            tab_type_routes.stop = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 23, 59, 59);
+            var s_d_start = tab_type_routes.start.getDate() + '.' + (tab_type_routes.start.getMonth() + 1) + '.' + tab_type_routes.start.getFullYear() + ' ' + tab_type_routes.start.getHours() + ':' + tab_type_routes.start.getMinutes();
+            var s_d_stop = tab_type_routes.stop.getDate() + '.' + (tab_type_routes.stop.getMonth() + 1) + '.' + tab_type_routes.stop.getFullYear() + ' ' + tab_type_routes.stop.getHours() + ':' + tab_type_routes.stop.getMinutes()
+            tab_type_routes.obj_range.data('dateRangePicker').setDateRange(s_d_start, s_d_stop, true);
+            this.html_div.tabs({
+                collapsible: true,
+                activate: function (event, ui) {
+                    tab_type_routes.active = tab_type_routes.html_div.tabs("option", "active");
+                    tab_type_routes.activeTable(tab_type_routes.active, false);
+                },
+            });
+            //tab_group_reports.activeTable(tab_group_reports.active, false);
+        },
+        activeTable: function (active, data_refresh) {
+            if (active == 0) {
+
+            }
+            if (active == 1) {
+                table_wt_last.viewTable(data_refresh);
+            }
+        }
+    },
+
+    //-------------------------------
+    // Таблица детального расположения вагонов
+    table_wt_last = {
+        html_table: $('#table-list-wt-last'),
+        html_div_panel: $('<div class="dt-buttons setup-operation" id="property"></div>'),
+        label_last_date: $('<label>' + (lang == 'en' ? "Actual on: " : "Актуально на: ") + '</label>'),
+        label_last_date_value: $('<label id="label-last-date-value"></label>'),
+        label_last_total: $('<label>' + (lang == 'en' ? "Total number of wagons: " : "Общее количество вагонов: ") + '</label>'),
+        label_last_total_value: $('<label id="label-last-total-value"></label>'),
+        obj_table: null,
+        obj: null,
+        list: null,
+        last_date: null,
+        report_id: null,
+        initObject: function () {
+            this.obj = this.html_table.DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                language: {
+                    decimal: lang == 'en' ? "." : ",",
+                    search: lang == 'en' ? "Search" : "Найти вагон:",
+                },
+                jQueryUI: true,
+                "createdRow": function (row, data, index) {
+                    if (data.count_surplus_1 != null) {
+                        $('td', row).eq(2).addClass('not-limit');
+                    }
+                    if (data.count_surplus_2 != null) {
+                        $('td', row).eq(7).addClass('not-limit');
+                    }
+                    if (data.count_surplus_3 != null) {
+                        $('td', row).eq(12).addClass('not-limit');
+                    }
+                    if (data.count_surplus_4 != null) {
+                        $('td', row).eq(17).addClass('not-limit');
+                    }
+                    if (data.count_norma_1 != null) {
+                        $('td', row).eq(3).addClass('ok-limit');
+                    }
+                    if (data.count_norma_2 != null) {
+                        $('td', row).eq(8).addClass('ok-limit');
+                    }
+                    if (data.count_norma_3 != null) {
+                        $('td', row).eq(13).addClass('ok-limit');
+                    }
+                    if (data.count_norma_4 != null) {
+                        $('td', row).eq(18).addClass('ok-limit');
+                    }
+                },
+                "footerCallback": function (row, data, start, end, display) {
+
+                    var api = this.api(), data;
+
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+                    // Вернуть среднее значение
+                    var avg = function (data) {
+                        var count = 0;
+                        var sum = 0;
+                        for (i = 0; i < data.length; i++) {
+                            sum += data[i];
+                            if (data[i] != null) {
+                                count++;
+                            }
+                        }
+                        return sum!= 0 | count!=0 ? sum / count : 0;
+                    }
+                    // Total over all pages
+                    total11 = api.column(1).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total12 = api.column(2).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total13 = api.column(3).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total14 = api.column(4).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    //total15 = api.column(5).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total15 = avg(api.column(5).data());
+                    //data_avg1 = api.column(5).data();
+
+                    total21 = api.column(6).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total22 = api.column(7).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total23 = api.column(8).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total24 = api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total25 = avg(api.column(10).data());
+
+                    total31 = api.column(11).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total32 = api.column(12).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total33 = api.column(13).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total34 = api.column(14).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total35 = avg(api.column(15).data());
+
+                    total41 = api.column(16).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total42 = api.column(17).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total43 = api.column(18).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total44 = api.column(19).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    total45 = avg(api.column(20).data());
+                    // Update footer
+                    $(api.column(1).footer()).html(total11);
+                    $(api.column(2).footer()).html(total12);
+                    $(api.column(3).footer()).html(total13);
+                    $(api.column(4).footer()).html(total14);
+                    $(api.column(5).footer()).html(total15.toFixed(2));
+
+                    $(api.column(6).footer()).html(total21);
+                    $(api.column(7).footer()).html(total22);
+                    $(api.column(8).footer()).html(total23);
+                    $(api.column(9).footer()).html(total24);
+                    $(api.column(10).footer()).html(total25.toFixed(2));
+
+                    $(api.column(11).footer()).html(total31);
+                    $(api.column(12).footer()).html(total32);
+                    $(api.column(13).footer()).html(total33);
+                    $(api.column(14).footer()).html(total34);
+                    $(api.column(15).footer()).html(total35.toFixed(2));
+
+                    $(api.column(16).footer()).html(total41);
+                    $(api.column(17).footer()).html(total42);
+                    $(api.column(18).footer()).html(total43);
+                    $(api.column(19).footer()).html(total44);
+                    $(api.column(20).footer()).html(total45.toFixed(2));
+                    table_wt_last.label_last_total_value.text(total11 + total21 + total31 + total41);
+                },
+                columns: [
+                    { data: "name_station", title: "Станция назначения", width: "150px", orderable: false, searchable: false },
+                    { data: "count_1", title: "Всего", width: "50px", orderable: false, searchable: false, },
+                    { data: "count_surplus_1", title: "С привыш. нормат. времени", width: "50px", orderable: false, searchable: false },
+                    { data: "count_norma_1", title: "В нормат.", width: "50px", orderable: false, searchable: false },
+                    { data: "time_limit_1", title: "Норматив", width: "50px", orderable: false, searchable: false },
+                    { data: "time_avg_1", title: "Факт. сред..", width: "50px", orderable: false, searchable: false },
+                    { data: "count_2", title: "Всего", width: "50px", orderable: false, searchable: false, },
+                    { data: "count_surplus_2", title: "С привыш. нормат. времени", width: "50px", orderable: false, searchable: false },
+                    { data: "count_norma_2", title: "В нормат.", width: "50px", orderable: false, searchable: false },
+                    { data: "time_limit_2", title: "Норматив", width: "50px", orderable: false, searchable: false },
+                    { data: "time_avg_2", title: "Факт. сред..", width: "50px", orderable: false, searchable: false },
+                    { data: "count_3", title: "Всего", width: "50px", orderable: false, searchable: false, },
+                    { data: "count_surplus_3", title: "С привыш. нормат. времени", width: "50px", orderable: false, searchable: false },
+                    { data: "count_norma_3", title: "В нормат.", width: "50px", orderable: false, searchable: false },
+                    { data: "time_limit_3", title: "Норматив", width: "50px", orderable: false, searchable: false },
+                    { data: "time_avg_3", title: "Факт. сред..", width: "50px", orderable: false, searchable: false },
+                    { data: "count_4", title: "Всего", width: "50px", orderable: false, searchable: false, },
+                    { data: "count_surplus_4", title: "С привыш. нормат. времени", width: "50px", orderable: false, searchable: false },
+                    { data: "count_norma_4", title: "В нормат.", width: "50px", orderable: false, searchable: false },
+                    { data: "time_limit_4", title: "Норматив", width: "50px", orderable: false, searchable: false },
+                    { data: "time_avg_4", title: "Факт. сред..", width: "50px", orderable: false, searchable: false },
+                ],
+            });
+            this.obj_table = $('DIV#table-list-wt-last_wrapper');
+            this.html_div_panel
+                .append(this.label_last_date)
+                .append(this.label_last_date_value)
+                .append(this.label_last_total)
+                .append(this.label_last_total_value);
+            this.obj_table.prepend(this.html_div_panel);
+        },
+        viewTable: function (data_refresh) {
+            if (wt_report_cars.select_report.id == -1) return;
+            //var date = 
+            if (this.list == null | data_refresh == true | this.report_id != wt_report_cars.select_report.id) {
+                // Обновим данные
+                getAsyncLastWagonTrackingAndDateTimeOfReports(
+                    (wt_report_cars.select_report.id != null ? wt_report_cars.select_report.id : 0),
+                    tab_type_routes.start,
+                    tab_type_routes.stop,
+                    function (result) {
+                        table_wt_last.list = result.list;
+                        table_wt_last.last_date = result.dt_last;
+                        table_wt_last.report_id = wt_report_cars.select_report.id;
+                        table_wt_last.label_last_date_value.text(result.dt_last)
+                        table_wt_last.loadDataTable(result.list);
+                        table_wt_last.obj.draw();
+                    }
+                    );
+            } else {
+                table_wt_last.loadDataTable(this.list);
+                table_wt_last.obj.draw();
+            };
+        },
+        loadDataTable: function (data) {
+            this.list = data;
+            this.obj.clear();
+            for (i = 0; i < data.length; i++) {
+                this.obj.row.add({
+                    "name_station": data[i].name_station,
+                    "count_1": data[i].count_1,
+                    "count_surplus_1": data[i].count_surplus_1,
+                    "count_norma_1": data[i].count_norma_1,
+                    "time_limit_1": data[i].time_limit_1,
+                    "time_avg_1": data[i].time_avg_1,
+                    "count_2": data[i].count_2,
+                    "count_surplus_2": data[i].count_surplus_2,
+                    "count_norma_2": data[i].count_norma_2,
+                    "time_limit_2": data[i].time_limit_2,
+                    "time_avg_2": data[i].time_avg_2,
+                    "count_3": data[i].count_3,
+                    "count_surplus_3": data[i].count_surplus_3,
+                    "count_norma_3": data[i].count_norma_3,
+                    "time_limit_3": data[i].time_limit_3,
+                    "time_avg_3": data[i].time_avg_3,
+                    "count_4": data[i].count_4,
+                    "count_surplus_4": data[i].count_surplus_4,
+                    "count_norma_4": data[i].count_norma_4,
+                    "time_limit_4": data[i].time_limit_3,
+                    "time_avg_4": data[i].time_avg_4,
+                });
+            }
+            //this.obj.draw();
+        },
+
+    }
+    //-------------------------------
+    // Таблица детального расположения вагонов
     table_wt = {
         data_range: {
             obj: null,
@@ -321,7 +628,7 @@
                         '<td>' + data[i].kgro + '</td>' +
                         '<td>' + data[i].km + '</td>' +
                         '</tr>';
-                   var table = '<table>' + list_tr + '</table>';
+                    var table = '<table>' + list_tr + '</table>';
                 }
                 fnExcelReport(table, "WagonsTracking");
             });
@@ -484,6 +791,8 @@
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
         }
     }
+
+
     //-----------------------------------------------------------------------------------------
     // Функции
     //-----------------------------------------------------------------------------------------
@@ -529,8 +838,10 @@
             wt_report_cars.initObject(true);
             // Загружаем дальше
             table_wt.initObject();
+            table_wt_last.initObject();
             //table_disl.initObject();
-            tab_group_reports.initObject();
+            tab_group_reports.initObject(); // Основная группа
+            tab_type_routes.initObject(); // Основные типы маршрутов
 
 
         }); // локализация

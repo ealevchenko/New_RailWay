@@ -234,6 +234,12 @@ namespace Web_RailWay.Controllers.api
             public int? km { get; set; }
         }
 
+        public class CurentWagonTrackingAndDateTime
+        {
+            public DateTime? dt_last  { get; set; }            
+            public List<CurentWagonTracking> list  { get; set; }
+        }
+
         #region WT
 
         // GET: api/mt/wagons_tracking
@@ -291,6 +297,7 @@ namespace Web_RailWay.Controllers.api
                 return InternalServerError(e);
             }
         }
+
         // GET: api/mt/wagons_tracking_arhiv/car/52921004/start/2018-03-29T00:00:00.000Z/stop/2018-03-29T23:59:59.000Z
         [Route("wagons_tracking_arhiv/car/{num:int}/start/{start:datetime}/stop/{stop:datetime}")]
         [ResponseType(typeof(DBWagonsTracking))]
@@ -314,6 +321,51 @@ namespace Web_RailWay.Controllers.api
                 return InternalServerError(e);
             }
         }
+
+        // GET: api/mt/wagons_tracking_arhiv/last/report/2/start/2018-04-01T00:00:00.000Z/stop/2018-04-30T23:59:59.000Z
+        [Route("wagons_tracking_arhiv/last/report/{id_report:int}/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(CurentWagonTracking))]
+        public IHttpActionResult GetLastWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
+        {
+            try
+            {
+                List<CurentWagonTracking> list = this.rep_MT.GetLastWagonTrackingOfReports(id_report,start,stop);
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastWagonTrackingOfReports(id_report={0}, start={1}, stop={2})", id_report, start, stop), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/mt/wagons_tracking_arhiv/last_dt/report/2/start/2018-04-01T00:00:00.000Z/stop/2018-04-30T23:59:59.000Z
+        [Route("wagons_tracking_arhiv/last_dt/report/{id_report:int}/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(CurentWagonTrackingAndDateTime))]
+        public IHttpActionResult GetLastWagonTrackingDTOfReports(int id_report, DateTime start, DateTime stop)
+        {
+            try
+            {
+                List<CurentWagonTracking> list = this.rep_MT.GetLastWagonTrackingOfReports(id_report,start,stop);
+                WagonsTracking wt = this.rep_MT.WagonsTracking.Where(w=>w.dt <= stop).OrderByDescending(w=>w.dt).FirstOrDefault();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                
+                return Ok(new CurentWagonTrackingAndDateTime() { list = list, dt_last = wt !=null ? wt.dt : null});
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastWagonTrackingOfReports(id_report={0}, start={1}, stop={2})", id_report, start, stop), eventID);
+                return InternalServerError(e);
+            }
+        }
+
 
         // GET: api/mt/wagons_tracking/reports
         [Route("wagons_tracking/reports")]
