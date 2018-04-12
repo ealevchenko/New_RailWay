@@ -1820,7 +1820,328 @@ namespace EFMT.Concrete
             }
             #endregion
 
+            #region WTCycle
+            public IQueryable<WTCycle> WTCycle
+            {
+                get { return context.WTCycle; }
+            }
 
+            public IQueryable<WTCycle> GetWTCycle()
+            {
+                try
+                {
+                    return WTCycle;
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetWTCycle()"), eventID);
+                    return null;
+                }
+            }
+
+            public WTCycle GetWTCycle(int id)
+            {
+                try
+                {
+                    return GetWTCycle().Where(t => t.id == id).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetWTCycle(id={0})", id), eventID);
+                    return null;
+                }
+            }
+
+            public IQueryable<WTCycle> GetWTCycleOfNumCar(int num)
+            {
+                try
+                {
+                    return GetWTCycle().Where(t => t.WagonsTracking.nvagon == num);
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetWTCycleOfNumCar(num={0})", num), eventID);
+                    return null;
+                }
+            }
+
+            public int SaveWTCycle(WTCycle WTCycle)
+            {
+                WTCycle dbEntry;
+                try
+                {
+                    if (WTCycle.id == 0)
+                    {
+                        dbEntry = new WTCycle()
+                        {
+                            id = WTCycle.id,
+                            id_wt = WTCycle.id_wt,
+                            cycle = WTCycle.cycle,
+                            route = WTCycle.route,
+                            station_from = WTCycle.station_from,
+                            station_end = WTCycle.station_end,
+                            WagonsTracking = WTCycle.WagonsTracking
+                        };
+                        context.WTCycle.Add(dbEntry);
+                    }
+                    else
+                    {
+                        dbEntry = context.WTCycle.Find(WTCycle.id);
+                        if (dbEntry != null)
+                        {
+                            dbEntry.id_wt = WTCycle.id_wt;
+                            dbEntry.cycle = WTCycle.cycle;
+                            dbEntry.route = WTCycle.route;
+                            dbEntry.station_from = WTCycle.station_from;
+                            dbEntry.station_end = WTCycle.station_end;
+                            dbEntry.WagonsTracking = WTCycle.WagonsTracking;
+                        }
+                    }
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("SaveWTCycle(WTCycle={0})", WTCycle.GetFieldsAndValue()), eventID);
+                    return -1;
+                }
+                return dbEntry.id;
+            }
+
+            public WTCycle DeleteWTCycle(int id)
+            {
+                WTCycle dbEntry = context.WTCycle.Find(id);
+                if (dbEntry != null)
+                {
+                    try
+                    {
+                        context.WTCycle.Remove(dbEntry);
+                        context.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        e.WriteErrorMethod(String.Format("DeleteWTCycle(id={0})", id), eventID);
+                        return null;
+                    }
+                }
+                return dbEntry;
+            }
+            #endregion
+
+            #region CycleWagonsTracking
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="id_report"></param>
+            /// <param name="start"></param>
+            /// <param name="stop"></param>
+            /// <returns></returns>
+            public List<CycleWagonsTracking> GetCycleWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
+            {
+                try
+                {
+                    SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+                    SqlParameter dt_start = new SqlParameter("@start", start);
+                    SqlParameter dt_stop = new SqlParameter("@stop", stop);
+
+                    List<CycleWagonsTracking> list = this.Database.SqlQuery<CycleWagonsTracking>("EXEC [MT].[GetCycleDBWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
+                    return list;
+
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetCycleWagonsTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report,start,stop), eventID);
+                    return null;
+                }
+            }
+            #endregion
+
+            #region RouteWagonTracking
+            /// <summary>
+            /// Вернуть все маршруты по выбранным вагонам за указаный период
+            /// </summary>
+            /// <param name="id_report"></param>
+            /// <param name="start"></param>
+            /// <param name="stop"></param>
+            /// <returns></returns>
+            public List<RouteWagonTracking> GetRouteWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
+            {
+                try
+                {
+                    SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+                    SqlParameter dt_start = new SqlParameter("@start", start);
+                    SqlParameter dt_stop = new SqlParameter("@stop", stop);
+
+                    List<RouteWagonTracking> list = this.Database.SqlQuery<RouteWagonTracking>("EXEC [MT].[GetRouteWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
+                    return list;
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetRouteWagonTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report, start, stop), eventID);
+                    return null;
+                }
+            }
+            /// <summary>
+            /// Вернуть последний маршрут по выбранным вагонам за указаный период
+            /// </summary>
+            /// <param name="id_report"></param>
+            /// <param name="start"></param>
+            /// <param name="stop"></param>
+            /// <returns></returns>
+            public List<RouteWagonTracking> GetLastRouteWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
+            {
+                try
+                {
+                    SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+                    SqlParameter dt_start = new SqlParameter("@start", start);
+                    SqlParameter dt_stop = new SqlParameter("@stop", stop);
+
+                    List<RouteWagonTracking> list = this.Database.SqlQuery<RouteWagonTracking>("EXEC [MT].[GetLastRouteWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
+                    return list;
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetLastRouteWagonTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report, start, stop), eventID);
+                    return null;
+                }
+            }
+
+            public List<CurentWagonTracking> GetLastWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
+            {
+                try
+                {
+                    List<CurentWagonTracking> list_result = new List<CurentWagonTracking>();                    
+                    List<RouteWagonTracking> list = GetLastRouteWagonTrackingOfReports(id_report, start, stop);
+                    List<IGrouping<string, RouteWagonTracking>> gr_station = list.GroupBy(g => g.name_station_group).ToList();
+                    foreach (IGrouping<string, RouteWagonTracking> gr in gr_station) { 
+                        
+                        int? count_norma_1 =  gr.Where(r=>r.route==1 & r.time_left >=0).Count();
+                        int? count_norma_2 =  gr.Where(r=>r.route==2 & r.time_left >=0).Count();
+                        int? count_norma_3 =  gr.Where(r=>r.route==3 & r.time_left >=0).Count();
+                        int? count_norma_4 =  gr.Where(r=>r.route==4 & r.time_left >=0).Count();
+                        int? count_surplus_1 =  gr.Where(r=>r.route==1 & r.time_left <0).Count();
+                        int? count_surplus_2 =  gr.Where(r=>r.route==2 & r.time_left <0).Count();
+                        int? count_surplus_3 =  gr.Where(r=>r.route==3 & r.time_left <0).Count();
+                        int? count_surplus_4 =  gr.Where(r=>r.route==4 & r.time_left <0).Count();
+                        int? count_1 =  gr.Where(r=>r.route==1).Count();
+                        int? count_2 =  gr.Where(r=>r.route==2).Count();
+                        int? count_3 =  gr.Where(r=>r.route==3).Count();
+                        int? count_4 =  gr.Where(r=>r.route==4).Count();
+                        RouteWagonTracking rwt_limit_1 = gr.Where(r => r.route == 1).FirstOrDefault();
+                        RouteWagonTracking rwt_limit_2 = gr.Where(r => r.route == 2).FirstOrDefault();
+                        RouteWagonTracking rwt_limit_3 = gr.Where(r => r.route == 3).FirstOrDefault();
+                        RouteWagonTracking rwt_limit_4 = gr.Where(r => r.route == 4).FirstOrDefault();
+
+                        decimal? time_limit_1 = rwt_limit_1 != null ? rwt_limit_1.time_limit : null;
+                        decimal? time_limit_2 = rwt_limit_2 != null ? rwt_limit_2.time_limit : null;
+                        decimal? time_limit_3 = rwt_limit_3 != null ? rwt_limit_3.time_limit : null;
+                        decimal? time_limit_4 = rwt_limit_4 != null ? rwt_limit_4.time_limit : null;
+
+                        List<RouteWagonTracking> list_rwt_1 = gr.Where(r => r.route == 1).ToList();
+                        List<RouteWagonTracking> list_rwt_2 = gr.Where(r => r.route == 2).ToList();
+                        List<RouteWagonTracking> list_rwt_3 = gr.Where(r => r.route == 3).ToList();
+                        List<RouteWagonTracking> list_rwt_4 = gr.Where(r => r.route == 4).ToList();
+
+
+                        decimal? time_avg_1 = list_rwt_1!=null && list_rwt_1.Count() >0 ? (decimal?)list_rwt_1.Average(r=>r.dt_difference) : null;
+                        decimal? time_avg_2 = list_rwt_2!=null && list_rwt_2.Count() >0 ? (decimal?)list_rwt_2.Average(r=>r.dt_difference) : null;
+                        decimal? time_avg_3 = list_rwt_3!=null && list_rwt_3.Count() >0 ? (decimal?)list_rwt_3.Average(r=>r.dt_difference) : null;
+                        decimal? time_avg_4 = list_rwt_4!=null && list_rwt_4.Count() >0 ? (decimal?)list_rwt_4.Average(r=>r.dt_difference) : null;
+
+                        CurentWagonTracking new_current = new CurentWagonTracking()
+                        {
+                            name_station = gr.Key,
+                            count_1 = count_1 != 0 ? count_1 : null,
+                            count_2 = count_2 != 0 ? count_2 : null,
+                            count_3 = count_3 != 0 ? count_3 : null,
+                            count_4 = count_4 != 0 ? count_4 : null,
+                            count_norma_1 = count_norma_1 != 0 ? count_norma_1 : null,
+                            count_norma_2 = count_norma_2 != 0 ? count_norma_2 : null,
+                            count_norma_3 = count_norma_3 != 0 ? count_norma_3 : null,
+                            count_norma_4 = count_norma_4 != 0 ? count_norma_4 : null,
+                            count_surplus_1 = count_surplus_1 != 0 ? count_surplus_1 : null,
+                            count_surplus_2 = count_surplus_2 != 0 ? count_surplus_2 : null,
+                            count_surplus_3 = count_surplus_3 != 0 ? count_surplus_3 : null,
+                            count_surplus_4 = count_surplus_4 != 0 ? count_surplus_4 : null,
+                            time_limit_1 = time_limit_1 != 0 ? time_limit_1 : null,
+                            time_limit_2 = time_limit_2 != 0 ? time_limit_2 : null,
+                            time_limit_3 = time_limit_3 != 0 ? time_limit_3 : null,
+                            time_limit_4 = time_limit_4 != 0 ? time_limit_4 : null,
+                            time_avg_1 = time_avg_1 != null ? (decimal?)Math.Round((decimal)time_avg_1,2) : null,
+                            time_avg_2 = time_avg_2 != null ? (decimal?)Math.Round((decimal)time_avg_2, 2) : null,
+                            time_avg_3 = time_avg_3 != null ? (decimal?)Math.Round((decimal)time_avg_3, 2) : null,
+                            time_avg_4 = time_avg_4 != null ? (decimal?)Math.Round((decimal)time_avg_4, 2) : null
+                        };
+                        list_result.Add(new_current);
+                    }
+
+                    return list_result;
+
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetLastWagonTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report, start, stop), eventID);
+                    return null;
+                }
+            }
+
+            #endregion
+
+
+            //#region RouteDBWagonsTracking
+            ///// <summary>
+            ///// 
+            ///// </summary>
+            ///// <param name="id_report"></param>
+            ///// <param name="start"></param>
+            ///// <param name="stop"></param>
+            ///// <returns></returns>
+            //public List<RouteDBWagonsTracking> GetRouteWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
+            //{
+            //    try
+            //    {
+            //        SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+            //        SqlParameter dt_start = new SqlParameter("@start", start);
+            //        SqlParameter dt_stop = new SqlParameter("@stop", stop);
+
+            //        List<RouteDBWagonsTracking> list = this.Database.SqlQuery<RouteDBWagonsTracking>("EXEC [MT].[GetRouteDBWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
+            //        return list;
+
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        e.WriteErrorMethod(String.Format("GetRouteWagonsTrackingOfReports(id_report={0})", id_report), eventID);
+            //        return null;
+            //    }
+            //}
+
+            //public List<RouteDBWagonsTracking> GetLastRouteWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
+            //{
+            //    try
+            //    {
+                    
+            //        List<RouteDBWagonsTracking> list_last = new List<RouteDBWagonsTracking>();
+            //        List<IGrouping<int, RouteDBWagonsTracking>> gr = GetRouteWagonsTrackingOfReports(id_report, start, stop).GroupBy(r=>r.nvagon).ToList();
+            //        foreach (IGrouping<int, RouteDBWagonsTracking> rw in gr) { 
+            //            RouteDBWagonsTracking last = rw.OrderByDescending(r=>r.cycle).FirstOrDefault();
+            //            if (last != null)
+            //            {
+            //                list_last.Add(last);
+            //            }
+            //        }
+            //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr4 = list_last.Where(r => r.id_4 != null).GroupBy(r => r.station_from_4).ToList();
+            //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr3 = list_last.Where(r => r.id_3 != null & r.id_4 == null).GroupBy(r => r.station_disl_3).ToList();
+            //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr2 = list_last.Where(r => r.id_2 != null & r.id_3 == null & r.id_4 == null).GroupBy(r => r.station_end_2).ToList();
+            //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr1 = list_last.Where(r => r.id_1 != null & r.id_2 == null & r.id_3 == null & r.id_4 == null).GroupBy(r => r.station_disl_1).ToList();
+
+            //        return list_last;
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        e.WriteErrorMethod(String.Format("GetLastRouteWagonsTrackingOfReports(id_report={0})", id_report), eventID);
+            //        return null;
+            //    }
+            //}
+            //#endregion
         #endregion
 
     }

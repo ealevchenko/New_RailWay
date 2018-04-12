@@ -182,5 +182,42 @@ namespace Testing
 
         }
 
+        public void MTTransfer_TransferTransferWTCycle()
+        {
+            MTTransfer mtt = new MTTransfer();
+            int res = mtt.TransferWTCycle(56857808);
+            Console.WriteLine("Перенесено {0}", res);
+        }
+
+        public void MTTransfer_TransferWTCycle()
+        {
+            MTTransfer mtt = new MTTransfer();
+            int res = mtt.TransferWTCycle();
+            Console.WriteLine("Перенесено {0}", res);
+        }
+
+        public void EFMetallurgTrans_GetRouteWagonsTrackingOfReports()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            DateTime start = new DateTime(2018, 4, 1, 0, 0, 0);
+            DateTime stop = new DateTime(2018, 4, 30, 23, 59, 59);
+            List<RouteWagonTracking> list = efmt.GetRouteWagonTrackingOfReports(2, start, stop);
+        }
+
+        public void EFMetallurgTrans_GetLastRouteWagonsTrackingOfReports()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            DateTime start = new DateTime(2018, 4, 1, 0, 0, 0);
+            DateTime stop = new DateTime(2018, 4, 30, 23, 59, 59);
+            List<RouteWagonTracking> list = efmt.GetLastRouteWagonTrackingOfReports(2, start, stop);
+        }
+
+        public void EFMetallurgTrans_GetLastWagonTrackingOfReports()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            DateTime start = new DateTime(2018, 4, 1, 0, 0, 0);
+            DateTime stop = new DateTime(2018, 4, 30, 23, 59, 59);
+            efmt.GetLastWagonTrackingOfReports(2, start, stop);
+        }
     }
 }

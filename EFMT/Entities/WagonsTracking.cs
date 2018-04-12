@@ -12,6 +12,12 @@ namespace EFMT.Entities
     //[Serializable]
     public partial class WagonsTracking //: ISerializable
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public WagonsTracking()
+        {
+            WTCycle = new HashSet<WTCycle>();
+        }
+        
         public int id { get; set; }
 
         public int nvagon { get; set; }
@@ -70,6 +76,9 @@ namespace EFMT.Entities
         public int? kgro { get; set; }
 
         public int? km { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WTCycle> WTCycle { get; set; }
 
         //public WagonsTracking() { 
         

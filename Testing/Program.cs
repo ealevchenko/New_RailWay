@@ -72,7 +72,7 @@ namespace Testing
             //tst_rw.RWReference_GetShopOfKis(); // Получить id цеха по данным КИС, если нет создать.
             //tst_rw.RWReference_GetReferenceConsigneeOfKis(); // Получить id грузополучателя по данным КИС, если нет создать.
             //tst_rw.RWOperation_CorrectPositionCarsOnWay(); // Скорректировать позицию на пути.
-            tst_rw.RWOperation_SetWayCorrectPosition(); // Переставить вагон + скорректировать позиции.
+            //tst_rw.RWOperation_SetWayCorrectPosition(); // Переставить вагон + скорректировать позиции.
             #endregion
 
 
@@ -113,6 +113,11 @@ namespace Testing
             //tst_tr_app.MTTransfer_TransferWagonsTracking(); // Тест переноса информации слежения за вагонами
             //tst_tr_app.MTThread_TransferWagonsTracking(); // Тест работы потока переноса информации слежения за вагонами
             //tst_tr_app.MTArrivalCarsClose(); // Закроем вагоны натурками
+            //tst_tr_app.MTTransfer_TransferTransferWTCycle(); // Перенесем и создадим циклы движения одного вагона
+            //tst_tr_app.MTTransfer_TransferWTCycle(); // Перенесем и создадим циклы движения всех вагонов
+            //tst_tr_app.EFMetallurgTrans_GetRouteWagonsTrackingOfReports(); // получить данные по циклам движения указанных вагонов за указанное время
+            //tst_tr_app.EFMetallurgTrans_GetLastRouteWagonsTrackingOfReports(); // получить данные по циклам движения указанных вагонов за указанное время
+            tst_tr_app.EFMetallurgTrans_GetLastWagonTrackingOfReports();
 
             #endregion
 

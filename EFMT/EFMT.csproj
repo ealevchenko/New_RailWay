@@ -54,6 +54,9 @@
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\EFMetallurgTrans.cs" />
     <Compile Include="Entities\CountCarsOfSostav.cs" />
+    <Compile Include="Entities\CycleWagonsTracking.cs" />
+    <Compile Include="Entities\RouteDBWagonsTracking.cs" />
+    <Compile Include="Entities\RouteWagonTracking.cs" />
     <Compile Include="Entities\WagonsTracking.cs" />
     <Compile Include="Entities\ApproachesCars.cs" />
     <Compile Include="Entities\ApproachesSostav.cs" />
@@ -63,6 +66,7 @@
     <Compile Include="Entities\ListWagonsTracking.cs" />
     <Compile Include="Entities\WTCarsReports.cs" />
     <Compile Include="Entities\WTReports.cs" />
+    <Compile Include="Entities\WTCycle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

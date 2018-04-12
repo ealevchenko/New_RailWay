@@ -138,6 +138,25 @@ namespace EFMT.Abstract
         WTCarsReports DeleteWTCarsReports(int id);
         #endregion
 
+        #region WTCycle
+        IQueryable<WTCycle> WTCycle { get; }
+        IQueryable<WTCycle> GetWTCycle();
+        WTCycle GetWTCycle(int id);
+        IQueryable<WTCycle> GetWTCycleOfNumCar(int num);
+        int SaveWTCycle(WTCycle WTCycle);
+        WTCycle DeleteWTCycle(int id);
+        #endregion
+
+        #region CycleWagonsTracking
+            List<CycleWagonsTracking> GetCycleWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop);
+        #endregion
+
+        #region RouteWagonTracking
+            List<RouteWagonTracking> GetRouteWagonTrackingOfReports(int id_report, DateTime start, DateTime stop);
+            List<RouteWagonTracking> GetLastRouteWagonTrackingOfReports(int id_report, DateTime start, DateTime stop);
+            List<CurentWagonTracking> GetLastWagonTrackingOfReports(int id_report, DateTime start, DateTime stop);
+        #endregion
+
         #region CountCarsOfSostav
         List<CountCarsOfSostav> GetNoCloseArrivalCarsOfStationUZ(int code);
         List<CountCarsOfSostav> GetArrivalCarsOfStationUZ(int code, bool close);

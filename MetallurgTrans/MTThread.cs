@@ -489,7 +489,7 @@ namespace MetallurgTrans
             }
         }
         /// <summary>
-        /// Поток переноса вагонов по прибытию
+        /// Поток переноса информации об вагонах по которым установленно слижение в MT и формирование циклограммы
         /// </summary>
         private static void TransferWagonsTracking()
         {
@@ -522,6 +522,7 @@ namespace MetallurgTrans
                 }
                 dt_start = DateTime.Now;
                 int res_transfer = 0;
+                int res_transfer_cycle = 0;
                 //lock (locker_xml_file)
                 //{
                 MTTransfer mtt = new MTTransfer(service);
@@ -530,10 +531,11 @@ namespace MetallurgTrans
                 mtt.UserWagonsTracking = user_wagons_tracking;
                 mtt.PSWWagonsTracking = psw_wagons_tracking;
                 mtt.APIWagonsTracking = api_wagons_tracking;
-                res_transfer = mtt.TransferWagonsTracking();
+                res_transfer = mtt.TransferWagonsTracking();    // Перенос данных
+                res_transfer_cycle = mtt.TransferWTCycle();     // Формироание циклограмм
                 //}
                 TimeSpan ts = DateTime.Now - dt_start;
-                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}, res_transfer_cycle:{7}.", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer, res_transfer_cycle);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
                 service.WriteServices(dt_start, DateTime.Now, res_transfer);
             }

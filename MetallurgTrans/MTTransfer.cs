@@ -45,6 +45,15 @@ namespace MetallurgTrans
         close_arrival_station_on = -6,
     }
 
+    public enum wtroute : int
+    {
+        not = 0,
+        amkr = 1,
+        send = 2,
+        client = 3,
+        ret = 4,
+    }
+
     [Serializable()]
     public class FileApproachesSostav
     {
@@ -1312,6 +1321,160 @@ namespace MetallurgTrans
             return;
         }
 
+        #endregion
+
+        #region WTCycle
+        /// <summary>
+        /// Проверка строка WagonsTracking это начало цикла
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public bool IsStartCycle(WagonsTracking car) {
+            return IsArrivalAMKR(car);
+        }
+
+        public bool IsSendingClient(WagonsTracking car) {
+            return car.st_disl == 46700 & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") & car.st_end != 46700 ? true : false;
+        }
+        /// <summary>
+        /// Начало вагон у клиента
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="client_code"></param>
+        /// <returns></returns>
+        public bool IsArrivalClient(WagonsTracking car, int client_code) {
+            return car.st_disl != 46700 & (car.nameop == "ОТОТ") & car.st_disl == client_code ? true : false;
+        }
+        /// <summary>
+        /// Начало возвращения вагона
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public bool IsReturnClient(WagonsTracking car) {
+            return car.st_end == 46700 & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") ? true : false;
+        }
+        /// <summary>
+        /// Начало вагон на АМКР
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public bool IsArrivalAMKR(WagonsTracking car) {
+            return car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН") & (car.kgrp == 7932 | car.kgrp == 3437) ? true : false;
+        }
+        /// <summary>
+        /// Перенос и формирование циклограммы по всем вагонам
+        /// </summary>
+        /// <returns></returns>
+        public int TransferWTCycle() {
+            try
+            {
+                int transfer = 0;
+                int transfer_car = 0;
+                int error = 0; 
+                EFMetallurgTrans efmt = new EFMetallurgTrans();
+                List<int> cars = efmt.WagonsTracking.ToList().Select(c => c.nvagon).Distinct().ToList();
+                foreach (int car in cars){
+                   int res_tr = TransferWTCycle(car);
+                   if (res_tr > 0) { transfer++; transfer_car += res_tr; }
+                   if (res_tr < 0) { error++; }
+                   if (res_tr == 0) { transfer++; }
+                }
+                string mess = String.Format("Коррекция данных БД MT.WagonsTracking выполнена, найдено для коррекции {0} вагонов, скорректировано {1} групп вагонов, общее количество коррекций {2}, ошибки при коррекции {3}."
+                    , cars != null ? cars.Count() : 0, transfer, transfer_car, error);
+                mess.WriteInformation(servece_owner, this.eventID);
+                if (cars != null && cars.Count() > 0) { mess.WriteEvents(error > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+                return transfer;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferWTCycle()"), servece_owner, eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Перенос и формирование циклограммы по указаному вагону 
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public int TransferWTCycle(int num) {
+            try
+            {
+                int transfer = 0;
+                int error = 0; 
+                EFMetallurgTrans efmt = new EFMetallurgTrans();
+                int cycle = 0;
+                wtroute route = wtroute.not;
+                int station_sending = 0;
+                int station_from = 0;
+                List<WagonsTracking> list_wt_cars;
+                WTCycle last_Cycle = efmt.GetWTCycleOfNumCar(num).OrderByDescending(c=>c.id).FirstOrDefault();
+                if (last_Cycle == null)
+                {
+                    // Последней записи нет переносим все
+                    list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).OrderBy(t=>t.dt).ToList();
+                }
+                else { 
+                    list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).Where(t=>t.id>last_Cycle.id_wt).OrderBy(t=>t.dt).ToList();
+                    cycle = last_Cycle.cycle;
+                    route = (wtroute)last_Cycle.route;
+                    station_sending = last_Cycle.station_end;
+                    station_from = last_Cycle.station_from;
+                }
+                // Переносим двнные
+                foreach (WagonsTracking car in list_wt_cars)
+                {
+                    if (IsStartCycle(car))
+                    { // Это старт цикла
+                        cycle++;
+                        route = wtroute.amkr;
+                        station_sending = 46700;
+                        station_from = station_sending;
+                    }
+                    if (route == wtroute.amkr & IsSendingClient(car))
+                    { // отправка клиенту
+                        route = wtroute.send;
+                        station_from = 46700;
+                        station_sending = (int)car.st_end;
+                    }
+                    if (route == wtroute.send & IsArrivalClient(car, station_sending)) { // прибыл клиенту
+                        route = wtroute.client;
+                        station_from = station_sending;
+                    }
+                    if (route == wtroute.client & IsReturnClient(car))
+                    { // возврат
+                        route = wtroute.ret;
+                        station_sending = 46700;
+
+                    }
+                    if (route == wtroute.ret & IsArrivalAMKR(car))
+                    { // возврат
+                        route = wtroute.amkr;
+                        station_sending = 46700;
+                        station_from = station_sending;
+                    }
+                    // Сохраним
+                    if (cycle > 0)
+                    {
+                        int res = efmt.SaveWTCycle(new WTCycle()
+                        {
+                            id = 0,
+                            id_wt = car.id,
+                            cycle = cycle,
+                            station_end = station_sending,
+                            station_from = station_from,
+                            route = (int)route
+                        });
+                        if (res > 0) { transfer++; } else { error++; }
+                    }
+                }
+                return transfer;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferWTCycle(num={0})", num), servece_owner, eventID);
+                return -1;
+            }
+        }
         #endregion
     }
 }
