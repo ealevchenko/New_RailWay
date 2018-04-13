@@ -43,6 +43,29 @@
     { "tag": "table_field_kgrp", "ru": "Грузополучатель", "en": "Consignee" },
     { "tag": "table_field_nst_form", "ru": "Станция отправления", "en": "Station of departure" },
     { "tag": "table_field_ves", "ru": "Вес", "en": "The weight" },
-    { "tag": "table_field_type_cargo_code", "ru": "Тип груза(код ЕТСНГ)", "en": "Type of cargo (ETSNG code)" }
+    { "tag": "table_field_type_cargo_code", "ru": "Тип груза(код ЕТСНГ)", "en": "Type of cargo (ETSNG code)" },
+
+    { "tag": "label_view_all", "ru": "Все маршруты", "en": "All routes" },
+    { "tag": "label_view_last", "ru": "Текщий маршрут", "en": "Tracking route" },
+
+    { "tag": "name_route_1", "ru": "на АМКР", "en": "to AMKR" },
+    { "tag": "name_route_2", "ru": "отправлен", "en": "sent to" },
+    { "tag": "name_route_3", "ru": "в порту", "en": "in port" },
+    { "tag": "name_route_4", "ru": "на подходах", "en": "on approaches" },
+        
+    { "tag": "table_field_nvagon", "ru": "№ вагона", "en": "# car" },
+    { "tag": "table_field_cycle", "ru": "Цикл", "en": "Cycle" },
+    { "tag": "table_field_route", "ru": "Маршрут", "en": "Route" },
+    { "tag": "table_field_name_station_from", "ru": "Станция отправки", "en": "Sending station" },
+    { "tag": "table_field_name_station_disl", "ru": "Станция дислокации", "en": "Dislocation station" },
+    { "tag": "table_field_name_station_end", "ru": "Станция назначения", "en": "Destination station" },   
+    { "tag": "table_field_dt_start", "ru": "Начат", "en": "Started" },
+    { "tag": "table_field_dt_stop", "ru": "Закончен", "en": "Finished" },
+    { "tag": "table_field_dt_difference", "ru": "Продолжительность", "en": "Duration" },
+    { "tag": "table_field_time_limit", "ru": "Времен. норматив", "en": "Temporary norm" },
+    { "tag": "table_field_time_left", "ru": "Факт. норматив", "en": "Actual norm" },
+    { "tag": "table_field_km", "ru": "Факт. расст.", "en": "Actual distance" },
+    { "tag": "table_field_km_distance", "ru": "Осталось пройти", "en": "It remains to pass" },
+    { "tag": "table_field_type_cargo", "ru": "Тип груза", "en": "Type of cargo" }
 
 ]

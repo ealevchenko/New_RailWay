@@ -5,7 +5,6 @@
 tr.group,
 tr.group:hover {
     background-color: #ddd !important;
-
 }
 
 
@@ -16,7 +15,7 @@ td.details-control {
 
 tr.shown td.details-control {
     background: url('../../Content/DataTables/images1/details_close.png') no-repeat center center;
-}    
+}
 
 .detali-wt {
     border-left: 6px solid #8ae;
@@ -42,24 +41,89 @@ tr.shown td.details-control {
     }
 
 #panel-select-routes {
-    text-align:left;
+    text-align: left;
 }
 
 #table-list-wt-last {
-    font-size:11px
+    font-size: 11px;
 }
 
-#table-list-wt-last th {
-    text-align:center;
-}
+    #table-list-wt-last th {
+        text-align: center;
+    }
 
-#table-list-wt-last td {
-    text-align:center;
-    font-size:13px;
-}
+    #table-list-wt-last td {
+        text-align: center;
+        font-size: 13px;
+    }
+
 .not-limit {
-    background :#e0ab85;
+    background: #e0ab85;
 }
-.ok-limit{
-    background :#a0ce77;
+
+.ok-limit {
+    background: #a0ce77;
+}
+
+.on-amkr {
+    background: #DDEBF7;
+}
+
+.cars-sending {
+    background: #FFF2CC;
+}
+
+.cars-approach {
+    background: #FFF2CC;
+}
+
+.on-client {
+    background: #E2EFDA;
+}
+
+.footer-on-amkr {
+    background: #BDD7EE;
+    font-weight: bold;
+    color: #3e3b3b;
+    border: 1px solid #808080;
+}
+
+.footer-cars-sending {
+    background: #FFE699;
+    font-weight: bold;
+    color: #3e3b3b;
+    border: 1px solid #808080;
+}
+
+.footer-cars-approach {
+    background: #FFE699;
+    font-weight: bold;
+    color: #3e3b3b;
+    border: 1px solid #808080;
+}
+
+.footer-on-client {
+    background: #C6E0B4;
+    font-weight: bold;
+    color: #3e3b3b;
+    border: 1px solid #808080;
+
+}
+.right-line {
+    border-right: 2px solid #808080;
+
+}
+
+table#table-list-wt-last tfoot th, table#table-list-wt-last tfoot td {
+    border-top: 2px solid #808080;
+}
+
+.label-text {
+    font-weight:400;
+     color: #3e3b3b;
+}
+
+.value-text {
+    font-weight:400;
+    color:#0026ff;
 }

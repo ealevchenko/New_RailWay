@@ -215,3 +215,97 @@ function getAsyncLastWagonTrackingAndDateTimeOfReports(id_reports, start, stop, 
         },
     });
 }
+
+// Вернуть все маршруты по группе вагонов за указанное время
+function getAsyncRouteWagonTrackingOfReports(id_reports, start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/route/report/' + id_reports + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Вернуть все маршруты по группе вагонов за указанное время
+function getAsyncRouteWagonTrackingAndDateTimeOfReports(id_reports, start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/route_dt/report/' + id_reports + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Вернуть последний маршрут по группе вагонов за указанное время
+function getAsyncLastRouteWagonTrackingOfReports(id_reports, start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/route/last/report/' + id_reports + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Вернуть последний маршрут по группе вагонов за указанное время
+function getAsyncLastRouteWagonTrackingAndDateTimeOfReports(id_reports, start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/route_dt/last/report/' + id_reports + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
