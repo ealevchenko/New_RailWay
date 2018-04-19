@@ -49,52 +49,52 @@ function getAsyncDBWagonsTracking(callback) {
     });
 }
 
-function getAsyncDBWagonsTrackingOfReports(id_reports, callback) {
-    $.ajax({
-        type: 'GET',
-        url: '/railway/api/mt/wagons_tracking_arhiv/report/'+ id_reports,
-        async: true,
-        dataType: 'json',
-        beforeSend: function () {
-            AJAXBeforeSend();
-        },
-        success: function (data) {
-            if (typeof callback === 'function') {
-                callback(data);
-            }
-        },
-        error: function (x, y, z) {
-            OnAJAXError(x, y, z);
-        },
-        complete: function () {
-            AJAXComplete();
-        },
-    });
-}
+//function getAsyncDBWagonsTrackingOfReports(id_reports, callback) {
+//    $.ajax({
+//        type: 'GET',
+//        url: '/railway/api/mt/wagons_tracking_arhiv/report/'+ id_reports,
+//        async: true,
+//        dataType: 'json',
+//        beforeSend: function () {
+//            AJAXBeforeSend();
+//        },
+//        success: function (data) {
+//            if (typeof callback === 'function') {
+//                callback(data);
+//            }
+//        },
+//        error: function (x, y, z) {
+//            OnAJAXError(x, y, z);
+//        },
+//        complete: function () {
+//            AJAXComplete();
+//        },
+//    });
+//}
 
 // Веруть список всех вагонов за которыми установлено слижение
-function getAsyncDBCarWagonsTracking(num, start, stop, callback) {
-    $.ajax({
-        type: 'GET',
-        url: '/railway/api/mt/wagons_tracking_arhiv/car/' + num + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
-        async: true,
-        dataType: 'json',
-        beforeSend: function () {
-            AJAXBeforeSend();
-        },
-        success: function (data) {
-            if (typeof callback === 'function') {
-                callback(data);
-            }
-        },
-        error: function (x, y, z) {
-            OnAJAXError(x, y, z);
-        },
-        complete: function () {
-            AJAXComplete();
-        },
-    });
-}
+//function getAsyncDBCarWagonsTracking(num, start, stop, callback) {
+//    $.ajax({
+//        type: 'GET',
+//        url: '/railway/api/mt/wagons_tracking_arhiv/car/' + num + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
+//        async: true,
+//        dataType: 'json',
+//        beforeSend: function () {
+//            AJAXBeforeSend();
+//        },
+//        success: function (data) {
+//            if (typeof callback === 'function') {
+//                callback(data);
+//            }
+//        },
+//        error: function (x, y, z) {
+//            OnAJAXError(x, y, z);
+//        },
+//        complete: function () {
+//            AJAXComplete();
+//        },
+//    });
+//}
 
 // Веруть список составов на УЗ КР по которым есть не принятые вагоны
 function getNoCloseArrivalCarsOfStationUZ(code, callback) {
@@ -143,6 +143,9 @@ function getAsyncCarsOfArrivalUZ(id_sostav, is_close, callback) {
         },
     });
 }
+
+
+
 
 // Веруть список всех вагонов за которыми установлено слижение
 function getAsyncWTReports(callback) {
@@ -308,4 +311,76 @@ function getAsyncLastRouteWagonTrackingAndDateTimeOfReports(id_reports, start, s
         },
     });
 }
+
+
+function getAsyncLastOperationWagonsTrackingOfCarsReports(id_reports, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/operations/last/report/' + id_reports,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+function getAsyncOperationWagonsTrackingOfNumCarAndDT(num, start, stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/operations/car/' + num + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+// Вернуть список операций по указаному вагону за указаный диапазон id
+function getAsyncOperationWagonsTrackingOfNumCar(nvagon, id_start, id_stop, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/operations/car/' + nvagon + '/id_start/' + id_start + '/id_stop/' + id_stop,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 

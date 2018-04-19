@@ -1,5 +1,9 @@
 ﻿[
-    { "tag": "label_select_text", "ru": "Выберите группу вагонов: ", "en": "Choose a wagon group: " },
+    {
+        "tag": "label_select_text",
+        "ru": "Выберите группу вагонов: ",
+        "en": "Choose a wagon group: "
+    },
     {
         "tag": "table_message_emptyTable",
         "ru": "Данные отсутствуют.",
@@ -31,41 +35,275 @@
         "en": "Reports#5"
     },
 
-    { "tag": "link_tabs_routes_1", "ru": "Все маршруты", "en": "All routes" },
-    { "tag": "link_tabs_routes_2", "ru": "Текущее местоположение", "en": "Current location" },
-    { "tag": "link_tabs_routes_3", "ru": "Текущая оборачиваемость", "en": "Current turnover" },
+    {
+        "tag": "link_tabs_routes_1",
+        "ru": "Маршруты",
+        "en": "All routes"
+    },
+    {
+        "tag": "link_tabs_routes_2",
+        "ru": "Текущее местоположение",
+        "en": "Current location"
+    },
+    {
+        "tag": "link_tabs_routes_3",
+        "ru": "Текущая оборачиваемость",
+        "en": "Current turnover"
+    },
 
-    { "tag": "table_field_nameop", "ru": "Операция", "en": "Operation" },
-    { "tag": "table_field_dt", "ru": "Дата и время", "en": "Date And Time" },
-    { "tag": "table_field_nst_disl", "ru": "Станция дислокации", "en": "Dislocation station" },
-    { "tag": "table_field_index", "ru": "Индекс поезда", "en": "Train index" },
-    { "tag": "table_field_nst_nazn", "ru": "Станция назначения", "en": "Station of destination" },
-    { "tag": "table_field_kgrp", "ru": "Грузополучатель", "en": "Consignee" },
-    { "tag": "table_field_nst_form", "ru": "Станция отправления", "en": "Station of departure" },
-    { "tag": "table_field_ves", "ru": "Вес", "en": "The weight" },
-    { "tag": "table_field_type_cargo_code", "ru": "Тип груза(код ЕТСНГ)", "en": "Type of cargo (ETSNG code)" },
+    {
+        "tag": "link_tabs_operations_1",
+        "ru": "Последняя",
+        "en": "The last"
+    },
 
-    { "tag": "label_view_all", "ru": "Все маршруты", "en": "All routes" },
-    { "tag": "label_view_last", "ru": "Текщий маршрут", "en": "Tracking route" },
+    { "tag": "table_field_operation_nvagon", "ru": "ВАГОН", "en": "" },
+    { "tag": "table_field_operation_type_car", "ru": "ТИП", "en": "" },
+    { "tag": "table_field_operation_nameop", "ru": "ОПЕР.", "en": "" },
+    { "tag": "table_field_operation_dt", "ru": "ДАТА/ВРЕМЯ", "en": "" },
+    { "tag": "table_field_operation_st_disl", "ru": "КСДТ", "en": "" },
+    { "tag": "table_field_operation_nst_disl", "ru": "ДИСЛОКАЦИЯ", "en": "" },
+    { "tag": "table_field_operation_st_form", "ru": "КСТО", "en": "" },
+    { "tag": "table_field_operation_nst_form", "ru": "ОТПРАВЛЕНИЯ", "en": "" },
+    { "tag": "table_field_operation_index", "ru": "ИНДЕКС ПОЕЗДА", "en": "" },
+    { "tag": "table_field_operation_st_nazn", "ru": "КСТН", "en": "" },
+    { "tag": "table_field_operation_nst_nazn", "ru": "НАЗНАЧЕНИЕ", "en": "" },
+    { "tag": "table_field_operation_kgro", "ru": "КГрО", "en": "" },
+    { "tag": "table_field_operation_kgrp", "ru": "КГрП", "en": "" },
+    { "tag": "table_field_operation_st_end", "ru": "ККСТ", "en": "" },
+    { "tag": "table_field_operation_nst_end", "ru": "КОНЕЧНАЯ", "en": "" },
+    { "tag": "table_field_operation_ves", "ru": "ВЕС", "en": "" },
+    { "tag": "table_field_operation_kgr", "ru": "КГР", "en": "" },
+    { "tag": "table_field_operation_type_cargo", "ru": "РОД ГРУЗА", "en": "" },
+    { "tag": "table_field_operation_ntrain", "ru": "ПОЕЗД", "en": "" },
 
-    { "tag": "name_route_1", "ru": "на АМКР", "en": "to AMKR" },
-    { "tag": "name_route_2", "ru": "отправлен", "en": "sent to" },
-    { "tag": "name_route_3", "ru": "в порту", "en": "in port" },
-    { "tag": "name_route_4", "ru": "на подходах", "en": "on approaches" },
-        
-    { "tag": "table_field_nvagon", "ru": "№ вагона", "en": "# car" },
-    { "tag": "table_field_cycle", "ru": "Цикл", "en": "Cycle" },
-    { "tag": "table_field_route", "ru": "Маршрут", "en": "Route" },
-    { "tag": "table_field_name_station_from", "ru": "Станция отправки", "en": "Sending station" },
-    { "tag": "table_field_name_station_disl", "ru": "Станция дислокации", "en": "Dislocation station" },
-    { "tag": "table_field_name_station_end", "ru": "Станция назначения", "en": "Destination station" },   
-    { "tag": "table_field_dt_start", "ru": "Начат", "en": "Started" },
-    { "tag": "table_field_dt_stop", "ru": "Закончен", "en": "Finished" },
-    { "tag": "table_field_dt_difference", "ru": "Продолжительность", "en": "Duration" },
-    { "tag": "table_field_time_limit", "ru": "Времен. норматив", "en": "Temporary norm" },
-    { "tag": "table_field_time_left", "ru": "Факт. норматив", "en": "Actual norm" },
-    { "tag": "table_field_km", "ru": "Факт. расст.", "en": "Actual distance" },
-    { "tag": "table_field_km_distance", "ru": "Осталось пройти", "en": "It remains to pass" },
-    { "tag": "table_field_type_cargo", "ru": "Тип груза", "en": "Type of cargo" }
 
+    {
+        "tag": "table_field_nameop",
+        "ru": "Операция",
+        "en": "Operation"
+    },
+    {
+        "tag": "table_field_dt",
+        "ru": "Дата и время",
+        "en": "Date And Time"
+    },
+    {
+        "tag": "table_field_nst_disl",
+        "ru": "Станция дислокации",
+        "en": "Dislocation station"
+    },
+    {
+        "tag": "table_field_index",
+        "ru": "Индекс поезда",
+        "en": "Train index"
+    },
+    {
+        "tag": "table_field_nst_nazn",
+        "ru": "Станция назначения",
+        "en": "Station of destination"
+    },
+    {
+        "tag": "table_field_kgrp",
+        "ru": "Грузополучатель",
+        "en": "Consignee"
+    },
+    {
+        "tag": "table_field_kgro",
+        "ru": "Грузоотправитель",
+        "en": "Consignor"
+    },
+    {
+        "tag": "table_field_nst_form",
+        "ru": "Станция отправления",
+        "en": "Station of departure"
+    },
+    {
+        "tag": "table_field_nst_end",
+        "ru": "Станция назначения",
+        "en": "Destination station"
+    },
+    {
+        "tag": "table_field_km",
+        "ru": "Расстояние",
+        "en": "Distance"
+    },
+    {
+        "tag": "table_field_ves",
+        "ru": "Вес",
+        "en": "The weight"
+    },
+    {
+        "tag": "table_field_type_cargo_code",
+        "ru": "Тип груза(код ЕТСНГ)",
+        "en": "Type of cargo (ETSNG code)"
+    },
+
+    {
+        "tag": "label_view_all",
+        "ru": "Все",
+        "en": "All routes"
+    },
+    {
+        "tag": "label_view_last",
+        "ru": "Последний",
+        "en": "Tracking route"
+    },
+
+    {
+        "tag": "name_route_1",
+        "ru": "на АМКР",
+        "en": "to AMKR"
+    },
+    {
+        "tag": "name_route_2",
+        "ru": "отправлен",
+        "en": "sent to"
+    },
+    {
+        "tag": "name_route_3",
+        "ru": "в порту",
+        "en": "in port"
+    },
+    {
+        "tag": "name_route_4",
+        "ru": "на подходах",
+        "en": "on approaches"
+    },
+
+    {
+        "tag": "table_field_nvagon",
+        "ru": "№ вагона",
+        "en": "# car"
+    },
+    {
+        "tag": "table_field_cycle",
+        "ru": "Цикл",
+        "en": "Cycle"
+    },
+    {
+        "tag": "table_field_route",
+        "ru": "Маршрут",
+        "en": "Route"
+    },
+    {
+        "tag": "table_field_name_station_from",
+        "ru": "Станция отправки",
+        "en": "Sending station"
+    },
+    {
+        "tag": "table_field_name_station_disl",
+        "ru": "Станция дислокации",
+        "en": "Dislocation station"
+    },
+    {
+        "tag": "table_field_name_station_end",
+        "ru": "Станция назначения",
+        "en": "Destination station"
+    },
+    {
+        "tag": "table_field_dt_start",
+        "ru": "Начат",
+        "en": "Started"
+    },
+    {
+        "tag": "table_field_dt_stop",
+        "ru": "Закончен",
+        "en": "Finished"
+    },
+    {
+        "tag": "table_field_dt_difference",
+        "ru": "Продолжительность",
+        "en": "Duration"
+    },
+    {
+        "tag": "table_field_time_limit",
+        "ru": "Времен. норматив",
+        "en": "Temporary norm"
+    },
+    {
+        "tag": "table_field_time_left",
+        "ru": "Факт. норматив",
+        "en": "Actual norm"
+    },
+    {
+        "tag": "table_field_km",
+        "ru": "Факт. расст.",
+        "en": "Actual distance"
+    },
+    {
+        "tag": "table_field_km_distance",
+        "ru": "Осталось пройти",
+        "en": "It remains to pass"
+    },
+    {
+        "tag": "table_field_type_cargo",
+        "ru": "Тип груза",
+        "en": "Type of cargo"
+    },
+
+    {
+        "tag": "table_field_name_station",
+        "ru": "Станция назначения",
+        "en": "Destination station"
+    },
+    {
+        "tag": "table_field_count",
+        "ru": "Всего",
+        "en": "Total"
+    },
+    {
+        "tag": "table_field_count_surplus",
+        "ru": "С превыш. нормат. времени",
+        "en": "With the excess of the time specific"
+    },
+    {
+        "tag": "table_field_count_norma",
+        "ru": "В нормат.",
+        "en": "In the norm."
+    },
+    {
+        "tag": "table_field_time_limit",
+        "ru": "Норматив",
+        "en": "Standard"
+    },
+    {
+        "tag": "table_field_time_avg",
+        "ru": "Факт. сред.",
+        "en": "Actual Average"
+    },
+    {
+        "tag": "button_to_excel",
+        "ru": "Экспорт в Excel",
+        "en": "Export to Excel"
+    },
+
+    {
+        "tag": "button_close_detali",
+        "ru": "Закрыть детали",
+        "en": "Close details"
+    },
+
+    {
+        "tag": "label_select_date_detali",
+        "ru": "Выберите период для деталей:",
+        "en": "Select a period for details:"
+    },
+
+    {
+        "tag": "label_total_cars",
+        "ru": "Общее количество вагонов: ",
+        "en": "Total number of wagons: "
+    },
+    {
+        "tag": "table_not_data",
+        "ru": "За указанный период данных нет.",
+        "en": "For the specified period, there is no data."
+    },
+
+    { "tag": "table_message_emptyTable", "ru": "Данные отсутствуют.", "en": "No data available in table." },
+    { "tag": "table_decimal", "ru": ",", "en": "." },
+    { "tag": "table_message_search", "ru": "Найти вагон:", "en": "Search car:" },
+    { "tag": "table_message_separator", "ru": "по", "en": "to" },
+    { "tag": "table_date_format", "ru": "DD.MM.YYYY HH:mm", "en": "MM/DD/YYYY HH:mm" }
 ]

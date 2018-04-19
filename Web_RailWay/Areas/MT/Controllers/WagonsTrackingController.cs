@@ -25,5 +25,17 @@ namespace Web_RailWay.Areas.MT.Controllers
         {
             return View();
         }
+
+        [Access(LogVisit = true)]
+        public ActionResult Routes()
+        {
+            return View();
+        }
+
+        [Access(LogVisit = true)]
+        public ActionResult Operations()
+        {
+            return View();
+        }
     }
 }

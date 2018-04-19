@@ -282,40 +282,40 @@ namespace Web_RailWay.Controllers.api
             }
         }
 
-            #region Операции над вагонами
-            // GET: api/mt/wagons_tracking_arhiv/report/2
-            [Route("wagons_tracking_arhiv/report/{id_report:int}")]
-            [ResponseType(typeof(DBWagonsTracking))]
-            public IHttpActionResult GetDBWagonsTrackingOfCarsReports(int id_report)
+            #region Операции над вагонами OperationWagonsTracking
+            // GET: api/mt/wagons_tracking_arhiv/operations/last/report/2
+            [Route("wagons_tracking_arhiv/operations/last/report/{id_report:int}")]
+            [ResponseType(typeof(OperationWagonsTracking))]
+            public IHttpActionResult GetLastOperationWagonsTrackingOfCarsReports(int id_report)
             {
                 try
                 {
                     SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
-                    List<DBWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<DBWagonsTracking>("EXEC [MT].[GetDBWagonsTrackingOfCarsReports] @idreport", i_id_report).ToList();
-                    if (arr_cars == null)
+                    List<OperationWagonsTracking> list_operations = this.rep_MT.Database.SqlQuery<OperationWagonsTracking>("EXEC [MT].[GetLastOperationWagonsTrackingOfCarsReports] @idreport", i_id_report).ToList();
+                    if (list_operations == null)
                     {
                         return NotFound();
                     }
-                    return Ok(arr_cars);
+                    return Ok(list_operations);
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("GetDBWagonsTrackingOfCarsReports(id_report={0})", id_report), eventID);
+                    e.WriteErrorMethod(String.Format("GetLastOperationWagonsTrackingOfCarsReports(id_report={0})", id_report), eventID);
                     return InternalServerError(e);
                 }
             }
 
-            // GET: api/mt/wagons_tracking_arhiv/car/52921004/start/2018-03-29T00:00:00.000Z/stop/2018-03-29T23:59:59.000Z
-            [Route("wagons_tracking_arhiv/car/{num:int}/start/{start:datetime}/stop/{stop:datetime}")]
-            [ResponseType(typeof(DBWagonsTracking))]
-            public IHttpActionResult GetDBCarWagonsTracking(int num, DateTime start, DateTime stop)
+            // GET: api/mt/wagons_tracking_arhiv/operations/car/52921004/start/2018-03-29T00:00:00.000Z/stop/2018-03-29T23:59:59.000Z
+            [Route("wagons_tracking_arhiv/operations/car/{num:int}/start/{start:datetime}/stop/{stop:datetime}")]
+            [ResponseType(typeof(OperationWagonsTracking))]
+            public IHttpActionResult GetOperationWagonsTrackingOfNumCarAndDT(int num, DateTime start, DateTime stop)
             {
                 try
                 {
                     SqlParameter i_num = new SqlParameter("@num", num);
                     SqlParameter dt_start = new SqlParameter("@start", start);
                     SqlParameter dt_stop = new SqlParameter("@stop", stop);
-                    List<DBWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<DBWagonsTracking>("EXEC [MT].[GetDBCarWagonsTracking] @num, @start, @stop", i_num, dt_start, dt_stop).ToList();
+                    List<OperationWagonsTracking> arr_cars = this.rep_MT.Database.SqlQuery<OperationWagonsTracking>("EXEC [MT].[GetOperationWagonsTrackingOfNumCarAndDT] @num, @start, @stop", i_num, dt_start, dt_stop).ToList();
                     if (arr_cars == null)
                     {
                         return NotFound();
@@ -324,12 +324,32 @@ namespace Web_RailWay.Controllers.api
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("GetDBCarWagonsTracking(num={0}, start={1}, stop={2})", num, start, stop), eventID);
+                    e.WriteErrorMethod(String.Format("GetOperationWagonsTrackingOfNumCarAndDT(num={0}, start={1}, stop={2})", num, start, stop), eventID);
+                    return InternalServerError(e);
+                }
+            }
+
+            // GET: api/mt/wagons_tracking_arhiv/operations/car/52921079/id_start/145741/id_stop/153672
+            [Route("wagons_tracking_arhiv/operations/car/{nvagon:int}/id_start/{id_start:int}/id_stop/{id_stop:int}")]
+            [ResponseType(typeof(OperationWagonsTracking))]
+            public IHttpActionResult GetOperationWagonsTrackingOfNumCar(int nvagon, int id_start, int id_stop)
+            {
+                try
+                {
+                    List<OperationWagonsTracking> list = this.rep_MT.GetOperationWagonsTrackingOfNumCar(nvagon, id_start, id_stop);
+                    if (list == null)
+                    {
+                        return NotFound();
+                    }
+                    return Ok(list);
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetOperationWagonsTrackingOfNumCar(id_report={0}, start={1}, stop={2})", nvagon, id_start, id_stop), eventID);
                     return InternalServerError(e);
                 }
             }
             #endregion
-
 
             #region Вернуть последний маршрут по группе вагонов за указанное время
             // GET: api/mt/wagons_tracking_arhiv/last/report/2/start/2018-04-01T00:00:00.000Z/stop/2018-04-30T23:59:59.000Z
@@ -468,7 +488,8 @@ namespace Web_RailWay.Controllers.api
                 }
             }
             #endregion
-        /// <summary>
+
+            /// <summary>
         /// Вернуть список рапартов
         /// </summary>
         // GET: api/mt/wagons_tracking/reports

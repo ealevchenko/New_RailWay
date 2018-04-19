@@ -1,0 +1,56 @@
+﻿.setup-operation {
+    padding: 5px;
+    text-align: left;
+}
+
+    .setup-operation button {
+        margin-left: 5px;
+    }
+
+    .setup-operation label {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+.label-text {
+    font-weight: 400;
+    color: #3e3b3b;
+}
+
+.value-text {
+    font-weight: 400;
+    color: #0026ff;
+}
+
+.dataTables_wrapper .dataTables_length {
+    float: right;
+}
+
+td.details-control {
+    background: url('../../Content/DataTables/images1/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+
+tr.shown td.details-control {
+    background: url('../../Content/DataTables/images1/details_close.png') no-repeat center center;
+}
+
+.detali-operation {
+    border-left: 6px solid #8ae;
+    border-top: 1px solid #8ae;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    background-color: #eee;
+    border-radius: 4px;
+    text-align:left;
+}
+
+.table-operation-detali {
+    font-size: 11px;
+    table-layout: fixed;
+}
+
+    .table-operation-detali th {
+        background: #8ae;
+    }

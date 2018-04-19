@@ -1,0 +1,79 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @MTResource.index_report_cars_amkr_operations_desc;
+    ViewBag.Home = @MTResource.index_report_cars_amkr_operations_title;
+}
+
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("LinkAdmin", "Home", new { area = "" }); }
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    @Styles.Render("~/jquery-ui/css")
+    @Styles.Render("~/DataTables/css")
+    @Styles.Render("~/datetime/css")
+    <link rel="stylesheet" type="text/css" href="~/Content/MT/operations.css">
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/Ajax")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/DataTables")
+    @Scripts.Render("~/bundles/datetime")
+    <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/metallurgtrans.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/railway.js" type="text/javascript"></script>
+    <script src="~/Scripts/MT/operations.js" type="text/javascript"></script>
+    <script>
+        $('header').addClass('img-header-mt');
+    </script>
+}
+
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        <label id="label-select" class="title-label"></label>
+        <select id="stations-list" name="station"></select>
+        <button class="ui-button ui-widget ui-corner-all" id="to-excel"> </button>
+    </div>
+    <div id="report-detali">
+        <div id="tabs-report-operations">
+            <ul>
+                <li><a href="#tabs-operations-1" id="link-tabs-operations-1"></a></li>
+                @*<li><a href="#tabs-operations-2" id="link-tabs-operations-2"></a></li>
+                <li><a href="#tabs-operations-3" id="link-tabs-operations-3"></a></li>*@
+            </ul>
+            <div id="tabs-operations-1">
+                <table class='display compact' id="table-list-operations" style="width:100%" cellpadding="0"></table>
+            </div>
+            @*<div id="tabs-operations-2">
+                <table class='compact table-bordered' id="table-list-last" style="width:100%" cellpadding="0"></table>
+            </div>
+            <div id="tabs-operations-3">
+                <table class='display compact' id="table-list-wt-cycle" style="width:100%" cellpadding="0"></table>
+            </div>*@
+        </div>
+
+    </div>
+    <div id="cls"></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

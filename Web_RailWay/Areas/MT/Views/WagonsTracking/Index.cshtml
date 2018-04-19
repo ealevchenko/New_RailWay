@@ -30,24 +30,24 @@
 <div class="content">
     <ul class="ca-menu">
         <li>
-            <a href='@Url.Action("ReportArhive", "WagonsTracking", new { area = "MT" })'>
+            <a href='@Url.Action("Operations", "WagonsTracking", new { area = "MT" })'>
                 <span class="ca-icon">H</span>
                 <div class="ca-content">
-                    <h2 class="ca-main">@MTResource.index_report_cars_amkr_db_title</h2>
-                    <h3 class="ca-sub">@MTResource.index_report_cars_amkr_db_desc</h3>
+                    <h2 class="ca-main">@MTResource.index_report_cars_amkr_operations_title</h2>
+                    <h3 class="ca-sub">@MTResource.index_report_cars_amkr_operations_desc</h3>
                 </div>
             </a>
         </li>
         <li>
-            <a href='@Url.Action("ReportOnline", "WagonsTracking", new { area = "MT" })'>
+            <a href='@Url.Action("Routes", "WagonsTracking", new { area = "MT" })'>
                 <span class="ca-icon">K</span>
                 <div class="ca-content">
-                    <h2 class="ca-main">@MTResource.index_report_cars_amkr_ol_title</h2>
-                    <h3 class="ca-sub">@MTResource.index_report_cars_amkr_ol_desc</h3>
+                    <h2 class="ca-main">@MTResource.index_report_cars_amkr_routes_title</h2>
+                    <h3 class="ca-sub">@MTResource.index_report_cars_amkr_routes_desc</h3>
                 </div>
             </a>
         </li>
-        <li>
+        @*<li>
             <a href="#">
                 <span class="ca-icon">I</span>
                 <div class="ca-content">
@@ -55,7 +55,7 @@
                     <h3 class="ca-sub">@MTResource.index_report_hist_cars_amkr_desc</h3>
                 </div>
             </a>
-        </li>
+        </li>*@
 
     </ul>
 </div>

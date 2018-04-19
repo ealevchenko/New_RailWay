@@ -1,34 +1,6 @@
-﻿body {
-}
-
-
-tr.group,
-tr.group:hover {
-    background-color: #ddd !important;
-}
-
-
-td.details-control {
-    background: url('../../Content/DataTables/images1/details_open.png') no-repeat center center;
-    cursor: pointer;
-}
-
-tr.shown td.details-control {
-    background: url('../../Content/DataTables/images1/details_close.png') no-repeat center center;
-}
-
-.detali-wt {
-    border-left: 6px solid #8ae;
-    border-top: 1px solid #8ae;
-    padding: 10px;
-    font-size: 14px;
-    line-height: 1.4;
-    background-color: #eee;
-    border-radius: 4px;
-}
-
-.setup-operation {
+﻿.setup-operation {
     padding: 5px;
+    text-align:left;
 }
 
     .setup-operation button {
@@ -40,19 +12,30 @@ tr.shown td.details-control {
         margin-right: 5px;
     }
 
-#panel-select-routes {
-    text-align: left;
+.label-text {
+    font-weight: 400;
+    color: #3e3b3b;
 }
 
-#table-list-wt-last {
+.value-text {
+    font-weight: 400;
+    color: #0026ff;
+}
+
+.dataTables_wrapper .dataTables_length {
+    float:right;
+}
+
+#table-list-last {
     font-size: 11px;
+    table-layout:fixed;
 }
 
-    #table-list-wt-last th {
+    #table-list-last th {
         text-align: center;
     }
 
-    #table-list-wt-last td {
+    #table-list-last td {
         text-align: center;
         font-size: 13px;
     }
@@ -107,24 +90,23 @@ tr.shown td.details-control {
     font-weight: bold;
     color: #3e3b3b;
     border: 1px solid #808080;
-
 }
 
-.right-line {
-    border-right: 2px solid #808080;
-
+td.details-control {
+    background: url('../../Content/DataTables/images1/details_open.png') no-repeat center center;
+    cursor: pointer;
 }
 
-table#table-list-wt-last tfoot th, table#table-list-wt-last tfoot td {
-    border-top: 2px solid #808080;
+tr.shown td.details-control {
+    background: url('../../Content/DataTables/images1/details_close.png') no-repeat center center;
 }
 
-.label-text {
-    font-weight:400;
-     color: #3e3b3b;
-}
-
-.value-text {
-    font-weight:400;
-    color:#0026ff;
+.detali-operation-wt {
+    border-left: 6px solid #8ae;
+    border-top: 1px solid #8ae;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    background-color: #eee;
+    border-radius: 4px;
 }

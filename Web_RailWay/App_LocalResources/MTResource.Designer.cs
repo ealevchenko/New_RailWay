@@ -349,6 +349,42 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Операции над вагонами собственного парка, по данным ООО «МеталлургТранс».
+        /// </summary>
+        public static string index_report_cars_amkr_operations_desc {
+            get {
+                return ResourceManager.GetString("index_report_cars_amkr_operations_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Операции.
+        /// </summary>
+        public static string index_report_cars_amkr_operations_title {
+            get {
+                return ResourceManager.GetString("index_report_cars_amkr_operations_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Маршруты вагонов собственного парка, по данным ООО «МеталлургТранс».
+        /// </summary>
+        public static string index_report_cars_amkr_routes_desc {
+            get {
+                return ResourceManager.GetString("index_report_cars_amkr_routes_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Маршруты.
+        /// </summary>
+        public static string index_report_cars_amkr_routes_title {
+            get {
+                return ResourceManager.GetString("index_report_cars_amkr_routes_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Вагоны АМКР.
         /// </summary>
         public static string index_report_cars_amkr_title {

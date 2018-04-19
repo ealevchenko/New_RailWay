@@ -82,3 +82,5 @@
 /// <reference path="rw/awas1.js" />
 /// <reference path="rw/awas.json" />
 /// <reference path="mt/wagons_tracking_arhiv.js" />
+/// <reference path="mt/routes.js" />
+/// <reference path="mt/operations.js" />

@@ -27,7 +27,7 @@
             id: -1,
             Report: null,
             Description: null
-        }
+        },
     // Объект группа вагонов для отчета
     wt_report_cars = {
         html_select: $('select[name ="station"]'),
@@ -673,7 +673,6 @@
             }
             //this.obj.draw();
         },
-
     }
     //-------------------------------
     // Таблица детального расположения вагонов
@@ -1064,7 +1063,6 @@
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
         }
     }
-
 
     //-----------------------------------------------------------------------------------------
     // Функции

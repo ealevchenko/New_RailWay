@@ -387,4 +387,16 @@
   <data name="index_report_cars_amkr_ol_title" xml:space="preserve">
     <value>Вагоны OnLine</value>
   </data>
+  <data name="index_report_cars_amkr_operations_desc" xml:space="preserve">
+    <value>Операции над вагонами собственного парка, по данным ООО «МеталлургТранс»</value>
+  </data>
+  <data name="index_report_cars_amkr_operations_title" xml:space="preserve">
+    <value>Операции</value>
+  </data>
+  <data name="index_report_cars_amkr_routes_desc" xml:space="preserve">
+    <value>Маршруты вагонов собственного парка, по данным ООО «МеталлургТранс»</value>
+  </data>
+  <data name="index_report_cars_amkr_routes_title" xml:space="preserve">
+    <value>Маршруты</value>
+  </data>
 </root>
