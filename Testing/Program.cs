@@ -117,7 +117,8 @@ namespace Testing
             //tst_tr_app.MTTransfer_TransferWTCycle(); // Перенесем и создадим циклы движения всех вагонов
             //tst_tr_app.EFMetallurgTrans_GetRouteWagonsTrackingOfReports(); // получить данные по циклам движения указанных вагонов за указанное время
             //tst_tr_app.EFMetallurgTrans_GetLastRouteWagonsTrackingOfReports(); // получить данные по циклам движения указанных вагонов за указанное время
-            tst_tr_app.EFMetallurgTrans_GetLastWagonTrackingOfReports();
+            //tst_tr_app.EFMetallurgTrans_GetLastWagonTrackingOfReports();
+            tst_tr_app.EFMetallurgTrans_GetOperationWagonsTrackingOfNumCar(); // Проверка получения списка операций по номеру и id
 
             #endregion
 

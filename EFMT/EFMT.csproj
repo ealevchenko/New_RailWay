@@ -55,6 +55,7 @@
     <Compile Include="Concrete\EFMetallurgTrans.cs" />
     <Compile Include="Entities\CountCarsOfSostav.cs" />
     <Compile Include="Entities\CycleWagonsTracking.cs" />
+    <Compile Include="Entities\OperationWagonsTracking.cs" />
     <Compile Include="Entities\RouteDBWagonsTracking.cs" />
     <Compile Include="Entities\RouteWagonTracking.cs" />
     <Compile Include="Entities\WagonsTracking.cs" />

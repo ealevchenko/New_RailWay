@@ -157,6 +157,10 @@ namespace EFMT.Abstract
             List<CurentWagonTracking> GetLastWagonTrackingOfReports(int id_report, DateTime start, DateTime stop);
         #endregion
 
+        #region OperationWagonsTracking
+            List<OperationWagonsTracking> GetOperationWagonsTrackingOfNumCar(int nvagon, int? id_start, int? id_stop);
+        #endregion
+
         #region CountCarsOfSostav
         List<CountCarsOfSostav> GetNoCloseArrivalCarsOfStationUZ(int code);
         List<CountCarsOfSostav> GetArrivalCarsOfStationUZ(int code, bool close);

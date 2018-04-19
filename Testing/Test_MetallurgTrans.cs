@@ -219,5 +219,14 @@ namespace Testing
             DateTime stop = new DateTime(2018, 4, 30, 23, 59, 59);
             efmt.GetLastWagonTrackingOfReports(2, start, stop);
         }
+
+        public void EFMetallurgTrans_GetOperationWagonsTrackingOfNumCar()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            List<OperationWagonsTracking> list1 = efmt.GetOperationWagonsTrackingOfNumCar(52921079, 145741, 153672);
+            List<OperationWagonsTracking> list2 = efmt.GetOperationWagonsTrackingOfNumCar(52921079, null, null);
+            List<OperationWagonsTracking> list3 = efmt.GetOperationWagonsTrackingOfNumCar(52921079, null, 153672);
+            List<OperationWagonsTracking> list4 = efmt.GetOperationWagonsTrackingOfNumCar(52921079, 145741, null);
+        }
     }
 }

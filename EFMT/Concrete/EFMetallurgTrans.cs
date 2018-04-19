@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using libClass;
 using System.Data.SqlClient;
 using RWConversionFunctions;
+using System.Data;
 
 namespace EFMT.Concrete
 {
@@ -2086,8 +2087,57 @@ namespace EFMT.Concrete
 
             #endregion
 
+            #region OperationWagonsTracking
+            /// <summary>
+            /// Вернуть список операций по указаному вагону в интервале указанных id
+            /// </summary>
+            /// <param name="nvagon"></param>
+            /// <param name="id_start"></param>
+            /// <param name="id_stop"></param>
+            /// <returns></returns>
+            public List<OperationWagonsTracking> GetOperationWagonsTrackingOfNumCar(int nvagon, int? id_start, int? id_stop)
+            {
+                try
+                {
+                    SqlParameter i_nvagon = new SqlParameter("@nvagon", nvagon);
+                    SqlParameter i_id_start = new SqlParameter();
+                    i_id_start.ParameterName = "@id_start";
+                    i_id_start.SqlDbType = SqlDbType.Int;
+                    //i_id_start.SqlValue = id_start;
+                    if (id_start != null)
+                    {
+                        i_id_start.SqlValue = id_start;
+                    }
+                    else
+                    {
+                        i_id_start.SqlValue = DBNull.Value;
+                    }
 
-            //#region RouteDBWagonsTracking
+                    SqlParameter i_id_stop = new SqlParameter();
+                    i_id_stop.ParameterName = "@id_stop";
+                    i_id_stop.SqlDbType = SqlDbType.Int;
+                    //i_id_stop.SqlValue = id_stop;
+                    if (i_id_stop != null)
+                    {
+                        i_id_stop.SqlValue = id_stop;
+                    }
+                    else
+                    {
+                        i_id_stop.SqlValue = DBNull.Value;
+                    }
+                    List<OperationWagonsTracking> list = this.Database.SqlQuery<OperationWagonsTracking>("[MT].[GetOperationWagonsTrackingOfNumCarAndID] @nvagon, @id_start, @id_stop", i_nvagon, i_id_start, i_id_stop).ToList();
+                    return list;
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetOperationWagonsTrackingOfNumCar(nvagon={0},id_start ={1},id_stop ={2})", nvagon, id_start, id_stop), eventID);
+                    return null;
+                }
+            
+            }
+            #endregion
+
+        //#region RouteDBWagonsTracking
             ///// <summary>
             ///// 
             ///// </summary>
