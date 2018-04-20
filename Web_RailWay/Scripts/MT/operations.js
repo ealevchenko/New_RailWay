@@ -78,8 +78,8 @@
         active: 0,
         initObject: function () {
             $('#link-tabs-operations-1').text(resurses.getText("link_tabs_operations_1"));
-            //$('#link-tabs-operations-2').text(resurses.getText("link_tabs_operations_2"));
-            //$('#link-tabs-operations-3').text(resurses.getText("link_tabs_operations_3"));
+            $('#link-tabs-operations-2').text(resurses.getText("link_tabs_operations_2"));
+            $('#link-tabs-operations-3').text(resurses.getText("link_tabs_operations_3"));
             this.html_div.tabs({
                 collapsible: true,
                 activate: function (event, ui) {
@@ -90,11 +90,14 @@
         },
         activeTable: function (active, data_refresh) {
             if (active == 0) {
-                table_operations_last.viewTable(data_refresh);
+                table_last_operations.viewTable(data_refresh);
             }
-            //if (active == 1) {
-            //    table_operations_last.viewTable(data_refresh);
-            //}
+            if (active == 1) {
+                table_cargo_disl_operation.viewTable(data_refresh);
+            }
+            if (active == 2) {
+                table_cargo_car_operation.viewTable(data_refresh);
+            }
         }
     },
     panel_operations_last = {
@@ -141,7 +144,7 @@
                 var trs = $('tr.shown');
 
                 for (i = 0; i < trs.length; i++) {
-                    var row = table_operations_last.obj.row(trs[i]);
+                    var row = table_last_operations.obj.row(trs[i]);
                     if (row.child.isShown()) {
                         // This row is already open - close it
                         row.child.hide();
@@ -177,7 +180,7 @@
                     panel_operations_last.stop = obj.date2;
                 })
                 .bind('datepicker-closed', function () {
-                    table_operations_last.viewTable(true);
+                    table_last_operations.viewTable(true);
                 });
             var dt = new Date();
             panel_operations_last.start = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, 00, 00, 00);
@@ -188,7 +191,8 @@
             panel_operations_last.obj_range.data('dateRangePicker').setDateRange(s_d_start, s_d_stop, true);
         },
     },
-    table_operations_last = {
+    // Последние операции
+    table_last_operations = {
         html_table: $('#table-list-operations'),
         html_div_panel: $('<div class="dt-buttons setup-operation" id="property"></div>'),
         button_to_excel_detali: $('<button class="ui-button ui-widget ui-corner-all" id=""></button>'),
@@ -214,13 +218,6 @@
                 jQueryUI: true,
                 "createdRow": function (row, data, index) {
                     $(row).attr('id', data.nvagon);
-                    //$('td', row).eq(0).html('<a id=' + data.nvagon + ' name="nvagon" href="#">' + data.nvagon + '</a>')
-                    //if (data.st_form != null & data.nsost != undefined & data.st_nazn != null & data.nsost != "000") {
-                    //    $('td', row).eq(6).html(data.st_form + '-' + data.nsost + '-' + data.st_nazn);
-                    //};
-                    if (data.id_oper == this.select) {
-                        //$(row).addClass('selected');
-                    }
                 },
                 columns: [
                     {
@@ -263,16 +260,16 @@
                 getAsyncLastOperationWagonsTrackingOfCarsReports(
                     (wt_report_cars.select_report.id != null ? wt_report_cars.select_report.id : 0),
                     function (result) {
-                        table_operations_last.list = result;
-                        table_operations_last.report_id = wt_report_cars.select_report.id;
+                        table_last_operations.list = result;
+                        table_last_operations.report_id = wt_report_cars.select_report.id;
                         panel_operations_last.label_last_total_value.text(result.length);
-                        table_operations_last.loadDataTable(result);
-                        table_operations_last.obj.draw();
+                        table_last_operations.loadDataTable(result);
+                        table_last_operations.obj.draw();
                     }
                     );
             } else {
-                table_operations_last.loadDataTable(this.list);
-                table_operations_last.obj.draw();
+                table_last_operations.loadDataTable(this.list);
+                table_last_operations.obj.draw();
             };
         },
         loadDataTable: function (data) {
@@ -308,7 +305,7 @@
             this.html_table.find('tbody')
             .on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
-                var row = table_operations_last.obj.row(tr);
+                var row = table_last_operations.obj.row(tr);
                 if (row.child.isShown()) {
                     // This row is already open - close it
                     row.child.hide();
@@ -316,7 +313,7 @@
                 }
                 else {
                     row.child('<div id="detali' + row.data().nvagon + '" class="detali-operation"></div>').show();
-                    table_operations_last.viewTableChild(row.data());
+                    table_last_operations.viewTableChild(row.data());
                     tr.addClass('shown');
                 }
             });
@@ -331,7 +328,7 @@
                 target.empty();
                 target.append('<button class="ui-button ui-widget ui-corner-all" id="button_to_excel_' + data.nvagon + '">'+resurses.getText("button_to_excel")+'</button>');
 
-                var tab = table_operations_last.createTable(result)
+                var tab = table_last_operations.createTable(result)
                 target.append(tab);
                 $('#button_to_excel_' + data.nvagon).on('click', function (evt) {
                     var table = $(this).next();
@@ -470,7 +467,305 @@
             }
             fnExcelReport(table, "LastOperation");
         }
+    },
+    //
+    panel_operations_cargo_disl = {
+        html_div_panel: $('<div class="dt-buttons setup-operation" id="property"></div>'),
+        html_div_panel_info: $('<div class="setup-operation" id="cargo-disl-info"></div>'),
+
+
+        label_car_total: $('<label class="label-text" for="label-car-total-value"></label>'),
+        label_car_total_value: $('<label class="value-text" id="label-car-total-value"></label>'),
+        label_ves_total: $('<label class="label-text" for="label-ves-total-value"></label>'),
+        label_ves_total_value: $('<label class="value-text" id="label-ves-total-value"></label>'),
+        initPanel: function (obj) {
+            // Настроим панель info
+            this.html_div_panel_info
+                //.append(this.label_last_date)
+                //.append(this.label_last_date_value)
+                .append(this.label_car_total.text(resurses.getText("label_total_cars")))
+                .append(this.label_car_total_value)
+                .append(this.label_ves_total.text(resurses.getText("label_total_ves")))
+                .append(this.label_ves_total_value);
+            this.html_div_panel
+                .append(this.html_div_panel_info);
+            obj.prepend(this.html_div_panel);
+        },
+    },
+    //Дислокация грузов
+    table_cargo_disl_operation = {
+        html_table: $('#table-cargo-disl-operations'),
+        html_div_panel: $('<div class="dt-buttons setup-operation" id="property"></div>'),
+        obj_table: null,
+        obj: null,
+        list: null,
+        report_id: null,
+        initObject: function () {
+            this.obj = this.html_table.DataTable({
+                "lengthMenu": [10, 25, 50, 100, 200, 400],
+                "paging": true,
+                "ordering": true,
+                "info": false,
+                //"select": true,
+                //"filter": true,
+                //"scrollY": "600px",
+                //"scrollX": true,
+                language: {
+                    emptyTable: resurses.getText("table_message_emptyTable"),
+                    emptyTable: resurses.getText("table_decimal"),
+                    emptyTable: resurses.getText("table_message_search"),
+                },
+                jQueryUI: true,
+                "createdRow": function (row, data, index) {
+                },
+                "footerCallback": function (row, data, start, end, display) {
+
+                    var api = this.api(), data;
+                    var outVal = function (i) {
+                        return i != null ? Number(i) : '';
+                    };
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+
+                    // Total over all pages
+                    total_ves = outVal(api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0));
+                    total_count = outVal(api.column(10).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0));
+                    panel_operations_cargo_disl.label_car_total_value.text(total_count);
+                    panel_operations_cargo_disl.label_ves_total_value.text(total_ves);
+                },
+                columns: [
+                    { data: "st_disl", title: resurses.getText("table_field_operation_st_disl"), orderable: true, searchable: false },
+                    { data: "nst_disl", title: resurses.getText("table_field_operation_nst_disl"), width: "150px", orderable: true, searchable: true },
+                    { data: "dt", title: resurses.getText("table_field_operation_dt"), orderable: true, searchable: false },
+                    { data: "nameop", title: resurses.getText("table_field_operation_nameop"), orderable: true, searchable: true },
+                    { data: "st_nazn", title: resurses.getText("table_field_operation_st_nazn"), orderable: true, searchable: false },
+                    { data: "nst_nazn", title: resurses.getText("table_field_operation_nst_nazn"), width: "150px", orderable: true, searchable: true },
+                    { data: "st_form", title: resurses.getText("table_field_operation_st_form"), orderable: true, searchable: false },
+                    { data: "nst_form", title: resurses.getText("table_field_operation_nst_form"), width: "150px", orderable: true, searchable: true },
+                    { data: "type_cargo", title: resurses.getText("table_field_operation_type_cargo"), orderable: true, searchable: true },
+                    { data: "ves_cargo", title: resurses.getText("table_field_operation_ves_cargo"), orderable: true, searchable: true },
+                    { data: "count_car", title: resurses.getText("table_field_operation_count_car"), orderable: true, searchable: true },
+                ],
+            });
+            this.obj_table = $('DIV#table-cargo-disl-operations_wrapper');
+            panel_operations_cargo_disl.initPanel(this.obj_table);
+            //this.initEventSelectChild();
+        },
+        viewTable: function (data_refresh) {
+            if (wt_report_cars.select_report.id == -1) return;
+            //var date = 
+            if (this.list == null | data_refresh == true | this.report_id != wt_report_cars.select_report.id) {
+                // Обновим данные
+                getAsyncCargoDislocationOperationWagonsTrackingOfCarsReports(
+                    (wt_report_cars.select_report.id != null ? wt_report_cars.select_report.id : 0),
+                    function (result) {
+                        table_cargo_disl_operation.list = result;
+                        table_cargo_disl_operation.report_id = wt_report_cars.select_report.id;
+                        table_cargo_disl_operation.loadDataTable(result);
+                        table_cargo_disl_operation.obj.draw();
+                    }
+                    );
+            } else {
+                table_cargo_disl_operation.loadDataTable(this.list);
+                table_cargo_disl_operation.obj.draw();
+            };
+        },
+        loadDataTable: function (data) {
+            this.list = data;
+            this.obj.clear();
+            for (i = 0; i < data.length; i++) {
+                this.obj.row.add({
+                    //"type_car": lang == 'en' ? data[i].type_car_en : data[i].type_car_ru,
+                    "nameop": data[i].nameop,
+                    "dt": data[i].dt,
+                    "st_disl": data[i].st_disl,
+                    "nst_disl": data[i].nst_disl,
+                    "st_form": data[i].st_form,
+                    "nst_form": data[i].nst_form,
+                    "st_nazn": data[i].st_nazn,
+                    "nst_nazn": data[i].nst_nazn,
+                    "ves_cargo": data[i].ves_cargo,
+                    "count_car": data[i].count_car,
+                    "type_cargo": lang == 'en' ? data[i].type_cargo_en : data[i].type_cargo_ru,
+                    //                        "nsost": data[i].nsost,
+                });
+            }
+        },
+        createTable: function (data) {
+            if (data == null || data.length == 0) {
+                return resurses.getText("table_not_data")
+            }
+
+            var outVal = function (i) {
+                return i != null ? Number(i) : '';
+            };
+
+            var list_tr = '<thead><tr>' +
+                '<th>nameop</th>' +
+                '<th>dt</th>' +
+                '<th>st_disl</th>' +
+                '<th>nst_disl</th>' +
+                '<th>st_form</th>' +
+                '<th>nst_form</th>' +
+                '<th>st_nazn</th>' +
+                '<th>nst_nazn</th>' +
+                '<th>ves_cargo</th>' +
+                '<th>count_car</th>' +
+                '<th>type_cargo</th>' +
+            '</tr></thead>';
+            list_tr += '<tbody>';
+            for (i = 0; i < data.length; i++) {
+                list_tr += '<tr>' +
+                    '<td>' + data[i].nameop + '</td>' +
+                    '<td>' + data[i].dt + '</td>' +
+                    '<td>' + data[i].st_disl + '</td>' +
+                    '<td>' + data[i].nst_disl + '</td>' +
+                    '<td>' + data[i].st_form + '</td>' +
+                    '<td>' + data[i].nst_form + '</td>' +
+                    '<td>' + data[i].st_nazn + '</td>' +
+                    '<td>' + data[i].nst_nazn + '</td>' +
+                    '<td>' + data[i].ves_cargo + '</td>' +
+                    '<td>' + data[i].count_car + '</td>' +
+                    '<td>' + (lang == 'en' ? data[i].type_cargo_en : data[i].type_cargo_ru) + '</td>' +
+                    '</tr>';
+            }
+            list_tr += '</tbody>';
+            return '<table>' + list_tr + '</table>';
+        },
+        toExcel: function () {
+            var table = this.createTable(this.list);
+            fnExcelReport(table, "Cargo-dislocation");
+        }
+    },
+        //
+    panel_operations_cargo_car = {
+        html_div_panel: $('<div class="dt-buttons setup-operation" id="property"></div>'),
+        html_div_panel_info: $('<div class="setup-operation" id="cargo-disl-info"></div>'),
+        label_car_total: $('<label class="label-text" for="label-car-total-value"></label>'),
+        label_car_total_value: $('<label class="value-text" id="label-car-total-value"></label>'),
+        label_ves_total: $('<label class="label-text" for="label-ves-total-value"></label>'),
+        label_ves_total_value: $('<label class="value-text" id="label-ves-total-value"></label>'),
+        initPanel: function (obj) {
+            // Настроим панель info
+            this.html_div_panel_info
+                //.append(this.label_last_date)
+                //.append(this.label_last_date_value)
+                .append(this.label_car_total.text(resurses.getText("label_total_cars")))
+                .append(this.label_car_total_value)
+                .append(this.label_ves_total.text(resurses.getText("label_total_ves")))
+                .append(this.label_ves_total_value);
+            this.html_div_panel
+                .append(this.html_div_panel_info);
+            obj.prepend(this.html_div_panel);
+        },
+    },
+    //Груз по вагонам
+    table_cargo_car_operation = {
+        html_table: $('#table-cargo-car-operations'),
+        html_div_panel: $('<div class="dt-buttons setup-operation" id="property"></div>'),
+        obj_table: null,
+        obj: null,
+        list: null,
+        report_id: null,
+        initObject: function () {
+            this.obj = this.html_table.DataTable({
+                "lengthMenu": [10, 25, 50, 100, 200, 400],
+                "paging": true,
+                "ordering": true,
+                "info": false,
+                "select": true,
+                //"filter": true,
+                //"scrollY": "600px",
+                "scrollX": true,
+                language: {
+                    emptyTable: resurses.getText("table_message_emptyTable"),
+                    emptyTable: resurses.getText("table_decimal"),
+                    emptyTable: resurses.getText("table_message_search"),
+                },
+                jQueryUI: true,
+                "createdRow": function (row, data, index) {
+                    $(row).attr('id', data.nvagon);
+                },
+                "footerCallback": function (row, data, start, end, display) {
+
+                    var api = this.api(), data;
+                    var outVal = function (i) {
+                        return i != null ? Number(i) : '';
+                    };
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                    };
+
+                    // Total over all pages
+                    total_ves = outVal(api.column(5).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0));
+                    panel_operations_cargo_car.label_ves_total_value.text(total_ves);
+                },
+                columns: [
+                    //{
+                    //    className: 'details-control',
+                    //    orderable: false,
+                    //    data: null,
+                    //    defaultContent: '',
+                    //    searchable: false, width: "30px"
+                    //},
+                    { data: "nvagon", title: resurses.getText("table_field_operation_nvagon"), orderable: true, searchable: true },
+                    { data: "full_nameop", title: resurses.getText("table_field_operation_nameop"), orderable: true, searchable: true },
+                    { data: "dt", title: resurses.getText("table_field_operation_dt"), orderable: true, searchable: false },
+                    { data: "nst_disl", title: resurses.getText("table_field_operation_nst_disl"), width: "150px", orderable: true, searchable: true },
+                    { data: "nst_nazn", title: resurses.getText("table_field_operation_nst_nazn"), width: "150px", orderable: true, searchable: true },
+                    { data: "ves", title: resurses.getText("table_field_operation_ves"), orderable: true, searchable: false },
+                    { data: "type_cargo", title: resurses.getText("table_field_operation_type_cargo"), orderable: true, searchable: true },
+                ],
+            });
+            this.obj_table = $('DIV#table-cargo-car-operations_wrapper');
+            panel_operations_cargo_car.initPanel(this.obj_table);
+
+        },
+        viewTable: function (data_refresh) {
+            if (wt_report_cars.select_report.id == -1) return;
+            if (this.list == null | data_refresh == true | this.report_id != wt_report_cars.select_report.id) {
+                // Обновим данные
+                getAsyncLastOperationWagonsTrackingOfCarsReports(
+                    (wt_report_cars.select_report.id != null ? wt_report_cars.select_report.id : 0),
+                    function (result) {
+                        table_cargo_car_operation.list = result;
+                        table_cargo_car_operation.report_id = wt_report_cars.select_report.id;
+                        panel_operations_cargo_car.label_car_total_value.text(result.length);
+                        table_cargo_car_operation.loadDataTable(result);
+                        table_cargo_car_operation.obj.draw();
+                    }
+                    );
+            } else {
+                table_cargo_car_operation.loadDataTable(this.list);
+                table_cargo_car_operation.obj.draw();
+            };
+        },
+        loadDataTable: function (data) {
+            this.list = data;
+            this.obj.clear();
+            for (i = 0; i < data.length; i++) {
+                this.obj.row.add({
+                    "nvagon": data[i].nvagon,
+                    "full_nameop": data[i].full_nameop,
+                    "dt": data[i].dt,
+                    "nst_disl": data[i].nst_disl,
+                    "nst_nazn": data[i].nst_nazn,
+                    "ves": data[i].ves,
+                    "type_cargo": lang == 'en' ? data[i].type_cargo_en : data[i].type_cargo_ru,
+                });
+            }
+        },
     }
+
 
 
     //-----------------------------------------------------------------------------------------
@@ -490,18 +785,20 @@
         $('#to-excel').on('click', function () {
 
             if (tab_type_operations.active == 0) {
-                table_operations_last.toExcel();
+                table_last_operations.toExcel();
             };
-            //if (tab_type_operations.active == 1) {
-            //    fnExcelReport(table_operations_last.html_table.html(), "LastWagonsTracking");
-            //};
+            if (tab_type_operations.active == 1) {
+                table_cargo_disl_operation.toExcel();
+            };
 
         });
         wt_report_cars.initObject(true);
         //// Загружаем дальше
-        table_operations_last.initObject();
+        table_last_operations.initObject();
+        table_cargo_disl_operation.initObject();
+        table_cargo_car_operation.initObject();
         //table_wt_routes.initObject();
-        //table_operations_last.initObject();
+        //table_last_operations.initObject();
 
         ////table_disl.initObject();
         tab_type_operations.initObject(); // Типы маршрутов

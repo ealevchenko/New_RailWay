@@ -305,6 +305,28 @@ namespace Web_RailWay.Controllers.api
                 }
             }
 
+            // GET: api/mt/wagons_tracking_arhiv/operations/cargo/disl/report/2
+            [Route("wagons_tracking_arhiv/operations/cargo/disl/report/{id_report:int}")]
+            [ResponseType(typeof(CargoOperationWagonsTracking))]
+            public IHttpActionResult GetCargoDislocationOperationWagonsTrackingOfCarsReports(int id_report)
+            {
+                try
+                {
+                    SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+                    List<CargoOperationWagonsTracking> list_operations = this.rep_MT.Database.SqlQuery<CargoOperationWagonsTracking>("EXEC [MT].[GetCargoDislocationOperationWagonsTrackingOfCarsReports] @idreport", i_id_report).ToList();
+                    if (list_operations == null)
+                    {
+                        return NotFound();
+                    }
+                    return Ok(list_operations);
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("GetCargoDislocationOperationWagonsTrackingOfCarsReports(id_report={0})", id_report), eventID);
+                    return InternalServerError(e);
+                }
+            }
+
             // GET: api/mt/wagons_tracking_arhiv/operations/car/52921004/start/2018-03-29T00:00:00.000Z/stop/2018-03-29T23:59:59.000Z
             [Route("wagons_tracking_arhiv/operations/car/{num:int}/start/{start:datetime}/stop/{stop:datetime}")]
             [ResponseType(typeof(OperationWagonsTracking))]

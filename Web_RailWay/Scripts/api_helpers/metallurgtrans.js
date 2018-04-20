@@ -383,4 +383,27 @@ function getAsyncOperationWagonsTrackingOfNumCar(nvagon, id_start, id_stop, call
     });
 }
 
+function getAsyncCargoDislocationOperationWagonsTrackingOfCarsReports(id_reports, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/wagons_tracking_arhiv/operations/cargo/disl/report/' + id_reports,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 

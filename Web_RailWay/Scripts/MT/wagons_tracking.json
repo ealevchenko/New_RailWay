@@ -57,6 +57,18 @@
         "en": "The last"
     },
 
+    {
+        "tag": "link_tabs_operations_2",
+        "ru": "Дислокация грузов",
+        "en": "Dislocation of goods"
+    },
+
+    {
+        "tag": "link_tabs_operations_3",
+        "ru": "Груз в вагонах",
+        "en": "Cargo in wagons"
+    },
+
     { "tag": "table_field_operation_nvagon", "ru": "ВАГОН", "en": "" },
     { "tag": "table_field_operation_type_car", "ru": "ТИП", "en": "" },
     { "tag": "table_field_operation_nameop", "ru": "ОПЕР.", "en": "" },
@@ -76,8 +88,8 @@
     { "tag": "table_field_operation_kgr", "ru": "КГР", "en": "" },
     { "tag": "table_field_operation_type_cargo", "ru": "РОД ГРУЗА", "en": "" },
     { "tag": "table_field_operation_ntrain", "ru": "ПОЕЗД", "en": "" },
-
-
+    { "tag": "table_field_operation_ves_cargo", "ru": "ОБЩ. ВЕС", "en": "" },
+    { "tag": "table_field_operation_count_car", "ru": "КОЛ. ВАГОНОВ", "en": "" },
     {
         "tag": "table_field_nameop",
         "ru": "Операция",
@@ -294,6 +306,12 @@
         "tag": "label_total_cars",
         "ru": "Общее количество вагонов: ",
         "en": "Total number of wagons: "
+    },
+
+    {
+        "tag": "label_total_ves",
+        "ru": "Общей вес вагонов (т): ",
+        "en": "Total wagon weight (t): "
     },
     {
         "tag": "table_not_data",
