@@ -1,7 +1,7 @@
 ﻿//-------------------------------------------------------
 // Для работы с модулем добавте файл common.js
 //-------------------------------------------------------
-// Веруть список всех вагонов за которыми установлено слижение
+// Веруть список всех вагонов за которыми установлено слижение (онлайн)
 function getAsyncWagonsTracking(callback) {
     $.ajax({
         type: 'GET',
@@ -24,77 +24,6 @@ function getAsyncWagonsTracking(callback) {
         },
     });
 }
-
-// Веруть список всех вагонов за которыми установлено слижение
-function getAsyncDBWagonsTracking(callback) {
-    $.ajax({
-        type: 'GET',
-        url: '/railway/api/mt/wagons_tracking_arhiv/',
-        async: true,
-        dataType: 'json',
-        beforeSend: function () {
-            AJAXBeforeSend();
-        },
-        success: function (data) {
-            if (typeof callback === 'function') {
-                callback(data);
-            }
-        },
-        error: function (x, y, z) {
-            OnAJAXError(x, y, z);
-        },
-        complete: function () {
-            AJAXComplete();
-        },
-    });
-}
-
-//function getAsyncDBWagonsTrackingOfReports(id_reports, callback) {
-//    $.ajax({
-//        type: 'GET',
-//        url: '/railway/api/mt/wagons_tracking_arhiv/report/'+ id_reports,
-//        async: true,
-//        dataType: 'json',
-//        beforeSend: function () {
-//            AJAXBeforeSend();
-//        },
-//        success: function (data) {
-//            if (typeof callback === 'function') {
-//                callback(data);
-//            }
-//        },
-//        error: function (x, y, z) {
-//            OnAJAXError(x, y, z);
-//        },
-//        complete: function () {
-//            AJAXComplete();
-//        },
-//    });
-//}
-
-// Веруть список всех вагонов за которыми установлено слижение
-//function getAsyncDBCarWagonsTracking(num, start, stop, callback) {
-//    $.ajax({
-//        type: 'GET',
-//        url: '/railway/api/mt/wagons_tracking_arhiv/car/' + num + '/start/' + start.toISOString() + '/stop/' + stop.toISOString(),
-//        async: true,
-//        dataType: 'json',
-//        beforeSend: function () {
-//            AJAXBeforeSend();
-//        },
-//        success: function (data) {
-//            if (typeof callback === 'function') {
-//                callback(data);
-//            }
-//        },
-//        error: function (x, y, z) {
-//            OnAJAXError(x, y, z);
-//        },
-//        complete: function () {
-//            AJAXComplete();
-//        },
-//    });
-//}
 
 // Веруть список составов на УЗ КР по которым есть не принятые вагоны
 function getNoCloseArrivalCarsOfStationUZ(code, callback) {
@@ -144,10 +73,8 @@ function getAsyncCarsOfArrivalUZ(id_sostav, is_close, callback) {
     });
 }
 
-
-
-
-// Веруть список всех вагонов за которыми установлено слижение
+//------------------------------------------------------------------------------------------
+// Вернуть список рапартов
 function getAsyncWTReports(callback) {
     $.ajax({
         type: 'GET',
@@ -170,8 +97,8 @@ function getAsyncWTReports(callback) {
         },
     });
 }
-
-// Веруть список всех вагонов за которыми установлено слижение
+//------------------------------------------------------------------------------------------
+// Вернуть последний маршрут по группе вагонов за указанное время
 function getAsyncLastWagonTrackingOfReports(id_reports, start, stop, callback) {
     $.ajax({
         type: 'GET',
@@ -194,8 +121,7 @@ function getAsyncLastWagonTrackingOfReports(id_reports, start, stop, callback) {
         },
     });
 }
-
-// Веруть список всех вагонов за которыми установлено слижение
+// Вернуть последний маршрут по группе вагонов за указанное время
 function getAsyncLastWagonTrackingAndDateTimeOfReports(id_reports, start, stop, callback) {
     $.ajax({
         type: 'GET',
@@ -218,7 +144,7 @@ function getAsyncLastWagonTrackingAndDateTimeOfReports(id_reports, start, stop, 
         },
     });
 }
-
+//------------------------------------------------------------------------------------------
 // Вернуть все маршруты по группе вагонов за указанное время
 function getAsyncRouteWagonTrackingOfReports(id_reports, start, stop, callback) {
     $.ajax({
@@ -242,7 +168,7 @@ function getAsyncRouteWagonTrackingOfReports(id_reports, start, stop, callback) 
         },
     });
 }
-// Вернуть все маршруты по группе вагонов за указанное время
+//Вернуть все маршруты по группе вагонов за указанное время
 function getAsyncRouteWagonTrackingAndDateTimeOfReports(id_reports, start, stop, callback) {
     $.ajax({
         type: 'GET',
@@ -265,7 +191,8 @@ function getAsyncRouteWagonTrackingAndDateTimeOfReports(id_reports, start, stop,
         },
     });
 }
-// Вернуть последний маршрут по группе вагонов за указанное время
+//------------------------------------------------------------------------------------------
+// Вернуть текущие маршруты по группе вагонов за указанное время
 function getAsyncLastRouteWagonTrackingOfReports(id_reports, start, stop, callback) {
     $.ajax({
         type: 'GET',
@@ -288,7 +215,7 @@ function getAsyncLastRouteWagonTrackingOfReports(id_reports, start, stop, callba
         },
     });
 }
-// Вернуть последний маршрут по группе вагонов за указанное время
+// Вернуть текущие маршруты по группе вагонов за указанное время
 function getAsyncLastRouteWagonTrackingAndDateTimeOfReports(id_reports, start, stop, callback) {
     $.ajax({
         type: 'GET',
@@ -311,8 +238,8 @@ function getAsyncLastRouteWagonTrackingAndDateTimeOfReports(id_reports, start, s
         },
     });
 }
-
-
+//------------------------------------------------------------------------------------------
+// Вернуть последние операции по группе вагонов
 function getAsyncLastOperationWagonsTrackingOfCarsReports(id_reports, callback) {
     $.ajax({
         type: 'GET',
@@ -335,7 +262,7 @@ function getAsyncLastOperationWagonsTrackingOfCarsReports(id_reports, callback) 
         },
     });
 }
-
+// Вернуть список операций по указанному вагону за указаный период времени
 function getAsyncOperationWagonsTrackingOfNumCarAndDT(num, start, stop, callback) {
     $.ajax({
         type: 'GET',
@@ -358,7 +285,6 @@ function getAsyncOperationWagonsTrackingOfNumCarAndDT(num, start, stop, callback
         },
     });
 }
-
 // Вернуть список операций по указаному вагону за указаный диапазон id
 function getAsyncOperationWagonsTrackingOfNumCar(nvagon, id_start, id_stop, callback) {
     $.ajax({
@@ -382,7 +308,7 @@ function getAsyncOperationWagonsTrackingOfNumCar(nvagon, id_start, id_stop, call
         },
     });
 }
-
+// Вернуть операции дислокации грузов
 function getAsyncCargoDislocationOperationWagonsTrackingOfCarsReports(id_reports, callback) {
     $.ajax({
         type: 'GET',

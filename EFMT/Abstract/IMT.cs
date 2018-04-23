@@ -147,9 +147,9 @@ namespace EFMT.Abstract
         WTCycle DeleteWTCycle(int id);
         #endregion
 
-        #region CycleWagonsTracking
-            List<CycleWagonsTracking> GetCycleWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop);
-        #endregion
+        //#region CycleWagonsTracking
+        //    List<CycleWagonsTracking> GetCycleWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop);
+        //#endregion
 
         #region RouteWagonTracking
             List<RouteWagonTracking> GetRouteWagonTrackingOfReports(int id_report, DateTime start, DateTime stop);

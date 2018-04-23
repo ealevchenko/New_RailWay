@@ -1928,33 +1928,33 @@ namespace EFMT.Concrete
             }
             #endregion
 
-            #region CycleWagonsTracking
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="id_report"></param>
-            /// <param name="start"></param>
-            /// <param name="stop"></param>
-            /// <returns></returns>
-            public List<CycleWagonsTracking> GetCycleWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
-            {
-                try
-                {
-                    SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
-                    SqlParameter dt_start = new SqlParameter("@start", start);
-                    SqlParameter dt_stop = new SqlParameter("@stop", stop);
+            //#region CycleWagonsTracking
+            ///// <summary>
+            ///// 
+            ///// </summary>
+            ///// <param name="id_report"></param>
+            ///// <param name="start"></param>
+            ///// <param name="stop"></param>
+            ///// <returns></returns>
+            //public List<CycleWagonsTracking> GetCycleWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
+            //{
+            //    try
+            //    {
+            //        SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+            //        SqlParameter dt_start = new SqlParameter("@start", start);
+            //        SqlParameter dt_stop = new SqlParameter("@stop", stop);
 
-                    List<CycleWagonsTracking> list = this.Database.SqlQuery<CycleWagonsTracking>("EXEC [MT].[GetCycleDBWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
-                    return list;
+            //        List<CycleWagonsTracking> list = this.Database.SqlQuery<CycleWagonsTracking>("EXEC [MT].[GetCycleDBWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
+            //        return list;
 
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetCycleWagonsTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report,start,stop), eventID);
-                    return null;
-                }
-            }
-            #endregion
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        e.WriteErrorMethod(String.Format("GetCycleWagonsTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report,start,stop), eventID);
+            //        return null;
+            //    }
+            //}
+            //#endregion
 
             #region RouteWagonTracking
             /// <summary>

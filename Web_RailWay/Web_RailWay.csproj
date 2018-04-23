@@ -536,7 +536,6 @@
     <Content Include="Areas\MT\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\MT\Views\WagonsTracking\Index.cshtml" />
     <Content Include="Areas\MT\Views\WagonsTracking\ReportOnline.cshtml" />
-    <Content Include="Areas\MT\Views\WagonsTracking\Operations1.cshtml" />
     <Content Include="Areas\MT\Views\WagonsTracking\Routes.cshtml" />
     <Content Include="Areas\MT\Views\WagonsTracking\Operations.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
@@ -651,7 +650,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\MT\operations.js" />
     <Content Include="Scripts\MT\routes.js" />
-    <Content Include="Scripts\MT\wagons_tracking_arhiv.js" />
     <Content Include="Scripts\MT\wagons_tracking.js" />
     <Content Include="Scripts\RW\awas1.js" />
     <Content Include="Scripts\RW\awas.js" />
