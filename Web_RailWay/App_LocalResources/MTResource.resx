@@ -399,4 +399,10 @@
   <data name="index_report_cars_amkr_routes_title" xml:space="preserve">
     <value>Маршруты</value>
   </data>
+  <data name="index_report_natur_desc" xml:space="preserve">
+    <value>Информация о натурных листах (составах для АМКР) переданных ООО «МеталлургТранс»</value>
+  </data>
+  <data name="index_report_natur_title" xml:space="preserve">
+    <value>Натурные листы</value>
+  </data>
 </root>

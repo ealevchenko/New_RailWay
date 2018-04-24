@@ -421,6 +421,24 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Информация о натурных листах (составах для АМКР) переданных ООО «МеталлургТранс».
+        /// </summary>
+        public static string index_report_natur_desc {
+            get {
+                return ResourceManager.GetString("index_report_natur_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Натурные листы.
+        /// </summary>
+        public static string index_report_natur_title {
+            get {
+                return ResourceManager.GetString("index_report_natur_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на ООО Металлургтранс.
         /// </summary>
         public static string index_title {

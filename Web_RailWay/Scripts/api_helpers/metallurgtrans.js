@@ -73,6 +73,61 @@ function getAsyncCarsOfArrivalUZ(id_sostav, is_close, callback) {
     });
 }
 
+
+//******************************************************************************************
+// Admins
+//******************************************************************************************
+// Получить список полученых xml-файлов
+function getAsyncCountArrivalNaturList(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/arrival/natur_list/',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Получить список полученых txt-файлов
+function getAsyncCountApproachesNaturList(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/approaches/natur_list/',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+//******************************************************************************************
+// WagonTracking
+//******************************************************************************************
+
 //------------------------------------------------------------------------------------------
 // Вернуть список рапартов
 function getAsyncWTReports(callback) {

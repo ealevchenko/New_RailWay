@@ -83,3 +83,4 @@
 /// <reference path="rw/awas.json" />
 /// <reference path="mt/routes.js" />
 /// <reference path="mt/operations.js" />
+/// <reference path="mt/natur.js" />

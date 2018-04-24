@@ -215,6 +215,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\KIS\KISAreaRegistration.cs" />
+    <Compile Include="Areas\MT\Controllers\AdminController.cs" />
     <Compile Include="Areas\MT\Controllers\WagonsTrackingController.cs" />
     <Compile Include="Areas\MT\MTAreaRegistration.cs" />
     <Compile Include="Areas\RW\RWAreaRegistration.cs" />
@@ -433,6 +434,7 @@
     <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\KIST\kist.css" />
     <Content Include="Content\lockpanel\lockpanel.css" />
+    <Content Include="Content\MT\natur.css" />
     <Content Include="Content\MT\operations.css" />
     <Content Include="Content\MT\routes.css" />
     <Content Include="Content\MT\wagons_tracking.css" />
@@ -538,6 +540,8 @@
     <Content Include="Areas\MT\Views\WagonsTracking\ReportOnline.cshtml" />
     <Content Include="Areas\MT\Views\WagonsTracking\Routes.cshtml" />
     <Content Include="Areas\MT\Views\WagonsTracking\Operations.cshtml" />
+    <Content Include="Areas\MT\Views\Admin\Natur.cshtml" />
+    <Content Include="Areas\MT\Views\Admin\Index.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
     <Content Include="Scripts\api_helpers\settings.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -648,6 +652,7 @@
     <Content Include="Scripts\KIS\transfer_kis.js" />
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\MT\natur.js" />
     <Content Include="Scripts\MT\operations.js" />
     <Content Include="Scripts\MT\routes.js" />
     <Content Include="Scripts\MT\wagons_tracking.js" />
@@ -730,6 +735,7 @@
     <Content Include="Views\AWAS\Index.cshtml" />
     <Content Include="Scripts\RW\awas.json" />
     <Content Include="Scripts\MT\wagons_tracking.json" />
+    <Content Include="Scripts\MT\mt.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppSettings\DBSettings\DBSettings.csproj">

@@ -522,6 +522,19 @@ namespace Web_RailWay.Controllers.api
                 return InternalServerError(e);
             }
         }
+
+        // GET: api/mt/arrival/natur_list
+        [Route("arrival/natur_list")]
+        [ResponseType(typeof(CountNaturList))]
+        public IHttpActionResult GetCountArrivalNaturList()
+        {
+            List<CountNaturList> natur_list = this.rep_MT.GetCountArrivalNaturList();
+            if (natur_list == null)
+            {
+                return NotFound();
+            }
+            return Ok(natur_list);
+        }
         #endregion
 
         #region Approaches
@@ -563,6 +576,20 @@ namespace Web_RailWay.Controllers.api
             ApproachesCars new_cars = CreateCorectApproachesCars(cars);
             return Ok(new_cars);
         }
+
+        // GET: api/mt/approaches/natur_list
+        [Route("approaches/natur_list")]
+        [ResponseType(typeof(CountNaturList))]
+        public IHttpActionResult GetCountApproachesNaturList()
+        {
+            List<CountNaturList> natur_list = this.rep_MT.GetCountApproachesNaturList();
+            if (natur_list == null)
+            {
+                return NotFound();
+            }
+            return Ok(natur_list);
+        }
+
         #endregion
 
 

@@ -1,0 +1,17 @@
+﻿[
+    { "tag": "table_message_emptyTable", "ru": "Данные отсутствуют.", "en": "No data available in table." },
+    { "tag": "table_decimal", "ru": ",", "en": "." },
+    { "tag": "table_message_search", "ru": "Найти:", "en": "Search:" },
+    { "tag": "table_message_separator", "ru": "по", "en": "to" },
+    { "tag": "table_date_format", "ru": "DD.MM.YYYY HH:mm", "en": "MM/DD/YYYY HH:mm" },
+
+    { "tag": "label_sostav_arrival", "ru": "Натурные листы (xml-файлы) – данные о составах для АМКР на станциях УЗ Кривого Рога", "en": "Natural sheets (xml-files) - data on compositions for AMKR at stations of UZ of Krivoy Rog" },
+    { "tag": "label_sostav_approaches", "ru": "Натурные листы (txt-файлы) – данные о составах на подходах к АМКР", "en": "Natural sheets (txt files) - data on compositions on approaches to AMKR" },
+
+    { "tag": "table_field_year", "ru": "Год", "en": "Year" },
+    { "tag": "table_field_month", "ru": "Месяц", "en": "Month" },
+    { "tag": "table_field_count_xml", "ru": "Кол. получ. xml-файлов", "en": "Qty. received. xml files" },
+    { "tag": "table_field_count_txt", "ru": "Кол. получ. txt-файлов", "en": "Qty. received. txt files" },
+    { "tag": "table_field_start_dt", "ru": "Получен первый файл", "en": "First file received" },
+    { "tag": "table_field_stop_dt", "ru": "Получен последний файл", "en": "Last file received" }
+]

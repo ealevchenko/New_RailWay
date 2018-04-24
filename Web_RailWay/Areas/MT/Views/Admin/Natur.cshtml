@@ -1,0 +1,53 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @MTResource.index_report_natur_desc;
+    ViewBag.Home = @MTResource.index_report_natur_title;
+}
+
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("Index", "Admin", new { area = "MT" }); }
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    @Styles.Render("~/jquery-ui/css")
+    @Styles.Render("~/DataTables/css")
+    <link rel="stylesheet" type="text/css" href="~/Content/MT/natur.css">
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/Ajax")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/DataTables")
+    <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/metallurgtrans.js" type="text/javascript"></script>
+    <script src="~/Scripts/MT/natur.js" type="text/javascript"></script>
+    <script>
+        $('header').addClass('img-header-mt');
+    </script>
+}
+
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+    </div>
+    <div id="report-detali">
+        <div id="sostav-arrival" class="sostav-detali">
+            <label id="label-sostav-arrival"></label>
+            <table class='display table' id="table-sostav-arrival" style="width:100%" cellpadding="0"></table>
+        </div>
+        <div id="sostav-approaches" class="sostav-detali">
+            <label id="label-sostav-approaches"></label>
+            <table class='display table' id="table-sostav-approaches" style="width:100%" cellpadding="0"></table>
+        </div>
+    </div>
+    <div id="cls"></div>
+</div>
