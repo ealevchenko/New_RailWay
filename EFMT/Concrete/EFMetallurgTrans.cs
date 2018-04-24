@@ -541,6 +541,25 @@ namespace EFMT.Concrete
                 return;
             }
         }
+        /// <summary>
+        /// Получить список количества натурок txt- файлы
+        /// </summary>
+        /// <returns></returns>
+        public List<CountNaturList> GetCountApproachesNaturList()
+        {
+            try
+            {
+                int type = 1;
+                SqlParameter i_type = new SqlParameter("@type", type);
+                List<CountNaturList> list = this.Database.SqlQuery<CountNaturList>("EXEC [MT].[GetCountNaturList] @type", i_type).ToList();
+                return list;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCountApproachesNaturList()"), eventID);
+                return null;
+            }
+        }
 
         #endregion
 
@@ -1195,7 +1214,25 @@ namespace EFMT.Concrete
                 return null;
             }
         }
-
+        /// <summary>
+        /// Получить список количества натурок xml- файлы
+        /// </summary>
+        /// <returns></returns>
+        public List<CountNaturList> GetCountArrivalNaturList()
+        {
+            try
+            {
+                int type = 0;
+                SqlParameter i_type = new SqlParameter("@type", type);
+                List<CountNaturList> list = this.Database.SqlQuery<CountNaturList>("EXEC [MT].[GetCountNaturList] @type", i_type).ToList();
+                return list;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCountArrivalNaturList()"), eventID);
+                return null;
+            }
+        }
 
         public int GetNextIDArrival()
         {

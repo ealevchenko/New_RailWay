@@ -40,6 +40,8 @@ namespace EFMT.Abstract
         ApproachesSostav GetNoCloseApproachesSostav(string index, DateTime date);
         ApproachesSostav GetApproachesSostavOfParentID(int parent_id);
         List<ApproachesSostav> GetApproachesSostavLocation(int id_sostav, bool destinct);
+        List<CountNaturList> GetCountApproachesNaturList();
+
         #endregion
 
         #region На станциях УЗ КР
@@ -77,6 +79,7 @@ namespace EFMT.Abstract
         IQueryable<ArrivalSostav> GetArrivalSostavOfIDArrival(int id_arrival);
         List<int> GetNotCarsOfOldArrivalSostav(int id_sostav);
         List<int> GetNotCarsOfOldArrivalSostav(ArrivalSostav sostav);
+        List<CountNaturList> GetCountArrivalNaturList();
         int GetNextIDArrival();
 
 
