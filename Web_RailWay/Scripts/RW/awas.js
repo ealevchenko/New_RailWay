@@ -41,7 +41,7 @@
         label_info = $('<label id="view-info"></label>'),
         //  - режимы работы 
         label_mode_view = $('<label for="mode-view"></label>'),
-        radio_mode_view = ('<input type="radio" name="mode" id="mode-view" checked="checked" >'),
+        radio_mode_view = $('<input type="radio" name="mode" id="mode-view" checked="checked" >'),
         label_mode_manevr = $('<label for="mode-manevr"></label>'),
         radio_mode_manevr = $('<input type="radio" name="mode" id="mode-manevr">'),
         label_mode_sending = $('<label for="mode-sending"></label>'),
@@ -50,17 +50,34 @@
         radio_mode_correction = $('<input type="radio" name="mode" id="mode-correction">'),
         label_mode_statepark = $('<label for="mode-statepark"></label>'),
         radio_mode_statepark = $('<input type="radio" name="mode" id="mode-statepark">'),
-        label_mode_accept = $('<label for="mode-accept"></label>'),
-        radio_mode_accept = $('<input type="radio" name="mode" id="mode-accept">'),
+        label_mode_arrival = $('<label for="mode-arrival"></label>'),
+        radio_mode_arrival = $('<input type="radio" name="mode" id="mode-arrival">'),
         label_mode_transit = $('<label for="mode-transit"></label>'),
         radio_mode_transit = $('<input type="radio" name="mode" id="mode-transit">'),
+        //  - кнопки выбора
+        button_select_all = $('<button class="ui-button ui-widget ui-corner-all"></button>'),
+        button_clear_all = $('<button class="ui-button ui-widget ui-corner-all"></button>'),
+        // - выбор горловины
+        label_neck = $('<label class="setup-label" for="select-neck"></label>'),
+        select_neck = $('<select id="select-neck" name="neck"></select>'),
+        // - выбор пути
+        label_way = $('<label class="setup-label" for="select-way">></label>'),
+        select_way = $('<select id="select-way" name="way"></select>'),
+        // - выбор станции 
+        label_station = $('<label class="setup-label" for="select-station">></label>'),
+        select_station = $('<select id="select-station" name="station"></select>'),
+        // - выбор времени
+        label_datetime = $('<label class="setup-label" for="select-datetime"></label>'),
+        input_datetime = $('<input id="select-datetime" name="datetime" type="datetime">'),
+        //  - кнопка выполнить
+        button_run = $('<button class="ui-button ui-widget ui-corner-all"></button>'),
 
         panel_detali = $('#detali-group'), // Панель отображения данных по группам
         //------------------------------------
         // Панель режимов 
         panel_mode = {
             active: 0,
-            html_div: $('<div class="dt-buttons setup-operation" id="property_view_mode"></div>'),
+            html_div: $('<div class="dt-buttons setup-operation" id="property-view-mode"></div>'),
             initPanel: function (view, manevr, sending, accept, transit, correction, statepark) {
                 this.html_div.empty();
                 if (view) {
@@ -73,7 +90,7 @@
                     this.html_div.append(label_mode_sending.text(resurses.getText("label_mode_sending"))).append(radio_mode_sending);
                 };
                 if (accept) {
-                    this.html_div.append(label_mode_accept.text(resurses.getText("label_mode_accept"))).append(radio_mode_accept);
+                    this.html_div.append(label_mode_arrival.text(resurses.getText("label_mode_arrival"))).append(radio_mode_arrival);
                 };
                 if (transit) {
                     this.html_div.append(label_mode_transit.text(resurses.getText("label_mode_transit"))).append(radio_mode_transit);
@@ -86,11 +103,17 @@
                 };
                 this.html_div.controlgroup();
                 // Выберем режим просмотра
-                $("#mode-view").prop('checked', true);
-                //panel_mode.activeView();
+
                 // определим событие выбора режима
-                $("[name='mode']").on("change", panel_mode.selectToggle);
-                panel_mode.html_div.controlgroup("refresh"); // Обновим 
+                radio_mode_view.on("change", panel_mode.selectToggle);
+                radio_mode_manevr.on("change", panel_mode.selectToggle);
+                radio_mode_sending.on("change", panel_mode.selectToggle);
+                radio_mode_correction.on("change", panel_mode.selectToggle);
+                radio_mode_statepark.on("change", panel_mode.selectToggle);
+                radio_mode_arrival.on("change", panel_mode.selectToggle);
+                radio_mode_transit.on("change", panel_mode.selectToggle);
+                panel_mode.activeView();
+
             },
             selectToggle: function (e) {
                 var target = $(e.target);
@@ -109,8 +132,8 @@
                 if (target.is("#mode-statepark")) {
                     panel_mode.activeStatepark();
                 }
-                if (target.is("#mode-accept")) {
-                    panel_mode.activeAccept();
+                if (target.is("#mode-arrival")) {
+                    panel_mode.activeArrival();
                 }
                 if (target.is("#mode-transit")) {
                     panel_mode.activeTransit();
@@ -122,86 +145,98 @@
             hide: function () {
                 this.html_div.hide();
             },
+
             activeView: function () {
+                $("#mode-view").prop('checked', true);
+                panel_mode.html_div.controlgroup("refresh"); // Обновим 
+                table_cars_details.clearSelect(); // Убрать выделеные строки
                 panel_mode.active = 0;
-                //panel.manevr.obj.hide();
-                //panel.sent.obj.hide();
+                panel_manevr.hide();
+                panel_sending.hide();
                 //panel.arrival.obj.hide();
-                //panel.accept.obj.hide();
-                //cars.clearSelect();
-                //panel_detali.removeClass();
+                panel_arrival.hide();
+                panel_detali.removeClass();
             },
             activeManevr: function () {
+                $("#mode-manevr").prop('checked', true);
+                panel_mode.html_div.controlgroup("refresh"); // Обновим 
+                table_cars_details.clearSelect(); // Убрать выделеные строки
                 panel_mode.active = 1;
-                //panel.manevr.obj.show(); panel.manevr.initPanel();
-                //panel.sent.obj.hide();
+                panel_manevr.show(); panel_manevr.initPanel();
+                panel_sending.hide();
                 //panel.arrival.obj.hide();
-                //panel.accept.obj.hide();
+                panel_arrival.hide();
                 ////panel.transit.obj.hide();
-                //cars.clearSelect();
-                //panel_detali.removeClass();
-                //panel_detali.addClass('mode-manevr');
+                panel_detali.removeClass();
+                panel_detali.addClass('mode-manevr');
             },
             activeSending: function () {
+                $("#mode-sending").prop('checked', true);
+                panel_mode.html_div.controlgroup("refresh"); // Обновим 
+                table_cars_details.clearSelect(); // Убрать выделеные строки
                 panel_mode.active = 2;
-                //panel.manevr.obj.hide();
-                //panel.sent.obj.show(); panel.sent.initPanel();
+                panel_manevr.hide();
+                panel_sending.show(); panel_sending.initPanel();
                 //panel.arrival.obj.hide();
-                //panel.accept.obj.hide();
+                panel_arrival.hide();
                 ////panel.transit.obj.hide();
-                //cars.clearSelect();
-                //panel_detali.removeClass();
-                //panel_detali.addClass('mode-sending');
+                panel_detali.removeClass();
+                panel_detali.addClass('mode-sending');
             },
-            activeAccept: function () {
+            activeArrival: function () {
+                $("#mode-arrival").prop('checked', true);
+                panel_mode.html_div.controlgroup("refresh"); // Обновим 
+                table_cars_details.clearSelect(); // Убрать выделеные строки
                 panel_mode.active = 3;
-                //panel.manevr.obj.hide();
-                //panel.sent.obj.hide();
+                panel_manevr.hide();
+                panel_sending.hide();
                 //panel.arrival.obj.hide();
-                //panel.accept.obj.show(); panel.accept.initPanel();
+                panel_arrival.show(); panel_arrival.initPanel();
                 ////panel.transit.obj.hide();
-                //cars.clearSelect();
-                //panel_detali.removeClass();
-                //panel_detali.addClass('mode-accept');
+                panel_detali.removeClass();
+                panel_detali.addClass('mode-arrival');
             },
             activeTransit: function () {
+                $("#mode-transit").prop('checked', true);
+                panel_mode.html_div.controlgroup("refresh"); // Обновим 
+                table_cars_details.clearSelect(); // Убрать выделеные строки
                 panel_mode.active = 4;
-                //panel.manevr.obj.hide();
-                //panel.sent.obj.hide();
+                panel_manevr.hide();
+                panel_sending.hide();
                 //panel.arrival.obj.hide();
-                //panel.accept.obj.show(); panel.accept.initPanel();
-                ////panel.transit.obj.show(); panel.transit.initPanel();
-                //cars.clearSelect();
-                //panel_detali.removeClass();
-                //panel_detali.addClass('mode-transit');
+                panel_arrival.show(); panel_arrival.initPanel();
+                panel_detali.removeClass();
+                panel_detali.addClass('mode-transit');
             },
             activeCorrection: function () {
+                $("#mode-correction").prop('checked', true);
+                panel_mode.html_div.controlgroup("refresh"); // Обновим 
+                table_cars_details.clearSelect(); // Убрать выделеные строки
                 panel_mode.active = 5;
-                //panel.manevr.obj.hide();
-                //panel.sent.obj.hide();
+                panel_manevr.hide();
+                panel_sending.hide();
                 //panel.arrival.obj.hide();
-                //panel.accept.obj.hide();
-                ////panel.transit.obj.hide();
-                //cars.clearSelect();
-                //panel_detali.removeClass();
-                //panel_detali.addClass('mode-correction');
+                panel_arrival.hide();
+                panel_detali.removeClass();
+                panel_detali.addClass('mode-correction');
             },
             activeStatepark: function () {
+                $("#mode-statepark").prop('checked', true);
+                panel_mode.html_div.controlgroup("refresh"); // Обновим 
+                table_cars_details.clearSelect(); // Убрать выделеные строки
                 panel_mode.active = 6;
-                //panel.manevr.obj.hide();
-                //panel.sent.obj.hide();
+                panel_manevr.hide();
+                panel_sending.hide();
                 //panel.arrival.obj.hide();
-                //panel.accept.obj.hide();
-                ////panel.transit.obj.hide();
-                //cars.clearSelect();
-                //panel_detali.removeClass();
-                //panel_detali.addClass('mode-statepark');
+                panel_arrival.hide();
+                panel_detali.removeClass();
+                panel_detali.addClass('mode-statepark');
             },
         },
         //------------------------------------
         // Панель нстроек отображения информации
         panel_view = {
-            html_div: $('<div class="dt-buttons setup-operation" id="property_view_cars"></div>'),
+            html_div: $('<div class="dt-buttons setup-operation" id="property-view-cars"></div>'),
             handleToggle: function (e) {
                 var target = $(e.target);
                 if (target.is("#view-inp-cargo")) {
@@ -248,7 +283,7 @@
         //------------------------------------
         // Панель отображения информации
         panel_info = {
-            html_div: $('<div class="dt-buttons setup-operation" id="property_info"></div>'),
+            html_div: $('<div class="dt-buttons setup-operation" id="property-info"></div>'),
             initPanel: function () {
                 this.html_div.append(label_info.text('Информация'));
             },
@@ -256,28 +291,147 @@
                 label_info.text(value);
             },
         },
-        //panel_manevr = {
-        //    html_div: $('<div class="dt-buttons setup-operation" id="property_manevr_operation"></div>'),
-        //    initPanel: function () {
-        //        this.obj.empty();
-        //        panel.element.button_manevr_select_all.on('click', function () {
-        //            cars.allSelect();
-        //        });
-        //        panel.element.button_manevr_clear_all.on('click', function () {
-        //            cars.clearSelect();
-        //        });
-        //        this.obj.append(panel.element.button_manevr_select_all)
-        //                .append(panel.element.button_manevr_clear_all)
-        //                .append(panel.element.label_gorlov_manevr)
-        //                .append(panel.element.select_manevr_side)
-        //                .append(panel.element.label_way_manevr)
-        //                .append(panel.element.select_manevr_way)
-        //                .append(panel.element.button_ok_manevr);
-        //        initSelect(panel.element.select_manevr_side, { width: 150 }, side.list, null, 0, function (event, ui) { event.preventDefault(); }, null);
-        //        initSelect(panel.element.select_manevr_way, { width: 300 }, ways.list, function (row) { return { value: row.id_way, text: row.num + '-' + row.name }; }, -1, function (event, ui) { event.preventDefault(); }, null);
-
-        //    },
-        //}
+        //------------------------------------
+        // Панель выполнения маневров
+        panel_manevr = {
+            html_div: $('<div class="dt-buttons setup-operation" id="property-manevr-operation"></div>'),
+            initPanel: function () {
+                this.html_div.empty();
+                this.html_div.append(button_select_all.text(resurses.getText("button_select_all")));
+                button_select_all.on('click', function () {
+                    table_cars_details.allSelect();
+                });
+                this.html_div.append(button_clear_all.text(resurses.getText("button_clear_all")));
+                button_clear_all.on('click', function () {
+                    table_cars_details.clearSelect();
+                });
+                this.html_div.append(label_neck.text(resurses.getText("label_neck_manever")));
+                this.html_div.append(select_neck);
+                initSelect(
+                    select_neck,
+                    { width: 150 },
+                    rw_side.list_side,
+                    function (row) { return { value: row.value, text: resurses.getText(row.text) }; },
+                    0,
+                    function (event, ui) { event.preventDefault(); },
+                    null);
+                this.html_div.append(label_way.text(resurses.getText("label_way_manever")));
+                this.html_div.append(select_way);
+                initSelect(
+                    select_way,
+                    { width: 300 },
+                    table_ways.list,
+                    function (row) { return { value: row.id_way, text: row.num + '-' + (lang == 'en' ? row.name_en : row.name_ru) }; },
+                    -1,
+                    function (event, ui) { event.preventDefault(); },
+                    null);
+                this.html_div.append(button_run.text(resurses.getText("button_run_manevr")));
+            },
+            show: function () {
+                this.html_div.show();
+            },
+            hide: function () {
+                this.html_div.hide();
+            },
+        },
+        //------------------------------------
+        // Панель выполнения отправки
+        panel_sending = {
+            html_div: $('<div class="dt-buttons setup-operation" id="property-sending-operation"></div>'),
+            initPanel: function () {
+                this.html_div.empty();
+                this.html_div.append(button_select_all.text(resurses.getText("button_select_all")));
+                button_select_all.on('click', function () {
+                    table_cars_details.allSelect();
+                });
+                this.html_div.append(button_clear_all.text(resurses.getText("button_clear_all")));
+                button_clear_all.on('click', function () {
+                    table_cars_details.clearSelect();
+                });
+                this.html_div.append(label_station.text(resurses.getText("label_station_sending")));
+                this.html_div.append(select_station);
+                initSelect(
+                    select_station,
+                    { width: 300 },
+                    rw_stations.select_station.sending_station,
+                    function (row) { return { value: row.id, text: row.name, disabled: (row.transfer_type != 0 & row.transfer_type != 3 ? true : false) }; },
+                    0,
+                    function (event, ui) { event.preventDefault(); },
+                    null);
+                //!!!!!... цех, вагоноопрокид
+                this.html_div.append(label_neck.text(resurses.getText("label_neck_sending")));
+                this.html_div.append(select_neck);
+                initSelect(
+                    select_neck,
+                    { width: 150 },
+                    rw_side.list_side,
+                    function (row) { return { value: row.value, text: resurses.getText(row.text) }; },
+                    0,
+                    function (event, ui) { event.preventDefault(); },
+                    null);
+                this.html_div.append(button_run.text(resurses.getText("button_run_sending")));
+            },
+            show: function () {
+                this.html_div.show();
+            },
+            hide: function () {
+                this.html_div.hide();
+            },
+        },
+        panel_arrival = {
+            html_div: $('<div class="dt-buttons setup-operation" id="property-arrival-operation"></div>'),
+            initPanel: function () {
+                this.html_div.empty();
+                this.html_div.append(button_select_all.text(resurses.getText("button_select_all")));
+                button_select_all.on('click', function () {
+                    table_cars_details.allSelect();
+                });
+                this.html_div.append(button_clear_all.text(resurses.getText("button_clear_all")));
+                button_clear_all.on('click', function () {
+                    table_cars_details.clearSelect();
+                });
+                if (panel_mode.active == 3) {
+                    this.html_div.append(label_way.text(resurses.getText("label_way_arrival")));
+                }
+                this.html_div.append(select_way);
+                initSelect(
+                    select_way,
+                    { width: 300 },
+                    table_ways.list,
+                    function (row) { return { value: row.id_way, text: row.num + '-' + (lang == 'en' ? row.name_en : row.name_ru) }; },
+                    -1,
+                    function (event, ui) { event.preventDefault(); },
+                    null);
+                if (tab_group_list.active != 1 & tab_group_list.active != 2 & panel_mode.active == 3) {
+                    this.html_div.append(label_neck.text(resurses.getText("label_neck_arrival")));
+                    this.html_div.append(select_neck);
+                    initSelect(
+                        select_neck,
+                        { width: 150 },
+                        rw_side.list_side,
+                        function (row) { return { value: row.value, text: resurses.getText(row.text) }; },
+                        0,
+                        function (event, ui) { event.preventDefault(); },
+                        null);
+                }
+                //!! Показть транзитную станцию
+                this.html_div.append(label_datetime.text(resurses.getText("label_datetime")));
+                this.html_div.append(input_datetime);
+                initDateTime(input_datetime, null);
+                this.html_div.append(button_run.text(resurses.getText("button_run_arrival")));
+                button_run.on('click', function () {
+                    var list = table_cars_details.getListCars()
+                    //confirm_arrival_panel.initObject(list)
+                    confirm_arrival_panel.Open(list);
+                });
+            },
+            show: function () {
+                this.html_div.show();
+            },
+            hide: function () {
+                this.html_div.hide();
+            },
+        },
         //------------------------------------
         // Панель управления и отображения
         panel = {
@@ -285,13 +439,12 @@
                 // Всегда показывать
                 panel_view.initPanel();
                 panel_info.initPanel();
-                //obj.prepend(panel.accept.obj);
-                //obj.prepend(panel.sent.obj);
-                //obj.prepend(panel.manevr.obj);
+                obj.prepend(panel_arrival.html_div);
+                obj.prepend(panel_sending.html_div);
+                obj.prepend(panel_manevr.html_div);
                 obj.prepend(panel_info.html_div);
                 obj.prepend(panel_view.html_div);
                 obj.prepend(panel_mode.html_div);
-                //obj.prepend(panel.transit.obj);
             },
             activePanel: function (active_group) {
                 panel_view.show();
@@ -323,8 +476,159 @@
                         break;
                     default:
                         // Группы закрыты
-
+                        panel_mode.activeView();
                         break;
+                }
+            }
+        },
+        //------------------------------------
+        // Панель подтверждения принятия вагонов
+        confirm_arrival_panel = {
+            html_div: $("#arrival-confirm"),
+            html_table: $("#table-arrival-confirm"),
+            obj: null,
+            table: null,
+            list: null,
+            initObject: function () {
+                this.obj = this.html_div.dialog({
+                    resizable: false,
+                    modal: true,
+                    autoOpen: false,
+                    height: "auto",
+                    width: 1000,
+                    buttons: {
+                        "Принять": function () {
+                            $(this).dialog("close");
+                        },
+                        Cancel: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+                this.initTable();
+            },
+            Open: function (list) {
+                this.loadData(list)
+                this.еее();
+                this.obj.dialog("option", "title", "Принять вагоны с УЗ");
+                this.obj.dialog("open");
+            },
+            initTable: function () {
+                this.table = this.html_table.DataTable({
+                    "paging": false,
+                    "ordering": false,
+                    "info": false,
+                    "select": true,
+                    "filter": false,
+                    language: {
+                        emptyTable: resurses.getText("table_message_emptyTable"),
+                    },
+                    jQueryUI: true,
+                    "createdRow": function (row, data, index) {
+                        //$('td', row).eq(1).text('');
+                        //$('td', row).eq(1).append('<input id="search" position="'+data.position+'" type="number" value="' + data.num + '">');
+                        $(row).attr('id', data.id);
+                        //if (table_ways.select != null && data.id == table_ways.select.id) {
+                        //    $(row).addClass('selected');
+                        //}
+                    },
+                    columns: [
+                        //{ data: "position", title: resurses.getText("table_field_confirm_position") },
+                        //{ data: "num", title: resurses.getText("table_field_confirm_num") },
+                        //{ data: "status", title: resurses.getText("table_field_confirm_status") },
+                                { data: "position", title: resurses.getText("table_field_num"), orderable: false, searchable: false },
+                                { data: "num", title: resurses.getText("table_field_car_num"), orderable: false, searchable: true },
+                                // - Тип вагона, владелец, страна
+                                { data: "type", title: resurses.getText("table_field_car_type"), orderable: false, searchable: false },
+                                { data: "owner", title: resurses.getText("table_field_car_owner"), width: "150px", orderable: false, searchable: false },
+                                { data: "country", title: resurses.getText("table_field_car_country"), orderable: false, searchable: false },
+                                { data: "status", title: resurses.getText("table_field_car_status"), orderable: false, searchable: false },
+                            ],
+                });
+                this.html_div_table = $('DIV#table-arrival-confirm_wrapper');
+            },
+            loadData: function (data) {
+                this.list = data;
+                this.table.clear();
+                for (i = 0; i < data.length; i++) {
+                    // Добавим данные о станциях
+                    this.table.row.add({
+                        //"position": data[i].position,
+                        //"num": data[i].num,
+                        //"status": data[i].status,
+                        "id": data[i].id, //0
+                        "position": data[i].position,
+                        "num": data[i].num,
+                        "type": data[i].type,
+                        "owner": data[i].owner,
+                        "country": data[i].country,
+                        "status": data[i].status,
+                    });
+                };
+                this.table.draw();
+            },
+            еее: function () {
+
+                $('#form-arrival-confirm').keydown(function (event) {
+                    if (event.keyCode == 13) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+
+                $.widget("custom.catcomplete", $.ui.autocomplete, {
+                    _create: function () {
+                        this._super();
+                        this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                    },
+                    _renderMenu: function (ul, items) {
+
+                        var that = this,
+
+                          currentCategory = "";
+
+                        $.each(items, function (index, item) {
+
+                            var li;
+
+                            if (item.category != currentCategory) {
+
+                                ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
+
+                                currentCategory = item.category;
+
+                            }
+
+                            li = that._renderItemData(ul, item);
+
+                            if (item.category) {
+
+                                li.attr("aria-label", item.category + " : " + item.label);
+
+                            }
+
+                        });
+
+                    }
+                });
+
+                var data = [
+                  { label: "56734567", category: "На АМКР" },
+                  { label: "12345678", category: "На АМКР" },
+                  { label: "30400053", category: "На АМКР" },
+                  { label: "87654321", category: "Пибывает" },
+                  { label: "32456712", category: "Пибывает" },
+                  { label: "23567854", category: "Пибывает" },
+                  { label: "57575889", category: "Отправлен" },
+                  { label: "59876543", category: "Отправлен" },
+                  { label: "67890862", category: "Отправлен" }
+                ];
+                $("#search").catcomplete({
+                    delay: 0,
+                    source: data
+                });
+                $("#search").onkeyup = function (e) {
+
                 }
             }
         },
@@ -788,8 +1092,9 @@
                 ],
             });
             this.html_div_table = $('DIV#table-list-cars_wrapper');
+            //this.initEventSelect();
             panel.initObject(this.html_div_table); // Инициализируем панель 
-            this.initEventSelect();
+
             // Отображение полей по умолчанию
             var view_inp_cargo = checkbox_view_inp_cargo.attr('checked');
             this.enableColumsInpCargo(view_inp_cargo != null ? view_inp_cargo : false);
@@ -805,17 +1110,20 @@
             this.html_div_table.hide();
         },
         initEventSelect: function () {
-            //this.html_table.find('tbody')
-            //        .on('click', 'tr', function () {
-            //            table_ways.clearSelect();
-            //            $(this).addClass('selected');
-            //            var id = Number($(this).attr("id"));
-            //            if (id >= 0) {
-            //                table_ways.setSelectWay(id);
-            //            }
-            //            //table_arrival_uz.getSelectObj(arrival_uz.select);
-            //            //cars.viewTable(arrival_uz, false);
-            //        });
+            // Определим события выбора вагонов из таблицы
+            table_cars_details.html_table
+                .find('tbody tr')
+                .mousedown(function () {
+                    if (panel_mode.active >= 1 & panel_mode.active <= 4) {
+                        $(this).toggleClass('selected');
+                        table_cars_details.html_table.find('tbody tr').on('mouseenter', function () {
+                            $(this).toggleClass('selected');
+                        });
+                    }
+                });
+            table_cars_details.html_table.mouseup(function () {
+                table_cars_details.html_table.find('tbody tr').off('mouseenter');
+            });
         },
         setSelectWay: function (id) {
             var way = getObjects(table_ways.list, 'id', id)
@@ -827,7 +1135,7 @@
             this.html_table.find('tbody tr').removeClass('selected');
         },
         allSelect: function () {
-            this.table.find('tbody tr').addClass('selected');
+            this.html_table.find('tbody tr').addClass('selected');
         },
         sortPosition: function () {
             if (tab_group_list.active == 0) {
@@ -880,13 +1188,16 @@
                 });
             };
             // Перестроить последовательность нумерации вагонов
+
             this.sortPosition();
+            this.initEventSelect(); // Инициализация выборки
             //this.obj.draw(); - это делается в this.sortPosition();
         },
         // Показать таблицу ессли есть значения
         enableTable: function (length) {
             if (length >= 0) {
                 this.html_div_table.show();
+                //this.initEventSelect(); // Инициализация выборки
             } else {
                 this.html_div_table.hide();
             }
@@ -961,6 +1272,27 @@
         clearListSelect: function () {
             //this.list = null;
             //this.select = null;
+        },
+        getListCars: function () {
+            var $selected = this.html_table.find('tbody tr.selected');
+            var list_car = [];
+            var position = 1;
+            this.html_table.find('tbody tr.selected').each(function () {
+                list_car.push({
+                    //position: position,
+                    //num: $(this).find('td').eq(1).html(),
+                    //status: 'Прибывающий' //!!! ... обавить состав откуда когда
+                    id: $(this).attr('id'), //0
+                    position: position,
+                    num: $(this).find('td').eq(1).html(),
+                    type: $(this).find('td').eq(2).html(),
+                    owner: $(this).find('td').eq(3).html(),
+                    country: $(this).find('td').eq(4).html(),
+                    status: $(this).find('td').eq(5).html(),
+                })
+                position++;
+            });
+            return list_car;
         }
     },
     //------------------------------------
@@ -975,7 +1307,8 @@
         id_kis: -1,
         default_side: null,
         code_uz: null,
-        arrival_uz: null
+        arrival_uz: null,
+        sending_station: null
     },
     //------------------------------------
     // Объект станции системы
@@ -1034,15 +1367,35 @@
                 var nodes = station[0].StationsNodes1;
                 if (nodes != null && nodes.length > 0) {
                     for (i = 0; i < nodes.length; i++) {
-                        var station = getObjects(rw_stations.list_station, 'id', nodes[i].id_station_from)
-                        if (station != null & station[0].station_uz) {
+                        var station_uz = getObjects(rw_stations.list_station, 'id', nodes[i].id_station_from)
+                        if (station_uz != null & station_uz[0].station_uz) {
                             arrival_uz.push({
-                                id: station[0].id
+                                id: station_uz[0].id
                             })
                         }
                     }
                 }
                 rw_stations.select_station.arrival_uz = arrival_uz;
+
+                // Определим стании для отправки
+                var sending_station = [];
+                var sending_nodes = station[0].StationsNodes;
+                if (sending_nodes != null && sending_nodes.length > 0) {
+                    for (i = 0; i < sending_nodes.length; i++) {
+                        var station_send = getObjects(rw_stations.list_station, 'id', sending_nodes[i].id_station_on)
+                        if (station_send != null) {
+                            sending_station.push({
+                                id: station_send[0].id,
+                                name: (lang == 'en' ? station_send[0].name_en : station_send[0].name_ru),
+                                station_uz: station_send[0].station_uz,
+                                side_station_from: sending_nodes[i].side_station_from,
+                                side_station_on: sending_nodes[i].side_station_on,
+                                transfer_type: sending_nodes[i].transfer_type,
+                            })
+                        }
+                    }
+                }
+                rw_stations.select_station.sending_station = sending_station;
                 // определим горловину по умолчанию
                 rw_side.setSideOfStation(rw_stations.select_station.default_side);
                 // Показать панели групп
@@ -1136,7 +1489,6 @@
             }
             rw_side.html_select.val(rw_side.select_side.id).selectmenu("refresh");
         },
-
     }
 
     //-----------------------------------------------------------------------------------------
@@ -1151,6 +1503,8 @@
     resurses.initObject("/railway/Scripts/RW/awas.json",
         function () {
             // Загружаем дальше
+            confirm_arrival_panel.initObject();
+
             tab_group_list.initObject();    // Панель переключения групп
             table_cars_details.initTable(); // таблица информация по вагонам детально
             table_ways.initTable();         // таблица вагоны на путях станций

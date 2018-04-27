@@ -10,10 +10,24 @@
     { "tag": "label_mode_view", "ru": "Просмотр ", "en": "View " },
     { "tag": "label_mode_manevr", "ru": "Маневры ", "en": "Maneuvers " },
     { "tag": "label_mode_sending", "ru": "Отправка ", "en": "Sending " },
-    { "tag": "label_mode_accept", "ru": "Принять ", "en": "To accept " },
+    { "tag": "label_mode_arrival", "ru": "Принять ", "en": "To accept " },
     { "tag": "label_mode_transit", "ru": "Транзит ", "en": "Transit " },
     { "tag": "label_mode_correction", "ru": "Коррекция ", "en": "Correction " },
     { "tag": "label_mode_statepark", "ru": "Состояние парка ", "en": "State of the park " },
+
+    { "tag": "button_select_all", "ru": "Выбрать все", "en": "Select All" },
+    { "tag": "button_clear_all", "ru": "Убрать все", "en": "Clear All" },
+    { "tag": "button_run_manevr", "ru": "Выполнить маневр", "en": "Perform a maneuver" },
+    { "tag": "button_run_sending", "ru": "Отправить", "en": "Send" },
+    { "tag": "button_run_arrival", "ru": "Принять", "en": "To accept" },
+
+    { "tag": "label_neck_manever", "ru": "Горловина маневра:", "en": "The throat of maneuver:" },
+    { "tag": "label_neck_sending", "ru": "Горловина отправки:", "en": "Sending neck:" },
+    { "tag": "label_neck_arrival", "ru": "Прием со стороны:", "en": "Reception from:" },
+    { "tag": "label_station_sending", "ru": "Станция приема:", "en": "Reception station:" },
+    { "tag": "label_way_manever", "ru": "Маневр на путь:", "en": "Maneuver on the way:" },
+    { "tag": "label_way_arrival", "ru": "Путь приема:", "en": "Way of reception:" },
+    { "tag": "label_datetime", "ru": "Дата и время:", "en": "Date and Time:" },
 
     { "tag": "table_message_emptyTable", "ru": "Данные отсутствуют.", "en": "No data available in table." },
     { "tag": "table_field_num", "ru": "№", "en": "#" },
@@ -47,5 +61,9 @@
     { "tag": "table_field_car_inp_shop_code_sap", "ru": "SAP код грузополучателя", "en": "SAP code of the consignee" },
     { "tag": "table_field_car_inp_shop_name_sap", "ru": "SAP грузополучатель", "en": "SAP consignee" },
     { "tag": "table_field_car_inp_new_shop_code_sap", "ru": "SAP код перенаправленного грузополучателя", "en": "SAP code of the redirected consignee" },
-    { "tag": "table_field_car_inp_new_shop_name_sap", "ru": "SAP перенаправленный грузополучатель", "en": "SAP redirected consignee" }
+    { "tag": "table_field_car_inp_new_shop_name_sap", "ru": "SAP перенаправленный грузополучатель", "en": "SAP redirected consignee" },
+
+    { "tag": "table_field_confirm_position", "ru": "№", "en": "#" },
+    { "tag": "table_field_confirm_num", "ru": "Вагон", "en": "Car" },
+    { "tag": "table_field_confirm_status", "ru": "Состояние", "en": "Status" }
 ]
