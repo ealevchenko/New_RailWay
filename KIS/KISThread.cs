@@ -22,6 +22,9 @@ namespace KIS
         protected Thread thCopyBufferArrivalSostav = null;
         public bool statusCopyBufferArrivalSostav { get { return thCopyBufferArrivalSostav.IsAlive; } }
 
+        protected Thread thCopyBufferSendingSostav = null;
+        public bool statusCopyBufferSendingSostav { get { return thCopyBufferSendingSostav.IsAlive; } }
+
         protected Thread thTransferArrivalOfKIS = null;
         public bool statusTransferArrivalOfKIS { get { return thTransferArrivalOfKIS.IsAlive; } }
 
@@ -602,6 +605,85 @@ namespace KIS
                 string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer_rc:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer_rc);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
                 service.WriteServices(dt_start, DateTime.Now, res_transfer_rc);
+            }
+            catch (ThreadAbortException exc)
+            {
+                String.Format("Поток {0} сервиса {1} - прерван по событию ThreadAbortException={2}", service.ToString(), servece_owner, exc).WriteWarning(servece_owner, eventID);
+            }
+            catch (Exception ex)
+            {
+                ex.WriteError(String.Format("Ошибка выполнения потока {0} сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, -1);
+
+            }
+        }
+        #endregion
+        #endregion
+
+        #region TransferSending (Копирование по отправке на станции УЗ Кривого Рога)
+        #region CopyBufferSendingSostav
+        /// <summary>
+        /// Запустить поток переноса информации о составах принятых в системе КИС
+        /// </summary>
+        /// <returns></returns>
+        public bool StartCopyBufferSendingSostav()
+        {
+            service service = service.CopySendingSostavKIS;
+            string mes_service_start = String.Format("Поток : {0} сервиса : {1}", service.ToString(), servece_owner);
+            try
+            {
+                if ((thCopyBufferSendingSostav == null) || (!thCopyBufferSendingSostav.IsAlive && thCopyBufferSendingSostav.ThreadState == ThreadState.Stopped))
+                {
+                    thCopyBufferSendingSostav = new Thread(CopyBufferSendingSostav);
+                    thCopyBufferSendingSostav.Name = service.ToString();
+                    thCopyBufferSendingSostav.Start();
+                }
+                return thCopyBufferSendingSostav.IsAlive;
+            }
+            catch (Exception ex)
+            {
+                mes_service_start += " - ошибка запуска.";
+                ex.WriteError(mes_service_start, servece_owner, eventID);
+                return false;
+            }
+
+        }
+        /// <summary>
+        /// Поток переноса информации о отправленных составах на УЗ в системе КИС
+        /// </summary>
+        private static void CopyBufferSendingSostav()
+        {
+            service service = service.CopySendingSostavKIS;
+            DateTime dt_start = DateTime.Now;
+            try
+            {
+                int day_control_sending_kis_add_data = 1;
+                // считать настройки
+                lock (locker_setting)
+                {
+                    try
+                    {
+                        // Период контроля добавления натурных листов прибытия
+                        day_control_sending_kis_add_data = RWSetting.GetDB_Config_DefaultSetting<int>("AddControlPeriodCopySendingSostav", service, day_control_sending_kis_add_data, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.WriteError(String.Format("Ошибка выполнения считывания настроек потока {0}, сервиса {1}", service.ToString(), servece_owner), servece_owner, eventID);
+                    }
+                }
+                dt_start = DateTime.Now;
+                int res_copy = 0;
+                lock (locker_tas)
+                {
+                    // Проверить наличие новых отправок в КИС, перенести данные в таблицу
+                    KIS_RW_Transfer kis_rw_trans = new KIS_RW_Transfer(service);
+                    kis_rw_trans.DayControlSendingKisAddData = day_control_sending_kis_add_data;
+                    res_copy += kis_rw_trans.CopyBufferSendingSostavOfKIS();
+                }
+                TimeSpan ts = DateTime.Now - dt_start;
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_copy:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_copy);
+                mes_service_exec.WriteInformation(servece_owner, eventID);
+                service.WriteServices(dt_start, DateTime.Now, res_copy);
             }
             catch (ThreadAbortException exc)
             {

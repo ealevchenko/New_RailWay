@@ -121,6 +121,9 @@ namespace KIS
         protected int day_control_arrival_kis_add_data = 1; // Период(суток) контроля системы КИС вагоны из УЗ КР на предмет вставки новых строк.
         public int DayControlArrivalKisAddData { get { return this.day_control_arrival_kis_add_data; } set { this.day_control_arrival_kis_add_data = value; } }
 
+        protected int day_control_sending_kis_add_data = 1; // Период(суток) контроля системы КИС вагоны из УЗ КР на предмет вставки новых строк.
+        public int DayControlSendingKisAddData { get { return this.day_control_sending_kis_add_data; } set { this.day_control_sending_kis_add_data = value; } }
+
         protected int day_control_input_kis_add_data = 1; // Период(суток) контроля системы КИС вагоны по прибытию на предмет вставки новых строк.
         public int DayControlInputKisAddData { get { return this.day_control_input_kis_add_data; } set { this.day_control_input_kis_add_data = value; } }
 

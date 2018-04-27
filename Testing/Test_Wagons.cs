@@ -574,17 +574,17 @@ namespace Testing
         //}
         //#endregion
 
-        //#region PromSostav
-        ///// <summary>
-        ///// Список прибывающих и отправляющих вагонов
-        ///// </summary>
-        ////public void Test_VagonsContent_GetPromSostav()
-        ////{
-        ////    foreach (PromSostav t in pc.GetPromSostav())
-        ////    {
-        ////        WL(t);
-        ////    }
-        ////}
+        #region PromSostav
+        /// <summary>
+        /// Список прибывающих и отправляющих вагонов
+        /// </summary>
+        //public void Test_VagonsContent_GetPromSostav()
+        //{
+        //    foreach (PromSostav t in pc.GetPromSostav())
+        //    {
+        //        WL(t);
+        //    }
+        //}
 
         //public void Test_VagonsContent_GetInputPromSostav()
         //{
@@ -594,15 +594,34 @@ namespace Testing
         //    }
         //}
 
+        public void Test_PROM_GetInputPromSostav()
+        {
+            EFWagons ef_wag = new EFWagons();
+            List<PromSostav> list = ef_wag.GetInputPromSostav().ToList();
+            foreach (PromSostav t in ef_wag.GetInputPromSostav())
+            {
+                WL(t);
+            }
+        }
 
-        //public void WL(PromSostav t) 
-        //{
-        //    if (t == null) { Console.WriteLine(" = Null"); return; }
-        //    Console.WriteLine("N_NATUR: {0},\t D_DD: {1},\t D_MM: {2},\t D_YY: {3},\t T_HH: {4},\t T_MI: {5},\t K_ST: {6},\t N_PUT: {7},\t NAPR: {8},\t P_OT: {9},\t V_P: {10}",
-        //            t.N_NATUR,t.D_DD,t.D_MM,t.D_YY,t.T_HH,t.T_MI,t.K_ST,t.N_PUT,t.NAPR,t.P_OT,t.V_P);        
-        //}
+        public void Test_PROM_GetOutputPromSostav()
+        {
+            EFWagons ef_wag = new EFWagons();
+            List<PromSostav> list = ef_wag.GetOutputPromSostav().ToList();
+            foreach (PromSostav t in ef_wag.GetOutputPromSostav())
+            {
+                WL(t);
+            }
+        }
 
-        //#endregion
+        public void WL(PromSostav t)
+        {
+            if (t == null) { Console.WriteLine(" = Null"); return; }
+            Console.WriteLine("N_NATUR: {0},\t D_DD: {1},\t D_MM: {2},\t D_YY: {3},\t T_HH: {4},\t T_MI: {5},\t K_ST: {6},\t N_PUT: {7},\t NAPR: {8},\t P_OT: {9},\t V_P: {10}",
+                    t.N_NATUR, t.D_DD, t.D_MM, t.D_YY, t.T_HH, t.T_MI, t.K_ST, t.N_PUT, t.NAPR, t.P_OT, t.V_P);
+        }
+
+        #endregion
 
 
         //public void CopyReferenceWagonsToRailWay()

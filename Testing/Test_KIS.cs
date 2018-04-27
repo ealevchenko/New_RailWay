@@ -162,5 +162,19 @@ namespace Testing
             kis_trans.UpdWayRailWayOfKIS(ref arr_s);
         }
 
+
+        public void Test_KIS_RW_Transfer_CopyBufferSendingSostavOfKIS()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+
+            kis_trans.CopyBufferSendingSostavOfKIS(1);
+        }
+
+        public void Test_KISThread_StartCopyBufferSendingSostav()
+        {
+            KISThread kis_t = new KISThread(service.TransferSendingKIS);
+            kis_t.StartCopyBufferSendingSostav();
+        }
+
     }
 }

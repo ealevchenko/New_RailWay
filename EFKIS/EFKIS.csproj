@@ -94,6 +94,7 @@
     <Compile Include="Helpers\Filters.cs" />
     <Compile Include="Entities\RCBufferInputSostav.cs" />
     <Compile Include="Entities\RCBufferOutputSostav.cs" />
+    <Compile Include="Entities\RWBufferSendingSostav.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

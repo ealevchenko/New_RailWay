@@ -791,6 +791,156 @@ namespace EFKIS.Concrete
         }
 
         #endregion
+
+        #region RWBufferSendingSostav Перенос отправленных на УЗ вагонов по данным КИС
+        public IQueryable<RWBufferSendingSostav> RWBufferSendingSostav
+        {
+            get { return context_rw.RWBufferSendingSostav; }
+        }
+
+        public IQueryable<RWBufferSendingSostav> GetRWBufferSendingSostav()
+        {
+            try
+            {
+                return RWBufferSendingSostav;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferSendingSostav()"), eventID);
+                return null;
+            }
+        }
+
+        public RWBufferSendingSostav GetRWBufferSendingSostav(int id)
+        {
+            try
+            {
+                return GetRWBufferSendingSostav().Where(s => s.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferSendingSostav(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveRWBufferSendingSostav(RWBufferSendingSostav RWBufferSendingSostav)
+        {
+            RWBufferSendingSostav dbEntry;
+            try
+            {
+                if (RWBufferSendingSostav.id == 0)
+                {
+                    dbEntry = new RWBufferSendingSostav()
+                    {
+                        id = RWBufferSendingSostav.id,
+                        datetime = RWBufferSendingSostav.datetime,
+                        day = RWBufferSendingSostav.day,
+                        month = RWBufferSendingSostav.month,
+                        year = RWBufferSendingSostav.year,
+                        hour = RWBufferSendingSostav.hour,
+                        minute = RWBufferSendingSostav.minute,
+                        natur = RWBufferSendingSostav.natur,
+                        id_station_from_kis = RWBufferSendingSostav.id_station_from_kis,
+                        id_station_on_kis = RWBufferSendingSostav.id_station_on_kis,
+                        count_nathist = RWBufferSendingSostav.count_nathist,
+                        count_set_nathist = RWBufferSendingSostav.count_set_nathist,
+                        close = RWBufferSendingSostav.close,
+                        close_user = RWBufferSendingSostav.close_user,
+                        status = RWBufferSendingSostav.status,
+                        list_no_set_wagons = RWBufferSendingSostav.list_no_set_wagons,
+                        message = RWBufferSendingSostav.message,
+                    };
+                    context_rw.RWBufferSendingSostav.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context_rw.RWBufferSendingSostav.Find(RWBufferSendingSostav.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.datetime = RWBufferSendingSostav.datetime;
+                        dbEntry.day = RWBufferSendingSostav.day;
+                        dbEntry.month = RWBufferSendingSostav.month;
+                        dbEntry.year = RWBufferSendingSostav.year;
+                        dbEntry.hour = RWBufferSendingSostav.hour;
+                        dbEntry.minute = RWBufferSendingSostav.minute;
+                        dbEntry.natur = RWBufferSendingSostav.natur;
+                        dbEntry.id_station_from_kis = RWBufferSendingSostav.id_station_from_kis;
+                        dbEntry.id_station_on_kis = RWBufferSendingSostav.id_station_on_kis;
+                        dbEntry.count_nathist = RWBufferSendingSostav.count_nathist;
+                        dbEntry.count_set_nathist = RWBufferSendingSostav.count_set_nathist;
+                        dbEntry.close = RWBufferSendingSostav.close;
+                        dbEntry.close_user = RWBufferSendingSostav.close_user;
+                        dbEntry.status = RWBufferSendingSostav.status;
+                        dbEntry.list_no_set_wagons = RWBufferSendingSostav.list_no_set_wagons;
+                        dbEntry.message = RWBufferSendingSostav.message;
+                    }
+                }
+                context_rw.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveRWBufferSendingSostav(RWBufferSendingSostav={0})", RWBufferSendingSostav.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public RWBufferSendingSostav DeleteRWBufferSendingSostav(int id)
+        {
+            RWBufferSendingSostav dbEntry = context_rw.RWBufferSendingSostav.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context_rw.RWBufferSendingSostav.Remove(dbEntry);
+                    context_rw.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteRWBufferSendingSostav(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        /// <summary>
+        /// Вернуть последнее время по которому перенесли состав
+        /// </summary>
+        /// <returns></returns>
+        public DateTime? GetLastDateTimeRWBufferSendingSostav()
+        {
+            try
+            {
+                RWBufferSendingSostav bas = GetRWBufferSendingSostav().OrderByDescending(a => a.datetime).FirstOrDefault();
+                return bas != null ? (DateTime?)bas.datetime : null;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastDateTimeRWBufferSendingSostav()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Выбрать перенесеные составы за указанный период
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public IQueryable<RWBufferSendingSostav> GetRWBufferSendingSostav(DateTime start, DateTime stop)
+        {
+            try
+            {
+                return GetRWBufferSendingSostav().Where(o => o.datetime >= start & o.datetime <= stop);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferSendingSostav()"), eventID);
+                return null;
+            }
+        }
+
+        #endregion
         #endregion
     }
 }

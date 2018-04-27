@@ -61,5 +61,15 @@ namespace EFKIS.Abstract
         int CloseRWBufferArrivalSostav(int id, string user);
         #endregion
 
+        #region RWBufferSendingSostav Перенос отправленных на УЗ вагонов по данным КИС
+        IQueryable<RWBufferSendingSostav> RWBufferSendingSostav  { get; }
+        IQueryable<RWBufferSendingSostav> GetRWBufferSendingSostav();
+        RWBufferSendingSostav GetRWBufferSendingSostav(int id);
+        int SaveRWBufferSendingSostav(RWBufferSendingSostav RWBufferSendingSostav);
+        RWBufferSendingSostav DeleteRWBufferSendingSostav(int id);
+        DateTime? GetLastDateTimeRWBufferSendingSostav();
+        IQueryable<RWBufferSendingSostav> GetRWBufferSendingSostav(DateTime start, DateTime stop);
+        #endregion
+
     }
 }

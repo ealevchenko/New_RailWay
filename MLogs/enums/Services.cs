@@ -35,6 +35,10 @@ namespace MessageLog
         CopyOutputSostavKIS = 231,     // поток переноса данных в буфер прибытие из станций АМКР
         TransferOutputKIS = 232,       // поток переноса вагонов в прибытие из станций АМКР по данным КИС
         CloseOutputSostavKIS = 233,    // поток закрытия данных в буфере
+
+        CopySendingSostavKIS = 241,     // поток переноса данных в буфер
+        TransferSendingKIS = 242,       // поток переноса вагонов отправки на УЗ по данным КИС
+
     }
 
 }

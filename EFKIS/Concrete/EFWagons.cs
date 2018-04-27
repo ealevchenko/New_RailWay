@@ -463,8 +463,77 @@ namespace EFKIS.Concrete
             }
 
         }
+        /// <summary>
+        /// Вернуть составы отправленные на станции УЗ
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<PromSostav> GetOutputPromSostav()
+        {
+            try
+            {
+                return GetPromSostav().Where(p => p.P_OT == 1 & p.K_ST != null);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOutputPromSostav()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть составы отправленные на станции УЗ за указанный период
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop)
+        {
+            try
+            {
+                return GetOutputPromSostav().ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOutputPromSostav(start={0}, stop={1})", start, stop), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть составы отправленные на станции УЗ за указанный период с сортировкой
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        public IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop, bool sort)
+        {
+            try
+            {
+                if (sort)
+                {
+                    return GetOutputPromSostav(start, stop)
+                        .OrderByDescending(p => p.D_YY)
+                        .ThenByDescending(p => p.D_MM)
+                        .ThenByDescending(p => p.D_DD)
+                        .ThenByDescending(p => p.T_HH)
+                        .ThenByDescending(p => p.T_MI);
+                }
+                else
+                {
+                    return GetOutputPromSostav(start, stop)
+                        .OrderBy(p => p.D_YY)
+                        .ThenBy(p => p.D_MM)
+                        .ThenBy(p => p.D_DD)
+                        .ThenBy(p => p.T_HH)
+                        .ThenBy(p => p.T_MI);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOutputPromSostav(start={0}, stop={1}, sort={2})", start, stop, sort), eventID);
+                return null;
+            }
 
-
+        }
         ///// <summary>
         ///// Выбрать строки с указанием направления
         ///// </summary>

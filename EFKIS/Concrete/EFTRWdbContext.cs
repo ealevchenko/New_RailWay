@@ -21,6 +21,8 @@ namespace EFKIS.Concrete
         public virtual DbSet<RWBufferInputSostav> RWBufferInputSostav { get; set; }
         public virtual DbSet<RWBufferOutputSostav> RWBufferOutputSostav { get; set; }
 
+        public virtual DbSet<RWBufferSendingSostav> RWBufferSendingSostav { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 
