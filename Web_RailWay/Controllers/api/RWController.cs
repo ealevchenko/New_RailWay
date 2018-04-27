@@ -289,12 +289,39 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(StationsNodes))]
         public IHttpActionResult GetStationsNodes(int id)
         {
-            StationsNodes node = this.rep_rw.GetStationsNodes(id);
-            if (node == null)
+            try
             {
-                return NotFound();
+                StationsNodes node = this.rep_rw.StationsNodes
+                    .Where(n => n.id == id)
+                    .ToList()
+                    .Select(n => new StationsNodes
+                    {
+                        id = n.id,
+                        nodes = n.nodes,
+                        id_station_from = n.id_station_from,
+                        side_station_from = n.side_station_from,
+                        id_station_on = n.id_station_on,
+                        side_station_on = n.side_station_on,
+                        transfer_type = n.transfer_type,
+                    }).FirstOrDefault();
+                if (node == null)
+                {
+                    return NotFound();
+                }
+                return Json(node);
             }
-            return Ok(node);
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStationsNodes(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+            
+            //StationsNodes node = this.rep_rw.GetStationsNodes(id);
+            //if (node == null)
+            //{
+            //    return NotFound();
+            //}
+            //return Ok(node);
         }
         #endregion
 
