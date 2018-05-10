@@ -76,6 +76,7 @@
     <Compile Include="Entities\Ways.cs" />
     <Compile Include="Entities\ReferenceConsignee.cs" />
     <Compile Include="Entities\Shops.cs" />
+    <Compile Include="Entities\Deadlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

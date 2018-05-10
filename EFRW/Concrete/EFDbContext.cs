@@ -67,11 +67,12 @@ namespace EFRW.Concrete
         public virtual DbSet<ReferenceConsignee> ReferenceConsignee { get; set; }
 
         // таблицы Railway
-        // Станции, узлы и пути, цеха
+        // Станции, узлы и пути, цеха, тупики
         public virtual DbSet<Stations> Stations { get; set; }
         public virtual DbSet<StationsNodes> StationsNodes { get; set; }
         public virtual DbSet<Ways> Ways { get; set; }
         public virtual DbSet<Shops> Shops { get; set; }
+        public virtual DbSet<Deadlock> Deadlock { get; set; }
         // Вагоны и опрерации
         public virtual DbSet<Cars> Cars { get; set; }
         public virtual DbSet<CarOperations> CarOperations { get; set; }
@@ -241,6 +242,16 @@ namespace EFRW.Concrete
                 .HasMany(e => e.Reference_Consignee)
                 .WithOptional(e => e.Shops)
                 .HasForeignKey(e => e.id_shop);
+
+            modelBuilder.Entity<Shops>()
+                .HasMany(e => e.Deadlock)
+                .WithOptional(e => e.Shops)
+                .HasForeignKey(e => e.id_shop);
+
+            modelBuilder.Entity<Ways>()
+                .HasMany(e => e.Deadlock)
+                .WithOptional(e => e.Ways)
+                .HasForeignKey(e => e.id_way);
         }
 
     }

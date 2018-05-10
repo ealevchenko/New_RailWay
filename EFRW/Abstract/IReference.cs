@@ -78,6 +78,7 @@ namespace EFRW.Abstract
         ReferenceStation GetReferenceStation(int id);
         int SaveReferenceStation(ReferenceStation ReferenceStation);
         ReferenceStation DeleteReferenceStation(int id);
+        ReferenceStation GetReferenceStationOfCodecs(int codecs);
         #endregion
 
         #region ReferenceOwners

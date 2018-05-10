@@ -13,6 +13,7 @@ namespace EFRW.Entities
         public Shops()
         {
             Reference_Consignee = new HashSet<ReferenceConsignee>();
+            Deadlock = new HashSet<Deadlock>();
         }
 
         public int id { get; set; }
@@ -45,5 +46,8 @@ namespace EFRW.Entities
         public virtual ICollection<ReferenceConsignee> Reference_Consignee { get; set; }
 
         public virtual Stations Stations { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Deadlock> Deadlock { get; set; }
     }
 }

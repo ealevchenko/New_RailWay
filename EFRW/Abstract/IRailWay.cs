@@ -61,6 +61,8 @@ namespace EFRW.Abstract
         Ways GetWaysOfStation(int id_station, string num);
         Ways GetWaysOfArrivalUZ(int id_station);
         Ways GetWaysOfSendingUZ(int id_station);
+        IQueryable<Ways> GetWaysOfStationAMKR();
+        IQueryable<Ways> GetWaysOfStationUZ();
         #endregion
 
         #region Shops
@@ -71,6 +73,15 @@ namespace EFRW.Abstract
         int SaveShops(Shops Shops);
         Shops DeleteShops(int id);
         #endregion
+
+        #region Deadlock
+        IQueryable<Deadlock> Deadlock { get; }
+        IQueryable<Deadlock> GetDeadlock();
+        Deadlock GetDeadlock(int id);
+        int SaveDeadlock(Deadlock Deadlock);
+        Deadlock DeleteDeadlock(int id);
+        #endregion
+
 
         #region Cars
         IQueryable<Cars> Cars { get; }

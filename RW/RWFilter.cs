@@ -392,7 +392,6 @@ namespace RW
         }        
         #endregion
 
-
         public static Cars SetCar(this Cars car, int? natur_kis, int? natur, DateTime? dt_inp_amkr)
         {
             if (car == null) return null;
@@ -403,6 +402,43 @@ namespace RW
             { car.natur = natur; }
             return car;
         }
+        /// <summary>
+        /// Закрыть вагон
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="dt_out_amkr"></param>
+        /// <returns></returns>
+        public static Cars SetCar(this Cars car, DateTime? dt_out_amkr)
+        {
+            if (car == null) return null;
+            car.dt_out_amkr = dt_out_amkr;
+            return car;
+        }
+        /// <summary>
+        /// Добавить или обновить исходяшую поставку
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="delivery"></param>
+        /// <returns></returns>
+        public static Cars SetCar(this Cars car, CarsOutDelivery delivery)
+        {
+            if (car == null) return null;
+            // Входяшие поставки
+            if (car.CarsOutDelivery == null || car.CarsOutDelivery.Count() == 0)
+            {
+                // если нет добавим
+                car.CarsOutDelivery.Add(delivery);
+            }
+            else
+            {
+                // Обновим 
+                car.CarsOutDelivery.Clear();
+                car.CarsOutDelivery.Add(delivery);
+            }
+            return car;
+        }
+
+
         /// <summary>
         /// Присвоить грузополучателя и готовность
         /// </summary>

@@ -13,6 +13,7 @@ namespace EFRW.Entities
         public Ways()
         {
             CarOperations = new HashSet<CarOperations>();
+            Deadlock = new HashSet<Deadlock>();
         }
 
         public int id { get; set; }
@@ -57,5 +58,8 @@ namespace EFRW.Entities
         public virtual ICollection<CarOperations> CarOperations { get; set; }
 
         public virtual Stations Stations { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Deadlock> Deadlock { get; set; }
     }
 }

@@ -850,6 +850,20 @@ namespace EFRW.Concrete
             }
             return dbEntry;
         }
+
+        public ReferenceStation GetReferenceStationOfCodecs(int codecs)
+        {
+            try
+            {
+                return GetReferenceStation().Where(s => s.code_cs == codecs).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetReferenceStationOfCodecs(codecs={0})", codecs), eventID);
+                return null;
+            };
+        }
+
         #endregion
 
         #region OWNERS

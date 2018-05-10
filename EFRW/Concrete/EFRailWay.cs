@@ -670,6 +670,39 @@ namespace EFRW.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Получить список всех путей станций АМКР
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<Ways> GetWaysOfStationAMKR()
+        {
+            try
+            {
+                return GetWays().Where(w=>w.Stations.station_uz == false);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWaysOfStationAMKR()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить список всех путей станций УЗ
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<Ways> GetWaysOfStationUZ()
+        {
+            try
+            {
+                return GetWays().Where(w=>w.Stations.station_uz == true);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWaysOfStationUZ()"), eventID);
+                return null;
+            }
+        }
+
         #endregion
 
         #region Shops
@@ -776,6 +809,115 @@ namespace EFRW.Concrete
                 catch (Exception e)
                 {
                     e.WriteErrorMethod(String.Format("DeleteShops(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        #endregion
+
+        #region Deadlock
+        public IQueryable<Deadlock> Deadlock
+        {
+            get { return context.Deadlock; }
+        }
+
+        public IQueryable<Deadlock> GetDeadlock()
+        {
+            try
+            {
+                return Deadlock;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDeadlock()"), eventID);
+                return null;
+            }
+        }
+
+        public Deadlock GetDeadlock(int id)
+        {
+            try
+            {
+                return GetDeadlock().Where(d => d.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDeadlock(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public Deadlock GetDeadlockOfKis(int id_kis)
+        {
+            try
+            {
+                return GetDeadlock().Where(d => d.id_kis == id_kis).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDeadlockOfKis(id_kis={0})", id_kis), eventID);
+                return null;
+            }
+        }
+
+        public int SaveDeadlock(Deadlock Deadlock)
+        {
+            Deadlock dbEntry;
+            try
+            {
+                if (Deadlock.id == 0)
+                {
+                    dbEntry = new Deadlock()
+                    {
+                        id = 0,
+                        id_shop = Deadlock.id_shop,
+                        id_way = Deadlock.id_way,
+                        name = Deadlock.name,
+                        description = Deadlock.description,
+                        id_kis = Deadlock.id_kis,
+                        Shops = Deadlock.Shops,
+                        Ways = Deadlock.Ways,
+                    };
+                    context.Deadlock.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.Deadlock.Find(Deadlock.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.id_shop = Deadlock.id_shop;
+                        dbEntry.id_way = Deadlock.id_way;
+                        dbEntry.name = Deadlock.name;
+                        dbEntry.description = Deadlock.description;
+                        dbEntry.id_kis = Deadlock.id_kis;
+                        dbEntry.Shops = Deadlock.Shops;
+                        dbEntry.Ways = Deadlock.Ways;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveDeadlock(Deadlock={0})", Deadlock.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public Deadlock DeleteDeadlock(int id)
+        {
+            Deadlock dbEntry = context.Deadlock.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.Deadlock.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteDeadlock(id={0})", id), eventID);
                     return null;
                 }
             }

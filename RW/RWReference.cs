@@ -384,6 +384,22 @@ namespace RW
                 return 0;
             }
         }
+
+        public int GetIDReferenceCountryOfCodeISO(int code_country_iso)
+        {
+            try
+            {
+                EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
+                EFReference.Entities.Countrys code = ef_reference.GetCountryOfCode(code_country_iso);
+                return GetIDReferenceCountry(code);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDReferenceCountryOfCodeSNG(code_country_sng={0})", code_country_iso), servece_owner, eventID);
+                return 0;
+            }
+        }
+
         #endregion
 
         #region Справочник "Грузов"
@@ -636,6 +652,95 @@ namespace RW
         }
         #endregion
 
+        #region Справочник "Станций УЗ для отправки"
+        /// <summary>
+        /// Вернуть строку справочника "Станций УЗ для отправки" по коду (с контрольной суммой) станции, если нет создать
+        /// </summary>
+        /// <param name="codecs"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public ReferenceStation GetReferenceStation(int codecs, bool create)
+        {
+            try
+            {
+                EFRW.Concrete.EFReference ef_ref = new EFRW.Concrete.EFReference();
+                EFReference.Concrete.EFReference reference = new EFReference.Concrete.EFReference();
+                ReferenceStation ref_station = ef_ref.GetReferenceStationOfCodecs(codecs);
+                if (ref_station == null)
+                {
+                    EFReference.Entities.Stations station = reference.GetStationsOfCodeCS(codecs);
+                    ReferenceStation new_station;
+                    if (station != null & create)
+                    {
+                        EFReference.Entities.InternalRailroad ir = reference.GetInternalRailroad(station.id_ir!= null ? (int)station.id_ir:0);
+                        EFReference.Entities.States state = reference.GetStates(ir != null ? ir.id_state : 0);  
+                        string internal_railroad = ir!=null ? ir.internal_railroad : "?";
+                        string ir_abbr = ir != null ? ir.abbr : "?";
+                        string name_network = state != null ? state.name_network : "?";
+                        string nn_abbr = state != null ? state.abb_ru : "?";
+                        string name = station.station + ", " + ir_abbr + ". ж/д. "+ nn_abbr;
+
+                        new_station = new ReferenceStation()
+                        {
+                            id = 0,
+                            name = name,
+                            station = station.station,
+                            internal_railroad = internal_railroad,
+                            ir_abbr = ir_abbr,
+                            name_network = name_network,
+                            nn_abbr = nn_abbr,
+                            code_cs = codecs,
+                        };
+                    }
+                    else
+                    {
+                        new_station = new ReferenceStation()
+                        {
+                            id = 0,
+                            name = "?",
+                            station = "?",
+                            internal_railroad = "?",
+                            ir_abbr = "?",
+                            name_network = "?",
+                            nn_abbr = "?",
+                            code_cs = codecs,
+                        };
+                    }
+                    int res_station = ef_ref.SaveReferenceStation(new_station);
+                    if (res_station > 0)
+                    {
+                        ref_station = ef_ref.GetReferenceStation(res_station);
+                    }
+
+                }
+                return ref_station;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetReferenceStation(codecs={0}, create={1})", codecs, create), servece_owner, eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть id строкb справочника "Станций УЗ для отправки" по коду (с контрольной суммой) станции, если нет создать
+        /// </summary>
+        /// <param name="codecs"></param>
+        /// <returns></returns>
+        public int GetIDGetReferenceStationOfCodecs(int codecs)
+        {
+            try
+            {
+                ReferenceStation ref_station = GetReferenceStation(codecs, true);
+                return ref_station != null ? ref_station.id : 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDGetReferenceStationOfCodecs(codecs={0})", codecs), servece_owner, eventID);
+                return 0;
+            }
+        }
+        #endregion
+
         #region Справочник "Путей railway"
         /// <summary>
         /// Вернуть строку пути справочника "Пути railway" по id станции и номеру пути, если нет создать по данным КИС
@@ -762,7 +867,6 @@ namespace RW
         //}
         #endregion
 
-        
         #region Справочник "Цехов"
         /// <summary>
         /// Получить id цеха по id цеха системы кис, если нет создать по данным КИС
@@ -810,6 +914,51 @@ namespace RW
             }
         }
         #endregion        
+
+        #region Справочник "Тупиков"
+        /// <summary>
+        /// Получить id тупика по id тупика системы кис, если нет создать по данным КИС
+        /// </summary>
+        /// <param name="id_kis"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public int? GetIDDeadlockOfKis(int id_kis, bool create)
+        {
+            try
+            {
+                EFRailWay ef_rw = new EFRailWay();
+                Deadlock deadlock = ef_rw.GetDeadlockOfKis(id_kis);
+                if (deadlock == null & create & this.reference_kis)
+                {
+                    EFWagons kis = new EFWagons();
+                    NumVagStpr1Tupik typik = kis.GetNumVagStpr1Tupik(id_kis);
+                    if (typik != null)
+                    {
+                        Deadlock new_deadlock = new Deadlock()
+                        {
+                            id = 0, 
+                            name = typik.NAMETUPIK, 
+                            description = typik.NAMETUPIK,
+                            id_kis = typik.ID_CEX_TUPIK
+ 
+                        };
+                        int res = ef_rw.SaveDeadlock(new_deadlock);
+                        if (res > 0)
+                        {
+                            deadlock = ef_rw.GetDeadlock(res);
+                        }
+                    }
+                }
+                return deadlock != null ? (int?)deadlock.id : null;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetIDDeadlockOfKis(id_kis={0}, create={1})", id_kis, create), servece_owner, eventID);
+                return 0;
+            }
+        }
+        #endregion  
+
         #region Справочник "Грузополучателей"
 
         public int GetIDReferenceConsigneeOfKis(int id_kis, bool create)
@@ -859,5 +1008,7 @@ namespace RW
             }
         }
         #endregion
+
+
     }
 }

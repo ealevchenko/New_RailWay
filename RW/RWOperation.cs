@@ -18,7 +18,8 @@ namespace RW
     public enum operation : int
     {
         set_way,        // Поставить на путь 
-        arrival_uz_way, // Принять из УЗ на путь
+        arrival_uz_way, // Принять с УЗ на путь АМКР
+        sending_uz_way, // Сдать на УЗ с пути АМКР
         send_station,
         send_shop,
         send_wo
@@ -33,6 +34,7 @@ namespace RW
         int? side { get; set; }
         DateTime dt_set { get; set; }
         DateTime? dt_inp_amkr { get; set; }
+        DateTime? dt_out_amkr { get; set; }
         int? id_status { get; set; }
         int? id_сonditions { get; set; }
         int? natur_kis { get; set; }
@@ -50,6 +52,7 @@ namespace RW
         public int? side { get; set; }
         public DateTime dt_set { get; set; }
         public DateTime? dt_inp_amkr { get; set; }
+        public DateTime? dt_out_amkr { get; set; }
         public int? id_status { get; set; }
         public int? id_сonditions { get; set; }
         public int? natur_kis { get; set; }
@@ -92,6 +95,7 @@ namespace RW
         public int? side { get; set; }
         public DateTime dt_set { get; set; }
         public DateTime? dt_inp_amkr { get; set; }
+        public DateTime? dt_out_amkr { get; set; }
         public int? id_status { get; set; }
         public int? id_сonditions { get; set; }
         public int? natur_kis { get; set; }
@@ -120,6 +124,7 @@ namespace RW
         public int? side { get; set; }
         public DateTime dt_set { get; set; }
         public DateTime? dt_inp_amkr { get; set; }
+        public DateTime? dt_out_amkr { get; set; }
         public int? id_status { get; set; }
         public int? id_сonditions { get; set; }
         public int? natur_kis { get; set; }
@@ -152,6 +157,51 @@ namespace RW
             this.natur_kis = natur_kis;
             this.natur_rw = natur;
         }
+    }
+
+    public class OperationSendingUZWay : IOperation
+    {
+        public operation operation { get; set; }
+        public int? id_station { get; set; }
+        public int? id_way { get; set; }
+        public int? position { get; set; }
+        public int? side { get; set; }
+        public DateTime dt_set { get; set; }
+        public DateTime? dt_inp_amkr { get; set; }
+        public DateTime? dt_out_amkr { get; set; }
+        public int? id_status { get; set; }
+        public int? id_сonditions { get; set; }
+        public int? natur_kis { get; set; }
+        public int? natur_rw { get; set; }
+
+        public OperationSendingUZWay(int id_way, int position, DateTime dt_set, DateTime? dt_out_amkr, int? natur_kis, int? natur, int? id_сonditions)
+        {
+            this.operation = operation.sending_uz_way;
+            this.id_way = id_way;
+            this.position = position;
+            //this.side = null;
+            this.dt_set = dt_set;
+            this.dt_out_amkr = dt_out_amkr;
+            this.id_status = 13; // Прибыл с УЗ
+            this.id_сonditions = id_сonditions;
+            this.natur_kis = natur_kis;
+            this.natur_rw = natur;
+        }
+
+        public OperationSendingUZWay(int id_way, DateTime dt_set, DateTime? dt_out_amkr, int? natur_kis, int? natur, int? id_сonditions)
+        {
+            this.operation = operation.sending_uz_way;
+            this.id_way = id_way;
+            //this.position = position;
+            //this.side = null;
+            this.dt_set = dt_set;
+            this.dt_out_amkr = dt_out_amkr;
+            this.id_status = 13; // Прибыл с УЗ
+            this.id_сonditions = id_сonditions;
+            this.natur_kis = natur_kis;
+            this.natur_rw = natur;
+        }
+
     }
 
     public class RWOperation
@@ -281,7 +331,12 @@ namespace RW
                 return null;
             }
         }
-
+        /// <summary>
+        /// Опрерация принять с УЗ на путь.
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="operation"></param>
+        /// <returns></returns>
         public CarOperations OperationArrivalUZWay(Cars car, IOperation operation)
         {
             try
@@ -300,6 +355,31 @@ namespace RW
                 return null;
             }
         }
+        /// <summary>
+        /// Опрерация сдать на УЗ с пути.
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="operation"></param>
+        /// <returns></returns>
+        public CarOperations OperationSendingUZWay(Cars car, IOperation operation)
+        {
+            try
+            {
+                
+                CarOperations last_operation = car.GetLastOperations();
+                CarOperations new_operation = last_operation == null ? OperationSetWay(car.id, null, operation) : OperationSetWay(last_operation, operation);
+                car.CarOperations.Add(new_operation);
+                car.SetCar(operation.dt_out_amkr);
+                return new_operation;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("OperationSendingUZWay(car={0}, operation={1})",
+                    car, operation), servece_owner, eventID);
+                return null;
+            }
+        }
+
 
         #endregion
 
@@ -313,10 +393,36 @@ namespace RW
         {
             return ef_rw.CarOperations.Where(o => o.Cars.num == num).IsOpenOperation(Filters.IsOpenAll);
         }
-
+        /// <summary>
+        /// Вернуть все открытые операции по номеру вагона
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         public List<CarOperations> IsOpenOperation(int num, Filters.IsFilterOpen filter)
         {
             return ef_rw.CarOperations.Where(o => o.Cars.num == num).IsOpenOperation(filter);
+        }
+        /// <summary>
+        /// Вернуть все открытые операции по номеру вагона и натурке
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="natur"></param>
+        /// <returns></returns>
+        public List<CarOperations> IsOpenAllOperation(int num, int natur)
+        {
+            return ef_rw.CarOperations.Where(o => o.Cars.num == num & o.Cars.natur_kis == natur).IsOpenOperation(Filters.IsOpenAll);
+        }
+        /// <summary>
+        /// Вернуть все открытые операции по номеру вагона и натурке
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="natur"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public List<CarOperations> IsOpenOperation(int num, int natur, Filters.IsFilterOpen filter)
+        {
+            return ef_rw.CarOperations.Where(o => o.Cars.num == num & o.Cars.natur_kis == natur).IsOpenOperation(filter);
         }
         #endregion
 
@@ -775,7 +881,6 @@ namespace RW
                 return null;
             }
         }
-
         #endregion
 
         #region Входящие поставки
@@ -879,6 +984,66 @@ namespace RW
             {
                 e.WriteErrorMethod(String.Format("CreateCarsInpDelivery(num={0}, id_arrival={1}, dt_operation={2}, index={3}, position={4}, CountryCode={5}, CargoCode={6}, Weight={7}, Consignee={8})"
                     , num, id_arrival, dt_operation, index, position, CountryCode, CargoCode, Weight, Consignee), servece_owner, eventID);
+                return null;
+            }
+        }
+        #endregion
+
+        #region Исходящие вагоны
+        //public Cars SetCarsToUZRailWay(CarOperations last_operation, SetCarOperation set_operation, IOperation operation)
+        //{
+        //    try
+        //    {
+        //        // Вагон статит на АМКР
+        //        Cars car = last_operation.Cars; // Определим вагон
+        //        // Определим исходящие поставки
+        //        CarsOutDelivery delivery = CreateCarsOutDelivery(car.num, (int)car.natur_kis, (DateTime)operation.dt_out_amkr);
+        //        int res_car = rw_oper.ExecSaveOperation(car, rw_oper.OperationSendingUZWay, new OperationSendingUZWay(id_sending_way, dt_out_amkr, dt_out_amkr, natur, null, null));
+        //        if (res_car > 0)
+        //        {
+        //            // 
+        //            // Входяшие поставки
+        //            if (car.CarsOutDelivery == null || car.CarsOutDelivery.Count() == 0)
+        //            { car.CarsOutDelivery.Add(delivery); }
+
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("SetCarsToRailWay(arr_car={0}, set_operation={1}, operation={2})", arr_car.GetFieldsAndValue(), set_operation, operation), servece_owner, eventID);
+        //        return null;
+        //    }
+        //}
+        #endregion
+        #region Исходящие поставки
+        public CarsOutDelivery CreateCarsOutDelivery(int num, int? id_tupik, int? CountryCodeISO, int? StationCode, string note, int CargoCode, float Weight)
+        {
+            try
+            {
+                return new CarsOutDelivery()
+                {
+                    id = 0,
+                    id_car = 0,
+                    num_nakl_sap = null,
+                    id_tupik = id_tupik,
+                    id_country_out = CountryCodeISO != null ? rw_ref.GetIDReferenceCountryOfCodeISO((int)CountryCodeISO): CountryCodeISO,
+                    id_station_out = StationCode != null ? rw_ref.GetIDGetReferenceStationOfCodecs((int)StationCode) : StationCode, //
+                    note = note,
+                    cargo_code = CargoCode,
+                    id_cargo = rw_ref.GetIDReferenceCargoOfCodeETSNG(CargoCode),
+                    weight_cargo = (decimal)Weight,
+                    num_doc_reweighing_sap = null,
+                    dt_doc_reweighing_sap = null,
+                    weight_reweighing_sap = null,
+                    dt_reweighing_sap = null,
+                    post_reweighing_sap = null,
+                };
+
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CreateCarsOutDelivery(num={0}, id_tupik={1}, CountryCodeISO={2}, StationCode={3}, note={4}, CargoCode={5}, Weight={6})"
+                    , num, id_tupik, CountryCodeISO, StationCode, note, CargoCode, Weight), servece_owner, eventID);
                 return null;
             }
         }
