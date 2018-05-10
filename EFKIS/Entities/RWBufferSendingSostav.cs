@@ -41,6 +41,9 @@ namespace EFKIS.Entities
         public int? status { get; set; }
 
         [StringLength(1000)]
+        public string list_wagons { get; set; }
+
+        [StringLength(1000)]
         public string list_no_set_wagons { get; set; }
 
         [StringLength(1000)]

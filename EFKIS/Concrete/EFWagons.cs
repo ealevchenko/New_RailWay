@@ -2,6 +2,7 @@
 using EFKIS.Entities;
 using EFKIS.Helpers;
 using MessageLog;
+using RWConversionFunctions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -707,6 +708,64 @@ namespace EFKIS.Concrete
             return GetNatHist(natur, station, day, month, year, null);
         }
         /// <summary>
+        /// Получить список вагонов по натурному листу и дате сдачи вагона
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <param name="hour"></param>
+        /// <param name="minute"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        public IQueryable<PromNatHist> GetNatHistSendingOfNaturAndDT(int natur, int day, int month, int year, int hour, int minute, bool? sort)
+        {
+            try
+            {
+                if (sort == null)
+                {
+                    return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute);
+                }
+                if ((bool)sort)
+                {
+                    return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).OrderByDescending(n => n.NPP);
+                }
+                else
+                {
+                    return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).OrderBy(n => n.NPP);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNatHistOfNaturAndDT(natur={0}, day={1}, month={2}, year={3}, hour={4}, minute={5} sort={6})", natur, day, month, year, hour, minute, sort), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <param name="num"></param>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <param name="hour"></param>
+        /// <param name="minute"></param>
+        /// <returns></returns>
+        public PromNatHist GetNatHistSendingOfNaturNumDT(int natur, int num, int day, int month, int year, int hour, int minute)
+        {
+            try
+            {
+                return GetPromNatHist().Where(n => n.N_NATUR == natur & n.N_VAG == num & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNatHistSendingOfNaturNumDT(natur={0}, num={1}, day={2}, month={3}, year={4}, hour={5}, minute={6})", natur, num, day, month, year, hour, minute), eventID);
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Получить вагон по натурному листу станции и дате поступления
         /// </summary>
         /// <param name="natur"></param>
@@ -1380,6 +1439,24 @@ namespace EFKIS.Concrete
                 return -1;
             }
         }
+
+        public IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStDocOfCarAndDoc(int[] nums_car, int[] nums_doc)
+        {
+            try
+            {
+
+                string s_nums_car = nums_car.IntsToString(',');
+                string s_nums_doc = nums_doc.IntsToString(',');
+                string sql = " SELECT *  FROM NUM_VAG.STPR1_OUT_ST_VAG where ID_DOC in (" + s_nums_doc + ")  and N_VAG in (" + s_nums_car + ")";
+                return context.Database.SqlQuery<NumVagStpr1OutStVag>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSTPR1OutStDocOfCarAndDoc(nums_car={0}, nums_doc={1})", nums_car.IntsToString(','), nums_doc.IntsToString(',')), eventID);
+                return null;
+            }
+        }
+
         #endregion
 
         #region NumVagStan (справочник станций)
@@ -1404,6 +1481,73 @@ namespace EFKIS.Concrete
         public NumVagStan GetNumVagStations(int id_stan)
         {
             return GetNumVagStations().Where(s => s.K_STAN == id_stan).FirstOrDefault();
+        }
+        #endregion
+
+        #region NumVagStpr1Tupik (справочник тупиков)
+
+        public IQueryable<NumVagStpr1Tupik> NumVagStpr1Tupik
+        {
+            get { return context.NumVagStpr1Tupik; }
+        }
+        /// <summary>
+        /// Получить все тупики
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStpr1Tupik> GetNumVagStpr1Tupik()
+        {
+            return NumVagStpr1Tupik;
+        }
+        /// <summary>
+        /// Получить информацию по станции по  id
+        /// </summary>
+        /// <param name="id_stan"></param>
+        /// <returns></returns>
+        public NumVagStpr1Tupik GetNumVagStpr1Tupik(int id_tupik)
+        {
+            return GetNumVagStpr1Tupik().Where(t => t.ID_CEX_TUPIK == id_tupik).FirstOrDefault();
+        }
+        #endregion
+
+        #region NumVagStran (справочник стран)
+        public IQueryable<NumVagStran> NumVagStran
+        {
+            get { return context.NumVagStran; }
+        }
+        /// <summary>
+        /// Получить все страны
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<NumVagStran> GetNumVagStran()
+        {
+            return NumVagStran;
+        }
+        /// <summary>
+        /// Получить информацию по стране по  id
+        /// </summary>
+        /// <param name="id_stan"></param>
+        /// <returns></returns>
+        public NumVagStran GetNumVagStran(int npp)
+        {
+            return GetNumVagStran().Where(s => s.NPP == npp).FirstOrDefault();
+        }
+        /// <summary>
+        /// Получить информацию по стране по коду iso
+        /// </summary>
+        /// <param name="id_stan"></param>
+        /// <returns></returns>
+        public NumVagStran GetNumVagStranOfCodeISO(int code)
+        {
+            return GetNumVagStran().Where(s => s.KOD_STRAN == code).FirstOrDefault();
+        }
+        /// <summary>
+        /// Получить информацию по стране по коду europe
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public NumVagStran GetNumVagStranOfCodeEurope(int code)
+        {
+            return GetNumVagStran().Where(s => s.KOD_EUROP == code).FirstOrDefault();
         }
         #endregion
 

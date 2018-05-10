@@ -73,6 +73,7 @@ namespace EFKIS.Abstract
 
         IQueryable<PromNatHist> GetNatHist(int natur, int station, int day, int month, int year, bool? sort);
         IQueryable<PromNatHist> GetNatHist(int natur, int station, int day, int month, int year);
+        IQueryable<PromNatHist> GetNatHistSendingOfNaturAndDT(int natur, int day, int month, int year, int hour, int minute, bool? sort);
         PromNatHist GetNatHist(int natur, int station, int day, int month, int year, int wag);
 
         IQueryable<PromNatHist> GetNatHistOfVagon(int num_vag);
@@ -140,6 +141,7 @@ namespace EFKIS.Abstract
         IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStVag(int doc);
         IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStVag(int doc, bool sort);
         int GetCountSTPR1OutStVag(int doc);
+        IQueryable<NumVagStpr1OutStVag> GetSTPR1OutStDocOfCarAndDoc(int[] nums_car, int[] nums_doc);
         #endregion
 
         #region NumVagStan (справочник станций)
@@ -148,6 +150,20 @@ namespace EFKIS.Abstract
         IQueryable<NumVagStan> GetNumVagStations();
         NumVagStan GetNumVagStations(int id_stan);
 
+        #endregion
+
+        #region NumVagStpr1Tupik (справочник тупиков)
+        IQueryable<NumVagStpr1Tupik> NumVagStpr1Tupik { get; }
+        IQueryable<NumVagStpr1Tupik> GetNumVagStpr1Tupik();
+        NumVagStpr1Tupik GetNumVagStpr1Tupik(int id_tupik);
+        #endregion
+
+        #region NumVagStran (справочник стран)
+        IQueryable<NumVagStran> NumVagStran { get; }
+        IQueryable<NumVagStran> GetNumVagStran();
+        NumVagStran GetNumVagStran(int npp);
+        NumVagStran GetNumVagStranOfCodeISO(int code);
+        NumVagStran GetNumVagStranOfCodeEurope(int code);
         #endregion
 
         #endregion

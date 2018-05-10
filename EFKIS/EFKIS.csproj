@@ -113,6 +113,10 @@
       <Project>{8f256cd8-5a1c-466d-9874-639ec4fadb0f}</Project>
       <Name>MLogs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RWConversionFunctions\RWConversionFunctions.csproj">
+      <Project>{d4c8d1c2-db0f-42d3-a432-94c0549907e4}</Project>
+      <Name>RWConversionFunctions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

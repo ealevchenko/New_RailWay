@@ -847,7 +847,8 @@ namespace EFKIS.Concrete
                         count_set_nathist = RWBufferSendingSostav.count_set_nathist,
                         close = RWBufferSendingSostav.close,
                         close_user = RWBufferSendingSostav.close_user,
-                        status = RWBufferSendingSostav.status,
+                        status = RWBufferSendingSostav.status, 
+                        list_wagons = RWBufferSendingSostav.list_wagons,
                         list_no_set_wagons = RWBufferSendingSostav.list_no_set_wagons,
                         message = RWBufferSendingSostav.message,
                     };
@@ -872,6 +873,7 @@ namespace EFKIS.Concrete
                         dbEntry.close = RWBufferSendingSostav.close;
                         dbEntry.close_user = RWBufferSendingSostav.close_user;
                         dbEntry.status = RWBufferSendingSostav.status;
+                        dbEntry.list_wagons = RWBufferSendingSostav.list_wagons;
                         dbEntry.list_no_set_wagons = RWBufferSendingSostav.list_no_set_wagons;
                         dbEntry.message = RWBufferSendingSostav.message;
                     }
@@ -939,7 +941,22 @@ namespace EFKIS.Concrete
                 return null;
             }
         }
-
+        /// <summary>
+        /// Выбрать не закрытые перенесеные составы
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<RWBufferSendingSostav> GetRWBufferSendingSostavNoClose()
+        {
+            try
+            {
+                return GetRWBufferSendingSostav().Where(o => o.close == null).OrderBy(o => o.datetime);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferSendingSostavNoClose()"), eventID);
+                return null;
+            }
+        }
         #endregion
         #endregion
     }

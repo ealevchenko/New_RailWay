@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using libClass;
 using EFKIS.Entities;
 using EFKIS.Concrete;
+using EFKIS.Helpers;
 using System.Globalization;
 using EFRW.Entities;
 using RW;
@@ -21,7 +22,7 @@ namespace KIS
         private eventID eventID = eventID.KIS_RWTransfer;
         //protected service servece_owner = service.Null;
         bool log_detali = false;
-        
+
         public KIS_RW_Transfer()
             : base()
         {
@@ -222,8 +223,8 @@ namespace KIS
                     year = (int)ps.D_YY,
                     hour = (int)ps.T_HH,
                     minute = (int)ps.T_MI,
-                    natur = ps.N_NATUR, 
-                    id_station_from_kis = (int)ps.K_ST, 
+                    natur = ps.N_NATUR,
+                    id_station_from_kis = (int)ps.K_ST,
                     id_station_on_kis = (int)ps.K_ST_PR,
                     count_nathist = null,
                     count_set_nathist = null,
@@ -413,6 +414,63 @@ namespace KIS
                 return null;
             }
         }
+        /// <summary>
+        /// Создать справочник SAP Исходящие поставки по данным PromNatHist
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="natur"></param>
+        /// <param name="dt_out_amkr"></param>
+        /// <returns></returns>
+        public CarsOutDelivery CreateCarsOutDelivery(int num, int natur, DateTime dt_out_amkr)
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                PromNatHist pnh = ef_wag.GetNatHistSendingOfNaturNumDT(natur, num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
+                // Определим исходящие поставки
+                return CreateCarsOutDelivery(pnh);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CreateCarsOutDelivery(num={0}, natur={1}, dt_out_amkr={2})", num, natur, dt_out_amkr), servece_owner, eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Создать справочник SAP Исходящие поставки по данным PromNatHist
+        /// </summary>
+        /// <param name="pnh_out"></param>
+        /// <returns></returns>
+        public CarsOutDelivery CreateCarsOutDelivery(PromNatHist pnh_out)
+        {
+            try
+            {
+                RWReference rw_ref = new RWReference(true);
+                RWOperation rw_oper = new RWOperation(this.servece_owner);
+                EFWagons ef_wag = new EFWagons();
+
+                DateTime dt_out_amkr = DateTime.Parse(pnh_out.D_SD_DD.ToString() + "-" + pnh_out.D_SD_MM.ToString() + "-" + pnh_out.D_SD_YY.ToString() + " " + pnh_out.T_SD_HH.ToString() + ":" + pnh_out.T_SD_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
+
+                List<NumVagStpr1OutStDoc> list_out_sostav = ef_wag.GetSTPR1OutStDoc(dt_out_amkr.AddDays(-3), dt_out_amkr).ToList();
+                List<NumVagStpr1OutStVag> list_out_car = ef_wag.GetSTPR1OutStDocOfCarAndDoc(new int[] { pnh_out.N_VAG }, list_out_sostav.Select(s => s.ID_DOC).ToArray()).ToList();
+                NumVagStpr1OutStVag car_out = list_out_car.OrderByDescending(v => v.ID_DOC).FirstOrDefault();
+
+                NumVagStran stan_kis = car_out.STRAN_OUT_ST != null ? ef_wag.GetNumVagStranOfCodeEurope((int)car_out.STRAN_OUT_ST) : null;
+                // Определим код груза
+                return rw_oper.CreateCarsOutDelivery(car_out.N_VAG,
+                    (car_out.N_TUP_OUT_ST != null ? rw_ref.GetIDDeadlockOfKis((int)car_out.N_TUP_OUT_ST, true) : null),
+                    (stan_kis != null ? (int?)stan_kis.KOD_STRAN : null),
+                    car_out.ST_NAZN_OUT_ST,
+                    car_out.REM_IN_ST,
+                    rw_ref.GetCorrectCodeETSNGOfKis(pnh_out.K_GR_T),
+                    0);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CreateCarsOutDelivery(pnh_out={0})", pnh_out.GetFieldsAndValue()), servece_owner, eventID);
+                return null;
+            }
+        }
         #endregion
 
         #region дополнительные методы к EFWagons
@@ -424,15 +482,16 @@ namespace KIS
         /// <param name="dt_amkr"></param>
         /// <param name="id_station_kis"></param>
         /// <returns></returns>
-        public PromNatHist GetCorrectNatHist(int natur, int num_vag, DateTime dt_amkr, int id_station_kis) {
+        public PromNatHist GetCorrectNatHist(int natur, int num_vag, DateTime dt_amkr, int id_station_kis)
+        {
             EFWagons ef_wag = new EFWagons();
             PromNatHist pnh = ef_wag.GetNatHist(natur, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
-                if (pnh == null & id_station_kis == 18)
-                {
-                    // Если промышленная, попробовать Промышленная-керамет
-                    pnh = ef_wag.GetNatHist(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
-                }
-                return pnh;
+            if (pnh == null & id_station_kis == 18)
+            {
+                // Если промышленная, попробовать Промышленная-керамет
+                pnh = ef_wag.GetNatHist(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+            }
+            return pnh;
         }
         /// <summary>
         /// 
@@ -451,7 +510,7 @@ namespace KIS
                 // Если промышленная, попробовать Промышленная-керамет
                 pv = ef_wag.GetVagon(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
             }
-                return pv;
+            return pv;
         }
         #endregion
 
@@ -653,7 +712,7 @@ namespace KIS
                     }
                     catch (Exception e)
                     {
-                        e.WriteError(String.Format("Ошибка обработки строки буфера переноса состава (натурный лист: {0}, дата: {1}, ID строки буфера переноса: {2})",bas.natur, bas.datetime, bas.id), servece_owner, eventID);
+                        e.WriteError(String.Format("Ошибка обработки строки буфера переноса состава (натурный лист: {0}, дата: {1}, ID строки буфера переноса: {2})", bas.natur, bas.datetime, bas.id), servece_owner, eventID);
                     }
                 }
                 return close;
@@ -665,7 +724,51 @@ namespace KIS
             }
         }
 
-        #region ПОСТАВИМ НА ПУТЬ СИСТЕМЫ RAILWAY ПО ДАННЫМ PROM_VAG
+        public int TransferSendingKISToRailWay()
+        {
+            try
+            {
+                EFTKIS ef_tkis = new EFTKIS();
+                int close = 0;
+                IQueryable<RWBufferSendingSostav> list_noClose = ef_tkis.GetRWBufferSendingSostavNoClose();
+                if (list_noClose == null || list_noClose.Count() == 0) return 0;
+                foreach (RWBufferSendingSostav bas in list_noClose.ToList())
+                {
+                    try
+                    {
+                        string mess_put = String.Format("Состав (натурный лист: {0}, дата: {1}, ID строки буфера переноса: {2}), отправленный на станцию УЗ (id_kis:{3}) по данным системы КИС", bas.natur, bas.datetime, bas.id, bas.id_station_on_kis);
+                        RWBufferSendingSostav bss_result = new RWBufferSendingSostav();
+                        bss_result = bas;
+                        // Поставим состав на путь станции УЗ системы RailWay
+                        int res_put = SetWayRailWayOfKIS(ref bss_result);
+
+                        //Закрыть состав
+                        if (bss_result.count_nathist != null & bss_result.count_set_nathist != null
+                            & bss_result.count_nathist == bss_result.count_set_nathist)
+                        {
+                            bss_result.close = DateTime.Now;
+                            bss_result.close_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                            int res_close = ef_tkis.SaveRWBufferSendingSostav(bss_result);
+                            mess_put += " - перенесен и закрыт";
+                            mess_put.WriteEvents(res_close > 0 ? EventStatus.Ok : EventStatus.Error, servece_owner, eventID);
+                            close++;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.WriteError(String.Format("Ошибка обработки строки буфера переноса состава (натурный лист: {0}, дата: {1}, ID строки буфера переноса: {2})", bas.natur, bas.datetime, bas.id), servece_owner, eventID);
+                    }
+                }
+                return close;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferSendingKISToRailWay()"), servece_owner, eventID);
+                return -1;
+            }
+        }
+
+        #region ПОСТАВИМ НА ПУТЬ АМКР СИСТЕМЫ RAILWAY ПО ДАННЫМ PROM_VAG
         /// <summary>
         /// Принять вагоны состава на путь станции по данным КИС 
         /// </summary>
@@ -677,7 +780,7 @@ namespace KIS
         {
             try
             {
-                string mess_transf = String.Format("cостава (натурный лист: {0}, дата: {1}, ID строки буфера переноса: {2}), прибывающий с УЗ на станцию АМКР", 
+                string mess_transf = String.Format("cостава (натурный лист: {0}, дата: {1}, ID строки буфера переноса: {2}), прибывающий с УЗ на станцию АМКР",
                     bas_sostav.natur, bas_sostav.datetime, bas_sostav.id);
                 string mess_transf1 = " по данным системы КИС.";
                 string mess_arr_sostav = "Перенос " + mess_transf;
@@ -991,7 +1094,7 @@ namespace KIS
         }
         #endregion
 
-        #region ОБНОВИТЬ ВАГОН НА ПУТИ СИСТЕМЫ RAILWAY ПО ДАННЫМ PROM_VAG
+        #region ОБНОВИТЬ ВАГОН НА ПУТИ АМКР СИСТЕМЫ RAILWAY ПО ДАННЫМ PROM_VAG
         /// <summary>
         /// 
         /// </summary>
@@ -1001,7 +1104,7 @@ namespace KIS
         {
             try
             {
-                string mess_upd = String.Format("состава (натурный лист: {0}, дата: {1}, ID строки буфера переноса: {2}), прибывшего на АМКР",bas_sostav.natur, bas_sostav.datetime, bas_sostav.id);
+                string mess_upd = String.Format("состава (натурный лист: {0}, дата: {1}, ID строки буфера переноса: {2}), прибывшего на АМКР", bas_sostav.natur, bas_sostav.datetime, bas_sostav.id);
                 string mess_upd_sostav = "Обновление " + mess_upd;
                 string mess_error_upd_sostav = "Ошибка обновления";
 
@@ -1064,7 +1167,7 @@ namespace KIS
                     }
                 }
                 bas_sostav.count_set_nathist = (bas_sostav.count_set_nathist != null ? bas_sostav.count_set_nathist : 0) + result.ResultUpdate;
-                mess_upd_sostav += String.Format(" (id_rw_station : {0}, id_rw_way : {1}) по данным системы КИС. Определено для обновления: {2} вагонов, обновлено: {3} вагонов, ранее обновлено: {4} вагонов, ошибок обновления {5}.",id_stations_rw, id_ways_rw, set_wagons.Count(), result.updates, result.skippeds, result.errors);
+                mess_upd_sostav += String.Format(" (id_rw_station : {0}, id_rw_way : {1}) по данным системы КИС. Определено для обновления: {2} вагонов, обновлено: {3} вагонов, ранее обновлено: {4} вагонов, ошибок обновления {5}.", id_stations_rw, id_ways_rw, set_wagons.Count(), result.updates, result.skippeds, result.errors);
                 mess_upd_sostav.WriteInformation(servece_owner, eventID);
                 //if (set_wagons.Count() > 0) { mess_update_sostav.SaveLogEvents(result.errors > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
                 // Сохранить результат и вернуть код
@@ -1097,7 +1200,7 @@ namespace KIS
                 string mess = String.Format("грузополучателя и годности вагона №:{0}, принадлежащего составу (натурный лист: {1}, дата: {2}) стоящего на пути станции (станция АМКР: {3}, путь: {4})", num_vag, natur, dt_amkr, station.name_ru, way.num + "- " + way.name_ru);
                 string mess_update_vag = "Обновление " + mess;
                 string mess_update_vag_err = "Ошибка обновления " + mess;
-         
+
                 PromNatHist pnh = GetCorrectNatHist(natur, num_vag, dt_amkr, (int)station.id_kis);
                 if (pnh == null)
                 {
@@ -1112,10 +1215,12 @@ namespace KIS
                 }
 
                 // Обновим данные
-                if (id_consignee!= null | pnh.GODN!=null | !String.IsNullOrWhiteSpace(pnh.ST_OTPR) ){
+                if (id_consignee != null | pnh.GODN != null | !String.IsNullOrWhiteSpace(pnh.ST_OTPR))
+                {
                     Cars car = ef_rw.GetCarsOfSetKIS(num_vag, dt_amkr, natur);
-                    if (car != null) {
-                        if (id_consignee!= null) car.CarsInpDelivery.ToList()[0].id_consignee = id_consignee;
+                    if (car != null)
+                    {
+                        if (id_consignee != null) car.CarsInpDelivery.ToList()[0].id_consignee = id_consignee;
                         if (!String.IsNullOrWhiteSpace(pnh.ST_OTPR)) car.CarsInpDelivery.ToList()[0].station_shipment = pnh.ST_OTPR;
                         if (pnh.GODN != null)
                         {
@@ -1152,6 +1257,575 @@ namespace KIS
                 return (int)errorTransfer.global;
             }
         }
+        #endregion
+
+        #region ОСТАВИМ НА ПУТЬ УЗ СИСТЕМЫ RAILWAY ПО ДАННЫМ PROM_VAG
+        /// <summary>
+        /// Оновим список поставленных и не поставленных вагонов
+        /// </summary>
+        /// <param name="bss_sostav"></param>
+        /// <param name="list_nh"></param>
+        /// <returns></returns>
+        public int SetListWagon(ref RWBufferSendingSostav bss_sostav, List<PromNatHist> list_nh)
+        {
+            EFTKIS ef_tkis = new EFTKIS();
+            if (list_nh == null) return 0; // Списков вагонов нет
+            try
+            {
+
+                //Создать и список вагонов заново и поставить их на путь
+                List<int> old_wagons = GetWagonsToListInt(bss_sostav.list_wagons);
+                bss_sostav.list_wagons = GetWagonsToString(list_nh);
+                List<int> new_wagons = GetWagonsToListInt(bss_sostav.list_wagons);
+
+                List<int> wagons_no_set = GetWagonsToListInt(bss_sostav.list_no_set_wagons);
+
+                List<int> wagons_buf = new List<int>();
+                List<int> wagons_no_set_buf = new List<int>();
+
+                // Удалить вагоны не найденные в новом списке из списка непоставленных на станцию вагонов 
+                if (wagons_no_set != null)
+                {
+                    wagons_buf = GetWagonsToListInt(bss_sostav.list_wagons);
+                    wagons_no_set_buf = GetWagonsToListInt(bss_sostav.list_no_set_wagons);
+                    DeleteExistWagon(ref wagons_buf, ref wagons_no_set_buf);
+                    foreach (int wag in wagons_no_set_buf)
+                    {
+                        DeleteExistWagon(ref wagons_no_set, wag);
+                    }
+                }
+                // сформировать строчные списки не поставленных и не обнавленных вагонов
+                bss_sostav.list_no_set_wagons = GetWagonsToString(wagons_no_set);
+                // Добавить в списки не поставленных и не обнавленных вагонов новые вагоны из нового списка
+                DeleteExistWagon(ref new_wagons, ref old_wagons);
+                foreach (int wag in new_wagons)
+                {
+                    if (wagons_no_set != null)
+                    { bss_sostav.list_no_set_wagons += wag.ToString() + ";"; }
+                }
+
+                bss_sostav.count_nathist = list_nh.Count();
+                return ef_tkis.SaveRWBufferSendingSostav(bss_sostav);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetListWagon(bss_sostav={0}, list_nh={1})", bss_sostav.GetFieldsAndValue(), list_nh), servece_owner, eventID);
+                return (int)errorTransfer.global;
+            }
+        }
+
+        public int SetWayRailWayOfKIS(ref RWBufferSendingSostav bss_sostav)
+        {
+            try
+            {
+                string mess_transf = String.Format("cостава (натурный лист: {0}, дата: {1}, ID строки буфера переноса: {2}), отправленный с АМКР на УЗ",
+                    bss_sostav.natur, bss_sostav.datetime, bss_sostav.id);
+                string mess_transf1 = " по данным системы КИС.";
+                string mess_arr_sostav = "Перенос " + mess_transf;
+                string mess_error_arr_sostav = "Ошибка переноса " + mess_transf;
+
+                RWReference rw_ref = new RWReference(base.servece_owner, true); // создавать содержимое справочника из данных КИС
+                EFWagons ef_wag = new EFWagons();
+                EFTKIS ef_tkis = new EFTKIS();
+
+                int id_stations_amkr = 0;
+                int id_stations_uz = 0;
+
+                id_stations_amkr = rw_ref.GetIDStationsOfKIS(bss_sostav.id_station_from_kis);
+                if (id_stations_amkr <= 0)
+                {
+                    String.Format(mess_error_arr_sostav + mess_transf1 + " - ID станции АМКР: {0} не определён в справочнике системы RailWay", bss_sostav.id_station_from_kis).WriteError(servece_owner, eventID);
+                    return (int)errorTransfer.no_stations;
+                }
+                if (id_stations_amkr == 26) id_stations_amkr = 27; // Коррекция Промышленная Керамет -> 'это промышленная
+                id_stations_uz = rw_ref.GetIDStationsOfKIS(bss_sostav.id_station_on_kis);
+                if (id_stations_uz <= 0)
+                {
+                    String.Format(mess_error_arr_sostav + mess_transf1 + " - ID станции УЗ: {0} не определён в справочнике системы RailWay", bss_sostav.id_station_on_kis).WriteError(servece_owner, eventID);
+                    return (int)errorTransfer.no_stations;
+                }
+                int id_way_uz = 0;
+
+
+                // Определим путь на станции система RailCars
+                id_way_uz = rw_ref.GetIDDefaultWayOfStation(id_stations_uz, "2");
+                if (id_way_uz <= 0)
+                {
+                    String.Format(mess_error_arr_sostav + mess_transf1 + " - ID пути: {0} станции УЗ: {1} не определён в справочнике системы RailWay", "2", bss_sostav.id_station_on_kis).WriteError(servece_owner, eventID);
+                    return (int)errorTransfer.no_ways;
+                }
+                // Получим список вагонов
+                List<PromNatHist> list_nh = ef_wag.GetNatHistSendingOfNaturAndDT(bss_sostav.natur,
+                    bss_sostav.day,
+                    bss_sostav.month,
+                    bss_sostav.year,
+                    bss_sostav.hour,
+                    bss_sostav.minute,
+                    false).ToList();
+
+                int res_set_list = SetListWagon(ref bss_sostav, list_nh);
+                if (bss_sostav.list_no_set_wagons == null & bss_sostav.list_wagons == null) return 0;
+
+                if (res_set_list >= 0)
+                {
+                    List<int> set_wagons = new List<int>();
+                    // Обнавляем вагоны
+                    if (bss_sostav.count_set_nathist != null & bss_sostav.list_no_set_wagons != null)
+                    {
+                        set_wagons = GetWagonsToListInt(bss_sostav.list_no_set_wagons); // доствавим вагоны
+                    }
+                    // Ставим вагоны в первый раз
+                    if (bss_sostav.count_set_nathist == null & bss_sostav.list_no_set_wagons == null & bss_sostav.list_wagons != null)
+                    {
+                        set_wagons = GetWagonsToListInt(bss_sostav.list_wagons); // поставим занаво
+                    }
+                    if (set_wagons.Count() == 0) return 0;
+                    ResultTransfers result_set_way = new ResultTransfers(set_wagons.Count(), 0, null, null, 0, 0);
+                    // Ставим вагоны на путь станции
+                    bss_sostav.list_no_set_wagons = null;
+                    foreach (int wag in set_wagons)
+                    {
+                        if (result_set_way.SetResultInsert(SetCarToSendingWayRailWay(bss_sostav.natur, wag, bss_sostav.datetime, id_way_uz, id_stations_amkr)))
+                        {
+                            // Ошибка
+                            bss_sostav.list_no_set_wagons += wag.ToString() + ";";
+                        }
+                    }
+                    bss_sostav.count_set_nathist = bss_sostav.count_set_nathist == null ? result_set_way.ResultInsert : (int)bss_sostav.count_set_nathist + result_set_way.ResultInsert;
+                    mess_arr_sostav += mess_transf1 + String.Format("По данным системы КИС, определено для переноса на путь станции УЗ: {0} вагонов, перенесено: {1} вагонов, ранее перенесено: {2} вагонов, ошибок переноса {3}.",
+                        set_wagons.Count(), result_set_way.inserts, result_set_way.skippeds, result_set_way.errors);
+                    mess_arr_sostav.WriteInformation(servece_owner, eventID);
+                    if (set_wagons.Count() > 0) { mess_arr_sostav.WriteEvents(result_set_way.errors > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+                    // Сохранить результат и вернуть код
+                    if (ef_tkis.SaveRWBufferSendingSostav(bss_sostav) < 0)
+                    { return (int)errorTransfer.set_table_sending_sostav; }
+                    else { return result_set_way.ResultInsert; }
+                }
+                else
+                {
+                    return res_set_list; // вернуло ошибку
+                }
+
+
+                //foreach (PromNatHist pnh in list_nh)
+                //{
+                //    // Получим исходящую поставку
+                //    CarsOutDelivery cod = CreateCarsOutDelivery(pnh);
+                //    // Получим входящую натурку
+                //    PromNatHist pnh_arrival = ef_wag.GetNatHistOfVagonLess(pnh.N_VAG, bss_sostav.datetime, true).FirstOrDefault();
+
+
+                //    int res = SetCarToSendingWayRailWay(bss_sostav.natur, pnh.N_VAG, bss_sostav.datetime, id_way_uz, id_stations_amkr);
+
+
+
+                //}
+
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetWayRailWayOfKIS(orc_sostav={0})", bss_sostav.GetFieldsAndValue()), servece_owner, eventID);
+                return (int)errorTransfer.global;
+            }
+        }
+
+        public int SetCarToSendingWayRailWay(int natur, int num_vag, DateTime dt_out_amkr, int id_sending_way, int id_station_amkr)
+        {
+            try
+            {
+                RWOperation rw_oper = new RWOperation(this.servece_owner);
+                EFRailWay ef_rw = new EFRailWay();
+                //EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+                EFWagons ef_wag = new EFWagons();
+
+                //Ways way_uz = ef_rw.GetWays(id_sending_way);
+                //Stations station_uz = way_uz.Stations;
+
+                // Получить список путей станции с которой отправили вагон
+                //List<Ways> list_ways_station_amkr = new List<Ways>();
+                //list_ways_station_amkr = ef_rw.GetWaysOfStation(id_station_amkr).ToList();
+                //// Получить список всех путей станций АМКР
+                //List<Ways> list_all_ways_station_amkr = new List<Ways>();
+                //list_all_ways_station_amkr = ef_rw.GetWaysOfStationAMKR().ToList();
+                //// Получить список путей отправки и приема
+                //List<Ways> list_arrival_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "1").ToList();
+                //List<Ways> list_sending_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "2").ToList();
+
+                // Определим исходные данные по таблице Prom.NatHist
+                //PromNatHist pnh = ef_wag.GetNatHistSendingOfNaturNumDT(natur, num_vag, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
+                // Определим исходящие поставки
+                //CarsOutDelivery cod = CreateCarsOutDelivery(pnh);
+                // Определим входящие данные по таблице Prom.NatHist
+                PromNatHist pnh_arrival = ef_wag.GetNatHistOfVagonLess(num_vag, dt_out_amkr, true).FirstOrDefault();
+
+                Cars car = null; // Определим вагон
+
+                // Получим последнюю открытую операцию по указанному вагону
+                CarOperations last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperation(num_vag), true); // проверить вагон в системе 
+                if (last_operation != null)
+                {
+                    car = last_operation.Cars; // Определим вагон
+                    // Операция открыта
+                    if (car.natur_kis == pnh_arrival.N_NATUR)
+                    {
+                        // Операция открыта. Натурные листы совподают
+                        int res_oper = SetCarToSendingWayRailWay(num_vag, natur, dt_out_amkr, id_sending_way);
+                    }
+                    else
+                    {
+                        // Операция открыта. Натурные листы НЕ совподают
+                        //...
+                        // Закрыть вагон
+                        // Найти вагон
+                        Cars car_close = ef_rw.GetCarsOfSetKIS(pnh_arrival.N_VAG, (DateTime)pnh_arrival.GetPRDateTime(), pnh_arrival.N_NATUR);
+                        if (car_close != null)
+                        {
+                            // Такой вагон был
+                            // открыть последнюю операцию
+                            // Операция открыта. Натурные листы совподают
+                            int res_oper = SetCarToSendingWayRailWay(num_vag, natur, dt_out_amkr, id_sending_way);
+                        }
+                        else
+                        {
+                            // Такого вагона НЕ было
+                        }
+
+                    }
+                }
+                else
+                {
+                    // Операция закрыта
+
+                }
+                return 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetCarToWayRailWay()"), servece_owner, eventID);
+                return (int)errorTransfer.global;
+            }
+        }
+        /// <summary>
+        /// выполнить операцию "Сдачи вагона на УЗ"
+        /// </summary>
+        /// <param name="last_operation"></param>
+        /// <param name="natur"></param>
+        /// <param name="num_vag"></param>
+        /// <param name="dt_out_amkr"></param>
+        /// <param name="id_sending_way"></param>
+        /// <returns></returns>
+        public int SetCarToSendingWayRailWay(int num, int natur, DateTime dt_out_amkr, int id_sending_way)
+        {
+            try
+            {
+                RWOperation rw_oper = new RWOperation(this.servece_owner);
+                EFRailWay ef_rw = new EFRailWay();
+                //EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+                //EFWagons ef_wag = new EFWagons();
+
+                //Ways way_uz = ef_rw.GetWays(id_sending_way);
+                //Stations station_uz = way_uz.Stations;
+
+                // Получить список путей станции с которой отправили вагон
+                //List<Ways> list_ways_station_amkr = new List<Ways>();
+                //list_ways_station_amkr = ef_rw.GetWaysOfStation(id_station_amkr).ToList();
+                //// Получить список всех путей станций АМКР
+                //List<Ways> list_all_ways_station_amkr = new List<Ways>();
+                //list_all_ways_station_amkr = ef_rw.GetWaysOfStationAMKR().ToList();
+                //// Получить список путей отправки и приема
+                //List<Ways> list_arrival_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "1").ToList();
+                List<Ways> list_sending_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "2").ToList();
+
+                CarOperations last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperation(num), true); 
+
+                // Вагон статит на пути станции АМКР, если да отправить на УЗ, обновим исх .поставку
+                int id_car = SetCarSendingWayUZRailWay(num, natur, dt_out_amkr, id_sending_way);
+                if (id_car < 0) return id_car; // Ошибка                
+                if (id_car > 0)
+                {
+                    // Вагон стоял на станции АМКР, и отправлен на УЗ
+                    // получим новую операцию
+                    //last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperation(num_vag), true); // проверить вагон в системе 
+                    return id_car;
+                }
+                else
+                {
+                    // Вагон НЕ стоял на станции АМКР
+                    // Вагон статит на путях принятия с УЗ?, если да поставить на путь станции и вернуть id CAR
+                    id_car = SetCarArrivalWayRailWay(num, dt_out_amkr);
+                    if (id_car < 0) return id_car; // Ошибка
+                    if (id_car > 0)
+                    {
+                        // Вагон стоял на путях принятия с УЗ и принят на амкр
+                        // получим новую операцию
+                        last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperation(num), true);
+                        // Отправить на УЗ, обновим исх .поставку
+                        id_car = SetCarSendingWayUZRailWay(num, natur, dt_out_amkr, id_sending_way);
+                        //if (id_car < 0) return id_car; // Ошибка
+                        return id_car;
+                    }
+                    else
+                    {
+                        // Вагон НЕ стотял на путях принятия с УЗ
+                        // Вагон статит на путях принятия с АМКР?
+                        int id_way_car = last_operation.IsSetWay(list_sending_ways_uz.Select(w => w.id).ToArray(), null);
+                        if (id_way_car > 0)
+                        {
+                            // Вагон статит на путях принятия с АМКР
+                            //..
+                            // Обновим исходящие поставки
+                            // Вагон статит на АМКР
+                            Cars car = last_operation.Cars; // Определим вагон
+                            // Определим исходящие поставки
+                            CarsOutDelivery delivery = CreateCarsOutDelivery(car.num, natur, dt_out_amkr);
+                            // Исходящая поставка
+                            car.SetCar(delivery);
+                            int res_car = rw_oper.SaveChanges(car);
+                            return res_car;
+                        }
+                        else
+                        {
+                            // Вагон НЕ статит на путях принятия с АМКР
+                            //..
+                            // Исключение!! у вагона нет другого варианта
+                            return (int)errorTransfer.global;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetCarToWayRailWay()"), servece_owner, eventID);
+                return (int)errorTransfer.global;
+            }
+        }
+
+        /// <summary>
+        /// Найти информацию о прибытии вагона на АМКР, принять вагон на АМКР с путей "для отправки на АМКР" станции УЗ
+        /// </summary>
+        /// <param name="last_operation"></param>
+        /// <param name="pnh_arrival"></param>
+        /// <returns></returns>
+        public int SetCarArrivalWayRailWay(int num, DateTime dt_out_amkr)
+        {
+            try
+            {
+                RWReference rw_ref = new RWReference(base.servece_owner, true); // создавать содержимое справочника из данных КИС
+                EFWagons ef_wag = new EFWagons();
+
+                // Определим входящие данные по таблице Prom.NatHist
+                PromNatHist pnh_arrival = ef_wag.GetNatHistOfVagonLess(num, dt_out_amkr, true).FirstOrDefault();
+
+                int id_stations_rw = rw_ref.GetIDStationsOfKIS(pnh_arrival.K_ST);
+                if (id_stations_rw <= 0)
+                {
+                    //String.Format(mess_error_upd_sostav + mess_upd + " - ID станции: {0} не определён в справочнике системы RailWay", bas_sostav.id_station_kis).WriteError(servece_owner, eventID);
+                    return (int)errorTransfer.no_stations;
+                }
+                if (id_stations_rw == 26) id_stations_rw = 27; // Коррекция Промышленная Керамет -> 'это промышленная
+                // Определим путь на станции система RailCars
+                int id_ways_rw = rw_ref.GetIDDefaultWayOfStation(id_stations_rw, null);
+                if (id_ways_rw <= 0)
+                {
+                    //String.Format(mess_error_upd_sostav + mess_upd + " - ID пути: {0} станции: {1} не определён в справочнике системы RailWay", bas_sostav.way_num, bas_sostav.id_station_kis).WriteError(servece_owner, eventID);
+                    return (int)errorTransfer.no_ways;
+                }
+                return SetCarArrivalWayRailWay(pnh_arrival.N_VAG, pnh_arrival.N_NATUR, (DateTime)pnh_arrival.GetPRDateTime(), id_ways_rw);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetCarArrivalWayRailWay()"), servece_owner, eventID);
+                return (int)errorTransfer.global;
+            }
+        }
+        /// <summary>
+        /// Принять на АМКР с путей "для отправки на АМКР" станции УЗ
+        /// </summary>
+        /// <param name="last_operation"></param>
+        public int SetCarArrivalWayRailWay(int num, int natur, DateTime dt_amkr, int id_way)
+        {
+            try
+            {
+                EFRailWay ef_rw = new EFRailWay();
+                RWOperation rw_oper = new RWOperation(this.servece_owner);
+                EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+
+                CarOperations last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperation(num), true); 
+
+                List<Ways> list_arrival_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "1").ToList();
+                int id_way_car = last_operation.IsSetWay(list_arrival_ways_uz.Select(w => w.id).ToArray(), null);
+                if (id_way_car > 0)
+                {
+                    // Вагон статит на путях "для отправки на АМКР"
+                    Cars car = last_operation.Cars; // Определим вагон
+                    int res_car = rw_oper.ExecSaveOperation(car, rw_oper.OperationArrivalUZWay, new OperationArrivalUZWay(id_way, dt_amkr, dt_amkr, natur, null, null));
+                    if (res_car > 0)
+                    {
+                        // Закрываем прибытие
+                        int res_close_mt = ef_mt.CloseArrivalCars(car.id_sostav, car.num, natur, dt_amkr);
+                    }
+                    Console.WriteLine("Вагон {0} - cтоит в прибытии станции УЗ по которой можно получить вагон на станцию АМКР - результат переноса {1}", car.num, res_car);
+                    return res_car;
+
+                } return 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetCarArrivalWayRailWay()"), servece_owner, eventID);
+                return (int)errorTransfer.global;
+            }
+        }
+        /// <summary>
+        /// Сдать на УЗ с путей станции АМКР
+        /// </summary>
+        /// <param name="last_operation"></param>
+        /// <param name="id_sending_way"></param>
+        /// <param name="dt_out_amkr"></param>
+        /// <param name="natur"></param>
+        /// <returns></returns>
+        public int SetCarSendingWayUZRailWay(int num, int natur, DateTime dt_out_amkr,int id_sending_way)
+        {
+            try
+            {
+                EFRailWay ef_rw = new EFRailWay();
+                RWOperation rw_oper = new RWOperation(this.servece_owner);
+                List<Ways> list_all_ways_station_amkr = new List<Ways>();
+                list_all_ways_station_amkr = ef_rw.GetWaysOfStationAMKR().ToList();
+
+                CarOperations last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperation(num), true); 
+                // проверить вагон в системе, стоит он на путях станций АМКР
+                int id_way_car = last_operation.IsSetWay(list_all_ways_station_amkr.Select(w => w.id).ToArray(), null);
+                if (id_way_car > 0)
+                {
+                    // Вагон статит на АМКР
+                    Cars car = last_operation.Cars; // Определим вагон
+                    // Определим исходящие поставки
+                    CarsOutDelivery delivery = CreateCarsOutDelivery(car.num, natur, dt_out_amkr);
+                    // Исходящая поставка
+                    car.SetCar(delivery);
+                    int res_car = rw_oper.ExecSaveOperation(car, rw_oper.OperationSendingUZWay, new OperationSendingUZWay(id_sending_way, dt_out_amkr, dt_out_amkr, natur, null, null));
+                    Console.WriteLine("Вагон {0} - cтоит на станции АМКР, и будет сдан на УЗ - результат переноса {1}", car.num, res_car);
+                    return res_car;
+                } return 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetCarSendingWayUZRailWay()"), servece_owner, eventID);
+                return (int)errorTransfer.global;
+            }
+        }
+
+
+
+        //public int SetCarToSendingWayRailWay_(int natur, int num_vag, DateTime dt_out_amkr, int id_sending_way, int id_station_amkr)
+        //{
+        //    try
+        //    {
+        //        RWOperation rw_oper = new RWOperation(this.servece_owner);
+        //        EFRailWay ef_rw = new EFRailWay();
+        //        //EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+        //        EFWagons ef_wag = new EFWagons();
+
+        //        Ways way_uz = ef_rw.GetWays(id_sending_way);
+        //        Stations station_uz = way_uz.Stations;
+
+        //        // Получить список путей станции с которой отправили вагон
+        //        List<Ways> list_ways_station_amkr = new List<Ways>();
+        //        list_ways_station_amkr = ef_rw.GetWaysOfStation(id_station_amkr).ToList();
+        //        // Получить список всех путей станций АМКР
+        //        List<Ways> list_all_ways_station_amkr = new List<Ways>();
+        //        list_all_ways_station_amkr = ef_rw.GetWaysOfStationAMKR().ToList();
+        //        // Получить список путей отправки и приема
+        //        List<Ways> list_arrival_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "1").ToList();
+        //        List<Ways> list_sending_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "2").ToList();
+
+
+        //        PromNatHist pnh = ef_wag.GetNatHistSendingOfNaturNumDT(natur, num_vag, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
+        //        CarsOutDelivery cod = CreateCarsOutDelivery(pnh);
+        //        PromNatHist pnh_arrival = ef_wag.GetNatHistOfVagonLess(num_vag, dt_out_amkr, true).FirstOrDefault();
+
+        //        ////-----------------------------------------
+        //        //// определим исходящие поставки
+        //        //List<NumVagStpr1OutStDoc> list_out_sostav = ef_wag.GetSTPR1OutStDoc(dt_out_amkr.AddDays(-3), dt_out_amkr).ToList();
+        //        //List<NumVagStpr1OutStVag> list_out_car = ef_wag.GetSTPR1OutStDocOfCarAndDoc(new int[] { num_vag }, list_out_sostav.Select(s => s.ID_DOC).ToArray()).ToList();
+        //        //NumVagStpr1OutStVag car_out = list_out_car.OrderByDescending(v => v.ID_DOC).FirstOrDefault();
+
+        //        // Получим последнюю открытую операцию по указанному вагону
+        //        CarOperations last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperation(num_vag), true); // проверить вагон в системе 
+        //        if (last_operation != null)
+        //        {   // Вагон есть в системе 
+        //            Cars car = last_operation.Cars; // Определим вагон
+        //            // Вагон статит на пути станции АМКР
+        //            int id_way_car = last_operation.IsSetWay(list_ways_station_amkr.Select(w => w.id).ToArray(), null);
+        //            if (id_way_car > 0)
+        //            { // стоит на одном из пути станции АМКР
+
+        //                //Выполним операцию
+        //                int res_car = rw_oper.ExecSaveOperation(car, rw_oper.OperationSendingUZWay, new OperationSendingUZWay(id_sending_way, dt_out_amkr, dt_out_amkr, natur, null, null));
+        //                if (res_car > 0)
+        //                {
+
+        //                }
+        //                Console.WriteLine("Вагон {0} - cтоит в прибытии станции УЗ по которой можно получить вагон на станцию АМКР - результат переноса {1}", num_vag, res_car);
+        //                return res_car;
+
+        //            }
+        //            else
+        //            { // не стоит на одном из пути станции АМКР
+        //                // Вагон стотит на пути любой станции АМКР?
+        //                id_way_car = last_operation.IsSetWay(list_all_ways_station_amkr.Select(w => w.id).ToArray(), null);
+        //                if (id_way_car > 0)
+        //                { // Вагон статит на пути любой станции АМКР 
+        //                    // Выполним операцию
+
+        //                    //int res_car = rw_oper.ExecSaveOperation(car, rw_oper.OperationArrivalUZWay, new OperationArrivalUZWay(id_way, dt_amkr, dt_amkr, natur, null, null));
+        //                    //if (res_car > 0)
+        //                    //{
+        //                    //    // Закрываем прибытие
+        //                    //    int res_close_mt = ef_mt.CloseArrivalCars(car.id_sostav, car.num, natur, dt_amkr);
+        //                    //}
+        //                    //Console.WriteLine("Вагон {0} - cтоит в прибытии станции УЗ - результат переноса {1}", num_vag, res_car);
+        //                    //return res_car;
+
+        //                }
+        //                else
+        //                { // Не стотит на пути любой станции АМКР
+        //                    // Вагон статит на пути принятия с АМКР, любой станции УЗ?
+        //                    id_way_car = last_operation.IsSetWay(list_sending_ways_uz.Select(w => w.id).ToArray(), null);
+        //                    if (id_way_car > 0)
+        //                    { // Вагон отправлен на УЗ назад
+
+        //                    }
+        //                    else
+        //                    {   // Вагон не стоит на пути принятия с АМКР
+        //                        // Вагон статит на пути отправки на АМКР, любой станции УЗ?
+        //                        id_way_car = last_operation.IsSetWay(list_arrival_ways_uz.Select(w => w.id).ToArray(), null);
+        //                        if (id_way_car > 0)
+        //                        { // Вагон статит на пути отправки на АМКР, любой станции УЗ
+
+
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            // Вагона небыло в системе 
+        //            // Создать вагон по данным КИС
+        //            //int res_car = 0;
+        //            //res_car = SetCarKISToWayRailWay(natur, num_vag, dt_amkr, id_way, (int)station.id_kis);
+        //            //Console.WriteLine("Вагон {0} - НЕ было в сисстеме RAILWAY. Создать новый вагон по данным КИС - результат создания {1}", num_vag, res_car);
+        //            //return res_car;
+        //        }
+        //        return 0;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("SetCarToWayRailWay()"), servece_owner, eventID);
+        //        return (int)errorTransfer.global;
+        //    }
+        //}
         #endregion
 
         #endregion

@@ -42,6 +42,7 @@ namespace KIS
         no_del_input = -15,
         old_wagon_is_nathist = -16, // NanHist устарел
         set_table_arrival_sostav = -30,
+        set_table_sending_sostav = -31,
     }
 
     public enum statusSting : int { Normal = 0, Delete = 1, Insert = 2, Update = 3 }

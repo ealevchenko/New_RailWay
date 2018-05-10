@@ -176,5 +176,21 @@ namespace Testing
             kis_t.StartCopyBufferSendingSostav();
         }
 
+        public void Test_KIS_RW_Transfer_TransferSendingKISToRailWay()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+
+            kis_trans.TransferSendingKISToRailWay();
+        }
+
+        public void Test_KIS_RW_Transfer_TransferSendingKISToRailWay_SetWayRailWayOfKIS()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+            EFTKIS ef_tkis = new EFTKIS();
+            EFKIS.Entities.RWBufferSendingSostav bss = ef_tkis.GetRWBufferSendingSostav(61);
+            int res_put = kis_trans.SetWayRailWayOfKIS(ref bss);
+
+        }
+
     }
 }

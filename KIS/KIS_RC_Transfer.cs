@@ -1332,7 +1332,7 @@ namespace KIS
                     String.Format(mess_vag_err1 + ", код ошибки:{0}", errorTransfer.no_wagon_is_nathist.ToString()).WriteError(servece_owner, eventID);
                     return (int)errorTransfer.no_wagon_is_nathist;
                 }
-                DateTime dt_amkr = (DateTime)EFKIS.Helpers.Filters.GetDateTime(pnh);
+                DateTime dt_amkr = (DateTime)EFKIS.Helpers.Filters.GetPRDateTime(pnh);
                 int id_sostav = ef_sap.GetDefaultIDSAPIncSupply();
                 int? id_operarion = null;
                 DateTime? data_uz = null;
@@ -1705,7 +1705,7 @@ namespace KIS
                     String.Format(mess_vag_err1 + ", код ошибки:{0}", errorTransfer.no_wagon_is_nathist.ToString()).WriteError(servece_owner, eventID);
                     return (int)errorTransfer.no_wagon_is_nathist;
                 }
-                DateTime dt_amkr = (DateTime)EFKIS.Helpers.Filters.GetDateTime(pnh);
+                DateTime dt_amkr = (DateTime)EFKIS.Helpers.Filters.GetPRDateTime(pnh);
                 int id_sostav = ef_sap.GetDefaultIDSAPIncSupply();
                 int? id_operarion = null;
                 DateTime? data_uz = null;

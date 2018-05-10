@@ -50,7 +50,7 @@ namespace EFKIS.Helpers
         /// <returns></returns>
         public static bool IsGreaterOrequalToLessOrEqual(PromSostav ps, DateTime? start, DateTime? stop)
         {
-            DateTime? DT = GetDateTime(ps);
+            DateTime? DT = ps.GetDateTime();
             if (DT != null & DT >= start & DT <= stop) 
             { return true; }
             return false;
@@ -64,7 +64,7 @@ namespace EFKIS.Helpers
         /// <returns></returns>
         public static bool IsGreaterOrequalToLessOrEqual(PromNatHist pnh, DateTime? start, DateTime? stop)
         {
-            DateTime? DT = GetDateTime(pnh);
+            DateTime? DT = pnh.GetPRDateTime();
             if (DT != null & DT >= start & DT <= stop) { return true; }
             return false;
         }
@@ -77,21 +77,21 @@ namespace EFKIS.Helpers
         /// <returns></returns>
         public static bool IsGreaterOrequalToLessOrEqual(PromVagon pv, DateTime? start, DateTime? stop)
         {
-            DateTime? DT = GetDateTime(pv);
+            DateTime? DT = pv.GetPRDateTime();
             if (DT != null & DT >= start & DT <= stop) { return true; }
             return false;
         }
 
         public static bool IsLessOrEqual(PromNatHist pnh, DateTime? start)
         {
-            DateTime? DT = GetDateTime(pnh);
+            DateTime? DT = pnh.GetPRDateTime();
             if (DT != null & DT <= start) { return true; }
             return false;
         }
 
         public static bool IsGreaterOrEqual(PromNatHist pnh, DateTime? start)
         {
-            DateTime? DT = GetDateTime(pnh);
+            DateTime? DT = pnh.GetPRDateTime();
             if (DT != null & DT >= start) { return true; }
             return false;
         }
@@ -101,7 +101,7 @@ namespace EFKIS.Helpers
         /// </summary>
         /// <param name="ps"></param>
         /// <returns></returns>
-        public static DateTime? GetDateTime(PromSostav ps)
+        public static DateTime? GetDateTime(this PromSostav ps)
         {
             try { 
                 return DateTime.Parse(ps.D_DD.ToString() + "-" + ps.D_MM.ToString() + "-" + ps.D_YY.ToString() + " " + ps.T_HH.ToString() + ":" + ps.T_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
@@ -112,7 +112,7 @@ namespace EFKIS.Helpers
             }
         }
 
-        public static DateTime? GetDateTime(PromNatHist pnh)
+        public static DateTime? GetPRDateTime(this PromNatHist pnh)
         {
             if (pnh.D_PR_DD != null & pnh.D_PR_MM != null & pnh.D_PR_YY != null & pnh.T_PR_HH != null & pnh.T_PR_MI != null)
             {
@@ -120,7 +120,15 @@ namespace EFKIS.Helpers
             } return null;
         }
 
-        public static DateTime? GetDateTime(PromVagon pv)
+        public static DateTime? GetSDDateTime(this PromNatHist pnh)
+        {
+            if (pnh.D_SD_DD != null & pnh.D_SD_MM != null & pnh.D_SD_YY != null & pnh.T_SD_HH != null & pnh.T_SD_MI != null)
+            {
+                return DateTime.Parse(pnh.D_PR_DD.ToString() + "-" + pnh.D_PR_MM.ToString() + "-" + pnh.D_PR_YY.ToString() + " " + pnh.T_PR_HH.ToString() + ":" + pnh.T_PR_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
+            } return null;
+        }
+
+        public static DateTime? GetPRDateTime(this PromVagon pv)
         {
             if (pv.D_PR_DD != null & pv.D_PR_MM != null & pv.D_PR_YY != null & pv.T_PR_HH != null & pv.T_PR_MI != null)
             {

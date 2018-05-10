@@ -145,7 +145,9 @@ namespace Testing
             //tst_kis.Test_KISTransfer_SetWayRailWayOfKIS(); // тест постановки вагонов по данным КИС(buffer) в систему RailWay
             //tst_kis.Test_KISTransfer_UpdWayRailWayOfKIS(); // тест обновления вагонов по данным КИС(buffer) в систему RailWay
             //tst_kis.Test_KIS_RW_Transfer_CopyBufferSendingSostavOfKIS(); // Тест переноса данных по отправленым составам в таблицу буфер
-            tst_kis.Test_KISThread_StartCopyBufferSendingSostav(); // Тест запуска и выполнения службы переноса данных по отправленым составам в таблицу буфер
+            //tst_kis.Test_KISThread_StartCopyBufferSendingSostav(); // Тест запуска и выполнения службы переноса данных по отправленым составам в таблицу буфер
+            //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay(); // Перенос составов отправленных на УЗ
+            tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay_SetWayRailWayOfKIS(); // Переноса строки состава отправленных на УЗ
             #endregion
 
             #region Test_Reference
