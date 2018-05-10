@@ -479,5 +479,49 @@ namespace EFReference.Concrete
         }
 
         #endregion
+
+        #region InternalRailroad (внутрение железные дороги)
+
+        public IQueryable<InternalRailroad> InternalRailroad
+        {
+            get { return context.InternalRailroad; }
+        }
+        /// <summary>
+        /// Получить список внутрених железных дорог
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<InternalRailroad> GetInternalRailroad()
+        {
+            try
+            {
+                return InternalRailroad;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetInternalRailroad()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить внутрению железную дорогу по id
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        public InternalRailroad GetInternalRailroad(int id)
+        {
+            try
+            {
+                return GetInternalRailroad().Where(s => s.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetInternalRailroad(id={0})", id), eventID);
+                return null;
+            }
+
+        }
+
+        #endregion
+
     }
 }

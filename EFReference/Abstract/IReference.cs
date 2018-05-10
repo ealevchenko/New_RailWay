@@ -50,5 +50,13 @@ namespace EFReference.Abstract
         string GetStatesToState(int code);
         #endregion
 
+        #region InternalRailroad (внутрение железные дороги)
+
+        IQueryable<InternalRailroad> InternalRailroad {get;}
+        IQueryable<InternalRailroad> GetInternalRailroad();
+        InternalRailroad GetInternalRailroad(int id);
+
+        #endregion
+
     }
 }
