@@ -41,6 +41,9 @@ namespace KIS
         no_station_nazn = -14,
         no_del_input = -15,
         old_wagon_is_nathist = -16, // NanHist устарел
+        different_nanur_out = -17,  // Натурные листы отличаются
+        no_list_nathist = -18,      // Нет списка вагонов по указному натурному листу
+        no_list_wagons = -19,       // Неопределенн список вагонов
         set_table_arrival_sostav = -30,
         set_table_sending_sostav = -31,
     }

@@ -43,16 +43,16 @@ namespace KIS
         /// </summary>
         /// <param name="ps"></param>
         /// <returns></returns>
-        protected int SaveRCBufferArrivalSostav(PromSostav ps, statusSting status)
+        protected int SaveRCBufferArrivalSostav(Prom_Sostav ps, statusSting status)
         {
             EFTKIS ef_tkis = new EFTKIS();
             try
             {
-                DateTime DT = DateTime.Parse(ps.D_DD.ToString() + "-" + ps.D_MM.ToString() + "-" + ps.D_YY.ToString() + " " + ps.T_HH.ToString() + ":" + ps.T_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
+                //DateTime DT = DateTime.Parse(ps.D_DD.ToString() + "-" + ps.D_MM.ToString() + "-" + ps.D_YY.ToString() + " " + ps.T_HH.ToString() + ":" + ps.T_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
                 return ef_tkis.SaveRCBufferArrivalSostav(new RCBufferArrivalSostav()
                 {
                     id = 0,
-                    datetime = DT,
+                    datetime = (DateTime)ps.DT,
                     day = (int)ps.D_DD,
                     month = (int)ps.D_MM,
                     year = (int)ps.D_YY,
@@ -115,7 +115,7 @@ namespace KIS
         /// </summary>
         /// <param name="list_ps"></param>
         /// <param name="list_as"></param>
-        protected void DelExistRCBufferArrivalSostav(ref List<PromSostav> list_ps, ref List<RCBufferArrivalSostav> list_as)
+        protected void DelExistRCBufferArrivalSostav(ref List<Prom_Sostav> list_ps, ref List<RCBufferArrivalSostav> list_as)
         {
             try
             {
@@ -176,14 +176,14 @@ namespace KIS
         /// Добавить новые составы появившиеся после переноса
         /// </summary>
         /// <param name="list"></param>
-        protected int InsertRCBufferArrivalSostav(List<PromSostav> list)
+        protected int InsertRCBufferArrivalSostav(List<Prom_Sostav> list)
         {
             try
             {
                 if (list == null | list.Count == 0) return 0;
                 int insers = 0;
                 int errors = 0;
-                foreach (PromSostav ps in list)
+                foreach (Prom_Sostav ps in list)
                 {
                     int res = SaveRCBufferArrivalSostav(ps, statusSting.Insert);
                     if (res > 0) insers++;
@@ -527,9 +527,9 @@ namespace KIS
             int errors = 0;
             int normals = 0;
             // список новых составов в системе КИС
-            List<PromSostav> list_newsostav = new List<PromSostav>();
+            List<Prom_Sostav> list_newsostav = new List<Prom_Sostav>();
             // список уже перенесенных в RailWay составов в системе КИС (с учетом периода контроля dayControllingAddNatur)
-            List<PromSostav> list_oldsostav = new List<PromSostav>();
+            List<Prom_Sostav> list_oldsostav = new List<Prom_Sostav>();
             // список уже перенесенных в RailWay составов (с учетом периода контроля dayControllingAddNatur)
             List<RCBufferArrivalSostav> list_arrivalsostav = new List<RCBufferArrivalSostav>();
             try
@@ -539,19 +539,19 @@ namespace KIS
                 if (lastDT != null)
                 {
                     // Данные есть получим новые
-                    list_newsostav = ef_wag.GetInputPromSostav(((DateTime)lastDT).AddSeconds(1), DateTime.Now, false).ToList();
-                    list_oldsostav = ef_wag.GetInputPromSostav(((DateTime)lastDT).AddDays(day_control_add_natur * -1), ((DateTime)lastDT).AddSeconds(1), false).ToList();
+                    list_newsostav = ef_wag.GetInputProm_Sostav(((DateTime)lastDT).AddSeconds(1), DateTime.Now, false).ToList();
+                    list_oldsostav = ef_wag.GetInputProm_Sostav(((DateTime)lastDT).AddDays(day_control_add_natur * -1), ((DateTime)lastDT).AddSeconds(1), false).ToList();
                     list_arrivalsostav = ef_tkis.GetRCBufferArrivalSostav(((DateTime)lastDT).AddDays(day_control_add_natur * -1), ((DateTime)lastDT).AddSeconds(1)).ToList();
                 }
                 else
                 {
                     // Таблица пуста получим первый раз
-                    list_newsostav = ef_wag.GetInputPromSostav(DateTime.Now.AddDays(day_control_add_natur * -1), DateTime.Now, false).ToList();
+                    list_newsostav = ef_wag.GetInputProm_Sostav(DateTime.Now.AddDays(day_control_add_natur * -1), DateTime.Now, false).ToList();
                 }
                 // Переносим информацию по новым составам
                 if (list_newsostav.Count() > 0)
                 {
-                    foreach (PromSostav ps in list_newsostav)
+                    foreach (Prom_Sostav ps in list_newsostav)
                     {
 
                         int res = SaveRCBufferArrivalSostav(ps, statusSting.Normal);
@@ -565,7 +565,7 @@ namespace KIS
                 // Обновим информацию по составам которые были перенесены
                 if (list_oldsostav.Count() > 0 & list_arrivalsostav.Count() > 0)
                 {
-                    List<PromSostav> list_ps = new List<PromSostav>();
+                    List<Prom_Sostav> list_ps = new List<Prom_Sostav>();
                     list_ps = list_oldsostav;
                     List<RCBufferArrivalSostav> list_as = new List<RCBufferArrivalSostav>();
                     list_as = list_arrivalsostav.Where(a => a.status != (int)statusSting.Delete).ToList();
@@ -1326,7 +1326,7 @@ namespace KIS
             try
             {
                 // Найдем вагон в натурном листе PromNatHist
-                PromNatHist pnh = ef_wag.GetNatHistOfVagonLess(vag_is.N_VAG, dt_input, true).FirstOrDefault();
+                PromNatHist pnh = ef_wag.GetNatHistOfVagonLessEqualPR(vag_is.N_VAG, dt_input, true).FirstOrDefault();
                 if (pnh == null)
                 {
                     String.Format(mess_vag_err1 + ", код ошибки:{0}", errorTransfer.no_wagon_is_nathist.ToString()).WriteError(servece_owner, eventID);
@@ -1699,7 +1699,7 @@ namespace KIS
             try
             {
                 // Найдем вагон в натурном листе PromNatHist
-                PromNatHist pnh = ef_wag.GetNatHistOfVagonLess(vag_os.N_VAG, dt_input, true).FirstOrDefault();
+                PromNatHist pnh = ef_wag.GetNatHistOfVagonLessEqualPR(vag_os.N_VAG, dt_input, true).FirstOrDefault();
                 if (pnh == null)
                 {
                     String.Format(mess_vag_err1 + ", код ошибки:{0}", errorTransfer.no_wagon_is_nathist.ToString()).WriteError(servece_owner, eventID);

@@ -28,7 +28,9 @@ namespace EFKIS.Entities
 
         public int? KOD_STRAN { get; set; }
         public decimal? WES_GR { get; set; }
-        public int? K_GR { get; set; }   
+        public int? K_GR { get; set; }
+        public int? K_ST_NAZN { get; set; }
+        public int? K_ST_OTPR { get; set; }
 
     }
 }

@@ -14,6 +14,7 @@ namespace EFKIS.Entities
     {
         [Key, Column(Order = 2)]
         public  int N_VAG { get; set; }
+        [Key, Column(Order = 3)]
         public  int? NPP { get; set; }
         public  int? GODN { get; set; }
         public  int K_ST { get; set; }
@@ -35,16 +36,21 @@ namespace EFKIS.Entities
         
         public int? K_POL_GR { get; set; }
         public int? K_GR { get; set; }
-        public int? K_GR_T { get; set; }       
+        public int? K_GR_T { get; set; }    
+   
         public int? N_VED_PR { get; set; }
         public int? N_NAK_MPS { get; set; }
         public int? N_NAK_KMK { get; set; }
         public decimal? WES_GR { get; set; }
+        public decimal? WES_GR_T { get; set; }
         public int? K_OP { get; set; }
         public int? K_FRONT { get; set; }
         public int? KOD_STRAN { get; set; }
         public string ST_OTPR { get; set; }
+        public int? K_ST_NAZN { get; set; }
+        public int? K_ST_OTPR { get; set; }
 
+        //[Key,  Column(Order = 3)]
         public DateTime? DAT_VVOD { get; set; }
     }
 }
