@@ -81,15 +81,49 @@ namespace EFKIS.Helpers
             if (DT != null & DT >= start & DT <= stop) { return true; }
             return false;
         }
-
-        public static bool IsLessOrEqual(PromNatHist pnh, DateTime? start)
+        /// <summary>
+        /// Фильтр меньше и равно
+        /// </summary>
+        /// <param name="pnh"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static bool IsLessOrEqualPR(PromNatHist pnh, DateTime? start)
         {
             DateTime? DT = pnh.GetPRDateTime();
             if (DT != null & DT <= start) { return true; }
             return false;
         }
-
-        public static bool IsGreaterOrEqual(PromNatHist pnh, DateTime? start)
+        /// <summary>
+        /// Фильтр меньше
+        /// </summary>
+        /// <param name="pnh"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static bool IsLessPR(PromNatHist pnh, DateTime? start)
+        {
+            DateTime? DT = pnh.GetPRDateTime();
+            if (DT != null & DT < start) { return true; }
+            return false;
+        }
+        /// <summary>
+        /// Фильтр больше (по полю сдачи)
+        /// </summary>
+        /// <param name="pnh"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static bool IsMoreSD(PromNatHist pnh, DateTime? start)
+        {
+            DateTime? DT = pnh.GetSDDateTime();
+            if (DT != null & DT > start) { return true; }
+            return false;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pnh"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public static bool IsGreaterOrEqualPR(PromNatHist pnh, DateTime? start)
         {
             DateTime? DT = pnh.GetPRDateTime();
             if (DT != null & DT >= start) { return true; }
@@ -103,7 +137,10 @@ namespace EFKIS.Helpers
         /// <returns></returns>
         public static DateTime? GetDateTime(this PromSostav ps)
         {
-            try { 
+            try {
+                //if (ps.D_YY == 2018 & ps.D_MM == 6) { 
+                
+                //}
                 return DateTime.Parse(ps.D_DD.ToString() + "-" + ps.D_MM.ToString() + "-" + ps.D_YY.ToString() + " " + ps.T_HH.ToString() + ":" + ps.T_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
             }
             catch (Exception e)
@@ -124,7 +161,7 @@ namespace EFKIS.Helpers
         {
             if (pnh.D_SD_DD != null & pnh.D_SD_MM != null & pnh.D_SD_YY != null & pnh.T_SD_HH != null & pnh.T_SD_MI != null)
             {
-                return DateTime.Parse(pnh.D_PR_DD.ToString() + "-" + pnh.D_PR_MM.ToString() + "-" + pnh.D_PR_YY.ToString() + " " + pnh.T_PR_HH.ToString() + ":" + pnh.T_PR_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
+                return DateTime.Parse(pnh.D_SD_DD.ToString() + "-" + pnh.D_SD_MM.ToString() + "-" + pnh.D_SD_YY.ToString() + " " + pnh.T_SD_HH.ToString() + ":" + pnh.T_SD_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
             } return null;
         }
 
