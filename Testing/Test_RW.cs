@@ -124,8 +124,8 @@ namespace Testing
         public void RWOperation_IsOpenOperation()
         {
             RWOperation rw_oper = new RWOperation();
-            List<CarOperations> list = rw_oper.IsOpenAllOperation(54645593);
-            List<CarOperations> list1 = rw_oper.IsOpenAllOperation(0);
+            List<CarOperations> list = rw_oper.IsOpenAllOperationOfNum(54645593);
+            List<CarOperations> list1 = rw_oper.IsOpenAllOperationOfNum(0);
         }
 
         public void RWTransfer_TransferArivalCarsToRailWay()

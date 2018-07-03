@@ -141,9 +141,9 @@ namespace Testing
             string log = "Тест сохрнения Information библиотеки RWLog";
             MLog.InitRWLogs(true, true, true, true, true, true);
             log.WriteInformation();
-            log.WriteInformation(service.TransferMT);
+            log.WriteInformation(service.ServicesMT);
             log.WriteInformation(eventID.RailWay);
-            log.WriteInformation(service.TransferMT, eventID.RailWay);
+            log.WriteInformation(service.ServicesMT, eventID.RailWay);
        }
 
         public void RWLog_WriteWarning()
@@ -151,9 +151,9 @@ namespace Testing
             string log = "Тест сохрнения Warning библиотеки RWLog";
             MLog.InitRWLogs(true, true, true, true, true, true);
             log.WriteWarning();
-            log.WriteWarning(service.TransferMT);
+            log.WriteWarning(service.ServicesMT);
             log.WriteWarning(eventID.RailWay);
-            log.WriteWarning(service.TransferMT, eventID.RailWay);
+            log.WriteWarning(service.ServicesMT, eventID.RailWay);
 
         }
 
@@ -162,9 +162,9 @@ namespace Testing
             string log = "Тест сохрнения Error библиотеки RWLog";
             MLog.InitRWLogs(true, true, true, true, true, true);
             log.WriteError();
-            log.WriteError(service.TransferMT);
+            log.WriteError(service.ServicesMT);
             log.WriteError(eventID.RailWay);
-            log.WriteError(service.TransferMT, eventID.RailWay);
+            log.WriteError(service.ServicesMT, eventID.RailWay);
 
         }
 
@@ -176,12 +176,12 @@ namespace Testing
             MLog.InitRWLogs(true, true, true, true, true, true);
             ex.WriteError();
             ex.WriteError(log);
-            ex.WriteError(service.TransferMT);
-            ex.WriteError(log,service.TransferMT);
+            ex.WriteError(service.ServicesMT);
+            ex.WriteError(log, service.ServicesMT);
             ex.WriteError(eventID.RailWay);
             ex.WriteError(log, eventID.RailWay);
-            ex.WriteError(service.TransferMT, eventID.RailWay);
-            ex.WriteError(log, service.TransferMT, eventID.RailWay);
+            ex.WriteError(service.ServicesMT, eventID.RailWay);
+            ex.WriteError(log, service.ServicesMT, eventID.RailWay);
         }
         #endregion
 
@@ -190,7 +190,7 @@ namespace Testing
         public void MLog_WriteEvents() { 
             string events = "eventsTest";
             string status = "statusTest";
-            service service = MessageLog.service.TransferMT;
+            service service = MessageLog.service.ServicesMT;
             eventID eventID = MessageLog.eventID.EFRCReference;
             events.WriteEvents(status,service,eventID);
             events.WriteEvents(status,service);
@@ -206,21 +206,21 @@ namespace Testing
         }
 
         public void MLog_WriteLogServices()
-        { 
-            service service = MessageLog.service.TransferMT;
+        {
+            service service = MessageLog.service.ServicesMT;
             service.WriteServices(DateTime.Now.AddDays(-1), DateTime.Now, 5);
         }
 
         public void MLog_WriteStatusServices()
-        { 
-            service service = MessageLog.service.TransferMT;
+        {
+            service service = MessageLog.service.ServicesMT;
             service.WriteStatusServices(DateTime.Now.AddDays(-1), DateTime.Now);
             MessageLog.service.TransferApproaches.WriteStatusServices(DateTime.Now.AddDays(-1));
         }
 
         public void MLog_WriteLogStatusServices()
-        { 
-            service service = MessageLog.service.TransferMT;
+        {
+            service service = MessageLog.service.ServicesMT;
             service.WriteLogStatusServices();
             service.WriteLogStatusServices(DateTime.Now.AddHours(-1), DateTime.Now);
         }

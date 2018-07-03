@@ -158,7 +158,7 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(1949);
+            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(2883);
             kis_trans.UpdWayRailWayOfKIS(ref arr_s);
         }
 
@@ -187,9 +187,17 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferSendingSostav bss = ef_tkis.GetRWBufferSendingSostav(61);
+            EFKIS.Entities.RWBufferSendingSostav bss = ef_tkis.GetRWBufferSendingSostav(824);
             int res_put = kis_trans.SetWayRailWayOfKIS(ref bss);
 
+            //int res = kis_trans.SetCarToSendingWayRailWay(bss.natur, 55224646, bss.datetime, 1, 1);
+
+        }
+
+        public void Test_KISThread_StartTransferSendingOfKIS()
+        {
+            KISThread kis_t = new KISThread(service.TransferSendingKIS);
+            kis_t.StartTransferSendingOfKIS();
         }
 
     }

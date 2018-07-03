@@ -10,6 +10,7 @@ using EFKIS.Entities;
 //using EFWagons.Statics;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,11 +22,11 @@ namespace Testing
         //PromContent promsostav = new PromContent();
         //VagonsContent vc = new VagonsContent();
         //PromContent pc = new PromContent();
-        
 
-        public Test_Wagons() 
-        { 
-        
+
+        public Test_Wagons()
+        {
+
         }
 
         #region KometaParkState
@@ -255,13 +256,14 @@ namespace Testing
             WL(kom_con.GetVagonsSob(num, dt));
         }
 
-        public void WL(KometaVagonSob t) 
+        public void WL(KometaVagonSob t)
         {
-            if (t == null) {
+            if (t == null)
+            {
                 Console.WriteLine("NULL"); return;
-            }   
+            }
             Console.WriteLine("N_VAGON: {0},\t SOB: {1},\t DATE_AR: {2},\t DATE_END: {3},\t ROD: {4},\t DATE_REM: {5},\t PRIM: {6},\t CODE: {7}",
-                    t.N_VAGON,t.SOB,t.DATE_AR, t.DATE_END, t.ROD,t.DATE_REM, t.PRIM,t.CODE);        
+                    t.N_VAGON, t.SOB, t.DATE_AR, t.DATE_END, t.ROD, t.DATE_REM, t.PRIM, t.CODE);
         }
 
         public void Test_KometaContent_KometaSobstvForNakl()
@@ -284,7 +286,7 @@ namespace Testing
             if (t == null)
             {
                 Console.WriteLine("NULL"); return;
-            } 
+            }
             Console.WriteLine("NPLAT: {0},\t SOBSTV: {1},\t ABR: {2},\t SOD_PLAT: {3},\t ID: {4},\t ID2: {5}",
                 t.NPLAT, t.SOBSTV, t.ABR, t.SOD_PLAT, t.ID, t.ID2);
         }
@@ -379,7 +381,7 @@ namespace Testing
             foreach (PromNatHist t in list)
             {
                 WL(t);
-            }  
+            }
         }
 
         public void WL(PromNatHist t)
@@ -470,7 +472,7 @@ namespace Testing
 
         //public void Test_PromContent_TestFilter()
         //{
-            
+
         //    List<PromSostav> list = promsostav.GetInputPromSostav(DateTime.Now.AddDays(-1), DateTime.Now).ToList();
         //    List<PromNatHist> list_pnh = promsostav.GetNatHistOfVagonLess(60226420, DateTime.Parse("2017-01-18 05:00:00"), true).ToList();
 
@@ -544,8 +546,8 @@ namespace Testing
         //}
         //#endregion
 
- 
-        
+
+
         //#region NumVagStran
         ///// <summary>
         ///// Список стран
@@ -593,25 +595,121 @@ namespace Testing
         //        WL(t);
         //    }
         //}
+        public void Test_PROM_GetPromSostav()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                //List<PromSostav> list = ef_wag.GetPromSostav().ToList();
+                //List<sostav_kis> list_kis = ef_wag.GetPromSostav()
+                //    .ToList().Select(l => new sostav_kis
+                //    {
+                //        N_NATUR = l.N_NATUR,
+                //        D_PR_DD = l.D_PR_DD,
+                //        D_DD = l.D_DD,
+                //        D_PR_MM = l.D_PR_MM,
+                //        D_MM = l.D_MM,
+                //        D_PR_YY = l.D_PR_YY,
+                //        D_YY = l.D_YY,
+                //        T_PR_HH = l.T_PR_HH,
+                //        T_HH = l.T_HH,
+                //        T_PR_MI = l.T_PR_MI,
+                //        T_MI = l.T_MI,
+                //        K_ST = l.K_ST,
+                //        N_PUT = l.N_PUT,
+                //        NAPR = l.NAPR,
+                //        P_OT = l.P_OT,
+                //        V_P = l.V_P,
+                //        K_ST_OTPR = l.K_ST_OTPR,
+                //        K_ST_PR = l.K_ST_PR,
+                //        N_VED_PR = l.N_VED_PR,
+                //        N_SOST_OT = l.N_SOST_OT,
+                //        N_SOST_PR = l.N_SOST_PR,
+                //        //DT_PR_Key = l.DT_PR_Key,
+                //    }).ToList();
+
+                //List<sostav_kis> list_kis = new List<sostav_kis>();
+                //foreach (PromSostav ps in ef_wag.GetPromSostav().OrderBy(s=>s.D_PR_YY).OrderBy(s=>s.D_PR_MM).OrderBy(s=>s.D_PR_DD).ToList()) { 
+                //    list_kis.Add(new sostav_kis
+                //    {
+                //        N_NATUR = ps.N_NATUR,
+                //        D_PR_DD = ps.D_PR_DD,
+                //        D_DD = ps.D_DD,
+                //        D_PR_MM = ps.D_PR_MM,
+                //        D_MM = ps.D_MM,
+                //        D_PR_YY = ps.D_PR_YY,
+                //        D_YY = ps.D_YY,
+                //        T_PR_HH = ps.T_PR_HH,
+                //        T_HH = ps.T_HH,
+                //        T_PR_MI = ps.T_PR_MI,
+                //        T_MI = ps.T_MI,
+                //        K_ST = ps.K_ST,
+                //        N_PUT = ps.N_PUT,
+                //        NAPR = ps.NAPR,
+                //        P_OT = ps.P_OT,
+                //        V_P = ps.V_P,
+                //        K_ST_OTPR = ps.K_ST_OTPR,
+                //        K_ST_PR = ps.K_ST_PR,
+                //        N_VED_PR = ps.N_VED_PR,
+                //        N_SOST_OT = ps.N_SOST_OT,
+                //        N_SOST_PR = ps.N_SOST_PR,
+                //        //DT_PR_Key = l.DT_PR_Key,
+                //    });
+                //}
+
+                //List<Prom_Sostav> list_ps = ef_wag.GetProm_Sostav().ToList();
+                //List<Prom_Sostav> list_natur = list_ps.Where(l => l.N_NATUR == 3850).ToList();
+
+                //List<Prom_Sostav> list_ps1 = ef_wag.GetProm_Sostav().ToList();
+                //List<Prom_Sostav> list_natur1 = list_ps1.Where(l => l.N_NATUR == 3850).ToList();
+                //List<Prom_Sostav> list2 = list_ps1.Where(l => l.DT >= new DateTime(2018, 6, 20, 0, 0, 0) & l.DT <= new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
+
+                //List<Prom_Sostav> list = ef_wag.GetProm_Sostav().ToList();
+                //List<Prom_Sostav> list1 = ef_wag.GetProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
+
+                //List<Prom_SostavAndCount> list_psc = ef_wag.GetProm_SostavAndCount().ToList();
+                List<Prom_SostavAndCount> list_psc1 = ef_wag.GetProm_SostavAndCount(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
+
+                List<Prom_Sostav> list_input = ef_wag.GetInputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), false).ToList();
+                List<Prom_Sostav> list_output = ef_wag.GetOutputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), true).ToList();
+
+                //List<PromSostav> list_s = ef_wag.GetPromSostav().ToList();
+                //List<PromSostav> list = list_s.Where(l => l.DT_PR_Key >= new DateTime(2018, 6, 1, 0, 0, 0) & l.DT_PR_Key <= new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
+                //List<sostav_kis> list1 = list_kis.Where(l => l.N_NATUR == 3850).ToList();
+                //List<PromSostav> list2 = list_s.Where(l => l.DT==null).ToList();
+                //List<PromSostav> list = ef_wag.GetPromSostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
+                //foreach (PromSostav t in list)
+                //{
+                //    WL(t);
+                //}
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
 
         public void Test_PROM_GetInputPromSostav()
         {
             EFWagons ef_wag = new EFWagons();
-            List<PromSostav> list = ef_wag.GetInputPromSostav().ToList();
-            foreach (PromSostav t in ef_wag.GetInputPromSostav())
-            {
-                WL(t);
-            }
+            //List<PromSostav> list = ef_wag.GetInputPromSostav(DateTime.Now.AddDays(-10),DateTime.Now, false).ToList();
+            //List<PromSostav> list = ef_wag.GetInputPromSostav().ToList();
+            //foreach (PromSostav t in ef_wag.GetInputPromSostav())
+            //{
+            //    WL(t);
+            //}
         }
 
         public void Test_PROM_GetOutputPromSostav()
         {
             EFWagons ef_wag = new EFWagons();
-            List<PromSostav> list = ef_wag.GetOutputPromSostav().ToList();
-            foreach (PromSostav t in ef_wag.GetOutputPromSostav())
-            {
-                WL(t);
-            }
+            //List<PromSostav> list = ef_wag.GetOutputPromSostav(DateTime.Now.AddDays(-10), DateTime.Now, false).ToList();
+            //List<PromSostav> list = ef_wag.GetOutputPromSostav().ToList();
+            //foreach (PromSostav t in ef_wag.GetOutputPromSostav())
+            //{
+            //    WL(t);
+            //}
         }
 
         public void WL(PromSostav t)
@@ -621,8 +719,26 @@ namespace Testing
                     t.N_NATUR, t.D_DD, t.D_MM, t.D_YY, t.T_HH, t.T_MI, t.K_ST, t.N_PUT, t.NAPR, t.P_OT, t.V_P);
         }
 
-        #endregion
+        public void Test_PROM_GetProm_Vagon()
+        {
+            EFWagons ef_wag = new EFWagons();
+            List<Prom_Vagon> list = ef_wag.GetProm_Vagon().ToList();
+            //List<Prom_Sostav> list_input = ef_wag.GetInputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), false).ToList();
+            //List<Prom_Sostav> list_output = ef_wag.GetOutputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), true).ToList();
 
+        }
+
+        public void Test_PROM_GetProm_NatHist()
+        {
+            EFWagons ef_wag = new EFWagons();
+
+            List<Prom_NatHist> list = ef_wag.GetProm_NatHist().ToList();
+            //List<Prom_Sostav> list_input = ef_wag.GetInputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), false).ToList();
+            //List<Prom_Sostav> list_output = ef_wag.GetOutputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), true).ToList();
+
+        }
+
+        #endregion
 
         //public void CopyReferenceWagonsToRailWay()
         //{
@@ -656,7 +772,7 @@ namespace Testing
         //        //if ()
         //        //if (kv != null)
         //        //{
-                    
+
         //        //    //list.Add(new rwCar() { num = kv.N_VAGON, rod = kv.ROD });
         //        //}
         //    }

@@ -147,7 +147,8 @@ namespace Testing
             //tst_kis.Test_KIS_RW_Transfer_CopyBufferSendingSostavOfKIS(); // Тест переноса данных по отправленым составам в таблицу буфер
             //tst_kis.Test_KISThread_StartCopyBufferSendingSostav(); // Тест запуска и выполнения службы переноса данных по отправленым составам в таблицу буфер
             //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay(); // Перенос составов отправленных на УЗ
-            tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay_SetWayRailWayOfKIS(); // Переноса строки состава отправленных на УЗ
+            //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay_SetWayRailWayOfKIS(); // Переноса строки состава отправленных на УЗ
+            //tst_kis.Test_KISThread_StartTransferSendingOfKIS(); // Перенос составов на УЗ из АМКР
             #endregion
 
             #region Test_Reference
@@ -186,6 +187,10 @@ namespace Testing
             //tst_wag.Test_PROM_GetPromNatHist();
             //tst_wag.Test_PROM_GetInputPromSostav(); // тест данных кис по отправленным составам
             //tst_wag.Test_PROM_GetOutputPromSostav(); // тест данных кис по отправленным составам
+            tst_wag.Test_PROM_GetPromSostav(); // тест данных кис по составам
+            //tst_wag.Test_PROM_GetProm_Vagon(); // тест данных кис по составам
+            //tst_wag.Test_PROM_GetProm_NatHist(); // тест данных кис по составам
+            //tst_wag.Test_ADOWagons();
             #endregion
 
             #region Test_Logs тест логирования
