@@ -34,10 +34,11 @@ namespace EFRW.Entities
         [Column(TypeName = "datetime")]
         public DateTime? dt_out_amkr { get; set; }
 
-        public int? natur_kis { get; set; } 
-       
-        public int? natur { get; set; }
+        public int? natur_kis { get; set; }
 
+        public int? natur_kis_out { get; set; }    
+    
+        public int? natur { get; set; }
 
         public DateTime dt_create { get; set; }
 

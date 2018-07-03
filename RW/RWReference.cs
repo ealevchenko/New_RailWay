@@ -506,6 +506,28 @@ namespace RW
 
         #region Справочник "Станций railway"
         /// <summary>
+        /// Вернуть строку станции УЗ справочника "Станций railway" по индексу поезда МТ
+        /// </summary>
+        /// <param name="index_mt"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public Stations GetStationsUZ(string index_mt, bool create)
+        {
+            try
+            {
+                if (String.IsNullOrWhiteSpace(index_mt)) return null;
+                EFReference.Concrete.EFReference reference = new EFReference.Concrete.EFReference();
+                EFReference.Entities.Stations station_in = reference.GetStationsOfCode(int.Parse(index_mt.Substring(9, 4)) * 10);
+                int codecs_in = station_in != null ? (int)station_in.code_cs : int.Parse(index_mt.Substring(9, 4)) * 10;
+                return GetStationsUZ(codecs_in, true);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStationsUZ(index_mt={0}, create={1})", index_mt, create), servece_owner, eventID);
+                return null;
+            }
+        }
+        /// <summary>
         /// Вернуть строку станции УЗ справочника "Станций railway" по коду уз
         /// </summary>
         /// <param name="code_uz"></param>

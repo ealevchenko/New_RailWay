@@ -33,6 +33,14 @@ namespace EFRW.Concrete
             get { return context.Database; }
         }
 
+        public void RefreshAll()
+        {
+            foreach (var entity in context.ChangeTracker.Entries())
+            {
+                entity.Reload();
+            }
+        }
+
         public List<Option> GetTypeSendTransfer()
         {
             List<Option> list = new List<Option>();
@@ -976,7 +984,8 @@ namespace EFRW.Concrete
                         dt_uz = Cars.dt_uz,
                         dt_inp_amkr = Cars.dt_inp_amkr,
                         dt_out_amkr = Cars.dt_out_amkr,
-                        natur_kis = Cars.natur_kis,
+                        natur_kis = Cars.natur_kis, 
+                        natur_kis_out = Cars.natur_kis_out,
                         natur = Cars.natur,
                         dt_create = Cars.dt_create != DateTime.Parse("01.01.0001") ? Cars.dt_create : DateTime.Now,
                         user_create = Cars.user_create != null ? Cars.user_create : System.Environment.UserDomainName + @"\" + System.Environment.UserName, 
@@ -1005,6 +1014,7 @@ namespace EFRW.Concrete
                         dbEntry.dt_inp_amkr = Cars.dt_inp_amkr;
                         dbEntry.dt_out_amkr = Cars.dt_out_amkr;
                         dbEntry.natur_kis = Cars.natur_kis;
+                        dbEntry.natur_kis_out = Cars.natur_kis_out;
                         dbEntry.natur = Cars.natur;
                         dbEntry.dt_create = old_Cars.dt_create;
                         dbEntry.user_create = old_Cars.user_create;
@@ -1201,11 +1211,86 @@ namespace EFRW.Concrete
         {
             try
             {
-                return GetCarsOfNum(num).Where(c => c.dt_inp_amkr == dt_amkr & c.natur_kis == natur).OrderByDescending(c => c.id).FirstOrDefault();
+                return GetCarsOfNum(num).Where(c => c.dt_inp_amkr == dt_amkr & c.natur_kis == natur).OrderByDescending(c => c.dt_uz).FirstOrDefault();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetLastCarsOfSetKIS(num={0}, dt_amkr={1}, natur={3})", num, dt_amkr, natur), eventID);
+                e.WriteErrorMethod(String.Format("GetCarsOfSetKIS(num={0}, dt_amkr={1}, natur={2})", num, dt_amkr, natur), eventID);
+                return null;
+            }
+
+        }
+
+        public Cars GetCarsOfSetKIS(int num, DateTime dt_amkr, int natur, int hour_interval)
+        {
+            try
+            {
+                DateTime start = dt_amkr.AddHours(hour_interval * -1);
+                DateTime stop = dt_amkr.AddHours(hour_interval * 1);
+                return GetCarsOfNum(num).Where(c => c.dt_inp_amkr >= start & c.dt_inp_amkr <= stop & c.natur_kis == natur).OrderByDescending(c => c.dt_uz).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfSetKIS(num={0}, dt_amkr={1}, natur={2})", num, dt_amkr, natur), eventID);
+                return null;
+            }
+
+        }
+
+        /// <summary>
+        /// Найти вагон перенесеный по данным КИС но не принтый на амкр
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="natur"></param>
+        /// <returns></returns>
+        public Cars GetCarsOfSetKIS(int num, int natur)
+        {
+            try
+            {
+                return GetCarsOfNum(num).Where(c => c.dt_inp_amkr == null & c.natur_kis == natur).OrderByDescending(c => c.id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfSetKIS(num={0}, natur={1})", num, natur), eventID);
+                return null;
+            }
+
+        }
+        /// <summary>
+        /// Найти вагон не принятый на АМКР по номеру вагона ниже указоной даты в указаном деапазоне времени
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="dt_amkr"></param>
+        /// <param name="hour_interval"></param>
+        /// <returns></returns>
+        public Cars GetCarsOfNumDT(int num, DateTime dt_amkr, int hour_interval)
+        {
+            try
+            {
+                DateTime start = dt_amkr.AddHours(hour_interval * -1);
+                return GetCarsOfNum(num).Where(c => c.dt_inp_amkr == null & c.dt_out_amkr == null & c.dt_uz != null & c.dt_uz >= start & c.dt_uz <= dt_amkr).OrderByDescending(c => c.dt_uz).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfNumDT(num={0}, dt_amkr={1}, hour_interval={2})", num, dt_amkr, hour_interval), eventID);
+                return null;
+            }
+
+        }
+        /// <summary>
+        /// Вернуть следующий входящий вагон 
+        /// </summary>
+        /// <param name="parent_id"></param>
+        /// <returns></returns>
+        public Cars GetCarsOfParentID(int parent_id)
+        {
+            try
+            {
+                return GetCars().Where(c => c.parent_id == parent_id).OrderByDescending(c => c.id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOfParentID(parent_id={0})", parent_id), eventID);
                 return null;
             }
 

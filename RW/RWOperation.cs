@@ -196,7 +196,7 @@ namespace RW
             //this.side = null;
             this.dt_set = dt_set;
             this.dt_out_amkr = dt_out_amkr;
-            this.id_status = 13; // Прибыл с УЗ
+            this.id_status = 16; // Сдан на УЗ
             this.id_сonditions = id_сonditions;
             this.natur_kis = natur_kis;
             this.natur_rw = natur;
@@ -247,7 +247,7 @@ namespace RW
             {
                 if (last_car_operation != null)
                 {
-                    CarOperations close_operation = last_car_operation.CloseOperations(operation.dt_set);
+                    CarOperations close_operation = last_car_operation.CloseOperations(operation.dt_set, true);
                     //int res = ef_rw.SaveCarOperations(close_operation);
                     return OperationSetWay(last_car_operation.id_car, last_car_operation.id, operation);
                 }
@@ -369,7 +369,7 @@ namespace RW
                 CarOperations last_operation = car.GetLastOperations();
                 CarOperations new_operation = last_operation == null ? OperationSetWay(car.id, null, operation) : OperationSetWay(last_operation, operation);
                 car.CarOperations.Add(new_operation);
-                car.SetCar(operation.dt_out_amkr);
+                car.SetCar(operation.dt_out_amkr, operation.natur_kis);
                 return new_operation;
             }
             catch (Exception e)
@@ -389,41 +389,83 @@ namespace RW
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        public List<CarOperations> IsOpenAllOperation(int num)
+        public List<CarOperations> IsOpenAllOperationOfNum(int num)
         {
             return ef_rw.CarOperations.Where(o => o.Cars.num == num).IsOpenOperation(Filters.IsOpenAll);
         }
         /// <summary>
-        /// Вернуть все открытые операции по номеру вагона
+        /// Вернуть операции по номеру вагона с использованием фильтра
         /// </summary>
         /// <param name="num"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public List<CarOperations> IsOpenOperation(int num, Filters.IsFilterOpen filter)
+        public List<CarOperations> IsOpenOperationOfNum(int num, Filters.IsFilterOpen filter)
         {
             return ef_rw.CarOperations.Where(o => o.Cars.num == num).IsOpenOperation(filter);
         }
         /// <summary>
-        /// Вернуть все открытые операции по номеру вагона и натурке
+        /// Вернуть все открытые операции по id_car
         /// </summary>
         /// <param name="num"></param>
-        /// <param name="natur"></param>
         /// <returns></returns>
-        public List<CarOperations> IsOpenAllOperation(int num, int natur)
+        public List<CarOperations> IsOpenAllOperationOfID(int id)
         {
-            return ef_rw.CarOperations.Where(o => o.Cars.num == num & o.Cars.natur_kis == natur).IsOpenOperation(Filters.IsOpenAll);
+            return ef_rw.CarOperations.Where(o => o.Cars.id == id).IsOpenOperation(Filters.IsOpenAll);
         }
+        /// <summary>
+        /// Вернуть операции по id_car с использованием фильтра
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public List<CarOperations> IsOpenOperationOfID(int id, Filters.IsFilterOpen filter)
+        {
+            return ef_rw.CarOperations.Where(o => o.Cars.id == id).IsOpenOperation(filter);
+        }
+
         /// <summary>
         /// Вернуть все открытые операции по номеру вагона и натурке
         /// </summary>
         /// <param name="num"></param>
         /// <param name="natur"></param>
+        /// <returns></returns>
+        public List<CarOperations> IsOpenAllOperationOfNumNatur(int num, int natur)
+        {
+            return ef_rw.CarOperations.Where(o => o.Cars.num == num & o.Cars.natur_kis == natur).IsOpenOperation(Filters.IsOpenAll);
+        }
+        /// <summary>
+        /// Вернуть операции по номеру вагона и натурке с использованием фильтра
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="natur"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public List<CarOperations> IsOpenOperation(int num, int natur, Filters.IsFilterOpen filter)
+        public List<CarOperations> IsOpenOperationOfNumNatur(int num, int natur, Filters.IsFilterOpen filter)
         {
             return ef_rw.CarOperations.Where(o => o.Cars.num == num & o.Cars.natur_kis == natur).IsOpenOperation(filter);
         }
+        /// <summary>
+        /// Вернуть все открытые операции по Cars
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public List<CarOperations> IsOpenAllOperationOfCar(Cars car)
+        {
+            Cars cars = ef_rw.GetCars(car.id);
+            return cars!=null ? cars.CarOperations.IsOpenOperation(Filters.IsOpenAll) : null;
+        }
+        /// <summary>
+        /// Вернуть операции по Cars с использованием фильтра
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public List<CarOperations> IsOpenOperationOfCar(Cars car, Filters.IsFilterOpen filter)
+        {
+            Cars cars = ef_rw.GetCars(car.id);
+            return cars != null ? cars.CarOperations.IsOpenOperation(filter) : null;
+        }
+
         #endregion
 
         /// <summary>
@@ -436,7 +478,7 @@ namespace RW
         {
             if (list == null && list.Count() == 0) return null;
             if (list != null & list.Count() == 1) return list[0];
-            return list.OrderByDescending(o => o.id).FirstOrDefault(); // вернем последнюю операцию
+            return list.OrderByDescending(o => o.id_car).FirstOrDefault(); // вернем последнюю операцию
             //TODO: Доработать коррекцию опреаций (по указанному номеру вагона есть несколько не закрытых операций)
             //List<IGrouping<Cars, CarOperations>> list_cars = list.GroupBy(o => o.Cars).ToList();
             //foreach (IGrouping<Cars, CarOperations> gr in list_cars.OrderByDescending(g => g.Key.id)) { 
@@ -545,17 +587,33 @@ namespace RW
         /// <param name="car"></param>
         /// <param name="dt_close"></param>
         /// <returns></returns>
-        public int CloseSaveCar(Cars car, DateTime dt_close)
+        public int CloseSaveCar(Cars car, DateTime dt_close, bool rewrite)
         {
             try
             {
-                car.CloseCar(dt_close);
+                car.CloseCar(dt_close, rewrite);
                 return ef_rw.SaveCars(car);
             }
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("CloseSaveCar(car={0}, dt_close={1})",
                     car, dt_close), servece_owner, eventID);
+                return -1;
+            }
+        }
+
+        public int CloseSaveCar(int id_car, DateTime dt_close, bool rewrite)
+        {
+            try
+            {
+                Cars car = ef_rw.GetCars(id_car);
+                car.CloseCar(dt_close, rewrite);
+                return ef_rw.SaveCars(car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseSaveCar(id_car={0}, dt_close={1})",
+                    id_car, dt_close), servece_owner, eventID);
                 return -1;
             }
         }
@@ -566,11 +624,11 @@ namespace RW
         /// <param name="dt_close_operation"></param>
         /// <param name="dt_close_car"></param>
         /// <returns></returns>
-        public int CloseSaveCar(Cars car, DateTime dt_close_operation, DateTime dt_close_car)
+        public int CloseSaveCar(Cars car, DateTime dt_close_operation, DateTime dt_close_car, bool rewrite)
         {
             try
             {
-                car.CloseCar(dt_close_operation, dt_close_car);
+                car.CloseCar(dt_close_operation, dt_close_car, rewrite);
                 return ef_rw.SaveCars(car);
             }
             catch (Exception e)
@@ -598,6 +656,80 @@ namespace RW
             {
                 e.WriteErrorMethod(String.Format("SetSaveCar(car={0}, natur_kis={1}, natur={2}, dt_inp_amkr={3})",
                     car, natur_kis, natur, dt_inp_amkr), servece_owner, eventID);
+                return -1;
+            }        
+        }
+        /// <summary>
+        /// Применить и сохранить свойства
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="dt_out_amkr"></param>
+        /// <returns></returns>
+        public int SetSaveCar(Cars car, DateTime? dt_out_amkr, int? natur_kis_out) { 
+            try
+            {
+                car.SetCar(dt_out_amkr, natur_kis_out);
+                return ef_rw.SaveCars(car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetSaveCar(car={0}, dt_out_amkr={1})",
+                    car, dt_out_amkr), servece_owner, eventID);
+                return -1;
+            }        
+        }
+        /// <summary>
+        /// Применить и сохранить свойства
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="delivery"></param>
+        /// <returns></returns>
+        public int SetSaveCar(Cars car, CarsOutDelivery delivery)
+        { 
+            try
+            {
+                car.SetCar(delivery);
+                return ef_rw.SaveCars(car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetSaveCar(car={0}, delivery={1})",
+                    car.GetFieldsAndValue(), delivery.GetFieldsAndValue()), servece_owner, eventID);
+                return -1;
+            }        
+        }
+        /// <summary>
+        /// Сбросить посдеднюю операцию закрытия и сохранить вагон
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public int ClearCloseSaveCar(Cars car)
+        { 
+            try
+            {
+                car.ClearCloseCar();
+                return ef_rw.SaveCars(car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("ClearCloseCar(car={0})",
+                    car.GetFieldsAndValue()), servece_owner, eventID);
+                return -1;
+            }        
+        }
+
+        public int ClearCloseSaveCar(int id_car)
+        { 
+            try
+            {
+                Cars car = ef_rw.GetCars(id_car);
+                car.ClearCloseCar();
+                return ef_rw.SaveCars(car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("ClearCloseCar(id_car={0})",
+                    id_car), servece_owner, eventID);
                 return -1;
             }        
         }
@@ -659,7 +791,7 @@ namespace RW
                 {
                     List<Cars> list_not_cars = ef_rw.GetCarsOfArrivalNum(sostav.IDArrival, not_nums.ToArray());
                     //List<CarOperations> list_operations = ExecOperation(list_not_cars, OperationClose, new OperationClose(sostav.DateTime));
-                    List<CarOperations> list_operations = list_not_cars.CloseOperations(sostav.DateTime);
+                    List<CarOperations> list_operations = list_not_cars.CloseOperations(sostav.DateTime, true);
                     result_close = SaveChanges(list_operations);
                 }
                 // Поставим новые
@@ -799,7 +931,7 @@ namespace RW
                 Cars car = null;
                 Cars car_old = null;
                 // Есть по этому вагону открытая операция
-                CarOperations last_operation = GetLastOpenOperation(IsOpenAllOperation(num), true); // проверить вагон в системе 
+                CarOperations last_operation = GetLastOpenOperation(IsOpenAllOperationOfNum(num), true); // проверить вагон в системе 
                 if (last_operation != null)
                 {
                     // Есть открытая операция
@@ -823,7 +955,8 @@ namespace RW
                             (mess += String.Format(" - в системе RailWay будет закрыта старая запись 'Входящего вагона' id_car:{0}, и создана новая.", last_operation.Cars.id)).WriteInformation(servece_owner, eventID);
                         }
                         // Открыта операция над старим Входящим вагоном
-                        car_old = last_operation.Cars.CloseCar(DateTime.Now);
+                        //car_old = last_operation.Cars.CloseCar(DateTime.Now);
+                        car_old = last_operation.Cars.CloseCar(operation.dt_set, true);
                         ef_rw.SaveCars(car_old);
                     }
                 }
@@ -990,31 +1123,182 @@ namespace RW
         #endregion
 
         #region Исходящие вагоны
-        //public Cars SetCarsToUZRailWay(CarOperations last_operation, SetCarOperation set_operation, IOperation operation)
+
+        //public int SetCarToSendingWayRailWay(int id_car, int natur, DateTime dt_out_amkr, int id_sending_way, CarsOutDelivery delivery)
         //{
         //    try
         //    {
-        //        // Вагон статит на АМКР
-        //        Cars car = last_operation.Cars; // Определим вагон
-        //        // Определим исходящие поставки
-        //        CarsOutDelivery delivery = CreateCarsOutDelivery(car.num, (int)car.natur_kis, (DateTime)operation.dt_out_amkr);
-        //        int res_car = rw_oper.ExecSaveOperation(car, rw_oper.OperationSendingUZWay, new OperationSendingUZWay(id_sending_way, dt_out_amkr, dt_out_amkr, natur, null, null));
-        //        if (res_car > 0)
-        //        {
-        //            // 
-        //            // Входяшие поставки
-        //            if (car.CarsOutDelivery == null || car.CarsOutDelivery.Count() == 0)
-        //            { car.CarsOutDelivery.Add(delivery); }
+        //        RWOperation rw_oper = new RWOperation(this.servece_owner);
+        //        EFRailWay ef_rw = new EFRailWay();
+        //        List<Ways> list_sending_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "2").ToList();
 
+        //        // Вагон статит на пути станции АМКР, если да отправить на УЗ, обновим исх .поставку
+        //        int id_car_res = SetCarSendingWayUZRailWay(id_car, natur, dt_out_amkr, id_sending_way, delivery);
+        //        if (id_car_res < 0) return id_car_res; // Ошибка                
+        //        if (id_car_res > 0)
+        //        {
+        //            // Вагон стоял на станции АМКР, и отправлен на УЗ
+        //            // получим новую операцию
+        //            return id_car_res;
+        //        }
+        //        else
+        //        {
+        //            // Вагон НЕ стоял на станции АМКР
+        //            // Вагон статит на путях принятия с УЗ?, если да поставить на путь станции и вернуть id CAR
+        //            id_car_res = SetCarArrivalWayRailWay(id_car, dt_out_amkr);
+        //            if (id_car_res < 0) return id_car_res; // Ошибка
+        //            if (id_car_res > 0)
+        //            {
+        //                // Вагон стоял на путях принятия с УЗ и принят на амкр
+        //                // Отправить на УЗ, обновим исх .поставку
+        //                id_car_res = SetCarSendingWayUZRailWay(id_car, natur, dt_out_amkr, id_sending_way, delivery);
+        //                //if (id_car < 0) return id_car; // Ошибка
+        //                return id_car_res;
+        //            }
+        //            else
+        //            {
+        //                // Вагон НЕ стотял на путях принятия с УЗ
+        //                // Вагон статит на путях принятия с АМКР?
+        //                CarOperations last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperationOfID(id_car), true);
+        //                int id_way_car = last_operation.IsSetWay(list_sending_ways_uz.Select(w => w.id).ToArray(), null);
+        //                if (id_way_car > 0)
+        //                {
+        //                    // Вагон статит на путях принятия с АМКР
+        //                    //..
+        //                    // Обновим исходящие поставки
+        //                    // Вагон статит на АМКР
+        //                    Cars car = last_operation.Cars; // Определим вагон
+        //                    // Определим исходящие поставки
+        //                    //CarsOutDelivery delivery = CreateCarsOutDelivery(car.num, natur, dt_out_amkr);
+        //                    // Исходящая поставка
+        //                    int res_car = rw_oper.SetSaveCar(car, delivery);
+        //                    return res_car;
+        //                }
+        //                else
+        //                {
+        //                    // Вагон НЕ статит на путях принятия с АМКР
+        //                    //..
+        //                    // Исключение!! у вагона нет другого варианта
+        //                    return -1;
+        //                }
+        //            }
         //        }
         //    }
         //    catch (Exception e)
         //    {
-        //        e.WriteErrorMethod(String.Format("SetCarsToRailWay(arr_car={0}, set_operation={1}, operation={2})", arr_car.GetFieldsAndValue(), set_operation, operation), servece_owner, eventID);
-        //        return null;
+        //        e.WriteErrorMethod(String.Format("SetCarToWayRailWay()"), servece_owner, eventID);
+        //        return -1;
         //    }
         //}
+
+        //public int SetCarSendingWayUZRailWay(int id_car, int natur, DateTime dt_out_amkr, int id_sending_way, CarsOutDelivery delivery)
+        //{
+        //    try
+        //    {
+        //        EFRailWay ef_rw = new EFRailWay();
+        //        RWOperation rw_oper = new RWOperation(this.servece_owner);
+        //        List<Ways> list_all_ways_station_amkr = new List<Ways>();
+        //        list_all_ways_station_amkr = ef_rw.GetWaysOfStationAMKR().ToList();
+
+        //        CarOperations last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperationOfID(id_car), true);
+        //        // проверить вагон в системе, стоит он на путях станций АМКР
+        //        int id_way_car = last_operation.IsSetWay(list_all_ways_station_amkr.Select(w => w.id).ToArray(), null);
+        //        if (id_way_car > 0)
+        //        {
+        //            // Вагон статит на АМКР
+        //            Cars car = last_operation.Cars; // Определим вагон
+        //            // Исходящая поставка
+        //            car.SetCar(delivery);
+        //            int res_car = rw_oper.ExecSaveOperation(car, rw_oper.OperationSendingUZWay, new OperationSendingUZWay(id_sending_way, dt_out_amkr, dt_out_amkr, natur, null, null));
+        //            Console.WriteLine("Вагон {0} - cтоит на станции АМКР, и будет сдан на УЗ - результат переноса {1}", car.num, res_car);
+        //            return res_car;
+        //        } return 0;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("SetCarSendingWayUZRailWay()"), servece_owner, eventID);
+        //        return -1;
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Найти информацию о прибытии вагона на АМКР, принять вагон на АМКР с путей "для отправки на АМКР" станции УЗ
+        ///// </summary>
+        ///// <param name="last_operation"></param>
+        ///// <param name="pnh_arrival"></param>
+        ///// <returns></returns>
+        //public int SetCarArrivalWayRailWay(int id_car, DateTime dt_out_amkr)
+        //{
+        //    try
+        //    {
+        //        RWReference rw_ref = new RWReference(base.servece_owner, true); // создавать содержимое справочника из данных КИС
+        //        EFRailWay ef_rw = new EFRailWay();
+
+
+        //        Cars car = ef_rw.GetCars(id_car);
+
+        //        int id_stations_rw = rw_ref.GetIDStationsOfKIS(pnh_arrival.K_ST);
+        //        if (id_stations_rw <= 0)
+        //        {
+        //            //String.Format(mess_error_upd_sostav + mess_upd + " - ID станции: {0} не определён в справочнике системы RailWay", bas_sostav.id_station_kis).WriteError(servece_owner, eventID);
+        //            return -1;
+        //        }
+        //        if (id_stations_rw == 26) id_stations_rw = 27; // Коррекция Промышленная Керамет -> 'это промышленная
+        //        // Определим путь на станции система RailCars
+        //        int id_ways_rw = rw_ref.GetIDDefaultWayOfStation(id_stations_rw, null);
+        //        if (id_ways_rw <= 0)
+        //        {
+        //            //String.Format(mess_error_upd_sostav + mess_upd + " - ID пути: {0} станции: {1} не определён в справочнике системы RailWay", bas_sostav.way_num, bas_sostav.id_station_kis).WriteError(servece_owner, eventID);
+        //            return -1;
+        //        }
+        //        return SetCarArrivalWayRailWay(id_car, pnh_arrival.N_NATUR, (DateTime)pnh_arrival.GetPRDateTime(), id_ways_rw);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("SetCarArrivalWayRailWay()"), servece_owner, eventID);
+        //        return -1;
+        //    }
+        //}
+        ///// <summary>
+        ///// Принять на АМКР с путей "для отправки на АМКР" станции УЗ
+        ///// </summary>
+        ///// <param name="last_operation"></param>
+        //public int SetCarArrivalWayRailWay(int id_car, int natur, DateTime dt_amkr, int id_way)
+        //{
+        //    try
+        //    {
+        //        EFRailWay ef_rw = new EFRailWay();
+        //        RWOperation rw_oper = new RWOperation(this.servece_owner);
+        //        EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+
+        //        CarOperations last_operation = rw_oper.GetLastOpenOperation(rw_oper.IsOpenAllOperationOfID(id_car), true);
+
+        //        List<Ways> list_arrival_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "1").ToList();
+        //        int id_way_car = last_operation.IsSetWay(list_arrival_ways_uz.Select(w => w.id).ToArray(), null);
+        //        if (id_way_car > 0)
+        //        {
+        //            // Вагон статит на путях "для отправки на АМКР"
+        //            Cars car = last_operation.Cars; // Определим вагон
+        //            int res_car = rw_oper.ExecSaveOperation(car, rw_oper.OperationArrivalUZWay, new OperationArrivalUZWay(id_way, dt_amkr, dt_amkr, natur, null, null));
+        //            if (res_car > 0)
+        //            {
+        //                // Закрываем прибытие
+        //                int res_close_mt = ef_mt.CloseArrivalCars(car.id_sostav, car.num, natur, dt_amkr);
+        //            }
+        //            Console.WriteLine("Вагон {0} - cтоит в прибытии станции УЗ по которой можно получить вагон на станцию АМКР - результат переноса {1}", car.num, res_car);
+        //            return res_car;
+
+        //        } return 0;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("SetCarArrivalWayRailWay()"), servece_owner, eventID);
+        //        return (int)errorTransfer.global;
+        //    }
+        //}
+
         #endregion
+
         #region Исходящие поставки
         public CarsOutDelivery CreateCarsOutDelivery(int num, int? id_tupik, int? CountryCodeISO, int? StationCode, string note, int CargoCode, float Weight)
         {
@@ -1112,6 +1396,18 @@ namespace RW
 
         public Cars GetCars(int id_car) {
             return ef_rw.GetCars(id_car);
+        }
+
+        public List<Cars> GetCarsOfNum(int num) {
+            return ef_rw.GetCarsOfNum(num).ToList();
+        }
+
+        public Cars GetNextCars(int id_car) {
+            return ef_rw.GetCarsOfParentID(id_car);
+        }
+
+        public void Refresh() {
+            ef_rw.RefreshAll();
         }
 
 

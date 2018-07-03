@@ -65,7 +65,11 @@ namespace RW
             }
             return result;
         }
-
+        /// <summary>
+        /// Вернуть последнюю операцию
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
         public static CarOperations GetLastOperations(this Cars car)
         {
             try
@@ -164,6 +168,25 @@ namespace RW
             return 0;
 
         }
+        /// <summary>
+        /// Операция, вагон стоял на одном из указных путей
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <param name="id_way"></param>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static int IsPassWay(this CarOperations oper, int[] id_way, DateTime? dt)
+        {
+            foreach (int id in id_way)
+            {
+                if (IsSetOperation(oper, id, dt, false))
+                {
+                    return id;
+                }
+            }
+            return 0;
+        }
+
         /// <summary>
         /// Проверим текущее положение вагона - вагон стоит на указанном пути за указанное время
         /// </summary>
@@ -296,13 +319,15 @@ namespace RW
         #endregion
 
         #region Набор функций закрытия операций над вагонами
-        public static CarOperations CloseOperations(this CarOperations operations, DateTime? dt_close)
+        public static CarOperations CloseOperations(this CarOperations operations, DateTime? dt_close, bool rewrite)
         {
             try
             {
-                List<CarOperations> list = null;
+                List<CarOperations> list = new List<CarOperations>();
                 if (operations == null) return null;
-                if (operations.dt_inp_station != null & operations.dt_out_station == null) { operations.dt_out_station = dt_close != null ? dt_close : DateTime.Now; }
+                // Проверяем открытые
+                if (operations.dt_inp_station != null & operations.dt_out_station == null) { 
+                    operations.dt_out_station = dt_close != null ? dt_close : DateTime.Now; }
                 if (operations.dt_inp_way != null & operations.dt_out_way == null) { 
                     operations.dt_out_way = dt_close != null ? dt_close : DateTime.Now; 
                     list = operations.Ways.CarOperations.Where(w=>w.dt_inp_way != null & w.dt_out_way == null).OrderBy(w=>w.position).ToList();
@@ -311,7 +336,13 @@ namespace RW
                     operations.send_dt_out_way = dt_close != null ? dt_close : DateTime.Now; 
                     list = operations.Ways.CarOperations.Where(w=>w.send_dt_inp_way != null & w.send_dt_out_way == null).OrderBy(w=>w.position).ToList();                
                 }
-
+                if (rewrite)
+                {
+                    // Проверяем закрытые перезаписать время закрытия операции
+                    if (operations.dt_inp_station != null & operations.dt_out_station != null) { operations.dt_out_station = dt_close != null ? dt_close : operations.dt_out_station; }
+                    if (operations.dt_inp_way != null & operations.dt_out_way != null) { operations.dt_out_way = dt_close != null ? dt_close : operations.dt_out_way; }
+                    if (operations.send_dt_inp_way != null & operations.send_dt_out_way != null) { operations.send_dt_out_way = dt_close != null ? dt_close : operations.send_dt_out_way; }
+                }
                 int position = 1;
                 foreach (CarOperations operation in list)
                 {
@@ -323,72 +354,107 @@ namespace RW
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("CloseOperations(operations={0}, dt_close={1})", operations, dt_close), eventID);
+                e.WriteErrorMethod(String.Format("CloseOperations(operations={0}, dt_close={1}, rewrite={2})", operations, dt_close, rewrite), eventID);
                 return null;
             }
         }
 
-        public static CarOperations CloseOperations(this Cars car, DateTime? dt_close)
+        public static CarOperations CloseOperations(this Cars car, DateTime? dt_close, bool rewrite)
         {
             try
             {
-                return car.GetLastOperations().CloseOperations(dt_close);
+                return car.GetLastOperations().CloseOperations(dt_close, rewrite);
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("CloseOperations(car={0}, dt_close={1})", car, dt_close), eventID);
+                e.WriteErrorMethod(String.Format("CloseOperations(car={0}, dt_close={1}, rewrite={2})", car, dt_close, rewrite), eventID);
                 return null;
             }
         }
 
-        public static List<CarOperations> CloseOperations(this IEnumerable<Cars> cars, DateTime? dt_close)
+        public static List<CarOperations> CloseOperations(this IEnumerable<Cars> cars, DateTime? dt_close, bool rewrite)
         {
             try
             {
                 List<CarOperations> result = new List<CarOperations>();
                 foreach (Cars car in cars) { 
-                    CarOperations operation_result = car.GetLastOperations().CloseOperations(dt_close);
+                    CarOperations operation_result = car.GetLastOperations().CloseOperations(dt_close, rewrite);
                     if (operation_result!=null){result.Add(operation_result);}
                 }
                 return result;
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("CloseOperations(cars={0}, dt_close={1})", cars, dt_close), eventID);
+                e.WriteErrorMethod(String.Format("CloseOperations(cars={0}, dt_close={1}, rewrite={2})", cars, dt_close, rewrite), eventID);
                 return null;
             }
         }
 
-        public static Cars CloseCar(this Cars car, DateTime dt_close)
+        public static Cars CloseCar(this Cars car, DateTime dt_close, bool rewrite)
         {
             if (car == null) return null;
-            car.GetLastOperations().CloseOperations(dt_close);
-            car.dt_close = dt_close;
-            car.user_close = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
-            return car;
-        }        
-        
-        public static Cars CloseCar(this Cars car, DateTime dt_close_operation, DateTime dt_close_car)
-        {
-            if (car == null) return null;
-            car.GetLastOperations().CloseOperations(dt_close_operation);
-            car.dt_close = dt_close_car;
-            car.user_close = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+            car.GetLastOperations().CloseOperations(dt_close, rewrite);
+            if ((car.dt_close != null & rewrite) | (car.dt_close == null))
+            {
+                car.dt_close = dt_close;
+                car.user_close = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+            }
             return car;
         }
 
-        public static Cars CloseCar(this CarOperations operations, DateTime dt_close)
+        public static Cars CloseCar(this Cars car, DateTime dt_close_operation, DateTime dt_close_car, bool rewrite)
+        {
+            if (car == null) return null;
+            car.GetLastOperations().CloseOperations(dt_close_operation, rewrite);
+            if ((car.dt_close != null & rewrite) | (car.dt_close == null))
+            {
+                car.dt_close = dt_close_car;
+                car.user_close = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+            }
+            return car;
+        }
+
+        public static Cars CloseCar(this CarOperations operations, DateTime dt_close, bool rewrite)
         {
             if (operations == null) return null;
             Cars car = operations.Cars;
-            return car.CloseCar(dt_close);
+            return car.CloseCar(dt_close, rewrite);
         }        
 
-        public static Cars CloseCar(this CarOperations operations, DateTime dt_close_operation, DateTime dt_close_car)
+        public static Cars CloseCar(this CarOperations operations, DateTime dt_close_operation, DateTime dt_close_car, bool rewrite)
         {
             if (operations == null) return null;
             Cars car = operations.Cars;
-            return car.CloseCar(dt_close_operation, dt_close_car);
+            return car.CloseCar(dt_close_operation, dt_close_car, rewrite);
+        }        
+        #endregion
+
+        #region Набор функций сброса закрытия операций над вагонами
+        public static CarOperations ClearCloseOperations(this CarOperations operations)
+        {
+            try
+            {
+                List<CarOperations> list = null;
+                if (operations == null) return null;
+                if (operations.dt_inp_station != null & operations.dt_out_station != null) { operations.dt_out_station = null; }
+                if (operations.dt_inp_way != null & operations.dt_out_way != null) { operations.dt_out_way = null; }
+                if (operations.send_dt_inp_way != null & operations.send_dt_out_way != null) {  operations.send_dt_out_way = null; }
+                return operations;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("ClearCloseOperations(operations={0})", operations), eventID);
+                return null;
+            }
+        }
+
+        public static Cars ClearCloseCar(this Cars car)
+        {
+            if (car == null) return null;
+            car.GetLastOperations().ClearCloseOperations();
+            car.dt_close = null;
+            car.user_close = null;
+            return car;
         }        
         #endregion
 
@@ -408,10 +474,11 @@ namespace RW
         /// <param name="car"></param>
         /// <param name="dt_out_amkr"></param>
         /// <returns></returns>
-        public static Cars SetCar(this Cars car, DateTime? dt_out_amkr)
+        public static Cars SetCar(this Cars car, DateTime? dt_out_amkr, int? natur_kis_out)
         {
             if (car == null) return null;
-            car.dt_out_amkr = dt_out_amkr;
+            car.dt_out_amkr = dt_out_amkr != null ? dt_out_amkr : car.dt_out_amkr; ;
+            car.natur_kis_out = natur_kis_out!= null ? natur_kis_out : car.natur_kis_out;
             return car;
         }
         /// <summary>
@@ -432,8 +499,7 @@ namespace RW
             else
             {
                 // Обновим 
-                car.CarsOutDelivery.Clear();
-                car.CarsOutDelivery.Add(delivery);
+                car.CarsOutDelivery.ToList()[0] = delivery;
             }
             return car;
         }

@@ -12,6 +12,8 @@ namespace EFRW.Abstract
     public interface IRailWay
     {
         Database Database { get; }
+
+        void RefreshAll();
         
         List<Option> GetTypeSendTransfer();
         string GetTypeSendTransfer(int type);
@@ -98,6 +100,10 @@ namespace EFRW.Abstract
         Cars GetCarsOfArrivalNum(int id_arrival, int num);
         List<Cars> GetCarsOfArrivalNum(int id_arrival, int[] nums);
         Cars GetCarsOfSetKIS(int num, DateTime dt_amkr, int natur);
+        Cars GetCarsOfSetKIS(int num, DateTime dt_amkr, int natur, int hour_interval);
+        Cars GetCarsOfSetKIS(int num, int natur);
+        Cars GetCarsOfNumDT(int num, DateTime dt_amkr, int hour_interval);
+        Cars GetCarsOfParentID(int parent_id);
         #endregion
 
         #region CarOperations
