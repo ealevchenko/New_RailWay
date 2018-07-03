@@ -14,6 +14,12 @@ namespace Web_RailWay.Areas.KIS.Controllers
             return View();
         }
 
+        // Оборот вагонов 
+        public ActionResult Turnover()
+        {
+            return View();
+        } 
+
         /// <summary>
         /// Список ссылок на отчеты копирования КИС
         /// </summary>

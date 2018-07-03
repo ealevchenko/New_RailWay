@@ -413,48 +413,7 @@ namespace Web_RailWay.Controllers.api
                 return InternalServerError(e);
             }
         }
-        //public IHttpActionResult GetStation(int id)
-        //{
-        //    Stations station = this.rep_rw.GetStations(id);
-        //    if (station == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    //Stations st = new Stations() {
-        //    //    id = station.id,
-        //    //    name_ru = station.name_ru,
-        //    //    name_en = station.name_en,
-        //    //    view = station.view,
-        //    //    exit_uz = station.exit_uz,
-        //    //    station_uz = station.station_uz,
-        //    //    id_rs = station.id_rs,
-        //    //    id_kis = station.id_kis,
-        //    //    default_side = station.default_side,
-        //    //    code_uz = station.code_uz,
-        //    //    //Ways = station.Ways,
-        //    //    //CarOperations = station.CarOperations,
-        //    //    //StationsNodes = station.StationsNodes,
-        //    //    //StationsNodes1 = station.StationsNodes1 
-        //    //};
-
-        //    return Ok(station);
-        //}
-
-        //// GET: api/rw/station_name/1
-        //[Route("station_name/{id:int}")]
-        //[ResponseType(typeof(string))]
-        //public string GetStationName(int id)
-        //{
-        //    Stations station = this.rep_rw.GetStations(id);
-        //    if (station == null)
-        //    {
-        //        return id.ToString();
-        //    }
-        //    return Thread.CurrentThread.CurrentUICulture.Name == "en-US" ? station.name_en : station.name_ru;
-        //}
-
-        // GET: api/rw/station/1/name
         [Route("station/{id:int}/name")]
         [ResponseType(typeof(string))]
         public string GetStationName(int id)
@@ -792,6 +751,38 @@ namespace Web_RailWay.Controllers.api
         public string GetSide(int side)
         {
             return GetResource(this.rep_rw.GetSide(side));
+        }
+        #endregion
+
+        #region CarConditions
+        // GET: api/rw/car/conditions
+        [Route("car/conditions")]
+        [ResponseType(typeof(CarConditions))]
+        public IHttpActionResult GetCarConditions()
+        {
+            try
+            {
+                List<CarConditions> car_conditions = this.rep_rw.CarConditions
+                    .ToList()
+                    .Select(c => new CarConditions
+                    {
+                        id = c.id,
+                        name_ru = c.name_ru,
+                        name_en = c.name_en,
+                    })
+             .ToList();
+
+                if (car_conditions == null)
+                {
+                    return NotFound();
+                }
+                return Ok(car_conditions);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStations()"), eventID);
+                return InternalServerError(e);
+            }
         }
         #endregion
 

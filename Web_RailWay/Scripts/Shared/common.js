@@ -79,7 +79,7 @@ function OnBegin() {
 // Обработчики ajax - функций
 // Событие перед запросом
 function AJAXBeforeSend() {
-    OnBegin();
+    //OnBegin();
 }
 // Обработка ошибок
 function OnAJAXError(x, y, z) {
@@ -90,7 +90,7 @@ function OnAJAXError(x, y, z) {
 }
 // Событие после выполнения
 function AJAXComplete() {
-    LockScreenOff();
+    //LockScreenOff();
 }
 
 //-------------------------------------------------------------------------

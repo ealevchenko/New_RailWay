@@ -155,7 +155,6 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\KIS\Models\" />
-    <Folder Include="Areas\KIS\Views\Shared\" />
     <Folder Include="Areas\MT\Models\" />
     <Folder Include="Areas\RW\Models\" />
     <Folder Include="Areas\RW\Views\Shared\" />
@@ -433,6 +432,8 @@
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\KIST\kist.css" />
+    <Content Include="Content\KIS\transfer.css" />
+    <Content Include="Content\KIS\turnover.css" />
     <Content Include="Content\lockpanel\lockpanel.css" />
     <Content Include="Content\MT\natur.css" />
     <Content Include="Content\MT\operations.css" />
@@ -542,6 +543,10 @@
     <Content Include="Areas\MT\Views\WagonsTracking\Operations.cshtml" />
     <Content Include="Areas\MT\Views\Admin\Natur.cshtml" />
     <Content Include="Areas\MT\Views\Admin\Index.cshtml" />
+    <Content Include="Areas\KIS\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\KIS\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\KIS\Views\Transfer\Index.cshtml" />
+    <Content Include="Areas\KIS\Views\Home\Turnover.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
     <Content Include="Scripts\api_helpers\settings.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -650,6 +655,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\KIS\transfer_kis.js" />
+    <Content Include="Scripts\KIS\transfer_kis1.js" />
+    <Content Include="Scripts\KIS\turnover.js" />
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\MT\natur.js" />
@@ -730,12 +737,13 @@
     <Content Include="Areas\RW\Views\Home\Index.cshtml" />
     <Content Include="Areas\RW\Views\Home\LinkRWControl.cshtml" />
     <Content Include="Areas\Admin\Views\Services\Index.cshtml" />
-    <Content Include="Areas\KIS\Views\Transfer\Index.cshtml" />
+    <Content Include="Areas\KIS\Views\Transfer\Index1.cshtml" />
     <Content Include="Views\RWUI\Index.cshtml" />
     <Content Include="Views\AWAS\Index.cshtml" />
     <Content Include="Scripts\RW\awas.json" />
     <Content Include="Scripts\MT\wagons_tracking.json" />
     <Content Include="Scripts\MT\mt.json" />
+    <Content Include="Scripts\KIS\kis.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppSettings\DBSettings\DBSettings.csproj">

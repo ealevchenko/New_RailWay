@@ -117,7 +117,7 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(RCBufferArrivalSostav))]
         public IHttpActionResult GetBufferArrivalSostav(DateTime start, DateTime stop)
         {
-            List<RCBufferArrivalSostav> list = this.rep_kist.GetRCBufferArrivalSostav(start,stop)
+            List<RCBufferArrivalSostav> list = this.rep_kist.GetRCBufferArrivalSostav(start, stop)
                                                 .OrderByDescending(x => x.datetime)
                                                 .ToList();
             if (list == null)
@@ -126,12 +126,12 @@ namespace Web_RailWay.Controllers.api
             }
             return Ok(list);
         }
-        
+
         [HttpPost]
         [Route("bas/{id:int}/close")]
         public int CloseBufferArrivalSostav(int id)
         {
-            return this.rep_kist.CloseRCBufferArrivalSostav(id, User.Identity.Name); 
+            return this.rep_kist.CloseRCBufferArrivalSostav(id, User.Identity.Name);
         }
 
         #endregion
@@ -170,6 +170,48 @@ namespace Web_RailWay.Controllers.api
             }
             return Ok(list);
         }
+        #endregion
+
+        #region RAILWAY
+        #region BufferArrivalSostav
+
+        // GET: api/kis/transfer/arrival/2018-01-13T22:00:00.000Z/2018-01-15T21:59:59.000Z
+        [Route("arrival/{start:datetime}/{stop:datetime}")]
+        [ResponseType(typeof(RWBufferArrivalSostav))]
+        public IHttpActionResult GetRWBufferArrivalSostav(DateTime start, DateTime stop)
+        {
+            List<RWBufferArrivalSostav> list = this.rep_kist.GetRWBufferArrivalSostav(start, stop)
+                                                .OrderByDescending(x => x.datetime)
+                                                .ToList();
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+
+        // GET: api/kis/transfer/arrival/id/2513
+        [Route("arrival/id/{id:int}")]
+        [ResponseType(typeof(RWBufferArrivalSostav))]
+        public IHttpActionResult GetRWBufferArrivalSostav(int id)
+        {
+            RWBufferArrivalSostav bas = this.rep_kist.GetRWBufferArrivalSostav(id);
+            if (bas == null)
+            {
+                return NotFound();
+            }
+            return Ok(bas);
+        }
+
+        [HttpPost]
+        [Route("arrival/{id:int}/close")]
+        public int CloseRWBufferArrivalSostav(int id)
+        {
+            return this.rep_kist.CloseRWBufferArrivalSostav(id, User.Identity.Name);
+        }
+
+        #endregion
+
         #endregion
 
     }

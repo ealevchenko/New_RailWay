@@ -101,7 +101,7 @@ function getAsyncViewStations(callback) {
         },
     });
 }
-// Веруть список станций открытых для работы
+// Веруть список станций
 function getAsyncStations(callback) {
     $.ajax({
         type: 'GET',
@@ -471,7 +471,7 @@ function getAsyncStationsNodes(callback) {
     });
 }
 
-
+//-----------------------------------------------------------------------------
 // Получить список составов на станции уз
 function getAsyncArrivalSostavOfStationUZ(id_station_uz, callback) {
     $.ajax({
@@ -634,6 +634,33 @@ function getDefaultReferenceCargo(code_etsng) {
         },
     });
     return value;
+}
+
+//---------------------------------------------------------
+// CarConditions - годность по прибытию и отправке
+//---------------------------------------------------------
+// Веруть годность по прибытию и отправке
+function getAsyncCarConditions(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/car/conditions/',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
 }
 
 

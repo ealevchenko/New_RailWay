@@ -19,7 +19,7 @@ namespace Web_RailWay.App_LocalResources {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class KISResource {
@@ -88,20 +88,20 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Копирование данных из КИС прибытие составов с УЗ.
+        ///   Ищет локализованную строку, похожую на Информация о прибывших составах на АМКР и сданных на УЗ по данным системы КИС.
         /// </summary>
-        public static string index_report_arrival_desc {
+        public static string index_report_arrival_sending_desc {
             get {
-                return ResourceManager.GetString("index_report_arrival_desc", resourceCulture);
+                return ResourceManager.GetString("index_report_arrival_sending_desc", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Прибытие с УЗ.
+        ///   Ищет локализованную строку, похожую на Принятие и сдача.
         /// </summary>
-        public static string index_report_arrival_title {
+        public static string index_report_arrival_sending_title {
             get {
-                return ResourceManager.GetString("index_report_arrival_title", resourceCulture);
+                return ResourceManager.GetString("index_report_arrival_sending_title", resourceCulture);
             }
         }
         

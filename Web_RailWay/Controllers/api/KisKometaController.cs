@@ -23,6 +23,7 @@ namespace Web_RailWay.Controllers.api
             this.rep_kis = new EFWagons();  
         }
 
+        #region KometaVagonSob
         // GET: api/kis/kometa/vagon_sob/num_vag/68823137
         [Route("vagon_sob/num_vag/{num:int}")]
         [ResponseType(typeof(KometaVagonSob))]
@@ -63,7 +64,9 @@ namespace Web_RailWay.Controllers.api
             }
             return Ok(vs);
         }
+        #endregion
 
+        #region KometaSobstvForNakl
         // GET: api/kis/kometa/sobstv_for_nakl
         [Route("sobstv_for_nakl")]
         [ResponseType(typeof(KometaSobstvForNakl))]
@@ -89,7 +92,9 @@ namespace Web_RailWay.Controllers.api
             }
             return Ok(nakl);
         }
+        #endregion
 
+        #region KometaStan
         // GET: api/kis/kometa/station/name
         [Route("station/name")]
         [ResponseType(typeof(Option))]
@@ -120,5 +125,25 @@ namespace Web_RailWay.Controllers.api
             KometaStan kstan = this.rep_kis.GetKometaStan(id);
             return kstan != null ? kstan.NAME : id.ToString();
         }
+        #endregion
+
+        #region KometaStrana
+        // GET: api/kis/kometa/strana
+        [Route("strana")]
+        [ResponseType(typeof(KometaStrana))]
+        public IHttpActionResult GetKometaStrana()
+        {
+            List<KometaStrana> list = this.rep_kis.GetKometaStrana().ToList();
+            if (list == null || list.Count()==0)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+        #endregion
+
+        #region
+
+        #endregion
     }
 }

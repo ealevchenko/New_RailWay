@@ -212,8 +212,8 @@
                 "scrollX": true,
                 language: {
                     emptyTable: resurses.getText("table_message_emptyTable"),
-                    emptyTable: resurses.getText("table_decimal"),
-                    emptyTable: resurses.getText("table_message_search"),
+                    decimal: resurses.getText("table_decimal"),
+                    search: resurses.getText("table_message_search"),
                 },
                 jQueryUI: true,
                 "createdRow": function (row, data, index) {
@@ -512,8 +512,8 @@
                 //"scrollX": true,
                 language: {
                     emptyTable: resurses.getText("table_message_emptyTable"),
-                    emptyTable: resurses.getText("table_decimal"),
-                    emptyTable: resurses.getText("table_message_search"),
+                    decimal: resurses.getText("table_decimal"),
+                    search: resurses.getText("table_message_search"),
                 },
                 jQueryUI: true,
                 "createdRow": function (row, data, index) {
@@ -684,8 +684,8 @@
                 "scrollX": true,
                 language: {
                     emptyTable: resurses.getText("table_message_emptyTable"),
-                    emptyTable: resurses.getText("table_decimal"),
-                    emptyTable: resurses.getText("table_message_search"),
+                    decimal: resurses.getText("table_decimal"),
+                    search: resurses.getText("table_message_search"),
                 },
                 jQueryUI: true,
                 "createdRow": function (row, data, index) {

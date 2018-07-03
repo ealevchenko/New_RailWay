@@ -1,0 +1,72 @@
+﻿/*Показать цвет статусов строк*/
+table.dataTable tbody tr:not(.selected).Delete.odd, table.dataTable tbody tr:not(.selected).Delete.even {
+    text-decoration: line-through;
+    background-color: #FFE8EB;
+}
+
+table.order-column.dataTable tbody tr.Delete > .sorting_1, table.order-column.dataTable tbody tr.Delete > .sorting_2, table.order-column.dataTable tbody tr.Delete > .sorting_3, table.display.dataTable tbody tr.Delete > .sorting_1, table.display.dataTable tbody tr.Delete > .sorting_2, table.display.dataTable tbody tr.Delete > .sorting_3 {
+    background-color: #FFD9EB;
+}
+
+table.dataTable tbody tr:not(.selected).Insert.odd, table.dataTable tbody tr:not(.selected).Insert.even {
+    background-color: #FEF2D9;
+}
+
+table.order-column.dataTable tbody tr.Insert > .sorting_1, table.order-column.dataTable tbody tr.Insert > .sorting_2, table.order-column.dataTable tbody tr.Insert > .sorting_3, table.display.dataTable tbody tr.Insert > .sorting_1, table.display.dataTable tbody tr.Insert > .sorting_2, table.display.dataTable tbody tr.Insert > .sorting_3 {
+    background-color: #fef2b3;
+}
+
+table.dataTable tbody tr:not(.selected).Update.odd, table.dataTable tbody tr:not(.selected).Update.even {
+    background-color: #D9E5FF;
+}
+
+table.order-column.dataTable tbody tr.Update > .sorting_1, table.order-column.dataTable tbody tr.Update > .sorting_2, table.order-column.dataTable tbody tr.Update > .sorting_3, table.display.dataTable tbody tr.Update > .sorting_1, table.display.dataTable tbody tr.Update > .sorting_2, table.display.dataTable tbody tr.Update > .sorting_3 {
+    background-color: #fef2b3;
+}
+/*Показывает или прячить детали*/
+td.details-control {
+    background: url('../../Content/DataTables/images1/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+
+tr.shown td.details-control {
+    background: url('../../Content/DataTables/images1/details_close.png') no-repeat center center;
+}
+
+.detali-operation {
+    border-left: 6px solid #8ae;
+    border-top: 1px solid #8ae;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    background-color: #eee;
+    border-radius: 4px;
+    text-align: left;
+}
+/*разбить строку без пробелов в ячейке*/
+.list-status {
+    width: 400px;
+    word-break: break-all;
+}
+/* Отображение статусов переноса*/
+td.Ok {
+    color: #35c247;
+}
+
+td.Error {
+    color: #ff0000;
+}
+/*Панель настроек*/
+.setup-operation {
+    padding: 5px;
+    text-align: left;
+}
+
+    .setup-operation button {
+        margin-left: 5px;
+    }
+
+    .setup-operation label {
+        margin-left: 5px;
+        margin-right: 5px;
+    }

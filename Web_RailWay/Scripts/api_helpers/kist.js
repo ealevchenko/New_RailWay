@@ -94,7 +94,7 @@ function getError(err) {
 function getStatusCars(list, car) {
     if (list != null) {
         if (list.indexOf(car) >= 0) {
-            return 'Error' 
+            return 'Error'
         }
     }
     return 'Ok'
@@ -117,17 +117,19 @@ function getErrorCars(list_error, car) {
 function getBufferArrivalCarsStatus(bac) {
     var list_err = getError();
     if (bac != null) {
-        var cars = bac.list_wagons.split(';');
         var list_cars = [];
-        for (var i = 0; i < cars.length; i++) {
-            var upd_err = getErrorCars(bac.message, cars[i]);
-            if (cars[i] != "") {
-                list_cars.push({
-                    car: cars[i],
-                    car_set: getStatusCars(bac.list_no_set_wagons, cars[i]),
-                    car_upd: getStatusCars(bac.list_no_update_wagons, cars[i]),
-                    car_upderr: (upd_err != "Ok" ? getTextOption(list_err, upd_err) : upd_err),
-                });
+        if (bac.list_wagons != null) {
+            var cars = bac.list_wagons.split(';');
+            for (var i = 0; i < cars.length; i++) {
+                var upd_err = getErrorCars(bac.message, cars[i]);
+                if (cars[i] != "") {
+                    list_cars.push({
+                        car: cars[i],
+                        car_set: getStatusCars(bac.list_no_set_wagons, cars[i]),
+                        car_upd: getStatusCars(bac.list_no_update_wagons, cars[i]),
+                        car_upderr: (upd_err != "Ok" ? getTextOption(list_err, upd_err) : upd_err),
+                    });
+                }
             }
         }
         return list_cars;
@@ -318,40 +320,40 @@ function getBufferInputSostavXMLHttpRequest(correct, start, stop, callback) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
             jsondata = JSON.parse(xhr.responseText);
-                    if (correct) {
-                        var list_log = [];
-                        for (var i = 0; i < jsondata.length; i++) {
-                            list_log.push({
-                                id: jsondata[i].id,
-                                datetime: jsondata[i].datetime != null ? jsondata[i].datetime.replace("T", " ") : null,
-                                doc_num: jsondata[i].doc_num,
-                                id_station_from_kis: jsondata[i].id_station_from_kis,
-                                station_from_name: getTextOption(list_numvag_stan, jsondata[i].id_station_from_kis),
-                                way_num_kis: jsondata[i].way_num_kis,
-                                napr: jsondata[i].napr,
-                                id_station_on_kis: jsondata[i].id_station_on_kis,
-                                station_on_name: getTextOption(list_numvag_stan, jsondata[i].id_station_on_kis),
-                                count_wagons: jsondata[i].count_wagons,
-                                count_set_wagons: jsondata[i].count_set_wagons,
-                                natur: jsondata[i].natur,
-                                close: jsondata[i].close != null ? jsondata[i].close.replace("T", " ") : null,
-                                close_user: jsondata[i].close_user,
-                                status: getTextOption(list_status, jsondata[i].status),
-                                statusname: getTextOption(list_status_name, jsondata[i].status),
-                                message: jsondata[i].message,
-                            });
-                        }
-                    }
-                    if (typeof callback === 'function') {
-                        callback(list_log);
+            if (correct) {
+                var list_log = [];
+                for (var i = 0; i < jsondata.length; i++) {
+                    list_log.push({
+                        id: jsondata[i].id,
+                        datetime: jsondata[i].datetime != null ? jsondata[i].datetime.replace("T", " ") : null,
+                        doc_num: jsondata[i].doc_num,
+                        id_station_from_kis: jsondata[i].id_station_from_kis,
+                        station_from_name: getTextOption(list_numvag_stan, jsondata[i].id_station_from_kis),
+                        way_num_kis: jsondata[i].way_num_kis,
+                        napr: jsondata[i].napr,
+                        id_station_on_kis: jsondata[i].id_station_on_kis,
+                        station_on_name: getTextOption(list_numvag_stan, jsondata[i].id_station_on_kis),
+                        count_wagons: jsondata[i].count_wagons,
+                        count_set_wagons: jsondata[i].count_set_wagons,
+                        natur: jsondata[i].natur,
+                        close: jsondata[i].close != null ? jsondata[i].close.replace("T", " ") : null,
+                        close_user: jsondata[i].close_user,
+                        status: getTextOption(list_status, jsondata[i].status),
+                        statusname: getTextOption(list_status_name, jsondata[i].status),
+                        message: jsondata[i].message,
+                    });
+                }
+            }
+            if (typeof callback === 'function') {
+                callback(list_log);
 
-                    }
+            }
         };
     };
     xhr.send();
 }
 
-function getCorrectBufferInputSostav(jsondata,list_numvag_stan,list_status,list_status_name) {
+function getCorrectBufferInputSostav(jsondata, list_numvag_stan, list_status, list_status_name) {
     var list_log = [];
     for (var i = 0; i < jsondata.length; i++) {
         list_log.push({
@@ -429,6 +431,56 @@ function getCorrectBufferOutputSostav(jsondata, list_numvag_stan, list_status, l
 function getAsyncBufferOutputSostav(start, stop, callback) {
     $.ajax({
         url: '/railway/api/kis/transfer/bos/' + start.toISOString() + '/' + stop.toISOString(),
+        type: 'GET',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (jsondata) {
+            if (typeof callback === 'function') {
+                callback(jsondata);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+//--------------------------------------------------------------------------------------------------------
+// RAILWAY
+//--------------------------------------------------------------------------------------------------------
+// Получить список строк RWBufferArrivalSostav за указанное время
+function getAsyncRWBufferArrivalSostav(start, stop, callback) {
+    $.ajax({
+        url: '/railway/api/kis/transfer/arrival/' + start.toISOString() + '/' + stop.toISOString(),
+        type: 'GET',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (jsondata) {
+            if (typeof callback === 'function') {
+                callback(jsondata);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Получить строку RWBufferArrivalSostav по id
+function getAsyncRWBufferArrivalSostavOfID(id, callback) {
+    $.ajax({
+        url: '/railway/api/kis/transfer/arrival/id/' + id,
         type: 'GET',
         async: true,
         dataType: 'json',
