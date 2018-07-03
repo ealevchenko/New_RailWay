@@ -11,14 +11,14 @@ namespace MessageLog
         Null = -1,
         Test = 1,
         // сервисы МеталлургТранса
-        ServicesMT = 100,
+        ServicesMT = 100,                   //
         TransferHost = 110,
         TransferApproaches = 111,
         TransferArrival = 112,
         TransferWagonsTracking = 113,
-        TransferMT = 121,
-        HostMT = 122,
-        WebAPIMT = 123,
+        //TransferMT = 121,                   // Общей сервис перенос МТ
+        HostMT = 122,                       // Общий сервис одключение к sftpserver МТ
+        WebAPIMT = 123,                     // Общий сервис одключение к web-api МТ
         CloseTransferApproaches = 131,
         CloseTransferArrival = 132,
 

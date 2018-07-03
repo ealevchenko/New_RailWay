@@ -19,7 +19,7 @@ namespace MTTServices
     public partial class MTTServices : ServiceBase
     {
         private eventID eventID = eventID.MTTServices;
-        private service servece_name = service.TransferMT;
+        private service servece_name = service.ServicesMT;
         private service thread_host = service.TransferHost;
         private service thread_approaches = service.TransferApproaches;
         private service thread_arrival = service.TransferArrival;
@@ -45,7 +45,7 @@ namespace MTTServices
         System.Timers.Timer timer_services_tracking = new System.Timers.Timer();
         System.Timers.Timer timer_services_close_approaches = new System.Timers.Timer();
 
-        private MTThread mtt = new MTThread(service.TransferMT);
+        private MTThread mtt = new MTThread(service.ServicesMT);
 
         public enum ServiceState
         {
