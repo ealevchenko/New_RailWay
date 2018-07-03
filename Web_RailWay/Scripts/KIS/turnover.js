@@ -176,70 +176,6 @@
             }
         },
     },
-    // Список Vagon
-    Vagons = {
-        list: [],
-        addVagon: function (id, route, natur, day, month, year, hour, minute) {
-            switch (route) {
-                case 0:
-                    getAsyncArrivalPromVagon(natur, day, month, year, hour, minute,
-                    function (result) {
-                        Vagons.list.push({ id: id, vagon: result });
-                        table_turnover.addVagon(id, result.length);
-
-                    });
-                    break;
-                case 1:
-                    getAsyncSendingPromVagon(natur, day, month, year, hour, minute,
-                    function (result) {
-                        Vagons.list.push({ id: id, vagon: result });
-                        table_turnover.addVagon(id, result.length);
-                    });
-                    break;
-                default:
-                    Vagons.list.push({ id: id, vagon: null });
-                    break;
-            };
-        },
-        getVagon: function (id) {
-            var list_vagon = getObjects(Vagons.list, 'id', id)
-            if (list_vagon != null && list_vagon.length > 0) {
-                return list_vagon[0];
-            }
-        }
-    }
-    // Список Nat_Hist
-    Nat_Hist = {
-        list: [],
-        addNatHist: function (id, route, natur, day, month, year, hour, minute) {
-            switch (route) {
-                case 0:
-                    getAsyncArrivalPromNatHist(natur, day, month, year, hour, minute,
-                    function (result) {
-                        Nat_Hist.list.push({ id: id, vagon: result });
-                        table_turnover.addNatHist(id, result.length);
-
-                    });
-                    break;
-                case 1:
-                    getAsyncSendingNPromatHist(natur, day, month, year, hour, minute,
-                    function (result) {
-                        Nat_Hist.list.push({ id: id, vagon: result });
-                        table_turnover.addNatHist(id, result.length);
-                    });
-                    break;
-                default:
-                    Nat_Hist.list.push({ id: id, vagon: null });
-                    break;
-            };
-        },
-        getNatHist: function (id) {
-            var list_vagon = getObjects(Nat_Hist.list, 'id', id)
-            if (list_vagon != null && list_vagon.length > 0) {
-                return list_vagon[0];
-            }
-        }
-    }
     // Панель таблицы
     panel_table_turnover = {
         html_div_panel: $('<div class="dt-buttons setup-operation" id="property"></div>'),
@@ -380,13 +316,10 @@
         loadDataTable: function (data) {
             this.list = data;
             this.obj.clear();
-
             for (i = 0; i < data.length; i++) {
                 var station = rw_stations.selectStationKIS(data[i].K_ST);
                 var station_from = rw_stations.selectStationKIS(data[i].K_ST_OTPR);
                 var station_on = rw_stations.selectStationKIS(data[i].K_ST_PR);
-                //Vagons.addVagon(data[i].ID, data[i].P_OT, data[i].N_NATUR, data[i].D_DD, data[i].D_MM, data[i].D_YY, data[i].T_HH, data[i].T_MI);
-                //Nat_Hist.addNatHist(data[i].ID, data[i].P_OT, data[i].N_NATUR, data[i].D_DD, data[i].D_MM, data[i].D_YY, data[i].T_HH, data[i].T_MI);
                 this.obj.row.add({
                     "ID": data[i].ID,
                     "N_NATUR": data[i].N_NATUR,
@@ -429,6 +362,18 @@
             table_turnover.obj.columns([6, 9, 11, 12]).every(function () {
                 var column = this;
                 var name = $(column.header()).attr('title');
+                //switch (column[0][0]) {
+                //    case 6:
+                //        name = resurses.getText("table_field_K_ST");
+                //    case 9:
+                //        name = resurses.getText("table_field_P_OT");
+                //    case 11:
+                //        name = resurses.getText("table_field_K_ST_OTPR");
+                //    case 12:
+                //        name = resurses.getText("table_field_K_ST_PR");
+                //    default:
+                //        //return 'operation_null';
+                //};
                 var select = $('<select><option value="">' + (lang == 'en' ? 'All' : 'Все') + '</option></select>')
                     .appendTo($(column.header()).empty().append(name))
                     .on('change', function () {
@@ -466,11 +411,11 @@
                             '<div id="tabs-detali' + row.data().ID + '-1"> ' +
 
                             '</div> ' +
-                            '<div id="tabs-detali' + row.data().ID + '-2"> ' +
-
+                            '<div id="tabs-detali' + row.data().ID + '-2" class="tabs-detali"> ' +
+                                    '<table class="table-cars cell-border" id="table-detali-vagon-' + row.data().ID + '" style="width:3000px" cellpadding="0"></table>' +
                             '</div> ' +
                             '<div id="tabs-detali' + row.data().ID + '-3" class="tabs-detali"> ' +
-
+                                    '<table class="table-cars cell-border" id="table-detali-nathist-' + row.data().ID + '" style="width:3000px" cellpadding="0"></table>' +
                             '</div> ' +
                         '</div> ' +
                         '</div>').show();
@@ -480,282 +425,423 @@
                     $('#link-tabs-detali' + row.data().ID + '-3').text(resurses.getText("link_tabs_turnover_detali_3"));
                     $('#tabs-detali' + row.data().ID).tabs({
                         collapsible: true,
+                        activate: function (event, ui) {
+                            var tab = $('#tabs-detali' + row.data().ID).tabs("option", "active");
+                            if (tab == 1) {
+                                table_turnover.viewTableChildVagon(row.data());
+                            }
+                            if (tab == 2) {
+                                table_turnover.viewTableChildNatHist(row.data());
+                            }
+                        },
                     });
-                    //table_turnover.viewTableChildAllFields(row.data());
-                    table_turnover.viewTableChildVagon(row.data());
-                    table_turnover.viewTableChildNatHist(row.data());
+                    table_turnover.viewTableChildAllFields(row.data());
                     tr.addClass('shown');
                 }
             });
         },
         // Показать таблицу Prom.Vagon
         viewTableChildVagon: function (data) {
-            var list_vagon = Vagons.getVagon(data.ID);
-            var target = $("#tabs-detali" + data.ID + "-2");
-            target.empty();
-            var tab = this.createTableVagon(list_vagon);
-            target.append(tab);
-        },
-        // Создать таблицу Prom.Vagon
-        createTableVagon: function (data) {
-            if (data == null || data.length == 0) {
-                return resurses.getText("table_not_data")
-            }
 
-            var list_tr = '<thead><tr>' +
-                '<th>' + resurses.getText("table_field_num_car") + '</th>' +
-                '<th>' + resurses.getText("table_field_position") + '</th>' +
-                '<th>' + resurses.getText("table_field_DT_PR") + '</th>' +
-                '<th>' + resurses.getText("table_field_DT_SD") + '</th>' +
-                '<th>' + resurses.getText("table_field_GODN") + '</th>' +
-            '</tr></thead>';
-            list_tr += '<tbody>';
-            var vagons = data.vagon;
-            for (i = 0; i < vagons.length; i++) {
-                //var rod_cargo = lang == 'en' ? data[i].type_cargo_en : data[i].type_cargo_ru;
-                //var st_dislocation = data[i].st_disl != null ? data[i].nst_disl + '(' + data[i].st_disl + ')' : '';
-                //var st_naznach = data[i].st_nazn != null ? data[i].nst_nazn + '(' + data[i].st_nazn + ')' : '';
-                //var st_form = data[i].st_form != null ? data[i].nst_form + '(' + data[i].st_form + ')' : '';
-                //var st_end = data[i].st_end != null ? data[i].nst_end + '(' + data[i].st_end + ')' : '';
-                list_tr += '<tr>' +
-                    '<td>' + vagons[i].N_VAG + '</td>' +
-                    '<td>' + (vagons[i].NPP != null ? vagons[i].NPP : '') + '</td>' +
-                    '<td>' + (vagons[i].DT_PR != null ? vagons[i].DT_PR : '') + '</td>' +
-                    '<td>' + (vagons[i].DT_SD != null ? vagons[i].DT_SD : '') + '</td>' +
-                    '<td>' + vagons[i].GODN + '</td>' +
-                    //'<td>' + data[i].dt + '</td>' +
-                    //'<td>' + st_dislocation + '</td>' +
-                    //'<td>' + st_naznach + '</td>' +
-                    //'<td>' + data[i].index + '</td>' +
-                    //'<td>' + st_form + '</td>' +
-                    //'<td>' + outVal(data[i].kgro) + '</td>' +
-                    //'<td>' + st_end + '</td>' +
-                    //'<td>' + outVal(data[i].kgrp) + '</td>' +
-                    //'<td>' + outVal(data[i].km) + '</td>' +
-                    //'<td>' + data[i].ves + '</td>' +
-                    //'<td>' + rod_cargo + '(' + data[i].kgr + ')' + '</td>' +
-                    '</tr>';
+            if ($.fn.dataTable.isDataTable('#table-detali-vagon-' + data.ID)) {
+                detali_vagon = $('#table-detali-vagon-' + data.ID).DataTable();
             }
-            list_tr += '</tbody>';
-            return '<table class="table-turnover-detali" id="table-detali-vagon' + data.id + '" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
+            else {
+                detali_vagon = $('#table-detali-vagon-' + data.ID).DataTable({
+                    "paging": false,
+                    "ordering": true,
+                    "info": false,
+                    "select": false,
+                    "autoWidth": false,
+                    //"filter": true,
+                    //"scrollY": "400px",
+                    "scrollX": true,
+                    language: {
+                        emptyTable: resurses.getText("table_message_emptyTable"),
+                        decimal: resurses.getText("table_decimal"),
+                        search: resurses.getText("table_message_search"),
+                    },
+                    jQueryUI: true,
+                    "createdRow": function (row, data, index) {
+                    },
+                    columns: [
+                            { data: "N_VAG", title: resurses.getText("table_field_num_car"), orderable: false, searchable: true },
+                            { data: "NPP", title: resurses.getText("table_field_position"), orderable: true, searchable: false },
+                            // Прибытие
+                            { data: "DT_PR", title: resurses.getText("table_field_DT_PR"), orderable: false, searchable: false, visible: false }, //2
+                            { data: "GODN", title: resurses.getText("table_field_GODN"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_POL_GR", title: resurses.getText("table_field_K_POL_GR"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_GR", title: resurses.getText("table_field_K_GR"), orderable: false, searchable: false, visible: false  },
+                            { data: "ST_OTPR", title: resurses.getText("table_field_ST_OTPR"), orderable: false, searchable: false, visible: false  },
+                            { data: "OTPRAV", title: resurses.getText("table_field_OTPRAV"), orderable: false, searchable: false, visible: false  },
+                            { data: "PRIM_GR", title: resurses.getText("table_field_PRIM_GR"), orderable: false, searchable: false , visible: false },
+                            { data: "WES_GR", title: resurses.getText("table_field_WES_GR"), orderable: false, searchable: false , visible: false },
+                            { data: "N_VED_PR", title: resurses.getText("table_field_N_VED_PR"), orderable: false, searchable: false , visible: false },
+                            { data: "N_NAK_MPS", title: resurses.getText("table_field_N_NAK_MPS"), orderable: false, searchable: false, visible: false },
+
+                            // Отправка
+                            { data: "DT_SD", title: resurses.getText("table_field_DT_SD"), orderable: false, searchable: false, visible: false  }, // 12
+                            { data: "GODN_T", title: resurses.getText("table_field_GODN_T"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_GR_T", title: resurses.getText("table_field_K_GR_T"), orderable: false, searchable: false, visible: false  },
+                            { data: "WES_GR_T", title: resurses.getText("table_field_WES_GR_T"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_OTPR_GR", title: resurses.getText("table_field_K_OTPR_GR"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_OP", title: resurses.getText("table_field_K_OP"), orderable: false, searchable: false, visible: false  }, //17
+                            // Общая
+                            { data: "K_FRONT", title: resurses.getText("table_field_K_FRONT"), orderable: false, searchable: false },
+                            { data: "KOD_STRAN", title: resurses.getText("table_field_KOD_STRAN"), orderable: false, searchable: false },
+
+                            { data: "SERTIF", title: resurses.getText("table_field_SERTIF"), orderable: false, searchable: false, visible: false   }, //20
+                            { data: "KOD_SD", title: resurses.getText("table_field_KOD_SD"), orderable: false, searchable: false, visible: false }, //21
+
+                            //{ data: "N_NATUR", title: resurses.getText("table_field_N_NATUR"), orderable: false, searchable: false },
+                            //{ data: "K_ST", title: resurses.getText("table_field_K_ST"), orderable: false, searchable: false },
+                            //{ data: "N_PUT", title: resurses.getText("table_field_N_PUT"), orderable: false, searchable: false },
+                            //{ data: "N_NATUR_T", title: resurses.getText("table_field_N_NATUR_T"), orderable: false, searchable: false },
+                            //{ data: "K_ST_OTPR", title: resurses.getText("table_field_K_ST_OTPR"), orderable: false, searchable: false },
+                            //{ data: "K_ST_NAZN", title: resurses.getText("table_field_K_ST_NAZN"), orderable: false, searchable: false },
+
+                            { data: "ZADER", title: resurses.getText("table_field_ZADER"), orderable: false, searchable: false },
+                            { data: "NEPR", title: resurses.getText("table_field_NEPR"), orderable: false, searchable: false },
+                            { data: "UDOST", title: resurses.getText("table_field_UDOST"), orderable: false, searchable: false },
+                            { data: "NETO", title: resurses.getText("table_field_NETO"), orderable: false, searchable: false },
+                            { data: "BRUTO", title: resurses.getText("table_field_BRUTO"), orderable: false, searchable: false },
+                            { data: "TARA", title: resurses.getText("table_field_TARA"), orderable: false, searchable: false },
+                            { data: "DAT_VVOD", title: resurses.getText("table_field_DAT_VVOD"), orderable: false, searchable: false },
+                    ],
+
+                });
+                //this.obj_table = $('DIV#table-detali-nathist-' + data.ID + '_wrapper');
+                // Обновим данные
+                switch (data.P_OT) {
+                    case 0:
+                        OnBegin();
+                        getAsyncArrivalPromVagon(data.N_NATUR, data.D_DD, data.D_MM, data.D_YY, data.T_HH, data.T_MI,
+                        function (result) {
+                            table_turnover.loadDataTableDetali(detali_vagon, result);
+                            detali_vagon.columns([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 20, 21]).visible(true, true);
+                        });
+                        break;
+                    case 1:
+                        OnBegin();
+                        getAsyncSendingPromVagon(data.N_NATUR, data.D_DD, data.D_MM, data.D_YY, data.T_HH, data.T_MI,
+                        function (result) {
+                            table_turnover.loadDataTableDetali(detali_vagon, result);
+                            detali_vagon.columns([12, 13, 14, 15, 16, 17]).visible(true, true);
+                        });
+                        break;
+                    default:
+
+                        break;
+                };
+            } // end else if
+
         },
         // Показать таблицу Prom.Nat_Hist
         viewTableChildNatHist: function (data) {
-            var list_vagon = Nat_Hist.getNatHist(data.ID);
-            var target = $("#tabs-detali" + data.ID + "-3");
+
+            if ($.fn.dataTable.isDataTable('#table-detali-nathist-' + data.ID)) {
+                detali_nathist = $('#table-detali-nathist-' + data.ID).DataTable();
+            }
+            else {
+                detali_nathist = $('#table-detali-nathist-' + data.ID).DataTable({
+                    "paging": false,
+                    "ordering": true,
+                    "info": false,
+                    "select": false,
+                    "autoWidth": false,
+                    //"filter": true,
+                    //"scrollY": "400px",
+                    "scrollX": true,
+                    language: {
+                        emptyTable: resurses.getText("table_message_emptyTable"),
+                        decimal: resurses.getText("table_decimal"),
+                        search: resurses.getText("table_message_search"),
+                    },
+                    jQueryUI: true,
+                    "createdRow": function (row, data, index) {
+                    },
+                    columns: [
+                            { data: "N_VAG", title: resurses.getText("table_field_num_car"), orderable: false, searchable: true },
+                            { data: "NPP", title: resurses.getText("table_field_position"), orderable: true, searchable: false },
+                            // Прибытие
+                            { data: "DT_PR", title: resurses.getText("table_field_DT_PR"), orderable: false, searchable: false, visible: false }, //2
+                            { data: "GODN", title: resurses.getText("table_field_GODN"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_POL_GR", title: resurses.getText("table_field_K_POL_GR"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_GR", title: resurses.getText("table_field_K_GR"), orderable: false, searchable: false, visible: false  },
+                            { data: "ST_OTPR", title: resurses.getText("table_field_ST_OTPR"), orderable: false, searchable: false, visible: false  },
+                            { data: "OTPRAV", title: resurses.getText("table_field_OTPRAV"), orderable: false, searchable: false, visible: false  },
+                            { data: "PRIM_GR", title: resurses.getText("table_field_PRIM_GR"), orderable: false, searchable: false , visible: false },
+                            { data: "WES_GR", title: resurses.getText("table_field_WES_GR"), orderable: false, searchable: false , visible: false },
+                            { data: "N_VED_PR", title: resurses.getText("table_field_N_VED_PR"), orderable: false, searchable: false , visible: false },
+                            { data: "N_NAK_MPS", title: resurses.getText("table_field_N_NAK_MPS"), orderable: false, searchable: false, visible: false },// 11
+                            // Отправка
+                            { data: "DT_SD", title: resurses.getText("table_field_DT_SD"), orderable: false, searchable: false, visible: false  }, // 12
+                            { data: "GODN_T", title: resurses.getText("table_field_GODN_T"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_GR_T", title: resurses.getText("table_field_K_GR_T"), orderable: false, searchable: false, visible: false  },
+                            { data: "WES_GR_T", title: resurses.getText("table_field_WES_GR_T"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_OTPR_GR", title: resurses.getText("table_field_K_OTPR_GR"), orderable: false, searchable: false, visible: false  },
+                            { data: "K_OP", title: resurses.getText("table_field_K_OP"), orderable: false, searchable: false, visible: false  }, //17
+                            // Общая
+                            { data: "K_FRONT", title: resurses.getText("table_field_K_FRONT"), orderable: false, searchable: false },
+                            { data: "KOD_STRAN", title: resurses.getText("table_field_KOD_STRAN"), orderable: false, searchable: false },
+
+                            { data: "SERTIF", title: resurses.getText("table_field_SERTIF"), orderable: false, searchable: false, visible: false   }, //20
+                            { data: "KOD_SD", title: resurses.getText("table_field_KOD_SD"), orderable: false, searchable: false, visible: false }, //21
+
+                            //{ data: "N_NATUR", title: resurses.getText("table_field_N_NATUR"), orderable: false, searchable: false },
+                            //{ data: "K_ST", title: resurses.getText("table_field_K_ST"), orderable: false, searchable: false },
+                            //{ data: "N_PUT", title: resurses.getText("table_field_N_PUT"), orderable: false, searchable: false },
+                            //{ data: "N_NATUR_T", title: resurses.getText("table_field_N_NATUR_T"), orderable: false, searchable: false },
+                            //{ data: "K_ST_OTPR", title: resurses.getText("table_field_K_ST_OTPR"), orderable: false, searchable: false },
+                            //{ data: "K_ST_NAZN", title: resurses.getText("table_field_K_ST_NAZN"), orderable: false, searchable: false },
+
+                            { data: "ZADER", title: resurses.getText("table_field_ZADER"), orderable: false, searchable: false },
+                            { data: "NEPR", title: resurses.getText("table_field_NEPR"), orderable: false, searchable: false },
+                            { data: "UDOST", title: resurses.getText("table_field_UDOST"), orderable: false, searchable: false },
+                            { data: "NETO", title: resurses.getText("table_field_NETO"), orderable: false, searchable: false },
+                            { data: "BRUTO", title: resurses.getText("table_field_BRUTO"), orderable: false, searchable: false },
+                            { data: "TARA", title: resurses.getText("table_field_TARA"), orderable: false, searchable: false },
+                            { data: "DAT_VVOD", title: resurses.getText("table_field_DAT_VVOD"), orderable: false, searchable: false },
+                    ],
+
+                });
+                //this.obj_table = $('DIV#table-detali-nathist-' + data.ID + '_wrapper');
+                // Обновим данные
+                switch (data.P_OT) {
+                    case 0:
+                        OnBegin();
+                        getAsyncArrivalPromNatHist(data.N_NATUR, data.D_DD, data.D_MM, data.D_YY, data.T_HH, data.T_MI,
+                        function (result) {
+                            table_turnover.loadDataTableDetali(detali_nathist, result);
+                            detali_nathist.columns([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 20, 21]).visible(true, true);
+                        });
+                        break;
+                    case 1:
+                        OnBegin();
+                        getAsyncSendingPromNatHist(data.N_NATUR, data.D_DD, data.D_MM, data.D_YY, data.T_HH, data.T_MI,
+                        function (result) {
+                            table_turnover.loadDataTableDetali(detali_nathist, result);
+                            detali_nathist.columns([12, 13, 14, 15, 16, 17]).visible(true, true);
+                        });
+                        break;
+                    default:
+
+                        break;
+                };
+            } // end else if
+
+        },
+        // Загрузить данные в таблицы детально Prom.Vagon или Prom.Nat_Hist
+        loadDataTableDetali: function (obj, data) {
+            if (obj != null) {
+                obj.clear();
+                for (i = 0; i < data.length; i++) {
+                    var condition = rw_car_condition.getСondition(data[i].GODN);
+                    var condition_t = rw_car_condition.getСondition(data[i].GODN_T);
+                    var cex = kis_cex.getCex(data[i].K_POL_GR);
+                    var gruz = kis_gruz.getGruz(data[i].K_GR);
+                    var gruz_t = kis_gruz.getGruz(data[i].K_GR_T);
+                    var station_op = rw_stations.selectStationKIS(data[i].K_ST);
+                    var route = resurses.getText(Route(data[i].K_OP))
+                    var owner = kis_owner.getOwner(data[i].K_FRONT);
+                    var station_from = rw_stations.selectStationKIS(data[i].K_ST_OTPR);
+                    var station_on = rw_stations.selectStationKIS(data[i].K_ST_NAZN);
+                    var strana = kis_strana.getStrana(data[i].KOD_STRAN);
+                    obj.row.add({
+                        "N_VAG": data[i].N_VAG,
+                        "NPP": data[i].NPP,
+                        "DT_PR": data[i].DT_PR != null ? data[i].DT_PR : '',
+                        "DT_SD": data[i].DT_SD != null ? data[i].DT_SD : '',
+                        "GODN": data[i].GODN != null ? '(' + data[i].GODN + ') - ' + (condition != null ? (lang == 'en' ? condition.name_en : condition.name_ru) : '?') : '',
+                        "K_POL_GR": data[i].K_POL_GR != null ? '(' + data[i].K_POL_GR + ') - ' + (cex != null ? cex.NAME_P : '') : '',// kis_cex
+                        "K_GR": data[i].K_GR != null ? '(' + data[i].K_GR + ') - ' + (gruz != null ? gruz.NAME_GR + '(' + gruz.TAR_GR + ')' : '') : '',// kis_gruz
+                        "OTPRAV": data[i].OTPRAV != null ? data[i].OTPRAV : '',
+                        "PRIM_GR": data[i].PRIM_GR != null ? data[i].PRIM_GR : '',
+                        "WES_GR": data[i].WES_GR != null ? data[i].WES_GR : '',
+                        "K_FRONT": data[i].K_FRONT != null ? '(' + data[i].K_FRONT + ') - ' + (owner != null ? owner.NPLAT : '') : '',// kis_owner
+                        "KOD_STRAN": data[i].KOD_STRAN != null ? '(' + data[i].KOD_STRAN + ') - ' + (strana != null ? strana.NAME : '') : '', // kis_strana
+                        "N_VED_PR": data[i].N_VED_PR != null ? data[i].N_VED_PR : '',
+                        "N_NAK_MPS": data[i].N_NAK_MPS != null ? data[i].N_NAK_MPS : '',
+                        //"N_NATUR": data[i].N_NATUR != null ? data[i].N_NATUR : '',
+                        //"K_ST": data[i].K_ST != null ? '(' + data[i].K_ST + ') - ' + (station_op != null ? (lang == 'en' ? station_op.name_en : station_op.name_ru) : '?') : '',
+                        //"N_PUT": data[i].N_PUT != null ? data[i].N_PUT : '',
+                        "K_OP": data[i].K_OP != null ? '(' + data[i].K_OP + ') - ' + (route != null ? route : '') : '',// Route
+                        //"N_NATUR_T": data[i].N_NATUR_T != null ? data[i].N_NATUR_T : '',
+                        "GODN_T": data[i].GODN_T != null ? '(' + data[i].GODN_T + ') - ' + (condition_t != null ? (lang == 'en' ? condition_t.name_en : condition_t.name_ru) : '?') : '',// rw_car_condition
+                        "K_GR_T": data[i].K_GR_T != null ? '(' + data[i].K_GR_T + ') - ' + (gruz_t != null ? gruz_t.NAME_GR + '(' + gruz_t.TAR_GR + ')' : '') : '',// kis_gruz
+                        "WES_GR_T": data[i].WES_GR_T != null ? data[i].WES_GR_T : '',
+                        "K_OTPR_GR": data[i].K_OTPR_GR != null ? data[i].K_OTPR_GR : '',
+                        //"K_ST_OTPR": data[i].K_ST_OTPR != null ? '(' + data[i].K_ST_OTPR + ') - ' + (station_from != null ? (lang == 'en' ? station_from.name_en : station_from.name_ru) : '?') : '', // rw_stations
+                        //"K_ST_NAZN": data[i].K_ST_NAZN != null ? '(' + data[i].K_ST_NAZN + ') - ' + (station_on != null ? (lang == 'en' ? station_on.name_en : station_on.name_ru) : '?') : '', // rw_stations
+                        "ST_OTPR": data[i].ST_OTPR != null ? data[i].ST_OTPR : '',
+                        "ZADER": data[i].ZADER != null ? data[i].ZADER : '',
+                        "NEPR": data[i].NEPR != null ? data[i].NEPR : '',
+                        "UDOST": data[i].UDOST != null ? data[i].UDOST : '',
+                        "SERTIF": data[i].SERTIF != null ? data[i].SERTIF : '',
+
+                        "KOD_SD": data[i].KOD_SD != null ? data[i].KOD_SD : '',
+                        "NETO": data[i].NETO != null ? data[i].NETO : '',
+                        "BRUTO": data[i].BRUTO != null ? data[i].BRUTO : '',
+                        "TARA": data[i].TARA != null ? data[i].TARA : '',
+                        "DAT_VVOD": data[i].DAT_VVOD != null ? data[i].DAT_VVOD : '',
+                    });
+                }
+                obj.order([1, 'asc']);
+                obj.draw(false);
+            }
+            LockScreenOff();
+        },
+        // Показать все поля
+        viewTableChildAllFields: function (data) {
+            var target = $("#tabs-detali" + data.ID + "-1");
             target.empty();
-            var tab = this.createTableNatHist(list_vagon);
+            var tab = this.createTableAllFields(data);
             target.append(tab);
-            $('#table-detali-nathist' + data.ID).DataTable({
-                "paging": false,
-                "ordering": false,
-                "info": false,
-                "select": false,
-                //"filter": true,
-                //"scrollY": "600px",
-                "scrollX": true,
-                language: {
-                    emptyTable: resurses.getText("table_message_emptyTable"),
-                    decimal: resurses.getText("table_decimal"),
-                    search: resurses.getText("table_message_search"),
-                },
-                jQueryUI: true,
-                columns: [
-                        { data: "N_VAG", title: resurses.getText("table_field_num_car") },
-                        { data: "NPP", title: resurses.getText("table_field_position") },
-                        { data: "DT_PR", title: resurses.getText("table_field_DT_PR") },
-                        { data: "DT_SD", title: resurses.getText("table_field_DT_SD") },
-                        { data: "GODN", title: resurses.getText("table_field_GODN") },
-                        { data: "K_POL_GR", title: resurses.getText("table_field_K_POL_GR") },
-                        { data: "K_GR", title: resurses.getText("table_field_K_GR") },
-                        { data: "N_VED_PR", title: resurses.getText("table_field_N_VED_PR") },
-                        { data: "N_NAK_MPS", title: resurses.getText("table_field_N_NAK_MPS") },
-                        { data: "OTPRAV", title: resurses.getText("table_field_OTPRAV") },
-                        { data: "PRIM_GR", title: resurses.getText("table_field_PRIM_GR") },
-                        { data: "WES_GR", title: resurses.getText("table_field_WES_GR") },
-                        //{ data: "N_NATUR", title: resurses.getText("table_field_N_NATUR") },
-                        //{ data: "K_ST", title: resurses.getText("table_field_K_ST") },
-                        //{ data: "N_PUT", title: resurses.getText("table_field_N_PUT") },
-                        { data: "K_OP", title: resurses.getText("table_field_K_OP") },
-                        { data: "K_FRONT", title: resurses.getText("table_field_K_FRONT") },
-                        //{ data: "N_NATUR_T", title: resurses.getText("table_field_N_NATUR_T") },
-                        { data: "GODN_T", title: resurses.getText("table_field_GODN_T") },
-                        { data: "K_GR_T", title: resurses.getText("table_field_K_GR_T") },
-                        { data: "WES_GR_T", title: resurses.getText("table_field_WES_GR_T") },
-                        { data: "K_OTPR_GR", title: resurses.getText("table_field_K_OTPR_GR") },
-                        //{ data: "K_ST_OTPR", title: resurses.getText("table_field_K_ST_OTPR") },
-                        //{ data: "K_ST_NAZN", title: resurses.getText("table_field_K_ST_NAZN") },
-                        { data: "ST_OTPR", title: resurses.getText("table_field_ST_OTPR") },
-                        { data: "ZADER", title: resurses.getText("table_field_ZADER") },
-                        { data: "NEPR", title: resurses.getText("table_field_NEPR") },
-                        { data: "UDOST", title: resurses.getText("table_field_UDOST") },
-                        { data: "SERTIF", title: resurses.getText("table_field_SERTIF") },
-                        { data: "KOD_STRAN", title: resurses.getText("table_field_KOD_STRAN") },
-                        { data: "KOD_SD", title: resurses.getText("table_field_KOD_SD") },
-                        { data: "NETO", title: resurses.getText("table_field_NETO") },
-                        { data: "BRUTO", title: resurses.getText("table_field_BRUTO") },
-                        { data: "TARA", title: resurses.getText("table_field_TARA") },
-                        { data: "DAT_VVOD", title: resurses.getText("table_field_DAT_VVOD") },
-                ],
-            });
         },
-        // Создать таблицу Prom.Nat_Hist
-        createTableNatHist: function (data) {
+        // Сформировать таблицу все поля
+        createTableAllFields: function (data) {
             if (data == null || data.length == 0) {
                 return resurses.getText("table_not_data")
             }
-
             var list_tr = '<thead><tr>' +
-                '<th>' + resurses.getText("table_field_num_car") + '</th>' +
-                '<th>' + resurses.getText("table_field_position") + '</th>' +
-                '<th>' + resurses.getText("table_field_DT_PR") + '</th>' +
-                '<th>' + resurses.getText("table_field_DT_SD") + '</th>' +
-                '<th>' + resurses.getText("table_field_GODN") + '</th>' +
-                '<th>' + resurses.getText("table_field_K_POL_GR") + '</th>' +
-                '<th>' + resurses.getText("table_field_K_GR") + '</th>' +
-                '<th>' + resurses.getText("table_field_N_VED_PR") + '</th>' +
-                '<th>' + resurses.getText("table_field_N_NAK_MPS") + '</th>' +
-                '<th>' + resurses.getText("table_field_OTPRAV") + '</th>' +
-                '<th>' + resurses.getText("table_field_PRIM_GR") + '</th>' +
-                '<th>' + resurses.getText("table_field_WES_GR") + '</th>' +
-                //'<th>' + resurses.getText("table_field_N_NATUR") + '</th>' +
-                //'<th>' + resurses.getText("table_field_K_ST") + '</th>' +
-                //'<th>' + resurses.getText("table_field_N_PUT") + '</th>' +
-                '<th>' + resurses.getText("table_field_K_OP") + '</th>' +
-                '<th>' + resurses.getText("table_field_K_FRONT") + '</th>' +
-                //'<th>' + resurses.getText("table_field_N_NATUR_T") + '</th>' +
-                '<th>' + resurses.getText("table_field_GODN_T") + '</th>' +
-                '<th>' + resurses.getText("table_field_K_GR_T") + '</th>' +
-                '<th>' + resurses.getText("table_field_WES_GR_T") + '</th>' +
-                '<th>' + resurses.getText("table_field_K_OTPR_GR") + '</th>' +
-                //'<th>' + resurses.getText("table_field_K_ST_OTPR") + '</th>' +
-                //'<th>' + resurses.getText("table_field_K_ST_NAZN") + '</th>' +
-                '<th>' + resurses.getText("table_field_ST_OTPR") + '</th>' +
-                '<th>' + resurses.getText("table_field_ZADER") + '</th>' +
-                '<th>' + resurses.getText("table_field_NEPR") + '</th>' +
-                '<th>' + resurses.getText("table_field_UDOST") + '</th>' +
-                '<th>' + resurses.getText("table_field_SERTIF") + '</th>' +
-                '<th>' + resurses.getText("table_field_KOD_STRAN") + '</th>' +
-                '<th>' + resurses.getText("table_field_KOD_SD") + '</th>' +
-                '<th>' + resurses.getText("table_field_NETO") + '</th>' +
-                '<th>' + resurses.getText("table_field_BRUTO") + '</th>' +
-                '<th>' + resurses.getText("table_field_TARA") + '</th>' +
-                '<th>' + resurses.getText("table_field_DAT_VVOD") + '</th>' +
-            '</tr></thead>';
-            list_tr += '<tbody>';
-            var vagons = data.vagon;
-            for (i = 0; i < vagons.length; i++) {
-                //var rod_cargo = lang == 'en' ? data[i].type_cargo_en : data[i].type_cargo_ru;
-                //var st_dislocation = data[i].st_disl != null ? data[i].nst_disl + '(' + data[i].st_disl + ')' : '';
-                //var st_naznach = data[i].st_nazn != null ? data[i].nst_nazn + '(' + data[i].st_nazn + ')' : '';
-                //var st_form = data[i].st_form != null ? data[i].nst_form + '(' + data[i].st_form + ')' : '';
-                //var st_end = data[i].st_end != null ? data[i].nst_end + '(' + data[i].st_end + ')' : '';
-                var condition = rw_car_condition.getСondition(vagons[i].GODN);
-                var condition_t = rw_car_condition.getСondition(vagons[i].GODN_T);
-                var cex = kis_cex.getCex(vagons[i].K_POL_GR);
-                var gruz = kis_gruz.getGruz(vagons[i].K_GR);
-                var gruz_t = kis_gruz.getGruz(vagons[i].K_GR_T);
-                var station_op = rw_stations.selectStationKIS(vagons[i].K_ST);
-                var route = resurses.getText(Route(vagons[i].K_OP))
-                var owner = kis_owner.getOwner(vagons[i].K_FRONT);
-                var station_from = rw_stations.selectStationKIS(vagons[i].K_ST_OTPR);
-                var station_on = rw_stations.selectStationKIS(vagons[i].K_ST_NAZN);
-                var strana = kis_strana.getStrana(vagons[i].KOD_STRAN);
-                list_tr += '<tr>' +
-                    '<td>' + vagons[i].N_VAG + '</td>' +
-                    '<td>' + (vagons[i].NPP != null ? vagons[i].NPP : '') + '</td>' +
-                    '<td>' + (vagons[i].DT_PR != null ? vagons[i].DT_PR : '') + '</td>' +
-                    '<td>' + (vagons[i].DT_SD != null ? vagons[i].DT_SD : '') + '</td>' +
-                    '<td>' + (vagons[i].GODN != null ? '(' + vagons[i].GODN + ') - ' + (condition != null ? (lang == 'en' ? condition.name_en : condition.name_ru) : '?') : '') + '</td>' +  // rw_car_condition
-                    '<td>' + (vagons[i].K_POL_GR != null ? '(' + vagons[i].K_POL_GR + ') - ' + (cex != null ? cex.NAME_P : '') : '') + '</td>' +  // kis_cex
-                    '<td>' + (vagons[i].K_GR != null ? '(' + vagons[i].K_GR + ') - ' + (gruz != null ? gruz.NAME_GR + '(' + gruz.TAR_GR + ')' : '') : '') + '</td>' +  // kis_gruz
-                    '<td>' + (vagons[i].N_VED_PR != null ? vagons[i].N_VED_PR : '') + '</td>' +
-                    '<td>' + (vagons[i].N_NAK_MPS != null ? vagons[i].N_NAK_MPS : '') + '</td>' +
-                    '<td>' + (vagons[i].OTPRAV != null ? vagons[i].OTPRAV : '') + '</td>' +
-                    '<td>' + (vagons[i].PRIM_GR != null ? vagons[i].PRIM_GR : '') + '</td>' +
-                    '<td>' + (vagons[i].WES_GR != null ? vagons[i].WES_GR : '') + '</td>' +
-                    //'<td>' + (vagons[i].N_NATUR != null ? vagons[i].N_NATUR : '') + '</td>' +
-                    //'<td>' + (vagons[i].K_ST != null ? '(' + vagons[i].K_ST + ') - ' + (station_op != null ? (lang == 'en' ? station_op.name_en : station_op.name_ru) : '?') : '') + '</td>' +  // rw_stations
-                    //'<td>' + (vagons[i].N_PUT != null ? vagons[i].N_PUT : '') + '</td>' +
-                    '<td>' + (vagons[i].K_OP != null ? '(' + vagons[i].K_OP + ') - ' + (route != null ? route : '') : '') + '</td>' +  // Route
-                    '<td>' + (vagons[i].K_FRONT != null ? '(' + vagons[i].K_FRONT + ') - ' + (owner != null ? owner.NPLAT : '') : '') + '</td>' +  // kis_owner
-                    //'<td>' + (vagons[i].N_NATUR_T != null ? vagons[i].N_NATUR_T : '') + '</td>' +
-                    '<td>' + (vagons[i].GODN_T != null ? '(' + vagons[i].GODN_T + ') - ' + (condition_t != null ? (lang == 'en' ? condition_t.name_en : condition_t.name_ru) : '?') : '') + '</td>' +  // rw_car_condition
-                    '<td>' + (vagons[i].K_GR_T != null ? '(' + vagons[i].K_GR_T + ') - ' + (gruz_t != null ? gruz_t.NAME_GR + '(' + gruz_t.TAR_GR + ')' : '') : '') + '</td>' +  // kis_gruz
-                    '<td>' + (vagons[i].WES_GR_T != null ? vagons[i].WES_GR_T : '') + '</td>' +
-                    '<td>' + (vagons[i].K_OTPR_GR != null ? vagons[i].K_OTPR_GR : '') + '</td>' +
-                    //'<td>' + (vagons[i].K_ST_OTPR != null ? '(' + vagons[i].K_ST_OTPR + ') - ' + (station_from != null ? (lang == 'en' ? station_from.name_en : station_from.name_ru) : '?') : '') + '</td>' +  // rw_stations
-                    //'<td>' + (vagons[i].K_ST_NAZN != null ? '(' + vagons[i].K_ST_NAZN + ') - ' + (station_on != null ? (lang == 'en' ? station_on.name_en : station_on.name_ru) : '?') : '') + '</td>' +  // rw_stations
-                    '<td>' + (vagons[i].ST_OTPR != null ? vagons[i].ST_OTPR : '') + '</td>' +
-                    '<td>' + (vagons[i].ZADER != null ? vagons[i].ZADER : '') + '</td>' +
-                    '<td>' + (vagons[i].NEPR != null ? vagons[i].NEPR : '') + '</td>' +
-                    '<td>' + (vagons[i].UDOST != null ? vagons[i].UDOST : '') + '</td>' +
-                    '<td>' + (vagons[i].SERTIF != null ? vagons[i].SERTIF : '') + '</td>' +
-                    '<td>' + (vagons[i].KOD_STRAN != null ? '(' + vagons[i].KOD_STRAN + ') - ' + (strana != null ? strana.NAME : '') : '') + '</td>' +  // kis_strana
-                    '<td>' + (vagons[i].KOD_SD != null ? vagons[i].KOD_SD : '') + '</td>' +
-                    '<td>' + (vagons[i].NETO != null ? vagons[i].NETO : '') + '</td>' +
-                    '<td>' + (vagons[i].BRUTO != null ? vagons[i].BRUTO : '') + '</td>' +
-                    '<td>' + (vagons[i].TARA != null ? vagons[i].TARA : '') + '</td>' +
-                    '<td>' + (vagons[i].DAT_VVOD != null ? vagons[i].DAT_VVOD : '') + '</td>' +
-                    '</tr>';
-            }
-            list_tr += '</tbody>';
-            return '<table class="compact" id="table-detali-nathist' + data.id + '" cellpadding="5" cellspacing="0" border="0" style="width:100%">' + list_tr + '</table>';
+                '<th>' + resurses.getText("table_field_value") + '</th>' +
+                '<th>' + resurses.getText("table_field_text") + '</th>' +
+                '</tr></thead>' +
+            '<tbody>' +
+            '<tr><th>' + resurses.getText("table_field_id") + '</th>' + '<td>' + data.ID + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_N_NATUR") + '</th>' + '<td>' + data.N_NATUR + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_DT_PR") + '</th>' + '<td>' + data.DT_PR + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_D_PR_DD") + '</th>' + '<td>' + data.D_PR_DD + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_D_PR_MM") + '</th>' + '<td>' + data.D_PR_MM + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_D_PR_YY") + '</th>' + '<td>' + data.D_PR_YY + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_T_PR_HH") + '</th>' + '<td>' + data.T_PR_HH + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_T_PR_MI") + '</th>' + '<td>' + data.T_PR_MI + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_DT") + '</th>' + '<td>' + data.DT + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_D_DD") + '</th>' + '<td>' + data.D_DD + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_D_MM") + '</th>' + '<td>' + data.D_MM + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_D_YY") + '</th>' + '<td>' + data.D_YY + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_T_HH") + '</th>' + '<td>' + data.T_HH + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_T_MI") + '</th>' + '<td>' + data.T_MI + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_K_ST") + '</th>' + '<td>' + '(' + data.K_ST + ') - ' + data.Station + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_N_PUT") + '</th>' + '<td>' + data.N_PUT + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_NAPR") + '</th>' + '<td>' + data.NAPR + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_P_OT") + '</th>' + '<td>' + '(' + data.P_OT + ') - ' + data.Operation + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_V_P") + '</th>' + '<td>' + '(' + data.V_P + ') - ' + data.CloseInput + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_K_ST_OTPR") + '</th>' + '<td>' + '(' + data.K_ST_OTPR + ') - ' + data.Station_from + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_K_ST_PR") + '</th>' + '<td>' + '(' + data.K_ST_PR + ') - ' + data.Station_on + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_CountVagon") + '</th>' + '<td>' + data.CountVagon + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_NatHist") + '</th>' + '<td>' + data.CountNatHist + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_N_VED_PR") + '</th>' + '<td>' + data.N_VED_PR + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_N_SOST_OT") + '</th>' + '<td>' + data.N_SOST_OT + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_N_SOST_PR") + '</th>' + '<td>' + data.N_SOST_PR + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_DAT_VVOD") + '</th>' + '<td>' + data.DAT_VVOD + '</td></tr>' +
+            '</tbody>';
+            return '<table class="table-turnover-detali" id="table-detali-all-' + data.id + '" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
         },
 
+        //createTableNatHist: function (data) {
+        //    if (data == null || data.length == 0) {
+        //        return resurses.getText("table_not_data")
+        //    }
 
-        viewTableChild: function (data) {
-        },
-        createTable: function (data) {
-            if (data == null || data.length == 0) {
-                return resurses.getText("table_not_data")
-            }
+        //    var list_tr = '<thead><tr>' +
+        //        '<th>' + resurses.getText("table_field_num_car") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_position") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_DT_PR") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_DT_SD") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_GODN") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_K_POL_GR") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_K_GR") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_N_VED_PR") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_N_NAK_MPS") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_OTPRAV") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_PRIM_GR") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_WES_GR") + '</th>' +
+        //        //'<th>' + resurses.getText("table_field_N_NATUR") + '</th>' +
+        //        //'<th>' + resurses.getText("table_field_K_ST") + '</th>' +
+        //        //'<th>' + resurses.getText("table_field_N_PUT") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_K_OP") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_K_FRONT") + '</th>' +
+        //        //'<th>' + resurses.getText("table_field_N_NATUR_T") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_GODN_T") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_K_GR_T") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_WES_GR_T") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_K_OTPR_GR") + '</th>' +
+        //        //'<th>' + resurses.getText("table_field_K_ST_OTPR") + '</th>' +
+        //        //'<th>' + resurses.getText("table_field_K_ST_NAZN") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_ST_OTPR") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_ZADER") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_NEPR") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_UDOST") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_SERTIF") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_KOD_STRAN") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_KOD_SD") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_NETO") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_BRUTO") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_TARA") + '</th>' +
+        //        '<th>' + resurses.getText("table_field_DAT_VVOD") + '</th>' +
+        //    '</tr></thead>';
+        //    list_tr += '<tbody>';
+        //    var vagons = data.vagon;
+        //    for (i = 0; i < vagons.length; i++) {
+        //        //var rod_cargo = lang == 'en' ? data[i].type_cargo_en : data[i].type_cargo_ru;
+        //        //var st_dislocation = data[i].st_disl != null ? data[i].nst_disl + '(' + data[i].st_disl + ')' : '';
+        //        //var st_naznach = data[i].st_nazn != null ? data[i].nst_nazn + '(' + data[i].st_nazn + ')' : '';
+        //        //var st_form = data[i].st_form != null ? data[i].nst_form + '(' + data[i].st_form + ')' : '';
+        //        //var st_end = data[i].st_end != null ? data[i].nst_end + '(' + data[i].st_end + ')' : '';
+        //        var condition = rw_car_condition.getСondition(vagons[i].GODN);
+        //        var condition_t = rw_car_condition.getСondition(vagons[i].GODN_T);
+        //        var cex = kis_cex.getCex(vagons[i].K_POL_GR);
+        //        var gruz = kis_gruz.getGruz(vagons[i].K_GR);
+        //        var gruz_t = kis_gruz.getGruz(vagons[i].K_GR_T);
+        //        var station_op = rw_stations.selectStationKIS(vagons[i].K_ST);
+        //        var route = resurses.getText(Route(vagons[i].K_OP))
+        //        var owner = kis_owner.getOwner(vagons[i].K_FRONT);
+        //        var station_from = rw_stations.selectStationKIS(vagons[i].K_ST_OTPR);
+        //        var station_on = rw_stations.selectStationKIS(vagons[i].K_ST_NAZN);
+        //        var strana = kis_strana.getStrana(vagons[i].KOD_STRAN);
+        //        list_tr += '<tr>' +
+        //            '<td>' + vagons[i].N_VAG + '</td>' +
+        //            '<td>' + (vagons[i].NPP != null ? vagons[i].NPP : '') + '</td>' +
+        //            '<td>' + (vagons[i].DT_PR != null ? vagons[i].DT_PR : '') + '</td>' +
+        //            '<td>' + (vagons[i].DT_SD != null ? vagons[i].DT_SD : '') + '</td>' +
+        //            '<td>' + (vagons[i].GODN != null ? '(' + vagons[i].GODN + ') - ' + (condition != null ? (lang == 'en' ? condition.name_en : condition.name_ru) : '?') : '') + '</td>' +  // rw_car_condition
+        //            '<td>' + (vagons[i].K_POL_GR != null ? '(' + vagons[i].K_POL_GR + ') - ' + (cex != null ? cex.NAME_P : '') : '') + '</td>' +  // kis_cex
+        //            '<td>' + (vagons[i].K_GR != null ? '(' + vagons[i].K_GR + ') - ' + (gruz != null ? gruz.NAME_GR + '(' + gruz.TAR_GR + ')' : '') : '') + '</td>' +  // kis_gruz
+        //            '<td>' + (vagons[i].N_VED_PR != null ? vagons[i].N_VED_PR : '') + '</td>' +
+        //            '<td>' + (vagons[i].N_NAK_MPS != null ? vagons[i].N_NAK_MPS : '') + '</td>' +
+        //            '<td>' + (vagons[i].OTPRAV != null ? vagons[i].OTPRAV : '') + '</td>' +
+        //            '<td>' + (vagons[i].PRIM_GR != null ? vagons[i].PRIM_GR : '') + '</td>' +
+        //            '<td>' + (vagons[i].WES_GR != null ? vagons[i].WES_GR : '') + '</td>' +
+        //            //'<td>' + (vagons[i].N_NATUR != null ? vagons[i].N_NATUR : '') + '</td>' +
+        //            //'<td>' + (vagons[i].K_ST != null ? '(' + vagons[i].K_ST + ') - ' + (station_op != null ? (lang == 'en' ? station_op.name_en : station_op.name_ru) : '?') : '') + '</td>' +  // rw_stations
+        //            //'<td>' + (vagons[i].N_PUT != null ? vagons[i].N_PUT : '') + '</td>' +
+        //            '<td>' + (vagons[i].K_OP != null ? '(' + vagons[i].K_OP + ') - ' + (route != null ? route : '') : '') + '</td>' +  // Route
+        //            '<td>' + (vagons[i].K_FRONT != null ? '(' + vagons[i].K_FRONT + ') - ' + (owner != null ? owner.NPLAT : '') : '') + '</td>' +  // kis_owner
+        //            //'<td>' + (vagons[i].N_NATUR_T != null ? vagons[i].N_NATUR_T : '') + '</td>' +
+        //            '<td>' + (vagons[i].GODN_T != null ? '(' + vagons[i].GODN_T + ') - ' + (condition_t != null ? (lang == 'en' ? condition_t.name_en : condition_t.name_ru) : '?') : '') + '</td>' +  // rw_car_condition
+        //            '<td>' + (vagons[i].K_GR_T != null ? '(' + vagons[i].K_GR_T + ') - ' + (gruz_t != null ? gruz_t.NAME_GR + '(' + gruz_t.TAR_GR + ')' : '') : '') + '</td>' +  // kis_gruz
+        //            '<td>' + (vagons[i].WES_GR_T != null ? vagons[i].WES_GR_T : '') + '</td>' +
+        //            '<td>' + (vagons[i].K_OTPR_GR != null ? vagons[i].K_OTPR_GR : '') + '</td>' +
+        //            //'<td>' + (vagons[i].K_ST_OTPR != null ? '(' + vagons[i].K_ST_OTPR + ') - ' + (station_from != null ? (lang == 'en' ? station_from.name_en : station_from.name_ru) : '?') : '') + '</td>' +  // rw_stations
+        //            //'<td>' + (vagons[i].K_ST_NAZN != null ? '(' + vagons[i].K_ST_NAZN + ') - ' + (station_on != null ? (lang == 'en' ? station_on.name_en : station_on.name_ru) : '?') : '') + '</td>' +  // rw_stations
+        //            '<td>' + (vagons[i].ST_OTPR != null ? vagons[i].ST_OTPR : '') + '</td>' +
+        //            '<td>' + (vagons[i].ZADER != null ? vagons[i].ZADER : '') + '</td>' +
+        //            '<td>' + (vagons[i].NEPR != null ? vagons[i].NEPR : '') + '</td>' +
+        //            '<td>' + (vagons[i].UDOST != null ? vagons[i].UDOST : '') + '</td>' +
+        //            '<td>' + (vagons[i].SERTIF != null ? vagons[i].SERTIF : '') + '</td>' +
+        //            '<td>' + (vagons[i].KOD_STRAN != null ? '(' + vagons[i].KOD_STRAN + ') - ' + (strana != null ? strana.NAME : '') : '') + '</td>' +  // kis_strana
+        //            '<td>' + (vagons[i].KOD_SD != null ? vagons[i].KOD_SD : '') + '</td>' +
+        //            '<td>' + (vagons[i].NETO != null ? vagons[i].NETO : '') + '</td>' +
+        //            '<td>' + (vagons[i].BRUTO != null ? vagons[i].BRUTO : '') + '</td>' +
+        //            '<td>' + (vagons[i].TARA != null ? vagons[i].TARA : '') + '</td>' +
+        //            '<td>' + (vagons[i].DAT_VVOD != null ? vagons[i].DAT_VVOD : '') + '</td>' +
+        //            '</tr>';
+        //    }
+        //    list_tr += '</tbody>';
+        //    return '<table class="compact" id="table-detali-nathist' + data.id + '" cellpadding="5" cellspacing="0" border="0" style="width:100%">' + list_tr + '</table>';
+        //},
 
-            var outVal = function (i) {
-                return i != null ? Number(i) : '';
-            };
-
-            var list_tr = '<thead><tr>' +
-                '<th style="width:50px">' + resurses.getText("table_field_nameop") + '</th>' +
-                '<th>' + resurses.getText("table_field_dt") + '</th>' +
-                '<th>' + resurses.getText("table_field_nst_disl") + '</th>' +
-                '<th>' + resurses.getText("table_field_nst_nazn") + '</th>' +
-                '<th>' + resurses.getText("table_field_index") + '</th>' +
-                '<th>' + resurses.getText("table_field_nst_form") + '</th>' +
-                '<th style="width:50px">' + resurses.getText("table_field_kgro") + '</th>' +
-                '<th>' + resurses.getText("table_field_nst_end") + '</th>' +
-                '<th style="width:50px">' + resurses.getText("table_field_kgrp") + '</th>' +
-                '<th style="width:50px">' + resurses.getText("table_field_km") + '</th>' +
-                '<th style="width:50px">' + resurses.getText("table_field_ves") + '</th>' +
-                '<th style="width:50px">' + resurses.getText("table_field_type_cargo_code") + '</th>' +
-            '</tr></thead>';
-            var nvagon = 0;
-            list_tr += '<tbody>';
-            for (i = 0; i < data.length; i++) {
-                var rod_cargo = lang == 'en' ? data[i].type_cargo_en : data[i].type_cargo_ru;
-                var st_dislocation = data[i].st_disl != null ? data[i].nst_disl + '(' + data[i].st_disl + ')' : '';
-                var st_naznach = data[i].st_nazn != null ? data[i].nst_nazn + '(' + data[i].st_nazn + ')' : '';
-                var st_form = data[i].st_form != null ? data[i].nst_form + '(' + data[i].st_form + ')' : '';
-                var st_end = data[i].st_end != null ? data[i].nst_end + '(' + data[i].st_end + ')' : '';
-                list_tr += '<tr>' +
-                    '<td>' + data[i].nameop + '</td>' +
-                    '<td>' + data[i].dt + '</td>' +
-                    '<td>' + st_dislocation + '</td>' +
-                    '<td>' + st_naznach + '</td>' +
-                    '<td>' + data[i].index + '</td>' +
-                    '<td>' + st_form + '</td>' +
-                    '<td>' + outVal(data[i].kgro) + '</td>' +
-                    '<td>' + st_end + '</td>' +
-                    '<td>' + outVal(data[i].kgrp) + '</td>' +
-                    '<td>' + outVal(data[i].km) + '</td>' +
-                    '<td>' + data[i].ves + '</td>' +
-                    '<td>' + rod_cargo + '(' + data[i].kgr + ')' + '</td>' +
-                    '</tr>';
-                nvagon = data[i].nvagon;
-            }
-            list_tr += '</tbody>';
-            return '<table class="table-operation-detali" id="table-detali-' + nvagon + '" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
-        },
         toExcel: function () {
             var data = this.list;
             if (data == null) return;
@@ -835,18 +921,7 @@
                 var table = '<table>' + list_tr + '</table>';
             }
             fnExcelReport(table, "LastOperation");
-        },
-        // Добавить значения количества вагонов по таблице Prom.Vagon
-        addVagon: function (id, length) {
-            var row = table_turnover.obj.rows('#' + id).nodes();
-            row[0].cells(4).innerText = length;
-        },
-        // Добавить значения количества вагонов по таблице Prom.Vagon
-        addNatHist: function (id, length) {
-            var row = table_turnover.obj.rows('#' + id).nodes();
-            row[0].cells(5).innerText = length;
         }
-
     }
     //-----------------------------------------------------------------------------------------
     // Функции

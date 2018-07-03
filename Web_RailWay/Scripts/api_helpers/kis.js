@@ -224,7 +224,7 @@ function getAsyncArrivalPromNatHist(natur, day, month, year, hour, minute, callb
     });
 }
 // Вернуть список исходящих вагонов таблица PROM.NatHist
-function getAsyncSendingNPromatHist(natur, day, month, year, hour, minute, callback) {
+function getAsyncSendingPromNatHist(natur, day, month, year, hour, minute, callback) {
     $.ajax({
         type: 'GET',
         url: '/railway/api/kis/prom/nat_hist/sending/natur/' + natur + '/day/' + day + '/month/' + month + '/year/' + year + '/hour/' + hour + '/minute/' + minute,

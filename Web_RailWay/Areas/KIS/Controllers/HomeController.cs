@@ -18,7 +18,7 @@ namespace Web_RailWay.Areas.KIS.Controllers
         public ActionResult Turnover()
         {
             return View();
-        } 
+        }
 
         /// <summary>
         /// Список ссылок на отчеты копирования КИС
