@@ -1,534 +1,578 @@
 ﻿[
-    {
-        "tag": "table_message_emptyTable",
-        "ru": "Данные отсутствуют.",
-        "en": "No data available in table."
-    },
-    {
-        "tag": "table_decimal",
-        "ru": ",",
-        "en": "."
-    },
-    {
-        "tag": "table_message_search",
-        "ru": "Найти:",
-        "en": "Search:"
-    },
-    {
-        "tag": "table_message_separator",
-        "ru": "по",
-        "en": "to"
-    },
-    {
-        "tag": "table_date_format",
-        "ru": "DD.MM.YYYY HH:mm",
-        "en": "MM/DD/YYYY HH:mm"
-    },
-    {
-        "tag": "table_not_data",
-        "ru": "За указанный период данных нет.",
-        "en": "For the specified period, there is no data."
-    },
+  {
+    "tag": "table_message_emptyTable",
+    "ru": "Данные отсутствуют.",
+    "en": "No data available in table."
+  },
+  {
+    "tag": "table_decimal",
+    "ru": ",",
+    "en": "."
+  },
+  {
+    "tag": "table_message_search",
+    "ru": "Найти:",
+    "en": "Search:"
+  },
+  {
+    "tag": "table_message_separator",
+    "ru": "по",
+    "en": "to"
+  },
+  {
+    "tag": "table_date_format",
+    "ru": "DD.MM.YYYY HH:mm",
+    "en": "MM/DD/YYYY HH:mm"
+  },
+  {
+    "tag": "table_not_data",
+    "ru": "За указанный период данных нет.",
+    "en": "For the specified period, there is no data."
+  },
 
     {
         "tag": "label-select-date-range",
         "ru": "Выберите период: ",
         "en": "Select period: "
     },
+
     {
-        "tag": "button_to_excel",
-        "ru": "Экспорт в Excel",
-        "en": "Export to Excel"
+        "tag": "label_select_natur",
+        "ru": "№ Натурки: ",
+        "en": "# Natur: "
     },
+    {
+        "tag": "label_select_day",
+        "ru": "День: ",
+        "en": "Day: "
+    },
+    {
+        "tag": "label_select_month",
+        "ru": "Месяц: ",
+        "en": "Month: "
+    }, 
+    {
+        "tag": "label_select_year",
+        "ru": "Год: ",
+        "en": "Year: "
+    },     
+    {
+        "tag": "label_select_hour",
+        "ru": "Час: ",
+        "en": "Hour: "
+    },
+    {
+        "tag": "label_select_minute",
+        "ru": "Минуты: ",
+        "en": "Minutes: "
+    },       
+     
+  {
+    "tag": "button_to_excel",
+    "ru": "Экспорт в Excel",
+    "en": "Export to Excel"
+  },
     {
         "tag": "button_close_detali",
         "ru": "Закрыть детали",
         "en": "Close details"
     },
-
     {
-        "tag": "link-tabs-transfer-arrival",
-        "ru": "Прибытие на АМКР",
-        "en": ""
-    },
-    {
-        "tag": "link-tabs-transfer-sending",
-        "ru": "Сдача на УЗ",
-        "en": ""
-    },
-    {
-        "tag": "link-tabs-transfer-input",
-        "ru": "По прибытию",
-        "en": ""
-    },
-    {
-        "tag": "link-tabs-transfer-output",
-        "ru": "По отправке",
-        "en": ""
-    },
-    {
-        "tag": "link_tabs_turnover_1",
-        "ru": "Оборот вагонов УЗ АМКР",
-        "en": "Turnover of UZ AMKR wagons"
+        "tag": "button_to_searsh",
+        "ru": "Найти",
+        "en": "Searsh"
     },
 
-    {
-        "tag": "link_tabs_transfer_detali_1",
-        "ru": "Все поля",
-        "en": "All Fields"
-    },
-    {
-        "tag": "link_tabs_transfer_detali_2",
-        "ru": "Вагоны",
-        "en": "Cars"
-    },
 
-    {
-        "tag": "link_tabs_turnover_detali_1",
-        "ru": "Все поля",
-        "en": "All Fields"
-    },
-    {
-        "tag": "link_tabs_turnover_detali_2",
-        "ru": "Таблица Prom.Vagon",
-        "en": "Table Prom.Vagon"
-    },
-    {
-        "tag": "link_tabs_turnover_detali_3",
-        "ru": "Таблица Prom.Nat_Hist",
-        "en": "Table Prom.Nat_Hist"
-    },
 
-    {
-        "tag": "Normal",
-        "ru": "",
-        "en": ""
-    },
-    {
-        "tag": "Insert",
-        "ru": "Добавлена",
-        "en": "Insert"
-    },
-    {
-        "tag": "Delete",
-        "ru": "Удалена",
-        "en": "Delete"
-    },
-    {
-        "tag": "Update",
-        "ru": "Обновлена",
-        "en": "Update"
-    },
+  {
+    "tag": "link-tabs-transfer-arrival",
+    "ru": "Прибытие на АМКР",
+    "en": ""
+  },
+  {
+    "tag": "link-tabs-transfer-sending",
+    "ru": "Сдача на УЗ",
+    "en": ""
+  },
+  {
+    "tag": "link-tabs-transfer-input",
+    "ru": "По прибытию",
+    "en": ""
+  },
+  {
+    "tag": "link-tabs-transfer-output",
+    "ru": "По отправке",
+    "en": ""
+  },
+  {
+    "tag": "link_tabs_turnover_1",
+    "ru": "Оборот вагонов УЗ АМКР",
+    "en": "Turnover of UZ AMKR wagons"
+  },
 
-    {
-        "tag": "operation_input",
-        "ru": "Прибыл",
-        "en": "Arrived"
-    },
-    {
-        "tag": "operation_output",
-        "ru": "Отправлен",
-        "en": "Sent"
-    },
-    {
-        "tag": "operation_null",
-        "ru": "",
-        "en": ""
-    },
+  {
+    "tag": "link_tabs_transfer_detali_1",
+    "ru": "Все поля",
+    "en": "All Fields"
+  },
+  {
+    "tag": "link_tabs_transfer_detali_2",
+    "ru": "Вагоны",
+    "en": "Cars"
+  },
 
-    {
-        "tag": "route_not",
-        "ru": "Не маршрут",
-        "en": "Not a route"
-    },
-    {
-        "tag": "route_ok",
-        "ru": "Маршрут",
-        "en": "Route"
-    },
-    {
-        "tag": "route_null",
-        "ru": "",
-        "en": ""
-    },
+  {
+    "tag": "link_tabs_turnover_detali_1",
+    "ru": "Все поля",
+    "en": "All Fields"
+  },
+  {
+    "tag": "link_tabs_turnover_detali_2",
+    "ru": "Таблица Prom.Vagon",
+    "en": "Table Prom.Vagon"
+  },
+  {
+    "tag": "link_tabs_turnover_detali_3",
+    "ru": "Таблица Prom.Nat_Hist",
+    "en": "Table Prom.Nat_Hist"
+  },
 
-    {
-        "tag": "close_input",
-        "ru": "Да",
-        "en": "Yes"
-    },
-    {
-        "tag": "close_null",
-        "ru": "",
-        "en": ""
-    },
+  {
+    "tag": "Normal",
+    "ru": "",
+    "en": ""
+  },
+  {
+    "tag": "Insert",
+    "ru": "Добавлена",
+    "en": "Insert"
+  },
+  {
+    "tag": "Delete",
+    "ru": "Удалена",
+    "en": "Delete"
+  },
+  {
+    "tag": "Update",
+    "ru": "Обновлена",
+    "en": "Update"
+  },
 
-    {
-        "tag": "table_field_id",
-        "ru": "id",
-        "en": "id"
-    },
-    {
-        "tag": "table_field_natur",
-        "ru": "Натурка",
-        "en": ""
-    },
-    {
-        "tag": "table_field_datetime",
-        "ru": "Дата и время",
-        "en": ""
-    },
-    {
-        "tag": "table_field_station_on",
-        "ru": "Станция прибытия",
-        "en": ""
-    },
-    {
-        "tag": "table_field_way",
-        "ru": "Путь",
-        "en": ""
-    },
-    {
-        "tag": "table_field_napr",
-        "ru": "Напр.",
-        "en": ""
-    },
-    {
-        "tag": "table_field_count_wagons",
-        "ru": "Перенесено Wagons",
-        "en": ""
-    },
-    {
-        "tag": "table_field_count_nathist",
-        "ru": "Обнавленно Nathist",
-        "en": ""
-    },
-    {
-        "tag": "table_field_status",
-        "ru": "Статус",
-        "en": ""
-    },
-    {
-        "tag": "table_field_close",
-        "ru": "Закрыто",
-        "en": ""
-    },
-    {
-        "tag": "table_field_list_wagons",
-        "ru": "Список вагонов",
-        "en": ""
-    },
-    {
-        "tag": "table_field_list_no_set_wagons",
-        "ru": "Список не перенесеных вагонов",
-        "en": ""
-    },
-    {
-        "tag": "table_field_list_no_update_wagons",
-        "ru": "Список не обновленных вагонов",
-        "en": ""
-    },
-    {
-        "tag": "table_field_list_message",
-        "ru": "Статус переноса",
-        "en": ""
-    },
+  {
+    "tag": "operation_input",
+    "ru": "Прибыл",
+    "en": "Arrived"
+  },
+  {
+    "tag": "operation_output",
+    "ru": "Отправлен",
+    "en": "Sent"
+  },
+  {
+    "tag": "operation_null",
+    "ru": "",
+    "en": ""
+  },
 
-    {
-        "tag": "table_field_value",
-        "ru": "Поле",
-        "en": "Field"
-    },
-    {
-        "tag": "table_field_text",
-        "ru": "Значение",
-        "en": "Value"
-    },
+  {
+    "tag": "route_not",
+    "ru": "Не маршрут",
+    "en": "Not a route"
+  },
+  {
+    "tag": "route_ok",
+    "ru": "Маршрут",
+    "en": "Route"
+  },
+  {
+    "tag": "route_null",
+    "ru": "",
+    "en": ""
+  },
 
-    {
-        "tag": "table_field_num_car",
-        "ru": "№ вагона",
-        "en": "#"
-    },
-    {
-        "tag": "table_field_reult_set_car",
-        "ru": "Сотояниие переноса",
-        "en": ""
-    },
-    {
-        "tag": "table_field_reult_upd_car",
-        "ru": "Сотояниие обновления",
-        "en": ""
-    },
-    {
-        "tag": "table_field_N_NATUR",
-        "ru": "№ Натурки",
-        "en": ""
-    },
-    {
-        "tag": "table_field_DT_PR",
-        "ru": "Прибыл",
-        "en": "Arrived"
-    },
-    {
-        "tag": "table_field_DT_SD",
-        "ru": "Сдан",
-        "en": "Was passed"
-    },
-    {
-        "tag": "table_field_DT",
-        "ru": "Отправлен",
-        "en": ""
-    },
-    {
-        "tag": "table_field_CountVagon",
-        "ru": "Кол. Prom.Vagon",
-        "en": ""
-    },
-    {
-        "tag": "table_field_NatHist",
-        "ru": "Кол. Prom.Nat_Hist",
-        "en": ""
-    },
-    {
-        "tag": "table_field_D_PR_DD",
-        "ru": "D_PR_DD",
-        "en": ""
-    },
-    {
-        "tag": "table_field_D_PR_MM",
-        "ru": "D_PR_MM",
-        "en": ""
-    },
-    {
-        "tag": "table_field_D_PR_YY",
-        "ru": "D_PR_YY",
-        "en": ""
-    },
-    {
-        "tag": "table_field_T_PR_HH",
-        "ru": "T_PR_HH",
-        "en": ""
-    },
-    {
-        "tag": "table_field_T_PR_MI",
-        "ru": "T_PR_MI",
-        "en": ""
-    },
-    {
-        "tag": "table_field_D_DD",
-        "ru": "D_DD",
-        "en": ""
-    },
-    {
-        "tag": "table_field_D_MM",
-        "ru": "D_MM",
-        "en": ""
-    },
-    {
-        "tag": "table_field_D_YY",
-        "ru": "D_YY",
-        "en": ""
-    },
-    {
-        "tag": "table_field_T_HH",
-        "ru": "T_HH",
-        "en": ""
-    },
-    {
-        "tag": "table_field_T_MI",
-        "ru": "T_MI",
-        "en": ""
-    },
-    {
-        "tag": "table_field_K_ST",
-        "ru": "Станция операции",
-        "en": ""
-    },
-    {
-        "tag": "table_field_N_PUT",
-        "ru": "Путь операции",
-        "en": ""
-    },
-    {
-        "tag": "table_field_NAPR",
-        "ru": "Направление",
-        "en": ""
-    },
-    {
-        "tag": "table_field_P_OT",
-        "ru": "Операция",
-        "en": ""
-    },
-    {
-        "tag": "table_field_V_P",
-        "ru": "Признак закр. прибытия",
-        "en": ""
-    },
-    {
-        "tag": "table_field_K_ST_OTPR",
-        "ru": "Станция отправки",
-        "en": ""
-    },
-    {
-        "tag": "table_field_K_ST_PR",
-        "ru": "Станция прибытия",
-        "en": ""
-    },
-    {
-        "tag": "table_field_N_VED_PR",
-        "ru": "№ Вед. прибытия",
-        "en": ""
-    },
-    {
-        "tag": "table_field_N_SOST_OT",
-        "ru": "№ состава отп.",
-        "en": ""
-    },
-    {
-        "tag": "table_field_N_SOST_PR",
-        "ru": "№ состава приб.",
-        "en": ""
-    },
-    {
-        "tag": "table_field_DAT_VVOD",
-        "ru": "Дата и время ввода",
-        "en": ""
-    },
+  {
+    "tag": "close_input",
+    "ru": "Да",
+    "en": "Yes"
+  },
+  {
+    "tag": "close_null",
+    "ru": "",
+    "en": ""
+  },
 
-    {
-        "tag": "table_field_position",
-        "ru": "Позиция",
-        "en": "Position"
-    },
-    {
-        "tag": "table_field_GODN",
-        "ru": "Годность",
-        "en": "Suitability"
-    },
-    {
-        "tag": "table_field_K_POL_GR",
-        "ru": "Цех получатель",
-        "en": "Shop recipient"
-    },
-    {
-        "tag": "table_field_K_GR",
-        "ru": "Груз",
-        "en": "Cargo"
-    },
-    {
-        "tag": "table_field_N_VED_PR",
-        "ru": "Вед. приб.",
-        "en": "Arr. stat."
-    },
-    {
-        "tag": "table_field_N_NAK_MPS",
-        "ru": "Накл. МПС",
-        "en": "Сonsig. note MPS"
-    },
-    {
-        "tag": "table_field_OTPRAV",
-        "ru": "Отправитель",
-        "en": "Sender"
-    },
-    {
-        "tag": "table_field_PRIM_GR",
-        "ru": "Прим. гр. для лома",
-        "en": "Note cargo in scrap"
-    },
-    {
-        "tag": "table_field_WES_GR",
-        "ru": "Вес. гр.",
-        "en": "Weight"
-    },
-    {
-        "tag": "table_field_K_OP",
-        "ru": "Маршрут",
-        "en": "Route"
-    },
-    {
-        "tag": "table_field_K_FRONT",
-        "ru": "Собственник",
-        "en": "Owner"
-    },
-    {
-        "tag": "table_field_N_NATUR_T",
-        "ru": "Тек. натурка",
-        "en": "Сurrent Natur"
-    },
-    {
-        "tag": "table_field_GODN_T",
-        "ru": "Тек. годность",
-        "en": "Сurrent Suitability"
-    },
-    {
-        "tag": "table_field_K_GR_T",
-        "ru": "Тек. груз",
-        "en": "Сurrent Cargo"
-    },
-    {
-        "tag": "table_field_WES_GR_T",
-        "ru": "Тек. вес груза",
-        "en": "Сurrent Weight"
-    },
-    {
-        "tag": "table_field_K_OTPR_GR",
-        "ru": "Код отпр. гр.",
-        "en": "Shipper Code"
-    },
-    {
-        "tag": "table_field_K_ST_NAZN",
-        "ru": "Станция назначения",
-        "en": "Station of destination"
-    },
-    {
-        "tag": "table_field_ZADER",
-        "ru": "Причина задержки",
-        "en": "Reason for the delay"
-    },
-    {
-        "tag": "table_field_NEPR",
-        "ru": "Прич. непр. дорог.",
-        "en": "Failure cause of road"
-    },
-    {
-        "tag": "table_field_UDOST",
-        "ru": "Удостоверение ВПГ",
-        "en": "VPG certificate"
-    },
-    {
-        "tag": "table_field_SERTIF",
-        "ru": "Сертификат",
-        "en": "Certificate"
-    },
-    {
-        "tag": "table_field_KOD_STRAN",
-        "ru": "Страна владелец",
-        "en": "Country owner"
-    },
-    {
-        "tag": "table_field_ST_OTPR",
-        "ru": "Стан. отпр. внеш.",
-        "en": "Stat. send. exter."
-    },
-    {
-        "tag": "table_field_KOD_SD",
-        "ru": "KOD_SD",
-        "en": "KOD_SD"
-    },
-    {
-        "tag": "table_field_NETO",
-        "ru": "NETO",
-        "en": "NETO"
-    },
-    {
-        "tag": "table_field_BRUTO",
-        "ru": "BRUTO",
-        "en": "BRUTO"
-    },
-    {
-        "tag": "table_field_TARA",
-        "ru": "TARA",
-        "en": "TARA"
-    }
+  {
+    "tag": "table_field_id",
+    "ru": "id",
+    "en": "id"
+  },
+  {
+    "tag": "table_field_natur",
+    "ru": "Натурка",
+    "en": ""
+  },
+  {
+    "tag": "table_field_datetime",
+    "ru": "Дата и время",
+    "en": ""
+  },
+  {
+    "tag": "table_field_station_on",
+    "ru": "Станция прибытия",
+    "en": ""
+  },
+  {
+    "tag": "table_field_station_from",
+    "ru": "Станция отправки",
+    "en": ""
+  },
+  {
+    "tag": "table_field_way",
+    "ru": "Путь",
+    "en": ""
+  },
+  {
+    "tag": "table_field_napr",
+    "ru": "Напр.",
+    "en": ""
+  },
+  {
+    "tag": "table_field_count_wagons",
+    "ru": "Перенесено Wagons",
+    "en": ""
+  },
+  {
+    "tag": "table_field_count_nathist",
+    "ru": "Обнавленно Nathist",
+    "en": ""
+  },
+  {
+    "tag": "table_field_status",
+    "ru": "Статус",
+    "en": ""
+  },
+  {
+    "tag": "table_field_close",
+    "ru": "Закрыто",
+    "en": ""
+  },
+  {
+    "tag": "table_field_list_wagons",
+    "ru": "Список вагонов",
+    "en": ""
+  },
+  {
+    "tag": "table_field_list_no_set_wagons",
+    "ru": "Список не перенесеных вагонов",
+    "en": ""
+  },
+  {
+    "tag": "table_field_list_no_update_wagons",
+    "ru": "Список не обновленных вагонов",
+    "en": ""
+  },
+  {
+    "tag": "table_field_list_message",
+    "ru": "Статус переноса",
+    "en": ""
+  },
+
+  {
+    "tag": "table_field_value",
+    "ru": "Поле",
+    "en": "Field"
+  },
+  {
+    "tag": "table_field_text",
+    "ru": "Значение",
+    "en": "Value"
+  },
+
+  {
+    "tag": "table_field_num_car",
+    "ru": "№ вагона",
+    "en": "#"
+  },
+  {
+    "tag": "table_field_reult_set_car",
+    "ru": "Сотояниие переноса",
+    "en": ""
+  },
+  {
+    "tag": "table_field_reult_upd_car",
+    "ru": "Сотояниие обновления",
+    "en": ""
+  },
+  {
+    "tag": "table_field_N_NATUR",
+    "ru": "№ Натурки",
+    "en": ""
+  },
+  {
+    "tag": "table_field_DT_PR",
+    "ru": "Прибыл",
+    "en": "Arrived"
+  },
+  {
+    "tag": "table_field_DT_SD",
+    "ru": "Сдан",
+    "en": "Was passed"
+  },
+  {
+    "tag": "table_field_DT",
+    "ru": "Отправлен",
+    "en": ""
+  },
+  {
+    "tag": "table_field_CountVagon",
+    "ru": "Кол. Prom.Vagon",
+    "en": ""
+  },
+  {
+    "tag": "table_field_NatHist",
+    "ru": "Кол. Prom.Nat_Hist",
+    "en": ""
+  },
+  {
+    "tag": "table_field_D_PR_DD",
+    "ru": "D_PR_DD",
+    "en": ""
+  },
+  {
+    "tag": "table_field_D_PR_MM",
+    "ru": "D_PR_MM",
+    "en": ""
+  },
+  {
+    "tag": "table_field_D_PR_YY",
+    "ru": "D_PR_YY",
+    "en": ""
+  },
+  {
+    "tag": "table_field_T_PR_HH",
+    "ru": "T_PR_HH",
+    "en": ""
+  },
+  {
+    "tag": "table_field_T_PR_MI",
+    "ru": "T_PR_MI",
+    "en": ""
+  },
+  {
+    "tag": "table_field_D_DD",
+    "ru": "D_DD",
+    "en": ""
+  },
+  {
+    "tag": "table_field_D_MM",
+    "ru": "D_MM",
+    "en": ""
+  },
+  {
+    "tag": "table_field_D_YY",
+    "ru": "D_YY",
+    "en": ""
+  },
+  {
+    "tag": "table_field_T_HH",
+    "ru": "T_HH",
+    "en": ""
+  },
+  {
+    "tag": "table_field_T_MI",
+    "ru": "T_MI",
+    "en": ""
+  },
+  {
+    "tag": "table_field_K_ST",
+    "ru": "Станция операции",
+    "en": ""
+  },
+  {
+    "tag": "table_field_N_PUT",
+    "ru": "Путь операции",
+    "en": ""
+  },
+  {
+    "tag": "table_field_NAPR",
+    "ru": "Направление",
+    "en": ""
+  },
+  {
+    "tag": "table_field_P_OT",
+    "ru": "Операция",
+    "en": ""
+  },
+  {
+    "tag": "table_field_V_P",
+    "ru": "Признак закр. прибытия",
+    "en": ""
+  },
+  {
+    "tag": "table_field_K_ST_OTPR",
+    "ru": "Станция отправки",
+    "en": ""
+  },
+  {
+    "tag": "table_field_K_ST_PR",
+    "ru": "Станция прибытия",
+    "en": ""
+  },
+  {
+    "tag": "table_field_N_VED_PR",
+    "ru": "№ Вед. прибытия",
+    "en": ""
+  },
+  {
+    "tag": "table_field_N_SOST_OT",
+    "ru": "№ состава отп.",
+    "en": ""
+  },
+  {
+    "tag": "table_field_N_SOST_PR",
+    "ru": "№ состава приб.",
+    "en": ""
+  },
+  {
+    "tag": "table_field_DAT_VVOD",
+    "ru": "Дата и время ввода",
+    "en": ""
+  },
+
+  {
+    "tag": "table_field_position",
+    "ru": "Позиция",
+    "en": "Position"
+  },
+  {
+    "tag": "table_field_GODN",
+    "ru": "Годность",
+    "en": "Suitability"
+  },
+  {
+    "tag": "table_field_K_POL_GR",
+    "ru": "Цех получатель",
+    "en": "Shop recipient"
+  },
+  {
+    "tag": "table_field_K_GR",
+    "ru": "Груз",
+    "en": "Cargo"
+  },
+  {
+    "tag": "table_field_N_VED_PR",
+    "ru": "Вед. приб.",
+    "en": "Arr. stat."
+  },
+  {
+    "tag": "table_field_N_NAK_MPS",
+    "ru": "Накл. МПС",
+    "en": "Сonsig. note MPS"
+  },
+  {
+    "tag": "table_field_OTPRAV",
+    "ru": "Отправитель",
+    "en": "Sender"
+  },
+  {
+    "tag": "table_field_PRIM_GR",
+    "ru": "Прим. гр. для лома",
+    "en": "Note cargo in scrap"
+  },
+  {
+    "tag": "table_field_WES_GR",
+    "ru": "Вес. гр.",
+    "en": "Weight"
+  },
+  {
+    "tag": "table_field_K_OP",
+    "ru": "Маршрут",
+    "en": "Route"
+  },
+  {
+    "tag": "table_field_K_FRONT",
+    "ru": "Собственник",
+    "en": "Owner"
+  },
+  {
+    "tag": "table_field_N_NATUR_T",
+    "ru": "Тек. натурка",
+    "en": "Сurrent Natur"
+  },
+  {
+    "tag": "table_field_GODN_T",
+    "ru": "Тек. годность",
+    "en": "Сurrent Suitability"
+  },
+  {
+    "tag": "table_field_K_GR_T",
+    "ru": "Тек. груз",
+    "en": "Сurrent Cargo"
+  },
+  {
+    "tag": "table_field_WES_GR_T",
+    "ru": "Тек. вес груза",
+    "en": "Сurrent Weight"
+  },
+  {
+    "tag": "table_field_K_OTPR_GR",
+    "ru": "Код отпр. гр.",
+    "en": "Shipper Code"
+  },
+  {
+    "tag": "table_field_K_ST_NAZN",
+    "ru": "Станция назначения",
+    "en": "Station of destination"
+  },
+  {
+    "tag": "table_field_ZADER",
+    "ru": "Причина задержки",
+    "en": "Reason for the delay"
+  },
+  {
+    "tag": "table_field_NEPR",
+    "ru": "Прич. непр. дорог.",
+    "en": "Failure cause of road"
+  },
+  {
+    "tag": "table_field_UDOST",
+    "ru": "Удостоверение ВПГ",
+    "en": "VPG certificate"
+  },
+  {
+    "tag": "table_field_SERTIF",
+    "ru": "Сертификат",
+    "en": "Certificate"
+  },
+  {
+    "tag": "table_field_KOD_STRAN",
+    "ru": "Страна владелец",
+    "en": "Country owner"
+  },
+  {
+    "tag": "table_field_ST_OTPR",
+    "ru": "Стан. отпр. внеш.",
+    "en": "Stat. send. exter."
+  },
+  {
+    "tag": "table_field_KOD_SD",
+    "ru": "KOD_SD",
+    "en": "KOD_SD"
+  },
+  {
+    "tag": "table_field_NETO",
+    "ru": "NETO",
+    "en": "NETO"
+  },
+  {
+    "tag": "table_field_BRUTO",
+    "ru": "BRUTO",
+    "en": "BRUTO"
+  },
+  {
+    "tag": "table_field_TARA",
+    "ru": "TARA",
+    "en": "TARA"
+  }
 ]

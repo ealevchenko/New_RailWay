@@ -212,6 +212,45 @@ namespace Web_RailWay.Controllers.api
 
         #endregion
 
+        #region BufferSendingSostav
+
+        // GET: api/kis/transfer/sending/2018-01-13T22:00:00.000Z/2018-01-15T21:59:59.000Z
+        [Route("sending/{start:datetime}/{stop:datetime}")]
+        [ResponseType(typeof(RWBufferSendingSostav))]
+        public IHttpActionResult GetRWBufferSendingSostav(DateTime start, DateTime stop)
+        {
+            List<RWBufferSendingSostav> list = this.rep_kist.GetRWBufferSendingSostav(start, stop)
+                                                .OrderByDescending(x => x.datetime)
+                                                .ToList();
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+
+        // GET: api/kis/transfer/sending/id/2513
+        [Route("sending/id/{id:int}")]
+        [ResponseType(typeof(RWBufferSendingSostav))]
+        public IHttpActionResult GetRWBufferSendingSostav(int id)
+        {
+            RWBufferSendingSostav bas = this.rep_kist.GetRWBufferSendingSostav(id);
+            if (bas == null)
+            {
+                return NotFound();
+            }
+            return Ok(bas);
+        }
+
+        //[HttpPost]
+        //[Route("sending/{id:int}/close")]
+        //public int CloseRWBufferSendinglSostav(int id)
+        //{
+        //    //return this.rep_kist.CloseRWBufferSendingSostav(id, User.Identity.Name);
+        //}
+
+        #endregion
+
         #endregion
 
     }

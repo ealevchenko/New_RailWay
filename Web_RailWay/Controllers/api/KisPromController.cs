@@ -87,8 +87,29 @@ namespace Web_RailWay.Controllers.api
                 return NotFound();
             }
             return Ok(list);
+        }
+
+        // GET: api/kis/prom/sostav/natur/4201/day/3/month/7/year/2018/hour/14/minute/35
+        [Route("sostav/natur/{natur:int}/day/{day:int}/month/{month:int}/year/{year:int}/hour/{hour:int}/minute/{minute:int}")]
+        [ResponseType(typeof(Prom_SostavAndCount))]
+        public IHttpActionResult GetPromSostav(int natur, int day, int month, int year, int hour, int minute)
+        {
+            List<Prom_SostavAndCount> list = this.rep_kis.GetProm_SostavAndCount(
+                natur != -1 ? (int?)natur : null,
+                day != -1 ? (int?)day : null,
+                month != -1 ? (int?)month : null,
+                year != -1 ? (int?)year : null,
+                hour != -1 ? (int?)hour : null,
+                minute != -1 ? (int?)minute : null).ToList();
+            if (list == null)
+            {
+                return NotFound();
+            }
+            return Ok(list);
         }        
         #endregion
+
+
 
         #region PROM.Vagon
         // GET: api/kis/prom/vagon/arrival/natur/4023/day/27/month/6/year/2018/hour/4/minute/50

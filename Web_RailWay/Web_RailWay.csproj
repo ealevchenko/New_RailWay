@@ -547,6 +547,7 @@
     <Content Include="Areas\KIS\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\KIS\Views\Transfer\Index.cshtml" />
     <Content Include="Areas\KIS\Views\Home\Turnover.cshtml" />
+    <Content Include="Areas\KIS\Views\Home\Natur.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
     <Content Include="Scripts\api_helpers\settings.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -656,6 +657,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\KIS\transfer_kis.js" />
     <Content Include="Scripts\KIS\transfer_kis1.js" />
+    <Content Include="Scripts\KIS\natur.js" />
     <Content Include="Scripts\KIS\turnover.js" />
     <Content Include="Scripts\lockpanel\lockpanel.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />

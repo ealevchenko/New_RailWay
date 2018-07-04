@@ -20,6 +20,12 @@ namespace Web_RailWay.Areas.KIS.Controllers
             return View();
         }
 
+        // Оборот вагонов 
+        public ActionResult Natur(int? natur, int? day, int? month, int? year, int? hour, int? minute)
+        {
+            return View();
+        }
+
         /// <summary>
         /// Список ссылок на отчеты копирования КИС
         /// </summary>

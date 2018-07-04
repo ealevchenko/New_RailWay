@@ -86,3 +86,4 @@
 /// <reference path="mt/natur.js" />
 /// <reference path="KIS/transfer_kis1.js" />
 /// <reference path="kis/turnover.js" />
+/// <reference path="kis/natur.js" />

@@ -12,7 +12,7 @@
 }
 
 @section Admin {
-    @*@{ Html.RenderAction("LinkAdmin", "Home", new { area = "" }); }*@
+    @{ Html.RenderAction("LinkKISControl", "Home", new { area = "KIS" }); }
 }
 
 @section styles {
@@ -45,8 +45,8 @@
         <fieldset>
             <legend>Принимаемые вагоны</legend>
             @*<label for="search">Вагон: </label><input id="search" type="number" value="1">
-            <button class="ui-button ui-widget ui-corner-all">Добавить</button>
-            <table class="compact" id="table-arrival-confirm" style="width:100%" cellpadding="0"></table>*@
+                <button class="ui-button ui-widget ui-corner-all">Добавить</button>
+                <table class="compact" id="table-arrival-confirm" style="width:100%" cellpadding="0"></table>*@
 
 
 
@@ -67,7 +67,7 @@
         <div id="select-rangedatetime">
             <label id="label-select-date-range" class="title-label"></label>
             <span id="select-range">
-                <input id="date-start" name="date_start" type="datetime" size="20"> 
+                <input id="date-start" name="date_start" type="datetime" size="20">
                 <label id="label-to" class="title-label"></label>
                 <input id="date-stop" name="date_stop" type="datetime" size="20">
             </span>

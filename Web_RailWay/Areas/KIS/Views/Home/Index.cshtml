@@ -31,7 +31,7 @@
     <ul class="ca-menu">
         <li>
             <a href='@Url.Action("Turnover", "Home", new { area = "KIS" })'>
-                <span class="ca-icon">H</span>
+                <span class="ca-icon">~</span>
                 <div class="ca-content">
                     <h2 class="ca-main">@KISResource.index_report_arrival_sending_title</h2>
                     <h3 class="ca-sub">@KISResource.index_report_arrival_sending_desc</h3>
@@ -39,8 +39,17 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href='@Url.Action("Natur", "Home", new { area = "KIS" })'>
                 <span class="ca-icon">H</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">@KISResource.index_report_arrival_sending_search_title</h2>
+                    <h3 class="ca-sub">@KISResource.index_report_arrival_sending_search_desc</h3>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="ca-icon">X</span>
                 <div class="ca-content">
                     <h2 class="ca-main">@KISResource.index_report_input_title</h2>
                     <h3 class="ca-sub">@KISResource.index_report_input_desc</h3>
@@ -49,7 +58,7 @@
         </li>
         <li>
             <a href="#">
-                <span class="ca-icon">H</span>
+                <span class="ca-icon">X</span>
                 <div class="ca-content">
                     <h2 class="ca-main">@KISResource.index_report_output_title</h2>
                     <h3 class="ca-sub">@KISResource.index_report_output_desc</h3>

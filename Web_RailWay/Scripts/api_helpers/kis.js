@@ -154,6 +154,35 @@ function getAsyncPromSostav(start, stop, callback) {
         },
     });
 }
+// Вернуть перечень входящих и исходящих составов по натурному листу и дате
+function getAsyncPromSostavOfNaturAndDT(natur, day, month, year, hour, minute, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/kis/prom/sostav/natur/' + (natur != null ? natur : -1) +
+            '/day/' + (day != null ? day : -1) +
+            '/month/' + (month != null ? month : -1) +
+            '/year/' + (year != null ? year : -1) +
+            '/hour/' + (hour != null ? hour : -1) +            
+            '/minute/' + (minute != null ? minute : -1),
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 // Вернуть список входящих вагонов таблица PROM.VAGON
 function getAsyncArrivalPromVagon(natur, day, month, year, hour, minute, callback) {
     $.ajax({

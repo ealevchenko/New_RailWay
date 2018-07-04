@@ -88,7 +88,7 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Информация о прибывших составах на АМКР и сданных на УЗ по данным системы КИС.
+        ///   Ищет локализованную строку, похожую на Информация о составах прибывших на АМКР и сданных на УЗ по данным системы КИС..
         /// </summary>
         public static string index_report_arrival_sending_desc {
             get {
@@ -97,7 +97,25 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Принятие и сдача.
+        ///   Ищет локализованную строку, похожую на Поиск составов, прибывших на АМКР или сданных на УЗ в системе КИС..
+        /// </summary>
+        public static string index_report_arrival_sending_search_desc {
+            get {
+                return ResourceManager.GetString("index_report_arrival_sending_search_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Найти состав.
+        /// </summary>
+        public static string index_report_arrival_sending_search_title {
+            get {
+                return ResourceManager.GetString("index_report_arrival_sending_search_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Оборот УЗ - АМКР.
         /// </summary>
         public static string index_report_arrival_sending_title {
             get {

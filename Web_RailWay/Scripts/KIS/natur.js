@@ -2,6 +2,7 @@
     //-----------------------------------------------------------------------------------------
     // Объявление глобальных переменных
     //-----------------------------------------------------------------------------------------
+    allVars = $.getUrlVars();   // Получить параметры get запроса
     var lang = $.cookie('lang'),
     resurses = {
         list: null,
@@ -22,47 +23,121 @@
             return result;
         }
     },
-    dt = new Date(),
-    start = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, 00, 00, 00),
-    stop = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 23, 59, 59),
-    datetime_range = {
-        html_range: $("#select-range"),
-        obj: null,
-        initObject: function () {
-            this.obj = this.html_range.dateRangePicker(
-                {
-                    startOfWeek: 'monday',
-                    separator: resurses.getText("table_message_separator"),
-                    language: lang,
-                    format: resurses.getText("table_date_format"),
-                    autoClose: false,
-                    showShortcuts: false,
-                    getValue: function () {
-                        if ($('#date-start').val() && $('#date-stop').val())
-                            return $('#date-start').val() + ' to ' + $('#date-stop').val();
-                        else
-                            return '';
-                    },
-                    setValue: function (s, s1, s2) {
-                        $('#date-start').val(s1);
-                        $('#date-stop').val(s2);
-                    },
-                    time: {
-                        enabled: true
-                    },
-                }).
-                bind('datepicker-change', function (evt, obj) {
-                    start = obj.date1;
-                    stop = obj.date2;
-                })
-                .bind('datepicker-closed', function () {
-                    tab_type_turnover.activeTable(tab_type_turnover.active, true);
-                });
-            var s_d_start = start.getDate() + '.' + (start.getMonth() + 1) + '.' + start.getFullYear() + ' ' + start.getHours() + ':' + start.getMinutes();
-            var s_d_stop = stop.getDate() + '.' + (stop.getMonth() + 1) + '.' + stop.getFullYear() + ' ' + stop.getHours() + ':' + stop.getMinutes();
-            datetime_range.obj.data('dateRangePicker').setDateRange(s_d_start, s_d_stop, true);
+    snatur = $("#natur").spinner({
+        spin: function (event, ui) {
+            if (ui.value > 9999) {
+                $(this).spinner("value", 1);
+                return false;
+            } else if (ui.value < 1) {
+                $(this).spinner("value", 9999);
+                return false;
+            }
         }
-    },
+    }),
+    sday = $("#day").spinner({
+        spin: function (event, ui) {
+            if (ui.value > 31) {
+                $(this).spinner("value", 1);
+                return false;
+            } else if (ui.value < 1) {
+                $(this).spinner("value", 31);
+                return false;
+            }
+        }
+    }),
+    smonth = $("#month").spinner({
+        spin: function (event, ui) {
+            if (ui.value > 12) {
+                $(this).spinner("value", 1);
+                return false;
+            } else if (ui.value < 1) {
+                $(this).spinner("value", 12);
+                return false;
+            }
+        }
+    }),
+    syear = $("#year").spinner({
+        spin: function (event, ui) {
+            if (ui.value > 2050) {
+                $(this).spinner("value", 2000);
+                return false;
+            } else if (ui.value < 2000) {
+                $(this).spinner("value", 2050);
+                return false;
+            }
+        }
+    }),
+    shour = $("#hour").spinner({
+        spin: function (event, ui) {
+            if (ui.value > 23) {
+                $(this).spinner("value", 0);
+                return false;
+            } else if (ui.value < 0) {
+                $(this).spinner("value", 23);
+                return false;
+            }
+        }
+    }),
+    sminute = $("#minute").spinner({
+        spin: function (event, ui) {
+            if (ui.value > 59) {
+                $(this).spinner("value", 0);
+                return false;
+            } else if (ui.value < 0) {
+                $(this).spinner("value", 59);
+                return false;
+            }
+        }
+    }),
+    bt_searsh = $('#search').button({
+        icon: "ui-icon-search"
+    }).on('click', function (evt) {
+        evt.preventDefault();
+        tab_type_turnover.activeTable(tab_type_turnover.active, true);
+    });
+
+
+    //dt = new Date(),
+    //start = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, 00, 00, 00),
+    //stop = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 23, 59, 59),
+    //datetime_range = {
+    //    html_range: $("#select-range"),
+    //    obj: null,
+    //    initObject: function () {
+    //        this.obj = this.html_range.dateRangePicker(
+    //            {
+    //                startOfWeek: 'monday',
+    //                separator: resurses.getText("table_message_separator"),
+    //                language: lang,
+    //                format: resurses.getText("table_date_format"),
+    //                autoClose: false,
+    //                showShortcuts: false,
+    //                getValue: function () {
+    //                    if ($('#date-start').val() && $('#date-stop').val())
+    //                        return $('#date-start').val() + ' to ' + $('#date-stop').val();
+    //                    else
+    //                        return '';
+    //                },
+    //                setValue: function (s, s1, s2) {
+    //                    $('#date-start').val(s1);
+    //                    $('#date-stop').val(s2);
+    //                },
+    //                time: {
+    //                    enabled: true
+    //                },
+    //            }).
+    //            bind('datepicker-change', function (evt, obj) {
+    //                start = obj.date1;
+    //                stop = obj.date2;
+    //            })
+    //            .bind('datepicker-closed', function () {
+    //                tab_type_turnover.activeTable(tab_type_turnover.active, true);
+    //            });
+    //        var s_d_start = start.getDate() + '.' + (start.getMonth() + 1) + '.' + start.getFullYear() + ' ' + start.getHours() + ':' + start.getMinutes();
+    //        var s_d_stop = stop.getDate() + '.' + (stop.getMonth() + 1) + '.' + stop.getFullYear() + ' ' + stop.getHours() + ':' + stop.getMinutes();
+    //        datetime_range.obj.data('dateRangePicker').setDateRange(s_d_start, s_d_stop, true);
+    //    }
+    //},
     // Типы отчетов
     tab_type_turnover = {
         html_div: $("#tabs-report-turnover"),
@@ -78,7 +153,7 @@
                     tab_type_turnover.activeTable(tab_type_turnover.active, false);
                 },
             });
-            this.activeTable(0, true); // Первый запуск
+            //this.activeTable(0, true); // Первый запуск
         },
         activeTable: function (active, data_refresh) {
             if (active == 0) {
@@ -296,8 +371,13 @@
             OnBegin();
             if (this.list == null | data_refresh == true) {
                 // Обновим данные
-                getAsyncPromSostav(
-                    start, stop,
+                getAsyncPromSostavOfNaturAndDT(
+                    snatur.spinner("value"),
+                    sday.spinner("value"),
+                    smonth.spinner("value"),
+                    syear.spinner("value"),
+                    shour.spinner("value"),
+                    sminute.spinner("value"),
                     function (result) {
                         table_turnover.list = result;
                         //panel_operations_last.label_last_total_value.text(result.length);
@@ -967,10 +1047,18 @@
     resurses.initObject("/railway/Scripts/KIS/kis.json",
     function () {
         // Загружаем дальше
-        $('#label-select-date-range').text(resurses.getText("label-select-date-range"));
-        $('#label-to').text(resurses.getText("table_message_separator"));
-        $('#to-excel').text(resurses.getText("button_to_excel"));
-        datetime_range.initObject();
+        $('#label-select-natur').text(resurses.getText("label_select_natur"));
+        $('#label-select-day').text(resurses.getText("label_select_day"));
+        $('#label-select-month').text(resurses.getText("label_select_month"));
+        $('#label-select-year').text(resurses.getText("label_select_year"));
+        $('#label-select-hour').text(resurses.getText("label_select_hour"));
+        $('#label-select-minute').text(resurses.getText("label_select_minute"));
+        //bt_searsh.text(resurses.getText("button_to_searsh"));
+        //$('#searsh').text(resurses.getText("button_to_searsh"));
+        //$('#to-excel').text(resurses.getText("button_to_excel"));
+
+
+        //datetime_range.initObject();
         rw_stations.initObject();       // станции
         rw_car_condition.initObject();  // годности
         kis_cex.initObject();           // цеха
@@ -981,6 +1069,27 @@
         table_turnover.initObject();
         tab_type_turnover.initObject(); // Типы закладок отчетов 
 
+        //var dd = allVars.length;
+        if (allVars.natur != null) {
+            snatur.spinner("value", allVars.natur);
+        }
+        if (allVars.day != null) {
+            sday.spinner("value", allVars.day);
+        }
+        if (allVars.month != null) {
+            smonth.spinner("value", allVars.month);
+        }
+        if (allVars.year != null) {
+            syear.spinner("value", allVars.year);
+        }
+        if (allVars.hour != null) {
+            shour.spinner("value", allVars.hour);
+        }
+        if (allVars.minute != null) {
+            sminute.spinner("value", allVars.minute);
+        }
+
+        tab_type_turnover.activeTable(0, true); // Первый запуск
     }); // локализация
 
 

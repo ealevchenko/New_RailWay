@@ -124,10 +124,10 @@
     <value>Отчетная документация, полученная по данным предоставленным информационной системой КИС. Информация о перемещении подвижного состава на территории АМКР.</value>
   </data>
   <data name="index_report_arrival_sending_desc" xml:space="preserve">
-    <value>Информация о прибывших составах на АМКР и сданных на УЗ по данным системы КИС</value>
+    <value>Информация о составах прибывших на АМКР и сданных на УЗ по данным системы КИС.</value>
   </data>
   <data name="index_report_arrival_sending_title" xml:space="preserve">
-    <value>Принятие и сдача</value>
+    <value>Оборот УЗ - АМКР</value>
   </data>
   <data name="index_report_input_desc" xml:space="preserve">
     <value>Копирование данных из КИС с внутренних станций по прибытию</value>
@@ -287,5 +287,11 @@
   </data>
   <data name="kis_report_field_wagons" xml:space="preserve">
     <value>Кол по документу</value>
+  </data>
+  <data name="index_report_arrival_sending_search_desc" xml:space="preserve">
+    <value>Поиск составов, прибывших на АМКР или сданных на УЗ в системе КИС.</value>
+  </data>
+  <data name="index_report_arrival_sending_search_title" xml:space="preserve">
+    <value>Найти состав</value>
   </data>
 </root>
