@@ -192,7 +192,7 @@
                     jQueryUI: true,
                     "createdRow": function (row, data, index) {
                         $(row).attr('id', data.id).addClass(data.status);
-                        var link_kis = $('<a id=' + data.id + ' target="_blank" href="/KIS/Home/Natur?natur=' + data.natur +
+                        var link_kis = $('<a id=' + data.id + ' target="_blank" href="/railway/KIS/Home/Natur?natur=' + data.natur +
                             '&day=' + data.day +
                             '&month=' + data.month +
                             '&year=' + data.year +
