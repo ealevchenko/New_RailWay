@@ -1210,7 +1210,45 @@ namespace EFKIS.Concrete
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetProm_SostavAndCount()"), eventID);
+                e.WriteErrorMethod(String.Format("GetProm_SostavAndCount(start={0}, stop={1})", start, stop), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<Prom_SostavAndCount> GetProm_SostavAndCount(int? natur, int? day, int? month, int? year, int? hour, int? minute)
+        {
+            try
+            {
+                if (natur!=null | day!=null | month!=null | year!=null | hour!=null | minute!=null){
+                    string sql_where = " WHERE s.N_NATUR is not null";
+                    if (natur != null) { 
+                        sql_where+=" and s.N_NATUR = " + natur.ToString();
+                    };
+                    if (day != null) { 
+                        sql_where+=" and s.D_DD = " + day.ToString();
+                    };
+                    if (month != null) { 
+                        sql_where+=" and s.D_MM = " + month.ToString();
+                    };
+                    if (year != null) { 
+                        sql_where+=" and s.D_YY = " + year.ToString();
+                    };
+                    if (hour != null) { 
+                        sql_where+=" and s.T_HH = " + hour.ToString();
+                    };
+                    if (minute != null) { 
+                        sql_where+=" and s.T_MI = " + minute.ToString();
+                    };
+                return context.Database.SqlQuery<Prom_SostavAndCount>("SELECT " + sql_field_sostav + "," + sql_field_dt_pr + " as DT_PR" + "," + sql_field_dt + " as DT " +
+                     ",(select count(v.N_VAG) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as countVagon" +
+                     ",(select count(h.N_VAG) from PROM.Nat_Hist h where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD and s.P_OT=0) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD and s.P_OT=1)) as countNatHist " +
+                     sql_table_sostav + sql_where).AsQueryable();                
+                } else 
+                    return new List<Prom_SostavAndCount>().AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetProm_SostavAndCount(natur={0}, day={1}, month={2}, year={3}, hour={4}, minute={5})", natur, day,month,year,hour,minute), eventID);
                 return null;
             }
         }

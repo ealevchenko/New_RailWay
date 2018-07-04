@@ -87,6 +87,7 @@ namespace EFKIS.Abstract
 
         IQueryable<Prom_SostavAndCount> GetProm_SostavAndCount();
         IQueryable<Prom_SostavAndCount> GetProm_SostavAndCount(DateTime start, DateTime stop);
+        IQueryable<Prom_SostavAndCount> GetProm_SostavAndCount(int? natur, int? day, int? month, int? year, int? hour, int? minute);
 
         #region
 
