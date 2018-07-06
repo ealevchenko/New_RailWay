@@ -95,6 +95,7 @@ namespace MessageLog
 
         Web_API_KisKometaController = 11101,
         Web_API_KisNumVagController = 11102,
+        Web_API_KisPromController = 11103,
 
         Web_API_RCController = 11110,
 

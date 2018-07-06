@@ -82,7 +82,9 @@ namespace EFKIS.Concrete
     public class Prom_SostavAndCount : Prom_Sostav {
 
         public int countVagon { get; set; }
+        public int? maxVagon { get; set; }
         public int countNatHist { get; set; }
+        public int? maxNatHist { get; set; }
         public Prom_SostavAndCount() : base() { 
         
         }
@@ -222,6 +224,18 @@ namespace EFKIS.Concrete
         //,DAT_RAZBR
     }
 
+    public class Prom_VagonAndSostav : Prom_Vagon {
+        // дата
+        public int? D_DD { get; set; }
+        public int? D_MM { get; set; }
+        public int? D_YY { get; set; }
+        public int? T_HH { get; set; }
+        public int? T_MI { get; set; }
+        public DateTime? DT { get; set; }
+        public int? P_OT { get; set; }
+        public Prom_VagonAndSostav() : base() { }
+    }
+
     public class Prom_NatHist
     {
         public Int64 ID { get; set; }
@@ -356,6 +370,18 @@ namespace EFKIS.Concrete
         //,DAT_RAZBR
     }
 
+    public class Prom_NatHistAndSostav : Prom_NatHist
+    {
+        // дата
+        public int? D_DD { get; set; }
+        public int? D_MM { get; set; }
+        public int? D_YY { get; set; }
+        public int? T_HH { get; set; }
+        public int? T_MI { get; set; }
+        public DateTime? DT { get; set; }
+        public int? P_OT { get; set; }
+        public Prom_NatHistAndSostav() : base() { }
+    }
 
     public class EFWagons:IKIS
     {
@@ -368,9 +394,30 @@ namespace EFKIS.Concrete
         protected string sql_field_sostav = "ROWNUM as ID, s.N_NATUR ,s.N_VED_PR ,s.N_SOST_OT, s.N_SOST_PR, s.K_ST, s.K_ST_OTPR ,s.K_ST_PR ,s.N_PUT ,s.NAPR ,s.D_PR_DD ,s.D_PR_MM ,s.D_DD ,s.D_MM ,s.T_PR_HH ,s.T_PR_MI ,s.T_HH ,s.T_MI ,s.P_OT ,s.V_P ,s.ST_OTPR ,s.D_PR_YY ,s.D_YY ,s.DAT_VVOD";
         protected string sql_table_sostav = "FROM PROM.SOSTAV s";
 
-        //protected string sql_Sostav = "SELECT ROWNUM as ID, N_NATUR ,N_VED_PR ,N_SOST_OT, N_SOST_PR, K_ST, K_ST_OTPR ,K_ST_PR ,N_PUT ,NAPR ,D_PR_DD ,D_PR_MM ,D_DD ,D_MM ,T_PR_HH ,T_PR_MI ,T_HH ,T_MI ,P_OT ,V_P ,ST_OTPR ,D_PR_YY ,D_YY ,DAT_VVOD FROM PROM.SOSTAV";
         protected string sql_NatHist = "SELECT ROWNUM as ID,N_VAG,NPP,D_PR_DD,D_PR_MM,D_PR_YY,T_PR_HH,T_PR_MI,D_SD_DD,D_SD_MM,D_SD_YY,T_SD_HH,T_SD_MI,GODN,K_ST_KMK,K_POL_GR,K_GR,N_VED_PR,N_NAK_MPS,OTPRAV,PRIM_GR,WES_GR,N_NATUR,N_PUT,K_ST,K_OP,K_FRONT,N_NATUR_T,GODN_T,K_GR_T,WES_GR_T,K_OTPR_GR,K_ST_OTPR,K_ST_NAZN,ST_OTPR,ZADER,NEPR,UDOST,SERTIF,KOD_STRAN,KOD_SD,NETO,BRUTO,TARA,DAT_VVOD FROM PROM.NAT_HIST";
         protected string sql_Vagon = "SELECT ROWNUM as ID,N_VAG,NPP,D_PR_DD,D_PR_MM,D_PR_YY,T_PR_HH,T_PR_MI,D_SD_DD,D_SD_MM,D_SD_YY,T_SD_HH,T_SD_MI,GODN,K_ST_KMK,K_POL_GR,K_GR,N_VED_PR,N_NAK_MPS,OTPRAV,PRIM_GR,WES_GR,N_NATUR,N_PUT,K_ST,K_OP,K_FRONT,N_NATUR_T,GODN_T,K_GR_T,WES_GR_T,K_OTPR_GR,K_ST_OTPR,K_ST_NAZN,ST_OTPR,ZADER,NEPR,UDOST,SERTIF,KOD_STRAN,KOD_SD,NETO,BRUTO,TARA,DAT_VVOD FROM PROM.VAGON";
+
+        protected string sql_vagon_sostav = "SELECT ROWNUM as ID, " +
+                    "(CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END) as D_DD, " +
+                    "(CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) as D_MM, " +
+                    "(CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) as D_YY, " +
+                    "(CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END) as T_HH, " +
+                    "(CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END) as T_MI, " +
+                    "(select max(s.P_OT) from PROM.SOSTAV s where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD) ) as P_OT, " +
+                    "to_date((to_char((CASE WHEN ((CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END)>=1 and (CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END)<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)>=1 and (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)<=12) THEN (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END)>0) THEN (CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN (CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END) ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)>=1 and (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)<=12) THEN (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END)>0) THEN (CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN ((CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END)>=0 and (CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END)<=23) THEN (CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END) ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN ((CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END)>=0 and (CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END)<=59) THEN (CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END) ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') as DT, " +
+                    "v.N_VAG, v.NPP, v.D_PR_DD, v.D_PR_MM, v.D_PR_YY, v.T_PR_HH, v.T_PR_MI, v.D_SD_DD, v.D_SD_MM, v.D_SD_YY, v.T_SD_HH, v.T_SD_MI, v.GODN, v.K_ST_KMK, v.K_POL_GR, v.K_GR, v.N_VED_PR, v.N_NAK_MPS, v.OTPRAV, v.PRIM_GR, v.WES_GR, v.N_NATUR, v.N_PUT, v.K_ST, v.K_OP, v.K_FRONT, v.N_NATUR_T, v.GODN_T, v.K_GR_T, v.WES_GR_T, v.K_OTPR_GR, v.K_ST_OTPR, v.K_ST_NAZN, v.ST_OTPR, v.ZADER, v.NEPR, v.UDOST, v.SERTIF, v.KOD_STRAN, v.KOD_SD, v.NETO, v.BRUTO, v.TARA, v.DAT_VVOD " +
+                    "FROM PROM.VAGON v";
+
+        protected string sql_nathist_sostav = "SELECT ROWNUM as ID, " +
+                    "(CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END) as D_DD, " +
+                    "(CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END) as D_MM, " +
+                    "(CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END) as D_YY, " +
+                    "(CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END) as T_HH, " +
+                    "(CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END) as T_MI, " +
+                    "(select max(s.P_OT) from PROM.SOSTAV s where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD) ) as P_OT, " +
+                    "to_date((to_char((CASE WHEN ((CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END)>=1 and (CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END)<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)>=1 and (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)<=12) THEN (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END)>0) THEN (CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END) ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN (CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END) ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)>=1 and (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)<=12) THEN (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END)>0) THEN (CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END) ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN ((CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END)>=0 and (CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END)<=23) THEN (CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END) ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN ((CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END)>=0 and (CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END)<=59) THEN (CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END) ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') as DT, " +
+                    "h.N_VAG, h.NPP, h.D_PR_DD, h.D_PR_MM, h.D_PR_YY, h.T_PR_HH, h.T_PR_MI, h.D_SD_DD, h.D_SD_MM, h.D_SD_YY, h.T_SD_HH, h.T_SD_MI, h.GODN, h.K_ST_KMK, h.K_POL_GR, h.K_GR, h.N_VED_PR, h.N_NAK_MPS, h.OTPRAV, h.PRIM_GR, h.WES_GR, h.N_NATUR, h.N_PUT, h.K_ST, h.K_OP, h.K_FRONT, h.N_NATUR_T, h.GODN_T, h.K_GR_T, h.WES_GR_T, h.K_OTPR_GR, h.K_ST_OTPR, h.K_ST_NAZN, h.ST_OTPR, h.ZADER, h.NEPR, h.UDOST, h.SERTIF, h.KOD_STRAN, h.KOD_SD, h.NETO, h.BRUTO, h.TARA, h.DAT_VVOD " +
+                    "FROM PROM.NAT_HIST h";
 
         #region KOMETA
 
@@ -1186,8 +1233,10 @@ namespace EFKIS.Concrete
             try
             {
                 return context.Database.SqlQuery<Prom_SostavAndCount>("SELECT " + sql_field_sostav + "," + sql_field_dt_pr + " as DT_PR" + "," + sql_field_dt + " as DT " +
-                    ",(select count(v.N_VAG) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as countVagon"+
-                    ",(select count(h.N_VAG) from PROM.Nat_Hist h where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD and s.P_OT=0) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD and s.P_OT=1)) as countNatHist "+
+                     ",(select count(v.N_VAG) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as countVagon " +
+                     ",(select max(v.NPP) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as maxVagon " +
+                     ",(select count(h.N_VAG) from PROM.Nat_Hist h where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD and s.P_OT=0) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD and s.P_OT=1)) as countNatHist " +
+                     ",(select max(h.NPP) from PROM.Nat_Hist h where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD and s.P_OT=0) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD and s.P_OT=1)) as maxNatHist " +
                     sql_table_sostav).AsQueryable();         
             }
             catch (Exception e)
@@ -1203,8 +1252,10 @@ namespace EFKIS.Concrete
             {
 
                 return context.Database.SqlQuery<Prom_SostavAndCount>("SELECT " + sql_field_sostav + "," + sql_field_dt_pr + " as DT_PR" + "," + sql_field_dt + " as DT " +
-                     ",(select count(v.N_VAG) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as countVagon" +
+                     ",(select count(v.N_VAG) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as countVagon " +
+                     ",(select max(v.NPP) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as maxVagon " +
                      ",(select count(h.N_VAG) from PROM.Nat_Hist h where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD and s.P_OT=0) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD and s.P_OT=1)) as countNatHist " +
+                     ",(select max(h.NPP) from PROM.Nat_Hist h where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD and s.P_OT=0) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD and s.P_OT=1)) as maxNatHist " +
                      sql_table_sostav + " WHERE " + sql_field_dt + " >= TO_DATE('" + start.ToString("dd.MM.yyyy HH:mm") + "', 'dd.mm.yyyy hh24:mi') and " + sql_field_dt + " <= TO_DATE('" + stop.ToString("dd.MM.yyyy HH:mm") + "', 'dd.mm.yyyy hh24:mi')"
                      ).AsQueryable();
             }
@@ -1240,8 +1291,10 @@ namespace EFKIS.Concrete
                         sql_where+=" and s.T_MI = " + minute.ToString();
                     };
                 return context.Database.SqlQuery<Prom_SostavAndCount>("SELECT " + sql_field_sostav + "," + sql_field_dt_pr + " as DT_PR" + "," + sql_field_dt + " as DT " +
-                     ",(select count(v.N_VAG) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as countVagon" +
+                     ",(select count(v.N_VAG) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as countVagon " +
+                     ",(select max(v.NPP) from PROM.Vagon v where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD and s.P_OT=0) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD and s.P_OT=1)) as maxVagon " +
                      ",(select count(h.N_VAG) from PROM.Nat_Hist h where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD and s.P_OT=0) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD and s.P_OT=1)) as countNatHist " +
+                     ",(select max(h.NPP) from PROM.Nat_Hist h where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD and s.P_OT=0) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD and s.P_OT=1)) as maxNatHist " +
                      sql_table_sostav + sql_where).AsQueryable();                
                 } else 
                     return new List<Prom_SostavAndCount>().AsQueryable();
@@ -1738,6 +1791,35 @@ namespace EFKIS.Concrete
 
         #endregion
 
+        #region Prom_NatHistAndSostav
+
+        public IQueryable<Prom_NatHistAndSostav> GetProm_NatHistAndSostav()
+        {
+            try
+            {
+                return context.Database.SqlQuery<Prom_NatHistAndSostav>(sql_nathist_sostav).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetProm_NatHistAndSostav()"), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<Prom_NatHistAndSostav> GetProm_NatHistAndSostav(int num)
+        {
+            try
+            {
+                return context.Database.SqlQuery<Prom_NatHistAndSostav>(sql_nathist_sostav + " where h.N_VAG = " + num.ToString() + " order by D_YY desc, D_MM desc, D_DD desc, T_HH desc, T_MI desc").AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetProm_NatHistAndSostav(num={0})", num), eventID);
+                return null;
+            }
+        }
+        #endregion
+
         #region PROM.Vagon
 
         public IQueryable<PromVagon> PromVagon
@@ -1867,7 +1949,6 @@ namespace EFKIS.Concrete
         {
             try
             {
-                //return context.Database.SqlQuery<Prom_Vagon>("SELECT ROWNUM as ID,N_VAG,NPP,D_PR_DD,D_PR_MM,D_PR_YY,T_PR_HH,T_PR_MI,D_SD_DD,D_SD_MM,D_SD_YY,T_SD_HH,T_SD_MI,GODN,K_ST_KMK,K_POL_GR,K_GR,N_VED_PR,N_NAK_MPS,OTPRAV,PRIM_GR,WES_GR,N_NATUR,N_PUT,K_ST,K_OP,K_FRONT,N_NATUR_T,GODN_T,K_GR_T,WES_GR_T,K_OTPR_GR,K_ST_OTPR,K_ST_NAZN,ST_OTPR,ZADER,NEPR,UDOST,SERTIF,KOD_STRAN,KOD_SD,NETO,BRUTO,TARA,DAT_VVOD FROM PROM.VAGON").AsQueryable();
                 return context.Database.SqlQuery<Prom_Vagon>(sql_Vagon).AsQueryable();
             }
             catch (Exception e)
@@ -1890,7 +1971,6 @@ namespace EFKIS.Concrete
         {
             try
             {
-                //return context.Database.SqlQuery<Prom_Vagon>("SELECT ROWNUM as ID,N_VAG,NPP,D_PR_DD,D_PR_MM,D_PR_YY,T_PR_HH,T_PR_MI,D_SD_DD,D_SD_MM,D_SD_YY,T_SD_HH,T_SD_MI,GODN,K_ST_KMK,K_POL_GR,K_GR,N_VED_PR,N_NAK_MPS,OTPRAV,PRIM_GR,WES_GR,N_NATUR,N_PUT,K_ST,K_OP,K_FRONT,N_NATUR_T,GODN_T,K_GR_T,WES_GR_T,K_OTPR_GR,K_ST_OTPR,K_ST_NAZN,ST_OTPR,ZADER,NEPR,UDOST,SERTIF,KOD_STRAN,KOD_SD,NETO,BRUTO,TARA,DAT_VVOD FROM PROM.VAGON "+
                 return context.Database.SqlQuery<Prom_Vagon>(sql_Vagon + " WHERE N_NATUR = "+natur.ToString()+" AND D_PR_DD = "+day.ToString()+" AND D_PR_MM = "+month.ToString()+" AND D_PR_YY = "+year.ToString()+" AND T_PR_HH = "+hour.ToString()+" AND T_PR_MI = "+minute.ToString()+" ORDER BY NPP").AsQueryable();
             }
             catch (Exception e)
@@ -1919,6 +1999,35 @@ namespace EFKIS.Concrete
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("GetSDProm_Vagon(natur={0}, day={1}, month={2}, year={3}, hour={4}, minute={5})", natur, day, month, year, hour, minute), eventID);
+                return null;
+            }
+        }
+        #endregion
+
+        #region Prom_VagonAndSostav
+
+        public IQueryable<Prom_VagonAndSostav> GetProm_VagonAndSostav()
+        {
+            try
+            {
+                return context.Database.SqlQuery<Prom_VagonAndSostav>(sql_vagon_sostav).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetProm_VagonAndSostavn()"), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<Prom_VagonAndSostav> GetProm_VagonAndSostav(int num)
+        {
+            try
+            {
+                return context.Database.SqlQuery<Prom_VagonAndSostav>(sql_vagon_sostav + " where v.N_VAG = " + num.ToString() + " order by D_YY desc, D_MM desc, D_DD desc, T_HH desc, T_MI desc").AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetProm_VagonAndSostavn(num={0})",num), eventID);
                 return null;
             }
         }

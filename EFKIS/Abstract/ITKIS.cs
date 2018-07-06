@@ -70,6 +70,9 @@ namespace EFKIS.Abstract
         DateTime? GetLastDateTimeRWBufferSendingSostav();
         IQueryable<RWBufferSendingSostav> GetRWBufferSendingSostav(DateTime start, DateTime stop);
         IQueryable<RWBufferSendingSostav> GetRWBufferSendingSostavNoClose();
+        RWBufferSendingSostav GetRWBufferSendingSostavOfNatur(int natur);
+        int CloseRWBufferSendingSostav(int id);
+        int CloseRWBufferSendingSostav(int id, string user);
         #endregion
 
     }

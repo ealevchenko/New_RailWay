@@ -957,6 +957,59 @@ namespace EFKIS.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Получить строку по натурке
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <returns></returns>
+        public RWBufferSendingSostav GetRWBufferSendingSostavOfNatur(int natur)
+        {
+            try
+            {
+                return GetRWBufferSendingSostav().Where(o => o.natur == natur).OrderByDescending(o => o.datetime).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRWBufferSendingSostavOfNatur(natur={0})", natur), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Закрыть строку
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int CloseRWBufferSendingSostav(int id)
+        {
+            try
+            {
+                return CloseRWBufferSendingSostav(id, System.Environment.UserDomainName + @"\" + System.Environment.UserName);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseRWBufferSendingSostav(id={0})", id), eventID);
+                return -1;
+            }
+
+        }
+
+        public int CloseRWBufferSendingSostav(int id, string user)
+        {
+            try
+            {
+                RWBufferSendingSostav bas = GetRWBufferSendingSostav(id);
+                if (bas == null) return 0;
+                bas.close = DateTime.Now;
+                bas.close_user = user;
+                return SaveRWBufferSendingSostav(bas);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseRWBufferSendingSostav(id={0}, user={1})", id, user), eventID);
+                return -1;
+            }
+
+        }
         #endregion
         #endregion
     }

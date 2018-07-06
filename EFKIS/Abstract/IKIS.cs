@@ -120,11 +120,14 @@ namespace EFKIS.Abstract
         #endregion
 
         #region Prom_NatHist
-
         IQueryable<Prom_NatHist> GetProm_NatHist();
         IQueryable<Prom_NatHist> GetPRProm_NatHist(int natur, int day, int month, int year, int hour, int minute);
         IQueryable<Prom_NatHist> GetSDProm_NatHist(int natur, int day, int month, int year, int hour, int minute);
+        #endregion
 
+        #region Prom_NatHistAndSostav
+        IQueryable<Prom_NatHistAndSostav> GetProm_NatHistAndSostav();
+        IQueryable<Prom_NatHistAndSostav> GetProm_NatHistAndSostav(int num);
         #endregion
 
         #region PROM.Vagon
@@ -142,6 +145,12 @@ namespace EFKIS.Abstract
         IQueryable<Prom_Vagon> GetPRProm_Vagon(int natur, int day, int month, int year, int hour, int minute);
         IQueryable<Prom_Vagon> GetSDProm_Vagon(int natur, int day, int month, int year, int hour, int minute);
 
+        #endregion
+
+        #region Prom_VagonAndSostav
+
+        IQueryable<Prom_VagonAndSostav> GetProm_VagonAndSostav();
+        IQueryable<Prom_VagonAndSostav> GetProm_VagonAndSostav(int num);
         #endregion
 
         #region PROM.CEX
