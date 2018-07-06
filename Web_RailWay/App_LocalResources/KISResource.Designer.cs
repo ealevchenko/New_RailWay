@@ -97,24 +97,6 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Поиск составов, прибывших на АМКР или сданных на УЗ в системе КИС..
-        /// </summary>
-        public static string index_report_arrival_sending_search_desc {
-            get {
-                return ResourceManager.GetString("index_report_arrival_sending_search_desc", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Найти состав.
-        /// </summary>
-        public static string index_report_arrival_sending_search_title {
-            get {
-                return ResourceManager.GetString("index_report_arrival_sending_search_title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Оборот УЗ - АМКР.
         /// </summary>
         public static string index_report_arrival_sending_title {
@@ -142,6 +124,24 @@ namespace Web_RailWay.App_LocalResources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Поиск составов, прибывших на АМКР или сданных на УЗ в системе КИС..
+        /// </summary>
+        public static string index_report_natur_search_desc {
+            get {
+                return ResourceManager.GetString("index_report_natur_search_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Найти состав.
+        /// </summary>
+        public static string index_report_natur_search_title {
+            get {
+                return ResourceManager.GetString("index_report_natur_search_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Копирование данных из КИС с внутренних станций по отправке.
         /// </summary>
         public static string index_report_output_desc {
@@ -156,6 +156,24 @@ namespace Web_RailWay.App_LocalResources {
         public static string index_report_output_title {
             get {
                 return ResourceManager.GetString("index_report_output_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Поиск вагонов, прибывших на АМКР или сданных на УЗ в системе КИС..
+        /// </summary>
+        public static string index_report_vagon_search_desc {
+            get {
+                return ResourceManager.GetString("index_report_vagon_search_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Найти вагон.
+        /// </summary>
+        public static string index_report_vagon_search_title {
+            get {
+                return ResourceManager.GetString("index_report_vagon_search_title", resourceCulture);
             }
         }
         

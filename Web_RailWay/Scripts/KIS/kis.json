@@ -66,6 +66,11 @@
         "ru": "Минуты: ",
         "en": "Minutes: "
     },       
+    {
+        "tag": "label_select_vagon",
+        "ru": "№ Вагона: ",
+        "en": "# Car: "
+    },  
      
   {
     "tag": "button_to_excel",
@@ -319,11 +324,16 @@
     "ru": "Сдан",
     "en": "Was passed"
   },
-  {
-    "tag": "table_field_DT",
-    "ru": "Отправлен",
-    "en": ""
-  },
+    {
+        "tag": "table_field_DT",
+        "ru": "Отправлен",
+        "en": ""
+    },
+    {
+        "tag": "table_field_DT_PR_SD",
+        "ru": "Дата и время",
+        "en": ""
+    },
   {
     "tag": "table_field_CountVagon",
     "ru": "Кол. Prom.Vagon",

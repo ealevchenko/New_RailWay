@@ -1,0 +1,85 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @KISResource.index_report_vagon_search_desc;
+    ViewBag.Home = @KISResource.index_report_vagon_search_title;
+}
+
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("LinkKISControl", "Home", new { area = "KIS" }); }
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    @Styles.Render("~/jquery-ui/css")
+    @Styles.Render("~/DataTables/css")
+    <link rel="stylesheet" type="text/css" href="~/Content/KIS/turnover.css">
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/Ajax")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/DataTables")
+    <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/railway.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/kis.js" type="text/javascript"></script>
+    <script src="~/Scripts/KIS/vagon.js" type="text/javascript"></script>
+    <script>
+        $('header').addClass('img-header-kis');
+    </script>
+}
+
+<div id="report" class="report-wide">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+        <div id="select-vagon">
+            <label for="vagon" id="label-select-vagon" class="title-label"></label><input id="vagon" name="value" type="number" size="10">
+            @*<label for="day" id="label-select-day" class="title-label"></label><input id="day" name="value" type="number" size="5">
+            <label for="month" id="label-select-month" class="title-label"></label><input id="month" name="value" type="number" size="5">
+            <label for="year" id="label-select-year" class="title-label"></label><input id="year" name="value" size="5">
+            <label for="hour" id="label-select-hour" class="title-label"></label><input id="hour" name="value" size="5">
+            <label for="minute" id="label-select-minute" class="title-label"></label><input id="minute" name="value" size="5">*@
+            <button class="ui-button ui-widget ui-corner-all" id="search"></button>
+        </div>
+        @*<button class="ui-button ui-widget ui-corner-all" id="to-excel"> </button>*@
+    </div>
+    <div id="report-detali">
+        <div id="accordion-vagon">
+            <h3>Vagon</h3>
+            <div>
+                <table class='compact table-cars cell-border' id="table-list-vagon" cellpadding="0"></table>
+            </div>
+        </div>
+        <div id="accordion-nathist">
+            <h3>NatHist</h3>
+            <div>
+                <table class='compact table-cars cell-border' id="table-list-nathist" cellpadding="0"></table>
+            </div>
+        </div>
+
+
+        @*<div id="tabs-report-vagon">
+            <ul>
+                <li><a href="#tabs-vagon-1" id="link-tabs-vagon-1"></a></li>
+                <li><a href="#tabs-vagon-2" id="link-tabs-vagon-2"></a></li>
+            </ul>
+            <div id="tabs-vagon-1">
+                <table class='compact table-cars cell-border' id="table-list-vagon"  cellpadding="0"></table>
+            </div>
+            <div id="tabs-vagon-2">
+                <table class='compact cell-border' id="table-list-nathist" style="width:100%" cellpadding="0"></table>
+            </div>
+        </div>*@
+
+    </div>
+    <div id="cls"></div>
+</div>
+
+

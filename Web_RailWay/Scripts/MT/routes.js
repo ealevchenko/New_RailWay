@@ -131,7 +131,7 @@
         view: 0, // показать все
         initObject: function () {
             this.obj = this.html_table.DataTable({
-                "lengthMenu": [25, 50, 100, 200, 400],
+                "lengthMenu": [[10, 25, 50, 100, 200, 400, -1], [10, 25, 50, 100, 200, 400, "All"]],
                 "paging": true,
                 "ordering": true,
                 "info": false,

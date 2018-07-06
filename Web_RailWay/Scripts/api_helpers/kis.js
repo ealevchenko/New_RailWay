@@ -229,6 +229,30 @@ function getAsyncSendingPromVagon(natur, day, month, year, hour, minute, callbac
         },
     });
 }
+// Вернуть список вход и исход вагонов из таблицы PROM.VAGON по указаному вагону 
+function getAsyncPromVagonAndSostav(num, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/kis/prom/vagon_sostav/num/' + num,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 // Вернуть список входящих вагонов таблица PROM.NatHist
 function getAsyncArrivalPromNatHist(natur, day, month, year, hour, minute, callback) {
     $.ajax({
@@ -275,6 +299,30 @@ function getAsyncSendingPromNatHist(natur, day, month, year, hour, minute, callb
         },
     });
 }
+// Вернуть список вход и исход вагонов из таблицы PROM.NatHist по указаному вагону 
+function getAsyncPromNatHistAndSostav(num, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/kis/prom/nathist_sostav/num/' + num,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
 // Вернуть перечень цехов получателей грузов
 function getAsyncPromCex(callback) {
     $.ajax({

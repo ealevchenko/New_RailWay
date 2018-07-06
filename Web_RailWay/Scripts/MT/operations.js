@@ -202,7 +202,7 @@
         report_id: null,
         initObject: function () {
             this.obj = this.html_table.DataTable({
-                "lengthMenu": [10, 25, 50, 100, 200, 400],
+                "lengthMenu": [[10, 25, 50, 100, 200, 400, -1], [10, 25, 50, 100, 200, 400, "All"]],
                 "paging": true,
                 "ordering": true,
                 "info": false,
@@ -502,7 +502,7 @@
         report_id: null,
         initObject: function () {
             this.obj = this.html_table.DataTable({
-                "lengthMenu": [10, 25, 50, 100, 200, 400],
+                "lengthMenu": [[10, 25, 50, 100, 200, 400, -1], [10, 25, 50, 100, 200, 400, "All"]],
                 "paging": true,
                 "ordering": true,
                 "info": false,

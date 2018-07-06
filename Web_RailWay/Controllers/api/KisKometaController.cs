@@ -29,41 +29,65 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(KometaVagonSob))]
         public IHttpActionResult GetKometaVagonSob(int num)
         {
-            List<KometaVagonSob> list = this.rep_kis.GetVagonsSob(num).ToList();
-            if (list == null || list.Count() == 0)
+            try
             {
+                List<KometaVagonSob> list = this.rep_kis.GetVagonsSob(num).ToList();
+                if (list == null || list.Count() == 0)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaVagonSob(num={0})", num), eventID);
                 return NotFound();
             }
-            return Ok(list);
-        }
+}
 
         // GET: api/kis/kometa/vagon_sob/num_vag/68823137/2017/11/15/17/00/00
         [Route("vagon_sob/num_vag/{num:int}/{y:int}/{mt:int}/{d:int}/{h:int}/{m:int}/{s:int}")]
         [ResponseType(typeof(KometaVagonSob))]
         public IHttpActionResult GetKometaVagonSob(int num, int y, int mt, int d, int h, int m, int s)
         {
-            DateTime dt = new DateTime(y, mt, d, h, m, s);
-            KometaVagonSob vs = this.rep_kis.GetVagonsSob(num, dt);
-            if (vs == null)
+            try
             {
+                DateTime dt = new DateTime(y, mt, d, h, m, s);
+                KometaVagonSob vs = this.rep_kis.GetVagonsSob(num, dt);
+                if (vs == null)
+                {
+                    return NotFound();
+                }
+                return Ok(vs);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaVagonSob(num={0},y={1},mt={2},d={3},h={4},m={5},s={6})", num, y ,mt, d, h, m, s), eventID);
                 return NotFound();
             }
-            return Ok(vs);
-        }
+}
         // GET: api/kis/kometa/vagon_sob/num_vag/68823137/2017-11-15 17:00:00
         // GET: api/kis/kometa/vagon_sob/num_vag/?num=68823137&dt=2017-11-15 17:00:00
         [Route("vagon_sob/num_vag/{num:int}/{dt:DateTime}")]
         [ResponseType(typeof(KometaVagonSob))]
         public IHttpActionResult GetKometaVagonSob(int num, DateTime dt)
         {
-            //DateTime dt = DateTime.Parse(dts);
-            KometaVagonSob vs = this.rep_kis.GetVagonsSob(num, dt);
-            if (vs == null)
+            try
             {
+                //DateTime dt = DateTime.Parse(dts);
+                KometaVagonSob vs = this.rep_kis.GetVagonsSob(num, dt);
+                if (vs == null)
+                {
+                    return NotFound();
+                }
+                return Ok(vs);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaVagonSob(num={0}, dt={1})", num, dt), eventID);
                 return NotFound();
             }
-            return Ok(vs);
-        }
+}
         #endregion
 
         #region KometaSobstvForNakl
@@ -72,26 +96,42 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(KometaSobstvForNakl))]
         public IHttpActionResult GetSobstvForNakl()
         {
-            List<KometaSobstvForNakl> list = this.rep_kis.GetSobstvForNakl().ToList();
-            if (list == null || list.Count() == 0)
+            try
             {
+                List<KometaSobstvForNakl> list = this.rep_kis.GetSobstvForNakl().ToList();
+                if (list == null || list.Count() == 0)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSobstvForNakl()"), eventID);
                 return NotFound();
             }
-            return Ok(list);
-        }
+}
         
         // GET: api/kis/kometa/sobstv_for_nakl/sob/10
         [Route("sobstv_for_nakl/sob/{kod:int}")]
         [ResponseType(typeof(KometaSobstvForNakl))]
         public IHttpActionResult GetSobstvForNakl(int kod)
         {
-            KometaSobstvForNakl nakl = this.rep_kis.GetSobstvForNakl(kod);
-            if (nakl == null)
+            try
             {
+                KometaSobstvForNakl nakl = this.rep_kis.GetSobstvForNakl(kod);
+                if (nakl == null)
+                {
+                    return NotFound();
+                }
+                return Ok(nakl);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSobstvForNakl(kod={0})",kod), eventID);
                 return NotFound();
             }
-            return Ok(nakl);
-        }
+}
         #endregion
 
         #region KometaStan
@@ -122,9 +162,17 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(string))]
         public string GetKometaStan(int id)
         {
-            KometaStan kstan = this.rep_kis.GetKometaStan(id);
-            return kstan != null ? kstan.NAME : id.ToString();
-        }
+            try
+            {
+                KometaStan kstan = this.rep_kis.GetKometaStan(id);
+                return kstan != null ? kstan.NAME : id.ToString();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaStan(id={0})", id), eventID);
+                return null;
+            }
+}
         #endregion
 
         #region KometaStrana
@@ -133,13 +181,21 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(KometaStrana))]
         public IHttpActionResult GetKometaStrana()
         {
-            List<KometaStrana> list = this.rep_kis.GetKometaStrana().ToList();
-            if (list == null || list.Count()==0)
+            try
             {
+                List<KometaStrana> list = this.rep_kis.GetKometaStrana().ToList();
+                if (list == null || list.Count() == 0)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetKometaStrana()"), eventID);
                 return NotFound();
             }
-            return Ok(list);
-        }
+}
         #endregion
 
         #region

@@ -242,12 +242,12 @@ namespace Web_RailWay.Controllers.api
             return Ok(bas);
         }
 
-        //[HttpPost]
-        //[Route("sending/{id:int}/close")]
-        //public int CloseRWBufferSendinglSostav(int id)
-        //{
-        //    //return this.rep_kist.CloseRWBufferSendingSostav(id, User.Identity.Name);
-        //}
+        [HttpPost]
+        [Route("sending/{id:int}/close")]
+        public int CloseRWBufferSendinglSostav(int id)
+        {
+            return this.rep_kist.CloseRWBufferSendingSostav(id, User.Identity.Name);
+        }
 
         #endregion
 

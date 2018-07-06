@@ -288,10 +288,16 @@
   <data name="kis_report_field_wagons" xml:space="preserve">
     <value>Кол по документу</value>
   </data>
-  <data name="index_report_arrival_sending_search_desc" xml:space="preserve">
+  <data name="index_report_natur_search_desc" xml:space="preserve">
     <value>Поиск составов, прибывших на АМКР или сданных на УЗ в системе КИС.</value>
   </data>
-  <data name="index_report_arrival_sending_search_title" xml:space="preserve">
+  <data name="index_report_natur_search_title" xml:space="preserve">
     <value>Найти состав</value>
+  </data>
+  <data name="index_report_vagon_search_desc" xml:space="preserve">
+    <value>Поиск вагонов, прибывших на АМКР или сданных на УЗ в системе КИС.</value>
+  </data>
+  <data name="index_report_vagon_search_title" xml:space="preserve">
+    <value>Найти вагон</value>
   </data>
 </root>

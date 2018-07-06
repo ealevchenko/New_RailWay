@@ -227,7 +227,6 @@
         // Инициализация вагонов
         initObject: function () {
             this.obj = this.html_table.DataTable({
-                //"lengthMenu": [10, 25, 50, 100, 200, 400],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "paging": true,
                 "ordering": true,
@@ -244,6 +243,12 @@
                 jQueryUI: true,
                 "createdRow": function (row, data, index) {
                     $(row).attr('id', data.ID).addClass(Operation(data.P_OT));
+                    if (data.CountVagon == 0 || data.CountVagon != data.MaxVagon) {
+                        $('td', row).eq(4).addClass('error-count');
+                    }
+                    if (data.CountNatHist == 0 || data.CountNatHist != data.MaxNatHist) {
+                        $('td', row).eq(5).addClass('error-count');
+                    }
                 },
                 columns: [
                     {
@@ -256,8 +261,8 @@
                     { data: "N_NATUR", title: resurses.getText("table_field_N_NATUR"), orderable: true, searchable: true },
                     { data: "DT_PR", title: resurses.getText("table_field_DT_PR"), width: "150px", orderable: true, searchable: false },
                     { data: "DT", title: resurses.getText("table_field_DT"), width: "150px", orderable: true, searchable: false },
-                    { data: "CountVagon", title: resurses.getText("table_field_CountVagon"), orderable: true, searchable: false },
-                    { data: "CountNatHist", title: resurses.getText("table_field_NatHist"), orderable: true, searchable: false },
+                    { data: "Vagon", title: resurses.getText("table_field_CountVagon"), orderable: true, searchable: false },
+                    { data: "NatHist", title: resurses.getText("table_field_NatHist"), orderable: true, searchable: false },
                     //{ data: "D_PR_DD", title: resurses.getText("table_field_D_PR_DD"), orderable: true, searchable: true },
                     //{ data: "D_PR_MM", title: resurses.getText("table_field_D_PR_MM"), orderable: true, searchable: false },
                     //{ data: "D_PR_YY", title: resurses.getText("table_field_D_PR_YY"), orderable: true, searchable: false },
@@ -353,6 +358,10 @@
                     "DAT_VVOD": data[i].DAT_VVOD,
                     "CountVagon": data[i].countVagon,
                     "CountNatHist": data[i].countNatHist,
+                    "MaxVagon": data[i].maxVagon,
+                    "MaxNatHist": data[i].maxNatHist,
+                    "Vagon": data[i].countVagon + '(' + data[i].maxVagon + ')',
+                    "NatHist": data[i].countNatHist + '(' + data[i].maxNatHist + ')',
                 });
             }
             LockScreenOff();
@@ -440,6 +449,74 @@
                 }
             });
         },
+        // Инициализировать таблицу
+        initTableChild: function (html_table) {
+            return $(html_table).DataTable({
+                "paging": false,
+                "ordering": true,
+                "info": false,
+                "select": false,
+                "autoWidth": false,
+                //"filter": true,
+                //"scrollY": "400px",
+                "scrollX": true,
+                language: {
+                    emptyTable: resurses.getText("table_message_emptyTable"),
+                    decimal: resurses.getText("table_decimal"),
+                    search: resurses.getText("table_message_search"),
+                },
+                jQueryUI: true,
+                "createdRow": function (row, data, index) {
+                    var link_kis_vagon = $('<a id=' + data.id + ' target="_blank" href="/railway/KIS/Home/Vagon?num=' + data.N_VAG + '">' + data.N_VAG + '</a>');
+                    $('td', row).eq(0).html(link_kis_vagon);
+                },
+                columns: [
+                        { data: "N_VAG", title: resurses.getText("table_field_num_car"), orderable: false, searchable: true },
+                        { data: "NPP", title: resurses.getText("table_field_position"), orderable: true, searchable: false },
+                        // Прибытие
+                        { data: "DT_PR", title: resurses.getText("table_field_DT_PR"), orderable: false, searchable: false, visible: false }, //2
+                        { data: "GODN", title: resurses.getText("table_field_GODN"), orderable: false, searchable: false, visible: false },
+                        { data: "K_POL_GR", title: resurses.getText("table_field_K_POL_GR"), orderable: false, searchable: false, visible: false },
+                        { data: "K_GR", title: resurses.getText("table_field_K_GR"), orderable: false, searchable: false, visible: false },
+                        { data: "ST_OTPR", title: resurses.getText("table_field_ST_OTPR"), orderable: false, searchable: false, visible: false },
+                        { data: "OTPRAV", title: resurses.getText("table_field_OTPRAV"), orderable: false, searchable: false, visible: false },
+                        { data: "PRIM_GR", title: resurses.getText("table_field_PRIM_GR"), orderable: false, searchable: false, visible: false },
+                        { data: "WES_GR", title: resurses.getText("table_field_WES_GR"), orderable: false, searchable: false, visible: false },
+                        { data: "N_VED_PR", title: resurses.getText("table_field_N_VED_PR"), orderable: false, searchable: false, visible: false },
+                        { data: "N_NAK_MPS", title: resurses.getText("table_field_N_NAK_MPS"), orderable: false, searchable: false, visible: false },
+
+                        // Отправка
+                        { data: "DT_SD", title: resurses.getText("table_field_DT_SD"), orderable: false, searchable: false, visible: false }, // 12
+                        { data: "GODN_T", title: resurses.getText("table_field_GODN_T"), orderable: false, searchable: false, visible: false },
+                        { data: "K_GR_T", title: resurses.getText("table_field_K_GR_T"), orderable: false, searchable: false, visible: false },
+                        { data: "WES_GR_T", title: resurses.getText("table_field_WES_GR_T"), orderable: false, searchable: false, visible: false },
+                        { data: "K_OTPR_GR", title: resurses.getText("table_field_K_OTPR_GR"), orderable: false, searchable: false, visible: false },
+                        { data: "K_OP", title: resurses.getText("table_field_K_OP"), orderable: false, searchable: false, visible: false }, //17
+                        // Общая
+                        { data: "K_FRONT", title: resurses.getText("table_field_K_FRONT"), orderable: false, searchable: false },
+                        { data: "KOD_STRAN", title: resurses.getText("table_field_KOD_STRAN"), orderable: false, searchable: false },
+
+                        { data: "SERTIF", title: resurses.getText("table_field_SERTIF"), orderable: false, searchable: false, visible: false }, //20
+                        { data: "KOD_SD", title: resurses.getText("table_field_KOD_SD"), orderable: false, searchable: false, visible: false }, //21
+
+                        //{ data: "N_NATUR", title: resurses.getText("table_field_N_NATUR"), orderable: false, searchable: false },
+                        //{ data: "K_ST", title: resurses.getText("table_field_K_ST"), orderable: false, searchable: false },
+                        //{ data: "N_PUT", title: resurses.getText("table_field_N_PUT"), orderable: false, searchable: false },
+                        //{ data: "N_NATUR_T", title: resurses.getText("table_field_N_NATUR_T"), orderable: false, searchable: false },
+                        //{ data: "K_ST_OTPR", title: resurses.getText("table_field_K_ST_OTPR"), orderable: false, searchable: false },
+                        //{ data: "K_ST_NAZN", title: resurses.getText("table_field_K_ST_NAZN"), orderable: false, searchable: false },
+
+                        { data: "ZADER", title: resurses.getText("table_field_ZADER"), orderable: false, searchable: false },
+                        { data: "NEPR", title: resurses.getText("table_field_NEPR"), orderable: false, searchable: false },
+                        { data: "UDOST", title: resurses.getText("table_field_UDOST"), orderable: false, searchable: false },
+                        { data: "NETO", title: resurses.getText("table_field_NETO"), orderable: false, searchable: false },
+                        { data: "BRUTO", title: resurses.getText("table_field_BRUTO"), orderable: false, searchable: false },
+                        { data: "TARA", title: resurses.getText("table_field_TARA"), orderable: false, searchable: false },
+                        { data: "DAT_VVOD", title: resurses.getText("table_field_DAT_VVOD"), orderable: false, searchable: false },
+                ],
+
+            });
+        },
         // Показать таблицу Prom.Vagon
         viewTableChildVagon: function (data) {
 
@@ -447,71 +524,7 @@
                 detali_vagon = $('#table-detali-vagon-' + data.ID).DataTable();
             }
             else {
-                detali_vagon = $('#table-detali-vagon-' + data.ID).DataTable({
-                    "paging": false,
-                    "ordering": true,
-                    "info": false,
-                    "select": false,
-                    "autoWidth": false,
-                    //"filter": true,
-                    //"scrollY": "400px",
-                    "scrollX": true,
-                    language: {
-                        emptyTable: resurses.getText("table_message_emptyTable"),
-                        decimal: resurses.getText("table_decimal"),
-                        search: resurses.getText("table_message_search"),
-                    },
-                    jQueryUI: true,
-                    "createdRow": function (row, data, index) {
-                    },
-                    columns: [
-                            { data: "N_VAG", title: resurses.getText("table_field_num_car"), orderable: false, searchable: true },
-                            { data: "NPP", title: resurses.getText("table_field_position"), orderable: true, searchable: false },
-                            // Прибытие
-                            { data: "DT_PR", title: resurses.getText("table_field_DT_PR"), orderable: false, searchable: false, visible: false }, //2
-                            { data: "GODN", title: resurses.getText("table_field_GODN"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_POL_GR", title: resurses.getText("table_field_K_POL_GR"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_GR", title: resurses.getText("table_field_K_GR"), orderable: false, searchable: false, visible: false  },
-                            { data: "ST_OTPR", title: resurses.getText("table_field_ST_OTPR"), orderable: false, searchable: false, visible: false  },
-                            { data: "OTPRAV", title: resurses.getText("table_field_OTPRAV"), orderable: false, searchable: false, visible: false  },
-                            { data: "PRIM_GR", title: resurses.getText("table_field_PRIM_GR"), orderable: false, searchable: false , visible: false },
-                            { data: "WES_GR", title: resurses.getText("table_field_WES_GR"), orderable: false, searchable: false , visible: false },
-                            { data: "N_VED_PR", title: resurses.getText("table_field_N_VED_PR"), orderable: false, searchable: false , visible: false },
-                            { data: "N_NAK_MPS", title: resurses.getText("table_field_N_NAK_MPS"), orderable: false, searchable: false, visible: false },
-
-                            // Отправка
-                            { data: "DT_SD", title: resurses.getText("table_field_DT_SD"), orderable: false, searchable: false, visible: false  }, // 12
-                            { data: "GODN_T", title: resurses.getText("table_field_GODN_T"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_GR_T", title: resurses.getText("table_field_K_GR_T"), orderable: false, searchable: false, visible: false  },
-                            { data: "WES_GR_T", title: resurses.getText("table_field_WES_GR_T"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_OTPR_GR", title: resurses.getText("table_field_K_OTPR_GR"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_OP", title: resurses.getText("table_field_K_OP"), orderable: false, searchable: false, visible: false  }, //17
-                            // Общая
-                            { data: "K_FRONT", title: resurses.getText("table_field_K_FRONT"), orderable: false, searchable: false },
-                            { data: "KOD_STRAN", title: resurses.getText("table_field_KOD_STRAN"), orderable: false, searchable: false },
-
-                            { data: "SERTIF", title: resurses.getText("table_field_SERTIF"), orderable: false, searchable: false, visible: false   }, //20
-                            { data: "KOD_SD", title: resurses.getText("table_field_KOD_SD"), orderable: false, searchable: false, visible: false }, //21
-
-                            //{ data: "N_NATUR", title: resurses.getText("table_field_N_NATUR"), orderable: false, searchable: false },
-                            //{ data: "K_ST", title: resurses.getText("table_field_K_ST"), orderable: false, searchable: false },
-                            //{ data: "N_PUT", title: resurses.getText("table_field_N_PUT"), orderable: false, searchable: false },
-                            //{ data: "N_NATUR_T", title: resurses.getText("table_field_N_NATUR_T"), orderable: false, searchable: false },
-                            //{ data: "K_ST_OTPR", title: resurses.getText("table_field_K_ST_OTPR"), orderable: false, searchable: false },
-                            //{ data: "K_ST_NAZN", title: resurses.getText("table_field_K_ST_NAZN"), orderable: false, searchable: false },
-
-                            { data: "ZADER", title: resurses.getText("table_field_ZADER"), orderable: false, searchable: false },
-                            { data: "NEPR", title: resurses.getText("table_field_NEPR"), orderable: false, searchable: false },
-                            { data: "UDOST", title: resurses.getText("table_field_UDOST"), orderable: false, searchable: false },
-                            { data: "NETO", title: resurses.getText("table_field_NETO"), orderable: false, searchable: false },
-                            { data: "BRUTO", title: resurses.getText("table_field_BRUTO"), orderable: false, searchable: false },
-                            { data: "TARA", title: resurses.getText("table_field_TARA"), orderable: false, searchable: false },
-                            { data: "DAT_VVOD", title: resurses.getText("table_field_DAT_VVOD"), orderable: false, searchable: false },
-                    ],
-
-                });
-                //this.obj_table = $('DIV#table-detali-nathist-' + data.ID + '_wrapper');
-                // Обновим данные
+                detali_vagon = this.initTableChild('#table-detali-vagon-' + data.ID);
                 switch (data.P_OT) {
                     case 0:
                         OnBegin();
@@ -533,8 +546,7 @@
 
                         break;
                 };
-            } // end else if
-
+            }
         },
         // Показать таблицу Prom.Nat_Hist
         viewTableChildNatHist: function (data) {
@@ -543,69 +555,7 @@
                 detali_nathist = $('#table-detali-nathist-' + data.ID).DataTable();
             }
             else {
-                detali_nathist = $('#table-detali-nathist-' + data.ID).DataTable({
-                    "paging": false,
-                    "ordering": true,
-                    "info": false,
-                    "select": false,
-                    "autoWidth": false,
-                    //"filter": true,
-                    //"scrollY": "400px",
-                    "scrollX": true,
-                    language: {
-                        emptyTable: resurses.getText("table_message_emptyTable"),
-                        decimal: resurses.getText("table_decimal"),
-                        search: resurses.getText("table_message_search"),
-                    },
-                    jQueryUI: true,
-                    "createdRow": function (row, data, index) {
-                    },
-                    columns: [
-                            { data: "N_VAG", title: resurses.getText("table_field_num_car"), orderable: false, searchable: true },
-                            { data: "NPP", title: resurses.getText("table_field_position"), orderable: true, searchable: false },
-                            // Прибытие
-                            { data: "DT_PR", title: resurses.getText("table_field_DT_PR"), orderable: false, searchable: false, visible: false }, //2
-                            { data: "GODN", title: resurses.getText("table_field_GODN"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_POL_GR", title: resurses.getText("table_field_K_POL_GR"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_GR", title: resurses.getText("table_field_K_GR"), orderable: false, searchable: false, visible: false  },
-                            { data: "ST_OTPR", title: resurses.getText("table_field_ST_OTPR"), orderable: false, searchable: false, visible: false  },
-                            { data: "OTPRAV", title: resurses.getText("table_field_OTPRAV"), orderable: false, searchable: false, visible: false  },
-                            { data: "PRIM_GR", title: resurses.getText("table_field_PRIM_GR"), orderable: false, searchable: false , visible: false },
-                            { data: "WES_GR", title: resurses.getText("table_field_WES_GR"), orderable: false, searchable: false , visible: false },
-                            { data: "N_VED_PR", title: resurses.getText("table_field_N_VED_PR"), orderable: false, searchable: false , visible: false },
-                            { data: "N_NAK_MPS", title: resurses.getText("table_field_N_NAK_MPS"), orderable: false, searchable: false, visible: false },// 11
-                            // Отправка
-                            { data: "DT_SD", title: resurses.getText("table_field_DT_SD"), orderable: false, searchable: false, visible: false  }, // 12
-                            { data: "GODN_T", title: resurses.getText("table_field_GODN_T"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_GR_T", title: resurses.getText("table_field_K_GR_T"), orderable: false, searchable: false, visible: false  },
-                            { data: "WES_GR_T", title: resurses.getText("table_field_WES_GR_T"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_OTPR_GR", title: resurses.getText("table_field_K_OTPR_GR"), orderable: false, searchable: false, visible: false  },
-                            { data: "K_OP", title: resurses.getText("table_field_K_OP"), orderable: false, searchable: false, visible: false  }, //17
-                            // Общая
-                            { data: "K_FRONT", title: resurses.getText("table_field_K_FRONT"), orderable: false, searchable: false },
-                            { data: "KOD_STRAN", title: resurses.getText("table_field_KOD_STRAN"), orderable: false, searchable: false },
-
-                            { data: "SERTIF", title: resurses.getText("table_field_SERTIF"), orderable: false, searchable: false, visible: false   }, //20
-                            { data: "KOD_SD", title: resurses.getText("table_field_KOD_SD"), orderable: false, searchable: false, visible: false }, //21
-
-                            //{ data: "N_NATUR", title: resurses.getText("table_field_N_NATUR"), orderable: false, searchable: false },
-                            //{ data: "K_ST", title: resurses.getText("table_field_K_ST"), orderable: false, searchable: false },
-                            //{ data: "N_PUT", title: resurses.getText("table_field_N_PUT"), orderable: false, searchable: false },
-                            //{ data: "N_NATUR_T", title: resurses.getText("table_field_N_NATUR_T"), orderable: false, searchable: false },
-                            //{ data: "K_ST_OTPR", title: resurses.getText("table_field_K_ST_OTPR"), orderable: false, searchable: false },
-                            //{ data: "K_ST_NAZN", title: resurses.getText("table_field_K_ST_NAZN"), orderable: false, searchable: false },
-
-                            { data: "ZADER", title: resurses.getText("table_field_ZADER"), orderable: false, searchable: false },
-                            { data: "NEPR", title: resurses.getText("table_field_NEPR"), orderable: false, searchable: false },
-                            { data: "UDOST", title: resurses.getText("table_field_UDOST"), orderable: false, searchable: false },
-                            { data: "NETO", title: resurses.getText("table_field_NETO"), orderable: false, searchable: false },
-                            { data: "BRUTO", title: resurses.getText("table_field_BRUTO"), orderable: false, searchable: false },
-                            { data: "TARA", title: resurses.getText("table_field_TARA"), orderable: false, searchable: false },
-                            { data: "DAT_VVOD", title: resurses.getText("table_field_DAT_VVOD"), orderable: false, searchable: false },
-                    ],
-
-                });
-                //this.obj_table = $('DIV#table-detali-nathist-' + data.ID + '_wrapper');
+                detali_nathist = this.initTableChild('#table-detali-nathist-' + data.ID);
                 // Обновим данные
                 switch (data.P_OT) {
                     case 0:
@@ -729,8 +679,8 @@
             '<tr><th>' + resurses.getText("table_field_V_P") + '</th>' + '<td>' + '(' + data.V_P + ') - ' + data.CloseInput + '</td></tr>' +
             '<tr><th>' + resurses.getText("table_field_K_ST_OTPR") + '</th>' + '<td>' + '(' + data.K_ST_OTPR + ') - ' + data.Station_from + '</td></tr>' +
             '<tr><th>' + resurses.getText("table_field_K_ST_PR") + '</th>' + '<td>' + '(' + data.K_ST_PR + ') - ' + data.Station_on + '</td></tr>' +
-            '<tr><th>' + resurses.getText("table_field_CountVagon") + '</th>' + '<td>' + data.CountVagon + '</td></tr>' +
-            '<tr><th>' + resurses.getText("table_field_NatHist") + '</th>' + '<td>' + data.CountNatHist + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_CountVagon") + '</th>' + '<td>' + data.CountVagon + '(' + data.MaxVagon + ')' + '</td></tr>' +
+            '<tr><th>' + resurses.getText("table_field_NatHist") + '</th>' + '<td>' + data.CountNatHist + '(' + data.MaxNatHist + ')' + '</td></tr>' +
             '<tr><th>' + resurses.getText("table_field_N_VED_PR") + '</th>' + '<td>' + data.N_VED_PR + '</td></tr>' +
             '<tr><th>' + resurses.getText("table_field_N_SOST_OT") + '</th>' + '<td>' + data.N_SOST_OT + '</td></tr>' +
             '<tr><th>' + resurses.getText("table_field_N_SOST_PR") + '</th>' + '<td>' + data.N_SOST_PR + '</td></tr>' +

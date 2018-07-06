@@ -523,3 +523,26 @@ function getAsyncRWBufferSendingSostav(start, stop, callback) {
         },
     });
 }
+// Получить строку RWBufferArrivalSostav по id
+function getAsyncRWBufferSendingSostavOfID(id, callback) {
+    $.ajax({
+        url: '/railway/api/kis/transfer/sending/id/' + id,
+        type: 'GET',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (jsondata) {
+            if (typeof callback === 'function') {
+                callback(jsondata);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}

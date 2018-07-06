@@ -1,6 +1,7 @@
 ﻿using EFKIS.Abstract;
 using EFKIS.Concrete;
 using EFKIS.Entities;
+using MessageLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace Web_RailWay.Controllers.api
     [RoutePrefix("api/kis/prom")]
     public class KisPromController : ApiController
     {
+        private eventID eventID = eventID.Web_API_KisPromController;
+
         protected IKIS rep_kis;
         public KisPromController()
         {
@@ -26,39 +29,63 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(PromGruzSP))]
         public IHttpActionResult GetGruzSP()
         {
-            List<PromGruzSP> list = this.rep_kis.GetGruzSP().ToList();
-            if (list == null || list.Count() == 0)
+            try
             {
+                List<PromGruzSP> list = this.rep_kis.GetGruzSP().ToList();
+                if (list == null || list.Count() == 0)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetGruzSP()"), eventID);
                 return NotFound();
             }
-            return Ok(list);
-        }
+}
 
         // GET: api/kis/prom/gruz_sp/kod_gr/307
         [Route("gruz_sp/kod_gr/{kod:int}")]
         [ResponseType(typeof(PromGruzSP))]
         public IHttpActionResult GetGruzSP(int kod)
         {
-            PromGruzSP gsp = this.rep_kis.GetGruzSP(kod);
-            if (gsp == null)
+            try
             {
+                PromGruzSP gsp = this.rep_kis.GetGruzSP(kod);
+                if (gsp == null)
+                {
+                    return NotFound();
+                }
+                return Ok(gsp);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetGruzSP(kod={0})", kod), eventID);
                 return NotFound();
             }
-            return Ok(gsp);
-        }
+}
 
         // GET: api/kis/prom/gruz_sp/tar_gr/12502/true
         [Route("gruz_sp/tar_gr/{kod:int?}/{corect:bool}")]
         [ResponseType(typeof(PromGruzSP))]
         public IHttpActionResult GetGruzSPToTarGR(int? kod, bool corect)
         {
-            PromGruzSP gsp = this.rep_kis.GetGruzSPToTarGR(kod, corect);
-            if (gsp == null)
+            try
             {
+                PromGruzSP gsp = this.rep_kis.GetGruzSPToTarGR(kod, corect);
+                if (gsp == null)
+                {
+                    return NotFound();
+                }
+                return Ok(gsp);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetGruzSPToTarGR(kod={0},corect={1})", kod, corect), eventID);
                 return NotFound();
             }
-            return Ok(gsp);
-        }
+}
         #endregion
 
         #region PROM.SOSTAV
@@ -80,37 +107,50 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Prom_SostavAndCount))]
         public IHttpActionResult GetPromSostav(DateTime start, DateTime stop)
         {
-            //List<Prom_Sostav> ls_all = this.rep_kis.GetProm_Sostav().Where(s => s.D_PR_YY >= start.Year & s.D_MM >= start.Month).ToList();
-            List<Prom_SostavAndCount> list = this.rep_kis.GetProm_SostavAndCount(start, stop).ToList();
-            if (list == null)
+            try
             {
+                List<Prom_SostavAndCount> list = this.rep_kis.GetProm_SostavAndCount(start, stop).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetPromSostav(start={0},stop={1})", start, stop), eventID);
                 return NotFound();
             }
-            return Ok(list);
-        }
+}
 
         // GET: api/kis/prom/sostav/natur/4201/day/3/month/7/year/2018/hour/14/minute/35
         [Route("sostav/natur/{natur:int}/day/{day:int}/month/{month:int}/year/{year:int}/hour/{hour:int}/minute/{minute:int}")]
         [ResponseType(typeof(Prom_SostavAndCount))]
         public IHttpActionResult GetPromSostav(int natur, int day, int month, int year, int hour, int minute)
         {
-            List<Prom_SostavAndCount> list = this.rep_kis.GetProm_SostavAndCount(
-                natur != -1 ? (int?)natur : null,
-                day != -1 ? (int?)day : null,
-                month != -1 ? (int?)month : null,
-                year != -1 ? (int?)year : null,
-                hour != -1 ? (int?)hour : null,
-                minute != -1 ? (int?)minute : null).ToList();
-            if (list == null)
+            try
             {
+                List<Prom_SostavAndCount> list = this.rep_kis.GetProm_SostavAndCount(
+                    natur != -1 ? (int?)natur : null,
+                    day != -1 ? (int?)day : null,
+                    month != -1 ? (int?)month : null,
+                    year != -1 ? (int?)year : null,
+                    hour != -1 ? (int?)hour : null,
+                    minute != -1 ? (int?)minute : null).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetPromSostav(natur={0},day={1},month={2},year={3},hour={4},minute={5})",natur,day,month,year,hour,minute), eventID);
                 return NotFound();
             }
-            return Ok(list);
-        }        
+        }
         #endregion
-
-
-
+        
         #region PROM.Vagon
         // GET: api/kis/prom/vagon/arrival/natur/4023/day/27/month/6/year/2018/hour/4/minute/50
         [Route("vagon/arrival/natur/{natur:int}/day/{day:int}/month/{month:int}/year/{year:int}/hour/{hour:int}/minute/{minute:int}")]
@@ -136,7 +176,28 @@ namespace Web_RailWay.Controllers.api
                 return NotFound();
             }
             return Ok(list);
-        }        
+        }
+
+        // GET: api/kis/prom/vagon_sostav/num/94814431
+        [Route("vagon_sostav/num/{num:int}")]
+        [ResponseType(typeof(Prom_VagonAndSostav))]
+        public IHttpActionResult GetProm_VagonAndSostav(int num)
+        {
+            try
+            {
+                List<Prom_VagonAndSostav> list = this.rep_kis.GetProm_VagonAndSostav(num).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetProm_VagonAndSostav(num={0})",num), eventID);
+                return NotFound();
+            }
+        }
         #endregion
 
         #region PROM.Nat_Hist
@@ -164,7 +225,28 @@ namespace Web_RailWay.Controllers.api
                 return NotFound();
             }
             return Ok(list);
-        }        
+        }
+
+        // GET: api/kis/prom/nathist_sostav/num/94814431
+        [Route("nathist_sostav/num/{num:int}")]
+        [ResponseType(typeof(Prom_NatHistAndSostav))]
+        public IHttpActionResult GetProm_NatHistAndSostav(int num)
+        {
+            try
+            {
+                List<Prom_NatHistAndSostav> list = this.rep_kis.GetProm_NatHistAndSostav(num).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetProm_NatHistAndSostav(num={0})", num), eventID);
+                return NotFound();
+            }
+        }
         #endregion
 
         #region PROM.CEX
@@ -173,12 +255,20 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(PromCex))]
         public IHttpActionResult GetPromCex()
         {
-            List<PromCex> list = this.rep_kis.GetCex().ToList();
-            if (list == null)
+            try
             {
+                List<PromCex> list = this.rep_kis.GetCex().ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetPromCex()"), eventID);
                 return NotFound();
             }
-            return Ok(list);
         }
         #endregion
     }

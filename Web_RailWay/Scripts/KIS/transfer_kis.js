@@ -474,43 +474,44 @@
                     },
                     jQueryUI: true,
                     "createdRow": function (row, data, index) {
-                        //$(row).attr('id', data.id).addClass(data.status);
-                        //var link_kis = $('<a id=' + data.id + ' natur=' + data.natur + ' href="#">' + data.natur + '</a>');
-                        //$('td', row).eq(1).html(link_kis);
-                        //link_kis.on('click', function (evt) {
-                        //    evt.preventDefault();
-                        //    var natur = $(this).attr("natur");
-                        //});
+                        $(row).attr('id', data.id).addClass(data.status);
+                        var link_kis = $('<a id=' + data.id + ' target="_blank" href="/railway/KIS/Home/Natur?natur=' + data.natur +
+                            '&day=' + data.day +
+                            '&month=' + data.month +
+                            '&year=' + data.year +
+                            '&hour=' + data.hour +
+                            '&minute=' + data.minute +
+                            '">' + data.natur + '</a>');
+                        $('td', row).eq(1).html(link_kis);
+                        if (data.close == null) {
+                            var bt = $('<button id=' + data.id + ' class="ui-button ui-widget ui-corner-all" name="close"><span class="ui-icon ui-icon-circle-close"></span>' + (lang == 'en' ? 'Сlose' : 'Закрыть') + '</button>');
+                            $('td', row).eq(7).html(bt);
+                            bt.on('click', function (evt) {
+                                evt.preventDefault();
+                                var id = $(this).attr("id")
+                                $.ajax({
+                                    url: '/railway/api/kis/transfer/sending/' + id + '/close',
+                                    type: 'POST',
+                                    //data: JSON.stringify(new_station_node),
+                                    contentType: "application/json;charset=utf-8",
+                                    success: function (data) {
+                                        if (Number(data) > 0) {
+                                            getAsyncRWBufferSendingSostavOfID(
+                                                data,
+                                                function (result) {
+                                                    table_sending.viewFieldClose(result);
+                                                });
+                                        } else {
+                                            alert('Стока не закрыта. Error:' + data);
+                                        }
 
-                        //if (data.close == null) {
-                        //    var bt = $('<button id=' + data.id + ' class="ui-button ui-widget ui-corner-all" name="close"><span class="ui-icon ui-icon-circle-close"></span>' + (lang == 'en' ? 'Сlose' : 'Закрыть') + '</button>');
-                        //    $('td', row).eq(9).html(bt);
-                        //    bt.on('click', function (evt) {
-                        //        evt.preventDefault();
-                        //        var id = $(this).attr("id")
-                        //        $.ajax({
-                        //            url: '/railway/api/kis/transfer/arrival/' + id + '/close',
-                        //            type: 'POST',
-                        //            //data: JSON.stringify(new_station_node),
-                        //            contentType: "application/json;charset=utf-8",
-                        //            success: function (data) {
-                        //                if (Number(data) > 0) {
-                        //                    getAsyncRWBufferArrivalSostavOfID(
-                        //                        data,
-                        //                        function (result) {
-                        //                            table_arrival.viewFieldClose(result);
-                        //                        });
-                        //                } else {
-                        //                    alert('Стока не закрыта. Error:' + data);
-                        //                }
-
-                        //            },
-                        //            error: function (x, y, z) {
-                        //                alert(x + '\n' + y + '\n' + z);
-                        //            }
-                        //        });
-                        //    });
-                        //};
+                                    },
+                                    error: function (x, y, z) {
+                                        alert(x + '\n' + y + '\n' + z);
+                                    }
+                                });
+                            });
+                        };
                     },
                     columns: [
                         {
@@ -573,7 +574,7 @@
                         "datetime": data[i].datetime,
                         "id_station_from_kis": data[i].id_station_from_kis,
                         "station_from": station_from != null ? (lang == 'en' ? station_from.name_en : station_from.name_ru) : '?',
-                        "id_station_kis": data[i].id_station_kis,
+                        "id_station_on_kis": data[i].id_station_on_kis,
                         "station_on": station_on != null ? (lang == 'en' ? station_on.name_en : station_on.name_ru) : '?',
                         "count_nathist": nathist + nathist_set,
                         "status_id": data[i].status,
@@ -583,7 +584,6 @@
                         "list_wagons": data[i].list_wagons,
                         "list_no_set_wagons": data[i].list_no_set_wagons,
                         "message": data[i].message,
-
                     });
                 }
                 LockScreenOff();
@@ -639,7 +639,7 @@
                                 collapsible: true,
                             });
                             table_sending.viewTableChildAllFields(row.data());
-                            table_sending.viewTableChildStatus(row.data());
+                            //table_sending.viewTableChildStatus(row.data());
                             tr.addClass('shown');
                         }
                     });
@@ -694,16 +694,13 @@
                     '<tr><th>' + resurses.getText("table_field_id") + '</th>' + '<td>' + data.id + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_datetime") + '</th>' + '<td>' + data.datetime + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_natur") + '</th>' + '<td>' + data.natur + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_station_on") + '</th>' + '<td>' + '(' + data.id_station_kis + ') - ' + data.station_on + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_way") + '</th>' + '<td>' + data.way + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_napr") + '</th>' + '<td>' + data.napr + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_count_wagons") + '</th>' + '<td>' + data.count_wagons + '</td></tr>' +
+                    '<tr><th>' + resurses.getText("table_field_station_from") + '</th>' + '<td>' + '(' + data.id_station_from_kis + ') - ' + data.station_from + '</td></tr>' +
+                    '<tr><th>' + resurses.getText("table_field_station_on") + '</th>' + '<td>' + '(' + data.id_station_on_kis + ') - ' + data.station_on + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_count_nathist") + '</th>' + '<td>' + data.count_nathist + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_status") + '</th>' + '<td>' + '(' + data.status_id + ') - ' + data.status + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_close") + '</th>' + '<td>' + data.close + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_list_wagons") + '</th>' + '<td class="list-status">' + data.list_wagons + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_list_no_set_wagons") + '</th>' + '<td class="list-status">' + data.list_no_set_wagons + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_list_no_update_wagons") + '</th>' + '<td class="list-status">' + data.list_no_update_wagons + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_list_message") + '</th>' + '<td class="list-status">' + data.message + '</td></tr>' +
                     '</tbody>';
                 return '<table class="table-transfer-detali" id="table-detali-all-' + data.id + '" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
@@ -711,8 +708,8 @@
             // Добавить значения количества вагонов по таблице Prom.Vagon
             viewFieldClose: function (data) {
                 if (data.close != null) {
-                    var row = table_arrival.obj.row('#' + data.id).index();
-                    table_arrival.obj.cell(row, 9).data(data.close_user + " (" + data.close + ")").draw();
+                    var row = table_sending.obj.row('#' + data.id).index();
+                    table_sending.obj.cell(row, 7).data(data.close_user + " (" + data.close + ")").draw();
                 }
             },
         }

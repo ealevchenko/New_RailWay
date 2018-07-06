@@ -20,12 +20,17 @@ namespace Web_RailWay.Areas.KIS.Controllers
             return View();
         }
 
-        // Оборот вагонов 
+        // Поиск составов по натурке 
         public ActionResult Natur(int? natur, int? day, int? month, int? year, int? hour, int? minute)
         {
             return View();
         }
 
+        // Поиск вагонов по номеру 
+        public ActionResult Vagon(int? num)
+        {
+            return View();
+        }
         /// <summary>
         /// Список ссылок на отчеты копирования КИС
         /// </summary>

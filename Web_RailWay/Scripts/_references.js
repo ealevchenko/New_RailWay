@@ -87,3 +87,4 @@
 /// <reference path="KIS/transfer_kis1.js" />
 /// <reference path="kis/turnover.js" />
 /// <reference path="kis/natur.js" />
+/// <reference path="kis/vagon.js" />
