@@ -670,8 +670,8 @@ namespace Testing
                 //List<Prom_SostavAndCount> list_psc = ef_wag.GetProm_SostavAndCount().ToList();
                 List<Prom_SostavAndCount> list_psc1 = ef_wag.GetProm_SostavAndCount(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
 
-                List<Prom_Sostav> list_input = ef_wag.GetInputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), false).ToList();
-                List<Prom_Sostav> list_output = ef_wag.GetOutputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), true).ToList();
+                //List<Prom_Sostav> list_input = ef_wag.GetInputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), false).ToList();
+                //List<Prom_Sostav> list_output = ef_wag.GetOutputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), true).ToList();
 
                 //List<PromSostav> list_s = ef_wag.GetPromSostav().ToList();
                 //List<PromSostav> list = list_s.Where(l => l.DT_PR_Key >= new DateTime(2018, 6, 1, 0, 0, 0) & l.DT_PR_Key <= new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
@@ -738,6 +738,58 @@ namespace Testing
 
         }
 
+        public void Test_PROM_GetProm_SostavAndCount()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+
+                //List<Prom_SostavAndCount> list_psc = ef_wag.GetProm_SostavAndCount().ToList();
+                //List<Prom_SostavAndCount> list_psc1 = ef_wag.GetProm_SostavAndCount(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
+                List<Prom_SostavAndCount> list_psc2 = ef_wag.GetProm_SostavAndCount(1234,null,null,null,null,null).ToList();
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetProm_VagonAndSostav()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+
+                //List<Prom_VagonAndSostav> list_vas = ef_wag.GetProm_VagonAndSostav().ToList();
+                List<Prom_VagonAndSostav> list_vas1 = ef_wag.GetProm_VagonAndSostav(94814431).ToList();
+                //List<Prom_SostavAndCount> list_psc1 = ef_wag.GetProm_SostavAndCount(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
+                //List<Prom_SostavAndCount> list_psc2 = ef_wag.GetProm_SostavAndCount(1234,null,null,null,null,null).ToList();
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetProm_NatHistAndSostav()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+
+                //List<Prom_NatHistAndSostav> list_vas = ef_wag.GetProm_VagonAndSostav().ToList();
+                List<Prom_NatHistAndSostav> list_vas1 = ef_wag.GetProm_NatHistAndSostav(94814431).ToList();
+                //List<Prom_NatHistAndSostav> list_psc1 = ef_wag.GetProm_SostavAndCount(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
+                //List<Prom_NatHistAndSostav> list_psc2 = ef_wag.GetProm_SostavAndCount(1234,null,null,null,null,null).ToList();
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
         #endregion
 
         //public void CopyReferenceWagonsToRailWay()

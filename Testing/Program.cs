@@ -187,10 +187,12 @@ namespace Testing
             //tst_wag.Test_PROM_GetPromNatHist();
             //tst_wag.Test_PROM_GetInputPromSostav(); // тест данных кис по отправленным составам
             //tst_wag.Test_PROM_GetOutputPromSostav(); // тест данных кис по отправленным составам
-            tst_wag.Test_PROM_GetPromSostav(); // тест данных кис по составам
+            //tst_wag.Test_PROM_GetPromSostav(); // тест данных кис по составам
             //tst_wag.Test_PROM_GetProm_Vagon(); // тест данных кис по составам
             //tst_wag.Test_PROM_GetProm_NatHist(); // тест данных кис по составам
-            //tst_wag.Test_ADOWagons();
+            //tst_wag.Test_PROM_GetProm_SostavAndCount();
+            //tst_wag.Test_PROM_GetProm_VagonAndSostav();
+            tst_wag.Test_PROM_GetProm_NatHistAndSostav();
             #endregion
 
             #region Test_Logs тест логирования
