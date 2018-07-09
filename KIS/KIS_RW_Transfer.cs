@@ -1531,7 +1531,7 @@ namespace KIS
                         {
                             // Ошибка
                             bss_sostav.list_no_set_wagons += wag.ToString() + ";";
-                            bss_sostav.message += wag.ToString() + ";" + result_set_way.result + ";";
+                            bss_sostav.message += wag.ToString() + ":" + result_set_way.result + ";";
                         }
                     }
                     bss_sostav.count_set_nathist = bss_sostav.count_set_nathist == null ? result_set_way.ResultInsert : (int)bss_sostav.count_set_nathist + result_set_way.ResultInsert;
