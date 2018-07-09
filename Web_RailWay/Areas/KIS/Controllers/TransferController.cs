@@ -26,7 +26,7 @@ namespace Web_RailWay.Areas.KIS.Controllers
 
         // GET: KIST
         [Access(LogVisit = true)]
-        public ActionResult Index1()
+        public ActionResult Desktop()
         {
             return View();
         }

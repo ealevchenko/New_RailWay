@@ -1,5 +1,16 @@
 ﻿[
   {
+    "tag": "confirm_close_panel_form_text",
+    "ru": "Закрыть состав.",
+    "en": "Close composition."
+  },
+
+  {
+    "tag": "message_error_no_close_sostav",
+    "ru": "Состав не закрыт, код ошибки:",
+    "en": "The composition is not closed, the error code is:"
+  },
+  {
     "tag": "table_message_emptyTable",
     "ru": "Данные отсутствуют.",
     "en": "No data available in table."
@@ -30,63 +41,69 @@
     "en": "For the specified period, there is no data."
   },
 
-    {
-        "tag": "label-select-date-range",
-        "ru": "Выберите период: ",
-        "en": "Select period: "
-    },
+  {
+    "tag": "label-select-date-range",
+    "ru": "Выберите период: ",
+    "en": "Select period: "
+  },
 
-    {
-        "tag": "label_select_natur",
-        "ru": "№ Натурки: ",
-        "en": "# Natur: "
-    },
-    {
-        "tag": "label_select_day",
-        "ru": "День: ",
-        "en": "Day: "
-    },
-    {
-        "tag": "label_select_month",
-        "ru": "Месяц: ",
-        "en": "Month: "
-    }, 
-    {
-        "tag": "label_select_year",
-        "ru": "Год: ",
-        "en": "Year: "
-    },     
-    {
-        "tag": "label_select_hour",
-        "ru": "Час: ",
-        "en": "Hour: "
-    },
-    {
-        "tag": "label_select_minute",
-        "ru": "Минуты: ",
-        "en": "Minutes: "
-    },       
-    {
-        "tag": "label_select_vagon",
-        "ru": "№ Вагона: ",
-        "en": "# Car: "
-    },  
-     
+  {
+    "tag": "label_select_natur",
+    "ru": "№ Натурки: ",
+    "en": "# Natur: "
+  },
+  {
+    "tag": "label_select_day",
+    "ru": "День: ",
+    "en": "Day: "
+  },
+  {
+    "tag": "label_select_month",
+    "ru": "Месяц: ",
+    "en": "Month: "
+  },
+  {
+    "tag": "label_select_year",
+    "ru": "Год: ",
+    "en": "Year: "
+  },
+  {
+    "tag": "label_select_hour",
+    "ru": "Час: ",
+    "en": "Hour: "
+  },
+  {
+    "tag": "label_select_minute",
+    "ru": "Минуты: ",
+    "en": "Minutes: "
+  },
+  {
+    "tag": "label_select_vagon",
+    "ru": "№ Вагона: ",
+    "en": "# Car: "
+  },
+
+  {
+    "tag": "label_close_comment_text",
+    "ru": "Комментарий по закрываемой строке:",
+    "en": "Comment on the closing line:"
+  },
+
   {
     "tag": "button_to_excel",
     "ru": "Экспорт в Excel",
     "en": "Export to Excel"
   },
-    {
-        "tag": "button_close_detali",
-        "ru": "Закрыть детали",
-        "en": "Close details"
-    },
-    {
-        "tag": "button_to_searsh",
-        "ru": "Найти",
-        "en": "Searsh"
-    },
+  {
+    "tag": "button_close_detali",
+    "ru": "Закрыть детали",
+    "en": "Close details"
+  },
+  {
+    "tag": "button_to_searsh",
+    "ru": "Найти",
+    "en": "Searsh"
+  },
 
 
 
@@ -282,7 +299,11 @@
     "ru": "Статус переноса",
     "en": ""
   },
-
+  {
+    "tag": "table_field_close_comment",
+    "ru": "Комментарий по закрытой строке",
+    "en": "Comment on a closed line"
+  },
   {
     "tag": "table_field_value",
     "ru": "Поле",
@@ -324,16 +345,16 @@
     "ru": "Сдан",
     "en": "Was passed"
   },
-    {
-        "tag": "table_field_DT",
-        "ru": "Отправлен",
-        "en": ""
-    },
-    {
-        "tag": "table_field_DT_PR_SD",
-        "ru": "Дата и время",
-        "en": ""
-    },
+  {
+    "tag": "table_field_DT",
+    "ru": "Отправлен",
+    "en": ""
+  },
+  {
+    "tag": "table_field_DT_PR_SD",
+    "ru": "Дата и время",
+    "en": ""
+  },
   {
     "tag": "table_field_CountVagon",
     "ru": "Кол. Prom.Vagon",

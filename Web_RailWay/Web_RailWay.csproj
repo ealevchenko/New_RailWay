@@ -657,7 +657,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\KIS\transfer_kis.js" />
-    <Content Include="Scripts\KIS\transfer_kis1.js" />
+    <Content Include="Scripts\KIS\transfer_kis_old.js" />
     <Content Include="Scripts\KIS\natur.js" />
     <Content Include="Scripts\KIS\turnover.js" />
     <Content Include="Scripts\KIS\vagon.js" />
@@ -741,7 +741,7 @@
     <Content Include="Areas\RW\Views\Home\Index.cshtml" />
     <Content Include="Areas\RW\Views\Home\LinkRWControl.cshtml" />
     <Content Include="Areas\Admin\Views\Services\Index.cshtml" />
-    <Content Include="Areas\KIS\Views\Transfer\Index1.cshtml" />
+    <Content Include="Areas\KIS\Views\Transfer\Desktop.cshtml" />
     <Content Include="Views\RWUI\Index.cshtml" />
     <Content Include="Views\AWAS\Index.cshtml" />
     <Content Include="Scripts\RW\awas.json" />

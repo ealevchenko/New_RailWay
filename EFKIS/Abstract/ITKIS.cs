@@ -59,6 +59,7 @@ namespace EFKIS.Abstract
         RWBufferArrivalSostav GetRWBufferArrivalSostavOfNatur(int natur);
         int CloseRWBufferArrivalSostav(int id);
         int CloseRWBufferArrivalSostav(int id, string user);
+        int CloseRWBufferArrivalSostav(int id, string coment, string user);
         #endregion
 
         #region RWBufferSendingSostav Перенос отправленных на УЗ вагонов по данным КИС
@@ -73,6 +74,7 @@ namespace EFKIS.Abstract
         RWBufferSendingSostav GetRWBufferSendingSostavOfNatur(int natur);
         int CloseRWBufferSendingSostav(int id);
         int CloseRWBufferSendingSostav(int id, string user);
+        int CloseRWBufferSendingSostav(int id, string coment,  string user);
         #endregion
 
     }

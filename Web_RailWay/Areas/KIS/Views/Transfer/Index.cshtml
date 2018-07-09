@@ -40,16 +40,12 @@
     </script>
 }
 
-<div id="view-status" title="" style="display:none">
-    <form id="form-view-status">
+<div id="close-confirm" title="" style="display:none">
+    <form id="form-close-confirm">
         <fieldset>
-            <legend>Принимаемые вагоны</legend>
-            @*<label for="search">Вагон: </label><input id="search" type="number" value="1">
-                <button class="ui-button ui-widget ui-corner-all">Добавить</button>
-                <table class="compact" id="table-arrival-confirm" style="width:100%" cellpadding="0"></table>*@
-
-
-
+            <p><label id="close-comment-text"></label><Br>
+                <textarea id="close-txt" name="comment" cols="60" rows="3"></textarea>
+            </p>
             @*<input id="id-nodes" name="id-nodes" type="hidden" />
                 <p>
                     <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
@@ -72,7 +68,8 @@
                 <input id="date-stop" name="date_stop" type="datetime" size="20">
             </span>
         </div>
-        <button class="ui-button ui-widget ui-corner-all" id="to-excel"> </button>
+        <a href='@Url.Action("Desktop", "Transfer", new { area = "KIS" })' class="btn btn-link">Перенос для Desktop</a>
+        @*<button class="ui-button ui-widget ui-corner-all" id="to-excel"> </button>*@
     </div>
     <div id="report-detali">
         <div id="tabs-report-transfer">

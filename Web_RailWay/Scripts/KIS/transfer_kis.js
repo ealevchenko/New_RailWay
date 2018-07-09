@@ -100,9 +100,13 @@
         // список станций
         rw_stations = {
             list: null,
-            initObject: function () {
-                getAsyncStations(function (result)
-                { rw_stations.list = result; });
+            initObject: function (callback) {
+                getAsyncStations(function (result) {
+                    rw_stations.list = result;
+                    if (typeof callback === 'function') {
+                        callback(result);
+                    }
+                });
             },
             selectStationKIS: function (id_kis) {
                 var station = getObjects(this.list, 'id_kis', id_kis)
@@ -192,6 +196,7 @@
                     jQueryUI: true,
                     "createdRow": function (row, data, index) {
                         $(row).attr('id', data.id).addClass(data.status);
+                        // Ссылка на КИС по натурке
                         var link_kis = $('<a id=' + data.id + ' target="_blank" href="/railway/KIS/Home/Natur?natur=' + data.natur +
                             '&day=' + data.day +
                             '&month=' + data.month +
@@ -200,39 +205,22 @@
                             '&minute=' + data.minute +
                             '">' + data.natur + '</a>');
                         $('td', row).eq(1).html(link_kis);
-                        //link_kis.on('click', function (evt) {
-                        //    //evt.preventDefault();
-                        //    var natur = $(this).attr("natur");
-                        //});
+                        // Поле закрытия
                         if (data.close == null) {
                             var bt = $('<button id=' + data.id + ' class="ui-button ui-widget ui-corner-all" name="close"><span class="ui-icon ui-icon-circle-close"></span>' + (lang == 'en' ? 'Сlose' : 'Закрыть') + '</button>');
                             $('td', row).eq(9).html(bt);
                             bt.on('click', function (evt) {
                                 evt.preventDefault();
                                 var id = $(this).attr("id")
-                                $.ajax({
-                                    url: '/railway/api/kis/transfer/arrival/' + id + '/close',
-                                    type: 'POST',
-                                    //data: JSON.stringify(new_station_node),
-                                    contentType: "application/json;charset=utf-8",
-                                    success: function (data) {
-                                        if (Number(data) > 0) {
-                                            getAsyncRWBufferArrivalSostavOfID(
-                                                data,
-                                                function (result) {
-                                                    table_arrival.viewFieldClose(result);
-                                                });
-                                        } else {
-                                            alert('Стока не закрыта. Error:' + data);
-                                        }
-
-                                    },
-                                    error: function (x, y, z) {
-                                        alert(x + '\n' + y + '\n' + z);
-                                    }
-                                });
+                                confirm_close_panel.Open(id, 0);
                             });
                         };
+                        if (data.cwagons == null || data.cwagons == 0 || data.cwagons != data.swagons) {
+                            $('td', row).eq(6).addClass('error-count');
+                        }
+                        if (data.cnathist == null || data.cnathist == 0 || data.cnathist != data.snathist) {
+                            $('td', row).eq(7).addClass('error-count');
+                        }
                     },
                     columns: [
                         {
@@ -293,7 +281,7 @@
                     var wagons_set = data[i].count_set_wagons != null ? " (" + data[i].count_set_wagons + ")" : " (-)";
                     var nathist = data[i].count_nathist != null ? data[i].count_nathist : "-";
                     var nathist_set = data[i].count_set_nathist != null ? " (" + data[i].count_set_nathist + ")" : " (-)";
-                    var close = data[i].close_user + " (" + data[i].close + ")";
+                    var close = data[i].close_user + " (" + data[i].close + ")" + (data[i].close_comment != null ? " - <span>" + data[i].close_comment + "</span>" : "");
                     this.obj.row.add({
                         "id": data[i].id,
                         "natur": data[i].natur,
@@ -317,6 +305,11 @@
                         "year": data[i].year,
                         "hour": data[i].hour,
                         "minute": data[i].minute,
+                        "cwagons": data[i].count_wagons,
+                        "swagons": data[i].count_set_wagons,
+                        "cnathist": data[i].count_nathist,
+                        "snathist": data[i].count_set_nathist,
+                        "close_comment": data[i].close_comment,
                     });
                 }
                 LockScreenOff();
@@ -444,8 +437,47 @@
             viewFieldClose: function (data) {
                 if (data.close != null) {
                     var row = table_arrival.obj.row('#' + data.id).index();
-                    table_arrival.obj.cell(row, 9).data(data.close_user + " (" + data.close + ")").draw();
+                    table_arrival.obj.cell(row, 9).data(data.close_user + " (" + data.close + ")" + (data.close_comment != null ? " - <span>" + data.close_comment + "</span>" : "")).draw();
                 }
+            },
+        },
+        // Панель таблицы
+        panel_table_sending = {
+            html_div_panel: $('<div class="dt-buttons setup-operation" id="property"></div>'),
+            //html_div_panel_info: $('<div class="setup-operation" id="last-info"></div>'),
+            html_div_panel_select: $('<div class="setup-operation" id="last-select"></div>'),
+
+            //label_last_total: $('<label class="label-text" for="label-last-total-value"></label>'),
+            //label_last_total_value: $('<label class="value-text" id="label-last-total-value"></label>'),
+
+            button_close_detali: $('<button class="ui-button ui-widget ui-corner-all"></button>'),
+            initPanel: function (obj) {
+                // Настроим панель info
+                //this.html_div_panel_info
+                //.append(this.label_last_date)
+                //.append(this.label_last_date_value)
+                //.append(this.label_last_total.text(resurses.getText("label_total_cars")))
+                //.append(this.label_last_total_value);
+
+                this.html_div_panel_select
+                    .append(this.button_close_detali.text(resurses.getText("button_close_detali")))
+
+                this.html_div_panel
+                    //.append(this.html_div_panel_info)
+                    .append(this.html_div_panel_select);
+                obj.prepend(this.html_div_panel);
+                // Обработка события закрыть детали
+                this.button_close_detali.on('click', function () {
+                    var trs = $('tr.shown');
+                    for (i = 0; i < trs.length; i++) {
+                        var row = table_sending.obj.row(trs[i]);
+                        if (row.child.isShown()) {
+                            // This row is already open - close it
+                            row.child.hide();
+                        }
+                    }
+                    $('tr').removeClass('shown');
+                });
             },
         },
         // ТАБЛИЦА статуса переноса отправок
@@ -475,6 +507,7 @@
                     jQueryUI: true,
                     "createdRow": function (row, data, index) {
                         $(row).attr('id', data.id).addClass(data.status);
+                        // Ссылка на КИС
                         var link_kis = $('<a id=' + data.id + ' target="_blank" href="/railway/KIS/Home/Natur?natur=' + data.natur +
                             '&day=' + data.day +
                             '&month=' + data.month +
@@ -483,35 +516,19 @@
                             '&minute=' + data.minute +
                             '">' + data.natur + '</a>');
                         $('td', row).eq(1).html(link_kis);
+                        // Поле закрыть
                         if (data.close == null) {
                             var bt = $('<button id=' + data.id + ' class="ui-button ui-widget ui-corner-all" name="close"><span class="ui-icon ui-icon-circle-close"></span>' + (lang == 'en' ? 'Сlose' : 'Закрыть') + '</button>');
                             $('td', row).eq(7).html(bt);
                             bt.on('click', function (evt) {
                                 evt.preventDefault();
-                                var id = $(this).attr("id")
-                                $.ajax({
-                                    url: '/railway/api/kis/transfer/sending/' + id + '/close',
-                                    type: 'POST',
-                                    //data: JSON.stringify(new_station_node),
-                                    contentType: "application/json;charset=utf-8",
-                                    success: function (data) {
-                                        if (Number(data) > 0) {
-                                            getAsyncRWBufferSendingSostavOfID(
-                                                data,
-                                                function (result) {
-                                                    table_sending.viewFieldClose(result);
-                                                });
-                                        } else {
-                                            alert('Стока не закрыта. Error:' + data);
-                                        }
-
-                                    },
-                                    error: function (x, y, z) {
-                                        alert(x + '\n' + y + '\n' + z);
-                                    }
-                                });
+                                var id = $(this).attr("id");
+                                confirm_close_panel.Open(id, 1);
                             });
                         };
+                        if (data.cnathist == null || data.cnathist == 0 || data.cnathist != data.snathist) {
+                            $('td', row).eq(5).addClass('error-count');
+                        }
                     },
                     columns: [
                         {
@@ -533,7 +550,7 @@
                     ],
                 });
                 this.obj_table = $('DIV#table-transfer-sending_wrapper');
-                //panel_table_sending.initPanel(this.obj_table);
+                panel_table_sending.initPanel(this.obj_table);
                 this.initEventSelectChild();
                 this.obj.columns([8, 9]).visible(false, true);
             },
@@ -567,7 +584,7 @@
                     var station_from = rw_stations.selectStationKIS(data[i].id_station_from_kis);
                     var nathist = data[i].count_nathist != null ? data[i].count_nathist : "-";
                     var nathist_set = data[i].count_set_nathist != null ? " (" + data[i].count_set_nathist + ")" : " (-)";
-                    var close = data[i].close_user + " (" + data[i].close + ")";
+                    var close = data[i].close_user + " (" + data[i].close + ")" + (data[i].close_comment != null ? " - <span>"+ data[i].close_comment+"</span>"  : "");
                     this.obj.row.add({
                         "id": data[i].id,
                         "natur": data[i].natur,
@@ -584,6 +601,9 @@
                         "list_wagons": data[i].list_wagons,
                         "list_no_set_wagons": data[i].list_no_set_wagons,
                         "message": data[i].message,
+                        "cnathist": data[i].count_nathist,
+                        "snathist": data[i].count_set_nathist,
+                        "close_comment": data[i].close_comment,
                     });
                 }
                 LockScreenOff();
@@ -639,14 +659,14 @@
                                 collapsible: true,
                             });
                             table_sending.viewTableChildAllFields(row.data());
-                            //table_sending.viewTableChildStatus(row.data());
+                            table_sending.viewTableChildStatus(row.data());
                             tr.addClass('shown');
                         }
                     });
             },
             // Показать статусы переноса вагонов
             viewTableChildStatus: function (data) {
-                var list_cars = getBufferArrivalCarsStatus(data);
+                var list_cars = getBufferSendingCarsStatus(data);
                 var target = $("#tabs-detali" + data.id + "-2");
                 target.empty();
                 var tab = this.createTableStatus(list_cars, data.id);
@@ -660,16 +680,17 @@
                 var list_tr = '<thead><tr>' +
                     '<th>' + resurses.getText("table_field_num_car") + '</th>' +
                     '<th>' + resurses.getText("table_field_reult_set_car") + '</th>' +
-                    '<th>' + resurses.getText("table_field_reult_upd_car") + '</th>' +
                     '</tr></thead>';
                 list_tr += '<tbody>';
                 for (i = 0; i < data.length; i++) {
-                    list_tr += '<tr>' +
-                        //'<td>' + data[i].car + '</td>' +
-                        '<td><a id=' + data[i].car + ' name="natur" href="#">' + data[i].car + '</a></td>' +
-                        '<td class="' + data[i].car_set + '">' + data[i].car_set + '</td>' +
-                        '<td class="' + data[i].car_upd + '">' + data[i].car_upderr + '</td>' +
-                        '</tr>';
+                    list_tr += '<tr>';
+                    if (data[i].car != null) {
+                        list_tr += '<td><a id=' + data[i].car + ' name="natur" href="#">' + data[i].car + '</a></td>' +
+                            '<td class="' + data[i].car_set + '">' + data[i].car_seterr + '</td>';
+                    } else {
+                        list_tr += '<td colspan="2" class="' + data[i].car_set + '">' + data[i].car_seterr + '</td>';
+                    }
+                    list_tr += '</tr>';
                 }
                 list_tr += '</tbody>';
                 return '<table class="table-transfer-detali" id="table-detali-status-' + id + '" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
@@ -702,6 +723,7 @@
                     '<tr><th>' + resurses.getText("table_field_list_wagons") + '</th>' + '<td class="list-status">' + data.list_wagons + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_list_no_set_wagons") + '</th>' + '<td class="list-status">' + data.list_no_set_wagons + '</td></tr>' +
                     '<tr><th>' + resurses.getText("table_field_list_message") + '</th>' + '<td class="list-status">' + data.message + '</td></tr>' +
+                    //'<tr><th>' + resurses.getText("table_field_close_comment") + '</th>' + '<td class="list-status">' + data.close_comment + '</td></tr>' +
                     '</tbody>';
                 return '<table class="table-transfer-detali" id="table-detali-all-' + data.id + '" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
             },
@@ -709,9 +731,92 @@
             viewFieldClose: function (data) {
                 if (data.close != null) {
                     var row = table_sending.obj.row('#' + data.id).index();
-                    table_sending.obj.cell(row, 7).data(data.close_user + " (" + data.close + ")").draw();
+                    table_sending.obj.cell(row, 7).data(data.close_user + " (" + data.close + ")" + (data.close_comment != null ? " - <span>" + data.close_comment + "</span>" : "")).draw();
                 }
             },
+        },
+        // Панель подтверждения закрытия
+        confirm_close_panel = {
+            html_div: $("#close-confirm"),
+            html_txt: $("#close-txt"),
+            obj: null,
+            id_close: null,
+            type: null,
+            initObject: function () {
+                this.obj = this.html_div.dialog({
+                    resizable: false,
+                    modal: true,
+                    autoOpen: false,
+                    height: "auto",
+                    width: 500,
+                    buttons: {
+                        "Закрыть": function () {
+                            $(this).dialog("close");
+                            confirm_close_panel.CloseSostav(confirm_close_panel.id_close, confirm_close_panel.html_txt.text());
+                        },
+                        Cancel: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            },
+            Open: function (id, type) {
+                confirm_close_panel.id_close = id;
+                confirm_close_panel.type = type;
+                confirm_close_panel.html_txt.text("");
+                $('#close-comment-text').text(resurses.getText("label_close_comment_text"));
+                this.obj.dialog("option", "title", resurses.getText("confirm_close_panel_form_text"));
+                this.obj.dialog("open");                
+            },
+            CloseSostav: function (id, txt) {
+                if (confirm_close_panel.type == 0) {
+                    $.ajax({
+                        url: '/railway/api/kis/transfer/arrival/' + id + '/close',
+                        type: 'PUT',
+                        data: JSON.stringify(txt),
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            if (Number(data) > 0) {
+                                getAsyncRWBufferArrivalSostavOfID(
+                                    data,
+                                    function (result) {
+                                        table_arrival.viewFieldClose(result);
+                                    });
+                            } else {
+                                alert(resurses.getText("message_error_no_close_sostav") + data);
+                            }
+
+                        },
+                        error: function (x, y, z) {
+                            alert(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+                if (confirm_close_panel.type == 1) {
+                    $.ajax({
+                        url: '/railway/api/kis/transfer/sending/' + id + '/close',
+                        type: 'PUT',
+                        data: JSON.stringify(txt),
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            if (Number(data) > 0) {
+                                getAsyncRWBufferSendingSostavOfID(
+                                    data,
+                                    function (result) {
+                                        table_sending.viewFieldClose(result);
+                                    });
+                            } else {
+                                alert(resurses.getText("message_error_no_close_sostav") + data);
+                            }
+
+                        },
+                        error: function (x, y, z) {
+                            alert(x + '\n' + y + '\n' + z);
+                        }
+                    });
+                }
+
+            }
         }
 
     //-----------------------------------------------------------------------------------------
@@ -729,18 +834,19 @@
             $('#label-select-date-range').text(resurses.getText("label-select-date-range"));
             $('#label-to').text(resurses.getText("table_message_separator"));
             $('#to-excel').text(resurses.getText("button_to_excel"));
-            //view_status_panel.initObject();
 
             datetime_range.initObject();
+            confirm_close_panel.initObject();
+            OnBegin();
+            rw_stations.initObject(
+                function (data) {
+                    rw_status.initObject();
 
-            rw_stations.initObject();
-            rw_status.initObject();
+                    table_arrival.initObject();
+                    table_sending.initObject();
 
-            table_arrival.initObject();
-            table_sending.initObject();
-
-            tab_type_transfer.initObject(); // Типы маршрутов
-
+                    tab_type_transfer.initObject(); // Типы переносов
+                });
         }); // локализация
 
 });

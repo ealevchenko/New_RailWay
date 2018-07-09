@@ -90,7 +90,7 @@ function getError(err) {
     });
     return value;
 }
-
+// Получить статус вагона
 function getStatusCars(list, car) {
     if (list != null) {
         if (list.indexOf(car) >= 0) {
@@ -113,9 +113,9 @@ function getErrorCars(list_error, car) {
     return "Ok";
 }
 
-// получить статус переноса вагонов 
+// получить статус переноса вагонов по прибытию на АМКР
 function getBufferArrivalCarsStatus(bac) {
-    var list_err = getError();
+    var list_err = getError(); // Загрузить список ошибок
     if (bac != null) {
         var list_cars = [];
         if (bac.list_wagons != null) {
@@ -129,6 +129,35 @@ function getBufferArrivalCarsStatus(bac) {
                         car_upd: getStatusCars(bac.list_no_update_wagons, cars[i]),
                         car_upderr: (upd_err != "Ok" ? getTextOption(list_err, upd_err) : upd_err),
                     });
+                }
+            }
+        }
+        return list_cars;
+    }
+}
+// получить статус переноса вагонов по отправки с АМКР
+function getBufferSendingCarsStatus(bac) {
+    var list_err = getError(); // Загрузить список ошибок
+    if (bac != null) {
+        var list_cars = [];
+        if (bac.message!= null && bac.message.indexOf("no_") != -1) {
+            list_cars.push({
+                car: null,
+                car_set: 'Error',
+                car_seterr: bac.message,
+            });
+        } else {
+            if (bac.list_wagons != null) {
+                var cars = bac.list_wagons.split(';');
+                for (var i = 0; i < cars.length; i++) {
+                    var upd_err = getErrorCars(bac.message, cars[i]);
+                    if (cars[i] != "") {
+                        list_cars.push({
+                            car: cars[i],
+                            car_set: getStatusCars(bac.list_no_set_wagons, cars[i]),
+                            car_seterr: (upd_err != "Ok" ? getTextOption(list_err, upd_err) : upd_err),
+                        });
+                    }
                 }
             }
         }
@@ -313,8 +342,8 @@ function getBufferInputSostavXMLHttpRequest(correct, start, stop, callback) {
     var list_status;// = getStatus();
     var list_status;//_name = getStatusName();
     var xhr = new XMLHttpRequest(),
-    method = "GET",
-    url = '/railway/api/kis/transfer/bis/' + start.toISOString() + '/' + stop.toISOString();
+        method = "GET",
+        url = '/railway/api/kis/transfer/bis/' + start.toISOString() + '/' + stop.toISOString();
 
     xhr.open(method, url, true);
     xhr.onreadystatechange = function () {

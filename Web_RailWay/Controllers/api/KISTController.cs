@@ -210,6 +210,14 @@ namespace Web_RailWay.Controllers.api
             return this.rep_kist.CloseRWBufferArrivalSostav(id, User.Identity.Name);
         }
 
+        [HttpPut]
+        [Route("arrival/{id:int}/close")]
+        public int EditRWBufferArrivalSostav(int id, [FromBody]String txt)
+        {
+            return this.rep_kist.CloseRWBufferArrivalSostav(id, txt, User.Identity.Name);
+        }
+
+
         #endregion
 
         #region BufferSendingSostav
@@ -247,6 +255,13 @@ namespace Web_RailWay.Controllers.api
         public int CloseRWBufferSendinglSostav(int id)
         {
             return this.rep_kist.CloseRWBufferSendingSostav(id, User.Identity.Name);
+        }
+
+        [HttpPut]
+        [Route("sending/{id:int}/close")]
+        public int EditRWBufferSendingSostav(int id, [FromBody]String txt)
+        {
+            return this.rep_kist.CloseRWBufferSendingSostav(id, txt, User.Identity.Name);
         }
 
         #endregion

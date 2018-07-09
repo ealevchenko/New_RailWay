@@ -621,6 +621,7 @@ namespace EFKIS.Concrete
                         count_set_nathist = RWBufferArrivalSostav.count_set_nathist,
                         close = RWBufferArrivalSostav.close,
                         close_user = RWBufferArrivalSostav.close_user,
+                        close_comment = RWBufferArrivalSostav.close_comment,
                         status = RWBufferArrivalSostav.status,
                         list_wagons = RWBufferArrivalSostav.list_wagons,
                         list_no_set_wagons = RWBufferArrivalSostav.list_no_set_wagons,
@@ -650,6 +651,7 @@ namespace EFKIS.Concrete
                         dbEntry.count_set_nathist = RWBufferArrivalSostav.count_set_nathist;
                         dbEntry.close = RWBufferArrivalSostav.close;
                         dbEntry.close_user = RWBufferArrivalSostav.close_user;
+                        dbEntry.close_comment = RWBufferArrivalSostav.close_comment;
                         dbEntry.status = RWBufferArrivalSostav.status;
                         dbEntry.list_wagons = RWBufferArrivalSostav.list_wagons;
                         dbEntry.list_no_set_wagons = RWBufferArrivalSostav.list_no_set_wagons;
@@ -790,6 +792,25 @@ namespace EFKIS.Concrete
 
         }
 
+        public int CloseRWBufferArrivalSostav(int id, string coment, string user)
+        {
+            try
+            {
+                RWBufferArrivalSostav bas = GetRWBufferArrivalSostav(id);
+                if (bas == null) return 0;
+                bas.close = DateTime.Now;
+                bas.close_user = user;
+                bas.close_comment = coment;
+                return SaveRWBufferArrivalSostav(bas);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseRWBufferArrivalSostav(id={0}, user={1})", id, user), eventID);
+                return -1;
+            }
+
+        }
+
         #endregion
 
         #region RWBufferSendingSostav Перенос отправленных на УЗ вагонов по данным КИС
@@ -847,6 +868,7 @@ namespace EFKIS.Concrete
                         count_set_nathist = RWBufferSendingSostav.count_set_nathist,
                         close = RWBufferSendingSostav.close,
                         close_user = RWBufferSendingSostav.close_user,
+                        close_comment = RWBufferSendingSostav.close_comment,
                         status = RWBufferSendingSostav.status, 
                         list_wagons = RWBufferSendingSostav.list_wagons,
                         list_no_set_wagons = RWBufferSendingSostav.list_no_set_wagons,
@@ -872,6 +894,7 @@ namespace EFKIS.Concrete
                         dbEntry.count_set_nathist = RWBufferSendingSostav.count_set_nathist;
                         dbEntry.close = RWBufferSendingSostav.close;
                         dbEntry.close_user = RWBufferSendingSostav.close_user;
+                        dbEntry.close_comment = RWBufferSendingSostav.close_comment;
                         dbEntry.status = RWBufferSendingSostav.status;
                         dbEntry.list_wagons = RWBufferSendingSostav.list_wagons;
                         dbEntry.list_no_set_wagons = RWBufferSendingSostav.list_no_set_wagons;
@@ -1010,6 +1033,26 @@ namespace EFKIS.Concrete
             }
 
         }
+
+        public int CloseRWBufferSendingSostav(int id, string coment, string user)
+        {
+            try
+            {
+                RWBufferSendingSostav bas = GetRWBufferSendingSostav(id);
+                if (bas == null) return 0;
+                bas.close = DateTime.Now;
+                bas.close_user = user;
+                bas.close_comment = coment;
+                return SaveRWBufferSendingSostav(bas);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CloseRWBufferArrivalSostav(id={0}, user={1})", id, user), eventID);
+                return -1;
+            }
+
+        }
+
         #endregion
         #endregion
     }
