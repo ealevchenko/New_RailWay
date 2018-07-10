@@ -62,16 +62,15 @@ namespace EFKIS.Abstract
         #endregion
 
         #region PROM.SOSTAV
-        IQueryable<PromSostav> PromSostav { get; }
-        IQueryable<PromSostav> GetPromSostav();
-        IQueryable<PromSostav> GetPromSostav(DateTime start, DateTime stop);
-        IQueryable<PromSostav> GetInputPromSostav();
-        IQueryable<PromSostav> GetInputPromSostav(DateTime start, DateTime stop);
-        IQueryable<PromSostav> GetInputPromSostav(DateTime start, DateTime stop, bool sort);
-        IQueryable<PromSostav> GetOutputPromSostav();
-        IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop);
-        IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop, bool sort);
-
+        //IQueryable<PromSostav> PromSostav { get; }
+        //IQueryable<PromSostav> GetPromSostav();
+        //IQueryable<PromSostav> GetPromSostav(DateTime start, DateTime stop);
+        //IQueryable<PromSostav> GetInputPromSostav();
+        //IQueryable<PromSostav> GetInputPromSostav(DateTime start, DateTime stop);
+        //IQueryable<PromSostav> GetInputPromSostav(DateTime start, DateTime stop, bool sort);
+        //IQueryable<PromSostav> GetOutputPromSostav();
+        //IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop);
+        //IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop, bool sort);
         #endregion
 
         #endregion Prom_Sostav

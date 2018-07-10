@@ -811,307 +811,11 @@ namespace EFKIS.Concrete
 
         #endregion
 
-        #region PROM.SOSTAV
-
-        public IQueryable<PromSostav> PromSostav
-        {
-            get { return context.PromSostav; }
-        }
-
-        public IQueryable<PromSostav> GetPromSostav()
-        {
-            try
-            {
-                //return PromSostav.Where(p => p.D_PR_DD != null & p.D_PR_MM != null & p.D_PR_YY != null);
-                return PromSostav;
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetPromSostav()"), eventID);
-                return null;
-            }
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="stop"></param>
-        /// <returns></returns>
-        public IQueryable<PromSostav> GetPromSostav(DateTime start, DateTime stop)
-        {
-            try
-            {
-                return GetPromSostav().Where(p => p.P_OT != null & p.V_P == 1 & p.K_ST != null & p.D_PR_YY != null & p.D_PR_MM != null & p.D_PR_DD != null & p.T_PR_HH != null & p.T_PR_MI != null).ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
-                //return GetPromSostav().Where(p => p.DT >= start & p.DT <= stop);
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetPromSostav(start={0}, stop={1})", start, stop), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Вернуть составы прибывшие на станцию промышленую
-        /// </summary>
-        /// <returns></returns>
-        public IQueryable<PromSostav> GetInputPromSostav()
-        {
-            try
-            {
-                return GetPromSostav().Where(p => p.P_OT == 0 & p.V_P == 1 & p.K_ST != null);
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetInputPromSostav()"), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Вернуть составы прибывшие на станцию промышленую за указанный период
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="stop"></param>
-        /// <returns></returns>
-        public IQueryable<PromSostav> GetInputPromSostav(DateTime start, DateTime stop)
-        {
-            try
-            {
-                return GetInputPromSostav().ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetInputPromSostav(start={0}, stop={1})", start, stop), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Вернуть составы прибывшие на станцию промышленую за указанный период с сортировкой true - по убывания false - по возростанию
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="stop"></param>
-        /// <param name="sort"></param>
-        /// <returns></returns>
-        public IQueryable<PromSostav> GetInputPromSostav(DateTime start, DateTime stop, bool sort)
-        {
-            try
-            {
-                if (sort)
-                {
-                    return GetInputPromSostav(start, stop)
-                        .OrderByDescending(p => p.D_YY)
-                        .ThenByDescending(p => p.D_MM)
-                        .ThenByDescending(p => p.D_DD)
-                        .ThenByDescending(p => p.T_HH)
-                        .ThenByDescending(p => p.T_MI);
-                }
-                else
-                {
-                    return GetInputPromSostav(start, stop)
-                        .OrderBy(p => p.D_YY)
-                        .ThenBy(p => p.D_MM)
-                        .ThenBy(p => p.D_DD)
-                        .ThenBy(p => p.T_HH)
-                        .ThenBy(p => p.T_MI);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetInputPromSostav(start={0}, stop={1}, sort={2})", start, stop, sort), eventID);
-                return null;
-            }
-
-        }
-        /// <summary>
-        /// Вернуть составы отправленные на станции УЗ
-        /// </summary>
-        /// <returns></returns>
-        public IQueryable<PromSostav> GetOutputPromSostav()
-        {
-            try
-            {
-                //return GetPromSostav().Where(p => p.P_OT == 1 & p.K_ST != null);
-                return GetPromSostav().Where(p => p.P_OT == 1 & p.T_PR_HH != null & p.T_PR_MI != null);
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetOutputPromSostav()"), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Вернуть составы отправленные на станции УЗ за указанный период
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="stop"></param>
-        /// <returns></returns>
-        public IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop)
-        {
-            try
-            {
-                return GetOutputPromSostav().ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetOutputPromSostav(start={0}, stop={1})", start, stop), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Вернуть составы отправленные на станции УЗ за указанный период с сортировкой
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="stop"></param>
-        /// <param name="sort"></param>
-        /// <returns></returns>
-        public IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop, bool sort)
-        {
-            try
-            {
-                if (sort)
-                {
-                    return GetOutputPromSostav(start, stop)
-                        .OrderByDescending(p => p.D_YY)
-                        .ThenByDescending(p => p.D_MM)
-                        .ThenByDescending(p => p.D_DD)
-                        .ThenByDescending(p => p.T_HH)
-                        .ThenByDescending(p => p.T_MI);
-                }
-                else
-                {
-                    return GetOutputPromSostav(start, stop)
-                        .OrderBy(p => p.D_YY)
-                        .ThenBy(p => p.D_MM)
-                        .ThenBy(p => p.D_DD)
-                        .ThenBy(p => p.T_HH)
-                        .ThenBy(p => p.T_MI);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetOutputPromSostav(start={0}, stop={1}, sort={2})", start, stop, sort), eventID);
-                return null;
-            }
-
-        }
-
-        ///// <summary>
-        ///// Выбрать строки с указанием направления
-        ///// </summary>
-        ///// <returns></returns>
-        //public IQueryable<PromSostav> GetPromSostav(bool direction)
-        //{
-        //    try
-        //    {
-        //        string sql = "SELECT N_NATUR,D_DD,D_MM,D_YY,T_HH,T_MI,K_ST,N_PUT,NAPR,P_OT,V_P,K_ST_OTPR,K_ST_PR,N_VED_PR,N_SOST_OT,N_SOST_PR,DAT_VVOD FROM PROM.SOSTAV ";
-        //        if (direction)
-        //        {
-        //            sql += "WHERE (P_OT = 1 and K_ST_PR is not null)";
-        //        }
-        //        else
-        //        {
-
-        //            sql += "WHERE ( P_OT = 0 and K_ST_OTPR is not null)";
-        //        }
-
-        //        return rep_ps.db.SqlQuery<PromSostav>(sql).AsQueryable();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        ServicesEventLog.LogError(e, "GetPromSostav(1)", eventID);
-        //        return null;
-        //    }
-        //}
-        ///// <summary>
-        ///// Выбрать строки с указанием направления и временного диапазона
-        ///// </summary>
-        ///// <param name="start"></param>
-        ///// <param name="stop"></param>
-        ///// <param name="direction"></param>
-        ///// <returns></returns>
-        //public IQueryable<PromSostav> GetPromSostav(DateTime start, DateTime stop, bool direction)
-        //{
-        //    return GetPromSostav(direction).ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
-        //}
-
-        ///// <summary>
-        ///// Вернуть все прибывшие составы
-        ///// </summary>
-        ///// <returns></returns>
-        //public IQueryable<PromSostav> GetArrivalPromSostav()
-        //{
-        //    return rep_ps.PromSostav.Where(p => p.P_OT == 0 & p.K_ST_OTPR != null);
-        //}
-        ///// <summary>
-        ///// Вернуть все отправленные составы
-        ///// </summary>
-        ///// <returns></returns>
-        //public IQueryable<PromSostav> GetDeparturePromSostav()
-        //{
-        //    return rep_ps.PromSostav.Where(p => p.P_OT == 1 & p.K_ST_PR != null);
-        //}
-
-        ///// <summary>
-        ///// Вернуть состав прибывший на станцию промышленую по натурке
-        ///// </summary>
-        ///// <param name="natur"></param>
-        ///// <returns></returns>
-        //public PromSostav GetInputPromSostavToNatur(int natur)
-        //{
-        //    return GetInputPromSostav().Where(p => p.N_NATUR == natur).FirstOrDefault();
-        //}
-        ///// <summary>
-        ///// Вернуть состав прибывший на станцию промышленую по натурке и дате
-        ///// </summary>
-        ///// <param name="natur"></param>
-        ///// <param name="station"></param>
-        ///// <param name="day"></param>
-        ///// <param name="month"></param>
-        ///// <param name="year"></param>
-        ///// <returns></returns>
-        //public PromSostav GetArrivalPromSostavToNatur(int natur, int station, int day, int month, int year)
-        //{
-        //    return GetInputPromSostav().Where(p => p.N_NATUR == natur & p.K_ST == station & p.D_DD == day & p.D_MM == month & p.D_YY == year).FirstOrDefault();
-        //}
-
-        //public PromSostav GetInputPromSostavToNatur(int natur, int station, int day, int month, int year)
-        //{
-        //    return rep_ps.PromSostav.Where(p => p.N_NATUR == natur & p.K_ST == station & p.D_DD == day & p.D_MM == month & p.D_YY == year).FirstOrDefault();
-        //}
-        ///// <summary>
-        ///// Вернуть все составы на станции промышленая за указанный период
-        ///// </summary>
-        ///// <param name="start"></param>
-        ///// <param name="stop"></param>
-        ///// <returns></returns>
-        //public IQueryable<PromSostav> GetArrivalPromSostav(DateTime start, DateTime stop)
-        //{
-        //    return GetArrivalPromSostav().ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
-        //}
-        ///// <summary>
-        ///// Вернуть все составы на станции промышленая за указанный период
-        ///// </summary>
-        ///// <param name="start"></param>
-        ///// <param name="stop"></param>
-        ///// <returns></returns>
-        //public IQueryable<PromSostav> GetDeparturePromSostav(DateTime start, DateTime stop)
-        //{
-        //    return GetDeparturePromSostav().ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
-        //}
-
-        #endregion Prom_Sostav
-
-
         #region Prom_Sostav
         public IQueryable<Prom_Sostav> GetProm_Sostav()
         {
             try
             {
-                //return context.Database.SqlQuery<Prom_Sostav>("SELECT (dbms_random.value(0,10)) as ID, N_NATUR ,N_VED_PR ,N_SOST_OT      ,N_SOST_PR      ,POD_L      ,POD_N      ,K_ST      ,K_ST_OTPR      ,K_ST_PR      ,N_PUT      ,NAPR      ,K_POLUCH      ,D_PR_DD      ,D_PR_MM      ,D_DD      ,D_MM      ,T_PR_HH      ,T_PR_MI      ,T_HH      ,T_MI      ,K_GR      ,P_OT      ,FIO_V_KMK      ,FIO_V_MPS      ,FIO_P_KMK      ,FIO_P_MPS      ,V_WSEGO      ,V_MPS      ,V_KMK      ,WES      ,V_KR      ,V_P      ,V_PV      ,V_X      ,V_C      ,V_D      ,V_CM      ,V_PR      ,V_G      ,V_K      ,V_CH      ,V_S      ,V_SS      ,V_MR      ,V_SH      ,V_EX      ,T_PRED_HH      ,T_PRED_MI      ,T_OGR_HH      ,T_OGR_MI      ,T_OBR_HH      ,T_OBR_MI      ,T_SOGR_HH      ,T_SOGR_MI      ,N_GOL      ,N_HV      ,K_SIGN      ,ST_OTPR      ,OTPRAV      ,V_KR_KMK      ,V_P_KMK      ,V_PV_KMK      ,V_X_KMK      ,V_C_KMK      ,V_D_KMK      ,V_CM_KMK      ,V_PR_KMK      ,V_K_SNG      ,V_CH_SNG      ,V_SS_SNG      ,D_PR_YY      ,D_YY      ,MARSH      ,DAT_VVOD FROM PROM.SOSTAV").AsQueryable();
-                //return context.Database.SqlQuery<Prom_Sostav>("SELECT (dbms_random.value(0,10)) as ID, N_NATUR ,N_VED_PR ,N_SOST_OT, N_SOST_PR, K_ST, K_ST_OTPR ,K_ST_PR ,N_PUT ,NAPR ,D_PR_DD ,D_PR_MM ,D_DD ,D_MM ,T_PR_HH ,T_PR_MI ,T_HH ,T_MI ,P_OT ,V_P ,ST_OTPR ,D_PR_YY ,D_YY ,DAT_VVOD FROM PROM.SOSTAV").AsQueryable();
-                //return context.Database.SqlQuery<Prom_Sostav>("SELECT ROWNUM as ID, N_NATUR ,N_VED_PR ,N_SOST_OT, N_SOST_PR, K_ST, K_ST_OTPR ,K_ST_PR ,N_PUT ,NAPR ,D_PR_DD ,D_PR_MM ,D_DD ,D_MM ,T_PR_HH ,T_PR_MI ,T_HH ,T_MI ,P_OT ,V_P ,ST_OTPR ,D_PR_YY ,D_YY ,DAT_VVOD FROM PROM.SOSTAV").AsQueryable();
-               // return context.Database.SqlQuery<Prom_Sostav>(sql_Sostav).AsQueryable();   
                 return context.Database.SqlQuery<Prom_Sostav>("SELECT " + sql_field_sostav + "," + sql_field_dt_pr + " as DT_PR" + "," + sql_field_dt + " as DT "+ sql_table_sostav).AsQueryable();         
             }
             catch (Exception e)
@@ -1245,7 +949,12 @@ namespace EFKIS.Concrete
                 return null;
             }
         }
-
+        /// <summary>
+        /// Показать все составы и количество вагонов за указаный период времени для отчета "Оборот АМКР-УЗ"
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
         public IQueryable<Prom_SostavAndCount> GetProm_SostavAndCount(DateTime start, DateTime stop)
         {
             try
@@ -1265,7 +974,16 @@ namespace EFKIS.Concrete
                 return null;
             }
         }
-
+        /// <summary>
+        /// Показать состав и количество вагонов для отчета поиск по натурному листу
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <param name="hour"></param>
+        /// <param name="minute"></param>
+        /// <returns></returns>
         public IQueryable<Prom_SostavAndCount> GetProm_SostavAndCount(int? natur, int? day, int? month, int? year, int? hour, int? minute)
         {
             try
@@ -2583,3 +2301,292 @@ namespace EFKIS.Concrete
 
     }
 }
+
+//#region PROM.SOSTAV
+
+//public IQueryable<PromSostav> PromSostav
+//{
+//    get { return context.PromSostav; }
+//}
+
+//public IQueryable<PromSostav> GetPromSostav()
+//{
+//    try
+//    {
+//        //return PromSostav.Where(p => p.D_PR_DD != null & p.D_PR_MM != null & p.D_PR_YY != null);
+//        return PromSostav;
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetPromSostav()"), eventID);
+//        return null;
+//    }
+//}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="start"></param>
+/// <param name="stop"></param>
+/// <returns></returns>
+//public IQueryable<PromSostav> GetPromSostav(DateTime start, DateTime stop)
+//{
+//    try
+//    {
+//        return GetPromSostav().Where(p => p.P_OT != null & p.V_P == 1 & p.K_ST != null & p.D_PR_YY != null & p.D_PR_MM != null & p.D_PR_DD != null & p.T_PR_HH != null & p.T_PR_MI != null).ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
+//        //return GetPromSostav().Where(p => p.DT >= start & p.DT <= stop);
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetPromSostav(start={0}, stop={1})", start, stop), eventID);
+//        return null;
+//    }
+//}
+/// <summary>
+/// Вернуть составы прибывшие на станцию промышленую
+/// </summary>
+/// <returns></returns>
+//public IQueryable<PromSostav> GetInputPromSostav()
+//{
+//    try
+//    {
+//        return GetPromSostav().Where(p => p.P_OT == 0 & p.V_P == 1 & p.K_ST != null);
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetInputPromSostav()"), eventID);
+//        return null;
+//    }
+//}
+/// <summary>
+/// Вернуть составы прибывшие на станцию промышленую за указанный период
+/// </summary>
+/// <param name="start"></param>
+/// <param name="stop"></param>
+/// <returns></returns>
+//public IQueryable<PromSostav> GetInputPromSostav(DateTime start, DateTime stop)
+//{
+//    try
+//    {
+//        return GetInputPromSostav().ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetInputPromSostav(start={0}, stop={1})", start, stop), eventID);
+//        return null;
+//    }
+//}
+/// <summary>
+/// Вернуть составы прибывшие на станцию промышленую за указанный период с сортировкой true - по убывания false - по возростанию
+/// </summary>
+/// <param name="start"></param>
+/// <param name="stop"></param>
+/// <param name="sort"></param>
+/// <returns></returns>
+//public IQueryable<PromSostav> GetInputPromSostav(DateTime start, DateTime stop, bool sort)
+//{
+//    try
+//    {
+//        if (sort)
+//        {
+//            return GetInputPromSostav(start, stop)
+//                .OrderByDescending(p => p.D_YY)
+//                .ThenByDescending(p => p.D_MM)
+//                .ThenByDescending(p => p.D_DD)
+//                .ThenByDescending(p => p.T_HH)
+//                .ThenByDescending(p => p.T_MI);
+//        }
+//        else
+//        {
+//            return GetInputPromSostav(start, stop)
+//                .OrderBy(p => p.D_YY)
+//                .ThenBy(p => p.D_MM)
+//                .ThenBy(p => p.D_DD)
+//                .ThenBy(p => p.T_HH)
+//                .ThenBy(p => p.T_MI);
+//        }
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetInputPromSostav(start={0}, stop={1}, sort={2})", start, stop, sort), eventID);
+//        return null;
+//    }
+
+//}
+/// <summary>
+/// Вернуть составы отправленные на станции УЗ
+/// </summary>
+/// <returns></returns>
+//public IQueryable<PromSostav> GetOutputPromSostav()
+//{
+//    try
+//    {
+//        //return GetPromSostav().Where(p => p.P_OT == 1 & p.K_ST != null);
+//        return GetPromSostav().Where(p => p.P_OT == 1 & p.T_PR_HH != null & p.T_PR_MI != null);
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetOutputPromSostav()"), eventID);
+//        return null;
+//    }
+//}
+/// <summary>
+/// Вернуть составы отправленные на станции УЗ за указанный период
+/// </summary>
+/// <param name="start"></param>
+/// <param name="stop"></param>
+/// <returns></returns>
+//public IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop)
+//{
+//    try
+//    {
+//        return GetOutputPromSostav().ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetOutputPromSostav(start={0}, stop={1})", start, stop), eventID);
+//        return null;
+//    }
+//}
+/// <summary>
+/// Вернуть составы отправленные на станции УЗ за указанный период с сортировкой
+/// </summary>
+/// <param name="start"></param>
+/// <param name="stop"></param>
+/// <param name="sort"></param>
+/// <returns></returns>
+//public IQueryable<PromSostav> GetOutputPromSostav(DateTime start, DateTime stop, bool sort)
+//{
+//    try
+//    {
+//        if (sort)
+//        {
+//            return GetOutputPromSostav(start, stop)
+//                .OrderByDescending(p => p.D_YY)
+//                .ThenByDescending(p => p.D_MM)
+//                .ThenByDescending(p => p.D_DD)
+//                .ThenByDescending(p => p.T_HH)
+//                .ThenByDescending(p => p.T_MI);
+//        }
+//        else
+//        {
+//            return GetOutputPromSostav(start, stop)
+//                .OrderBy(p => p.D_YY)
+//                .ThenBy(p => p.D_MM)
+//                .ThenBy(p => p.D_DD)
+//                .ThenBy(p => p.T_HH)
+//                .ThenBy(p => p.T_MI);
+//        }
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetOutputPromSostav(start={0}, stop={1}, sort={2})", start, stop, sort), eventID);
+//        return null;
+//    }
+
+//}
+
+///// <summary>
+///// Выбрать строки с указанием направления
+///// </summary>
+///// <returns></returns>
+//public IQueryable<PromSostav> GetPromSostav(bool direction)
+//{
+//    try
+//    {
+//        string sql = "SELECT N_NATUR,D_DD,D_MM,D_YY,T_HH,T_MI,K_ST,N_PUT,NAPR,P_OT,V_P,K_ST_OTPR,K_ST_PR,N_VED_PR,N_SOST_OT,N_SOST_PR,DAT_VVOD FROM PROM.SOSTAV ";
+//        if (direction)
+//        {
+//            sql += "WHERE (P_OT = 1 and K_ST_PR is not null)";
+//        }
+//        else
+//        {
+
+//            sql += "WHERE ( P_OT = 0 and K_ST_OTPR is not null)";
+//        }
+
+//        return rep_ps.db.SqlQuery<PromSostav>(sql).AsQueryable();
+//    }
+//    catch (Exception e)
+//    {
+//        ServicesEventLog.LogError(e, "GetPromSostav(1)", eventID);
+//        return null;
+//    }
+//}
+///// <summary>
+///// Выбрать строки с указанием направления и временного диапазона
+///// </summary>
+///// <param name="start"></param>
+///// <param name="stop"></param>
+///// <param name="direction"></param>
+///// <returns></returns>
+//public IQueryable<PromSostav> GetPromSostav(DateTime start, DateTime stop, bool direction)
+//{
+//    return GetPromSostav(direction).ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
+//}
+
+///// <summary>
+///// Вернуть все прибывшие составы
+///// </summary>
+///// <returns></returns>
+//public IQueryable<PromSostav> GetArrivalPromSostav()
+//{
+//    return rep_ps.PromSostav.Where(p => p.P_OT == 0 & p.K_ST_OTPR != null);
+//}
+///// <summary>
+///// Вернуть все отправленные составы
+///// </summary>
+///// <returns></returns>
+//public IQueryable<PromSostav> GetDeparturePromSostav()
+//{
+//    return rep_ps.PromSostav.Where(p => p.P_OT == 1 & p.K_ST_PR != null);
+//}
+
+///// <summary>
+///// Вернуть состав прибывший на станцию промышленую по натурке
+///// </summary>
+///// <param name="natur"></param>
+///// <returns></returns>
+//public PromSostav GetInputPromSostavToNatur(int natur)
+//{
+//    return GetInputPromSostav().Where(p => p.N_NATUR == natur).FirstOrDefault();
+//}
+///// <summary>
+///// Вернуть состав прибывший на станцию промышленую по натурке и дате
+///// </summary>
+///// <param name="natur"></param>
+///// <param name="station"></param>
+///// <param name="day"></param>
+///// <param name="month"></param>
+///// <param name="year"></param>
+///// <returns></returns>
+//public PromSostav GetArrivalPromSostavToNatur(int natur, int station, int day, int month, int year)
+//{
+//    return GetInputPromSostav().Where(p => p.N_NATUR == natur & p.K_ST == station & p.D_DD == day & p.D_MM == month & p.D_YY == year).FirstOrDefault();
+//}
+
+//public PromSostav GetInputPromSostavToNatur(int natur, int station, int day, int month, int year)
+//{
+//    return rep_ps.PromSostav.Where(p => p.N_NATUR == natur & p.K_ST == station & p.D_DD == day & p.D_MM == month & p.D_YY == year).FirstOrDefault();
+//}
+///// <summary>
+///// Вернуть все составы на станции промышленая за указанный период
+///// </summary>
+///// <param name="start"></param>
+///// <param name="stop"></param>
+///// <returns></returns>
+//public IQueryable<PromSostav> GetArrivalPromSostav(DateTime start, DateTime stop)
+//{
+//    return GetArrivalPromSostav().ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
+//}
+///// <summary>
+///// Вернуть все составы на станции промышленая за указанный период
+///// </summary>
+///// <param name="start"></param>
+///// <param name="stop"></param>
+///// <returns></returns>
+//public IQueryable<PromSostav> GetDeparturePromSostav(DateTime start, DateTime stop)
+//{
+//    return GetDeparturePromSostav().ToArray().FilterArrayOfFilterFromTo(Filters.IsGreaterOrequalToLessOrEqual, start, stop).AsQueryable();
+//}
+
+//#endregion Prom_Sostav
