@@ -9,6 +9,7 @@ namespace Web_RailWay.Areas.RW.Controllers
     public class HomeController : Controller
     {
         // GET: RW
+        [Access(LogVisit = true)]
         public ActionResult Index()
         {
             return View();

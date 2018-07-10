@@ -19,6 +19,7 @@ namespace Web_RailWay.Areas.KIS.Controllers
             this.ef_kis = kis;
         }
 
+        [Access(LogVisit = true)]
         public ActionResult Index()
         {
             return View();
