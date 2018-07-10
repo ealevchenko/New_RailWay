@@ -99,7 +99,7 @@
         },
         // список станций
         rw_stations = {
-            list: null,
+            list: [],
             initObject: function (callback) {
                 getAsyncStations(function (result) {
                     rw_stations.list = result;
@@ -604,6 +604,11 @@
                         "cnathist": data[i].count_nathist,
                         "snathist": data[i].count_set_nathist,
                         "close_comment": data[i].close_comment,
+                        "day": data[i].day,
+                        "month": data[i].month,
+                        "year": data[i].year,
+                        "hour": data[i].hour,
+                        "minute": data[i].minute,
                     });
                 }
                 LockScreenOff();
@@ -828,6 +833,7 @@
     //-----------------------------------------------------------------------------------------
     // Инициализация объектов
     //-----------------------------------------------------------------------------------------
+    OnBegin();
     resurses.initObject("/railway/Scripts/KIS/kis.json",
         function () {
             // Загружаем дальше

@@ -94,50 +94,7 @@
     }).on('click', function (evt) {
         evt.preventDefault();
         tab_type_turnover.activeTable(tab_type_turnover.active, true);
-    });
-
-
-    //dt = new Date(),
-    //start = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1, 00, 00, 00),
-    //stop = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 23, 59, 59),
-    //datetime_range = {
-    //    html_range: $("#select-range"),
-    //    obj: null,
-    //    initObject: function () {
-    //        this.obj = this.html_range.dateRangePicker(
-    //            {
-    //                startOfWeek: 'monday',
-    //                separator: resurses.getText("table_message_separator"),
-    //                language: lang,
-    //                format: resurses.getText("table_date_format"),
-    //                autoClose: false,
-    //                showShortcuts: false,
-    //                getValue: function () {
-    //                    if ($('#date-start').val() && $('#date-stop').val())
-    //                        return $('#date-start').val() + ' to ' + $('#date-stop').val();
-    //                    else
-    //                        return '';
-    //                },
-    //                setValue: function (s, s1, s2) {
-    //                    $('#date-start').val(s1);
-    //                    $('#date-stop').val(s2);
-    //                },
-    //                time: {
-    //                    enabled: true
-    //                },
-    //            }).
-    //            bind('datepicker-change', function (evt, obj) {
-    //                start = obj.date1;
-    //                stop = obj.date2;
-    //            })
-    //            .bind('datepicker-closed', function () {
-    //                tab_type_turnover.activeTable(tab_type_turnover.active, true);
-    //            });
-    //        var s_d_start = start.getDate() + '.' + (start.getMonth() + 1) + '.' + start.getFullYear() + ' ' + start.getHours() + ':' + start.getMinutes();
-    //        var s_d_stop = stop.getDate() + '.' + (stop.getMonth() + 1) + '.' + stop.getFullYear() + ' ' + stop.getHours() + ':' + stop.getMinutes();
-    //        datetime_range.obj.data('dateRangePicker').setDateRange(s_d_start, s_d_stop, true);
-    //    }
-    //},
+    }),
     // Типы отчетов
     tab_type_turnover = {
         html_div: $("#tabs-report-turnover"),
@@ -169,10 +126,14 @@
     },
     // список станций
     rw_stations = {
-        list: [],
-        initObject: function () {
-            getAsyncStations(function (result)
-            { rw_stations.list = result; });
+        list: null,
+        initObject: function (callback) {
+            getAsyncStations(function (result) {
+                rw_stations.list = result;
+                if (typeof callback === 'function') {
+                    callback(result);
+                }
+            });
         },
         selectStationKIS: function (id_kis) {
             var station = getObjects(this.list, 'id_kis', id_kis)
@@ -998,6 +959,7 @@
     //-----------------------------------------------------------------------------------------
     // Инициализация объектов
     //-----------------------------------------------------------------------------------------
+    OnBegin();
     resurses.initObject("/railway/Scripts/KIS/kis.json",
     function () {
         // Загружаем дальше
@@ -1013,37 +975,38 @@
 
 
         //datetime_range.initObject();
-        rw_stations.initObject();       // станции
         rw_car_condition.initObject();  // годности
         kis_cex.initObject();           // цеха
         kis_gruz.initObject();          // грузы
         kis_owner.initObject();         // собственики
         kis_strana.initObject();         // страны
 
-        table_turnover.initObject();
-        tab_type_turnover.initObject(); // Типы закладок отчетов 
-
-        //var dd = allVars.length;
-        if (allVars.natur != null) {
-            snatur.spinner("value", allVars.natur);
-        }
-        if (allVars.day != null) {
-            sday.spinner("value", allVars.day);
-        }
-        if (allVars.month != null) {
-            smonth.spinner("value", allVars.month);
-        }
-        if (allVars.year != null) {
-            syear.spinner("value", allVars.year);
-        }
-        if (allVars.hour != null) {
-            shour.spinner("value", allVars.hour);
-        }
-        if (allVars.minute != null) {
-            sminute.spinner("value", allVars.minute);
-        }
-
-        tab_type_turnover.activeTable(0, true); // Первый запуск
+        rw_stations.initObject(         // Загрузка станций
+            function (data) {
+                // Продолжим после загрузки
+                table_turnover.initObject();
+                tab_type_turnover.initObject(); // Типы закладок отчетов 
+                //var dd = allVars.length;
+                if (allVars.natur != null) {
+                    snatur.spinner("value", allVars.natur);
+                }
+                if (allVars.day != null) {
+                    sday.spinner("value", allVars.day);
+                }
+                if (allVars.month != null) {
+                    smonth.spinner("value", allVars.month);
+                }
+                if (allVars.year != null) {
+                    syear.spinner("value", allVars.year);
+                }
+                if (allVars.hour != null) {
+                    shour.spinner("value", allVars.hour);
+                }
+                if (allVars.minute != null) {
+                    sminute.spinner("value", allVars.minute);
+                }
+                tab_type_turnover.activeTable(0, true); // Первый запуск
+            });
     }); // локализация
 
 

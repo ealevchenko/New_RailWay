@@ -95,9 +95,13 @@
     // список станций
     rw_stations = {
         list: [],
-        initObject: function () {
-            getAsyncStations(function (result)
-            { rw_stations.list = result; });
+        initObject: function (callback) {
+            getAsyncStations(function (result) {
+                rw_stations.list = result;
+                if (typeof callback === 'function') {
+                    callback(result);
+                }
+            });
         },
         selectStationKIS: function (id_kis) {
             var station = getObjects(this.list, 'id_kis', id_kis)
@@ -914,23 +918,26 @@
     //-----------------------------------------------------------------------------------------
     // Инициализация объектов
     //-----------------------------------------------------------------------------------------
+    OnBegin();
     resurses.initObject("/railway/Scripts/KIS/kis.json",
     function () {
+
         // Загружаем дальше
         $('#label-select-date-range').text(resurses.getText("label-select-date-range"));
         $('#label-to').text(resurses.getText("table_message_separator"));
         $('#to-excel').text(resurses.getText("button_to_excel"));
         datetime_range.initObject();
-        rw_stations.initObject();       // станции
         rw_car_condition.initObject();  // годности
         kis_cex.initObject();           // цеха
         kis_gruz.initObject();          // грузы
         kis_owner.initObject();         // собственики
         kis_strana.initObject();         // страны
-
-        table_turnover.initObject();
-        tab_type_turnover.initObject(); // Типы закладок отчетов 
-
+        rw_stations.initObject(         // Загрузка станций
+            function (data) {
+                // Продолжим после загрузки
+                table_turnover.initObject();
+                tab_type_turnover.initObject(); // Типы закладок отчетов 
+            });
     }); // локализация
 
 
