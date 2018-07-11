@@ -94,15 +94,15 @@ namespace EFKIS.Abstract
         IQueryable<PromNatHist> PromNatHist { get; }
         IQueryable<PromNatHist> GetPromNatHist();
 
-        IQueryable<PromNatHist> GetNatHist(int natur, int station, int day, int month, int year, bool? sort);
-        IQueryable<PromNatHist> GetNatHist(int natur, int station, int day, int month, int year);
-        IQueryable<PromNatHist> GetNatHistSendingOfNaturAndDate(int natur, int day, int month, int year, bool? sort);
-        IQueryable<PromNatHist> GetNatHistSendingOfNaturAndDate(int natur, int day, int month, int year);
+        IQueryable<PromNatHist> GetNatHistPR(int natur, int station, int day, int month, int year, bool? sort);
+        IQueryable<PromNatHist> GetNatHistPR(int natur, int station, int day, int month, int year);
+        IQueryable<PromNatHist> GetNatHistSD(int natur, int day, int month, int year, bool? sort);
+        IQueryable<PromNatHist> GetNatHistSD(int natur, int day, int month, int year);
 
-        IQueryable<PromNatHist> GetNatHistSendingOfNaturAndDT(int natur, int day, int month, int year, int hour, int minute, bool? sort);
-        PromNatHist GetNatHistSendingOfNaturNumDT(int natur, int num, int day, int month, int year, int hour, int minute);
-        PromNatHist GetNatHistSendingOfNumDT(int num, int day, int month, int year, int hour, int minute);
-        PromNatHist GetNatHist(int natur, int station, int day, int month, int year, int wag);
+        IQueryable<PromNatHist> GetNatHistSD(int natur, int day, int month, int year, int hour, int minute, bool? sort);
+        PromNatHist GetNatHistSD(int natur, int num, int day, int month, int year, int hour, int minute);
+        PromNatHist GetNatHistSD(int num, int day, int month, int year, int hour, int minute);
+        PromNatHist GetNatHistPR(int natur, int station, int day, int month, int year, int wag);
 
         IQueryable<PromNatHist> GetNatHistOfVagon(int num_vag);
 
@@ -113,15 +113,21 @@ namespace EFKIS.Abstract
         IQueryable<PromNatHist> GetNatHistOfVagonLessPR(int num_vag, DateTime start, bool sort);
         IQueryable<PromNatHist> GetNatHistOfVagonLessEqualPR(int num_vag, DateTime start);
         IQueryable<PromNatHist> GetNatHistOfVagonLessEqualPR(int num_vag, DateTime start, bool sort);
-        IQueryable<PromNatHist> GetNatHistOfVagonGreaterEqualPR(int num_vag, DateTime start);
-        IQueryable<PromNatHist> GetNatHistOfVagonGreaterEqualPR(int num_vag, DateTime start, bool sort);
+        //IQueryable<PromNatHist> GetNatHistOfVagonGreaterEqualPR(int num_vag, DateTime start);
+        //IQueryable<PromNatHist> GetNatHistOfVagonGreaterEqualPR(int num_vag, DateTime start, bool sort);
 
         #endregion
 
         #region Prom_NatHist
-        IQueryable<Prom_NatHist> GetProm_NatHist();
-        IQueryable<Prom_NatHist> GetPRProm_NatHist(int natur, int day, int month, int year, int hour, int minute);
-        IQueryable<Prom_NatHist> GetSDProm_NatHist(int natur, int day, int month, int year, int hour, int minute);
+        //IQueryable<Prom_NatHist> GetProm_NatHist();
+        IQueryable<Prom_NatHist> GetArrivalProm_NatHistOfNaturDateTime(int natur, int day, int month, int year, int hour, int minute, bool? sort);
+
+        IQueryable<Prom_NatHist> GetSendingProm_NatHistOfNaturDateTime(int natur, int day, int month, int year, int hour, int minute, bool? sort);
+
+        IQueryable<Prom_NatHist> GetProm_NatHistOfVagonMoreSD(int num_vag, DateTime start, bool sort);
+        IQueryable<Prom_NatHist> GetProm_NatHistOfVagonMoreEqualSD(int num_vag, DateTime start, bool sort);
+        IQueryable<Prom_NatHist> GetProm_NatHistOfVagonLessPR(int num_vag, DateTime start, bool sort);
+        IQueryable<Prom_NatHist> GetProm_NatHistOfVagonLessEqualPR(int num_vag, DateTime start, bool sort);
         #endregion
 
         #region Prom_NatHistAndSostav

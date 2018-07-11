@@ -395,7 +395,7 @@ namespace KIS
                 EFWagons ef_wag = new EFWagons();
                 // Формирование общего списка вагонов и постановка их на путь станции прибытия
                 List<PromVagon> list_pv = ef_wag.GetVagon(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
-                List<PromNatHist> list_nh = ef_wag.GetNatHist(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+                List<PromNatHist> list_nh = ef_wag.GetNatHistPR(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
                 return SetListWagon(ref orc_sostav, list_pv, list_nh);
             }
             catch (Exception e)

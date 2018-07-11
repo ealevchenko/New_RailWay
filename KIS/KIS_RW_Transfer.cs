@@ -478,7 +478,7 @@ namespace KIS
             try
             {
                 EFWagons ef_wag = new EFWagons();
-                PromNatHist pnh = ef_wag.GetNatHistSendingOfNaturNumDT(natur, num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
+                PromNatHist pnh = ef_wag.GetNatHistSD(natur, num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
                 // Определим исходящие поставки
                 return CreateCarsOutDelivery(pnh);
             }
@@ -499,7 +499,7 @@ namespace KIS
             try
             {
                 EFWagons ef_wag = new EFWagons();
-                PromNatHist pnh = ef_wag.GetNatHistSendingOfNumDT(num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
+                PromNatHist pnh = ef_wag.GetNatHistSD(num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
                 // Определим исходящие поставки
                 return CreateCarsOutDelivery(pnh);
             }
@@ -575,11 +575,11 @@ namespace KIS
         public PromNatHist GetCorrectNatHist(int natur, int num_vag, DateTime dt_amkr, int id_station_kis)
         {
             EFWagons ef_wag = new EFWagons();
-            PromNatHist pnh = ef_wag.GetNatHist(natur, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+            PromNatHist pnh = ef_wag.GetNatHistPR(natur, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
             if (pnh == null & id_station_kis == 18)
             {
                 // Если промышленная, попробовать Промышленная-керамет
-                pnh = ef_wag.GetNatHist(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                pnh = ef_wag.GetNatHistPR(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
             }
             return pnh;
         }
@@ -1231,7 +1231,7 @@ namespace KIS
                 }
 
                 // Обновим информацию по количеству вагонов в таблице NatHist
-                List<PromNatHist> list_nh = ef_wag.GetNatHist(bas_sostav.natur, bas_sostav.id_station_kis, bas_sostav.day, bas_sostav.month, bas_sostav.year, bas_sostav.napr == 2 ? true : false).ToList();
+                List<PromNatHist> list_nh = ef_wag.GetNatHistPR(bas_sostav.natur, bas_sostav.id_station_kis, bas_sostav.day, bas_sostav.month, bas_sostav.year, bas_sostav.napr == 2 ? true : false).ToList();
                 bas_sostav.count_nathist = list_nh.Count() > 0 ? list_nh.Count() as int? : null;
 
                 List<int> set_wagons = new List<int>();
@@ -1454,7 +1454,7 @@ namespace KIS
                     return (int)errorTransfer.no_ways;
                 }
                 // Получим список вагонов
-                List<PromNatHist> list_nh = ef_wag.GetNatHistSendingOfNaturAndDT(bss_sostav.natur,
+                List<PromNatHist> list_nh = ef_wag.GetNatHistSD(bss_sostav.natur,
                     bss_sostav.day,
                     bss_sostav.month,
                     bss_sostav.year,
@@ -1466,7 +1466,7 @@ namespace KIS
                 {
                     // Списка Нет (могут не правильно указать время)
                     // Проверим есть список вагонов по указанной натурке дате\месяцу\году
-                    list_nh = ef_wag.GetNatHistSendingOfNaturAndDate(bss_sostav.natur,
+                    list_nh = ef_wag.GetNatHistSD(bss_sostav.natur,
                                         bss_sostav.day,
                                         bss_sostav.month,
                                         bss_sostav.year,
@@ -1475,7 +1475,7 @@ namespace KIS
                     if (list_nh == null || list_nh.Count() == 0)
                     {
                         // Проверим есть список вагонов по указанной натурке дате\месяцу\году
-                        list_nh = ef_wag.GetNatHistSendingOfNaturAndDate(bss_sostav.natur,
+                        list_nh = ef_wag.GetNatHistSD(bss_sostav.natur,
                                             bss_sostav.day + 1,
                                             bss_sostav.month,
                                             bss_sostav.year,
@@ -2153,7 +2153,7 @@ namespace KIS
             EFWagons ef_wag = new EFWagons();
             EFTKIS ef_tkis = new EFTKIS();
             List<PromVagon> list_pv = ef_wag.GetVagon(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
-            List<PromNatHist> list_pnh = ef_wag.GetNatHist(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            List<PromNatHist> list_pnh = ef_wag.GetNatHistPR(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
             // Ситуация-1. Проверим наличие вагонов в системе КИС (Могли отменить натурку данных нет в таблицах PromVagons, NanHist)
             if ((list_pv == null || list_pv.Count() == 0) & (list_pnh == null || list_pnh.Count() == 0))
             {

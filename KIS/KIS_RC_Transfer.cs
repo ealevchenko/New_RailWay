@@ -763,7 +763,7 @@ namespace KIS
                 int idsostav = ef_sap.GetDefaultIDSAPIncSupply();
                 // Получим информацию для заполнения вагона с учетом отсутствия данных в PromVagon
                 PromVagon pv = ef_wag.GetVagon(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
-                PromNatHist pnh = ef_wag.GetNatHist(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                PromNatHist pnh = ef_wag.GetNatHistPR(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
                 if (pv == null & pnh == null) return (int)errorTransfer.no_wagon_is_list;   // Ошибка нет вагонов в списке
                 if (pv == null)
                 {
@@ -931,7 +931,7 @@ namespace KIS
                 return (int)errorTransfer.no_ways;
             }
             // Обновим информацию по количеству вагонов в таблице NatHist
-            List<PromNatHist> list_nh = ef_wag.GetNatHist(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+            List<PromNatHist> list_nh = ef_wag.GetNatHistPR(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
             orc_sostav.count_nathist = list_nh.Count() > 0 ? list_nh.Count() as int? : null;
             int res_upd = UpdCarsToStation(ref orc_sostav, (int)id_stations, (int)id_ways);
             return res_upd;
@@ -1019,7 +1019,7 @@ namespace KIS
             string mess_update_vag_err1 = "Ошибка " + mess_update_vag_err + mess;
             try
             {
-                PromNatHist pnh = ef_wag.GetNatHist(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                PromNatHist pnh = ef_wag.GetNatHistPR(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
                 if (pnh == null)
                 {
                     String.Format(mess_update_vag_err1 + ", код ошибки:{0}", errorTransfer.no_wagon_is_nathist.ToString()).WriteError(servece_owner, eventID);
@@ -1863,7 +1863,7 @@ namespace KIS
             EFWagons ef_wag = new EFWagons();
             EFTKIS ef_tkis = new EFTKIS();
             List<PromVagon> list_pv = ef_wag.GetVagon(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
-            List<PromNatHist> list_pnh = ef_wag.GetNatHist(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            List<PromNatHist> list_pnh = ef_wag.GetNatHistPR(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
             // Ситуация-1. Проверим наличие вагонов в системе КИС (Могли отменить натурку данных нет в таблицах PromVagons, NanHist)
             if ((list_pv == null || list_pv.Count() == 0) & (list_pnh == null || list_pnh.Count() == 0))
             {

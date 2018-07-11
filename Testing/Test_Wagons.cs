@@ -23,6 +23,7 @@ namespace Testing
         //VagonsContent vc = new VagonsContent();
         //PromContent pc = new PromContent();
 
+        EFWagons ef_wag = new EFWagons();
 
         public Test_Wagons()
         {
@@ -728,15 +729,15 @@ namespace Testing
 
         }
 
-        public void Test_PROM_GetProm_NatHist()
-        {
-            EFWagons ef_wag = new EFWagons();
+        //public void Test_PROM_GetProm_NatHist()
+        //{
+        //    EFWagons ef_wag = new EFWagons();
 
-            List<Prom_NatHist> list = ef_wag.GetProm_NatHist().ToList();
-            //List<Prom_Sostav> list_input = ef_wag.GetInputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), false).ToList();
-            //List<Prom_Sostav> list_output = ef_wag.GetOutputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), true).ToList();
+        //    List<Prom_NatHist> list = ef_wag.GetProm_NatHist().ToList();
+        //    //List<Prom_Sostav> list_input = ef_wag.GetInputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), false).ToList();
+        //    //List<Prom_Sostav> list_output = ef_wag.GetOutputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), true).ToList();
 
-        }
+        //}
 
         public void Test_PROM_GetProm_SostavAndCount()
         {
@@ -746,7 +747,7 @@ namespace Testing
 
                 //List<Prom_SostavAndCount> list_psc = ef_wag.GetProm_SostavAndCount().ToList();
                 //List<Prom_SostavAndCount> list_psc1 = ef_wag.GetProm_SostavAndCount(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
-                List<Prom_SostavAndCount> list_psc2 = ef_wag.GetProm_SostavAndCount(1234,null,null,null,null,null).ToList();
+                List<Prom_SostavAndCount> list_psc2 = ef_wag.GetProm_SostavAndCount(1234, null, null, null, null, null).ToList();
             }
             catch (Exception e)
             {
@@ -790,6 +791,284 @@ namespace Testing
                 return;
             }
         }
+        #endregion
+
+        #region PromNatHist
+
+        public void Test_PROM_GetNatHistOfVagonMoreSD()
+        {
+            try
+            {
+                //EFWagons ef_wag1 = new EFWagons();
+                DateTime start = DateTime.Now;
+                List<PromNatHist> list = ef_wag.GetNatHistOfVagonMoreSD(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetProm_NatHistOfVagonMoreSD()
+        {
+            try
+            {
+                //EFWagons ef_wag2 = new EFWagons();
+                DateTime start = DateTime.Now;
+                List<Prom_NatHist> list1 = ef_wag.GetProm_NatHistOfVagonMoreSD(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetProm_NatHistOfVagonMoreEqualSD()
+        {
+            try
+            {
+                //EFWagons ef_wag2 = new EFWagons();
+                DateTime start = DateTime.Now;
+                List<Prom_NatHist> list1 = ef_wag.GetProm_NatHistOfVagonMoreEqualSD(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetNatHistOfVagonLessPR()
+        {
+            try
+            {
+                //EFWagons ef_wag1 = new EFWagons();
+                DateTime start = DateTime.Now;
+                List<PromNatHist> list = ef_wag.GetNatHistOfVagonLessPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetProm_NatHistOfVagonLessPR()
+        {
+            try
+            {
+                //EFWagons ef_wag2 = new EFWagons();
+                DateTime start = DateTime.Now;
+                List<Prom_NatHist> list1 = ef_wag.GetProm_NatHistOfVagonLessPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetNatHistOfVagonLessEqualPR()
+        {
+            try
+            {
+                //EFWagons ef_wag1 = new EFWagons();
+                DateTime start = DateTime.Now;
+                List<PromNatHist> list = ef_wag.GetNatHistOfVagonLessEqualPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetProm_NatHistOfVagonLessEqualPR()
+        {
+            try
+            {
+                //EFWagons ef_wag2 = new EFWagons();
+                DateTime start = DateTime.Now;
+                List<Prom_NatHist> list1 = ef_wag.GetProm_NatHistOfVagonLessEqualPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetNatHistPR()
+        {
+            try
+            {
+                
+                DateTime start = DateTime.Now;
+                List<PromNatHist> list = ef_wag.GetNatHistPR(3469, 1, 6, 6, 2018, true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetArrivalProm_NatHistOfNaturStationDate()
+        {
+            try
+            {
+                
+                DateTime start = DateTime.Now;               
+                List<Prom_NatHist> list = ef_wag.GetArrivalProm_NatHistOfNaturStationDate(3469, 1, 6, 6, 2018, true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetArrivalProm_NatHistOfNaturStationDateNum()
+        {
+            try
+            {
+                
+                DateTime start = DateTime.Now;
+                Prom_NatHist nh = ef_wag.GetArrivalProm_NatHistOfNaturStationDateNum(3469, 1, 6, 6, 2018, 62975255);
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetSendingProm_NatHistOfNaturDate()
+        {
+            try
+            {
+                
+                DateTime start = DateTime.Now;
+                List<Prom_NatHist> list = ef_wag.GetSendingProm_NatHistOfNaturDate(4198, 3, 7, 2018, true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetSendingProm_NatHistOfNaturDateTime()
+        {
+            try
+            {
+                
+                DateTime start = DateTime.Now;
+                List<Prom_NatHist> list = ef_wag.GetSendingProm_NatHistOfNaturDateTime(4198, 3, 7, 2018,14,0, true).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetArrivalProm_NatHistOfNaturDateTime()
+        {
+            try
+            {
+                
+                DateTime start = DateTime.Now;
+                List<Prom_NatHist> list = ef_wag.GetArrivalProm_NatHistOfNaturDateTime(3469, 6, 6, 2018, 12, 25, null).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetSendingProm_NatHistOfNaturNumDateTime()
+        {
+            try
+            {
+                
+                DateTime start = DateTime.Now;
+                Prom_NatHist pnh = ef_wag.GetSendingProm_NatHistOfNaturNumDateTime(4198, 94814431, 3, 7, 2018, 14, 0);
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+        public void Test_PROM_GetSendingProm_NatHistOfNumDateTime()
+        {
+            try
+            {
+                
+                DateTime start = DateTime.Now;
+                Prom_NatHist pnh = ef_wag.GetSendingProm_NatHistOfNumDateTime(94814431, 3, 7, 2018, 14, 0);
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
         #endregion
 
         //public void CopyReferenceWagonsToRailWay()

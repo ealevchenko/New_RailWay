@@ -190,9 +190,58 @@ namespace Testing
             //tst_wag.Test_PROM_GetPromSostav(); // тест данных кис по составам
             //tst_wag.Test_PROM_GetProm_Vagon(); // тест данных кис по составам
             //tst_wag.Test_PROM_GetProm_NatHist(); // тест данных кис по составам
-            //tst_wag.Test_PROM_GetProm_SostavAndCount();
+            tst_wag.Test_PROM_GetProm_SostavAndCount();
             //tst_wag.Test_PROM_GetProm_VagonAndSostav();
-            tst_wag.Test_PROM_GetProm_NatHistAndSostav();
+            //tst_wag.Test_PROM_GetProm_NatHistAndSostav();
+
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonMoreSD();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonMoreSD();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonMoreSD();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonMoreSD();
+
+            //tst_wag.Test_PROM_GetNatHistOfVagonMoreSD();
+            //tst_wag.Test_PROM_GetNatHistOfVagonMoreSD();
+            //tst_wag.Test_PROM_GetNatHistOfVagonMoreSD();
+            //tst_wag.Test_PROM_GetNatHistOfVagonMoreSD();
+
+           // tst_wag.Test_PROM_GetProm_NatHistOfVagonMoreEqualSD();
+
+            //tst_wag.Test_PROM_GetNatHistOfVagonLessPR();
+            //tst_wag.Test_PROM_GetNatHistOfVagonLessPR();
+            //tst_wag.Test_PROM_GetNatHistOfVagonLessPR();
+            //tst_wag.Test_PROM_GetNatHistOfVagonLessPR();
+
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessPR();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessPR();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessPR();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessPR();
+
+
+            //tst_wag.Test_PROM_GetNatHistOfVagonLessEqualPR();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessEqualPR();
+            //tst_wag.Test_PROM_GetNatHistOfVagonLessEqualPR();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessEqualPR();
+            //tst_wag.Test_PROM_GetNatHistOfVagonLessEqualPR();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessEqualPR();
+            //tst_wag.Test_PROM_GetNatHistOfVagonLessEqualPR();
+            //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessEqualPR();
+           
+            //tst_wag.Test_PROM_GetNatHistPR();
+            //tst_wag.Test_PROM_GetNatHistPR();
+            //tst_wag.Test_PROM_GetNatHistPR();
+            //tst_wag.Test_PROM_GetNatHistPR();
+            //tst_wag.Test_PROM_GetArrivalProm_NatHistOfNaturStationDate();
+            //tst_wag.Test_PROM_GetArrivalProm_NatHistOfNaturStationDate();
+            //tst_wag.Test_PROM_GetArrivalProm_NatHistOfNaturStationDate();
+            //tst_wag.Test_PROM_GetArrivalProm_NatHistOfNaturStationDate();     
+
+            //tst_wag.Test_PROM_GetArrivalProm_NatHistOfNaturStationDateNum();
+            //tst_wag.Test_PROM_GetSendingProm_NatHistOfNaturDate();
+            //tst_wag.Test_PROM_GetSendingProm_NatHistOfNaturDateTime();
+            //tst_wag.Test_PROM_GetArrivalProm_NatHistOfNaturDateTime();
+            //tst_wag.Test_PROM_GetSendingProm_NatHistOfNaturNumDateTime();
+            tst_wag.Test_PROM_GetSendingProm_NatHistOfNumDateTime();
+
             #endregion
 
             #region Test_Logs тест логирования

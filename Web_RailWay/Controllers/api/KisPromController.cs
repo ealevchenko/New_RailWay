@@ -206,7 +206,7 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Prom_NatHist))]
         public IHttpActionResult GetPRPromNatHist(int natur, int day, int month, int year, int hour, int minute)
         {
-            List<Prom_NatHist> list = this.rep_kis.GetPRProm_NatHist(natur, day, month, year, hour, minute).ToList();
+            List<Prom_NatHist> list = this.rep_kis.GetArrivalProm_NatHistOfNaturDateTime(natur, day, month, year, hour, minute, false).ToList();
             if (list == null)
             {
                 return NotFound();
@@ -219,7 +219,7 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Prom_NatHist))]
         public IHttpActionResult GetSDPromNatHist(int natur, int day, int month, int year, int hour, int minute)
         {
-            List<Prom_NatHist> list = this.rep_kis.GetSDProm_NatHist(natur, day, month, year, hour, minute).ToList();
+            List<Prom_NatHist> list = this.rep_kis.GetSendingProm_NatHistOfNaturDateTime(natur, day, month, year, hour, minute, false).ToList();
             if (list == null)
             {
                 return NotFound();
