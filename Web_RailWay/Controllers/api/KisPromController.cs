@@ -157,7 +157,7 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Prom_Vagon))]
         public IHttpActionResult GetPRPromVagon(int natur, int day, int month, int year, int hour, int minute)
         {
-            List<Prom_Vagon> list = this.rep_kis.GetPRProm_Vagon(natur, day, month, year, hour, minute).ToList();
+            List<Prom_Vagon> list = this.rep_kis.GetArrivalProm_VagonOfNaturDateTime(natur, day, month, year, hour, minute, false).ToList();
             if (list == null)
             {
                 return NotFound();
@@ -170,7 +170,7 @@ namespace Web_RailWay.Controllers.api
         [ResponseType(typeof(Prom_Vagon))]
         public IHttpActionResult GetSDPromVagon(int natur, int day, int month, int year, int hour, int minute)
         {
-            List<Prom_Vagon> list = this.rep_kis.GetSDProm_Vagon(natur, day, month, year, hour, minute).ToList();
+            List<Prom_Vagon> list = this.rep_kis.GetSendingProm_VagonOfNaturDateTime(natur, day, month, year, hour, minute, false).ToList();
             if (list == null)
             {
                 return NotFound();

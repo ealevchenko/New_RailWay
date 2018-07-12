@@ -493,6 +493,10 @@
     <Content Include="fonts\websymbols\websymbols-regular-webfont.svg" />
     <Content Include="fonts\websymbols\WebSymbolsRegular-demo.html" />
     <Content Include="Global.asax" />
+    <Content Include="Image\access-denied.jpg" />
+    <Content Include="Image\access-denied.png" />
+    <Content Include="Image\error.jpg" />
+    <Content Include="Image\Error_404.jpg" />
     <Content Include="Image\header.jpg" />
     <Content Include="Image\header-home.jpg" />
     <Content Include="Image\Levchenko.jpg" />
@@ -549,6 +553,7 @@
     <Content Include="Areas\KIS\Views\Home\Turnover.cshtml" />
     <Content Include="Areas\KIS\Views\Home\Natur.cshtml" />
     <Content Include="Areas\KIS\Views\Home\Vagon.cshtml" />
+    <Content Include="Areas\RW\Views\Home\Vagon.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
     <Content Include="Scripts\api_helpers\settings.js" />
     <Content Include="Scripts\bootstrap.js" />

@@ -276,4 +276,10 @@
   <data name="rwui_group_list_sent" xml:space="preserve">
     <value>Отправленые</value>
   </data>
+  <data name="index_report_vagon_search_desc" xml:space="preserve">
+    <value>Паказать историю движения вагона в системе RailWay.</value>
+  </data>
+  <data name="index_report_vagon_search_title" xml:space="preserve">
+    <value>Найти вагон</value>
+  </data>
 </root>

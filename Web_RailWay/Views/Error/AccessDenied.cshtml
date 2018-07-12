@@ -3,12 +3,23 @@
 @{
     ViewBag.Title = "AccessDenied";
     ViewBag.Home = "error";
-    ViewBag.ImageFone = "background-image: url(../Image/header1.jpg);";
+    //ViewBag.ImageFone = "background-image: url(../Image/header1.jpg);";
 }
 
 @{
     string[] message = @Model.Split(';');
 }
-<div id="error-content">
+
+@section styles {
+
+}
+
+@section scripts {
+    <script>
+        $('header').addClass('img-header-access-denied');
+    </script>
+}
+@*<div id="error-content">
     <h2>Для учетной  записи: @message[0] доступ запрещен к ресурсу @message[1]</h2>
-</div>
+</div>*@
+<h2>Для учетной  записи: @message[0] <br /> доступ запрещен к ресурсу @message[1]</h2>

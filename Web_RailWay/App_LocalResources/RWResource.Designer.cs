@@ -19,7 +19,7 @@ namespace Web_RailWay.App_LocalResources {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class RWResource {
@@ -75,6 +75,24 @@ namespace Web_RailWay.App_LocalResources {
         public static string index_description {
             get {
                 return ResourceManager.GetString("index_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Паказать историю движения вагона в системе RailWay..
+        /// </summary>
+        public static string index_report_vagon_search_desc {
+            get {
+                return ResourceManager.GetString("index_report_vagon_search_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Найти вагон.
+        /// </summary>
+        public static string index_report_vagon_search_title {
+            get {
+                return ResourceManager.GetString("index_report_vagon_search_title", resourceCulture);
             }
         }
         

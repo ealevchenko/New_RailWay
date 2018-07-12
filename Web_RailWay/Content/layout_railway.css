@@ -10,3 +10,12 @@
 .img-header-home {
     background-image: url(../Image/header-home.jpg);
 }
+.img-header-error404 {
+    background-image: url(../Image/Error_404.jpg);
+}
+.img-header-access-denied {
+    background-image: url(../Image/access-denied.png);
+}
+.img-header-error {
+    background-image: url(../Image/error.jpg);
+}
