@@ -1,6 +1,6 @@
 ﻿using EFKIS.Abstract;
 using EFKIS.Entities;
-using EFKIS.Helpers;
+//using EFKIS.Helpers;
 using MessageLog;
 using RWConversionFunctions;
 using System;
@@ -23,36 +23,6 @@ namespace EFKIS.Concrete
     public class Prom_Sostav
     {
         public Int64 ID { get; set; }
-        //public DateTime? DT_PR
-        //{
-        //    get
-        //    {
-        //        try
-        //        {
-        //            return new DateTime((int)D_PR_YY, (int)D_PR_MM, (int)D_PR_DD, (int)T_PR_HH, (int)T_PR_MI, 00);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //    private set { }
-        //}
-        //public DateTime? DT
-        //{
-        //    get
-        //    {
-        //        try
-        //        {
-        //            return new DateTime((int)D_YY, (int)D_MM, (int)D_DD, (int)T_HH, (int)T_MI, 00);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //    private set { }
-        //}
         public DateTime DT_PR { get; set; }
         public DateTime DT { get; set; }
         public int N_NATUR { get; set; }
@@ -96,36 +66,38 @@ namespace EFKIS.Concrete
     public class Prom_Vagon
     {
         public Int64 ID { get; set; }
-        public DateTime? DT_PR
-        {
-            get
-            {
-                try
-                {
-                    return new DateTime((int)D_PR_YY, (int)D_PR_MM, (int)D_PR_DD, (int)T_PR_HH, (int)T_PR_MI, 00);
-                }
-                catch (Exception e)
-                {
-                    return null;
-                }
-            }
-            private set { }
-        }
-        public DateTime? DT_SD
-        {
-            get
-            {
-                try
-                {
-                    return new DateTime((int)D_SD_YY, (int)D_SD_MM, (int)D_SD_DD, (int)T_SD_HH, (int)T_SD_MI, 00);
-                }
-                catch (Exception e)
-                {
-                    return null;
-                }
-            }
-            private set { }
-        }
+        public DateTime? DT_PR { get; set; }
+        public DateTime? DT_SD { get; set; }
+        //public DateTime? DT_PR
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            return new DateTime((int)D_PR_YY, (int)D_PR_MM, (int)D_PR_DD, (int)T_PR_HH, (int)T_PR_MI, 00);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //    private set { }
+        //}
+        //public DateTime? DT_SD
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            return new DateTime((int)D_SD_YY, (int)D_SD_MM, (int)D_SD_DD, (int)T_SD_HH, (int)T_SD_MI, 00);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //    private set { }
+        //}
         //дата
         public int? D_PR_DD { get; set; }
         public int? D_PR_MM { get; set; }
@@ -245,37 +217,6 @@ namespace EFKIS.Concrete
         public Int64 ID { get; set; }
         public DateTime? DT_PR { get; set; }
         public DateTime? DT_SD { get; set; }
-        //public DateTime? DT_PR
-        //{
-        //    get
-        //    {
-        //        try
-        //        {
-        //            return new DateTime((int)D_PR_YY, (int)D_PR_MM, (int)D_PR_DD, (int)T_PR_HH, (int)T_PR_MI, 00);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //    private set { }
-        //}
-        //public DateTime? DT_SD
-        //{
-        //    get
-        //    {
-        //        try
-        //        {
-        //            return new DateTime((int)D_SD_YY, (int)D_SD_MM, (int)D_SD_DD, (int)T_SD_HH, (int)T_SD_MI, 00);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //    private set { }
-        //}
-        // дата
         public int? D_PR_DD { get; set; }
         public int? D_PR_MM { get; set; }
         public int? D_PR_YY { get; set; }
@@ -401,22 +342,47 @@ namespace EFKIS.Concrete
         protected string sql_table_sostav = "FROM PROM.SOSTAV s";
 
         //protected string sql_NatHist = "SELECT ROWNUM as ID,N_VAG,NPP,D_PR_DD,D_PR_MM,D_PR_YY,T_PR_HH,T_PR_MI,D_SD_DD,D_SD_MM,D_SD_YY,T_SD_HH,T_SD_MI,GODN,K_ST_KMK,K_POL_GR,K_GR,N_VED_PR,N_NAK_MPS,OTPRAV,PRIM_GR,WES_GR,N_NATUR,N_PUT,K_ST,K_OP,K_FRONT,N_NATUR_T,GODN_T,K_GR_T,WES_GR_T,K_OTPR_GR,K_ST_OTPR,K_ST_NAZN,ST_OTPR,ZADER,NEPR,UDOST,SERTIF,KOD_STRAN,KOD_SD,NETO,BRUTO,TARA,DAT_VVOD FROM PROM.NAT_HIST";
-        protected string sql_Vagon = "SELECT ROWNUM as ID,N_VAG,NPP,D_PR_DD,D_PR_MM,D_PR_YY,T_PR_HH,T_PR_MI,D_SD_DD,D_SD_MM,D_SD_YY,T_SD_HH,T_SD_MI,GODN,K_ST_KMK,K_POL_GR,K_GR,N_VED_PR,N_NAK_MPS,OTPRAV,PRIM_GR,WES_GR,N_NATUR,N_PUT,K_ST,K_OP,K_FRONT,N_NATUR_T,GODN_T,K_GR_T,WES_GR_T,K_OTPR_GR,K_ST_OTPR,K_ST_NAZN,ST_OTPR,ZADER,NEPR,UDOST,SERTIF,KOD_STRAN,KOD_SD,NETO,BRUTO,TARA,DAT_VVOD FROM PROM.VAGON";
+        //protected string sql_Vagon = "SELECT ROWNUM as ID,N_VAG,NPP,D_PR_DD,D_PR_MM,D_PR_YY,T_PR_HH,T_PR_MI,D_SD_DD,D_SD_MM,D_SD_YY,T_SD_HH,T_SD_MI,GODN,K_ST_KMK,K_POL_GR,K_GR,N_VED_PR,N_NAK_MPS,OTPRAV,PRIM_GR,WES_GR,N_NATUR,N_PUT,K_ST,K_OP,K_FRONT,N_NATUR_T,GODN_T,K_GR_T,WES_GR_T,K_OTPR_GR,K_ST_OTPR,K_ST_NAZN,ST_OTPR,ZADER,NEPR,UDOST,SERTIF,KOD_STRAN,KOD_SD,NETO,BRUTO,TARA,DAT_VVOD FROM PROM.VAGON";
 
-        protected string sql_vagon_sostav = "SELECT ROWNUM as ID, " +
-                    "(CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END) as D_DD, " +
-                    "(CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) as D_MM, " +
-                    "(CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) as D_YY, " +
-                    "(CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END) as T_HH, " +
-                    "(CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END) as T_MI, " +
-                    "(select max(s.P_OT) from PROM.SOSTAV s where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD) ) as P_OT, " +
-                    "to_date((to_char((CASE WHEN ((CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END)>=1 and (CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END)<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)>=1 and (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)<=12) THEN (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END)>0) THEN (CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN (CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END) ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)>=1 and (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)<=12) THEN (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END)>0) THEN (CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN ((CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END)>=0 and (CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END)<=23) THEN (CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END) ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN ((CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END)>=0 and (CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END)<=59) THEN (CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END) ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') as DT, " +
-                    "v.N_VAG, v.NPP, v.D_PR_DD, v.D_PR_MM, v.D_PR_YY, v.T_PR_HH, v.T_PR_MI, v.D_SD_DD, v.D_SD_MM, v.D_SD_YY, v.T_SD_HH, v.T_SD_MI, v.GODN, v.K_ST_KMK, v.K_POL_GR, v.K_GR, v.N_VED_PR, v.N_NAK_MPS, v.OTPRAV, v.PRIM_GR, v.WES_GR, v.N_NATUR, v.N_PUT, v.K_ST, v.K_OP, v.K_FRONT, v.N_NATUR_T, v.GODN_T, v.K_GR_T, v.WES_GR_T, v.K_OTPR_GR, v.K_ST_OTPR, v.K_ST_NAZN, v.ST_OTPR, v.ZADER, v.NEPR, v.UDOST, v.SERTIF, v.KOD_STRAN, v.KOD_SD, v.NETO, v.BRUTO, v.TARA, v.DAT_VVOD " +
-                    "FROM PROM.VAGON v";
+        //protected string sql_vagon_sostav = "SELECT ROWNUM as ID, " +
+        //            "(CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END) as D_DD, " +
+        //            "(CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) as D_MM, " +
+        //            "(CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) as D_YY, " +
+        //            "(CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END) as T_HH, " +
+        //            "(CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END) as T_MI, " +
+        //            "(select max(s.P_OT) from PROM.SOSTAV s where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD) ) as P_OT, " +
+        //            "to_date((to_char((CASE WHEN ((CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END)>=1 and (CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END)<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)>=1 and (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)<=12) THEN (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END)>0) THEN (CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN (CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END) ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)>=1 and (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)<=12) THEN (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END)>0) THEN (CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN ((CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END)>=0 and (CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END)<=23) THEN (CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END) ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN ((CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END)>=0 and (CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END)<=59) THEN (CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END) ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') as DT, " +
+        //            "v.N_VAG, v.NPP, v.D_PR_DD, v.D_PR_MM, v.D_PR_YY, v.T_PR_HH, v.T_PR_MI, v.D_SD_DD, v.D_SD_MM, v.D_SD_YY, v.T_SD_HH, v.T_SD_MI, v.GODN, v.K_ST_KMK, v.K_POL_GR, v.K_GR, v.N_VED_PR, v.N_NAK_MPS, v.OTPRAV, v.PRIM_GR, v.WES_GR, v.N_NATUR, v.N_PUT, v.K_ST, v.K_OP, v.K_FRONT, v.N_NATUR_T, v.GODN_T, v.K_GR_T, v.WES_GR_T, v.K_OTPR_GR, v.K_ST_OTPR, v.K_ST_NAZN, v.ST_OTPR, v.ZADER, v.NEPR, v.UDOST, v.SERTIF, v.KOD_STRAN, v.KOD_SD, v.NETO, v.BRUTO, v.TARA, v.DAT_VVOD " +
+        //            "FROM PROM.VAGON v";
+        
+        // общие строки формирования запроса
+        protected static string field_key = "ROWNUM as ID, ";        
+        // строки для формирования запроса к VAGON
+        protected static string field_vagon = " N_VAG, v.NPP, v.D_PR_DD, v.D_PR_MM, v.D_PR_YY, v.T_PR_HH, v.T_PR_MI, v.D_SD_DD, v.D_SD_MM, v.D_SD_YY, v.T_SD_HH, v.T_SD_MI, v.GODN, v.K_ST_KMK, v.K_POL_GR, v.K_GR, v.N_VED_PR, v.N_NAK_MPS, v.OTPRAV, v.PRIM_GR, v.WES_GR, v.N_NATUR, v.N_PUT, v.K_ST, v.K_OP, v.K_FRONT, v.N_NATUR_T, v.GODN_T, v.K_GR_T, v.WES_GR_T, v.K_OTPR_GR, v.K_ST_OTPR, v.K_ST_NAZN, v.ST_OTPR, v.ZADER, v.NEPR, v.UDOST, v.SERTIF, v.KOD_STRAN, v.KOD_SD, v.NETO, v.BRUTO, v.TARA, v.DAT_VVOD ";
+        protected static string field_vagon_dt_pr = " to_date((to_char((CASE WHEN (v.D_PR_DD>=1 and v.D_PR_DD<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN (v.D_PR_MM>=1 and v.D_PR_MM<=12) THEN v.D_PR_MM ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN (v.D_PR_YY>0) THEN v.D_PR_YY ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN v.D_PR_DD ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN (v.D_PR_MM>=1 and v.D_PR_MM<=12) THEN v.D_PR_MM ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN (v.D_PR_YY>0) THEN v.D_PR_YY ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN (v.T_PR_HH>=0 and v.T_PR_HH<=23) THEN v.T_PR_HH ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN (v.T_PR_MI>=0 and v.T_PR_MI<=59) THEN v.T_PR_MI ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') ";
+        protected static string field_vagon_dt_sd = " to_date((to_char((CASE WHEN (v.D_SD_DD>=1 and v.D_SD_DD<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN (v.D_SD_MM>=1 and v.D_SD_MM<=12) THEN v.D_SD_MM ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN (v.D_SD_YY>0) THEN v.D_SD_YY ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN v.D_SD_DD ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN (v.D_SD_MM>=1 and v.D_SD_MM<=12) THEN v.D_SD_MM ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN (v.D_SD_YY>0) THEN v.D_SD_YY ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN (v.T_SD_HH>=0 and v.T_SD_HH<=23) THEN v.T_SD_HH ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN (v.T_SD_MI>=0 and v.T_SD_MI<=59) THEN v.T_SD_MI ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') ";
+        protected static string field_vagon_dt_pr_null = " (CASE WHEN (v.D_PR_DD is null and v.D_PR_MM is null and v.D_PR_YY is null and v.T_PR_HH is null and v.T_PR_MI is null) THEN null ELSE " + field_vagon_dt_pr + " END ) ";
+        protected static string field_vagon_dt_sd_null = " (CASE WHEN (v.D_SD_DD is null and v.D_SD_MM is null and v.D_SD_YY is null and v.T_SD_HH is null and v.T_SD_MI is null) THEN null ELSE " + field_vagon_dt_sd + " END ) ";
+        protected static string vagon_table = "  FROM PROM.VAGON v ";
+        protected static string order_vagon_field_dt_pr = " ORDER BY v.D_PR_YY, v.D_PR_MM, v.D_PR_DD, v.T_PR_HH, v.T_PR_MI ";
+        protected static string order_vagon_field_dt_pr_desc = " ORDER BY v.D_PR_YY DESC, v.D_PR_MM DESC, v.D_PR_DD DESC, v.T_PR_HH DESC, v.T_PR_MI DESC ";
+        protected static string order_vagon_field_dt_sd = " ORDER BY v.D_SD_YY, v.D_SD_MM, v.D_SD_DD, v.T_SD_HH, v.T_SD_MI ";
+        protected static string order_vagon_field_dt_sd_desc = " ORDER BY v.D_SD_YY DESC, v.D_SD_MM DESC, v.D_SD_DD DESC, v.T_SD_HH DESC, v.T_SD_MI DESC ";
+        //select
+        protected string sql_vagon_select = "SELECT " + field_key + field_vagon + "," + field_vagon_dt_pr_null + "AS DT_PR, " + field_vagon_dt_sd_null + "AS DT_SD " + vagon_table;
+        protected string sql_vagon_sostav_select = "SELECT " + field_key +
+            "(CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END) as D_DD, " +
+            "(CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) as D_MM, " +
+            "(CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) as D_YY, " +
+            "(CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END) as T_HH, " +
+            "(CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END) as T_MI, " +
+            "(select max(s.P_OT) from PROM.SOSTAV s where (v.N_NATUR=s.N_NATUR and v.D_PR_YY=s.D_YY and v.D_PR_MM=s.D_MM and v.D_PR_DD=s.D_DD) or (v.N_NATUR=s.N_NATUR and v.D_SD_YY=s.D_YY and v.D_SD_MM=s.D_MM and v.D_SD_DD=s.D_DD) ) as P_OT, " +
+            "to_date((to_char((CASE WHEN ((CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END)>=1 and (CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END)<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)>=1 and (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)<=12) THEN (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END)>0) THEN (CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN (CASE WHEN (v.D_PR_DD is null) THEN v.D_SD_DD ELSE v.D_PR_DD END) ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)>=1 and (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END)<=12) THEN (CASE WHEN (v.D_PR_MM is null) THEN v.D_SD_MM ELSE v.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END)>0) THEN (CASE WHEN (v.D_PR_YY is null) THEN v.D_SD_YY ELSE v.D_PR_YY END) ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN ((CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END)>=0 and (CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END)<=23) THEN (CASE WHEN (v.T_PR_HH is null) THEN v.T_SD_HH ELSE v.T_PR_HH END) ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN ((CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END)>=0 and (CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END)<=59) THEN (CASE WHEN (v.T_PR_MI is null) THEN v.T_SD_MI ELSE v.T_PR_MI END) ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') as DT, " +
+            field_vagon_dt_pr_null + "AS DT_PR, " + field_vagon_dt_sd_null + "AS DT_SD, " + field_vagon + vagon_table;
 
 
         // строки для формирования запроса к NAT_HIST
-        protected static string field_key = "ROWNUM as ID, ";
+
         protected static string field_nathist = " h.N_VAG, h.NPP, h.D_PR_DD, h.D_PR_MM, h.D_PR_YY, h.T_PR_HH, h.T_PR_MI, h.D_SD_DD, h.D_SD_MM, h.D_SD_YY, h.T_SD_HH, h.T_SD_MI, h.GODN, h.K_ST_KMK, h.K_POL_GR, h.K_GR, h.N_VED_PR, h.N_NAK_MPS, h.OTPRAV, h.PRIM_GR, h.WES_GR, h.N_NATUR, h.N_PUT, h.K_ST, h.K_OP, h.K_FRONT, h.N_NATUR_T, h.GODN_T, h.K_GR_T, h.WES_GR_T, h.K_OTPR_GR, h.K_ST_OTPR, h.K_ST_NAZN, h.ST_OTPR, h.ZADER, h.NEPR, h.UDOST, h.SERTIF, h.KOD_STRAN, h.KOD_SD, h.NETO, h.BRUTO, h.TARA, h.DAT_VVOD ";
         protected static string field_nathist_dt_pr = " to_date((to_char((CASE WHEN (h.D_PR_DD>=1 and h.D_PR_DD<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN (h.D_PR_MM>=1 and h.D_PR_MM<=12) THEN h.D_PR_MM ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN (h.D_PR_YY>0) THEN h.D_PR_YY ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN h.D_PR_DD ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN (h.D_PR_MM>=1 and h.D_PR_MM<=12) THEN h.D_PR_MM ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN (h.D_PR_YY>0) THEN h.D_PR_YY ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN (h.T_PR_HH>=0 and h.T_PR_HH<=23) THEN h.T_PR_HH ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN (h.T_PR_MI>=0 and h.T_PR_MI<=59) THEN h.T_PR_MI ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') ";
         protected static string field_nathist_dt_sd = " to_date((to_char((CASE WHEN (h.D_SD_DD>=1 and h.D_SD_DD<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN (h.D_SD_MM>=1 and h.D_SD_MM<=12) THEN h.D_SD_MM ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN (h.D_SD_YY>0) THEN h.D_SD_YY ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN h.D_SD_DD ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN (h.D_SD_MM>=1 and h.D_SD_MM<=12) THEN h.D_SD_MM ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN (h.D_SD_YY>0) THEN h.D_SD_YY ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN (h.T_SD_HH>=0 and h.T_SD_HH<=23) THEN h.T_SD_HH ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN (h.T_SD_MI>=0 and h.T_SD_MI<=59) THEN h.T_SD_MI ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') ";
@@ -1057,447 +1023,6 @@ namespace EFKIS.Concrete
 
         #endregion
 
-        #region PROM.Nat_Hist
-
-        public IQueryable<PromNatHist> PromNatHist
-        {
-            get { return context.PromNatHist; }
-        }
-
-        public IQueryable<PromNatHist> GetPromNatHist()
-        {
-            try
-            {
-                return PromNatHist;
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetPromNatHist()"), eventID);
-                return null;
-            }
-        }
-        //GetArrivalProm_NatHistOfNaturStationDate
-        /// <summary>
-        /// Получить список вагонов по натурному листу станции и дате поступления c сортировкой true- npp по убыванию false- npp по возрастанию
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="station"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistPR(int natur, int station, int day, int month, int year, bool? sort)
-        {
-            try
-            {
-                if (sort == null)
-                {
-                    return GetPromNatHist().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year);
-                }
-                if ((bool)sort)
-                {
-                    return GetPromNatHist().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year).OrderByDescending(n => n.NPP);
-                }
-                else
-                {
-                    return GetPromNatHist().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year).OrderBy(n => n.NPP);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetVagon(natur={0}, station={1}, day={2}, month={3}, year={4}, sort={5})", natur, station, day, month, year, sort), eventID);
-                return null;
-            }
-
-        }
-        //GetArrivalProm_NatHistOfNaturStationDate
-        /// <summary>
-        /// Получить список вагонов по натурному листу станции и дате поступления
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="station"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistPR(int natur, int station, int day, int month, int year)
-        {
-            return GetNatHistPR(natur, station, day, month, year, null);
-        }
-        //GetArrivalProm_NatHistOfNaturStationDateNum
-        /// <summary>
-        /// Получить вагон по натурному листу станции и дате поступления
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="station"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <param name="wag"></param>
-        /// <returns></returns>
-        public PromNatHist GetNatHistPR(int natur, int station, int day, int month, int year, int wag)
-        {
-            try
-            {
-                return GetNatHistPR(natur, station, day, month, year, null).Where(h => h.N_VAG == wag).FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHist(natur={0}, station={1}, day={2}, month={3}, year={4}, wag={5})", natur, station, day, month, year, wag), eventID);
-                return null;
-            }
-
-        }
-        //GetSendingProm_NatHistOfNaturDate
-        /// <summary>
-        /// Получить список вагонов по натурному листу и дате сдачи вагона с сортировкой
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <param name="sort"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistSD(int natur, int day, int month, int year, bool? sort)
-        {
-            try
-            {
-                if (sort == null)
-                {
-                    return GetNatHistSD(natur, day, month, year);
-                }
-                if ((bool)sort)
-                {
-                    return GetNatHistSD(natur, day, month, year).OrderByDescending(n => n.NPP);
-                }
-                else
-                {
-                    return GetNatHistSD(natur, day, month, year).OrderBy(n => n.NPP);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistSendingOfNaturAndDate(natur={0}, day={1}, month={2}, year={3}, sort={4})", natur, day, month, year, sort), eventID);
-                return null;
-            }
-        }
-        //GetSendingProm_NatHistOfNaturDate
-        /// <summary>
-        /// Получить список вагонов по натурному листу и дате сдачи вагона
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistSD(int natur, int day, int month, int year)
-        {
-            try
-            {
-                return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year);
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistSendingOfNaturAndDate(natur={0}, day={1}, month={2}, year={3})", natur, day, month, year, eventID));
-                return null;
-            }
-        }
-        //GetSendingProm_NatHistOfNaturDateTime
-        /// <summary>
-        /// Получить список вагонов по натурному листу и дате сдачи вагона
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <param name="hour"></param>
-        /// <param name="minute"></param>
-        /// <param name="sort"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistSD(int natur, int day, int month, int year, int hour, int minute, bool? sort)
-        {
-            try
-            {
-                if (sort == null)
-                {
-                    return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute);
-                }
-                if ((bool)sort)
-                {
-                    return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).OrderByDescending(n => n.NPP);
-                }
-                else
-                {
-                    return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).OrderBy(n => n.NPP);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistOfNaturAndDT(natur={0}, day={1}, month={2}, year={3}, hour={4}, minute={5} sort={6})", natur, day, month, year, hour, minute, sort), eventID);
-                return null;
-            }
-        }
-        //GetSendingProm_NatHistOfNaturNumDateTime
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="num"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <param name="hour"></param>
-        /// <param name="minute"></param>
-        /// <returns></returns>
-        public PromNatHist GetNatHistSD(int natur, int num, int day, int month, int year, int hour, int minute)
-        {
-            try
-            {
-                return GetPromNatHist().Where(n => n.N_NATUR == natur & n.N_VAG == num & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistSendingOfNaturNumDT(natur={0}, num={1}, day={2}, month={3}, year={4}, hour={5}, minute={6})", natur, num, day, month, year, hour, minute), eventID);
-                return null;
-            }
-        }
-        //GetSendingProm_NatHistOfNumDateTime
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="num"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <param name="hour"></param>
-        /// <param name="minute"></param>
-        /// <returns></returns>
-        public PromNatHist GetNatHistSD(int num, int day, int month, int year, int hour, int minute)
-        {
-            try
-            {
-                return GetPromNatHist().Where(n => n.N_VAG == num & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistSendingOfNaturNumDT(num={0}, day={1}, month={2}, year={3}, hour={4}, minute={5})", num, day, month, year, hour, minute), eventID);
-                return null;
-            }
-        }
-
-        // перен
-        /// <summary>
-        /// Получить список вагонов по номеру вагона
-        /// </summary>
-        /// <param name="num_vag"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistOfVagon(int num_vag)
-        {
-            try
-            {
-                return GetPromNatHist().Where(n => n.N_VAG == num_vag);
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistOfVagon(num_vag={0})", num_vag), eventID);
-                return null;
-            }
-        }
-        // перен
-        /// <summary>
-        /// Получить список вагонов по номеру вагона и датой отправки больше указаной даты
-        /// </summary>
-        /// <param name="num_vag"></param>
-        /// <param name="start"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistOfVagonMoreSD(int num_vag, DateTime start)
-        {
-            try
-            {
-                List<PromNatHist> list = GetNatHistOfVagon(num_vag).ToList();
-                return list.ToArray().FilterArrayOfFilterFrom(Filters.IsMoreSD, start).AsQueryable();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistOfVagonMoreSD(num_vag={0}, start={1})", num_vag, start), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Получить список вагонов по номеру вагона и датой отправки больше указаной даты с сортировкой
-        /// </summary>
-        /// <param name="num_vag"></param>
-        /// <param name="start"></param>
-        /// <param name="sort"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistOfVagonMoreSD(int num_vag, DateTime start, bool sort)
-        {
-            try
-            {
-                if (sort)
-                {
-                    return GetNatHistOfVagonMoreSD(num_vag, start)
-                        .OrderByDescending(p => p.D_PR_YY)
-                        .ThenByDescending(p => p.D_PR_MM)
-                        .ThenByDescending(p => p.D_PR_DD)
-                        .ThenByDescending(p => p.T_PR_HH)
-                        .ThenByDescending(p => p.T_PR_MI);
-                }
-                else
-                {
-                    return GetNatHistOfVagonMoreSD(num_vag, start)
-                        .OrderBy(p => p.D_PR_YY)
-                        .ThenBy(p => p.D_PR_MM)
-                        .ThenBy(p => p.D_PR_DD)
-                        .ThenBy(p => p.T_PR_HH)
-                        .ThenBy(p => p.T_PR_MI);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistOfVagonMoreSD(num_vag={0}, start={1}, sort={2})", num_vag, start, sort), eventID);
-                return null;
-            }
-        }
-        // перен
-        /// <summary>
-        /// Получить список вагонов по номеру вагона и датой прибытия меньше указаной даты
-        /// </summary>
-        /// <param name="num_vag"></param>
-        /// <param name="start"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistOfVagonLessPR(int num_vag, DateTime start)
-        {
-            try
-            {
-                List<PromNatHist> list = GetNatHistOfVagon(num_vag).ToList();
-                return list.ToArray().FilterArrayOfFilterFrom(Filters.IsLessPR, start).AsQueryable();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistOfVagonLess(num_vag={0}, start={1})", num_vag, start), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Получить список вагонов по номеру вагона и датой прибытия меньше указаной даты с сортировкой
-        /// </summary>
-        /// <param name="num_vag"></param>
-        /// <param name="start"></param>
-        /// <param name="sort"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistOfVagonLessPR(int num_vag, DateTime start, bool sort)
-        {
-            try
-            {
-                if (sort)
-                {
-                    return GetNatHistOfVagonLessPR(num_vag, start)
-                        .OrderByDescending(p => p.D_PR_YY)
-                        .ThenByDescending(p => p.D_PR_MM)
-                        .ThenByDescending(p => p.D_PR_DD)
-                        .ThenByDescending(p => p.T_PR_HH)
-                        .ThenByDescending(p => p.T_PR_MI);
-                }
-                else
-                {
-                    return GetNatHistOfVagonLessPR(num_vag, start)
-                        .OrderBy(p => p.D_PR_YY)
-                        .ThenBy(p => p.D_PR_MM)
-                        .ThenBy(p => p.D_PR_DD)
-                        .ThenBy(p => p.T_PR_HH)
-                        .ThenBy(p => p.T_PR_MI);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNatHistOfVagonLess(num_vag={0}, start={1}, sort={2})", num_vag, start, sort), eventID);
-                return null;
-            }
-        }
-        // перен
-        /// <summary>
-        /// Получить список вагонов по номеру вагона и датой прибытия меньше или равно указаной даты
-        /// </summary>
-        /// <param name="num_vag"></param>
-        /// <param name="start"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistOfVagonLessEqualPR(int num_vag, DateTime start)
-        {
-            return GetNatHistOfVagon(num_vag).ToArray().FilterArrayOfFilterFrom(Filters.IsLessOrEqualPR, start).AsQueryable();
-        }
-        /// <summary>
-        /// Получить список вагонов по номеру вагона и датой прибытия меньше указаной даты с сортировкой
-        /// </summary>
-        /// <param name="num_vag"></param>
-        /// <param name="start"></param>
-        /// <param name="sort"></param>
-        /// <returns></returns>
-        public IQueryable<PromNatHist> GetNatHistOfVagonLessEqualPR(int num_vag, DateTime start, bool sort)
-        {
-            if (sort)
-            {
-                return GetNatHistOfVagonLessEqualPR(num_vag, start)
-                    .OrderByDescending(p => p.D_PR_YY)
-                    .ThenByDescending(p => p.D_PR_MM)
-                    .ThenByDescending(p => p.D_PR_DD)
-                    .ThenByDescending(p => p.T_PR_HH)
-                    .ThenByDescending(p => p.T_PR_MI);
-            }
-            else
-            {
-                return GetNatHistOfVagonLessEqualPR(num_vag, start)
-                    .OrderBy(p => p.D_PR_YY)
-                    .ThenBy(p => p.D_PR_MM)
-                    .ThenBy(p => p.D_PR_DD)
-                    .ThenBy(p => p.T_PR_HH)
-                    .ThenBy(p => p.T_PR_MI);
-            }
-
-        }
-
-        ///// <summary>
-        ///// Получить список вагонов по номеру вагона и датой прибытия болше или равно указаной даты
-        ///// </summary>
-        ///// <param name="num_vag"></param>
-        ///// <param name="start"></param>
-        ///// <returns></returns>
-        //public IQueryable<PromNatHist> GetNatHistOfVagonGreaterEqualPR(int num_vag, DateTime start)
-        //{
-        //    return GetNatHistOfVagon(num_vag).ToArray().FilterArrayOfFilterFrom(Filters.IsGreaterOrEqualPR, start).AsQueryable();
-        //}
-        ///// <summary>
-        ///// Получить список вагонов по номеру вагона и датой прибытия больше или равно указаной даты с сортировкой
-        ///// </summary>
-        ///// <param name="num_vag"></param>
-        ///// <param name="start"></param>
-        ///// <param name="sort"></param>
-        ///// <returns></returns>
-        //public IQueryable<PromNatHist> GetNatHistOfVagonGreaterEqualPR(int num_vag, DateTime start, bool sort)
-        //{
-        //    if (sort)
-        //    {
-        //        return GetNatHistOfVagonGreaterEqualPR(num_vag, start)
-        //            .OrderByDescending(p => p.D_PR_YY)
-        //            .ThenByDescending(p => p.D_PR_MM)
-        //            .ThenByDescending(p => p.D_PR_DD)
-        //            .ThenByDescending(p => p.T_PR_HH)
-        //            .ThenByDescending(p => p.T_PR_MI);
-        //    }
-        //    else
-        //    {
-        //        return GetNatHistOfVagonGreaterEqualPR(num_vag, start)
-        //            .OrderBy(p => p.D_PR_YY)
-        //            .ThenBy(p => p.D_PR_MM)
-        //            .ThenBy(p => p.D_PR_DD)
-        //            .ThenBy(p => p.T_PR_HH)
-        //            .ThenBy(p => p.T_PR_MI);
-        //    }
-
-        //}
-
-        #endregion
-
         #region Prom_NatHist
         //public IQueryable<Prom_NatHist> GetProm_NatHist()
         //{
@@ -1611,26 +1136,83 @@ namespace EFKIS.Concrete
         /// <param name="year"></param>
         /// <param name="num"></param>
         /// <returns></returns>
-        public Prom_NatHist GetArrivalProm_NatHistOfNaturStationDateNum(int natur, int station, int day, int month, int year, int num)
+        public Prom_NatHist GetArrivalProm_NatHistOfNaturNumStationDate(int natur, int num_vag, int station, int day, int month, int year)
         {
             try
             {
                 string sql = sql_nathist_select +
                         " WHERE h.N_NATUR = " + natur.ToString() +
+                        " AND h.N_VAG = " + num_vag.ToString() +
                         " AND h.K_ST = " + station.ToString() +
                         " AND h.D_PR_DD = " + day.ToString() +
                         " AND h.D_PR_MM = " + month.ToString() +
-                        " AND h.D_PR_YY = " + year.ToString() +
-                        " AND h.N_VAG = " + num.ToString();
+                        " AND h.D_PR_YY = " + year.ToString();
                 return context.Database.SqlQuery<Prom_NatHist>(sql).FirstOrDefault();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetArrivalProm_NatHistOfNaturStationDateNum(natur={0}, station={1}, day={2}, month={3}, year={4}, num={5})", natur, station, day, month, year, num), eventID);
+                e.WriteErrorMethod(String.Format("GetArrivalProm_NatHistOfNaturStationDateNum(natur={0}, num_vag={1}, station={2}, day={3}, month={4}, year={5})", natur, num_vag, station, day, month, year), eventID);
                 return null;
             }
 
         }
+        /// <summary>
+        /// Показать список NatHist по указаному вагону меньше указанного времени с сортировкой
+        /// </summary>
+        /// <param name="num_vag"></param>
+        /// <param name="start"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        public IQueryable<Prom_NatHist> GetArrivalProm_NatHistOfVagonLess(int num_vag, DateTime start, bool sort)
+        {
+            try
+            {
+                int day = start.Day;
+                int month = start.Month;
+                int year = start.Year;
+                int hour = start.Hour;
+                int minute = start.Minute;
+                string sql = sql_nathist_select +
+                    "WHERE h.N_VAG = " + num_vag.ToString() + " AND (h.D_PR_YY < " + year.ToString() + " OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM<" + month.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD < " + day.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD = " + day.ToString() + " AND h.T_PR_HH<" + hour.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD = " + day.ToString() + " AND h.T_PR_HH=" + hour.ToString() + " AND h.T_PR_MI<" + minute.ToString() + ")) " +
+                    (sort ? "order by h.D_PR_YY desc, h.D_PR_MM desc, h.D_PR_DD desc, h.T_PR_HH desc, h.T_PR_MI desc" : "order by h.D_PR_YY, h.D_PR_MM, h.D_PR_DD, h.T_PR_HH, h.T_PR_MI");
+
+                return context.Database.SqlQuery<Prom_NatHist>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetProm_NatHistOfVagonLessPR(num_vag={0}, start={1}, sort={2})", num_vag, start, sort), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Показать список NatHist по указаному вагону меньше или равно указанного времени с сортировкой
+        /// </summary>
+        /// <param name="num_vag"></param>
+        /// <param name="start"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        public IQueryable<Prom_NatHist> GetArrivalProm_NatHistOfVagonLessEqual(int num_vag, DateTime start, bool sort)
+        {
+            try
+            {
+                int day = start.Day;
+                int month = start.Month;
+                int year = start.Year;
+                int hour = start.Hour;
+                int minute = start.Minute;
+                string sql = sql_nathist_select +
+                    "WHERE h.N_VAG = " + num_vag.ToString() + " AND (h.D_PR_YY < " + year.ToString() + " OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM<=" + month.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD <= " + day.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD = " + day.ToString() + " AND h.T_PR_HH<=" + hour.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD = " + day.ToString() + " AND h.T_PR_HH=" + hour.ToString() + " AND h.T_PR_MI<=" + minute.ToString() + ")) " +
+                    (sort ? "order by h.D_PR_YY desc, h.D_PR_MM desc, h.D_PR_DD desc, h.T_PR_HH desc, h.T_PR_MI desc" : "order by h.D_PR_YY, h.D_PR_MM, h.D_PR_DD, h.T_PR_HH, h.T_PR_MI");
+
+                return context.Database.SqlQuery<Prom_NatHist>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetProm_NatHistOfVagonLessEqualPR(num_vag={0}, start={1}, sort={2})", num_vag, start, sort), eventID);
+                return null;
+            }
+        }
+
         /// <summary>
         /// Показать вагоны по отправке по указанной натурке, за указаное время
         /// </summary>
@@ -1789,7 +1371,7 @@ namespace EFKIS.Concrete
         /// <param name="start"></param>
         /// <param name="sort"></param>
         /// <returns></returns>
-        public IQueryable<Prom_NatHist> GetProm_NatHistOfVagonMoreSD(int num_vag, DateTime start, bool sort)
+        public IQueryable<Prom_NatHist> GetSendingProm_NatHistOfVagonMore(int num_vag, DateTime start, bool sort)
         {
             try
             {
@@ -1818,7 +1400,7 @@ namespace EFKIS.Concrete
         /// <param name="start"></param>
         /// <param name="sort"></param>
         /// <returns></returns>
-        public IQueryable<Prom_NatHist> GetProm_NatHistOfVagonMoreEqualSD(int num_vag, DateTime start, bool sort)
+        public IQueryable<Prom_NatHist> GetSendingProm_NatHistOfVagonMoreEqual(int num_vag, DateTime start, bool sort)
         {
             try
             {
@@ -1840,63 +1422,6 @@ namespace EFKIS.Concrete
                 return null;
             }
         }
-        /// <summary>
-        /// Показать список NatHist по указаному вагону меньше указанного времени с сортировкой
-        /// </summary>
-        /// <param name="num_vag"></param>
-        /// <param name="start"></param>
-        /// <param name="sort"></param>
-        /// <returns></returns>
-        public IQueryable<Prom_NatHist> GetProm_NatHistOfVagonLessPR(int num_vag, DateTime start, bool sort)
-        {
-            try
-            {
-                int day = start.Day;
-                int month = start.Month;
-                int year = start.Year;
-                int hour = start.Hour;
-                int minute = start.Minute;
-                string sql = sql_nathist_select +
-                    "WHERE h.N_VAG = " + num_vag.ToString() + " AND (h.D_PR_YY < " + year.ToString() + " OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM<" + month.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD < " + day.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD = " + day.ToString() + " AND h.T_PR_HH<" + hour.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD = " + day.ToString() + " AND h.T_PR_HH=" + hour.ToString() + " AND h.T_PR_MI<" + minute.ToString() + ")) " +
-                    (sort ? "order by h.D_PR_YY desc, h.D_PR_MM desc, h.D_PR_DD desc, h.T_PR_HH desc, h.T_PR_MI desc" : "order by h.D_PR_YY, h.D_PR_MM, h.D_PR_DD, h.T_PR_HH, h.T_PR_MI");
-
-                return context.Database.SqlQuery<Prom_NatHist>(sql).AsQueryable();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetProm_NatHistOfVagonLessPR(num_vag={0}, start={1}, sort={2})", num_vag, start, sort), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Показать список NatHist по указаному вагону меньше или равно указанного времени с сортировкой
-        /// </summary>
-        /// <param name="num_vag"></param>
-        /// <param name="start"></param>
-        /// <param name="sort"></param>
-        /// <returns></returns>
-        public IQueryable<Prom_NatHist> GetProm_NatHistOfVagonLessEqualPR(int num_vag, DateTime start, bool sort)
-        {
-            try
-            {
-                int day = start.Day;
-                int month = start.Month;
-                int year = start.Year;
-                int hour = start.Hour;
-                int minute = start.Minute;
-                string sql = sql_nathist_select +
-                    "WHERE h.N_VAG = " + num_vag.ToString() + " AND (h.D_PR_YY < " + year.ToString() + " OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM<=" + month.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD <= " + day.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD = " + day.ToString() + " AND h.T_PR_HH<=" + hour.ToString() + ") OR (h.D_PR_YY=" + year.ToString() + " AND h.D_PR_MM=" + month.ToString() + " AND h.D_PR_DD = " + day.ToString() + " AND h.T_PR_HH=" + hour.ToString() + " AND h.T_PR_MI<=" + minute.ToString() + ")) " +
-                    (sort ? "order by h.D_PR_YY desc, h.D_PR_MM desc, h.D_PR_DD desc, h.T_PR_HH desc, h.T_PR_MI desc" : "order by h.D_PR_YY, h.D_PR_MM, h.D_PR_DD, h.T_PR_HH, h.T_PR_MI");
-
-                return context.Database.SqlQuery<Prom_NatHist>(sql).AsQueryable();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetProm_NatHistOfVagonLessEqualPR(num_vag={0}, start={1}, sort={2})", num_vag, start, sort), eventID);
-                return null;
-            }
-        }
-
 
 
         #endregion
@@ -1931,140 +1456,198 @@ namespace EFKIS.Concrete
         }
         #endregion
 
-        #region PROM.Vagon
-
-        public IQueryable<PromVagon> PromVagon
-        {
-            get { return context.PromVagon; }
-        }
-        /// <summary>
-        /// Получить список всех вагонов станции Промышленная
-        /// </summary>
-        /// <returns></returns>
-        public IQueryable<PromVagon> GetVagon()
-        {
-            try
-            {
-                return PromVagon;
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetVagon()"), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Получить список вагонов по натурному листу станции и дате поступления c сортировкой true- npp по убыванию false- npp по возрастанию
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="station"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public IQueryable<PromVagon> GetVagon(int natur, int station, int day, int month, int year, bool? sort)
-        {
-            try
-            {
-                if (sort == null)
-                {
-                    return GetVagon().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year);
-                }
-                if ((bool)sort)
-                {
-                    return GetVagon().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year).OrderByDescending(n => n.NPP);
-                }
-                else
-                {
-                    return GetVagon().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year).OrderBy(n => n.NPP);
-                }
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetVagon(natur={0}, station={1}, day={2}, month={3}, year={4}, sort={5})", natur, station, day, month, year, sort), eventID);
-                return null;
-            }
-
-        }
-        /// <summary>
-        /// Получить список вагонов по натурному листу станции и дате поступления
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="station"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public IQueryable<PromVagon> GetVagon(int natur, int station, int day, int month, int year)
-        {
-            try
-            {
-                return GetVagon(natur, station, day, month, year, null);
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetVagon(natur={0}, station={1}, day={2}, month={3}, year={4})", natur, station, day, month, year), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Получить количество вагонов по натурному листу станции и дате поступления
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="station"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public int? CountWagonsVagon(int natur, int station, int day, int month, int year)
-        {
-
-            try
-            {
-                IQueryable<PromVagon> pv = GetVagon(natur, station, day, month, year);
-                return pv == null ? (int?)pv.Count() : null;
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("CountWagonsVagon(natur={0}, station={1}, day={2}, month={3}, year={4})", natur, station, day, month, year), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Получить информацию по вагону
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="station"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <param name="num"></param>
-        /// <returns></returns>
-        public PromVagon GetVagon(int natur, int station, int day, int month, int year, int num)
-        {
-            try
-            {
-                return GetVagon(natur, station, day, month, year).Where(p => p.N_VAG == num).FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetVagon(natur={0}, station={1}, day={2}, month={3}, year={4}, num={5})", natur, station, day, month, year, num), eventID);
-                return null;
-            }
-        }
-        #endregion
-
         #region Prom_Vagon
 
-        public IQueryable<Prom_Vagon> GetProm_Vagon()
+        //public IQueryable<Prom_Vagon> GetProm_Vagon()
+        //{
+        //    try
+        //    {
+        //        return context.Database.SqlQuery<Prom_Vagon>(sql_Vagon).AsQueryable();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetProm_Vagon()"), eventID);
+        //        return null;
+        //    }
+        //}
+        /// <summary>
+        /// Создать Prom_Vagon по Prom_NatHist
+        /// </summary>
+        /// <param name="pnh"></param>
+        /// <returns></returns>
+        public Prom_Vagon CreateProm_Vagon(Prom_NatHist pnh)
+        {
+            if (pnh == null) return null;
+            return new Prom_Vagon()
+            {
+                ID = pnh.ID,
+                DT_PR = pnh.DT_PR,
+                DT_SD = pnh.DT_SD,
+                D_PR_DD = pnh.D_PR_DD,
+                D_PR_MM = pnh.D_PR_MM,
+                D_PR_YY = pnh.D_PR_YY,
+                T_PR_HH = pnh.T_PR_HH,
+                T_PR_MI = pnh.T_PR_MI,
+                //
+                D_SD_DD = pnh.D_SD_DD,
+                D_SD_MM = pnh.D_SD_MM,
+                D_SD_YY = pnh.D_SD_YY,
+                T_SD_HH = pnh.T_SD_HH,
+                T_SD_MI = pnh.T_SD_MI,
+                //
+                N_VAG = pnh.N_VAG,
+                NPP = pnh.NPP,
+                GODN = pnh.GODN,
+                K_ST = pnh.K_ST,
+                K_ST_KMK = pnh.K_ST_KMK,
+                K_POL_GR = pnh.K_POL_GR,
+                N_VED_PR = pnh.N_VED_PR,
+                //
+                N_NAK_MPS = pnh.N_NAK_MPS,
+                OTPRAV = pnh.OTPRAV,
+                PRIM_GR = pnh.PRIM_GR,
+                K_GR = pnh.K_GR,
+                WES_GR = pnh.WES_GR,
+                N_NATUR = pnh.N_NATUR,
+                N_PUT = pnh.N_PUT,
+                K_OP = pnh.K_OP,
+                K_FRONT = pnh.K_FRONT,
+                N_NATUR_T = pnh.N_NATUR_T,
+                GODN_T = pnh.GODN_T,
+                K_GR_T = pnh.K_GR_T,
+                WES_GR_T = pnh.WES_GR_T,
+                K_OTPR_GR = pnh.K_OTPR_GR,
+                K_ST_NAZN = pnh.K_ST_NAZN,
+                K_ST_OTPR = pnh.K_ST_OTPR,
+                ST_OTPR = pnh.ST_OTPR,
+                ZADER = pnh.ZADER,
+                NEPR = pnh.NEPR,
+                UDOST = pnh.UDOST,
+                SERTIF = pnh.SERTIF,
+                KOD_STRAN = pnh.KOD_STRAN,
+                KOD_SD = pnh.KOD_SD,
+                NETO = pnh.NETO,
+                BRUTO = pnh.BRUTO,
+                TARA = pnh.TARA,
+                DAT_VVOD = pnh.DAT_VVOD
+            };
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <param name="station"></param>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        public IQueryable<Prom_Vagon> GetArrivalProm_VagonOfNaturStationDate(int natur, int station, int day, int month, int year, bool? sort)
         {
             try
             {
-                return context.Database.SqlQuery<Prom_Vagon>(sql_Vagon).AsQueryable();
+                string sql = sql_vagon_select +
+                    " WHERE v.N_NATUR = " + natur.ToString() +
+                    " AND v.K_ST = " + station.ToString() +
+                    " AND v.D_PR_DD = " + day.ToString() +
+                    " AND v.D_PR_MM = " + month.ToString() +
+                    " AND v.D_PR_YY = " + year.ToString();
+                if (sort != null)
+                {
+                    sql += ((bool)sort ? " ORDER BY v.NPP DESC " : " ORDER BY v.NPP ");
+                }
+                return context.Database.SqlQuery<Prom_Vagon>(sql).AsQueryable();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetProm_Vagon()"), eventID);
+                e.WriteErrorMethod(String.Format("GetArrivalProm_VagonOfNaturStationDate(natur={0}, station={1}, day={2}, month={3}, year={4}, sort={5})", natur, station, day, month, year, sort), eventID);
+                return null;
+            }
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <param name="station"></param>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public IQueryable<Prom_Vagon> GetArrivalProm_VagonOfNaturStationDate(int natur, int station, int day, int month, int year)
+        {
+            try
+            {
+                return GetArrivalProm_VagonOfNaturStationDate(natur,station,day,month,year,null);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalProm_VagonOfNaturStationDate(natur={0}, station={1}, day={2}, month={3}, year={4})", natur, station, day, month, year), eventID);
+                return null;
+            }
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <param name="num_vag"></param>
+        /// <param name="station"></param>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public Prom_Vagon GetArrivalProm_VagonOfNaturNumStationDate(int natur, int num_vag, int station, int day, int month, int year)
+        {
+            try
+            {
+                string sql = sql_vagon_select +
+                    " WHERE v.N_NATUR = " + natur.ToString() +
+                    " AND v.N_VAG = " + num_vag.ToString() +
+                    " AND v.K_ST = " + station.ToString() +
+                    " AND v.D_PR_DD = " + day.ToString() +
+                    " AND v.D_PR_MM = " + month.ToString() +
+                    " AND v.D_PR_YY = " + year.ToString();
+                return context.Database.SqlQuery<Prom_Vagon>(sql).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalProm_VagonOfNaturStationDate(natur={0}, station={1}, day={2}, month={3}, year={4})", natur, station, day, month, year), eventID);
+                return null;
+            }
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="natur"></param>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <param name="hour"></param>
+        /// <param name="minute"></param>
+        /// <returns></returns>
+        public IQueryable<Prom_Vagon> GetArrivalProm_VagonOfNaturDateTime(int natur, int day, int month, int year, int hour, int minute, bool? sort)
+        {
+            try
+            {
+                string sql = sql_vagon_select +
+                " WHERE v.N_NATUR = " + natur.ToString() +
+                " AND v.D_PR_DD = " + day.ToString() +
+                " AND v.D_PR_MM = " + month.ToString() +
+                " AND v.D_PR_YY = " + year.ToString() +
+                " AND v.T_PR_HH = " + hour.ToString() +
+                " AND v.T_PR_MI = " + minute.ToString();
+                if (sort != null)
+                {
+                    sql += ((bool)sort ? " ORDER BY v.NPP DESC " : " ORDER BY v.NPP ");
+                }
+                return context.Database.SqlQuery<Prom_Vagon>(sql).AsQueryable();
+                //return context.Database.SqlQuery<Prom_Vagon>(sql_Vagon + " WHERE N_NATUR = " + natur.ToString() + " AND D_PR_DD = " + day.ToString() + " AND D_PR_MM = " + month.ToString() + " AND D_PR_YY = " + year.ToString() + " AND T_PR_HH = " + hour.ToString() + " AND T_PR_MI = " + minute.ToString() + " ORDER BY NPP").AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalProm_VagonOfNaturDateTime(natur={0}, day={1}, month={2}, year={3}, hour={4}, minute={5})", natur, day, month, year, hour, minute), eventID);
                 return null;
             }
         }
@@ -2078,41 +1661,32 @@ namespace EFKIS.Concrete
         /// <param name="hour"></param>
         /// <param name="minute"></param>
         /// <returns></returns>
-        public IQueryable<Prom_Vagon> GetPRProm_Vagon(int natur, int day, int month, int year, int hour, int minute)
+        public IQueryable<Prom_Vagon> GetSendingProm_VagonOfNaturDateTime(int natur, int day, int month, int year, int hour, int minute, bool? sort)
         {
             try
             {
-                return context.Database.SqlQuery<Prom_Vagon>(sql_Vagon + " WHERE N_NATUR = " + natur.ToString() + " AND D_PR_DD = " + day.ToString() + " AND D_PR_MM = " + month.ToString() + " AND D_PR_YY = " + year.ToString() + " AND T_PR_HH = " + hour.ToString() + " AND T_PR_MI = " + minute.ToString() + " ORDER BY NPP").AsQueryable();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetPRProm_Vagon(natur={0}, day={1}, month={2}, year={3}, hour={4}, minute={5})", natur, day, month, year, hour, minute), eventID);
-                return null;
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="natur"></param>
-        /// <param name="day"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <param name="hour"></param>
-        /// <param name="minute"></param>
-        /// <returns></returns>
-        public IQueryable<Prom_Vagon> GetSDProm_Vagon(int natur, int day, int month, int year, int hour, int minute)
-        {
-            try
-            {
+                string sql = sql_vagon_select +
+                " WHERE v.N_NATUR = " + natur.ToString() +
+                " AND v.D_SD_DD = " + day.ToString() +
+                " AND v.D_SD_MM = " + month.ToString() +
+                " AND v.D_SD_YY = " + year.ToString() +
+                " AND v.T_SD_HH = " + hour.ToString() +
+                " AND v.T_SD_MI = " + minute.ToString();
+                if (sort != null)
+                {
+                    sql += ((bool)sort ? " ORDER BY v.NPP DESC " : " ORDER BY v.NPP ");
+                }
+                return context.Database.SqlQuery<Prom_Vagon>(sql).AsQueryable();                
                 //return context.Database.SqlQuery<Prom_Vagon>("SELECT ROWNUM as ID,N_VAG,NPP,D_PR_DD,D_PR_MM,D_PR_YY,T_PR_HH,T_PR_MI,D_SD_DD,D_SD_MM,D_SD_YY,T_SD_HH,T_SD_MI,GODN,K_ST_KMK,K_POL_GR,K_GR,N_VED_PR,N_NAK_MPS,OTPRAV,PRIM_GR,WES_GR,N_NATUR,N_PUT,K_ST,K_OP,K_FRONT,N_NATUR_T,GODN_T,K_GR_T,WES_GR_T,K_OTPR_GR,K_ST_OTPR,K_ST_NAZN,ST_OTPR,ZADER,NEPR,UDOST,SERTIF,KOD_STRAN,KOD_SD,NETO,BRUTO,TARA,DAT_VVOD FROM PROM.VAGON "+
-                return context.Database.SqlQuery<Prom_Vagon>(sql_Vagon + " WHERE N_NATUR = " + natur.ToString() + " AND D_SD_DD = " + day.ToString() + " AND D_SD_MM = " + month.ToString() + " AND D_SD_YY = " + year.ToString() + " AND T_SD_HH = " + hour.ToString() + " AND T_SD_MI = " + minute.ToString() + " ORDER BY NPP").AsQueryable();
+                //return context.Database.SqlQuery<Prom_Vagon>(sql_Vagon + " WHERE N_NATUR = " + natur.ToString() + " AND D_SD_DD = " + day.ToString() + " AND D_SD_MM = " + month.ToString() + " AND D_SD_YY = " + year.ToString() + " AND T_SD_HH = " + hour.ToString() + " AND T_SD_MI = " + minute.ToString() + " ORDER BY NPP").AsQueryable();
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetSDProm_Vagon(natur={0}, day={1}, month={2}, year={3}, hour={4}, minute={5})", natur, day, month, year, hour, minute), eventID);
+                e.WriteErrorMethod(String.Format("GetSendingProm_VagonOfNaturDateTime(natur={0}, day={1}, month={2}, year={3}, hour={4}, minute={5})", natur, day, month, year, hour, minute), eventID);
                 return null;
             }
         }
+
         #endregion
 
         #region Prom_VagonAndSostav
@@ -2121,7 +1695,7 @@ namespace EFKIS.Concrete
         {
             try
             {
-                return context.Database.SqlQuery<Prom_VagonAndSostav>(sql_vagon_sostav).AsQueryable();
+                return context.Database.SqlQuery<Prom_VagonAndSostav>(sql_vagon_sostav_select).AsQueryable();
             }
             catch (Exception e)
             {
@@ -2134,7 +1708,7 @@ namespace EFKIS.Concrete
         {
             try
             {
-                return context.Database.SqlQuery<Prom_VagonAndSostav>(sql_vagon_sostav + " where v.N_VAG = " + num.ToString() + " order by D_YY desc, D_MM desc, D_DD desc, T_HH desc, T_MI desc").AsQueryable();
+                return context.Database.SqlQuery<Prom_VagonAndSostav>(sql_vagon_sostav_select + " where v.N_VAG = " + num.ToString() + " order by D_YY desc, D_MM desc, D_DD desc, T_HH desc, T_MI desc").AsQueryable();
             }
             catch (Exception e)
             {
@@ -2692,7 +2266,570 @@ namespace EFKIS.Concrete
 
     }
 }
+//#region PROM.Vagon
 
+//public IQueryable<PromVagon> PromVagon
+//{
+//    get { return context.PromVagon; }
+//}
+///// <summary>
+///// Получить список всех вагонов станции Промышленная
+///// </summary>
+///// <returns></returns>
+//public IQueryable<PromVagon> GetVagon()
+//{
+//    try
+//    {
+//        return PromVagon;
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetVagon()"), eventID);
+//        return null;
+//    }
+//}
+//GetArrivalProm_VagonOfNaturStationDate
+// <summary>
+// Получить список вагонов по натурному листу станции и дате поступления c сортировкой true- npp по убыванию false- npp по возрастанию
+// </summary>
+// <param name="natur"></param>
+// <param name="station"></param>
+// <param name="day"></param>
+// <param name="month"></param>
+// <param name="year"></param>
+// <returns></returns>
+//public IQueryable<PromVagon> GetVagon(int natur, int station, int day, int month, int year, bool? sort)
+//{
+//    try
+//    {
+//        if (sort == null)
+//        {
+//            return GetVagon().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year);
+//        }
+//        if ((bool)sort)
+//        {
+//            return GetVagon().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year).OrderByDescending(n => n.NPP);
+//        }
+//        else
+//        {
+//            return GetVagon().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year).OrderBy(n => n.NPP);
+//        }
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetVagon(natur={0}, station={1}, day={2}, month={3}, year={4}, sort={5})", natur, station, day, month, year, sort), eventID);
+//        return null;
+//    }
+
+//}
+////GetArrivalProm_VagonOfNaturStationDate
+///// <summary>
+///// Получить список вагонов по натурному листу станции и дате поступления
+///// </summary>
+///// <param name="natur"></param>
+///// <param name="station"></param>
+///// <param name="day"></param>
+///// <param name="month"></param>
+///// <param name="year"></param>
+///// <returns></returns>
+//public IQueryable<PromVagon> GetVagon(int natur, int station, int day, int month, int year)
+//{
+//    try
+//    {
+//        return GetVagon(natur, station, day, month, year, null);
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetVagon(natur={0}, station={1}, day={2}, month={3}, year={4})", natur, station, day, month, year), eventID);
+//        return null;
+//    }
+//}
+///// <summary>
+///// Получить количество вагонов по натурному листу станции и дате поступления
+///// </summary>
+///// <param name="natur"></param>
+///// <param name="station"></param>
+///// <param name="day"></param>
+///// <param name="month"></param>
+///// <param name="year"></param>
+///// <returns></returns>
+//public int? CountWagonsVagon(int natur, int station, int day, int month, int year)
+//{
+
+//    try
+//    {
+//        IQueryable<PromVagon> pv = GetVagon(natur, station, day, month, year);
+//        return pv == null ? (int?)pv.Count() : null;
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("CountWagonsVagon(natur={0}, station={1}, day={2}, month={3}, year={4})", natur, station, day, month, year), eventID);
+//        return null;
+//    }
+//}
+//GetArrivalProm_VagonOfNaturStationDateNum
+// <summary>
+// Получить информацию по вагону
+// </summary>
+// <param name="natur"></param>
+// <param name="station"></param>
+// <param name="day"></param>
+// <param name="month"></param>
+// <param name="year"></param>
+// <param name="num"></param>
+// <returns></returns>
+//public PromVagon GetVagon(int natur, int station, int day, int month, int year, int num)
+//{
+//    try
+//    {
+//        return GetVagon(natur, station, day, month, year).Where(p => p.N_VAG == num).FirstOrDefault();
+//    }
+//    catch (Exception e)
+//    {
+//        e.WriteErrorMethod(String.Format("GetVagon(natur={0}, station={1}, day={2}, month={3}, year={4}, num={5})", natur, station, day, month, year, num), eventID);
+//        return null;
+//    }
+//}
+//#endregion
+
+        //#region PROM.Nat_Hist
+        //public IQueryable<PromNatHist> PromNatHist
+        //{
+        //    get { return context.PromNatHist; }
+        //}
+
+        //public IQueryable<PromNatHist> GetPromNatHist()
+        //{
+        //    try
+        //    {
+        //        return PromNatHist;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetPromNatHist()"), eventID);
+        //        return null;
+        //    }
+        //}
+        //GetArrivalProm_NatHistOfNaturStationDate
+        ///// <summary>
+        ///// Получить список вагонов по натурному листу станции и дате поступления c сортировкой true- npp по убыванию false- npp по возрастанию
+        ///// </summary>
+        ///// <param name="natur"></param>
+        ///// <param name="station"></param>
+        ///// <param name="day"></param>
+        ///// <param name="month"></param>
+        ///// <param name="year"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistPR(int natur, int station, int day, int month, int year, bool? sort)
+        //{
+        //    try
+        //    {
+        //        if (sort == null)
+        //        {
+        //            return GetPromNatHist().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year);
+        //        }
+        //        if ((bool)sort)
+        //        {
+        //            return GetPromNatHist().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year).OrderByDescending(n => n.NPP);
+        //        }
+        //        else
+        //        {
+        //            return GetPromNatHist().Where(n => n.N_NATUR == natur & n.K_ST == station & n.D_PR_DD == day & n.D_PR_MM == month & n.D_PR_YY == year).OrderBy(n => n.NPP);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetVagon(natur={0}, station={1}, day={2}, month={3}, year={4}, sort={5})", natur, station, day, month, year, sort), eventID);
+        //        return null;
+        //    }
+
+        //}
+        ////GetArrivalProm_NatHistOfNaturStationDate
+        ///// <summary>
+        ///// Получить список вагонов по натурному листу станции и дате поступления
+        ///// </summary>
+        ///// <param name="natur"></param>
+        ///// <param name="station"></param>
+        ///// <param name="day"></param>
+        ///// <param name="month"></param>
+        ///// <param name="year"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistPR(int natur, int station, int day, int month, int year)
+        //{
+        //    return GetNatHistPR(natur, station, day, month, year, null);
+        //}
+        //GetArrivalProm_NatHistOfNaturStationDateNum
+        // <summary>
+        // Получить вагон по натурному листу станции и дате поступления
+        // </summary>
+        // <param name="natur"></param>
+        // <param name="station"></param>
+        // <param name="day"></param>
+        // <param name="month"></param>
+        // <param name="year"></param>
+        // <param name="wag"></param>
+        // <returns></returns>
+        //public PromNatHist GetNatHistPR(int natur, int station, int day, int month, int year, int wag)
+        //{
+        //    try
+        //    {
+        //        return GetNatHistPR(natur, station, day, month, year, null).Where(h => h.N_VAG == wag).FirstOrDefault();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHist(natur={0}, station={1}, day={2}, month={3}, year={4}, wag={5})", natur, station, day, month, year, wag), eventID);
+        //        return null;
+        //    }
+
+        //}
+        //GetSendingProm_NatHistOfNaturDate
+        ///// <summary>
+        ///// Получить список вагонов по натурному листу и дате сдачи вагона с сортировкой
+        ///// </summary>
+        ///// <param name="natur"></param>
+        ///// <param name="day"></param>
+        ///// <param name="month"></param>
+        ///// <param name="year"></param>
+        ///// <param name="sort"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistSD(int natur, int day, int month, int year, bool? sort)
+        //{
+        //    try
+        //    {
+        //        if (sort == null)
+        //        {
+        //            return GetNatHistSD(natur, day, month, year);
+        //        }
+        //        if ((bool)sort)
+        //        {
+        //            return GetNatHistSD(natur, day, month, year).OrderByDescending(n => n.NPP);
+        //        }
+        //        else
+        //        {
+        //            return GetNatHistSD(natur, day, month, year).OrderBy(n => n.NPP);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistSendingOfNaturAndDate(natur={0}, day={1}, month={2}, year={3}, sort={4})", natur, day, month, year, sort), eventID);
+        //        return null;
+        //    }
+        //}
+        //GetSendingProm_NatHistOfNaturDate
+        ///// <summary>
+        ///// Получить список вагонов по натурному листу и дате сдачи вагона
+        ///// </summary>
+        ///// <param name="natur"></param>
+        ///// <param name="day"></param>
+        ///// <param name="month"></param>
+        ///// <param name="year"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistSD(int natur, int day, int month, int year)
+        //{
+        //    try
+        //    {
+        //        return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistSendingOfNaturAndDate(natur={0}, day={1}, month={2}, year={3})", natur, day, month, year, eventID));
+        //        return null;
+        //    }
+        //}
+        //GetSendingProm_NatHistOfNaturDateTime
+        ///// <summary>
+        ///// Получить список вагонов по натурному листу и дате сдачи вагона
+        ///// </summary>
+        ///// <param name="natur"></param>
+        ///// <param name="day"></param>
+        ///// <param name="month"></param>
+        ///// <param name="year"></param>
+        ///// <param name="hour"></param>
+        ///// <param name="minute"></param>
+        ///// <param name="sort"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistSD(int natur, int day, int month, int year, int hour, int minute, bool? sort)
+        //{
+        //    try
+        //    {
+        //        if (sort == null)
+        //        {
+        //            return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute);
+        //        }
+        //        if ((bool)sort)
+        //        {
+        //            return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).OrderByDescending(n => n.NPP);
+        //        }
+        //        else
+        //        {
+        //            return GetPromNatHist().Where(n => n.N_NATUR == natur & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).OrderBy(n => n.NPP);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistOfNaturAndDT(natur={0}, day={1}, month={2}, year={3}, hour={4}, minute={5} sort={6})", natur, day, month, year, hour, minute, sort), eventID);
+        //        return null;
+        //    }
+        //}
+        //GetSendingProm_NatHistOfNaturNumDateTime
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="natur"></param>
+        ///// <param name="num"></param>
+        ///// <param name="day"></param>
+        ///// <param name="month"></param>
+        ///// <param name="year"></param>
+        ///// <param name="hour"></param>
+        ///// <param name="minute"></param>
+        ///// <returns></returns>
+        //public PromNatHist GetNatHistSD(int natur, int num, int day, int month, int year, int hour, int minute)
+        //{
+        //    try
+        //    {
+        //        return GetPromNatHist().Where(n => n.N_NATUR == natur & n.N_VAG == num & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).FirstOrDefault();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistSendingOfNaturNumDT(natur={0}, num={1}, day={2}, month={3}, year={4}, hour={5}, minute={6})", natur, num, day, month, year, hour, minute), eventID);
+        //        return null;
+        //    }
+        //}
+        //GetSendingProm_NatHistOfNumDateTime
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="num"></param>
+        ///// <param name="day"></param>
+        ///// <param name="month"></param>
+        ///// <param name="year"></param>
+        ///// <param name="hour"></param>
+        ///// <param name="minute"></param>
+        ///// <returns></returns>
+        //public PromNatHist GetNatHistSD(int num, int day, int month, int year, int hour, int minute)
+        //{
+        //    try
+        //    {
+        //        return GetPromNatHist().Where(n => n.N_VAG == num & n.D_SD_DD == day & n.D_SD_MM == month & n.D_SD_YY == year & n.T_SD_HH == hour & n.T_SD_MI == minute).FirstOrDefault();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistSendingOfNaturNumDT(num={0}, day={1}, month={2}, year={3}, hour={4}, minute={5})", num, day, month, year, hour, minute), eventID);
+        //        return null;
+        //    }
+        //}
+
+        // перен
+        ///// <summary>
+        ///// Получить список вагонов по номеру вагона
+        ///// </summary>
+        ///// <param name="num_vag"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistOfVagon(int num_vag)
+        //{
+        //    try
+        //    {
+        //        return GetPromNatHist().Where(n => n.N_VAG == num_vag);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistOfVagon(num_vag={0})", num_vag), eventID);
+        //        return null;
+        //    }
+        //}
+        // перен
+        ///// <summary>
+        ///// Получить список вагонов по номеру вагона и датой отправки больше указаной даты
+        ///// </summary>
+        ///// <param name="num_vag"></param>
+        ///// <param name="start"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistOfVagonMoreSD(int num_vag, DateTime start)
+        //{
+        //    try
+        //    {
+        //        List<PromNatHist> list = GetNatHistOfVagon(num_vag).ToList();
+        //        return list.ToArray().FilterArrayOfFilterFrom(Filters.IsMoreSD, start).AsQueryable();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistOfVagonMoreSD(num_vag={0}, start={1})", num_vag, start), eventID);
+        //        return null;
+        //    }
+        //}
+        ///// <summary>
+        ///// Получить список вагонов по номеру вагона и датой отправки больше указаной даты с сортировкой
+        ///// </summary>
+        ///// <param name="num_vag"></param>
+        ///// <param name="start"></param>
+        ///// <param name="sort"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistOfVagonMoreSD(int num_vag, DateTime start, bool sort)
+        //{
+        //    try
+        //    {
+        //        if (sort)
+        //        {
+        //            return GetNatHistOfVagonMoreSD(num_vag, start)
+        //                .OrderByDescending(p => p.D_PR_YY)
+        //                .ThenByDescending(p => p.D_PR_MM)
+        //                .ThenByDescending(p => p.D_PR_DD)
+        //                .ThenByDescending(p => p.T_PR_HH)
+        //                .ThenByDescending(p => p.T_PR_MI);
+        //        }
+        //        else
+        //        {
+        //            return GetNatHistOfVagonMoreSD(num_vag, start)
+        //                .OrderBy(p => p.D_PR_YY)
+        //                .ThenBy(p => p.D_PR_MM)
+        //                .ThenBy(p => p.D_PR_DD)
+        //                .ThenBy(p => p.T_PR_HH)
+        //                .ThenBy(p => p.T_PR_MI);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistOfVagonMoreSD(num_vag={0}, start={1}, sort={2})", num_vag, start, sort), eventID);
+        //        return null;
+        //    }
+        //}
+        // перен
+        ///// <summary>
+        ///// Получить список вагонов по номеру вагона и датой прибытия меньше указаной даты
+        ///// </summary>
+        ///// <param name="num_vag"></param>
+        ///// <param name="start"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistOfVagonLessPR(int num_vag, DateTime start)
+        //{
+        //    try
+        //    {
+        //        List<PromNatHist> list = GetNatHistOfVagon(num_vag).ToList();
+        //        return list.ToArray().FilterArrayOfFilterFrom(Filters.IsLessPR, start).AsQueryable();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistOfVagonLess(num_vag={0}, start={1})", num_vag, start), eventID);
+        //        return null;
+        //    }
+        //}
+        ///// <summary>
+        ///// Получить список вагонов по номеру вагона и датой прибытия меньше указаной даты с сортировкой
+        ///// </summary>
+        ///// <param name="num_vag"></param>
+        ///// <param name="start"></param>
+        ///// <param name="sort"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistOfVagonLessPR(int num_vag, DateTime start, bool sort)
+        //{
+        //    try
+        //    {
+        //        if (sort)
+        //        {
+        //            return GetNatHistOfVagonLessPR(num_vag, start)
+        //                .OrderByDescending(p => p.D_PR_YY)
+        //                .ThenByDescending(p => p.D_PR_MM)
+        //                .ThenByDescending(p => p.D_PR_DD)
+        //                .ThenByDescending(p => p.T_PR_HH)
+        //                .ThenByDescending(p => p.T_PR_MI);
+        //        }
+        //        else
+        //        {
+        //            return GetNatHistOfVagonLessPR(num_vag, start)
+        //                .OrderBy(p => p.D_PR_YY)
+        //                .ThenBy(p => p.D_PR_MM)
+        //                .ThenBy(p => p.D_PR_DD)
+        //                .ThenBy(p => p.T_PR_HH)
+        //                .ThenBy(p => p.T_PR_MI);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetNatHistOfVagonLess(num_vag={0}, start={1}, sort={2})", num_vag, start, sort), eventID);
+        //        return null;
+        //    }
+        //}
+        // перен
+        ///// <summary>
+        ///// Получить список вагонов по номеру вагона и датой прибытия меньше или равно указаной даты
+        ///// </summary>
+        ///// <param name="num_vag"></param>
+        ///// <param name="start"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistOfVagonLessEqualPR(int num_vag, DateTime start)
+        //{
+        //    return GetNatHistOfVagon(num_vag).ToArray().FilterArrayOfFilterFrom(Filters.IsLessOrEqualPR, start).AsQueryable();
+        //}
+        ///// <summary>
+        ///// Получить список вагонов по номеру вагона и датой прибытия меньше указаной даты с сортировкой
+        ///// </summary>
+        ///// <param name="num_vag"></param>
+        ///// <param name="start"></param>
+        ///// <param name="sort"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistOfVagonLessEqualPR(int num_vag, DateTime start, bool sort)
+        //{
+        //    if (sort)
+        //    {
+        //        return GetNatHistOfVagonLessEqualPR(num_vag, start)
+        //            .OrderByDescending(p => p.D_PR_YY)
+        //            .ThenByDescending(p => p.D_PR_MM)
+        //            .ThenByDescending(p => p.D_PR_DD)
+        //            .ThenByDescending(p => p.T_PR_HH)
+        //            .ThenByDescending(p => p.T_PR_MI);
+        //    }
+        //    else
+        //    {
+        //        return GetNatHistOfVagonLessEqualPR(num_vag, start)
+        //            .OrderBy(p => p.D_PR_YY)
+        //            .ThenBy(p => p.D_PR_MM)
+        //            .ThenBy(p => p.D_PR_DD)
+        //            .ThenBy(p => p.T_PR_HH)
+        //            .ThenBy(p => p.T_PR_MI);
+        //    }
+
+        //}
+
+        ///// <summary>
+        ///// Получить список вагонов по номеру вагона и датой прибытия болше или равно указаной даты
+        ///// </summary>
+        ///// <param name="num_vag"></param>
+        ///// <param name="start"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistOfVagonGreaterEqualPR(int num_vag, DateTime start)
+        //{
+        //    return GetNatHistOfVagon(num_vag).ToArray().FilterArrayOfFilterFrom(Filters.IsGreaterOrEqualPR, start).AsQueryable();
+        //}
+        ///// <summary>
+        ///// Получить список вагонов по номеру вагона и датой прибытия больше или равно указаной даты с сортировкой
+        ///// </summary>
+        ///// <param name="num_vag"></param>
+        ///// <param name="start"></param>
+        ///// <param name="sort"></param>
+        ///// <returns></returns>
+        //public IQueryable<PromNatHist> GetNatHistOfVagonGreaterEqualPR(int num_vag, DateTime start, bool sort)
+        //{
+        //    if (sort)
+        //    {
+        //        return GetNatHistOfVagonGreaterEqualPR(num_vag, start)
+        //            .OrderByDescending(p => p.D_PR_YY)
+        //            .ThenByDescending(p => p.D_PR_MM)
+        //            .ThenByDescending(p => p.D_PR_DD)
+        //            .ThenByDescending(p => p.T_PR_HH)
+        //            .ThenByDescending(p => p.T_PR_MI);
+        //    }
+        //    else
+        //    {
+        //        return GetNatHistOfVagonGreaterEqualPR(num_vag, start)
+        //            .OrderBy(p => p.D_PR_YY)
+        //            .ThenBy(p => p.D_PR_MM)
+        //            .ThenBy(p => p.D_PR_DD)
+        //            .ThenBy(p => p.T_PR_HH)
+        //            .ThenBy(p => p.T_PR_MI);
+        //    }
+
+        //}
+        //#endregion
 //#region PROM.SOSTAV
 
 //public IQueryable<PromSostav> PromSostav

@@ -659,11 +659,12 @@ namespace RW
         /// </summary>
         /// <param name="id_kis"></param>
         /// <returns></returns>
-        public int GetIDStationsOfKIS(int id_kis)
+        public int GetIDStationsOfKIS(int? id_kis)
         {
             try
             {
-                Stations station = GetStations(id_kis, this.reference_kis == true ? true: false);
+                if (id_kis == null) return 0;
+                Stations station = GetStations((int)id_kis, this.reference_kis == true ? true: false);
                 return station != null ? station.id : 0;
             }
             catch (Exception e)

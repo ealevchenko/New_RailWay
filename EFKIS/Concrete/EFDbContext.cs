@@ -29,9 +29,9 @@ namespace EFKIS.Concrete
         public DbSet<KometaParkState> KometaParkState { get; set; }
 
         // Информация по станции Промышленная
-        public DbSet<PromSostav> PromSostav { get; set; } // Применил составные ключи
-        public DbSet<PromNatHist> PromNatHist { get; set;}
-        public DbSet<PromVagon> PromVagon { get; set; }
+        //public DbSet<PromSostav> PromSostav { get; set; } // Применил составные ключи
+        //public DbSet<PromNatHist> PromNatHist { get; set; }
+        //public DbSet<PromVagon> PromVagon { get; set; }
         public DbSet<PromGruzSP> PromGruzSP { get; set; } // грузы на приходе
         public DbSet<PromCex> PromCex { get; set; } // перечень цехов
 

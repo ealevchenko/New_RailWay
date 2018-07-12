@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using libClass;
 using EFKIS.Entities;
 using EFKIS.Concrete;
-using EFKIS.Helpers;
+//using EFKIS.Helpers;
 using System.Globalization;
 using EFRW.Entities;
 using RW;
@@ -372,7 +372,7 @@ namespace KIS
         /// <param name="set_operation"></param>
         /// <param name="operation"></param>
         /// <returns></returns>
-        public Cars SetCarsToRailWay(PromVagon prom_vagon, RW.RWOperation.SetCarOperation set_operation, IOperation operation)
+        public Cars SetCarsToRailWay(Prom_Vagon prom_vagon, RW.RWOperation.SetCarOperation set_operation, IOperation operation)
         {
             try
             {
@@ -393,7 +393,7 @@ namespace KIS
         /// <param name="set_operation"></param>
         /// <param name="operation"></param>
         /// <returns></returns>
-        public Cars SetCarsToRailWay(PromNatHist prom_nathist, RW.RWOperation.SetCarOperation set_operation, IOperation operation)
+        public Cars SetCarsToRailWay(Prom_NatHist prom_nathist, RW.RWOperation.SetCarOperation set_operation, IOperation operation)
         {
             try
             {
@@ -413,7 +413,7 @@ namespace KIS
         /// </summary>
         /// <param name="prom_vagon"></param>
         /// <returns></returns>
-        public CarsInpDelivery CreateCarsInpDelivery(PromVagon prom_vagon)
+        public CarsInpDelivery CreateCarsInpDelivery(Prom_Vagon prom_vagon)
         {
             try
             {
@@ -425,7 +425,7 @@ namespace KIS
                     (prom_vagon.N_NATUR * -1),
                     dt_oper,
                     "-",
-                    prom_vagon.NPP,
+                    prom_vagon.NPP !=null ? (int)prom_vagon.NPP : 0,
                     prom_vagon != null && prom_vagon.KOD_STRAN != null ? (int)prom_vagon.KOD_STRAN : 0,
                     rw_ref.GetCorrectCodeETSNGOfKis(prom_vagon.K_GR),
                     prom_vagon != null && prom_vagon.WES_GR != null ? (float)prom_vagon.WES_GR : 0,
@@ -442,7 +442,7 @@ namespace KIS
         /// </summary>
         /// <param name="prom_nathist"></param>
         /// <returns></returns>
-        public CarsInpDelivery CreateCarsInpDelivery(PromNatHist prom_nathist)
+        public CarsInpDelivery CreateCarsInpDelivery(Prom_NatHist prom_nathist)
         {
             try
             {
@@ -478,7 +478,8 @@ namespace KIS
             try
             {
                 EFWagons ef_wag = new EFWagons();
-                PromNatHist pnh = ef_wag.GetNatHistSD(natur, num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
+                //PromNatHist pnh = ef_wag.GetNatHistSD(natur, num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
+                Prom_NatHist pnh = ef_wag.GetSendingProm_NatHistOfNaturNumDateTime(natur, num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
                 // Определим исходящие поставки
                 return CreateCarsOutDelivery(pnh);
             }
@@ -499,7 +500,8 @@ namespace KIS
             try
             {
                 EFWagons ef_wag = new EFWagons();
-                PromNatHist pnh = ef_wag.GetNatHistSD(num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
+                //PromNatHist pnh = ef_wag.GetNatHistSD(num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
+                Prom_NatHist pnh = ef_wag.GetSendingProm_NatHistOfNumDateTime(num, dt_out_amkr.Day, dt_out_amkr.Month, dt_out_amkr.Year, dt_out_amkr.Hour, dt_out_amkr.Minute);
                 // Определим исходящие поставки
                 return CreateCarsOutDelivery(pnh);
             }
@@ -514,7 +516,7 @@ namespace KIS
         /// </summary>
         /// <param name="pnh_out"></param>
         /// <returns></returns>
-        public CarsOutDelivery CreateCarsOutDelivery(PromNatHist pnh_out)
+        public CarsOutDelivery CreateCarsOutDelivery(Prom_NatHist pnh_out)
         {
             try
             {
@@ -572,14 +574,16 @@ namespace KIS
         /// <param name="dt_amkr"></param>
         /// <param name="id_station_kis"></param>
         /// <returns></returns>
-        public PromNatHist GetCorrectNatHist(int natur, int num_vag, DateTime dt_amkr, int id_station_kis)
+        public Prom_NatHist GetCorrectNatHist(int natur, int num_vag, DateTime dt_amkr, int id_station_kis)
         {
             EFWagons ef_wag = new EFWagons();
-            PromNatHist pnh = ef_wag.GetNatHistPR(natur, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+            //PromNatHist pnh = ef_wag.GetNatHistPR(natur, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+            Prom_NatHist pnh = ef_wag.GetArrivalProm_NatHistOfNaturNumStationDate(natur, num_vag, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year);
             if (pnh == null & id_station_kis == 18)
             {
                 // Если промышленная, попробовать Промышленная-керамет
-                pnh = ef_wag.GetNatHistPR(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                //pnh = ef_wag.GetNatHistPR(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                pnh = ef_wag.GetArrivalProm_NatHistOfNaturNumStationDate(natur, num_vag, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year);
             }
             return pnh;
         }
@@ -591,14 +595,16 @@ namespace KIS
         /// <param name="dt_amkr"></param>
         /// <param name="id_station_kis"></param>
         /// <returns></returns>
-        public PromVagon GetCorrectVagon(int natur, int num_vag, DateTime dt_amkr, int id_station_kis)
+        public Prom_Vagon GetCorrectVagon(int natur, int num_vag, DateTime dt_amkr, int id_station_kis)
         {
             EFWagons ef_wag = new EFWagons();
-            PromVagon pv = ef_wag.GetVagon(natur, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+            //PromVagon pv = ef_wag.GetVagon(natur, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+            Prom_Vagon pv = ef_wag.GetArrivalProm_VagonOfNaturNumStationDate(natur, num_vag, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year);
             if (pv == null & id_station_kis == 18)
             {
                 // Если промышленная, попробовать Промышленная-керамет
-                pv = ef_wag.GetVagon(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                //pv = ef_wag.GetVagon(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                pv = ef_wag.GetArrivalProm_VagonOfNaturNumStationDate(natur, num_vag, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year);
             }
             return pv;
         }
@@ -970,7 +976,7 @@ namespace KIS
         {
             try
             {
-                //EFWagons ef_wag = new EFWagons();
+                EFWagons ef_wag = new EFWagons();
                 RWOperation rw_oper = new RWOperation(this.servece_owner);
 
                 // Получим информацию для заполнения вагона с учетом отсутствия данных в PromVagon
@@ -980,33 +986,84 @@ namespace KIS
                 //    // Если промышленная, попробовать Промышленная-керамет
                 //    pv = ef_wag.GetVagon(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
                 //}
-                PromVagon pv = GetCorrectVagon(natur, num_vag, dt_amkr, id_station_kis);
+                Prom_Vagon pv = GetCorrectVagon(natur, num_vag, dt_amkr, id_station_kis);
                 //PromNatHist pnh = ef_wag.GetNatHist(natur, id_station_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
                 //if (pnh == null & id_station_kis == 18)
                 //{
                 //    // Если промышленная, попробовать Промышленная-керамет
                 //    pnh = ef_wag.GetNatHist(natur, 81, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
                 //}
-                PromNatHist pnh = GetCorrectNatHist(natur, num_vag, dt_amkr, id_station_kis);
+                Prom_NatHist pnh = GetCorrectNatHist(natur, num_vag, dt_amkr, id_station_kis);
                 if (pv == null & pnh == null) return (int)errorTransfer.no_wagon_is_list;   // Ошибка нет вагонов в списке
                 if (pv == null)
                 {
-                    pv = new PromVagon()
-                    {
-                        N_VAG = pnh.N_VAG,
-                        NPP = pnh != null ? (int)pnh.NPP : 0,
-                        GODN = pnh.GODN,
-                        K_ST = pnh.K_ST,
-                        N_NATUR = pnh.N_NATUR,
-                        D_PR_DD = pnh.D_PR_DD,
-                        D_PR_MM = pnh.D_PR_MM,
-                        D_PR_YY = pnh.D_PR_YY,
-                        T_PR_HH = pnh.T_PR_HH,
-                        T_PR_MI = pnh.T_PR_MI,
-                        KOD_STRAN = pnh.KOD_STRAN,
-                        WES_GR = pnh.WES_GR,
-                        K_GR = pnh.K_GR
-                    };
+                    pv = ef_wag.CreateProm_Vagon(pnh);
+        //            pv = new Prom_Vagon()
+        //            {
+        //                //N_VAG = pnh.N_VAG,
+        //                //NPP = pnh != null ? (int)pnh.NPP : 0,
+        //                //GODN = pnh.GODN,
+        //                //K_ST = pnh.K_ST,
+        //                //N_NATUR = pnh.N_NATUR,
+        //                //D_PR_DD = pnh.D_PR_DD,
+        //                //D_PR_MM = pnh.D_PR_MM,
+        //                //D_PR_YY = pnh.D_PR_YY,
+        //                //T_PR_HH = pnh.T_PR_HH,
+        //                //T_PR_MI = pnh.T_PR_MI,
+        //                //KOD_STRAN = pnh.KOD_STRAN,
+        //                //WES_GR = pnh.WES_GR,
+        //                //K_GR = pnh.K_GR,
+
+        //                ID = 0,
+        //                DT_PR = pnh.DT_PR,
+        //                DT_SD = pnh.DT_SD,
+        //                D_PR_DD = pnh.D_PR_DD ,
+        //                D_PR_MM = pnh.D_PR_MM ,
+        //                D_PR_YY = pnh.D_PR_YY ,
+        //                T_PR_HH = pnh.T_PR_HH ,
+        //                T_PR_MI = pnh.T_PR_MI ,
+        ////
+        //                D_SD_DD = pnh.D_SD_DD ,
+        //                D_SD_MM = pnh.D_SD_MM ,
+        //                D_SD_YY = pnh.D_SD_YY ,
+        //                T_SD_HH = pnh.T_SD_HH ,
+        //                T_SD_MI = pnh.T_SD_MI ,
+        ////
+        //                N_VAG = pnh.N_VAG ,
+        //                NPP = pnh.NPP ,
+        //                GODN = pnh.GODN ,
+        //                K_ST = pnh.K_ST ,
+        //                K_ST_KMK = pnh.K_ST_KMK ,
+        //                K_POL_GR = pnh.K_POL_GR ,
+        //                N_VED_PR = pnh.N_VED_PR ,
+
+        //                N_NAK_MPS = pnh.N_NAK_MPS ,
+        //                OTPRAV = pnh.OTPRAV ,
+        //                PRIM_GR = pnh.PRIM_GR ,
+        //                K_GR = pnh.K_GR ,
+        //                WES_GR = pnh.WES_GR ,
+        //                N_NATUR = pnh.N_NATUR ,
+        //                N_PUT = pnh.N_PUT ,
+        //                K_OP = pnh.K_OP ,
+        //                K_FRONT = pnh.K_FRONT ,
+        //                N_NATUR_T = pnh.N_NATUR_T ,
+        //                GODN_T = pnh.GODN_T ,
+        //                K_GR_T = pnh.K_GR_T ,
+        //                WES_GR_T = pnh.WES_GR_T ,
+        //                K_OTPR_GR = pnh.K_OTPR_GR ,
+        //                K_ST_NAZN = pnh.K_ST_NAZN ,
+        //                K_ST_OTPR = pnh.K_ST_OTPR ,
+        //                ST_OTPR = pnh.ST_OTPR ,
+        //                ZADER = pnh.ZADER ,
+        //                NEPR = pnh.NEPR ,
+        //                UDOST = pnh.UDOST ,
+        //                SERTIF = pnh.SERTIF ,
+        //                KOD_STRAN = pnh.KOD_STRAN ,
+        //                KOD_SD = pnh.KOD_SD ,
+        //                NETO = pnh.NETO ,
+        //                BRUTO = pnh.BRUTO ,
+        //                TARA = pnh.TARA ,
+        //            };
                 }
                 // Создать новый вагон по данным КИС 
                 int res_car = 0;
@@ -1231,7 +1288,9 @@ namespace KIS
                 }
 
                 // Обновим информацию по количеству вагонов в таблице NatHist
-                List<PromNatHist> list_nh = ef_wag.GetNatHistPR(bas_sostav.natur, bas_sostav.id_station_kis, bas_sostav.day, bas_sostav.month, bas_sostav.year, bas_sostav.napr == 2 ? true : false).ToList();
+                //List<PromNatHist> list_nh = ef_wag.GetNatHistPR(bas_sostav.natur, bas_sostav.id_station_kis, bas_sostav.day, bas_sostav.month, bas_sostav.year, bas_sostav.napr == 2 ? true : false).ToList();
+                List<Prom_NatHist> list_nh = ef_wag.GetArrivalProm_NatHistOfNaturStationDate(bas_sostav.natur, bas_sostav.id_station_kis, bas_sostav.day, bas_sostav.month, bas_sostav.year, bas_sostav.napr == 2 ? true : false).ToList();
+
                 bas_sostav.count_nathist = list_nh.Count() > 0 ? list_nh.Count() as int? : null;
 
                 List<int> set_wagons = new List<int>();
@@ -1298,7 +1357,7 @@ namespace KIS
                 string mess_update_vag = "Обновление " + mess;
                 string mess_update_vag_err = "Ошибка обновления " + mess;
 
-                PromNatHist pnh = GetCorrectNatHist(natur, num_vag, dt_amkr, (int)station.id_kis);
+                Prom_NatHist pnh = GetCorrectNatHist(natur, num_vag, dt_amkr, (int)station.id_kis);
                 if (pnh == null)
                 {
                     String.Format(mess_update_vag_err + ", код ошибки:{0}", errorTransfer.no_wagon_is_nathist.ToString()).WriteWarning(servece_owner, eventID);
@@ -1363,7 +1422,7 @@ namespace KIS
         /// <param name="bss_sostav"></param>
         /// <param name="list_nh"></param>
         /// <returns></returns>
-        public int SetListWagon(ref RWBufferSendingSostav bss_sostav, List<PromNatHist> list_nh)
+        public int SetListWagon(ref RWBufferSendingSostav bss_sostav, List<Prom_NatHist> list_nh)
         {
             EFTKIS ef_tkis = new EFTKIS();
             if (list_nh == null || list_nh.Count() == 0)
@@ -1454,28 +1513,45 @@ namespace KIS
                     return (int)errorTransfer.no_ways;
                 }
                 // Получим список вагонов
-                List<PromNatHist> list_nh = ef_wag.GetNatHistSD(bss_sostav.natur,
+                //List<PromNatHist> list_nh = ef_wag.GetNatHistSD(bss_sostav.natur,
+                //    bss_sostav.day,
+                //    bss_sostav.month,
+                //    bss_sostav.year,
+                //    bss_sostav.hour,
+                //    bss_sostav.minute,
+                //    false).ToList();
+                List<Prom_NatHist> list_nh = ef_wag.GetSendingProm_NatHistOfNaturDateTime(bss_sostav.natur,
                     bss_sostav.day,
                     bss_sostav.month,
                     bss_sostav.year,
                     bss_sostav.hour,
                     bss_sostav.minute,
                     false).ToList();
+
                 // Проверим есть список вагонов по указанной натурке дате\месяцу\году\часу\минутах
                 if (list_nh == null || list_nh.Count() == 0)
                 {
                     // Списка Нет (могут не правильно указать время)
                     // Проверим есть список вагонов по указанной натурке дате\месяцу\году
-                    list_nh = ef_wag.GetNatHistSD(bss_sostav.natur,
+                    //list_nh = ef_wag.GetNatHistSD(bss_sostav.natur,
+                    //                    bss_sostav.day,
+                    //                    bss_sostav.month,
+                    //                    bss_sostav.year,
+                    //                    false).ToList();
+                    list_nh = ef_wag.GetSendingProm_NatHistOfNaturDate(bss_sostav.natur,
                                         bss_sostav.day,
                                         bss_sostav.month,
                                         bss_sostav.year,
                                         false).ToList();
-
                     if (list_nh == null || list_nh.Count() == 0)
                     {
                         // Проверим есть список вагонов по указанной натурке дате\месяцу\году
-                        list_nh = ef_wag.GetNatHistSD(bss_sostav.natur,
+                        //list_nh = ef_wag.GetNatHistSD(bss_sostav.natur,
+                        //                    bss_sostav.day + 1,
+                        //                    bss_sostav.month,
+                        //                    bss_sostav.year,
+                        //                    false).ToList();
+                        list_nh = ef_wag.GetSendingProm_NatHistOfNaturDate(bss_sostav.natur,
                                             bss_sostav.day + 1,
                                             bss_sostav.month,
                                             bss_sostav.year,
@@ -1484,7 +1560,7 @@ namespace KIS
                     if (list_nh != null && list_nh.Count() > 0)
                     {
                         // Скорректируем дату отправки
-                        bss_sostav.datetime = (DateTime)list_nh[0].GetSDDateTime();
+                        bss_sostav.datetime = (DateTime)list_nh[0].DT_SD;
                         ef_tkis.SaveRWBufferSendingSostav(bss_sostav);
                     }
 
@@ -1574,15 +1650,16 @@ namespace KIS
 
                 // Определим входящие данные по таблице Prom.NatHist
                 //List<PromNatHist> list = ef_wag.GetNatHistOfVagonLessPR(num_vag, dt_out_amkr, true).ToList();
-                PromNatHist pnh_arrival = ef_wag.GetNatHistOfVagonLessPR(num_vag, dt_out_amkr, true).FirstOrDefault();
+                //PromNatHist pnh_arrival = ef_wag.GetNatHistOfVagonLessPR(num_vag, dt_out_amkr, true).FirstOrDefault();
+                Prom_NatHist pnh_arrival = ef_wag.GetArrivalProm_NatHistOfVagonLess(num_vag, dt_out_amkr, true).FirstOrDefault();
                 if (pnh_arrival != null)
                 {
                     // Входящие данные есть, определим вагон
                     //DateTime dt = (DateTime)pnh_arrival.GetPRDateTime();
-                    Cars car = ef_rw.GetCarsOfSetKIS(pnh_arrival.N_VAG, (DateTime)pnh_arrival.GetPRDateTime(), pnh_arrival.N_NATUR);
+                    Cars car = ef_rw.GetCarsOfSetKIS(pnh_arrival.N_VAG, (DateTime)pnh_arrival.DT_PR, pnh_arrival.N_NATUR);
                     if (car == null)
                     {
-                        car = ef_rw.GetCarsOfSetKIS(pnh_arrival.N_VAG, (DateTime)pnh_arrival.GetPRDateTime(), pnh_arrival.N_NATUR, this.day_waiting_interval_cars * 24);
+                        car = ef_rw.GetCarsOfSetKIS(pnh_arrival.N_VAG, (DateTime)pnh_arrival.DT_PR, pnh_arrival.N_NATUR, this.day_waiting_interval_cars * 24);
                     }
                     if (car == null)
                     {
@@ -1593,7 +1670,7 @@ namespace KIS
                         {
                             // Вагона нет в системе без даты захода на АМКР но с указанной натуркой
                             // Ищем вагон без даты захода на АМКР без натурки но стоящий на УЗ с интервалом времени 24 часа
-                            car = ef_rw.GetCarsOfNumDT(pnh_arrival.N_VAG, (DateTime)pnh_arrival.GetPRDateTime(), this.day_waiting_interval_cars * 24);
+                            car = ef_rw.GetCarsOfNumDT(pnh_arrival.N_VAG, (DateTime)pnh_arrival.DT_PR, this.day_waiting_interval_cars * 24);
                             if (car == null)
                             {
                                 // Создать на пути прибытия и вернуть id_car
@@ -1606,7 +1683,7 @@ namespace KIS
                         else
                         {
                             // Обновить информацию о заходе вагона на АМКР
-                            int res_upd_car = UpdInpDelivery(car.id, (DateTime)pnh_arrival.GetPRDateTime(), pnh_arrival.N_NATUR);
+                            int res_upd_car = UpdInpDelivery(car.id, (DateTime)pnh_arrival.DT_PR, pnh_arrival.N_NATUR);
                             // Ошибка или операция не выполнилась
                             if (res_upd_car < 0) return res_upd_car;
                         }
@@ -1655,7 +1732,7 @@ namespace KIS
         /// <param name="id_sending_way"></param>
         /// <param name="pnh_arrival"></param>
         /// <returns></returns>
-        public int SetCarToSendingWayRailWay(int id_car, int natur_out, DateTime dt_out_amkr, int id_sending_way, PromNatHist pnh_arrival)
+        public int SetCarToSendingWayRailWay(int id_car, int natur_out, DateTime dt_out_amkr, int id_sending_way, Prom_NatHist pnh_arrival)
         {
 
             try
@@ -1757,7 +1834,7 @@ namespace KIS
         /// <param name="id_car"></param>
         /// <param name="pnh"></param>
         /// <returns></returns>
-        public int SetCarArrivalUZToRW(int id_car, PromNatHist pnh)
+        public int SetCarArrivalUZToRW(int id_car, Prom_NatHist pnh)
         {
             try
             {
@@ -1775,7 +1852,7 @@ namespace KIS
                 {
                     return (int)errorTransfer.no_ways;
                 }
-                return SetCarArrivalUZToRW(id_car, pnh.N_NATUR, (DateTime)pnh.GetPRDateTime(), id_ways_rw);
+                return SetCarArrivalUZToRW(id_car, pnh.N_NATUR, (DateTime)pnh.DT_PR, id_ways_rw);
             }
             catch (Exception e)
             {
@@ -1919,7 +1996,7 @@ namespace KIS
         /// </summary>
         /// <param name="pnh_arrival"></param>
         /// <returns></returns>
-        public int SetCarUZArrivalToRW(PromNatHist pnh_arrival)
+        public int SetCarUZArrivalToRW(Prom_NatHist pnh_arrival)
         {
             try
             {
@@ -1932,7 +2009,7 @@ namespace KIS
                 CarsInpDelivery delivery = null;
                 Stations station = null;
                 // Найдем вапгон в прибытии с УЗ КР (по данным метттранс)
-                ArrivalCars arr_car = ef_mt.GetArrivalCarsToNatur(pnh_arrival.N_NATUR, pnh_arrival.N_VAG, (DateTime)pnh_arrival.GetPRDateTime(), 15);
+                ArrivalCars arr_car = ef_mt.GetArrivalCarsToNatur(pnh_arrival.N_NATUR, pnh_arrival.N_VAG, (DateTime)pnh_arrival.DT_PR, 15);
                 if (arr_car != null)
                 {
                     station = rw_ref.GetStationsUZ(arr_car.CompositionIndex, true);
@@ -1951,7 +2028,7 @@ namespace KIS
                     (arr_car != null ? arr_car.IDSostav : (pnh_arrival.N_NATUR * -1)),
                     delivery,
                     rw_oper.OperationSetWay,
-                    new OperationSetWay(id_way, arr_car != null ? arr_car.Position : (int)pnh_arrival.NPP, arr_car != null ? arr_car.DateOperation : (DateTime)pnh_arrival.GetPRDateTime(), 15, null));
+                    new OperationSetWay(id_way, arr_car != null ? arr_car.Position : (int)pnh_arrival.NPP, arr_car != null ? arr_car.DateOperation : (DateTime)pnh_arrival.DT_PR, 15, null));
                 return res_create_car;
             }
             catch (Exception e)
@@ -2090,15 +2167,18 @@ namespace KIS
                 {
                     EFWagons ef_wag = new EFWagons();
                     // Найдем в КИС отправленный вагон на УЗ
-                    List<PromNatHist> list = ef_wag.GetNatHistOfVagonMoreSD(car_previous.num, (DateTime)car_previous.dt_inp_amkr, false).ToList();
-                    PromNatHist pnh_sending = ef_wag.GetNatHistOfVagonMoreSD(car_previous.num, (DateTime)car_previous.dt_inp_amkr, false).FirstOrDefault();
+                    //List<PromNatHist> list = ef_wag.GetNatHistOfVagonMoreSD(car_previous.num, (DateTime)car_previous.dt_inp_amkr, false).ToList();
+                    //PromNatHist pnh_sending = ef_wag.GetNatHistOfVagonMoreSD(car_previous.num, (DateTime)car_previous.dt_inp_amkr, false).FirstOrDefault();
+                    //List<Prom_NatHist> list = ef_wag.GetProm_NatHistOfVagonMoreSD(car_previous.num, (DateTime)car_previous.dt_inp_amkr, false).ToList();
+                    Prom_NatHist pnh_sending = ef_wag.GetSendingProm_NatHistOfVagonMore(car_previous.num, (DateTime)car_previous.dt_inp_amkr, false).FirstOrDefault();
+
                     if (pnh_sending != null)
                     {
                         int id_stations_uz = rw_ref.GetIDStationsOfKIS((int)pnh_sending.K_ST_NAZN);
                         int id_way_uz = rw_ref.GetIDDefaultWayOfStation(id_stations_uz, "2");
                         // Вагон стоит на путях станций АМКР
                         // Обновим CarsOutDelivery и сдадим на УЗ
-                        int res_sending_car = SetCarSendingUZToRW(car_previous.id, pnh_sending.N_NATUR, (DateTime)pnh_sending.GetSDDateTime(), id_way_uz);
+                        int res_sending_car = SetCarSendingUZToRW(car_previous.id, pnh_sending.N_NATUR, (DateTime)pnh_sending.DT_SD, id_way_uz);
 
                     }
                 }
@@ -2152,8 +2232,10 @@ namespace KIS
 
             EFWagons ef_wag = new EFWagons();
             EFTKIS ef_tkis = new EFTKIS();
-            List<PromVagon> list_pv = ef_wag.GetVagon(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
-            List<PromNatHist> list_pnh = ef_wag.GetNatHistPR(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            //List<PromVagon> list_pv = ef_wag.GetVagon(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            List<Prom_Vagon> list_pv = ef_wag.GetArrivalProm_VagonOfNaturStationDate(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            //List<PromNatHist> list_pnh = ef_wag.GetNatHistPR(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            List<Prom_NatHist> list_pnh = ef_wag.GetArrivalProm_NatHistOfNaturStationDate(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year, null).ToList();
             // Ситуация-1. Проверим наличие вагонов в системе КИС (Могли отменить натурку данных нет в таблицах PromVagons, NanHist)
             if ((list_pv == null || list_pv.Count() == 0) & (list_pnh == null || list_pnh.Count() == 0))
             {

@@ -236,7 +236,7 @@ namespace KIS
         /// <param name="id_sostav"></param>
         /// <param name="pv"></param>
         /// <returns></returns>
-        public bool CheckingWagonToSAPSupply(int id_sostav, PromVagon pv, ArrivalCars cars )
+        public bool CheckingWagonToSAPSupply(int id_sostav, Prom_Vagon pv, ArrivalCars cars )
         {
             EFSAP ef_sap = new EFSAP();
             EFWagons ef_wag = new EFWagons();
@@ -277,7 +277,7 @@ namespace KIS
                     // Создадим строку в САП (id состава)
                     new_wag = new trWagon()
                     {
-                        Position = pv != null ? pv.NPP : 0,
+                        Position = pv != null && pv.NPP !=null ? (int)pv.NPP : 0,
                         CarriageNumber = pv.N_VAG,
                         CountryCode = pv != null ? pv.KOD_STRAN != null ? (int)pv.KOD_STRAN : 0 : 0,
                         Weight = pv != null ? pv.WES_GR != null ? (float)pv.WES_GR : 0 : 0,
@@ -299,7 +299,7 @@ namespace KIS
             return true;
         }
         /// Проверка наличия вагона в справочнеке входящие поставки, если нет создать
-        public bool CheckingWagonToSAPSupply(int id_sostav, PromNatHist pnh, ArrivalCars cars)
+        public bool CheckingWagonToSAPSupply(int id_sostav, Prom_NatHist pnh, ArrivalCars cars)
         {
             EFSAP ef_sap = new EFSAP();
             EFWagons ef_wag = new EFWagons();

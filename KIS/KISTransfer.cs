@@ -13,7 +13,7 @@ using EFRC.Concrete;
 using EFMT.Entities;
 using EFMT.Concrete;
 using EFRC.Entities;
-using EFKIS.Helpers;
+//using EFKIS.Helpers;
 using RW;
 using EFRW.Concrete;
 using EFRW.Entities;
@@ -221,11 +221,11 @@ namespace KIS
         /// </summary>
         /// <param name="list_pv"></param>
         /// <returns></returns>
-        protected string GetWagonsToString(List<PromVagon> list_pv)
+        protected string GetWagonsToString(List<Prom_Vagon> list_pv)
         {
             if (list_pv == null | list_pv.Count() == 0) return null;
             string res = null;
-            foreach (PromVagon pv in list_pv)
+            foreach (Prom_Vagon pv in list_pv)
             {
                 res += pv.N_VAG.ToString() + ";";
             }
@@ -236,11 +236,11 @@ namespace KIS
         /// </summary>
         /// <param name="list_nh"></param>
         /// <returns></returns>
-        protected string GetWagonsToString(List<PromNatHist> list_nh)
+        protected string GetWagonsToString(List<Prom_NatHist> list_nh)
         {
             if (list_nh == null | list_nh.Count() == 0) return null;
             string res = null;
-            foreach (PromNatHist pv in list_nh)
+            foreach (Prom_NatHist pv in list_nh)
             {
                 res += pv.N_VAG.ToString() + ";";
             }
@@ -266,7 +266,7 @@ namespace KIS
         /// </summary>
         /// <param name="list_pv"></param>
         /// <returns></returns>
-        protected int[] GetWagonsToInt(List<PromVagon> list_pv)
+        protected int[] GetWagonsToInt(List<Prom_Vagon> list_pv)
         {
             if (list_pv == null | list_pv.Count() == 0) return null;
             return GetWagonsToInt(GetWagonsToString(list_pv));
@@ -309,7 +309,7 @@ namespace KIS
         /// Получить или обновить общий список вагонов, список не поставленных и не обнавленных вагонов
         /// </summary>
         /// <param name="orc_sostav"></param>
-        public int SetListWagon(ref IBufferArrivalSostav orc_sostav, List<PromVagon> list_pv, List<PromNatHist> list_nh)
+        public int SetListWagon(ref IBufferArrivalSostav orc_sostav, List<Prom_Vagon> list_pv, List<Prom_NatHist> list_nh)
         {
             EFTKIS ef_tkis = new EFTKIS();
             if (list_pv.Count() == 0 & list_nh.Count() == 0) return 0; // Списков вагонов нет
@@ -394,8 +394,11 @@ namespace KIS
             {
                 EFWagons ef_wag = new EFWagons();
                 // Формирование общего списка вагонов и постановка их на путь станции прибытия
-                List<PromVagon> list_pv = ef_wag.GetVagon(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
-                List<PromNatHist> list_nh = ef_wag.GetNatHistPR(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+                //List<PromVagon> list_pv = ef_wag.GetVagon(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+                List<Prom_Vagon> list_pv = ef_wag.GetArrivalProm_VagonOfNaturStationDate(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+                //List<PromNatHist> list_nh = ef_wag.GetNatHistPR(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+                List<Prom_NatHist> list_nh = ef_wag.GetArrivalProm_NatHistOfNaturStationDate(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+
                 return SetListWagon(ref orc_sostav, list_pv, list_nh);
             }
             catch (Exception e)

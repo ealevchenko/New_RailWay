@@ -375,23 +375,23 @@ namespace Testing
         //{
         //    WL(promsostav.GetNatHist(natur, station, day, month, year, wag));
         //}
-        public void Test_PROM_GetPromNatHist()
-        {
-            EFWagons ef_wag = new EFWagons();
-            List<PromNatHist> list = ef_wag.GetPromNatHist().Where(n => n.N_VAG == 54604095).ToList();
-            foreach (PromNatHist t in list)
-            {
-                WL(t);
-            }
-        }
+        //public void Test_PROM_GetPromNatHist()
+        //{
+        //    EFWagons ef_wag = new EFWagons();
+        //    List<PromNatHist> list = ef_wag.GetPromNatHist().Where(n => n.N_VAG == 54604095).ToList();
+        //    foreach (PromNatHist t in list)
+        //    {
+        //        WL(t);
+        //    }
+        //}
 
-        public void WL(PromNatHist t)
-        {
-            if (t == null) { Console.WriteLine(" = Null"); return; }
+        //public void WL(PromNatHist t)
+        //{
+        //    if (t == null) { Console.WriteLine(" = Null"); return; }
 
-            Console.WriteLine("N_VAG: {0},\t NPP: {1},\t GODN: {2},\t K_ST: {3},\t KOD_STRAN: {4},\t N_NATUR: {5},\t ST_OTPR: {6}",
-                    t.N_VAG, t.NPP, t.GODN, t.K_ST, t.KOD_STRAN, t.N_NATUR, t.ST_OTPR);
-        }
+        //    Console.WriteLine("N_VAG: {0},\t NPP: {1},\t GODN: {2},\t K_ST: {3},\t KOD_STRAN: {4},\t N_NATUR: {5},\t ST_OTPR: {6}",
+        //            t.N_VAG, t.NPP, t.GODN, t.K_ST, t.KOD_STRAN, t.N_NATUR, t.ST_OTPR);
+        //}
 
         //public void Test_PromContent_GetCex()
         //{
@@ -713,21 +713,21 @@ namespace Testing
             //}
         }
 
-        public void WL(PromSostav t)
-        {
-            if (t == null) { Console.WriteLine(" = Null"); return; }
-            Console.WriteLine("N_NATUR: {0},\t D_DD: {1},\t D_MM: {2},\t D_YY: {3},\t T_HH: {4},\t T_MI: {5},\t K_ST: {6},\t N_PUT: {7},\t NAPR: {8},\t P_OT: {9},\t V_P: {10}",
-                    t.N_NATUR, t.D_DD, t.D_MM, t.D_YY, t.T_HH, t.T_MI, t.K_ST, t.N_PUT, t.NAPR, t.P_OT, t.V_P);
-        }
+        //public void WL(PromSostav t)
+        //{
+        //    if (t == null) { Console.WriteLine(" = Null"); return; }
+        //    Console.WriteLine("N_NATUR: {0},\t D_DD: {1},\t D_MM: {2},\t D_YY: {3},\t T_HH: {4},\t T_MI: {5},\t K_ST: {6},\t N_PUT: {7},\t NAPR: {8},\t P_OT: {9},\t V_P: {10}",
+        //            t.N_NATUR, t.D_DD, t.D_MM, t.D_YY, t.T_HH, t.T_MI, t.K_ST, t.N_PUT, t.NAPR, t.P_OT, t.V_P);
+        //}
 
-        public void Test_PROM_GetProm_Vagon()
-        {
-            EFWagons ef_wag = new EFWagons();
-            List<Prom_Vagon> list = ef_wag.GetProm_Vagon().ToList();
-            //List<Prom_Sostav> list_input = ef_wag.GetInputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), false).ToList();
-            //List<Prom_Sostav> list_output = ef_wag.GetOutputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), true).ToList();
+        //public void Test_PROM_GetProm_Vagon()
+        //{
+        //    EFWagons ef_wag = new EFWagons();
+        //    List<Prom_Vagon> list = ef_wag.GetProm_Vagon().ToList();
+        //    //List<Prom_Sostav> list_input = ef_wag.GetInputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), false).ToList();
+        //    //List<Prom_Sostav> list_output = ef_wag.GetOutputProm_Sostav(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59), true).ToList();
 
-        }
+        //}
 
         //public void Test_PROM_GetProm_NatHist()
         //{
@@ -795,23 +795,23 @@ namespace Testing
 
         #region PromNatHist
 
-        public void Test_PROM_GetNatHistOfVagonMoreSD()
-        {
-            try
-            {
-                //EFWagons ef_wag1 = new EFWagons();
-                DateTime start = DateTime.Now;
-                List<PromNatHist> list = ef_wag.GetNatHistOfVagonMoreSD(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
-                DateTime stop = DateTime.Now;
-                TimeSpan diff1 = stop.Subtract(start);
-                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
-            }
-            catch (Exception e)
-            {
+        //public void Test_PROM_GetNatHistOfVagonMoreSD()
+        //{
+        //    try
+        //    {
+        //        //EFWagons ef_wag1 = new EFWagons();
+        //        DateTime start = DateTime.Now;
+        //        List<PromNatHist> list = ef_wag.GetNatHistOfVagonMoreSD(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+        //        DateTime stop = DateTime.Now;
+        //        TimeSpan diff1 = stop.Subtract(start);
+        //        Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+        //    }
+        //    catch (Exception e)
+        //    {
 
-                return;
-            }
-        }
+        //        return;
+        //    }
+        //}
 
         public void Test_PROM_GetProm_NatHistOfVagonMoreSD()
         {
@@ -819,7 +819,7 @@ namespace Testing
             {
                 //EFWagons ef_wag2 = new EFWagons();
                 DateTime start = DateTime.Now;
-                List<Prom_NatHist> list1 = ef_wag.GetProm_NatHistOfVagonMoreSD(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                List<Prom_NatHist> list1 = ef_wag.GetSendingProm_NatHistOfVagonMore(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
                 DateTime stop = DateTime.Now;
                 TimeSpan diff1 = stop.Subtract(start);
                 Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
@@ -838,7 +838,7 @@ namespace Testing
             {
                 //EFWagons ef_wag2 = new EFWagons();
                 DateTime start = DateTime.Now;
-                List<Prom_NatHist> list1 = ef_wag.GetProm_NatHistOfVagonMoreEqualSD(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                List<Prom_NatHist> list1 = ef_wag.GetSendingProm_NatHistOfVagonMoreEqual(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
                 DateTime stop = DateTime.Now;
                 TimeSpan diff1 = stop.Subtract(start);
                 Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
@@ -851,23 +851,23 @@ namespace Testing
             }
         }
 
-        public void Test_PROM_GetNatHistOfVagonLessPR()
-        {
-            try
-            {
-                //EFWagons ef_wag1 = new EFWagons();
-                DateTime start = DateTime.Now;
-                List<PromNatHist> list = ef_wag.GetNatHistOfVagonLessPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
-                DateTime stop = DateTime.Now;
-                TimeSpan diff1 = stop.Subtract(start);
-                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
-            }
-            catch (Exception e)
-            {
+        //public void Test_PROM_GetNatHistOfVagonLessPR()
+        //{
+        //    try
+        //    {
+        //        //EFWagons ef_wag1 = new EFWagons();
+        //        DateTime start = DateTime.Now;
+        //        List<PromNatHist> list = ef_wag.GetNatHistOfVagonLessPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+        //        DateTime stop = DateTime.Now;
+        //        TimeSpan diff1 = stop.Subtract(start);
+        //        Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+        //    }
+        //    catch (Exception e)
+        //    {
 
-                return;
-            }
-        }
+        //        return;
+        //    }
+        //}
 
         public void Test_PROM_GetProm_NatHistOfVagonLessPR()
         {
@@ -875,7 +875,7 @@ namespace Testing
             {
                 //EFWagons ef_wag2 = new EFWagons();
                 DateTime start = DateTime.Now;
-                List<Prom_NatHist> list1 = ef_wag.GetProm_NatHistOfVagonLessPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                List<Prom_NatHist> list1 = ef_wag.GetArrivalProm_NatHistOfVagonLess(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
                 DateTime stop = DateTime.Now;
                 TimeSpan diff1 = stop.Subtract(start);
                 Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
@@ -888,23 +888,23 @@ namespace Testing
             }
         }
 
-        public void Test_PROM_GetNatHistOfVagonLessEqualPR()
-        {
-            try
-            {
-                //EFWagons ef_wag1 = new EFWagons();
-                DateTime start = DateTime.Now;
-                List<PromNatHist> list = ef_wag.GetNatHistOfVagonLessEqualPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
-                DateTime stop = DateTime.Now;
-                TimeSpan diff1 = stop.Subtract(start);
-                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
-            }
-            catch (Exception e)
-            {
+        //public void Test_PROM_GetNatHistOfVagonLessEqualPR()
+        //{
+        //    try
+        //    {
+        //        //EFWagons ef_wag1 = new EFWagons();
+        //        DateTime start = DateTime.Now;
+        //        List<PromNatHist> list = ef_wag.GetNatHistOfVagonLessEqualPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+        //        DateTime stop = DateTime.Now;
+        //        TimeSpan diff1 = stop.Subtract(start);
+        //        Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
+        //    }
+        //    catch (Exception e)
+        //    {
 
-                return;
-            }
-        }
+        //        return;
+        //    }
+        //}
 
         public void Test_PROM_GetProm_NatHistOfVagonLessEqualPR()
         {
@@ -912,7 +912,7 @@ namespace Testing
             {
                 //EFWagons ef_wag2 = new EFWagons();
                 DateTime start = DateTime.Now;
-                List<Prom_NatHist> list1 = ef_wag.GetProm_NatHistOfVagonLessEqualPR(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
+                List<Prom_NatHist> list1 = ef_wag.GetArrivalProm_NatHistOfVagonLessEqual(52921004, new DateTime(2017, 6, 19, 22, 50, 0), true).ToList();
                 DateTime stop = DateTime.Now;
                 TimeSpan diff1 = stop.Subtract(start);
                 Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);
@@ -925,23 +925,23 @@ namespace Testing
             }
         }
 
-        public void Test_PROM_GetNatHistPR()
-        {
-            try
-            {
+        //public void Test_PROM_GetNatHistPR()
+        //{
+        //    try
+        //    {
                 
-                DateTime start = DateTime.Now;
-                List<PromNatHist> list = ef_wag.GetNatHistPR(3469, 1, 6, 6, 2018, true).ToList();
-                DateTime stop = DateTime.Now;
-                TimeSpan diff1 = stop.Subtract(start);
-                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
-            }
-            catch (Exception e)
-            {
+        //        DateTime start = DateTime.Now;
+        //        List<PromNatHist> list = ef_wag.GetNatHistPR(3469, 1, 6, 6, 2018, true).ToList();
+        //        DateTime stop = DateTime.Now;
+        //        TimeSpan diff1 = stop.Subtract(start);
+        //        Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+        //    }
+        //    catch (Exception e)
+        //    {
 
-                return;
-            }
-        }
+        //        return;
+        //    }
+        //}
 
         public void Test_PROM_GetArrivalProm_NatHistOfNaturStationDate()
         {
@@ -961,13 +961,33 @@ namespace Testing
             }
         }
 
-        public void Test_PROM_GetArrivalProm_NatHistOfNaturStationDateNum()
+        public void Test_PROM_GetArrivalProm_VagonOfNaturStationDate()
         {
             try
             {
                 
                 DateTime start = DateTime.Now;
-                Prom_NatHist nh = ef_wag.GetArrivalProm_NatHistOfNaturStationDateNum(3469, 1, 6, 6, 2018, 62975255);
+                List<Prom_Vagon> list = ef_wag.GetArrivalProm_VagonOfNaturStationDate(3469, 1, 6, 6, 2018, false).ToList();
+                DateTime stop = DateTime.Now;
+                TimeSpan diff1 = stop.Subtract(start);
+                Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                
+            }
+            catch (Exception e)
+            {
+
+                return;
+            }
+        }
+
+
+
+        public void Test_PROM_GetArrivalProm_VagonOfNaturStationDateNum()
+        {
+            try
+            {
+                
+                DateTime start = DateTime.Now;
+                Prom_Vagon pv = ef_wag.GetArrivalProm_VagonOfNaturNumStationDate(3469, 62975255, 1, 6, 6, 2018);
                 DateTime stop = DateTime.Now;
                 TimeSpan diff1 = stop.Subtract(start);
                 Console.WriteLine("Время выполнения млc - {0}", diff1.TotalMilliseconds);                

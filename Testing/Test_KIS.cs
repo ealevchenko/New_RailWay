@@ -187,7 +187,7 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferSendingSostav bss = ef_tkis.GetRWBufferSendingSostav(930);
+            EFKIS.Entities.RWBufferSendingSostav bss = ef_tkis.GetRWBufferSendingSostav(958);
             int res_put = kis_trans.SetWayRailWayOfKIS(ref bss);
 
             //int res = kis_trans.SetCarToSendingWayRailWay(bss.natur, 55224646, bss.datetime, 1, 1);

@@ -762,27 +762,30 @@ namespace KIS
 
                 int idsostav = ef_sap.GetDefaultIDSAPIncSupply();
                 // Получим информацию для заполнения вагона с учетом отсутствия данных в PromVagon
-                PromVagon pv = ef_wag.GetVagon(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
-                PromNatHist pnh = ef_wag.GetNatHistPR(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                //PromVagon pv = ef_wag.GetVagon(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                Prom_Vagon pv = ef_wag.GetArrivalProm_VagonOfNaturNumStationDate(natur, num_vag, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year);
+                //PromNatHist pnh = ef_wag.GetNatHistPR(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                Prom_NatHist pnh = ef_wag.GetArrivalProm_NatHistOfNaturNumStationDate(natur, num_vag, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year);
                 if (pv == null & pnh == null) return (int)errorTransfer.no_wagon_is_list;   // Ошибка нет вагонов в списке
                 if (pv == null)
                 {
-                    pv = new PromVagon()
-                    {
-                        N_VAG = pnh.N_VAG,
-                        NPP = pnh != null ? (int)pnh.NPP : 0,
-                        GODN = pnh.GODN,
-                        K_ST = pnh.K_ST,
-                        N_NATUR = pnh.N_NATUR,
-                        D_PR_DD = pnh.D_PR_DD,
-                        D_PR_MM = pnh.D_PR_MM,
-                        D_PR_YY = pnh.D_PR_YY,
-                        T_PR_HH = pnh.T_PR_HH,
-                        T_PR_MI = pnh.T_PR_MI,
-                        KOD_STRAN = pnh.KOD_STRAN,
-                        WES_GR = pnh.WES_GR,
-                        K_GR = pnh.K_GR
-                    };
+                    pv = ef_wag.CreateProm_Vagon(pnh);
+                    //pv = new Prom_Vagon()
+                    //{
+                    //    N_VAG = pnh.N_VAG,
+                    //    NPP = pnh != null ? (int)pnh.NPP : 0,
+                    //    GODN = pnh.GODN,
+                    //    K_ST = pnh.K_ST,
+                    //    N_NATUR = pnh.N_NATUR,
+                    //    D_PR_DD = pnh.D_PR_DD,
+                    //    D_PR_MM = pnh.D_PR_MM,
+                    //    D_PR_YY = pnh.D_PR_YY,
+                    //    T_PR_HH = pnh.T_PR_HH,
+                    //    T_PR_MI = pnh.T_PR_MI,
+                    //    KOD_STRAN = pnh.KOD_STRAN,
+                    //    WES_GR = pnh.WES_GR,
+                    //    K_GR = pnh.K_GR
+                    //};
                 }
                 ArrivalCars mt_list = GetIDSostavCloseMTCar(natur, num_vag, dt_amkr, pv.WES_GR);
                 if (mt_list != null)
@@ -931,7 +934,9 @@ namespace KIS
                 return (int)errorTransfer.no_ways;
             }
             // Обновим информацию по количеству вагонов в таблице NatHist
-            List<PromNatHist> list_nh = ef_wag.GetNatHistPR(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+            //List<PromNatHist> list_nh = ef_wag.GetNatHistPR(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+            List<Prom_NatHist> list_nh = ef_wag.GetArrivalProm_NatHistOfNaturStationDate(orc_sostav.natur, orc_sostav.id_station_kis, orc_sostav.day, orc_sostav.month, orc_sostav.year, orc_sostav.napr == 2 ? true : false).ToList();
+
             orc_sostav.count_nathist = list_nh.Count() > 0 ? list_nh.Count() as int? : null;
             int res_upd = UpdCarsToStation(ref orc_sostav, (int)id_stations, (int)id_ways);
             return res_upd;
@@ -1019,7 +1024,8 @@ namespace KIS
             string mess_update_vag_err1 = "Ошибка " + mess_update_vag_err + mess;
             try
             {
-                PromNatHist pnh = ef_wag.GetNatHistPR(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                //PromNatHist pnh = ef_wag.GetNatHistPR(natur, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year, num_vag);
+                Prom_NatHist pnh = ef_wag.GetArrivalProm_NatHistOfNaturNumStationDate(natur, num_vag, id_stat_kis, dt_amkr.Day, dt_amkr.Month, dt_amkr.Year);
                 if (pnh == null)
                 {
                     String.Format(mess_update_vag_err1 + ", код ошибки:{0}", errorTransfer.no_wagon_is_nathist.ToString()).WriteError(servece_owner, eventID);
@@ -1326,13 +1332,15 @@ namespace KIS
             try
             {
                 // Найдем вагон в натурном листе PromNatHist
-                PromNatHist pnh = ef_wag.GetNatHistOfVagonLessEqualPR(vag_is.N_VAG, dt_input, true).FirstOrDefault();
+                //PromNatHist pnh = ef_wag.GetNatHistOfVagonLessEqualPR(vag_is.N_VAG, dt_input, true).FirstOrDefault();
+                Prom_NatHist pnh = ef_wag.GetArrivalProm_NatHistOfVagonLessEqual(vag_is.N_VAG, dt_input, true).FirstOrDefault();
                 if (pnh == null)
                 {
                     String.Format(mess_vag_err1 + ", код ошибки:{0}", errorTransfer.no_wagon_is_nathist.ToString()).WriteError(servece_owner, eventID);
                     return (int)errorTransfer.no_wagon_is_nathist;
                 }
-                DateTime dt_amkr = (DateTime)EFKIS.Helpers.Filters.GetPRDateTime(pnh);
+                //DateTime dt_amkr = (DateTime)EFKIS.Helpers.Filters.GetPRDateTime(pnh);
+                DateTime dt_amkr = (DateTime)pnh.DT_PR;
                 int id_sostav = ef_sap.GetDefaultIDSAPIncSupply();
                 int? id_operarion = null;
                 DateTime? data_uz = null;
@@ -1699,13 +1707,15 @@ namespace KIS
             try
             {
                 // Найдем вагон в натурном листе PromNatHist
-                PromNatHist pnh = ef_wag.GetNatHistOfVagonLessEqualPR(vag_os.N_VAG, dt_input, true).FirstOrDefault();
+                //PromNatHist pnh = ef_wag.GetNatHistOfVagonLessEqualPR(vag_os.N_VAG, dt_input, true).FirstOrDefault();
+                Prom_NatHist pnh = ef_wag.GetArrivalProm_NatHistOfVagonLessEqual(vag_os.N_VAG, dt_input, true).FirstOrDefault();
                 if (pnh == null)
                 {
                     String.Format(mess_vag_err1 + ", код ошибки:{0}", errorTransfer.no_wagon_is_nathist.ToString()).WriteError(servece_owner, eventID);
                     return (int)errorTransfer.no_wagon_is_nathist;
                 }
-                DateTime dt_amkr = (DateTime)EFKIS.Helpers.Filters.GetPRDateTime(pnh);
+                //DateTime dt_amkr = (DateTime)EFKIS.Helpers.Filters.GetPRDateTime(pnh);
+                DateTime dt_amkr = (DateTime)pnh.DT_PR;
                 int id_sostav = ef_sap.GetDefaultIDSAPIncSupply();
                 int? id_operarion = null;
                 DateTime? data_uz = null;
@@ -1862,8 +1872,10 @@ namespace KIS
 
             EFWagons ef_wag = new EFWagons();
             EFTKIS ef_tkis = new EFTKIS();
-            List<PromVagon> list_pv = ef_wag.GetVagon(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
-            List<PromNatHist> list_pnh = ef_wag.GetNatHistPR(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            //List<PromVagon> list_pv = ef_wag.GetVagon(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            List<Prom_Vagon> list_pv = ef_wag.GetArrivalProm_VagonOfNaturStationDate(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            //List<PromNatHist> list_pnh = ef_wag.GetNatHistPR(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year).ToList();
+            List<Prom_NatHist> list_pnh = ef_wag.GetArrivalProm_NatHistOfNaturStationDate(bas.natur, bas.id_station_kis, bas.day, bas.month, bas.year, null).ToList();
             // Ситуация-1. Проверим наличие вагонов в системе КИС (Могли отменить натурку данных нет в таблицах PromVagons, NanHist)
             if ((list_pv == null || list_pv.Count() == 0) & (list_pnh == null || list_pnh.Count() == 0))
             {
