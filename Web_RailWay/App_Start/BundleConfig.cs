@@ -12,7 +12,7 @@ namespace Web_RailWay
             //JS
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         //"~/Scripts/jquery-3.2.1.js"));
-                        "~/Scripts/jquery-3.2.1.min.js"));
+                        "~/Scripts/jquery-3.3.1.min.js"));
             //"~/Scripts/jquery-{version}.js"));
 
             //bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
