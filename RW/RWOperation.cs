@@ -717,7 +717,11 @@ namespace RW
                 return -1;
             }        
         }
-
+        /// <summary>
+        /// Сбросить посдеднюю операцию закрытия и сохранить вагон
+        /// </summary>
+        /// <param name="id_car"></param>
+        /// <returns></returns>
         public int ClearCloseSaveCar(int id_car)
         { 
             try
@@ -733,6 +737,30 @@ namespace RW
                 return -1;
             }        
         }
+        /// <summary>
+        /// Удалить последнюю операцию, а предпоследнюю открыть
+        /// </summary>
+        /// <param name="id_car"></param>
+        /// <returns></returns>
+        public int DeleteLastOperationSaveCar(int id_car)
+        {
+            try
+            {
+                Cars car = ef_rw.GetCars(id_car);
+                CarOperations del = car.GetLastOperations();
+                CarOperations res_del = ef_rw.DeleteCarOperations(del.id);
+                car.GetLastOperations().ClearCloseOperations();
+                return ef_rw.SaveCars(car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DeleteLastOperationSaveCar(id_car={0})",
+                    id_car), servece_owner, eventID);
+                return -1;
+            }
+        }
+
+
         /// <summary>
         /// Коррекция номера позиции вагона на пути
         /// </summary>

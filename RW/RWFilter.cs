@@ -434,7 +434,7 @@ namespace RW
         {
             try
             {
-                List<CarOperations> list = null;
+                //List<CarOperations> list = null;
                 if (operations == null) return null;
                 if (operations.dt_inp_station != null & operations.dt_out_station != null) { operations.dt_out_station = null; }
                 if (operations.dt_inp_way != null & operations.dt_out_way != null) { operations.dt_out_way = null; }

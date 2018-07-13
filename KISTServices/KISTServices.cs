@@ -768,10 +768,10 @@ namespace KISTServices
             {
                 // Проверка выполнения службы переноса из Хост
                 int interval_host = RWSetting.GetDB_Config_DefaultSetting("IntervalTransferHost", service.TransferHost, 300, false);
-                int? code_run_service = service.TransferArrivalKIS.GetCodeReturnServices(interval_host + 60);
+                int? code_run_service = service.TransferHost.GetCodeReturnServices(interval_host + 60);
                 if (code_run_service == null)
                 {
-                    String.Format("Поток {0} сервиса {1} - заблокирован, из-за остановки службы {2}", this.thread_sending, this.servece_name, service.TransferArrivalKIS).WriteError(servece_name, eventID);
+                    String.Format("Поток {0} сервиса {1} - заблокирован, из-за остановки службы {2}", this.thread_sending, this.servece_name, service.TransferHost).WriteError(servece_name, eventID);
                     service.TransferSendingKIS.WriteServices(DateTime.Now, DateTime.Now, -2);
                     return;
                 }

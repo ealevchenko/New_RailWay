@@ -105,7 +105,7 @@ namespace Testing
         {
             KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RCBufferInputSostav bis = ef_tkis.GetRCBufferInputSostav(1379);
+            EFKIS.Entities.RCBufferInputSostav bis = ef_tkis.GetRCBufferInputSostav(2563);
             kis_trans.TransferArrivalToStation(ref bis);
         }
 
@@ -158,7 +158,7 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(2883);
+            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(2563);
             kis_trans.UpdWayRailWayOfKIS(ref arr_s);
         }
 
@@ -187,7 +187,7 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferSendingSostav bss = ef_tkis.GetRWBufferSendingSostav(958);
+            EFKIS.Entities.RWBufferSendingSostav bss = ef_tkis.GetRWBufferSendingSostav(869);
             int res_put = kis_trans.SetWayRailWayOfKIS(ref bss);
 
             //int res = kis_trans.SetCarToSendingWayRailWay(bss.natur, 55224646, bss.datetime, 1, 1);
@@ -199,6 +199,13 @@ namespace Testing
             KISThread kis_t = new KISThread(service.TransferSendingKIS);
             kis_t.StartTransferSendingOfKIS();
         }
+
+        public void Test_KIS_RW_Transfer_IsVagonOfSendingNatHistNatur()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+            bool res = kis_trans.IsVagonOfSendingNatHistNatur(3903, 65888587, new DateTime(2018, 6, 22, 6, 05, 0)); //2018-06-22T06:05:00
+        }
+
 
     }
 }
