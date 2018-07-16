@@ -158,7 +158,7 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(2563);
+            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(3239);
             kis_trans.UpdWayRailWayOfKIS(ref arr_s);
         }
 

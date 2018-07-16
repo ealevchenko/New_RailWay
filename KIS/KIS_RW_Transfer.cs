@@ -1221,8 +1221,26 @@ namespace KIS
                 // Обновим информацию по количеству вагонов в таблице NatHist
                 //List<PromNatHist> list_nh = ef_wag.GetNatHistPR(bas_sostav.natur, bas_sostav.id_station_kis, bas_sostav.day, bas_sostav.month, bas_sostav.year, bas_sostav.napr == 2 ? true : false).ToList();
                 List<Prom_NatHist> list_nh = ef_wag.GetArrivalProm_NatHistOfNaturStationDate(bas_sostav.natur, bas_sostav.id_station_kis, bas_sostav.day, bas_sostav.month, bas_sostav.year, bas_sostav.napr == 2 ? true : false).ToList();
-
-                bas_sostav.count_nathist = list_nh.Count() > 0 ? list_nh.Count() as int? : null;
+                if (list_nh== null || list_nh.Count()==0) {
+                    DateTime next_date = new DateTime(bas_sostav.year, bas_sostav.month, bas_sostav.day).AddDays(1); // Следующая дата (натурка водится в 23:00 а вагон принимается на следующий день) 
+                    list_nh = ef_wag.GetArrivalProm_NatHistOfNaturStationDate(bas_sostav.natur, bas_sostav.id_station_kis, next_date.Day, next_date.Month, next_date.Year, bas_sostav.napr == 2 ? true : false).ToList();
+                }
+                DateTime dt_pr = bas_sostav.datetime;
+                // Проверим 
+                if (list_nh == null || list_nh.Count() == 0)
+                {
+                    bas_sostav.count_nathist = null;
+                }
+                else
+                {
+                    bas_sostav.count_nathist = list_nh.Count();
+                    if ((DateTime)list_nh[0].DT_PR!= null && dt_pr != (DateTime)list_nh[0].DT_PR)
+                    {
+                        dt_pr = (DateTime)list_nh[0].DT_PR;
+                        String.Format(mess_upd_sostav + mess_upd + " - не совпадают даты прибытия состава {0} и вагонов {1}, будет произведена корректировка даты и времени прибытия", bas_sostav.datetime, list_nh[0].DT_PR).WriteWarning(servece_owner, eventID);
+                    }
+                }
+                 //= list_nh.Count() > 0 ? list_nh.Count() as int? : null;
 
                 List<int> set_wagons = new List<int>();
                 // Обнавляем вагоны
@@ -1246,7 +1264,7 @@ namespace KIS
                 // Ставим вагоны на путь станции
                 foreach (int wag in set_wagons)
                 {
-                    if (result.SetResultUpdate(UpdCarToWayRailWay(bas_sostav.natur, wag, bas_sostav.datetime, id_ways_rw)))
+                    if (result.SetResultUpdate(UpdCarToWayRailWay(bas_sostav.natur, wag, dt_pr, id_ways_rw)))
                     {
                         // Ошибка
                         bas_sostav.list_no_update_wagons += wag.ToString() + ";";

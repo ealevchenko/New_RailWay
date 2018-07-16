@@ -73,6 +73,7 @@ namespace Testing
             //tst_rw.RWReference_GetReferenceConsigneeOfKis(); // Получить id грузополучателя по данным КИС, если нет создать.
             //tst_rw.RWOperation_CorrectPositionCarsOnWay(); // Скорректировать позицию на пути.
             //tst_rw.RWOperation_SetWayCorrectPosition(); // Переставить вагон + скорректировать позиции.
+            //tst_rw.EFRailWay_GetListCars();
             #endregion
 
 
