@@ -104,6 +104,9 @@ namespace EFRW.Abstract
         Cars GetCarsOfSetKIS(int num, int natur);
         Cars GetCarsOfNumDT(int num, DateTime dt_amkr, int hour_interval);
         Cars GetCarsOfParentID(int parent_id);
+        IQueryable<Cars> GetFirstCarsOfNum(int num);
+        List<CarsHistory> GetHistoryCarsOfNum(int num);
+        CarsHistory CreateCarsHistory(Cars Cars, int position);
         #endregion
 
         #region CarOperations
@@ -112,6 +115,7 @@ namespace EFRW.Abstract
         CarOperations GetCarOperations(int id);
         int SaveCarOperations(CarOperations CarOperations);
         CarOperations DeleteCarOperations(int id);
+        int DeleteCarOperationsOfCars(int id_car);
         IQueryable<CarOperations> GetCarOperationsOfNumCar(int num);
         CarOperations GetLastCarOperationsOfNumCar(int num);
         IQueryable<CarOperations> GetOpenCarOperationsOfWay(int id_way);
@@ -141,6 +145,7 @@ namespace EFRW.Abstract
         CarsInpDelivery GetCarsInpDelivery(int id);
         int SaveCarsInpDelivery(CarsInpDelivery CarsInpDelivery);
         CarsInpDelivery DeleteCarsInpDelivery(int id);
+        int DeleteCarsInpDeliveryOfCars(int id_car);
         CarsInpDelivery GetCarsInpDeliveryOfCar(int id_car);
         CarsInpDelivery GetCarsInpDeliveryOfNumArrival(int num, int id_arrival);
         int GetDefaultIDArrival();
@@ -152,6 +157,7 @@ namespace EFRW.Abstract
         CarsOutDelivery GetCarsOutDelivery(int id);
         int SaveCarsOutDelivery(CarsOutDelivery CarsOutDelivery);
         CarsOutDelivery DeleteCarsOutDelivery(int id);
+        int DeleteCarsOutDeliveryOfCars(int id_car);
         #endregion
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EFRW.Entities;
 using System.Data.Entity;
+using System.Data.SqlClient;
 
 namespace EFRW.Concrete
 {
@@ -15,6 +16,27 @@ namespace EFRW.Concrete
     {
         public int value { get; set; }
         public string text { get; set; }
+    }
+
+    public class CarsHistory
+    {
+        public int id { get; set; }
+        public int position { get; set; }
+        public int id_sostav { get; set; }
+        public int id_arrival { get; set; }
+        public int num { get; set; }
+        public DateTime? dt_uz { get; set; }
+        public DateTime? dt_inp_amkr { get; set; }
+        public DateTime? dt_out_amkr { get; set; }
+        public int? natur_kis { get; set; }
+        public int? natur_kis_out { get; set; }
+        public int? natur { get; set; }
+        public DateTime dt_create { get; set; }
+        public string user_create { get; set; }
+        public DateTime? dt_close { get; set; }
+        public string user_close { get; set; }
+        public int? parent_id { get; set; }
+        public CarsHistory() { }
     }
 
     public class EFRailWay : IRailWay
@@ -128,22 +150,22 @@ namespace EFRW.Concrete
             try
             {
                 List<Stations> list = Stations.ToList().Select(c => new Stations
-                    {
-                        id = c.id,
-                        name_ru = c.name_ru,
-                        name_en = c.name_en,
-                        view = c.view,
-                        exit_uz = c.exit_uz,
-                        station_uz = c.station_uz,
-                        id_rs = c.id_rs,
-                        id_kis = c.id_kis,
-                        default_side = c.default_side,
-                        code_uz = c.code_uz,
-                        Ways = link ? c.Ways : null,
-                        CarOperations = link ? c.CarOperations : null,
-                        StationsNodes = link ? c.StationsNodes : null,
-                        StationsNodes1 = link ? c.StationsNodes1 : null
-                    }).ToList();
+                {
+                    id = c.id,
+                    name_ru = c.name_ru,
+                    name_en = c.name_en,
+                    view = c.view,
+                    exit_uz = c.exit_uz,
+                    station_uz = c.station_uz,
+                    id_rs = c.id_rs,
+                    id_kis = c.id_kis,
+                    default_side = c.default_side,
+                    code_uz = c.code_uz,
+                    Ways = link ? c.Ways : null,
+                    CarOperations = link ? c.CarOperations : null,
+                    StationsNodes = link ? c.StationsNodes : null,
+                    StationsNodes1 = link ? c.StationsNodes1 : null
+                }).ToList();
                 return (IQueryable<Stations>)list.AsQueryable();
             }
             catch (Exception e)
@@ -202,7 +224,7 @@ namespace EFRW.Concrete
                         CarOperations = Stations.CarOperations,
                         StationsNodes = Stations.StationsNodes,
                         StationsNodes1 = Stations.StationsNodes1,
-                        Shops = Stations.Shops, 
+                        Shops = Stations.Shops,
                     };
                     context.Stations.Add(dbEntry);
                 }
@@ -224,7 +246,7 @@ namespace EFRW.Concrete
                         dbEntry.CarOperations = Stations.CarOperations;
                         dbEntry.StationsNodes = Stations.StationsNodes;
                         dbEntry.StationsNodes1 = Stations.StationsNodes1;
-                        dbEntry.Shops = Stations.Shops; 
+                        dbEntry.Shops = Stations.Shops;
                     }
                 }
                 context.SaveChanges();
@@ -686,7 +708,7 @@ namespace EFRW.Concrete
         {
             try
             {
-                return GetWays().Where(w=>w.Stations.station_uz == false);
+                return GetWays().Where(w => w.Stations.station_uz == false);
             }
             catch (Exception e)
             {
@@ -702,7 +724,7 @@ namespace EFRW.Concrete
         {
             try
             {
-                return GetWays().Where(w=>w.Stations.station_uz == true);
+                return GetWays().Where(w => w.Stations.station_uz == true);
             }
             catch (Exception e)
             {
@@ -984,12 +1006,12 @@ namespace EFRW.Concrete
                         dt_uz = Cars.dt_uz,
                         dt_inp_amkr = Cars.dt_inp_amkr,
                         dt_out_amkr = Cars.dt_out_amkr,
-                        natur_kis = Cars.natur_kis, 
+                        natur_kis = Cars.natur_kis,
                         natur_kis_out = Cars.natur_kis_out,
                         natur = Cars.natur,
                         dt_create = Cars.dt_create != DateTime.Parse("01.01.0001") ? Cars.dt_create : DateTime.Now,
-                        user_create = Cars.user_create != null ? Cars.user_create : System.Environment.UserDomainName + @"\" + System.Environment.UserName, 
-                        dt_close = null, 
+                        user_create = Cars.user_create != null ? Cars.user_create : System.Environment.UserDomainName + @"\" + System.Environment.UserName,
+                        dt_close = null,
                         user_close = null,
                         ReferenceCars = Cars.ReferenceCars,
                         CarOperations = Cars.CarOperations,
@@ -1019,7 +1041,7 @@ namespace EFRW.Concrete
                         dbEntry.dt_create = old_Cars.dt_create;
                         dbEntry.user_create = old_Cars.user_create;
                         dbEntry.dt_close = Cars.dt_close;
-                        dbEntry.user_close = Cars.user_close;                       
+                        dbEntry.user_close = Cars.user_close;
                         dbEntry.ReferenceCars = Cars.ReferenceCars;
                         dbEntry.CarOperations = Cars.CarOperations;
                         dbEntry.CarsInpDelivery = Cars.CarsInpDelivery;
@@ -1295,6 +1317,94 @@ namespace EFRW.Concrete
             }
 
         }
+        /// <summary>
+        /// Получить список первых записей справочника "Входящий вагон" по номеру вагона
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public IQueryable<Cars> GetFirstCarsOfNum(int num)
+        {
+            try
+            {
+                return GetCars().Where(c => c.num == num & c.parent_id == null).OrderBy(c => c.dt_uz);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetFirstCarsOfNum(num={0})", num), eventID);
+                return null;
+            }
+
+        }
+        /// <summary>
+        /// Заполнить список строками справочника "Входящий вагон" по parent_id
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="history_list"></param>
+        /// <param name="position"></param>
+        protected void GetHistoryCarsOfNum(Cars car, ref List<CarsHistory> history_list, int position)
+        {
+            history_list.Add(CreateCarsHistory(car, position));
+            Cars next = GetCarsOfParentID(car.id);
+            if (next != null)
+            {
+                GetHistoryCarsOfNum(next, ref history_list, ++position);
+            }
+        }
+        /// <summary>
+        /// Получить список историю справочника "Входящий вагон" по номеру вагона
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public List<CarsHistory> GetHistoryCarsOfNum(int num)
+        {
+            try
+            {
+                List<Cars> first_list = GetFirstCarsOfNum(num).ToList();
+                List<CarsHistory> history_list = new List<CarsHistory>();
+                foreach (Cars car in first_list)
+                {
+                    GetHistoryCarsOfNum(car, ref history_list, 1);
+                }
+                return history_list;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetHistoryCarsOfNum(num={0})", num), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Создать строку история входящего-исходящего вагона
+        /// </summary>
+        /// <param name="Cars"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public CarsHistory CreateCarsHistory(Cars Cars, int position)
+        {
+            return new CarsHistory()
+            {
+                id = Cars.id,
+                id_sostav = Cars.id_sostav,
+                id_arrival = Cars.id_arrival,
+                num = Cars.num,
+                dt_uz = Cars.dt_uz,
+                dt_inp_amkr = Cars.dt_inp_amkr,
+                dt_out_amkr = Cars.dt_out_amkr,
+                natur_kis = Cars.natur_kis,
+                natur_kis_out = Cars.natur_kis_out,
+                natur = Cars.natur,
+                dt_create = Cars.dt_create,
+                user_create = Cars.user_create,
+                dt_close = Cars.dt_close,
+                user_close = Cars.user_close,
+                //ReferenceCars = Cars.ReferenceCars,
+                //CarOperations = Cars.CarOperations,
+                //CarsInpDelivery = Cars.CarsInpDelivery,
+                //CarsOutDelivery = Cars.CarsOutDelivery,
+                parent_id = Cars.parent_id,
+                position = position
+            };
+        }
 
         #endregion
 
@@ -1434,6 +1544,23 @@ namespace EFRW.Concrete
             }
             return dbEntry;
         }
+
+        public int DeleteCarOperationsOfCars(int id_car)
+        {
+
+            try
+            {
+                SqlParameter i_id_car = new SqlParameter("@IDCAR", id_car);
+                return context.Database.ExecuteSqlCommand("DELETE FROM RailWay.CarOperations where id_car = @IDCAR", i_id_car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DeleteCarOperationsOfCars(id_car={0})", id_car), eventID);
+                return -1;
+            }
+
+        }
+
         /// <summary>
         /// Получить все операции по указаному вагону
         /// </summary>
@@ -1524,12 +1651,13 @@ namespace EFRW.Concrete
         /// </summary>
         /// <param name="id_way"></param>
         /// <returns></returns>
-        public int GetLastPositionOpenCarOperationsOfWay(int id_way){
+        public int GetLastPositionOpenCarOperationsOfWay(int id_way)
+        {
 
             try
             {
-            List<CarOperations> open_operation = GetOpenCarOperationsOfWay(id_way).ToList();
-            return open_operation != null && open_operation.Count() > 0 ? (int)open_operation.Max(o => o.position) : 0;
+                List<CarOperations> open_operation = GetOpenCarOperationsOfWay(id_way).ToList();
+                return open_operation != null && open_operation.Count() > 0 ? (int)open_operation.Max(o => o.position) : 0;
             }
             catch (Exception e)
             {
@@ -1794,7 +1922,7 @@ namespace EFRW.Concrete
                         step2_sap = CarsInpDelivery.step2_sap,
                         Cars = CarsInpDelivery.Cars,
                         ReferenceCargo = CarsInpDelivery.ReferenceCargo,
-                        Reference_Consignee = CarsInpDelivery.Reference_Consignee, 
+                        Reference_Consignee = CarsInpDelivery.Reference_Consignee,
                     };
                     context.CarsInpDelivery.Add(dbEntry);
                 }
@@ -1867,6 +1995,23 @@ namespace EFRW.Concrete
             }
             return dbEntry;
         }
+
+        public int DeleteCarsInpDeliveryOfCars(int id_car)
+        {
+
+            try
+            {
+                SqlParameter i_id_car = new SqlParameter("@IDCAR", id_car);
+                return context.Database.ExecuteSqlCommand("DELETE FROM RailWay.CarsInpDelivery where id_car = @IDCAR", i_id_car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DeleteCarsInpDeliveryOfCars(id_car={0})", id_car), eventID);
+                return -1;
+            }
+
+        }
+
         /// <summary>
         /// Вернуть входящую поставку по id вагона
         /// </summary>
@@ -1906,7 +2051,8 @@ namespace EFRW.Concrete
         ///  Вернуть id прибытия по умолчанию если нет данных MT
         /// </summary>
         /// <returns></returns>
-        public int GetDefaultIDArrival() {
+        public int GetDefaultIDArrival()
+        {
             CarsInpDelivery delivery = GetCarsInpDelivery().Where(s => s.id_arrival < 0).OrderBy(s => s.id_arrival).FirstOrDefault();
             return delivery != null ? delivery.id_arrival - 1 : -1;
         }
@@ -2028,6 +2174,22 @@ namespace EFRW.Concrete
                 }
             }
             return dbEntry;
+        }
+
+        public int DeleteCarsOutDeliveryOfCars(int id_car)
+        {
+
+            try
+            {
+                SqlParameter i_id_car = new SqlParameter("@IDCAR", id_car);
+                return context.Database.ExecuteSqlCommand("DELETE FROM RailWay.CarsOutDelivery where id_car = @IDCAR", i_id_car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DeleteCarsOutDeliveryOfCars(id_car={0})", id_car), eventID);
+                return -1;
+            }
+
         }
         #endregion
 
