@@ -18,7 +18,7 @@ namespace Web_RailWay.Areas.RW.Controllers
 
         // Поиск вагонов по номеру 
         [Access(LogVisit = true)]
-        public ActionResult Vagon(int? num, int? day, int? month, int? year, int? hour, int? minute, int? second)
+        public ActionResult Vagon(int? num, DateTime? dt_uz, DateTime? dt_inp, DateTime? dt_out) //int? day, int? month, int? year, int? hour, int? minute, int? second
         {
             return View();
         }

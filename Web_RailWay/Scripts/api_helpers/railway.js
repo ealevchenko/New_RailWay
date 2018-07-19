@@ -662,5 +662,150 @@ function getAsyncCarConditions(callback) {
         },
     });
 }
-
-
+//---------------------------------------------------------
+// HistoryCars - История входящих и исходящих вагонов
+//---------------------------------------------------------
+// Веруть историю движения вагона
+function getAsyncHistoryCarsOfNum(num, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/cars/history/num/'+ num,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+//---------------------------------------------------------
+// CarsInpDelivery - Входящие поставки
+//---------------------------------------------------------
+// Веруть входящие поставки
+function getAsyncCarsInpDelivery(id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/cars/inp_delivery/id/' + id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Веруть входящие поставки
+function getAsyncCarsInpDeliveryOfCar(id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/cars/inp_delivery/id_car/' + id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Веруть исходящие поставки
+function getAsyncCarsOutDelivery(id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/cars/out_delivery/id/' + id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Веруть исходящие поставки
+function getAsyncCarsOutDeliveryOfCar(id, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/cars/out_delivery/id_car/' + id,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+//---------------------------------------------------------
+// Deadlock - тупик
+//---------------------------------------------------------
+// Веруть годность по прибытию и отправке
+function getAsyncDeadlock(callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/rw/car/deadlock/',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}

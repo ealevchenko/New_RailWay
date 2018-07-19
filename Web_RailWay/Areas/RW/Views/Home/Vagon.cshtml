@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
     @Styles.Render("~/jquery-ui/css")
     @Styles.Render("~/DataTables/css")
-    <link rel="stylesheet" type="text/css" href="~/Content/KIS/turnover.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/RW/vagon.css">
 }
 
 @section scripts {
@@ -29,8 +29,10 @@
     <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
     <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
     <script src="~/Scripts/api_helpers/railway.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/railway_reference.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/railway_operation.js" type="text/javascript"></script>
     <script src="~/Scripts/api_helpers/kis.js" type="text/javascript"></script>
-    @*<script src="~/Scripts/KIS/vagon.js" type="text/javascript"></script>*@
+    <script src="~/Scripts/RW/vagon.js" type="text/javascript"></script>
     <script>
         $('header').addClass('img-header-rw');
     </script>
@@ -51,20 +53,58 @@
         @*<button class="ui-button ui-widget ui-corner-all" id="to-excel"> </button>*@
     </div>
     <div id="report-detali">
-        <div id="accordion-vagon">
-            <h3>Vagon</h3>
-            <div>
-                <table class='compact table-cars cell-border' id="table-list-vagon" cellpadding="0"></table>
+        <div id="tabs-report-vagons">
+            <ul>
+                <li><a href="#tabs-history" id="link-tabs-history"></a></li>
+                <li><a href="#tabs-info" id="link-tabs-info"></a></li>
+            </ul>
+            <div id="tabs-history">
+                <div id="accordion-history-car">
+                    <h3>Car</h3>
+                    <div>
+                        <table class='compact table-cars cell-border' id="table-list-history-car" cellpadding="0" style="width:2000px"></table>
+                    </div>
+                </div>
+                <div id="accordion-history-sap">
+                    <h3>SAP</h3>
+                    <div>
+                        <fieldset style="float: left; margin-left:10px;">
+                            <legend>Входящие поставки</legend>
+                            <div id="history-car-sap-inp">
+                            </div>
+                        </fieldset>
+                        <fieldset style="float: left; margin-left:10px;">
+                            <legend>Исходящие поставки</legend>
+                            <div id="history-car-sap-out">
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div id="accordion-history-arrival">
+                    <h3>Arrival</h3>
+                    <div>
+                        @*<table class='compact table-cars cell-border' id="table-list-nathist" cellpadding="0"></table>*@
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="accordion-nathist">
-            <h3>NatHist</h3>
-            <div>
-                <table class='compact table-cars cell-border' id="table-list-nathist" cellpadding="0"></table>
+            <div id="tabs-info">
+                @*<table class='display compact' id="table-cargo-disl-operations" style="width:100%" cellpadding="0"></table>*@
             </div>
         </div>
     </div>
     <div id="cls"></div>
+</div>
+
+<div id="delete-confirm" title="" style="display:none">
+    <form id="form-delete-confirm">
+        <fieldset>
+            <p>
+                <label id="delete-comment"></label><br>
+            </p>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
 </div>
 
 

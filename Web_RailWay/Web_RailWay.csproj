@@ -267,6 +267,7 @@
     <Compile Include="Controllers\api\RCController.cs" />
     <Compile Include="Controllers\api\ReferenceController.cs" />
     <Compile Include="Controllers\api\RWController.cs" />
+    <Compile Include="Controllers\api\RWOperationController.cs" />
     <Compile Include="Controllers\api\RWReferenceController.cs" />
     <Compile Include="Controllers\api\SettingController.cs" />
     <Compile Include="Controllers\api\ValuesController.cs" />
@@ -482,6 +483,7 @@
     <Content Include="Content\reports.css" />
     <Content Include="Content\RW\awas.css" />
     <Content Include="Content\RW\rwui.css" />
+    <Content Include="Content\RW\vagon.css" />
     <Content Include="Content\Services\services.css" />
     <Content Include="Content\DataTables\css\reports-dataTables.css" />
     <Content Include="Content\Site.css" />
@@ -553,6 +555,8 @@
     <Content Include="Scripts\api_helpers\logs.js" />
     <Content Include="Scripts\api_helpers\metallurgtrans.js" />
     <Content Include="Scripts\api_helpers\railcars.js" />
+    <Content Include="Scripts\api_helpers\railway_operation.js" />
+    <Content Include="Scripts\api_helpers\railway_reference.js" />
     <Content Include="Scripts\api_helpers\railway.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
@@ -734,6 +738,7 @@
     <Content Include="Scripts\RW\awas1.js" />
     <Content Include="Scripts\RW\awas.js" />
     <Content Include="Scripts\RW\rwui.js" />
+    <Content Include="Scripts\RW\vagon.js" />
     <Content Include="Scripts\Services\services.js" />
     <Content Include="Scripts\MT\approachescars.js" />
     <Content Include="Scripts\MT\approachessostav.js" />
@@ -810,6 +815,7 @@
     <Content Include="Scripts\MT\wagons_tracking.json" />
     <Content Include="Scripts\MT\mt.json" />
     <Content Include="Scripts\KIS\kis.json" />
+    <Content Include="Scripts\RW\rw.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppSettings\DBSettings\DBSettings.csproj">

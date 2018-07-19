@@ -1,0 +1,35 @@
+﻿/*Показывает или прячить детали*/
+td.details-control {
+    background: url('../../Content/DataTables/images1/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+
+tr.shown td.details-control {
+    background: url('../../Content/DataTables/images1/details_close.png') no-repeat center center;
+}
+
+.detali-operation {
+    border-left: 6px solid #8ae;
+    border-top: 1px solid #8ae;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    background-color: #eee;
+    border-radius: 4px;
+    text-align: left;
+}
+
+table.table-cars.dataTable tbody td {
+    /*font-size:10px;*/
+    white-space: nowrap;
+}
+
+div#history-car-sap-inp {
+    width:500px;
+    text-align:left;
+}
+
+div#history-car-sap-out {
+    width: 500px;
+    text-align: left;
+}

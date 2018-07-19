@@ -1,0 +1,272 @@
+﻿[
+    {
+        "tag": "link_tabs_history",
+        "ru": "История",
+        "en": "History"
+    },
+    {
+        "tag": "link_tabs_info",
+        "ru": "Информация",
+        "en": "Information"
+    },
+
+    {
+        "tag": "label_delete_comment",
+        "ru": "Вы действительно хотите удалить строку справочника «Входящие вагоны» с id:",
+        "en": "Do you really want to delete the line of the directory Incoming cars with id:"
+    },
+
+    {
+        "tag": "confirm_delete_panel_form_text",
+        "ru": "Подтвердите удаление.",
+        "en": "Confirm removal."
+    },
+
+    {
+        "tag": "table_message_emptyTable",
+        "ru": "Данные отсутствуют.",
+        "en": "No data available in table."
+    },
+    {
+        "tag": "table_decimal",
+        "ru": ",",
+        "en": "."
+    },
+    {
+        "tag": "table_message_search",
+        "ru": "Найти:",
+        "en": "Search:"
+    },
+    {
+        "tag": "table_message_separator",
+        "ru": "по",
+        "en": "to"
+    },
+    {
+        "tag": "table_date_format",
+        "ru": "DD.MM.YYYY HH:mm",
+        "en": "MM/DD/YYYY HH:mm"
+    },
+    {
+        "tag": "table_not_data",
+        "ru": "За указанный период данных нет.",
+        "en": "For the specified period, there is no data."
+    },
+
+    {
+        "tag": "table_field_num",
+        "ru": "№ вагона",
+        "en": "# car"
+    },
+    {
+        "tag": "table_field_id_sostav",
+        "ru": "id_sostav",
+        "en": "id_sostav"
+    },
+    {
+        "tag": "table_field_id_arrival",
+        "ru": "id_arrival",
+        "en": "id_arrival"
+    },
+    {
+        "tag": "table_field_dt_uz",
+        "ru": "На УЗ",
+        "en": ""
+    },
+    {
+        "tag": "table_field_dt_inp_amkr",
+        "ru": "Зашел",
+        "en": "Has come"
+    },
+    {
+        "tag": "table_field_dt_out_amkr",
+        "ru": "Вышел",
+        "en": "Came out"
+    },
+    {
+        "tag": "table_field_natur_kis",
+        "ru": "Натурка Вх. (КИС)",
+        "en": ""
+    },
+    {
+        "tag": "table_field_natur_kis_out",
+        "ru": "Натурка Вых. (КИС)",
+        "en": ""
+    },
+    {
+        "tag": "table_field_natur",
+        "ru": "Натурка",
+        "en": ""
+    },
+    {
+        "tag": "table_field_dt_create",
+        "ru": "Создана",
+        "en": ""
+    },
+    {
+        "tag": "table_field_user_create",
+        "ru": "Создал",
+        "en": ""
+    },
+    {
+        "tag": "table_field_dt_close",
+        "ru": "Закрыта",
+        "en": ""
+    },
+    {
+        "tag": "table_field_user_close",
+        "ru": "Закрыл",
+        "en": ""
+    },
+    {
+        "tag": "table_field_parent_id",
+        "ru": "parent_id",
+        "en": "parent_id"
+    },
+    {
+        "tag": "table_field_position",
+        "ru": "№п.п.",
+        "en": "#"
+    },
+    {
+        "tag": "table_field_datetime",
+        "ru": "Дата и время",
+        "en": "#"
+    },
+    {
+        "tag": "table_field_field",
+        "ru": "Параметр",
+        "en": "Parameter"
+    },
+    {
+        "tag": "table_field_value",
+        "ru": "Значение",
+        "en": "Value"
+    },
+    {
+        "tag": "table_field_composition_index",
+        "ru": "Индекс состава",
+        "en": "Composition index"
+    },
+    {
+        "tag": "table_field_num_nakl_sap",
+        "ru": "№ нак. SAP",
+        "en": "Invoice number SAP"
+    },
+    {
+        "tag": "table_field_country",
+        "ru": "Страна",
+        "en": "Country"
+    },
+    {
+        "tag": "table_field_weight_cargo",
+        "ru": "Вес груза",
+        "en": "weight cargo"
+    },
+    {
+        "tag": "table_field_num_doc_reweighing_sap",
+        "ru": "№ док. перевески",
+        "en": "Doc No. reweighing"
+    },
+    {
+        "tag": "table_field_dt_doc_reweighing_sap",
+        "ru": "Дата и время док. перевески",
+        "en": "Date and Time No. reweighing"
+    },
+    {
+        "tag": "table_field_weight_reweighing_sap",
+        "ru": "Вес после перевески",
+        "en": "Weight after re-weighing"
+    },
+    {
+        "tag": "table_field_dt_reweighing_sap",
+        "ru": "Дата и время перевески",
+        "en": "Date and time of re-hanging"
+    },
+    {
+        "tag": "table_field_post_reweighing_sap",
+        "ru": "Пост перевески",
+        "en": "Post re-suspension"
+    },
+    {
+        "tag": "table_field_cargo",
+        "ru": "Груз",
+        "en": "Cargo"
+    },
+    {
+        "tag": "table_field_sap_material",
+        "ru": "Материал (SAP)",
+        "en": "Material (SAP)"
+    },
+    {
+        "tag": "table_field_station_shipment",
+        "ru": "Станция отправитель",
+        "en": "Sender station"
+    },
+    {
+        "tag": "table_field_sap_shipment",
+        "ru": "Станция отправитель (SAP)",
+        "en": "Sender station (SAP)"
+    },
+    {
+        "tag": "table_field_consignee",
+        "ru": "Грузополучатель",
+        "en": "Consignee"
+    },
+    {
+        "tag": "table_field_shop",
+        "ru": "Цех",
+        "en": "Shop"
+    },
+    {
+        "tag": "table_field_new_shop",
+        "ru": "Переадресация Цех",
+        "en": "Redirects Shop"
+    },
+    {
+        "tag": "table_field_permission_unload_sap",
+        "ru": "Разрешение на выгрузку",
+        "en": "Permission for unloading"
+    },
+    {
+        "tag": "table_field_step1_sap",
+        "ru": "Step1",
+        "en": "Step1"
+    },
+  {
+    "tag": "table_field_step2_sap",
+    "ru": "Step2",
+    "en": "Step2"
+  },
+  {
+    "tag": "table_field_num_nakl_sap",
+    "ru": "№ накладной SAP",
+    "en": "SAP Consignment Note"
+  },
+  {
+    "tag": "table_field_deadlock",
+    "ru": "Тупик загрузки",
+    "en": "Deadlock downloads"
+  },
+  {
+    "tag": "table_field_country_out",
+    "ru": "Страна отправки груза",
+    "en": "Country of shipment"
+  },
+  {
+    "tag": "table_field_note",
+    "ru": "Примечание",
+    "en": "Note"
+  },
+  {
+    "tag": "table_field_station_out",
+    "ru": "Станция получатель груза",
+    "en": "Station consignee"
+  },
+
+  {
+    "tag": "message_error_delete_vagon",
+    "ru": "Ошибка удаления строки вагона с id:",
+    "en": "Error removing line of railway car with id:"
+  }
+]

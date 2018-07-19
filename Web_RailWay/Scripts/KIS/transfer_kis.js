@@ -207,7 +207,7 @@
                         $('td', row).eq(1).html(link_kis);
                         // Поле закрытия
                         if (data.close == null) {
-                            var bt = $('<button id=' + data.id + ' class="ui-button ui-widget ui-corner-all" name="close"><span class="ui-icon ui-icon-circle-close"></span>' + (lang == 'en' ? 'Сlose' : 'Закрыть') + '</button>');
+                            var bt = $('<button id=' + data.id + ' class="ui-button ui-widget ui-corner-all" name="close"><span class="ui-icon ui-icon-circle-close"></span>' + (lang == 'en' ? 'Close' : 'Закрыть') + '</button>');
                             $('td', row).eq(9).html(bt);
                             bt.on('click', function (evt) {
                                 evt.preventDefault();
@@ -374,11 +374,11 @@
                 var list_cars = getBufferArrivalCarsStatus(data);
                 var target = $("#tabs-detali" + data.id + "-2");
                 target.empty();
-                var tab = this.createTableStatus(list_cars, data.id);
+                var tab = this.createTableStatus(list_cars, data.id, data.datetime);
                 target.append(tab);
             },
             // Сформировать таблицу статусы переноса вагонов
-            createTableStatus: function (data, id) {
+            createTableStatus: function (data, id, dt_amkr) {
                 if (data == null || data.length == 0) {
                     return resurses.getText("table_not_data")
                 }
@@ -391,7 +391,7 @@
                 for (i = 0; i < data.length; i++) {
                     list_tr += '<tr>' +
                         //'<td>' + data[i].car + '</td>' +
-                        '<td><a id=' + data[i].car + ' name="natur" href="#">' + data[i].car + '</a></td>' +
+                        '<td><a target="_blank" href="/railway/RW/Home/Vagon?num=' + data[i].car + '&dt_inp=' + dt_amkr + '">' + data[i].car + '</a></td>' +
                         '<td class="' + data[i].car_set + '">' + data[i].car_set + '</td>' +
                         '<td class="' + data[i].car_upd + '">' + data[i].car_upderr + '</td>' +
                         '</tr>';
@@ -580,7 +580,7 @@
                 this.list = data;
                 this.obj.clear();
                 for (i = 0; i < data.length; i++) {
-                    var station_on = rw_stations.selectStationKIS(data[i].id_station_kis);
+                    var station_on = rw_stations.selectStationKIS(data[i].id_station_on_kis);
                     var station_from = rw_stations.selectStationKIS(data[i].id_station_from_kis);
                     var nathist = data[i].count_nathist != null ? data[i].count_nathist : "-";
                     var nathist_set = data[i].count_set_nathist != null ? " (" + data[i].count_set_nathist + ")" : " (-)";
@@ -674,11 +674,11 @@
                 var list_cars = getBufferSendingCarsStatus(data);
                 var target = $("#tabs-detali" + data.id + "-2");
                 target.empty();
-                var tab = this.createTableStatus(list_cars, data.id);
+                var tab = this.createTableStatus(list_cars, data.id, data.datetime);
                 target.append(tab);
             },
             // Сформировать таблицу статусы переноса вагонов
-            createTableStatus: function (data, id) {
+            createTableStatus: function (data, id, dt_out) {
                 if (data == null || data.length == 0) {
                     return resurses.getText("table_not_data")
                 }
@@ -690,7 +690,7 @@
                 for (i = 0; i < data.length; i++) {
                     list_tr += '<tr>';
                     if (data[i].car != null) {
-                        list_tr += '<td><a id=' + data[i].car + ' name="natur" href="#">' + data[i].car + '</a></td>' +
+                        list_tr += '<td><a target="_blank" href="/railway/RW/Home/Vagon?num=' + data[i].car + '&dt_out=' + dt_out + '">' + data[i].car + '</a></td>' +
                             '<td class="' + data[i].car_set + '">' + data[i].car_seterr + '</td>';
                     } else {
                         list_tr += '<td colspan="2" class="' + data[i].car_set + '">' + data[i].car_seterr + '</td>';

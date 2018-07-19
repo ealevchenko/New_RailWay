@@ -786,6 +786,262 @@ namespace Web_RailWay.Controllers.api
         }
         #endregion
 
+        #region CarsHistory
+        // GET: api/rw/cars/history/num/52921343
+        [Route("cars/history/num/{num:int}")]
+        [ResponseType(typeof(CarsHistory))]
+        public IHttpActionResult GetHistoryCarsOfNum(int num)
+        {
+            try
+            {
+                List<CarsHistory> list_history = this.rep_rw.GetHistoryCarsOfNum(num);
+                if (list_history == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list_history);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetHistoryCarsOfNum(id={0})", num), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        #endregion
+
+        #region CarsInpDelivery
+        // GET: api/rw/cars/inp_delivery/id/26736
+        [Route("cars/inp_delivery/id/{id:int}")]
+        [ResponseType(typeof(CarsInpDelivery))]
+        public IHttpActionResult GetCarsInpDelivery(int id)
+        {
+            try
+            {
+                CarsInpDelivery cid = this.rep_rw.CarsInpDelivery
+                    .Where(i=>i.id == id)
+                    .ToList()
+                    .Select(c => new CarsInpDelivery
+                    {
+                        id = c.id,
+                        id_car = c.id_car,
+                        datetime = c.datetime,
+                        composition_index = c.composition_index,
+                        id_arrival = c.id_arrival,
+                        num_car = c.num_car,
+                        position = c.position,
+                        num_nakl_sap = c.num_nakl_sap,
+                        country_code = c.country_code,
+                        id_country = c.id_country,
+                        weight_cargo = c.weight_cargo,
+                        num_doc_reweighing_sap = c.num_doc_reweighing_sap,
+                        dt_doc_reweighing_sap = c.dt_doc_reweighing_sap,
+                        weight_reweighing_sap = c.weight_reweighing_sap,
+                        dt_reweighing_sap = c.dt_reweighing_sap,
+                        post_reweighing_sap = c.post_reweighing_sap,
+                        cargo_code = c.cargo_code,
+                        id_cargo = c.id_cargo,
+                        material_code_sap = c.material_code_sap,
+                        material_name_sap = c.material_name_sap,
+                        station_shipment = c.station_shipment,
+                        station_shipment_code_sap = c.station_shipment_code_sap,
+                        station_shipment_name_sap = c.station_shipment_name_sap,
+                        consignee = c.consignee,
+                        id_consignee = c.id_consignee,
+                        shop_code_sap = c.shop_code_sap,
+                        shop_name_sap = c.shop_name_sap,
+                        new_shop_code_sap = c.new_shop_code_sap,
+                        new_shop_name_sap = c.new_shop_name_sap,
+                        permission_unload_sap = c.permission_unload_sap,
+                        step1_sap = c.step1_sap,
+                        step2_sap = c.step2_sap,
+                    })
+                    .FirstOrDefault();
+                if (cid == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cid);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsInpDelivery(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/rw/cars/inp_delivery/id_car/26736
+        [Route("cars/inp_delivery/id_car/{id_car:int}")]
+        [ResponseType(typeof(CarsInpDelivery))]
+        public IHttpActionResult GetCarsInpDeliveryOfCar(int id_car)
+        {
+            try
+            {
+                CarsInpDelivery cid = this.rep_rw.CarsInpDelivery
+                    .Where(i => i.id_car == id_car)
+                    .ToList()
+                    .Select(c => new CarsInpDelivery
+                    {
+                        id = c.id,
+                        id_car = c.id_car,
+                        datetime = c.datetime,
+                        composition_index = c.composition_index,
+                        id_arrival = c.id_arrival,
+                        num_car = c.num_car,
+                        position = c.position,
+                        num_nakl_sap = c.num_nakl_sap,
+                        country_code = c.country_code,
+                        id_country = c.id_country,
+                        weight_cargo = c.weight_cargo,
+                        num_doc_reweighing_sap = c.num_doc_reweighing_sap,
+                        dt_doc_reweighing_sap = c.dt_doc_reweighing_sap,
+                        weight_reweighing_sap = c.weight_reweighing_sap,
+                        dt_reweighing_sap = c.dt_reweighing_sap,
+                        post_reweighing_sap = c.post_reweighing_sap,
+                        cargo_code = c.cargo_code,
+                        id_cargo = c.id_cargo,
+                        material_code_sap = c.material_code_sap,
+                        material_name_sap = c.material_name_sap,
+                        station_shipment = c.station_shipment,
+                        station_shipment_code_sap = c.station_shipment_code_sap,
+                        station_shipment_name_sap = c.station_shipment_name_sap,
+                        consignee = c.consignee,
+                        id_consignee = c.id_consignee,
+                        shop_code_sap = c.shop_code_sap,
+                        shop_name_sap = c.shop_name_sap,
+                        new_shop_code_sap = c.new_shop_code_sap,
+                        new_shop_name_sap = c.new_shop_name_sap,
+                        permission_unload_sap = c.permission_unload_sap,
+                        step1_sap = c.step1_sap,
+                        step2_sap = c.step2_sap,
+                    })
+                    .FirstOrDefault();
+                if (cid == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cid);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsInpDeliveryOfCar(id_car={0})", id_car), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        #endregion
+
+        #region CarsOutDelivery
+        // GET: api/rw/cars/out_delivery/id/26736
+        [Route("cars/out_delivery/id/{id:int}")]
+        [ResponseType(typeof(CarsOutDelivery))]
+        public IHttpActionResult GetCarsOutDelivery(int id)
+        {
+            try
+            {
+                CarsOutDelivery cid = this.rep_rw.CarsOutDelivery
+                    .Where(i=>i.id == id)
+                    .ToList()
+                    .Select(c => new CarsOutDelivery
+                    {
+                        id = c.id,
+                        id_car = c.id_car,
+                        num_nakl_sap = c.num_nakl_sap,
+                        id_tupik = c.id_tupik,
+                        id_country_out = c.id_country_out,
+                        id_station_out = c.id_station_out,
+                        note = c.note,
+                        cargo_code = c.cargo_code,
+                        id_cargo = c.id_cargo,
+                        weight_cargo = c.weight_cargo,
+                        num_doc_reweighing_sap = c.num_doc_reweighing_sap,
+                        dt_doc_reweighing_sap = c.dt_doc_reweighing_sap,
+                        weight_reweighing_sap = c.weight_reweighing_sap,
+                        dt_reweighing_sap = c.dt_reweighing_sap,
+                        post_reweighing_sap = c.post_reweighing_sap,
+                    })
+                    .FirstOrDefault();
+                if (cid == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cid);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOutDelivery(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/rw/cars/out_delivery/id_car/26736
+        [Route("cars/out_delivery/id_car/{id_car:int}")]
+        [ResponseType(typeof(CarsOutDelivery))]
+        public IHttpActionResult GetCarsOutDeliveryOfCar(int id_car)
+        {
+            try
+            {
+                CarsOutDelivery cid = this.rep_rw.CarsOutDelivery
+                    .Where(i => i.id_car == id_car)
+                    .ToList()
+                    .Select(c => new CarsOutDelivery
+                    {
+                        id = c.id,
+                        id_car = c.id_car,
+                        num_nakl_sap = c.num_nakl_sap,
+                        id_tupik = c.id_tupik,
+                        id_country_out = c.id_country_out,
+                        id_station_out = c.id_station_out,
+                        note = c.note,
+                        cargo_code = c.cargo_code,
+                        id_cargo = c.id_cargo,
+                        weight_cargo = c.weight_cargo,
+                        num_doc_reweighing_sap = c.num_doc_reweighing_sap,
+                        dt_doc_reweighing_sap = c.dt_doc_reweighing_sap,
+                        weight_reweighing_sap = c.weight_reweighing_sap,
+                        dt_reweighing_sap = c.dt_reweighing_sap,
+                        post_reweighing_sap = c.post_reweighing_sap,
+                    })
+                    .FirstOrDefault();
+                if (cid == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cid);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsOutDeliveryOfCar(id_car={0})", id_car), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        #endregion
+
+        #region Deadlock
+        // GET: api/rw/cars/deadlock
+        [Route("cars/deadlock")]
+        [ResponseType(typeof(Deadlock))]
+        public IHttpActionResult GetDeadlock()
+        {
+            try
+            {
+                List<Deadlock> list_deadlock = this.rep_rw.GetDeadlock().ToList();
+                if (list_deadlock == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list_deadlock);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDeadlock()"), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        #endregion
+
         // GET: api/rw/arrival/sostav/station/16
         [Route("arrival/sostav/station/{id:int}")]
         [ResponseType(typeof(ArrivalSostav))]

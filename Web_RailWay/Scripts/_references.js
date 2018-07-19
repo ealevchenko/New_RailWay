@@ -89,3 +89,6 @@
 /// <reference path="bootstrap.min.js" />
 /// <reference path="respond.min.js" />
 /// <reference path="respond.matchmedia.addlistener.min.js" />
+/// <reference path="api_helpers/railway_reference.js" />
+/// <reference path="RW/vagon.js" />
+/// <reference path="api_helpers/railway_operation.js" />
