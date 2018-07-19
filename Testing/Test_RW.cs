@@ -168,5 +168,19 @@ namespace Testing
             int res = rw_oper.ExecSaveOperation(car, rw_oper.OperationSetWay, new  OperationSetWay(106,DateTime.Now,null,null));
         }
 
+        public void EFRailWay_GetListCars()
+        {
+            EFRailWay ef_rw = new EFRailWay();
+            //List<Cars> list = ef_rw.GetFirstCarsOfNum(52921343).ToList();
+            List<CarsHistory> list1 = ef_rw.GetHistoryCarsOfNum(52921343);
+
+        }
+
+        public void RWOperation_DeleteSaveCar()
+        {
+            RWOperation rw_oper = new RWOperation();
+            int res = rw_oper.DeleteSaveCar(1197);
+        }
+
     }
 }
