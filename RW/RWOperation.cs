@@ -204,7 +204,7 @@ namespace RW
 
     }
 
-    public class RWOperation
+    public class RWOperation : IRWOperation
     {
         private eventID eventID = eventID.RW_RWOperation;
         protected service servece_owner = service.Null;
@@ -756,6 +756,57 @@ namespace RW
             {
                 e.WriteErrorMethod(String.Format("DeleteLastOperationSaveCar(id_car={0})",
                     id_car), servece_owner, eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Удалить строку из справочника "Входящий вагон"
+        /// </summary>
+        /// <param name="id_car"></param>
+        /// <returns></returns>
+        public int DeleteSaveCar(int id_car)
+        {
+            try
+            {
+                Cars delete_car = ef_rw.GetCars(id_car);
+                if (delete_car != null)
+                {
+                    Cars previous_car = delete_car.parent_id != null ? ef_rw.GetCars((int)delete_car.parent_id) : null;
+                    Cars next_car = ef_rw.GetCarsOfParentID(delete_car.id);
+
+                    int del_operation = ef_rw.DeleteCarOperationsOfCars(delete_car.id);
+                    int del_inp = ef_rw.DeleteCarsInpDeliveryOfCars(delete_car.id);
+                    int del_out = ef_rw.DeleteCarsOutDeliveryOfCars(delete_car.id);
+                    Cars del = ef_rw.DeleteCars(delete_car.id);
+                    int res_next_car = 0;
+                    int res_previous_car = 0;
+                    if (next_car != null)
+                    {
+                        next_car.parent_id = previous_car != null ? (int?)previous_car.id : null;
+                        res_next_car = ef_rw.SaveCars(next_car);
+                        //перезакрыть последнюю операцию previous_car от next_car
+                        if (previous_car != null && next_car.dt_uz != null ) {
+                            previous_car.CloseCar((DateTime)next_car.dt_uz, true);
+                            res_previous_car = ef_rw.SaveCars(previous_car);
+                        }
+                    }
+                    else
+                    {
+                        if (previous_car != null)
+                        {
+                            // Открыть последнюю операцию
+                            previous_car.ClearCloseCar();
+                            res_previous_car = ef_rw.SaveCars(previous_car);
+                        }
+                    }
+                    
+                    return (del_operation < 0 || del_inp < 0 || del_out < 0 || del == null || res_next_car < 0 || res_previous_car < 0) ? -1 : del.id;
+                }
+                return 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DeleteSaveCar(id_car={0})", id_car), eventID);
                 return -1;
             }
         }

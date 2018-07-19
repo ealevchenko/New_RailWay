@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRWOperation.cs" />
     <Compile Include="RWFilter.cs" />
     <Compile Include="RWOperation.cs" />
     <Compile Include="RWReference.cs" />
