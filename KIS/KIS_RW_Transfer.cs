@@ -47,32 +47,47 @@ namespace KIS
             EFTKIS ef_tkis = new EFTKIS();
             try
             {
-                //DateTime DT = DateTime.Parse(ps.D_DD.ToString() + "-" + ps.D_MM.ToString() + "-" + ps.D_YY.ToString() + " " + ps.T_HH.ToString() + ":" + ps.T_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
-                return ef_tkis.SaveRWBufferArrivalSostav(new RWBufferArrivalSostav()
+                // Проверка правилности заполнения времени и всех полей натурки
+                if (ps.D_DD == null || ps.D_MM == null || ps.D_YY == null || ps.T_HH == null || ps.T_MI == null)
                 {
-                    id = 0,
-                    datetime = (DateTime)ps.DT,
-                    day = (int)ps.D_DD,
-                    month = (int)ps.D_MM,
-                    year = (int)ps.D_YY,
-                    hour = (int)ps.T_HH,
-                    minute = (int)ps.T_MI,
-                    natur = ps.N_NATUR,
-                    id_station_kis = (int)ps.K_ST,
-                    way_num = ps.N_PUT,
-                    napr = ps.NAPR,
-                    count_wagons = null,
-                    count_nathist = null,
-                    count_set_wagons = null,
-                    count_set_nathist = null,
-                    close = null,
-                    close_user = null,
-                    status = (int)status,
-                    list_wagons = null,
-                    list_no_set_wagons = null,
-                    list_no_update_wagons = null,
-                    message = null,
-                });
+                    String.Format("Ошибка заполнения натурного листа {0}, невозможно определить дату и время: {1}-{2}-{3} {4}:{5}. Строка не добавлена в таблицу состояния переноса составов зашедших на АМКР по данным системы КИС", ps.N_NATUR, ps.D_DD, ps.D_MM, ps.D_YY, ps.T_HH, ps.T_MI).WriteWarning(servece_owner, this.eventID);
+                    return 0;
+                }
+                // p_ot=0, k_st_otpr is not null,  k_st_pr is null
+                if (ps.P_OT == 0 && ps.K_ST_OTPR != null && ps.K_ST_PR == null)
+                {
+                    return ef_tkis.SaveRWBufferArrivalSostav(new RWBufferArrivalSostav()
+                    {
+                        id = 0,
+                        datetime = (DateTime)ps.DT,
+                        day = (int)ps.D_DD,
+                        month = (int)ps.D_MM,
+                        year = (int)ps.D_YY,
+                        hour = (int)ps.T_HH,
+                        minute = (int)ps.T_MI,
+                        natur = ps.N_NATUR,
+                        id_station_kis = (int)ps.K_ST,
+                        way_num = ps.N_PUT,
+                        napr = ps.NAPR,
+                        count_wagons = null,
+                        count_nathist = null,
+                        count_set_wagons = null,
+                        count_set_nathist = null,
+                        close = null,
+                        close_user = null,
+                        status = (int)status,
+                        list_wagons = null,
+                        list_no_set_wagons = null,
+                        list_no_update_wagons = null,
+                        message = null,
+                    });
+                }
+                else
+                {
+                    String.Format("Натурный листа {0}, за: {1}-{2}-{3} {4}:{5} - не соответствует критерию заполнения P_OT={6} (0), K_ST_OTPR={7} (is not null), K_ST_PR={8} (is null). Строка не добавлена в таблицу состояния переноса составов сданных на УЗ по данным системы КИС",
+                        ps.N_NATUR, ps.D_DD, ps.D_MM, ps.D_YY, ps.T_HH, ps.T_MI, ps.P_OT, ps.K_ST_OTPR, ps.K_ST_PR).WriteWarning(servece_owner, this.eventID);
+                    return 0;
+                }
             }
             catch (Exception e)
             {
@@ -214,27 +229,42 @@ namespace KIS
             EFTKIS ef_tkis = new EFTKIS();
             try
             {
-                //DateTime DT = DateTime.Parse(ps.D_DD.ToString() + "-" + ps.D_MM.ToString() + "-" + ps.D_YY.ToString() + " " + ps.T_HH.ToString() + ":" + ps.T_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
-                return ef_tkis.SaveRWBufferSendingSostav(new RWBufferSendingSostav()
+                // Проверка правилности заполнения времени и всех полей натурки
+                if (ps.D_DD == null || ps.D_MM == null || ps.D_YY == null || ps.T_HH == null || ps.T_MI == null) {
+                    String.Format("Ошибка заполнения натурного листа {0}, невозможно определить дату и время: {1}-{2}-{3} {4}:{5}. Строка не добавлена в таблицу состояния переноса составов сданных на УЗ по данным системы КИС", ps.N_NATUR, ps.D_DD, ps.D_MM, ps.D_YY, ps.T_HH, ps.T_MI).WriteWarning(servece_owner, this.eventID);
+                    return 0;
+                }
+                // p_ot=1, n_ved_pr is null, k_st_otpr is null , k_st_pr is not null
+                if (ps.P_OT == 1 && ps.N_VED_PR == null && ps.K_ST_OTPR == null && ps.K_ST_PR != null)
                 {
-                    id = 0,
-                    datetime = (DateTime)ps.DT,
-                    day = (int)ps.D_DD,
-                    month = (int)ps.D_MM,
-                    year = (int)ps.D_YY,
-                    hour = (int)ps.T_HH,
-                    minute = (int)ps.T_MI,
-                    natur = ps.N_NATUR,
-                    id_station_from_kis = (int)ps.K_ST,
-                    id_station_on_kis = (int)ps.K_ST_PR,
-                    count_nathist = null,
-                    count_set_nathist = null,
-                    close = null,
-                    close_user = null,
-                    status = (int)status,
-                    list_no_set_wagons = null,
-                    message = null,
-                });
+                    return ef_tkis.SaveRWBufferSendingSostav(new RWBufferSendingSostav()
+                    {
+                        id = 0,
+                        datetime = (DateTime)ps.DT,
+                        day = (int)ps.D_DD,
+                        month = (int)ps.D_MM,
+                        year = (int)ps.D_YY,
+                        hour = (int)ps.T_HH,
+                        minute = (int)ps.T_MI,
+                        natur = ps.N_NATUR,
+                        id_station_from_kis = (int)ps.K_ST,
+                        id_station_on_kis = (int)ps.K_ST_PR,
+                        count_nathist = null,
+                        count_set_nathist = null,
+                        close = null,
+                        close_user = null,
+                        status = (int)status,
+                        list_no_set_wagons = null,
+                        message = null,
+                    });
+                }
+                else
+                {
+                    String.Format("Натурный листа {0}, за: {1}-{2}-{3} {4}:{5} - не соответствует критерию заполнения P_OT={6} (1), N_VED_PR={7} (is null), K_ST_OTPR={8} (is null), K_ST_PR={9} (is not null). Строка не добавлена в таблицу состояния переноса составов сданных на УЗ по данным системы КИС",
+                        ps.N_NATUR, ps.D_DD, ps.D_MM, ps.D_YY, ps.T_HH, ps.T_MI, ps.P_OT, ps.N_VED_PR, ps.K_ST_OTPR, ps.K_ST_PR).WriteWarning(servece_owner, this.eventID);
+                    return 0;
+                }
+
             }
             catch (Exception e)
             {
@@ -349,7 +379,7 @@ namespace KIS
                     if (res > 0) insers++;
                     if (res < 0)
                     {
-                        String.Format("Ошибка выполнения метода InsertRWBufferSendingSostav, добавления строки состава по данным системы КИС(натурный лист:{0}, дата:{1}-{2}-{3} {4}:{5}) в таблицу состояния переноса составов зашедших на АМКР по данным системы КИС", ps.N_NATUR, ps.D_DD, ps.D_MM, ps.D_YY, ps.T_HH, ps.T_MI).WriteError(servece_owner, this.eventID);
+                        String.Format("Ошибка выполнения метода InsertRWBufferSendingSostav, добавления строки состава по данным системы КИС(натурный лист:{0}, дата:{1}-{2}-{3} {4}:{5}) в таблицу состояния переноса составов сданных на УЗ по данным системы КИС", ps.N_NATUR, ps.D_DD, ps.D_MM, ps.D_YY, ps.T_HH, ps.T_MI).WriteError(servece_owner, this.eventID);
                         errors++;
                     }
                 }
