@@ -857,7 +857,7 @@ namespace KIS
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("TransferArrivalOfKIS()"), servece_owner, eventID);
+                e.WriteErrorMethod(String.Format("TransferArrivalKISToRailWay()"), servece_owner, eventID);
                 return -1;
             }
         }
@@ -1037,7 +1037,7 @@ namespace KIS
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("SetCarKISToWayRailWay()"), servece_owner, eventID);
+                e.WriteErrorMethod(String.Format("SetCarKISToWayRailWay(natur={0}, num_vag={1}, dt_amkr={2}, id_way={3}, id_station_kis={4})",natur,num_vag,dt_amkr,id_way,id_station_kis), servece_owner, eventID);
                 return (int)errorTransfer.global;
             }
         }
@@ -1203,7 +1203,7 @@ namespace KIS
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("SetCarToWayRailWay()"), servece_owner, eventID);
+                e.WriteErrorMethod(String.Format("SetCarToWayRailWay(natur={0}, num_vag={1}, dt_amkr={2}, id_way={3})",natur,num_vag,dt_amkr,id_way), servece_owner, eventID);
                 return (int)errorTransfer.global;
             }
         }
@@ -1388,7 +1388,7 @@ namespace KIS
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("SetCarToWayRailWay()"), servece_owner, eventID);
+                e.WriteErrorMethod(String.Format("UpdCarToWayRailWay(natur={0}, num_vag={1}, dt_amkr={2}, id_way={3})", natur, num_vag, dt_amkr, id_way), servece_owner, eventID);
                 return (int)errorTransfer.global;
             }
         }
