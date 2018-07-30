@@ -42,7 +42,6 @@ function getChildObjects(obj, key, val) {
     return objects;
 }
 
-
 // Получить значение атрибута text по атрибуту value
 function getTextOption(obj, val) {
     if (obj != null) {
@@ -75,6 +74,7 @@ function OnBegin() {
     var lang = $.cookie('lang');
     LockScreen(lang == 'en' ? 'We are processing your request ...' : 'Мы обрабатываем ваш запрос...');
 }
+
 //-------------------------------------------------------------------------
 // Обработчики ajax - функций
 // Событие перед запросом

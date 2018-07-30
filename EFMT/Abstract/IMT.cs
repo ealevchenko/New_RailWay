@@ -64,13 +64,15 @@ namespace EFMT.Abstract
         ArrivalCars GetArrivalCarsOfNextCar(int num, DateTime dt);
         int CloseArrivalCars(int num, DateTime dt, int code_close);
         int CloseArrivalCars(int id_sostav, int num, int doc, DateTime dt);
+        ArrivalCars GetArrivalCarsOfParentID(int parent_id);
+        IQueryable<ArrivalCars> GetFirstArrivalCarsOfNum(int num_car);
+        List<HistoryArrivalCars> GetHistoryArrivalCarsOfNum(int num);
+
         IQueryable<ArrivalSostav> ArrivalSostav { get; }
         IQueryable<ArrivalSostav> GetArrivalSostav();
         ArrivalSostav GetArrivalSostav(int id);
         int SaveArrivalSostav(ArrivalSostav ArrivalSostav);
         ArrivalSostav DeleteArrivalSostav(int id);
-
-
         ArrivalSostav GetArrivalSostavOfFile(string file);
         ArrivalSostav GetNoCloseArrivalSostav(string index, DateTime date);
         ArrivalSostav GetNoCloseArrivalSostav(string index, DateTime date, int period);

@@ -33,3 +33,18 @@ div#history-car-sap-out {
     width: 500px;
     text-align: left;
 }
+
+/*Панель настроек*/
+.setup-operation {
+    padding: 5px;
+    text-align: left;
+}
+
+    .setup-operation button {
+        margin-left: 5px;
+    }
+
+    .setup-operation label {
+        margin-left: 5px;
+        margin-right: 5px;
+    }

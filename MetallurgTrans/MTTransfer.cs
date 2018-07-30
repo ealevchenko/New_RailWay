@@ -1359,7 +1359,7 @@ namespace MetallurgTrans
         /// <param name="car"></param>
         /// <returns></returns>
         public bool IsArrivalAMKR(WagonsTracking car) {
-            return car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН") & (car.kgrp == 7932 | car.kgrp == 3437) ? true : false;
+            return car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН") & (car.kgrp == 7932 | car.kgrp == 3437 | car.kgrp == 6302) ? true : false;
         }
         /// <summary>
         /// Перенос и формирование циклограммы по всем вагонам

@@ -1,6 +1,7 @@
 ﻿using EFReference.Abstract;
 using EFReference.Concrete;
 using EFReference.Entities;
+using MessageLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Web_RailWay.Controllers.api
     [RoutePrefix("api/reference")]
     public class ReferenceController : ApiController
     {
+        private eventID eventID = eventID.Web_API_ReferenceController;
         IReference rep_ref;
 
         public ReferenceController()
@@ -176,5 +178,69 @@ namespace Web_RailWay.Controllers.api
         }
         #endregion
 
+        #region States
+        // GET: api/reference/states/all
+        [Route("states/all")]
+        [ResponseType(typeof(States))]
+        public IHttpActionResult GetStates()
+        {
+            try
+            {
+                List<States> states = this.rep_ref.States
+                    .ToList()
+                    .Select(s => new States
+                    {
+                        id = s.id,
+                        state = s.state,
+                        name_network = s.name_network,
+                        abb_ru = s.abb_ru,
+                        abb_en = s.abb_en
+                    })
+                    .ToList();
+                if (states == null)
+                {
+                    return NotFound();
+                }
+                return Ok(states);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStates()"), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        // GET: api/reference/states/id/22
+        [Route("states/id/{id:int?}")]
+        [ResponseType(typeof(States))]
+        public IHttpActionResult GetStates(int id)
+        {
+            try
+            {
+                States state = this.rep_ref.States
+                    .Where(s =>s.id == id)
+                    .ToList()
+                    .Select(s => new States
+                    {
+                        id = s.id,
+                        state = s.state,
+                        name_network = s.name_network,
+                        abb_ru = s.abb_ru,
+                        abb_en = s.abb_en
+                    }).FirstOrDefault();
+                if (state == null)
+                {
+                    return NotFound();
+                }
+                return Ok(state);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetStates(id={0})", id), eventID);
+                return InternalServerError(e);
+            }
+        }
+
+        #endregion
     }
 }

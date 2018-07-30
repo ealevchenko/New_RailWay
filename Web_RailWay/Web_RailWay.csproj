@@ -613,7 +613,9 @@
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Areas\RW\Views\Home\PluginTest.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
+    <Content Include="Scripts\api_helpers\reference.js" />
     <Content Include="Scripts\api_helpers\settings.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -731,6 +733,8 @@
     <Content Include="Scripts\MT\operations.js" />
     <Content Include="Scripts\MT\routes.js" />
     <Content Include="Scripts\MT\wagons_tracking.js" />
+    <Content Include="Scripts\Plugins\MT.js" />
+    <Content Include="Scripts\Plugins\MT_Tables.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
@@ -738,6 +742,7 @@
     <Content Include="Scripts\RW\awas1.js" />
     <Content Include="Scripts\RW\awas.js" />
     <Content Include="Scripts\RW\rwui.js" />
+    <Content Include="Scripts\RW\test.js" />
     <Content Include="Scripts\RW\vagon.js" />
     <Content Include="Scripts\Services\services.js" />
     <Content Include="Scripts\MT\approachescars.js" />

@@ -2,6 +2,7 @@
 using EFMT.Concrete;
 using EFMT.Entities;
 using MessageLog;
+using MetallurgTrans;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -535,6 +536,52 @@ namespace Web_RailWay.Controllers.api
             }
             return Ok(natur_list);
         }
+
+        // GET: api/mt/arrival/cars/num/52921004
+        [Route("arrival/cars/num/{num:int?}")]
+        [ResponseType(typeof(ArrivalCars))]
+        public IHttpActionResult GetArrivalCarsOfNum(int num)
+        {
+            try
+            {
+                List<ArrivalCars> list = this.rep_MT.ArrivalCars
+                    .Where(c=>c.Num == num)
+                    .ToList()
+                    .Select(c => new ArrivalCars
+                    {
+                        ID = c.ID,
+                        IDSostav = c.IDSostav,
+                        Position = c.Position,
+                        Num = c.Num,
+                        CountryCode = c.CountryCode,
+                        Weight = c.Weight,
+                        CargoCode = c.CargoCode,
+                        Cargo = c.Cargo,
+                        StationCode = c.StationCode,
+                        Station = c.Station,
+                        Consignee = c.Consignee,
+                        Operation = c.Operation,
+                        CompositionIndex = c.CompositionIndex,
+                        DateOperation = c.DateOperation,
+                        TrainNumber = c.TrainNumber,
+                        NumDocArrival = c.NumDocArrival,
+                        Arrival = c.Arrival,
+                        ParentID = c.ParentID,
+                        UserName = c.UserName
+                    }).OrderBy(c=>c.ID).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetHistoryArrivalCarsOfNum(num={0})",num), eventID);
+                return InternalServerError(e);
+            }
+        }
+
         #endregion
 
         #region Approaches
@@ -593,6 +640,56 @@ namespace Web_RailWay.Controllers.api
         #endregion
 
 
+        // GET: api/mt/list/arrival/result
+        [Route("list/arrival/result")]
+        [ResponseType(typeof(Option))]
+        public IHttpActionResult GetArrivalResult()
+        {
+            try
+            {
+                List<Option> list = new List<Option>();
+                foreach (mtt_err_arrival type in Enum.GetValues(typeof(mtt_err_arrival)))
+                {
+                    list.Add(new Option() { value = (int)type, text = type.ToString() });
+                }
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalResult()"), eventID);
+                return InternalServerError(e);
+            }
+        }
 
+        // GET: api/mt/list/arrival/result/0
+        [Route("list/arrival/result/{result:int?}")]
+        [ResponseType(typeof(Option))]
+        public IHttpActionResult GetArrivalResult(int result)
+        {
+            try
+            {
+                Option res= null;
+                foreach (mtt_err_arrival type in Enum.GetValues(typeof(mtt_err_arrival)))
+                {
+                    if ((int)type == result) {
+                        res = new Option() { value = (int)type, text = type.ToString() };
+                    }
+                }
+                if (res == null)
+                {
+                    return NotFound();
+                }
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalResult(result={0})", result), eventID);
+                return InternalServerError(e);
+            }
+        }
     }
 }

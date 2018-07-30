@@ -92,3 +92,7 @@
 /// <reference path="api_helpers/railway_reference.js" />
 /// <reference path="RW/vagon.js" />
 /// <reference path="api_helpers/railway_operation.js" />
+/// <reference path="api_helpers/reference.js" />
+/// <reference path="plugins/mt.js" />
+/// <reference path="rw/test.js" />
+/// <reference path="plugins/mt_tables.js" />

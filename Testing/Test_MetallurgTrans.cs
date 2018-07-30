@@ -228,5 +228,14 @@ namespace Testing
             List<OperationWagonsTracking> list3 = efmt.GetOperationWagonsTrackingOfNumCar(52921079, null, 153672);
             List<OperationWagonsTracking> list4 = efmt.GetOperationWagonsTrackingOfNumCar(52921079, 145741, null);
         }
+
+        public void EFMetallurgTrans_GetHistoryArrivalCarsOfNum()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+
+            List<HistoryArrivalCars> history = efmt.GetHistoryArrivalCarsOfNum(52921004);
+
+        }
+
     }
 }

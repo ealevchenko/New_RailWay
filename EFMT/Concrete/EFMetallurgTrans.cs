@@ -17,6 +17,33 @@ namespace EFMT.Concrete
 
     public enum mtConsignee : int { AMKR = 1 }
 
+    //public class HistoryArrivalCars
+    //{
+    //    public int ID { get; set; }
+    //    public int IDSostav { get; set; }
+    //    public int Num { get; set; }
+    //    public int CountryCode { get; set; }
+    //    public float Weight { get; set; }
+    //    public int CargoCode { get; set; }
+    //    public string Cargo { get; set; }
+    //    public int StationCode { get; set; }
+    //    public string Station { get; set; }
+    //    public int Consignee { get; set; }
+    //    public string CompositionIndex { get; set; }
+    //    public DateTime DateStart { get; set; }
+    //    public DateTime DateStop { get; set; }
+    //    public int TrainNumber { get; set; }
+    //    public int? NumDocArrival { get; set; }
+    //    public DateTime? Arrival { get; set; }
+    //    public string UserName { get; set; }
+    //    public List<ArrivalCars> list_operation { get; set; }
+    //}
+
+    public class HistoryArrivalCars
+    {
+        public List<ArrivalCars> list_operation { get; set; }
+    }
+
     public class EFMetallurgTrans : IMT
     {
         private eventID eventID = eventID.EFMetallurgTrans;
@@ -955,6 +982,81 @@ namespace EFMT.Concrete
                 return -1;
             }
         }
+        /// <summary>
+        /// Найти следующий вагон
+        /// </summary>
+        /// <param name="parent_id"></param>
+        /// <returns></returns>
+        public ArrivalCars GetArrivalCarsOfParentID(int parent_id)
+        {
+            try
+            {
+                return GetArrivalCars().Where(c => c.ParentID == parent_id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetArrivalCarsOfParentID(id={0})", parent_id), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить первые прибытия вагонов
+        /// </summary>
+        /// <param name="num_car"></param>
+        /// <returns></returns>
+        public IQueryable<ArrivalCars> GetFirstArrivalCarsOfNum(int num_car)
+        {
+            try
+            {
+                return GetArrivalCars().Where(c => c.Num == num_car & c.ParentID==null).OrderBy(c => c.ID);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetFirstArrivalCarsOfNum(num_car={0})", num_car), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Сформировать историю прибытия вагонов на УЗ Кривого Рога
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="history_car"></param>
+        protected void GetHistoryArrivalCarsOfNum(ArrivalCars car, ref List<ArrivalCars> history_car)
+        {
+            history_car.Add(car);
+            ArrivalCars next = GetArrivalCarsOfParentID(car.ID);
+            if (next != null)
+            {
+                GetHistoryArrivalCarsOfNum(next, ref history_car);
+            }
+        }
+        /// <summary>
+        /// Получить историю прибытия вагонов на УЗ Кривого Рога
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public List<HistoryArrivalCars> GetHistoryArrivalCarsOfNum(int num)
+        {
+            try
+            {
+                List<ArrivalCars> first_list = GetFirstArrivalCarsOfNum(num).ToList();
+                List<HistoryArrivalCars> history_list = new List<HistoryArrivalCars>();
+                foreach (ArrivalCars car in first_list)
+                {
+                    List<ArrivalCars> history_car = new List<ArrivalCars>();
+                    GetHistoryArrivalCarsOfNum(car, ref history_car);
+                    history_list.Add(new HistoryArrivalCars() { list_operation = history_car });
+
+                }
+                return history_list;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetHistoryArrivalCarsOfNum(num={0})", num), eventID);
+                return null;
+            }
+        }
+
         #endregion
 
         #region ArrivalSostav

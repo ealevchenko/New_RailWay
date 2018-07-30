@@ -30,5 +30,9 @@ namespace Web_RailWay.Areas.RW.Controllers
         {
             return PartialView();
         }
+
+        public ActionResult PluginTest() { 
+                return View();
+        }
     }
 }

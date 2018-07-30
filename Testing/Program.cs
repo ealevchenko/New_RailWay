@@ -121,6 +121,7 @@ namespace Testing
             //tst_tr_app.EFMetallurgTrans_GetLastRouteWagonsTrackingOfReports(); // получить данные по циклам движения указанных вагонов за указанное время
             //tst_tr_app.EFMetallurgTrans_GetLastWagonTrackingOfReports();
             //tst_tr_app.EFMetallurgTrans_GetOperationWagonsTrackingOfNumCar(); // Проверка получения списка операций по номеру и id
+            tst_tr_app.EFMetallurgTrans_GetHistoryArrivalCarsOfNum(); // Проверка получения истории прибытия вагона
 
             #endregion
 
@@ -146,7 +147,7 @@ namespace Testing
             //tst_kis.Test_KISTransfer_SetCarToWayRailWay(); // Тест принимаем на путь станции из УЗ
             //tst_kis.Test_KISTransfer_SetWayRailWayOfKIS(); // тест постановки вагонов по данным КИС(buffer) в систему RailWay
             //tst_kis.Test_KISTransfer_UpdWayRailWayOfKIS(); // тест обновления вагонов по данным КИС(buffer) в систему RailWay
-            tst_kis.Test_KIS_RW_Transfer_CopyBufferSendingSostavOfKIS(); // Тест переноса данных по отправленым составам в таблицу буфер
+            //tst_kis.Test_KIS_RW_Transfer_CopyBufferSendingSostavOfKIS(); // Тест переноса данных по отправленым составам в таблицу буфер
             //tst_kis.Test_KISThread_StartCopyBufferSendingSostav(); // Тест запуска и выполнения службы переноса данных по отправленым составам в таблицу буфер
             //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay(); // Перенос составов отправленных на УЗ
             //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay_SetWayRailWayOfKIS(); // Переноса строки состава отправленных на УЗ

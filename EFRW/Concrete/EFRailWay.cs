@@ -1058,29 +1058,6 @@ namespace EFRW.Concrete
             }
             return dbEntry.id;
         }
-        ///// <summary>
-        ///// Сохранить список вагонов, вернуть количество сохраненых без ошибок
-        ///// </summary>
-        ///// <param name="Cars"></param>
-        ///// <returns></returns>
-        //public int SaveCars(List<Cars> Cars)
-        //{
-        //    try
-        //    {
-        //        int result =0;
-        //        foreach (Cars car in Cars) {
-        //            int res = SaveCars(car);
-        //            if (res > 0) { result++; }
-        //        }
-        //        return result;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        e.WriteErrorMethod(String.Format("SaveCars(Cars={0})", Cars), eventID);
-        //        return -1;
-        //    }
-
-        //}
 
         public Cars DeleteCars(int id)
         {

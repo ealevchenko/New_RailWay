@@ -127,7 +127,6 @@ function getAsyncCountApproachesNaturList(callback) {
 //******************************************************************************************
 // WagonTracking
 //******************************************************************************************
-
 //------------------------------------------------------------------------------------------
 // Вернуть список рапартов
 function getAsyncWTReports(callback) {
@@ -385,6 +384,84 @@ function getAsyncCargoDislocationOperationWagonsTrackingOfCarsReports(id_reports
             AJAXComplete();
         },
     });
+}
+
+//******************************************************************************************
+// Arrival
+//******************************************************************************************
+// Вернуть список прибытий указаному вагону
+function getAsyncArrivalCars(num, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '/railway/api/mt/arrival/cars/num/'+num,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+//******************************************************************************************
+// Списки 
+//******************************************************************************************
+// Вернуть список результатов закрытия прибытий
+function getAsyncArrivalResult(result, callback) {
+    $.ajax({
+        type: 'GET',
+        url: result!=null ? '/railway/api/mt/list/arrival/result/' + result : '/railway/api/mt/list/arrival/result',
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+
+//------------------------------------------------------------------------
+// Формирование библиотек
+//------------------------------------------------------------------------
+function getReferenceArrivalResult(callback) {
+    var ref = {
+        list: [],
+        initObject: function () {
+            getAsyncArrivalResult(null, function (result) {
+                ref.list = result;
+                if (typeof callback === 'function') {
+                    callback(ref);
+                }
+            });
+        },
+        getResult: function (value) {
+            var result = getObjects(this.list, 'value', value)
+            if (result != null && result.length > 0) {
+                return result[0];
+            }
+        },
+    }
+    ref.initObject();
 }
 
 
