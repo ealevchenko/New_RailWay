@@ -1,0 +1,54 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @RWResource.index_report_vagon_search_desc;
+    ViewBag.Home = @RWResource.index_report_vagon_search_title;
+}
+
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("LinkKISControl", "Home", new { area = "KIS" }); }
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    @Styles.Render("~/jquery-ui/css")
+    @Styles.Render("~/DataTables/css")
+    <link rel="stylesheet" type="text/css" href="~/Content/RW/vagon.css">
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/Ajax")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/DataTables")
+
+    <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/Plugins/MT_Tables.js" type="text/javascript"></script>
+
+
+    <script src="~/Scripts/api_helpers/reference.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/metallurgtrans.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/railway.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/railway_reference.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/railway_operation.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/kis.js" type="text/javascript"></script>
+    <script src="~/Scripts/RW/test.js" type="text/javascript"></script>
+    <script>
+        $('header').addClass('img-header-rw');
+    </script>
+}
+<div id="report-detali" style="color:#000000; width:1000px; margin-left:50px" >
+    <div id="test-plugin">
+
+    </div>
+    <div id="test-plugin-1">
+
+    </div>
+</div>
+
