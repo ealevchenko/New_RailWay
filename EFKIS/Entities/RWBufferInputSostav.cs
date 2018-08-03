@@ -29,14 +29,31 @@ namespace EFKIS.Entities
 
         public int? natur { get; set; }
 
+        public int? status { get; set; }
+
+        [StringLength(1000)]
+        public string list_wagons { get; set; }
+
+        [StringLength(1000)]
+        public string list_no_set_wagons { get; set; }
+
+        [StringLength(1000)]
+        public string message { get; set; }
+
         public DateTime? close { get; set; }
 
         [StringLength(100)]
         public string close_user { get; set; }
 
-        public int? status { get; set; }
+        [StringLength(250)]
+        public string close_comment { get; set; }
 
-        [StringLength(1000)]
-        public string message { get; set; }
+
+
+
+
+
+
+
     }
 }

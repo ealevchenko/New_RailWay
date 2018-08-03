@@ -295,8 +295,8 @@ namespace KISTServices
             if (active_tmp & interval_tmp != interval)
             {
                 interval = interval_tmp;
-                timer_services_copy_input.Stop();
-                timer_services_copy_input.Interval = interval * 1000;
+                timer.Stop();
+                timer.Interval = interval * 1000;
                 switch (service){
                     case service.CopyArrivalSostavKIS: RunTimerCopyArrival(); break;
                     case service.TransferArrivalKIS: RunTimerTransferArrivalKIS(); break;
@@ -524,7 +524,7 @@ namespace KISTServices
         /// <param name="args"></param>
         private void OnTimerServicesCopyBufferInputSostav(object sender, System.Timers.ElapsedEventArgs args)
         {
-            //String.Format("Сервис : {0} сработал таймер Approaches.", this.servece_name).WriteInformation(servece_name, eventID);
+            //String.Format("Сервис : {0} сработал таймер CopyBufferInputSostav.", this.servece_name).WriteWarning(servece_name, eventID);
             try
             {
                 bool active_copy = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyInputSostavKIS", this.thread_copy_input, this.active_copy_input, true);
@@ -580,6 +580,7 @@ namespace KISTServices
         {
             try
             {
+                //String.Format("Сервис : {0} сработал таймер TimerServicesCopyBufferOutputSostav.", this.servece_name).WriteInformation(servece_name, eventID);
                 bool active_copy = RWSetting.GetDB_Config_DefaultSetting("ActiveCopyOutputSostavKIS", this.thread_copy_output, this.active_copy_output, true);
                 StartCopyOutput(active_copy);
                 if (active_copy != this.active_copy_output)

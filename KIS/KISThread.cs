@@ -356,18 +356,25 @@ namespace KIS
                     }
                 }
                 dt_start = DateTime.Now;
-                int res_copy = 0;
+                int res_rc_copy = 0;
+                int res_rw_copy = 0;
                 lock (locker_bis)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
-                    KIS_RC_Transfer kis_trans = new KIS_RC_Transfer(service);
-                    kis_trans.DayControlInputKisAddData = day_control_input_kis_add_data;
-                    res_copy = kis_trans.CopyBufferInputSostavOfKIS();
+                    KIS_RC_Transfer kis_rc_trans = new KIS_RC_Transfer(service);
+                    kis_rc_trans.DayControlInputKisAddData = day_control_input_kis_add_data;
+                    res_rc_copy = kis_rc_trans.CopyBufferInputSostavOfKIS();
+
+                    // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
+                    KIS_RW_Transfer kis_rw_trans = new KIS_RW_Transfer(service);
+                    kis_rw_trans.DayControlInputKisAddData = day_control_input_kis_add_data;
+                    res_rw_copy = kis_rw_trans.CopyBufferInputSostavOfKIS();
+
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
-                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_copy:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_copy);
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_rc_copy:{6}, res_rw_copy:{7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_rc_copy, res_rw_copy);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
-                service.WriteServices(dt_start, DateTime.Now, res_copy);
+                service.WriteServices(dt_start, DateTime.Now, res_rw_copy);
             }
             catch (ThreadAbortException exc)
             {
@@ -516,19 +523,26 @@ namespace KIS
                     }
                 }
                 dt_start = DateTime.Now;
-                int res_copy = 0;
+                int res_rc_copy = 0;
+                int res_rw_copy = 0;
                 lock (locker_bos)
                 {
                     // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
-                    KIS_RC_Transfer kis_trans = new KIS_RC_Transfer(service);
-                    kis_trans.DayControlOutputKisAddData = day_control_output_kis_add_data;
-                    kis_trans.StatusControlOutputKis = status_control_output_kis;
-                    res_copy = kis_trans.CopyBufferOutputSostavOfKIS();
+                    KIS_RC_Transfer kis_rc_trans = new KIS_RC_Transfer(service);
+                    kis_rc_trans.DayControlOutputKisAddData = day_control_output_kis_add_data;
+                    kis_rc_trans.StatusControlOutputKis = status_control_output_kis;
+                    res_rc_copy = kis_rc_trans.CopyBufferOutputSostavOfKIS();
+
+                    // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
+                    KIS_RW_Transfer kis_rw_trans = new KIS_RW_Transfer(service);
+                    kis_rw_trans.DayControlOutputKisAddData = day_control_output_kis_add_data;
+                    kis_rw_trans.StatusControlOutputKis = status_control_output_kis;
+                    res_rw_copy = kis_rw_trans.CopyBufferOutputSostavOfKIS();
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
-                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_copy:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_copy);
+                string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_rc_copy:{6}, res_rw_copy:{7}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_rc_copy, res_rw_copy);
                 mes_service_exec.WriteInformation(servece_owner, eventID);
-                service.WriteServices(dt_start, DateTime.Now, res_copy);
+                service.WriteServices(dt_start, DateTime.Now, res_rw_copy);
             }
             catch (ThreadAbortException exc)
             {

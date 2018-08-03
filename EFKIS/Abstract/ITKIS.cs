@@ -77,5 +77,34 @@ namespace EFKIS.Abstract
         int CloseRWBufferSendingSostav(int id, string coment,  string user);
         #endregion
 
+        #region RWBufferInputSostav Перенос вагонов по внутреним станциям по прибытию
+        IQueryable<RWBufferInputSostav> RWBufferInputSostav { get; }
+        IQueryable<RWBufferInputSostav> GetRWBufferInputSostav();
+        RWBufferInputSostav GetRWBufferInputSostav(int id);
+        int SaveRWBufferInputSostav(RWBufferInputSostav RWBufferInputSostav);
+        RWBufferInputSostav DeleteRWBufferInputSostav(int id);
+        DateTime? GetLastDateTimeRWBufferInputSostav();
+        IQueryable<RWBufferInputSostav> GetRWBufferInputSostav(DateTime start, DateTime stop);
+        IQueryable<RWBufferInputSostav> GetRWBufferInputSostavNoClose();
+        RWBufferInputSostav GetRWBufferInputSostavOfNatur(int natur);
+        int CloseRWBufferInputSostav(int id);
+        int CloseRWBufferInputSostav(int id, string user);
+        int CloseRWBufferInputSostav(int id, string coment, string user);
+        #endregion
+
+        #region RWBufferOutputSostav Перенос вагонов по внутреним станциям по отправке
+        IQueryable<RWBufferOutputSostav> RWBufferOutputSostav { get; }
+        IQueryable<RWBufferOutputSostav> GetRWBufferOutputSostav();
+        RWBufferOutputSostav GetRWBufferOutputSostav(int id);
+        int SaveRWBufferOutputSostav(RWBufferOutputSostav RWBufferOutputSostav);
+        RWBufferOutputSostav DeleteRWBufferOutputSostav(int id);
+        DateTime? GetLastDateTimeRWBufferOutputSostav();
+        IQueryable<RWBufferOutputSostav> GetRWBufferOutputSostav(DateTime start, DateTime stop);
+        IQueryable<RWBufferOutputSostav> GetRWBufferOutputSostavNoClose();
+        int CloseRWBufferOutputSostav(int id);
+        int CloseRWBufferOutputSostav(int id, string user);
+        int CloseRWBufferOutputSostav(int id, string coment, string user);
+        #endregion
+
     }
 }

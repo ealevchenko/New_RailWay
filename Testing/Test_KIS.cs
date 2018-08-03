@@ -13,8 +13,9 @@ namespace Testing
     {
         public Test_KIS() { }
 
-        
-        
+
+        #region RC
+
         public void Test_KISTransfer_TransferArrivalKISToRailWay()
         {
             KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
@@ -82,11 +83,11 @@ namespace Testing
             kis_trans.CopyBufferInputSostavOfKIS(1);
         }
 
-        public void Test_KISThread_StartCopyBufferInputSostav()
-        {
-            KISThread kis_t = new KISThread(service.ServicesKIS);
-            kis_t.StartCopyBufferInputSostav();
-        }
+        //public void Test_KISThread_StartCopyBufferInputSostav()
+        //{
+        //    KISThread kis_t = new KISThread(service.ServicesKIS);
+        //    kis_t.StartCopyBufferInputSostav();
+        //}
 
 
         public void Test_KISTransfer_CopyBufferOutputSostavOfKIS()
@@ -95,11 +96,11 @@ namespace Testing
             kis_trans.CopyBufferOutputSostavOfKIS(1, false);
         }
 
-        public void Test_KISThread_StartCopyBufferOutputSostav()
-        {
-            KISThread kis_t = new KISThread(service.ServicesKIS);
-            kis_t.StartCopyBufferOutputSostav();
-        }
+        //public void Test_KISThread_StartCopyBufferOutputSostav()
+        //{
+        //    KISThread kis_t = new KISThread(service.ServicesKIS);
+        //    kis_t.StartCopyBufferOutputSostav();
+        //}
 
         public void Test_KISTransfer_TransferArrivalToStation()
         {
@@ -136,6 +137,9 @@ namespace Testing
             kis_trans.TransferArrivalToStation(ref bos);
         }
 
+        #endregion
+
+        #region TEST RW Перенос принять на АМКР
         public void Test_KISTransfer_SetCarToWayRailWay()
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
@@ -158,15 +162,15 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(3239);
+            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(3416);
             kis_trans.UpdWayRailWayOfKIS(ref arr_s);
         }
+        #endregion
 
-
+        #region TEST RW Перенос сдача на УЗ 
         public void Test_KIS_RW_Transfer_CopyBufferSendingSostavOfKIS()
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
-
             kis_trans.CopyBufferSendingSostavOfKIS(1);
         }
 
@@ -205,6 +209,39 @@ namespace Testing
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             bool res = kis_trans.IsVagonOfSendingNatHistNatur(3903, 65888587, new DateTime(2018, 6, 22, 6, 05, 0)); //2018-06-22T06:05:00
         }
+        #endregion
+
+        #region TEST RW Перенос по внутреним станциям (по прибытию)
+
+        public void Test_KIS_RW_Transfer_CopyBufferInputSostavOfKIS()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+            int result = kis_trans.CopyBufferInputSostavOfKIS();
+        }
+
+        public void Test_KISThread_StartCopyBufferInputSostav()
+        {
+            KISThread kis_th = new KISThread(service.TransferInputKIS);
+            bool result = kis_th.StartCopyBufferInputSostav();
+        }
+
+        #endregion
+
+        #region TEST RW Перенос по внутреним станциям (по отправке)
+
+        public void Test_KIS_RW_Transfer_CopyBufferOutputSostavOfKIS()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+            int result = kis_trans.CopyBufferOutputSostavOfKIS();
+        }
+
+        public void Test_KISThread_StartCopyBufferOutputSostav()
+        {
+            KISThread kis_th = new KISThread(service.TransferInputKIS);
+            bool result = kis_th.StartCopyBufferOutputSostav();
+        }
+
+        #endregion
 
 
     }
