@@ -22,6 +22,12 @@ namespace Web_RailWay.Areas.RW.Controllers
         {
             return View();
         }
+
+        [Access(LogVisit = true)]
+        public ActionResult Vagon1(int? num, DateTime? dt_uz, DateTime? dt_inp, DateTime? dt_out) //int? day, int? month, int? year, int? hour, int? minute, int? second
+        {
+            return View();
+        }
         /// <summary>
         /// Список ссылок на отчеты администрирования
         /// </summary>

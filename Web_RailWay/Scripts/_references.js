@@ -96,3 +96,4 @@
 /// <reference path="plugins/mt.js" />
 /// <reference path="rw/test.js" />
 /// <reference path="plugins/mt_tables.js" />
+/// <reference path="rw/vagon1.js" />
