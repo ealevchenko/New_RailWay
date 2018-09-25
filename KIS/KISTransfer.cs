@@ -44,6 +44,7 @@ namespace KIS
         different_nanur_out = -17,  // Натурные листы отличаются
         no_list_nathist = -18,      // Нет списка вагонов по указному натурному листу
         no_list_wagons = -19,       // Неопределенн список вагонов
+        error_list_wagons = -20,       // Ошибка определения списка вагонов
         set_table_arrival_sostav = -30,
         set_table_sending_sostav = -31,
     }
@@ -137,11 +138,14 @@ namespace KIS
         protected bool status_control_output_kis = false; // Контроль состояния закрытия строки системы КИС вагоны по отправке.
         public bool StatusControlOutputKis { get { return this.status_control_output_kis; } set { this.status_control_output_kis = value; } }
 
-        protected bool transfer_input_kis = false; // Признак переноса данных из системы КИС в систему RC (1-при совподении правил переносим,0 при совподении правил просто закроем строку).
+        protected bool transfer_input_kis = false; // Признак переноса данных из системы КИС в систему RC или RW (1-при совподении правил переносим,0 при совподении правил просто закроем строку).
         public bool TransferInputKis { get { return this.transfer_input_kis; } set { this.transfer_input_kis = value; } }
 
-        protected bool transfer_output_kis = false; // Признак переноса данных из системы КИС в систему RC (1-при совподении правил переносим,0 при совподении правил просто закроем строку).
+        protected bool transfer_output_kis = false; // Признак переноса данных из системы КИС в систему RC или RW (1-при совподении правил переносим,0 при совподении правил просто закроем строку).
         public bool TransferOutputKis { get { return this.transfer_output_kis; } set { this.transfer_output_kis = value; } }
+
+        protected int type_transfer_output_kis = 2; // Тип переноса данных по отправке из системы КИС в систему RW (0-закрывать без переноса, 1-переносить все, 2-переносить согласно правил).
+        public int TypeTransferOutputKis { get { return this.type_transfer_output_kis; } set { this.type_transfer_output_kis = value; } }
 
         public KISTransfer()
         {
