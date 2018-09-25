@@ -428,11 +428,15 @@ namespace KIS
         /// <param name="inp_sostav"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        protected int SaveRWBufferInputSostav(NumVagStpr1InStDoc inp_sostav, statusSting status)
+        protected int SaveRWBufferInputSostav(NumVag_Stpr1InStDoc inp_sostav, statusSting status)
         {
-            EFTKIS ef_tkis = new EFTKIS();
             try
             {
+                EFTKIS ef_tkis = new EFTKIS();
+                EFWagons ef_wag = new EFWagons();
+                // Получим список вагонов
+                List<NumVag_Stpr1InStVag> list_car = ef_wag.GetNumVag_Stpr1InStVag(inp_sostav.ID_DOC, inp_sostav.NAPR_IN_ST == 2 ? true : false).ToList();
+
                 return ef_tkis.SaveRWBufferInputSostav(new RWBufferInputSostav()
                 {
                     id = 0,
@@ -443,13 +447,13 @@ namespace KIS
                     napr = inp_sostav.NAPR_IN_ST != null ? (int)inp_sostav.NAPR_IN_ST : 0,
                     id_station_on_kis = inp_sostav.K_STAN != null ? (int)inp_sostav.K_STAN : 0,
                     natur = inp_sostav.OLD_N_NATUR,
-                    count_wagons = null,
+                    count_wagons = list_car != null ? (int?)list_car.Count() : null, // Определим количество вагонов
                     count_set_wagons = null,
                     close = null,
                     close_user = null,
                     close_comment = null, 
-                    status = (int)status, 
-                    list_wagons = null, 
+                    status = (int)status,
+                    list_wagons = list_car != null ? GetWagonsToString(list_car.Select(v => v.N_VAG).ToArray().ToList()) : null, // Определим список вагонов 
                     list_no_set_wagons = null,
                     message = null, 
                 });
@@ -461,24 +465,85 @@ namespace KIS
             }
         }
         /// <summary>
+        /// Обновить список вагонов
+        /// </summary>
+        /// <param name="bis"></param>
+        /// <returns></returns>
+        public int UpdateCountWagons(ref RWBufferInputSostav bis)
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                // Получить список вагонов для переноса
+                List<NumVag_Stpr1InStVag> list_car = ef_wag.GetNumVag_Stpr1InStVag(bis.doc_num, bis.napr == 2 ? true : false).ToList();
+
+                return UpdateCountWagons(ref bis, list_car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetCountWagons(bis={0})", bis.GetFieldsAndValue()), servece_owner, eventID);
+                return (int)errorTransfer.error_list_wagons;
+            }
+        }
+        /// <summary>
+        /// Обновить список вагонов
+        /// </summary>
+        /// <param name="bis"></param>
+        /// <param name="list_car"></param>
+        /// <returns></returns>
+        public int UpdateCountWagons(ref RWBufferInputSostav bis, List<NumVag_Stpr1InStVag> list_car)
+        {
+            try
+            {
+                int result = 0;
+                EFTKIS ef_tkis = new EFTKIS();
+                if (list_car != null && list_car.Count() != bis.count_wagons)
+                {
+                    if (bis.count_wagons != null && bis.count_set_wagons != null)
+                    {
+                        // Вагоны были перенесены
+                        // Удалим вагоны из системы RailCars
+                        // TODO: Сделать код удаления вагонов из RailWay
+                    }
+                    // Определим новое количество вагонов
+
+                    if (bis.count_wagons != null)
+                    {
+                        bis.close_comment += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bis.count_wagons, bis.list_wagons, list_car != null ? (int?)list_car.Count() : null);
+                        bis.status = (int)statusSting.Update;
+                    }
+                    bis.count_wagons = list_car.Count(); // Определим количество вагонов
+                    bis.count_set_wagons = null;
+                    bis.list_wagons = GetWagonsToString(list_car.Select(v => v.N_VAG).ToArray().ToList()); // Определим список вагонов
+                    bis.list_no_set_wagons = null;
+                    bis.close = null;
+                    result = ef_tkis.SaveRWBufferInputSostav(bis);
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SetCountWagons(bis={0}, list_car={0})", bis.GetFieldsAndValue(), list_car.GetFieldsAndValue()), servece_owner, eventID);
+                return (int)errorTransfer.error_list_wagons;
+            }
+        }
+        /// <summary>
         /// проверить изменения в количестве вагонов в составе
         /// </summary>
         /// <param name="bis"></param>
         /// <param name="doc"></param>
-        protected void CheckChangeExistRWBufferInputSostav(RWBufferInputSostav bis, int doc)
+        protected void CheckChangeExistRWBufferInputSostav(RWBufferInputSostav bis, int doc, int? napr)
         {
-            EFTKIS ef_tkis = new EFTKIS();
-            EFWagons ef_wag = new EFWagons();
-            int count_vag = ef_wag.GetCountSTPR1InStVag(doc);
-            // Количество вагонов изменено
-            if (bis.count_wagons > 0 & count_vag > 0 & bis.count_wagons != count_vag)
+            try
             {
-                // Изменим количество вагонов и отправим на переустановку вагонов
-                bis.count_wagons = count_vag;
-                bis.status = (int)statusSting.Update;
-                bis.close = null;
-                bis.close_comment += String.Format(" Update(Изменено кол. ваг. было: {0} стало: {1} дата {2})", bis.count_wagons, count_vag, DateTime.Now);
-                ef_tkis.SaveRWBufferInputSostav(bis);
+                EFWagons ef_wag = new EFWagons();
+                // Получим список вагонов
+                List<NumVag_Stpr1InStVag> list_car = ef_wag.GetNumVag_Stpr1InStVag(doc, napr == 2 ? true : false).ToList();
+                UpdateCountWagons(ref bis, list_car);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CheckChangeExistRWBufferInputSostav(bis={0}, doc={1}, napr={2})", bis.GetFieldsAndValue(), doc, napr), servece_owner, eventID);
             }
         }
         /// <summary>
@@ -487,7 +552,7 @@ namespace KIS
         /// <param name="list"></param>
         /// <param name="doc"></param>
         /// <returns></returns>
-        protected bool DelExistRWBufferInputSostav(ref List<RWBufferInputSostav> list, int doc)
+        protected bool DelExistRWBufferInputSostav(ref List<RWBufferInputSostav> list, int doc, int? napr)
         {
             bool Result = false;
             int index = list.Count() - 1;
@@ -495,7 +560,7 @@ namespace KIS
             {
                 if (list[index].doc_num == doc)
                 {
-                    CheckChangeExistRWBufferInputSostav(list[index], doc); // количество вагонов
+                    CheckChangeExistRWBufferInputSostav(list[index], doc, napr); // количество вагонов
                     list.RemoveAt(index);
                     Result = true;
                 }
@@ -508,12 +573,12 @@ namespace KIS
         /// </summary>
         /// <param name="list_is"></param>
         /// <param name="list_ois"></param>
-        protected void DelExistRWBufferInputSostav(ref List<NumVagStpr1InStDoc> list_is, ref List<RWBufferInputSostav> list_ois)
+        protected void DelExistRWBufferInputSostav(ref List<NumVag_Stpr1InStDoc> list_is, ref List<RWBufferInputSostav> list_ois)
         {
             int index = list_is.Count() - 1;
             while (index >= 0)
             {
-                if (DelExistRWBufferInputSostav(ref list_ois, list_is[index].ID_DOC))
+                if (DelExistRWBufferInputSostav(ref list_ois, list_is[index].ID_DOC, list_is[index].NAPR_IN_ST))
                 {
                     list_is.RemoveAt(index);
                 }
@@ -546,38 +611,38 @@ namespace KIS
                     delete++;
                     if (log_detali)
                     {
-                        String.Format("[RailWay] Таблица состояния переноса составов (на подходах) по данным системы КИС - удален составов:(документ: {0}, дата: {1}, ID:{2}.", bis.doc_num, bis.datetime, bis.id).WriteWarning(servece_owner, this.eventID);
+                        String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Таблица состояния переноса составов (по прибытию) по данным системы КИС - удален составов:(документ: {0}, дата: {1}, ID:{2}.", bis.doc_num, bis.datetime, bis.id).WriteWarning(servece_owner, this.eventID);
                     }
                 }
                 if (res < 1)
                 {
-                    String.Format("[RailWay] Ошибка выполнения метода DeleteRWBufferInputSostav, удаление строки:{0} из таблицы состояния переноса составов (на подходах) по данным системы КИС", bis.id).WriteError(servece_owner, this.eventID);
+                    String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Ошибка выполнения метода DeleteRWBufferInputSostav, удаление строки:{0} из таблицы состояния переноса составов (по прибытию) по данным системы КИС", bis.id).WriteError(servece_owner, this.eventID);
                     errors++;
                 }
             }
-            String.Format("[RailWay] Таблица состояния переноса составов (на подходах) по данным системы КИС, определенно удаленных в системе КИС {0} составов, удалено из таблицы {1}, ошибок удаления {2}.", list.Count(), delete, errors).WriteWarning(servece_owner, this.eventID);
+            String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Таблица состояния переноса составов (по прибытию) по данным системы КИС, определенно удаленных в системе КИС {0} составов, удалено из таблицы {1}, ошибок удаления {2}.", list.Count(), delete, errors).WriteWarning(servece_owner, this.eventID);
             return delete;
         }
         /// <summary>
         /// Добавить новые составы появившиеся после переноса
         /// </summary>
         /// <param name="list"></param>
-        protected int InsertRWBufferInputSostav(List<NumVagStpr1InStDoc> list)
+        protected int InsertRWBufferInputSostav(List<NumVag_Stpr1InStDoc> list)
         {
             if (list == null | list.Count == 0) return 0;
             int insers = 0;
             int errors = 0;
-            foreach (NumVagStpr1InStDoc inp_s in list)
+            foreach (NumVag_Stpr1InStDoc inp_s in list)
             {
                 int res = SaveRWBufferInputSostav(inp_s, statusSting.Insert);
                 if (res > 0) insers++;
                 if (res < 1)
                 {
-                    String.Format("[RailWay] Ошибка выполнения метода InsertRWBufferInputSostav, добавления строки состава по данным системы КИС(№ документа:{0}, дата:{1}) в таблицу состояния переноса составов по прибытию RWBufferInputSostav", inp_s.ID_DOC, inp_s.DATE_IN_ST).WriteError(servece_owner, this.eventID);
+                    String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Ошибка выполнения метода InsertRWBufferInputSostav, добавления строки состава по данным системы КИС(№ документа:{0}, дата:{1}) в таблицу состояния переноса составов по прибытию RWBufferInputSostav", inp_s.ID_DOC, inp_s.DATE_IN_ST).WriteError(servece_owner, this.eventID);
                     errors++;
                 }
             }
-            String.Format("[RailWay] Таблица состояния переноса составов (по прибытию) по данным системы КИС, определенно добавленных в системе КИС {0} составов, добавлено в таблицу {1}, ошибок добавления {2}.", list.Count(), insers, errors).WriteWarning(servece_owner, this.eventID);
+            String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Таблица состояния переноса составов (по прибытию) по данным системы КИС, определенно добавленных в системе КИС {0} составов, добавлено в таблицу {1}, ошибок добавления {2}.", list.Count(), insers, errors).WriteWarning(servece_owner, this.eventID);
             return insers;
         }
         #endregion
@@ -589,11 +654,12 @@ namespace KIS
         /// <param name="out_sostav"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        protected int SaveRWBufferOutputSostav(NumVagStpr1OutStDoc out_sostav, statusSting status)
+        protected int SaveRWBufferOutputSostav(NumVag_Stpr1OutStDoc out_sostav, statusSting status)
         {
-            EFTKIS ef_tkis = new EFTKIS();
+
             try
             {
+                EFTKIS ef_tkis = new EFTKIS();                
                 EFWagons ef_wag = new EFWagons();
                 // Получим список вагонов
                 List<NumVag_Stpr1OutStVag> list_car = ef_wag.GetNumVag_Stpr1OutStVag(out_sostav.ID_DOC, out_sostav.NAPR_OUT_ST == 2 ? true : false).ToList();
@@ -603,10 +669,10 @@ namespace KIS
                     id = 0,
                     datetime = out_sostav.DATE_OUT_ST,
                     doc_num = out_sostav.ID_DOC,
-                    id_station_from_kis = out_sostav.ST_OUT_ST != null ? (int)out_sostav.ST_OUT_ST : 0,
+                    id_station_on_kis = out_sostav.ST_OUT_ST != null ? (int)out_sostav.ST_OUT_ST : 0,
                     way_num_kis = out_sostav.N_PUT_OUT_ST != null ? (int)out_sostav.N_PUT_OUT_ST : 0,
                     napr = out_sostav.NAPR_OUT_ST != null ? (int)out_sostav.NAPR_OUT_ST : 0,
-                    id_station_on_kis = out_sostav.K_STAN != null ? (int)out_sostav.K_STAN : 0,
+                    id_station_from_kis = out_sostav.K_STAN != null ? (int)out_sostav.K_STAN : 0,
                     count_wagons = list_car!=null ? (int?)list_car.Count() : null, // Определим количество вагонов
                     count_set_wagons = null,
                     close = null,
@@ -624,7 +690,6 @@ namespace KIS
                 return -1;
             }
         }
-
         /// <summary>
         /// Обновить список вагонов
         /// </summary>
@@ -688,7 +753,6 @@ namespace KIS
                 return (int)errorTransfer.error_list_wagons;
             }
         }
-
         /// <summary>
         /// проверить изменения в количестве вагонов в составе
         /// </summary>
@@ -698,32 +762,10 @@ namespace KIS
         {
             try
             {
-                EFTKIS ef_tkis = new EFTKIS();
-                //EFWagons ef_wag = new EFWagons();
-                //int count_vag = ef_wag.GetCountSTPR1InStVag(doc);
-                
-                
                 EFWagons ef_wag = new EFWagons();
                 // Получим список вагонов
                 List<NumVag_Stpr1OutStVag> list_car = ef_wag.GetNumVag_Stpr1OutStVag(doc, napr == 2 ? true : false).ToList();
-
                 UpdateCountWagons(ref bos, list_car);
-
-                //// Количество вагонов изменено
-                //if (list_car != null && bos.count_wagons > 0 && list_car.Count() > 0 && bos.count_wagons != list_car.Count())
-                //{
-                //    // Изменим количество вагонов и отправим на переустановку вагонов
-                //    // TODO: Сделать код возврата вагонов из RailWay
-
-                //    bos.close_comment += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bos.count_wagons, bos.list_wagons, list_car != null ? (int?)list_car.Count() : null);
-                //    bos.count_wagons = list_car.Count();
-                //    bos.count_set_wagons = null;
-                //    bos.list_wagons = GetWagonsToString(list_car.Select(v => v.N_VAG).ToArray().ToList());
-                //    bos.list_no_set_wagons = null;
-                //    bos.status = (int)statusSting.Update;
-                //    bos.close = null;
-                //    ef_tkis.SaveRWBufferOutputSostav(bos);
-                //}
             }
             catch (Exception e)
             {
@@ -757,7 +799,7 @@ namespace KIS
         /// </summary>
         /// <param name="list_is"></param>
         /// <param name="list_ois"></param>
-        protected void DelExistRWBufferOutputSostav(ref List<NumVagStpr1OutStDoc> list_is, ref List<RWBufferOutputSostav> list_ois)
+        protected void DelExistRWBufferOutputSostav(ref List<NumVag_Stpr1OutStDoc> list_is, ref List<RWBufferOutputSostav> list_ois)
         {
             int index = list_is.Count() - 1;
             while (index >= 0)
@@ -798,16 +840,16 @@ namespace KIS
                         delete++;
                         if (log_detali)
                         {
-                            String.Format("[RailWay] Таблица состояния переноса составов (по отправке) по данным системы КИС - удален составов:(документ: {0}, дата: {1}, ID:{2}.", bis.doc_num, bis.datetime, bis.id).WriteWarning(servece_owner, this.eventID);
+                            String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Таблица состояния переноса составов (по отправке) по данным системы КИС - удален составов:(документ: {0}, дата: {1}, ID:{2}.", bis.doc_num, bis.datetime, bis.id).WriteWarning(servece_owner, this.eventID);
                         }
                     }
                     if (res < 1)
                     {
-                        String.Format("[RailWay] Ошибка выполнения метода DeleteRWBufferOutputSostav, удаление строки:{0} из таблицы состояния переноса составов (по отправке) по данным системы КИС", bis.id).WriteError(servece_owner, this.eventID);
+                        String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Ошибка выполнения метода DeleteRWBufferOutputSostav, удаление строки:{0} из таблицы состояния переноса составов (по отправке) по данным системы КИС", bis.id).WriteError(servece_owner, this.eventID);
                         errors++;
                     }
                 }
-                String.Format("[RailWay] Таблица состояния переноса составов (по отправке) по данным системы КИС, определенно удаленных в системе КИС {0} составов, удалено из таблицы {1}, ошибок удаления {2}.", list.Count(), delete, errors).WriteWarning(servece_owner, this.eventID);
+                String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Таблица состояния переноса составов (по отправке) по данным системы КИС, определенно удаленных в системе КИС {0} составов, удалено из таблицы {1}, ошибок удаления {2}.", list.Count(), delete, errors).WriteWarning(servece_owner, this.eventID);
                 return delete;
             }
             catch (Exception e)
@@ -820,24 +862,24 @@ namespace KIS
         /// Добавить новые составы появившиеся после переноса
         /// </summary>
         /// <param name="list"></param>
-        protected int InsertRWBufferOutputSostav(List<NumVagStpr1OutStDoc> list)
+        protected int InsertRWBufferOutputSostav(List<NumVag_Stpr1OutStDoc> list)
         {
             try
             {
                 if (list == null | list.Count == 0) return 0;
                 int insers = 0;
                 int errors = 0;
-                foreach (NumVagStpr1OutStDoc inp_s in list)
+                foreach (NumVag_Stpr1OutStDoc inp_s in list)
                 {
                     int res = SaveRWBufferOutputSostav(inp_s, statusSting.Insert);
                     if (res > 0) insers++;
                     if (res < 1)
                     {
-                        String.Format("[RailWay] Ошибка выполнения метода InsertRWBufferOutputSostav, добавления строки состава по данным системы КИС(№ документа:{0}, дата:{1}) в таблицу состояния переноса составов по отправке RWBufferOutputSostav", inp_s.ID_DOC, inp_s.DATE_OUT_ST).WriteError(servece_owner, this.eventID);
+                        String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Ошибка выполнения метода InsertRWBufferOutputSostav, добавления строки состава по данным системы КИС(№ документа:{0}, дата:{1}) в таблицу состояния переноса составов по отправке RWBufferOutputSostav", inp_s.ID_DOC, inp_s.DATE_OUT_ST).WriteError(servece_owner, this.eventID);
                         errors++;
                     }
                 }
-                String.Format("[RailWay] Таблица состояния переноса составов (по отправке) по данным системы КИС, определенно добавленных в системе КИС {0} составов, добавлено в таблицу {1}, ошибок добавления {2}.", list.Count(), insers, errors).WriteWarning(servece_owner, this.eventID);
+                String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Таблица состояния переноса составов (по отправке) по данным системы КИС, определенно добавленных в системе КИС {0} составов, добавлено в таблицу {1}, ошибок добавления {2}.", list.Count(), insers, errors).WriteWarning(servece_owner, this.eventID);
                 return insers;
             }
             catch (Exception e)
@@ -2659,9 +2701,9 @@ namespace KIS
             int errors = 0;
             int normals = 0;
             // список новых составов в системе КИС
-            List<NumVagStpr1InStDoc> list_newsostav = new List<NumVagStpr1InStDoc>();
+            List<NumVag_Stpr1InStDoc> list_newsostav = new List<NumVag_Stpr1InStDoc>();
             // список уже перенесенных в RailWay составов в системе КИС (с учетом периода контроля dayControllingAddNatur)
-            List<NumVagStpr1InStDoc> list_oldsostav = new List<NumVagStpr1InStDoc>();
+            List<NumVag_Stpr1InStDoc> list_oldsostav = new List<NumVag_Stpr1InStDoc>();
             // список уже перенесенных в RailWay составов (с учетом периода контроля dayControllingAddNatur)
             List<RWBufferInputSostav> list_inputsostav = new List<RWBufferInputSostav>();
             try
@@ -2671,33 +2713,33 @@ namespace KIS
                 if (lastDT != null)
                 {
                     // Данные есть получим новые
-                    list_newsostav = ef_wag.GetSTPR1InStDoc(((DateTime)lastDT).AddSeconds(1), DateTime.Now, false).ToList();
-                    list_oldsostav = ef_wag.GetSTPR1InStDoc(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1), false).ToList();
+                    list_newsostav = ef_wag.GetNumVag_Stpr1InStDoc(((DateTime)lastDT).AddSeconds(1), DateTime.Now, false).ToList();
+                    list_oldsostav = ef_wag.GetNumVag_Stpr1InStDoc(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1), false).ToList();
                     list_inputsostav = ef_tkis.GetRWBufferInputSostav(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1)).ToList();
                 }
                 else
                 {
                     // Таблица пуста получим первый раз
-                    list_newsostav = ef_wag.GetSTPR1InStDoc(DateTime.Now.AddDays(day_control_ins * -1), DateTime.Now, false).ToList();
+                    list_newsostav = ef_wag.GetNumVag_Stpr1InStDoc(DateTime.Now.AddDays(day_control_ins * -1), DateTime.Now, false).ToList();
                 }
                 // Переносим информацию по новым составам
                 if (list_newsostav.Count() > 0)
                 {
-                    foreach (NumVagStpr1InStDoc inps in list_newsostav)
+                    foreach (NumVag_Stpr1InStDoc inps in list_newsostav)
                     {
 
                         int res = SaveRWBufferInputSostav(inps, statusSting.Normal);
                         if (res > 0) normals++;
                         if (res < 1) { errors++; }
                     }
-                    string mess_new = String.Format("[RailWay] Таблица состояния переноса составов (перенос по прибытию), по данным системы КИС (определено новых составов:{0}, перенесено:{1}, ошибок переноса:{2}).", list_newsostav.Count(), normals, errors);
+                    string mess_new = String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Таблица состояния переноса составов (по прибытию), по данным системы КИС (определено новых составов:{0}, перенесено:{1}, ошибок переноса:{2}).", list_newsostav.Count(), normals, errors);
                     mess_new.WriteInformation(servece_owner, this.eventID);
                     if (list_newsostav.Count() > 0) mess_new.WriteEvents(errors > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID);
                 }
                 // Обновим информацию по составам которые были перенесены
                 if (list_oldsostav.Count() > 0 & list_inputsostav.Count() > 0)
                 {
-                    List<NumVagStpr1InStDoc> list_is = new List<NumVagStpr1InStDoc>();
+                    List<NumVag_Stpr1InStDoc> list_is = new List<NumVag_Stpr1InStDoc>();
                     list_is = list_oldsostav;
                     List<RWBufferInputSostav> list_ois = new List<RWBufferInputSostav>();
                     list_ois = list_inputsostav.Where(a => a.status != (int)statusSting.Delete).ToList();
@@ -2705,7 +2747,7 @@ namespace KIS
                     int ins = InsertRWBufferInputSostav(list_is);
                     int del = DeleteRWBufferInputSostav(list_ois);
 
-                    string mess_upd = String.Format("[RailWay] Таблица состояния переноса сосставов (по прибытию) по данным системы КИС (определено добавленных составов:{0}, перенесено:{1}, определено удаленных составов:{2}, удалено:{3}).",
+                    string mess_upd = String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Таблица состояния переноса сосставов (по прибытию) по данным системы КИС (определено добавленных составов:{0}, перенесено:{1}, определено удаленных составов:{2}, удалено:{3}).",
                     list_is.Count(), ins, list_ois.Count(), del);
                     mess_upd.WriteInformation(servece_owner, this.eventID);
                     if (list_is.Count() > 0 | list_is.Count() > 0) mess_upd.WriteEvents(EventStatus.Ok, servece_owner, eventID);
@@ -2720,6 +2762,158 @@ namespace KIS
             return normals;
         }
 
+        public int TransferInputSostavKISToRailway()
+        {
+            try
+            {
+                EFTKIS ef_tkis = new EFTKIS();
+                int close = 0;
+                IQueryable<RWBufferInputSostav> list_noClose = ef_tkis.GetRWBufferInputSostavNoClose();
+                if (list_noClose == null || list_noClose.Count() == 0) return 0;
+                foreach (RWBufferInputSostav bis in list_noClose.ToList())
+                {
+                    RWBufferInputSostav kis_inp_sostav = new RWBufferInputSostav();
+                    kis_inp_sostav = bis;
+                    if (TransferInputSostavKISToRailway(ref kis_inp_sostav) > 0)
+                    {
+                        close++;
+                    }
+                }
+                return close;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferInputSostavKISToRailway()"), servece_owner, eventID);
+                return -1;
+            }
+        }
+
+        public int TransferInputSostavKISToRailway(ref RWBufferInputSostav bis)
+        {
+            try
+            {
+                EFRW.Concrete.EFRailWay ef_rw = new EFRW.Concrete.EFRailWay();
+
+                // Обновим количество вагонов
+                int res_list_wagons = UpdateCountWagons(ref bis);
+                if (res_list_wagons < 0)
+                {
+                    return (int)errorTransfer.error_list_wagons;
+                }
+                //Закрыть состав
+                int res_close = 0;
+                res_close = CheckCloseInputSostavKIS(ref bis);
+                if (res_close > 0)
+                {
+                    return res_close;
+                }
+                // Проверка соответствия переносу и правилам
+                if (this.type_transfer_input_kis == 1 ||
+                    (this.type_transfer_input_kis == 2 && ef_rw.IsRulesTransferOfKis(bis.id_station_from_kis, bis.id_station_on_kis, EFRW.Concrete.EFRailWay.typeSendTransfer.kis_input)))
+                {
+                    // переносим
+                    int res_put = SetInputSostavKISToRailway(ref bis);
+                    if (res_put >= 0)
+                    {
+                        // Если перенесли, закроем состав
+                        res_close = CheckCloseInputSostavKIS(ref bis);
+                    }
+                }
+                else
+                {
+                    // Пропустить и закрыть состав
+                    res_close = CloseInputSostavKIS(ref bis, "Пропущен и закрыт, " + (this.type_transfer_output_kis == 0 ? "сервис переноса отключен [TypeTransferInputKis=" + this.type_transfer_input_kis + "]." : "перенос не соответствует правилам."));
+                }
+                return res_close;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferInputSostavKISToRailway(bis={0})", bis.GetFieldsAndValue()), servece_owner, eventID);
+                return -1;
+            }
+        }
+
+        public int CheckCloseInputSostavKIS(ref RWBufferInputSostav bis)
+        {
+            int res_close = 0;
+            //Закрыть состав
+            if (bis.count_wagons != null & bis.count_set_wagons != null & bis.count_wagons == bis.count_set_wagons)
+            {
+                res_close = CloseInputSostavKIS(ref bis, "Перенесен и закрыт.");
+            }
+            return res_close;
+        }
+        /// <summary>
+        /// Закрыть строку таблицы состояния переноса с информационным сообщением
+        /// </summary>
+        /// <param name="bis"></param>
+        /// <param name="text_close"></param>
+        /// <returns></returns>
+        public int CloseInputSostavKIS(ref RWBufferInputSostav bis, string text_close)
+        {
+            int res_close = 0;
+            bis.close_comment = text_close;
+            res_close = CloseInputSostavKIS(ref bis);
+            string mess_put = String.Format("[Учёт ж.д. вагонов на внутренних станциях АМКР]. Состав, натурная ведомость: {0} от {1} по прибытию из внутренних станций, по данным системы КИС, ID строки - {2}", bis.doc_num, bis.datetime, bis.id);
+            mess_put += " - " + text_close;
+            mess_put.WriteEvents(res_close > 0 ? EventStatus.Ok : EventStatus.Error, servece_owner, eventID);
+            return res_close;
+        }
+        /// <summary>
+        /// Закрыть строку таблицы состояния переноса
+        /// </summary>
+        /// <param name="bis"></param>
+        /// <returns></returns>
+        public int CloseInputSostavKIS(ref RWBufferInputSostav bis)
+        {
+            EFTKIS ef_tkis = new EFTKIS();
+            int res_close = 0;
+            bis.close = DateTime.Now;
+            bis.close_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+            res_close = ef_tkis.SaveRWBufferInputSostav(bis);
+            return res_close;
+        }
+
+        public int SetInputSostavKISToRailway(ref RWBufferInputSostav bis)
+        {
+
+            RWReference rw_ref = new RWReference(base.servece_owner, reference_kis); // создавать содержимое справочника из данных КИС
+            EFWagons ef_wag = new EFWagons();
+
+            string mess_transf = String.Format("состава (№ документа: {0}, дата: {1}, ID строки: {2}) по прибытию из внутренних станций по данным системы КИС", bis.doc_num, bis.datetime, bis.id);
+            string mess_sostav_err = "[Учёт ж.д. вагонов на внутренних станциях АМКР]. Ошибка переноса " + mess_transf;
+            // Определим станцию отправитель
+            int? id_stations_from = rw_ref.GetIDStationsOfKIS(bis.id_station_from_kis);
+            if (id_stations_from == null)
+            {
+                String.Format(mess_sostav_err + " - ID станции отправки: {0} не определён в справочнике системы RailWay", bis.id_station_from_kis).WriteError(servece_owner, eventID);
+                return (int)errorTransfer.no_stations;
+            }
+            if (id_stations_from == 26) id_stations_from = 27; // Коррекция Промышленная Керамет -> 'это промышленная
+
+            // Определим станцию получатель
+            int? id_stations_on = rw_ref.GetIDStationsOfKIS(bis.id_station_on_kis);
+            if (id_stations_on == null)
+            {
+                String.Format(mess_sostav_err + " - ID станции прибытия: {0} не определён в справочнике системы RailWay", bis.id_station_on_kis).WriteError(servece_owner, eventID);
+                return (int)errorTransfer.no_stations;
+            }
+            if (id_stations_from == 26) id_stations_from = 27; // Коррекция Промышленная Керамет -> 'это промышленная
+
+            //// Определим путь на станции
+            //int? id_ways = rw_ref.DefinitionIDWays((int)id_stations_from);
+            //if (id_ways == null)
+            //{
+            //    String.Format(mess_sostav_err + " - ID пути: {0} станции: {1} не определён в справочнике системы RailWay", bos.way_num_kis, id_stations_from).WriteError(servece_owner, eventID);
+            //    return (int)errorTransfer.no_ways;
+            //}
+            // Формирование общего списка вагонов и постановка их на путь станции прибытия
+            //List<NumVag_Stpr1OutStVag> list_car = ef_wag.GetNumVag_Stpr1OutStVag(bos.doc_num, bos.napr == 2 ? true : false).ToList();
+
+            //bos.count_wagons = list_car.Count(); // Определим количество вагонов
+            //return TransferArrivalSostavToStation(ref bos, (int)id_stations_from, (int)id_stations_on, (int)id_ways);
+            return 0;
+        }
         #endregion
 
         #region ПЕРЕНОС ВАГОНОВ ПО ВНУТРЕНИМ СТАНЦИЯМ ПО ОТПРАВКЕ
@@ -2743,9 +2937,9 @@ namespace KIS
             int errors = 0;
             int normals = 0;
             // список новых составов в системе КИС
-            List<NumVagStpr1OutStDoc> list_newsostav = new List<NumVagStpr1OutStDoc>();
+            List<NumVag_Stpr1OutStDoc> list_newsostav = new List<NumVag_Stpr1OutStDoc>();
             // список уже перенесенных в RailWay составов в системе КИС (с учетом периода контроля dayControllingAddNatur)
-            List<NumVagStpr1OutStDoc> list_oldsostav = new List<NumVagStpr1OutStDoc>();
+            List<NumVag_Stpr1OutStDoc> list_oldsostav = new List<NumVag_Stpr1OutStDoc>();
             // список уже перенесенных в RailWay составов (с учетом периода контроля dayControllingAddNatur)
             List<RWBufferOutputSostav> list_outputsostav = new List<RWBufferOutputSostav>();
             try
@@ -2755,19 +2949,19 @@ namespace KIS
                 if (lastDT != null)
                 {
                     // Данные есть получим новые
-                    list_newsostav = ef_wag.GetSTPR1OutStDoc(((DateTime)lastDT).AddSeconds(1), DateTime.Now, false).ToList();
-                    list_oldsostav = ef_wag.GetSTPR1OutStDoc(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1), false).ToList();
+                    list_newsostav = ef_wag.GetNumVag_Stpr1OutStDoc(((DateTime)lastDT).AddSeconds(1), DateTime.Now, false).ToList();
+                    list_oldsostav = ef_wag.GetNumVag_Stpr1OutStDoc(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1), false).ToList();
                     list_outputsostav = ef_tkis.GetRWBufferOutputSostav(((DateTime)lastDT).AddDays(day_control_ins * -1), ((DateTime)lastDT).AddSeconds(1)).ToList();
                 }
                 else
                 {
                     // Таблица пуста получим первый раз
-                    list_newsostav = ef_wag.GetSTPR1OutStDoc(DateTime.Now.AddDays(day_control_ins * -1), DateTime.Now, false).ToList();
+                    list_newsostav = ef_wag.GetNumVag_Stpr1OutStDoc(DateTime.Now.AddDays(day_control_ins * -1), DateTime.Now, false).ToList();
                 }
                 // Переносим информацию по новым составам
                 if (list_newsostav.Count() > 0)
                 {
-                    foreach (NumVagStpr1OutStDoc inps in list_newsostav)
+                    foreach (NumVag_Stpr1OutStDoc inps in list_newsostav)
                     {
                         if (is_status && inps.STATUS != 1) break;
                         int res = SaveRWBufferOutputSostav(inps, statusSting.Normal);
@@ -2782,7 +2976,7 @@ namespace KIS
                 // Обновим информацию по составам которые были перенесены
                 if (list_oldsostav.Count() > 0 & list_outputsostav.Count() > 0)
                 {
-                    List<NumVagStpr1OutStDoc> list_os = new List<NumVagStpr1OutStDoc>();
+                    List<NumVag_Stpr1OutStDoc> list_os = new List<NumVag_Stpr1OutStDoc>();
                     list_os = list_oldsostav;
                     List<RWBufferOutputSostav> list_oos = new List<RWBufferOutputSostav>();
                     list_oos = list_outputsostav.Where(a => a.status != (int)statusSting.Delete).ToList();
@@ -2961,7 +3155,6 @@ namespace KIS
         //        return (int)errorTransfer.error_list_wagons;
         //    }
         //}
-
         public int SetOutputSostavKISToRailway(ref RWBufferOutputSostav bos)
         {
 

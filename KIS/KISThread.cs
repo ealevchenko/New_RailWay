@@ -429,14 +429,17 @@ namespace KIS
             DateTime dt_start = DateTime.Now;
             try
             {
-                bool transfer_kis = false;
+                //bool transfer_kis = false;
+                int type_transfer_input_kis = 0;
                 // считать настройки
                 lock (locker_setting)
                 {
                     try
                     {
                         // Бит перосить данные из кис или просто закрыть строку
-                        transfer_kis = RWSetting.GetDB_Config_DefaultSetting<bool>("TransferInputKIS", service, transfer_kis, true);
+                        //transfer_kis = RWSetting.GetDB_Config_DefaultSetting<bool>("TransferInputKIS", service, transfer_kis, true);
+                        // Признак режима переноса данных 0-закрывать без переноса, 1-переносить все, 2-переносить согласно правил
+                        type_transfer_input_kis = RWSetting.GetDB_Config_DefaultSetting<int>("TypeTransferInputKis", service, type_transfer_input_kis, true);
                     }
                     catch (Exception ex)
                     {
@@ -452,6 +455,10 @@ namespace KIS
                     //KIS_RC_Transfer kis_trans = new KIS_RC_Transfer(service);
                     //kis_trans.TransferInputKis = transfer_kis;
                     //res_transfer = kis_trans.TransferArrivalOfKISInput();
+                    // Проверить наличие новых прибытий в КИС, перенести данные в таблицу
+                    KIS_RW_Transfer kis_rw_trans = new KIS_RW_Transfer(service);
+                    kis_rw_trans.TypeTransferInputKis = type_transfer_input_kis;
+                    res_transfer = kis_rw_trans.TransferInputSostavKISToRailway();
                 }
                 TimeSpan ts = DateTime.Now - dt_start;
                 string mes_service_exec = String.Format("Поток {0} сервиса {1} - время выполнения: {2}:{3}:{4}({5}), код выполнения: res_transfer:{6}", service.ToString(), servece_owner, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds, res_transfer);

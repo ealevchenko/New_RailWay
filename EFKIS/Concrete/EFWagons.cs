@@ -330,6 +330,22 @@ namespace EFKIS.Concrete
         public Prom_NatHistAndSostav() : base() { }
     }
 
+    public class NumVag_Stpr1OutStDoc
+    {
+        public Int64 ID { get; set; }
+        public int ID_DOC { get; set; }
+        public DateTime DATE_OUT_ST { get; set; }
+        public int? ST_OUT_ST { get; set; }
+        public int? N_PUT_OUT_ST { get; set; }
+        public int? NAPR_OUT_ST { get; set; }
+        public int? FIO_IN_ST { get; set; }
+        public int? CEX { get; set; }
+        public int? K_STAN { get; set; }
+        public DateTime? DATE_ST { get; set; }
+        public int? STATUS { get; set; }
+        public string NAME_ST { get; set; } 
+    }
+
     public class NumVag_Stpr1OutStVag
     {
         public Int64 ID { get; set; }
@@ -347,6 +363,40 @@ namespace EFKIS.Concrete
         public int? N_TUP_OUT_ST { get; set; }
 
     }
+    
+    public class NumVag_Stpr1InStDoc
+    {
+        public Int64 ID { get; set; }
+        public int ID_DOC { get; set; }
+        public DateTime DATE_IN_ST { get; set; }
+        public int? ST_IN_ST { get; set; }
+        public int? N_PUT_IN_ST { get; set; }
+        public int? NAPR_IN_ST { get; set; }
+        public int? FIO_IN_ST { get; set; }
+        public int? CEX { get; set; }
+        public int? N_POST { get; set; }
+        public int? K_STAN { get; set; }
+        public int? OLD_N_NATUR { get; set; } 
+    }
+
+    public class NumVag_Stpr1InStVag
+    {
+        public Int64 ID { get; set; }
+        public int ID_DOC { get; set; }
+        public int N_IN_ST { get; set; }
+        public int N_VAG { get; set; }
+        public int? STRAN_SOBSTV { get; set; }
+        public int? GODN_IN_ST { get; set; }
+        public int GR_IN_ST { get; set; }
+        public int SOBSTV { get; set; }
+        public string REM_IN_ST { get; set; }
+        public int ID_VAG { get; set; }
+        public int? ST_NAZN_OUT_ST { get; set; }
+        public int? STRAN_OUT_ST { get; set; }
+        public int? SOBSTV_OLD { get; set; }
+
+    }
+
 
     public class EFWagons : IKIS
     {
@@ -423,12 +473,26 @@ namespace EFKIS.Concrete
                     "to_date((to_char((CASE WHEN ((CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END)>=1 and (CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END)<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)>=1 and (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)<=12) THEN (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END)>0) THEN (CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END) ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN (CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END) ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)>=1 and (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)<=12) THEN (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END)>0) THEN (CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END) ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN ((CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END)>=0 and (CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END)<=23) THEN (CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END) ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN ((CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END)>=0 and (CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END)<=59) THEN (CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END) ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') as DT, " +
                     field_nathist_dt_pr_null + "AS DT_PR, " + field_nathist_dt_sd_null + "AS DT_SD, " + field_nathist + nathist_table;
 
-        // строки для формирования запроса к NumVagStpr1OutStVag
+        // строки для формирования запроса к NumVag_Stpr1OutStDoc
+        protected static string field_NumVagStpr1OutStDoc = " d.ID_DOC, d.DATE_OUT_ST, d.ST_OUT_ST, d.N_PUT_OUT_ST, d.NAPR_OUT_ST, d.FIO_IN_ST, d.CEX, d.K_STAN, d.DATE_ST, d.STATUS, d.NAME_ST ";
+        protected static string NumVagStpr1OutStDoc_table = " FROM NUM_VAG.STPR1_OUT_ST_DOC d ";
+        // select
+        protected string sql_NumVagStpr1OutStDoc_select = "SELECT " + field_key + field_NumVagStpr1OutStDoc + NumVagStpr1OutStDoc_table;        
+        // строки для формирования запроса к NumVag_Stpr1OutStVag
         protected static string field_NumVagStpr1OutStVag = " v.ID_DOC, v.N_OUT_ST, v.GODN_OUT_ST, v.GR_OUT_ST, v.REM_IN_ST, v.N_TUP_OUT_ST, v.ST_NAZN_OUT_ST, v.STRAN_OUT_ST, v.N_VAG, v.SOBSTV, v.ID_VAG, v.SOBSTV_OLD ";
         protected static string NumVagStpr1OutStVag_table = " FROM NUM_VAG.STPR1_OUT_ST_VAG v ";
         // select
         protected string sql_NumVagStpr1OutStVag_select = "SELECT " + field_key + field_NumVagStpr1OutStVag + NumVagStpr1OutStVag_table;
-
+        // строки для формирования запроса к NumVag_Stpr1InStDoc
+        protected static string field_NumVagStpr1InStDoc = " d.ID_DOC, d.DATE_IN_ST, d.ST_IN_ST, d.N_PUT_IN_ST, d.NAPR_IN_ST, d.FIO_IN_ST, d.CEX, d.N_POST, d.K_STAN, d.OLD_N_NATUR ";
+        protected static string NumVagStpr1InStDoc_table = " FROM NUM_VAG.STPR1_IN_ST_DOC d ";
+        // select
+        protected string sql_NumVagStpr1InStDoc_select = "SELECT " + field_key + field_NumVagStpr1InStDoc + NumVagStpr1InStDoc_table;
+        // строки для формирования запроса к NumVag_Stpr1InStVag
+        protected static string field_NumVagStpr1InStVag = " v.ID_DOC, v.N_IN_ST, v.N_VAG, v.STRAN_SOBSTV, v.GODN_IN_ST, v.GR_IN_ST, v.SOBSTV, v.REM_IN_ST, v.ID_VAG, v.ST_NAZN_OUT_ST, v.STRAN_OUT_ST, v.SOBSTV_OLD ";
+        protected static string NumVagStpr1InStVag_table = " FROM NUM_VAG.STPR1_IN_ST_VAG v ";
+        // select
+        protected string sql_NumVagStpr1InStVag_select = "SELECT " + field_key + field_NumVagStpr1InStVag + NumVagStpr1InStVag_table;
 
         #region KOMETA
 
@@ -1824,6 +1888,160 @@ namespace EFKIS.Concrete
         }
         #endregion
 
+        #region NumVag_Stpr1OutStDoc
+
+        public IQueryable<NumVag_Stpr1OutStDoc> GetNumVag_Stpr1OutStDoc()
+        {
+            try
+            {
+                return context.Database.SqlQuery<NumVag_Stpr1OutStDoc>(sql_NumVagStpr1OutStDoc_select).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1OutStDoc()"), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<NumVag_Stpr1OutStDoc> GetNumVag_Stpr1OutStDoc(DateTime start, DateTime stop)
+        {
+            try
+            {
+                string sql = String.Format(sql_NumVagStpr1OutStDoc_select + " WHERE d.DATE_OUT_ST>=TO_DATE('{0}','dd.mm.yyyy hh24:mi:ss') AND d.DATE_OUT_ST<=TO_DATE('{1}','dd.mm.yyyy hh24:mi:ss') ", start.ToString("dd.MM.yyyy HH:mm:ss"), stop.ToString("dd.MM.yyyy HH:mm:ss"));
+                return context.Database.SqlQuery<NumVag_Stpr1OutStDoc>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1OutStDoc(start={0}, stop={1})",start,stop), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<NumVag_Stpr1OutStDoc> GetNumVag_Stpr1OutStDoc(DateTime start, DateTime stop, bool order)
+        {
+            try
+            {
+                string sql = String.Format(sql_NumVagStpr1OutStDoc_select + " WHERE d.DATE_OUT_ST>=TO_DATE('{0}','dd.mm.yyyy hh24:mi:ss') AND d.DATE_OUT_ST<=TO_DATE('{1}','dd.mm.yyyy hh24:mi:ss') ORDER BY d.DATE_OUT_ST " + (order ? "DESC" : ""), start.ToString("dd.MM.yyyy HH:mm:ss"), stop.ToString("dd.MM.yyyy HH:mm:ss"));
+                return context.Database.SqlQuery<NumVag_Stpr1OutStDoc>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1OutStDoc(start={0}, stop={1}, order={2})", start, stop, order), eventID);
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region NumVag_Stpr1OutStVag
+
+        public IQueryable<NumVag_Stpr1OutStVag> GetNumVag_Stpr1OutStVag()
+        {
+            try
+            {
+                return context.Database.SqlQuery<NumVag_Stpr1OutStVag>(sql_NumVagStpr1OutStVag_select).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1OutStVag()"), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<NumVag_Stpr1OutStVag> GetNumVag_Stpr1OutStVag(int natur, bool napr)
+        {
+            try
+            {
+                return context.Database.SqlQuery<NumVag_Stpr1OutStVag>(sql_NumVagStpr1OutStVag_select + " where v.ID_DOC = " + natur.ToString() + " order by v.N_OUT_ST" + (napr ? " desc" : "")).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1OutStVag(num={0}, napr={1})", natur, napr), eventID);
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region NumVag_Stpr1InStDoc
+
+        public IQueryable<NumVag_Stpr1InStDoc> GetNumVag_Stpr1InStDoc()
+        {
+            try
+            {
+                return context.Database.SqlQuery<NumVag_Stpr1InStDoc>(sql_NumVagStpr1InStDoc_select).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1InStDoc()"), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<NumVag_Stpr1InStDoc> GetNumVag_Stpr1InStDoc(DateTime start, DateTime stop)
+        {
+            try
+            {
+                string sql = String.Format(sql_NumVagStpr1InStDoc_select + " WHERE d.DATE_IN_ST>=TO_DATE('{0}','dd.mm.yyyy hh24:mi:ss') AND d.DATE_IN_ST<=TO_DATE('{1}','dd.mm.yyyy hh24:mi:ss') ", start.ToString("dd.MM.yyyy HH:mm:ss"), stop.ToString("dd.MM.yyyy HH:mm:ss"));
+                return context.Database.SqlQuery<NumVag_Stpr1InStDoc>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1InStDoc(start={0}, stop={1})", start, stop), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<NumVag_Stpr1InStDoc> GetNumVag_Stpr1InStDoc(DateTime start, DateTime stop, bool order)
+        {
+            try
+            {
+                string sql = String.Format(sql_NumVagStpr1InStDoc_select + " WHERE d.DATE_IN_ST>=TO_DATE('{0}','dd.mm.yyyy hh24:mi:ss') AND d.DATE_IN_ST<=TO_DATE('{1}','dd.mm.yyyy hh24:mi:ss') ORDER BY d.DATE_IN_ST " + (order ? "DESC" : ""), start.ToString("dd.MM.yyyy HH:mm:ss"), stop.ToString("dd.MM.yyyy HH:mm:ss"));
+                return context.Database.SqlQuery<NumVag_Stpr1InStDoc>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1InStDoc(start={0}, stop={1}, order={2})", start, stop, order), eventID);
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region NumVag_Stpr1InStVag
+
+        public IQueryable<NumVag_Stpr1InStVag> GetNumVag_Stpr1InStVag()
+        {
+            try
+            {
+                return context.Database.SqlQuery<NumVag_Stpr1InStVag>(sql_NumVagStpr1InStVag_select).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1InStVag()"), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<NumVag_Stpr1InStVag> GetNumVag_Stpr1InStVag(int natur, bool napr)
+        {
+            try
+            {
+                return context.Database.SqlQuery<NumVag_Stpr1InStVag>(sql_NumVagStpr1InStVag_select + " where v.ID_DOC = " + natur.ToString() + " order by v.N_IN_ST" + (napr ? " desc" : "")).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1InStVag(num={0}, napr={1})", natur, napr), eventID);
+                return null;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region NUMVAG (Информация по вагонам старый вариант)
+        
         #region NumVagStpr1InStDoc (Составы по прибытию)
 
         public IQueryable<NumVagStpr1InStDoc> NumVagStpr1InStDoc
@@ -1927,37 +2145,6 @@ namespace EFKIS.Concrete
         /// <returns></returns>
         public IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDocOfAmkr()
         { return GetSTPR1InStDocOfAmkr(null); }
-        #endregion
-
-
-        #region NumVag_Stpr1OutStVag
-
-        public IQueryable<NumVag_Stpr1OutStVag> GetNumVag_Stpr1OutStVag()
-        {
-            try
-            {
-                return context.Database.SqlQuery<NumVag_Stpr1OutStVag>(sql_NumVagStpr1OutStVag_select).AsQueryable();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1OutStVag()"), eventID);
-                return null;
-            }
-        }
-
-        public IQueryable<NumVag_Stpr1OutStVag> GetNumVag_Stpr1OutStVag(int natur, bool napr)
-        {
-            try
-            {
-                return context.Database.SqlQuery<NumVag_Stpr1OutStVag>(sql_NumVagStpr1OutStVag_select + " where v.ID_DOC = " + natur.ToString() + " order by N_OUT_ST" + (napr ? " desc" : "")).AsQueryable();
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1OutStVag(num={0}, napr={1})", natur, napr), eventID);
-                return null;
-            }
-        }
-
         #endregion
 
         #region NumVagStpr1InStVag (вагоны по прибытию)

@@ -144,6 +144,9 @@ namespace KIS
         protected bool transfer_output_kis = false; // Признак переноса данных из системы КИС в систему RC или RW (1-при совподении правил переносим,0 при совподении правил просто закроем строку).
         public bool TransferOutputKis { get { return this.transfer_output_kis; } set { this.transfer_output_kis = value; } }
 
+        protected int type_transfer_input_kis = 2; // Тип переноса данных по прибытию из системы КИС в систему RW (0-закрывать без переноса, 1-переносить все, 2-переносить согласно правил).
+        public int TypeTransferInputKis { get { return this.type_transfer_input_kis; } set { this.type_transfer_input_kis = value; } }
+
         protected int type_transfer_output_kis = 2; // Тип переноса данных по отправке из системы КИС в систему RW (0-закрывать без переноса, 1-переносить все, 2-переносить согласно правил).
         public int TypeTransferOutputKis { get { return this.type_transfer_output_kis; } set { this.type_transfer_output_kis = value; } }
 

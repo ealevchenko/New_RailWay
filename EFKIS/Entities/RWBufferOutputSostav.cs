@@ -43,7 +43,7 @@ namespace EFKIS.Entities
         [StringLength(100)]
         public string close_user { get; set; }
 
-        [StringLength(250)]
+        [StringLength(1000)]
         public string close_comment { get; set; }
     }
 }
