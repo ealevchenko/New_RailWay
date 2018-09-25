@@ -154,7 +154,7 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(1941);
+            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(4429);
             kis_trans.SetWayRailWayOfKIS(ref arr_s);
         }
 
@@ -225,6 +225,21 @@ namespace Testing
             bool result = kis_th.StartCopyBufferInputSostav();
         }
 
+        public void Test_KIS_RW_Transfer_TransferInputSostavKISToRailway()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+
+            kis_trans.TransferInputSostavKISToRailway();
+        }
+
+        public void Test_KIS_RW_Transfer_TransferInputSostavKISToRailway_of_RWBufferInputSostav()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+            EFTKIS ef_tkis = new EFTKIS();
+            EFKIS.Entities.RWBufferInputSostav bis = ef_tkis.GetRWBufferInputSostav(9963);
+            int result = kis_trans.TransferInputSostavKISToRailway(ref bis);
+        }
+
         #endregion
 
         #region TEST RW Перенос по внутреним станциям (по отправке)
@@ -252,7 +267,7 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferOutputSostav bos = ef_tkis.GetRWBufferOutputSostav(9963);
+            EFKIS.Entities.RWBufferOutputSostav bos = ef_tkis.GetRWBufferOutputSostav(10126);
             int result = kis_trans.TransferOutputSostavKISToRailway(ref bos);
         }
 

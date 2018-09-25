@@ -159,14 +159,16 @@ namespace Testing
             //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay(); // Перенос составов отправленных на УЗ
 
             // ПЕРЕНОС ВНУТРЕНИЕ СТАНЦИИ ПО ПРИБЫТИЮ
-            //tst_kis.Test_KIS_RW_Transfer_CopyBufferInputSostavOfKIS(); // Тест переноса данных по внутреним станциям (по прибытию)
+            tst_kis.Test_KIS_RW_Transfer_CopyBufferInputSostavOfKIS(); // Тест переноса данных по внутреним станциям (по прибытию)
             //tst_kis.Test_KISThread_StartCopyBufferInputSostav(); // Тест ПОТОКА переноса данных по внутреним станциям (по прибытию)
+            //tst_kis.Test_KIS_RW_Transfer_TransferInputSostavKISToRailway();    // Тест переноса составов по внутреним станциям (по прибытию)
+            //tst_kis.Test_KIS_RW_Transfer_TransferInputSostavKISToRailway_of_RWBufferInputSostav();    // Тест переноса составов по внутреним станциям (по прибытию) по указаной строке
 
             // ПЕРЕНОС ВНУТРЕНИЕ СТАНЦИИ ПО ОТПРАВКЕ
             //tst_kis.Test_KIS_RW_Transfer_CopyBufferOutputSostavOfKIS();       // Тест переноса данных по внутреним станциям (по отправке)
             //tst_kis.Test_KISThread_StartCopyBufferOutputSostav();             // Тест ПОТОКА переноса данных по внутреним станциям (по отправке)
-            //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway();    // Тест переноса составов по внутреним станциям (по прибытию)
-            //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway_of_RWBufferOutputSostav();    // Тест переноса составов по внутреним станциям (по прибытию) по указаной строке 
+            //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway();    // Тест переноса составов по внутреним станциям (по отправке)
+            //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway_of_RWBufferOutputSostav();    // Тест переноса составов по внутреним станциям (по отправке) по указаной строке 
 
             #endregion
 
@@ -265,8 +267,15 @@ namespace Testing
             //tst_wag.Test_PROM_GetArrivalProm_VagonOfNaturStationDateNum();
 
             // NUM_VAG Вагоны по отправке
-            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1OutStVag();       // Показать все вагоны по отправке
-            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1OutStVagOfNatur();  // Показать вагоны по отправке по указаной натурке
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1OutStDoc();               // Показать все натурки по отправке
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1OutStDocOfStartStop();    // Показать натурки по отправке за указаный период времени
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1OutStVag();               // Показать все вагоны по отправке
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1OutStVagOfNatur();        // Показать вагоны по отправке по указаной натурке
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1InStDoc();                // Показать все натурки по прибытию
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1InStDocOfStartStop();     // Показать натурки по прибытию за указаный период времени
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1InStVag();                  // Показать все вагоны по прибытию
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1InStVagOfNatur();           // Показать вагоны по прибытию по указаной натурке
+
 
             #endregion
 
@@ -293,9 +302,9 @@ namespace Testing
             //test.MLog_WriteEvents();
             //test.MLog_WriteLogServices();
             //test.MLog_WriteLogStatusServices();
-           // test.MLog_WriteLogStatusServices();
+            // test.MLog_WriteLogStatusServices();
 
-            test.MServicesLog_GetCodeReturnServices();
+            //test.MServicesLog_GetCodeReturnServices();
             #endregion
 
             #region Test_Settings тест настроек

@@ -1093,6 +1093,36 @@ namespace Testing
 
         #region NUM_VAG
 
+        public void Test_NUM_VAG_GetNumVag_Stpr1OutStDoc()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                List<NumVag_Stpr1OutStDoc> list_doc1 = ef_wag.GetNumVag_Stpr1OutStDoc().ToList();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
+        public void Test_NUM_VAG_GetNumVag_Stpr1OutStDocOfStartStop()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                DateTime start = new DateTime(2018, 9, 24, 0, 0, 0);
+                DateTime stop = new DateTime(2018, 9, 25, 0, 0, 0);
+                List<NumVag_Stpr1OutStDoc> list_doc1 = ef_wag.GetNumVag_Stpr1OutStDoc(start,stop).ToList();
+                List<NumVag_Stpr1OutStDoc> list_doc2 = ef_wag.GetNumVag_Stpr1OutStDoc(start,stop, false).ToList();
+                List<NumVag_Stpr1OutStDoc> list_doc3 = ef_wag.GetNumVag_Stpr1OutStDoc(start,stop, true).ToList();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
         public void Test_NUM_VAG_GetNumVag_Stpr1OutStVag()
         {
             try
@@ -1119,6 +1149,64 @@ namespace Testing
                 return;
             }
         }
+
+        public void Test_NUM_VAG_GetNumVag_Stpr1InStDoc()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                List<NumVag_Stpr1InStDoc> list_doc1 = ef_wag.GetNumVag_Stpr1InStDoc().ToList();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
+        public void Test_NUM_VAG_GetNumVag_Stpr1InStDocOfStartStop()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                DateTime start = new DateTime(2018, 9, 24, 0, 0, 0);
+                DateTime stop = new DateTime(2018, 9, 25, 0, 0, 0);
+                List<NumVag_Stpr1InStDoc> list_doc1 = ef_wag.GetNumVag_Stpr1InStDoc(start, stop).ToList();
+                List<NumVag_Stpr1InStDoc> list_doc2 = ef_wag.GetNumVag_Stpr1InStDoc(start, stop, false).ToList();
+                List<NumVag_Stpr1InStDoc> list_doc3 = ef_wag.GetNumVag_Stpr1InStDoc(start, stop, true).ToList();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
+        public void Test_NUM_VAG_GetNumVag_Stpr1InStVag()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                List<NumVag_Stpr1InStVag> list_vas1 = ef_wag.GetNumVag_Stpr1InStVag().ToList();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
+        public void Test_NUM_VAG_GetNumVag_Stpr1InStVagOfNatur()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                List<NumVag_Stpr1InStVag> list_vas1 = ef_wag.GetNumVag_Stpr1InStVag(280557, false).ToList();
+                List<NumVag_Stpr1InStVag> list_vas2 = ef_wag.GetNumVag_Stpr1InStVag(280557, true).ToList();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
         #endregion
 
         //public void CopyReferenceWagonsToRailWay()
