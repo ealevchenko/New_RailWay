@@ -330,6 +330,24 @@ namespace EFKIS.Concrete
         public Prom_NatHistAndSostav() : base() { }
     }
 
+    public class NumVag_Stpr1OutStVag
+    {
+        public Int64 ID { get; set; }
+        public int ID_DOC { get; set; }
+        public int N_OUT_ST { get; set; }
+        public int N_VAG { get; set; }
+        public int? GODN_OUT_ST { get; set; }
+        public int GR_OUT_ST { get; set; }
+        public int SOBSTV { get; set; }
+        public string REM_IN_ST { get; set; }
+        public int ID_VAG { get; set; }
+        public int? ST_NAZN_OUT_ST { get; set; }
+        public int? STRAN_OUT_ST { get; set; }
+        public int? SOBSTV_OLD { get; set; }
+        public int? N_TUP_OUT_ST { get; set; }
+
+    }
+
     public class EFWagons : IKIS
     {
         private eventID eventID = eventID.EFWagons;
@@ -404,6 +422,13 @@ namespace EFKIS.Concrete
                     "(select max(s.P_OT) from PROM.SOSTAV s where (h.N_NATUR=s.N_NATUR and h.D_PR_YY=s.D_YY and h.D_PR_MM=s.D_MM and h.D_PR_DD=s.D_DD) or (h.N_NATUR=s.N_NATUR and h.D_SD_YY=s.D_YY and h.D_SD_MM=s.D_MM and h.D_SD_DD=s.D_DD) ) as P_OT, " +
                     "to_date((to_char((CASE WHEN ((CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END)>=1 and (CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END)<=TO_CHAR(LAST_DAY(to_date((to_char(1,'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)>=1 and (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)<=12) THEN (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END)>0) THEN (CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END) ELSE 1 END),1),'0009')),'dd.mm.yyyy')), 'DD')) THEN (CASE WHEN (h.D_PR_DD is null) THEN h.D_SD_DD ELSE h.D_PR_DD END) ELSE 1 END),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)>=1 and (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END)<=12) THEN (CASE WHEN (h.D_PR_MM is null) THEN h.D_SD_MM ELSE h.D_PR_MM END) ELSE 1 END),1),'09')||'.'||to_char(nvl((CASE WHEN ((CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END)>0) THEN (CASE WHEN (h.D_PR_YY is null) THEN h.D_SD_YY ELSE h.D_PR_YY END) ELSE 1 END),1),'0009')||' '||to_char(nvl((CASE WHEN ((CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END)>=0 and (CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END)<=23) THEN (CASE WHEN (h.T_PR_HH is null) THEN h.T_SD_HH ELSE h.T_PR_HH END) ELSE 0 END),1),'09')||':'||to_char(nvl((CASE WHEN ((CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END)>=0 and (CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END)<=59) THEN (CASE WHEN (h.T_PR_MI is null) THEN h.T_SD_MI ELSE h.T_PR_MI END) ELSE 0 END),1),'09')),'dd.mm.yyyy hh24:mi') as DT, " +
                     field_nathist_dt_pr_null + "AS DT_PR, " + field_nathist_dt_sd_null + "AS DT_SD, " + field_nathist + nathist_table;
+
+        // строки для формирования запроса к NumVagStpr1OutStVag
+        protected static string field_NumVagStpr1OutStVag = " v.ID_DOC, v.N_OUT_ST, v.GODN_OUT_ST, v.GR_OUT_ST, v.REM_IN_ST, v.N_TUP_OUT_ST, v.ST_NAZN_OUT_ST, v.STRAN_OUT_ST, v.N_VAG, v.SOBSTV, v.ID_VAG, v.SOBSTV_OLD ";
+        protected static string NumVagStpr1OutStVag_table = " FROM NUM_VAG.STPR1_OUT_ST_VAG v ";
+        // select
+        protected string sql_NumVagStpr1OutStVag_select = "SELECT " + field_key + field_NumVagStpr1OutStVag + NumVagStpr1OutStVag_table;
+
 
         #region KOMETA
 
@@ -1902,6 +1927,37 @@ namespace EFKIS.Concrete
         /// <returns></returns>
         public IQueryable<NumVagStpr1InStDoc> GetSTPR1InStDocOfAmkr()
         { return GetSTPR1InStDocOfAmkr(null); }
+        #endregion
+
+
+        #region NumVag_Stpr1OutStVag
+
+        public IQueryable<NumVag_Stpr1OutStVag> GetNumVag_Stpr1OutStVag()
+        {
+            try
+            {
+                return context.Database.SqlQuery<NumVag_Stpr1OutStVag>(sql_NumVagStpr1OutStVag_select).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1OutStVag()"), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<NumVag_Stpr1OutStVag> GetNumVag_Stpr1OutStVag(int natur, bool napr)
+        {
+            try
+            {
+                return context.Database.SqlQuery<NumVag_Stpr1OutStVag>(sql_NumVagStpr1OutStVag_select + " where v.ID_DOC = " + natur.ToString() + " order by N_OUT_ST" + (napr ? " desc" : "")).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetNumVag_Stpr1OutStVag(num={0}, napr={1})", natur, napr), eventID);
+                return null;
+            }
+        }
+
         #endregion
 
         #region NumVagStpr1InStVag (вагоны по прибытию)
