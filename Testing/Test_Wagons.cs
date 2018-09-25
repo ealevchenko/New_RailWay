@@ -1091,6 +1091,36 @@ namespace Testing
 
         #endregion
 
+        #region NUM_VAG
+
+        public void Test_NUM_VAG_GetNumVag_Stpr1OutStVag()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                List<NumVag_Stpr1OutStVag> list_vas1 = ef_wag.GetNumVag_Stpr1OutStVag().ToList();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+
+        public void Test_NUM_VAG_GetNumVag_Stpr1OutStVagOfNatur()
+        {
+            try
+            {
+                EFWagons ef_wag = new EFWagons();
+                List<NumVag_Stpr1OutStVag> list_vas1 = ef_wag.GetNumVag_Stpr1OutStVag(126130,false).ToList();
+                List<NumVag_Stpr1OutStVag> list_vas2 = ef_wag.GetNumVag_Stpr1OutStVag(126130,true).ToList();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+        }
+        #endregion
+
         //public void CopyReferenceWagonsToRailWay()
         //{
         //    KometaContent kcon = new KometaContent();

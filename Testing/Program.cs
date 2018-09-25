@@ -149,21 +149,24 @@ namespace Testing
             //tst_kis.Test_KISTransfer_UpdWayRailWayOfKIS(); // тест обновления вагонов по данным КИС(buffer) в систему RailWay
 
             //tst_kis.Test_KISThread_StartCopyBufferSendingSostav(); // Тест запуска и выполнения службы переноса данных по отправленым составам в таблицу буфер
-            //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay(); // Перенос составов отправленных на УЗ
+
             //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay_SetWayRailWayOfKIS(); // Переноса строки состава отправленных на УЗ
             //tst_kis.Test_KISThread_StartTransferSendingOfKIS(); // Перенос составов на УЗ из АМКР
             //tst_kis.Test_KIS_RW_Transfer_IsVagonOfSendingNatHistNatur();
 
             // ПЕРЕНОС ОТПРАВКА НА УЗ
-            tst_kis.Test_KIS_RW_Transfer_CopyBufferSendingSostavOfKIS(); // Тест переноса данных по отправленым составам в таблицу буфер
+            //tst_kis.Test_KIS_RW_Transfer_CopyBufferSendingSostavOfKIS(); // Тест переноса данных по отправленым составам в таблицу буфер
+            //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay(); // Перенос составов отправленных на УЗ
 
             // ПЕРЕНОС ВНУТРЕНИЕ СТАНЦИИ ПО ПРИБЫТИЮ
             //tst_kis.Test_KIS_RW_Transfer_CopyBufferInputSostavOfKIS(); // Тест переноса данных по внутреним станциям (по прибытию)
             //tst_kis.Test_KISThread_StartCopyBufferInputSostav(); // Тест ПОТОКА переноса данных по внутреним станциям (по прибытию)
 
             // ПЕРЕНОС ВНУТРЕНИЕ СТАНЦИИ ПО ОТПРАВКЕ
-            //tst_kis.Test_KIS_RW_Transfer_CopyBufferOutputSostavOfKIS(); // Тест переноса данных по внутреним станциям (по отправке)
-            //tst_kis.Test_KISThread_StartCopyBufferOutputSostav(); // Тест ПОТОКА переноса данных по внутреним станциям (по отправке)
+            //tst_kis.Test_KIS_RW_Transfer_CopyBufferOutputSostavOfKIS();       // Тест переноса данных по внутреним станциям (по отправке)
+            //tst_kis.Test_KISThread_StartCopyBufferOutputSostav();             // Тест ПОТОКА переноса данных по внутреним станциям (по отправке)
+            //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway();    // Тест переноса составов по внутреним станциям (по прибытию)
+            //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway_of_RWBufferOutputSostav();    // Тест переноса составов по внутреним станциям (по прибытию) по указаной строке 
 
             #endregion
 
@@ -261,6 +264,10 @@ namespace Testing
             //tst_wag.Test_PROM_GetArrivalProm_VagonOfNaturStationDate();
             //tst_wag.Test_PROM_GetArrivalProm_VagonOfNaturStationDateNum();
 
+            // NUM_VAG Вагоны по отправке
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1OutStVag();       // Показать все вагоны по отправке
+            //tst_wag.Test_NUM_VAG_GetNumVag_Stpr1OutStVagOfNatur();  // Показать вагоны по отправке по указаной натурке
+
             #endregion
 
             #region Test_Logs тест логирования
@@ -287,6 +294,8 @@ namespace Testing
             //test.MLog_WriteLogServices();
             //test.MLog_WriteLogStatusServices();
            // test.MLog_WriteLogStatusServices();
+
+            test.MServicesLog_GetCodeReturnServices();
             #endregion
 
             #region Test_Settings тест настроек

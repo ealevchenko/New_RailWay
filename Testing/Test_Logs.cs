@@ -227,5 +227,15 @@ namespace Testing
 
         #endregion
 
+        #region MServicesLog
+
+        public void MServicesLog_GetCodeReturnServices()
+        {
+            //return ServicesLogs.GetCodeReturnServices((int)service, period);
+            int? code_run_service = service.TransferHost.GetCodeReturnServices(300 + 60);
+        }
+
+        #endregion
+
     }
 }

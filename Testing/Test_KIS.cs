@@ -241,6 +241,21 @@ namespace Testing
             bool result = kis_th.StartCopyBufferOutputSostav();
         }
 
+        public void Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+
+            kis_trans.TransferOutputSostavKISToRailway();
+        }
+
+        public void Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway_of_RWBufferOutputSostav()
+        {
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+            EFTKIS ef_tkis = new EFTKIS();
+            EFKIS.Entities.RWBufferOutputSostav bos = ef_tkis.GetRWBufferOutputSostav(9963);
+            int result = kis_trans.TransferOutputSostavKISToRailway(ref bos);
+        }
+
         #endregion
 
 
