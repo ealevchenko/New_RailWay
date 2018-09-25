@@ -1561,7 +1561,7 @@ namespace KIS
                     }
                     if (ef_rw.IsRulesTransferOfKis(bos.id_station_from_kis, bos.id_station_on_kis, EFRW.Concrete.EFRailWay.typeSendTransfer.kis_output))
                     {
-                        if (this.transfer_input_kis)
+                        if (this.transfer_output_kis)
                         {
                             int res_put = TransferArrivalToStation(ref kis_out_sostav);
                         }
