@@ -46,7 +46,6 @@ namespace EFKIS.Entities
         [StringLength(250)]
         public string close_comment { get; set; }
 
-        [StringLength(4000)]
         public string list_update_wagons { get; set; }
     }
 }

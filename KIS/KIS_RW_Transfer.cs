@@ -736,11 +736,11 @@ namespace KIS
 
                     if (bos.count_wagons != null)
                     {
-                        string list_update_wagons = bos.list_update_wagons += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bos.count_wagons, bos.list_wagons, list_car != null ? (int?)list_car.Count() : null);
-                        // Обрезка строки если превышает 4000
-                        if (list_update_wagons.Length > 4000) {
-                            list_update_wagons = list_update_wagons.Substring(0, list_update_wagons.Length - 4000);
-                        }
+                        //string list_update_wagons = bos.list_update_wagons += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bos.count_wagons, bos.list_wagons, list_car != null ? (int?)list_car.Count() : null);
+                        //// Обрезка строки если превышает 4000
+                        //if (list_update_wagons.Length > 4000) {
+                        //    list_update_wagons = list_update_wagons.Substring(0, list_update_wagons.Length - 4000);
+                        //}
                         bos.list_update_wagons += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bos.count_wagons, bos.list_wagons, list_car != null ? (int?)list_car.Count() : null);
                         bos.status = (int)statusSting.Update;                    
                     }
