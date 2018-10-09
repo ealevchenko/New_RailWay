@@ -509,13 +509,14 @@ namespace KIS
 
                     if (bis.count_wagons != null)
                     {
-                        bis.close_comment += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bis.count_wagons, bis.list_wagons, list_car != null ? (int?)list_car.Count() : null);
+                        bis.list_update_wagons += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bis.count_wagons, bis.list_wagons, list_car != null ? (int?)list_car.Count() : null);
                         bis.status = (int)statusSting.Update;
                     }
                     bis.count_wagons = list_car.Count(); // Определим количество вагонов
                     bis.count_set_wagons = null;
                     bis.list_wagons = GetWagonsToString(list_car.Select(v => v.N_VAG).ToArray().ToList()); // Определим список вагонов
                     bis.list_no_set_wagons = null;
+                    bis.close_comment = "Update";
                     bis.close = null;
                     result = ef_tkis.SaveRWBufferInputSostav(bis);
                 }
@@ -735,13 +736,19 @@ namespace KIS
 
                     if (bos.count_wagons != null)
                     {
-                        bos.close_comment += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bos.count_wagons, bos.list_wagons, list_car != null ? (int?)list_car.Count() : null);
+                        string list_update_wagons = bos.list_update_wagons += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bos.count_wagons, bos.list_wagons, list_car != null ? (int?)list_car.Count() : null);
+                        // Обрезка строки если превышает 4000
+                        if (list_update_wagons.Length > 4000) {
+                            list_update_wagons = list_update_wagons.Substring(0, list_update_wagons.Length - 4000);
+                        }
+                        bos.list_update_wagons += String.Format(" Update(дата:{0}, было:{1}[{2}], стало:{3})", DateTime.Now, bos.count_wagons, bos.list_wagons, list_car != null ? (int?)list_car.Count() : null);
                         bos.status = (int)statusSting.Update;                    
                     }
                     bos.count_wagons = list_car.Count(); // Определим количество вагонов
                     bos.count_set_wagons = null;
                     bos.list_wagons = GetWagonsToString(list_car.Select(v => v.N_VAG).ToArray().ToList()); // Определим список вагонов
                     bos.list_no_set_wagons = null;
+                    bos.close_comment = "Update";                    
                     bos.close = null;
                     result = ef_tkis.SaveRWBufferOutputSostav(bos);
                 }

@@ -253,9 +253,12 @@
             this.initEventSelectChild();
         },
         viewTable: function (data_refresh) {
-            if (wt_report_cars.select_report.id == -1) return;
+
+                if (wt_report_cars.select_report.id == -1) return;
+                OnBegin();
             //var date = 
             if (this.list == null | data_refresh == true | this.report_id != wt_report_cars.select_report.id) {
+
                 // Обновим данные
                 getAsyncLastOperationWagonsTrackingOfCarsReports(
                     (wt_report_cars.select_report.id != null ? wt_report_cars.select_report.id : 0),
@@ -300,6 +303,7 @@
                     //                        "nsost": data[i].nsost,
                 });
             }
+            LockScreenOff();
         },
         initEventSelectChild: function () {
             this.html_table.find('tbody')
@@ -557,9 +561,12 @@
             //this.initEventSelectChild();
         },
         viewTable: function (data_refresh) {
+
             if (wt_report_cars.select_report.id == -1) return;
+                OnBegin();
             //var date = 
             if (this.list == null | data_refresh == true | this.report_id != wt_report_cars.select_report.id) {
+
                 // Обновим данные
                 getAsyncCargoDislocationOperationWagonsTrackingOfCarsReports(
                     (wt_report_cars.select_report.id != null ? wt_report_cars.select_report.id : 0),
@@ -595,6 +602,7 @@
                     //                        "nsost": data[i].nsost,
                 });
             }
+            LockScreenOff();
         },
         createTable: function (data) {
             if (data == null || data.length == 0) {
@@ -732,7 +740,9 @@
         },
         viewTable: function (data_refresh) {
             if (wt_report_cars.select_report.id == -1) return;
+                OnBegin();
             if (this.list == null | data_refresh == true | this.report_id != wt_report_cars.select_report.id) {
+
                 // Обновим данные
                 getAsyncLastOperationWagonsTrackingOfCarsReports(
                     (wt_report_cars.select_report.id != null ? wt_report_cars.select_report.id : 0),
@@ -763,6 +773,7 @@
                     "type_cargo": lang == 'en' ? data[i].type_cargo_en : data[i].type_cargo_ru,
                 });
             }
+            LockScreenOff();
         },
     }
 

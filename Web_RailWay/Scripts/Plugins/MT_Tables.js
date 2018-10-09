@@ -214,7 +214,7 @@
                         // Справочник лаколизации
                         //langs = getLanguages($.MTLanguages, option.language);
 
-                        var langs = $.extend(true, $.extend(true, getLanguages($.MTFields, option.language), getLanguages($.MTCommon, option.language)), getLanguages($.MTTable, option.language));
+                        var langs = $.extend(true, $.extend(true, getLanguages($.MTFields, option.language), getLanguages($.KISCommon, option.language)), getLanguages($.MTTable, option.language));
                         $(this).data('langs', langs);
 
                         $this.append($('<table class="' + option.class_table + '" id="' + table_name + '" cellpadding="0" style="width:100%"></table>'))

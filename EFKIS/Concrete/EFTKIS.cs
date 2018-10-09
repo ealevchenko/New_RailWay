@@ -1112,7 +1112,8 @@ namespace EFKIS.Concrete
                         message = RWBufferInputSostav.message ,
                         close = RWBufferInputSostav.close ,
                         close_user = RWBufferInputSostav.close_user ,
-                        close_comment = RWBufferInputSostav.close_comment
+                        close_comment = RWBufferInputSostav.close_comment, 
+                        list_update_wagons = RWBufferInputSostav.list_update_wagons,
                     };
                     context_rw.RWBufferInputSostav.Add(dbEntry);
                 }
@@ -1137,6 +1138,7 @@ namespace EFKIS.Concrete
                         dbEntry.close = RWBufferInputSostav.close;
                         dbEntry.close_user = RWBufferInputSostav.close_user;
                         dbEntry.close_comment = RWBufferInputSostav.close_comment;
+                        dbEntry.list_update_wagons = RWBufferInputSostav.list_update_wagons;
                     }
                 }
                 context_rw.SaveChanges();
@@ -1360,7 +1362,8 @@ namespace EFKIS.Concrete
                         message = RWBufferOutputSostav.message,
                         close = RWBufferOutputSostav.close,
                         close_user = RWBufferOutputSostav.close_user,
-                        close_comment = RWBufferOutputSostav.close_comment
+                        close_comment = RWBufferOutputSostav.close_comment, 
+                        list_update_wagons = RWBufferOutputSostav.list_update_wagons
                     };
                     context_rw.RWBufferOutputSostav.Add(dbEntry);
                 }
@@ -1384,6 +1387,7 @@ namespace EFKIS.Concrete
                         dbEntry.close = RWBufferOutputSostav.close;
                         dbEntry.close_user = RWBufferOutputSostav.close_user;
                         dbEntry.close_comment = RWBufferOutputSostav.close_comment;
+                        dbEntry.list_update_wagons = RWBufferOutputSostav.list_update_wagons;
                     }
                 }
                 context_rw.SaveChanges();

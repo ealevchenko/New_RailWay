@@ -28,6 +28,8 @@ namespace EFMT.Concrete
         public virtual DbSet<WTReports> WTReports { get; set; }
         public virtual DbSet<WTCycle> WTCycle { get; set; }
 
+        public virtual DbSet<BufferArrivalSostav> BufferArrivalSostav { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApproachesSostav>()

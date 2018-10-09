@@ -67,6 +67,11 @@ namespace WebApiClient
                     
                     var response =
                         client.PostAsync(APP_PATH + "/Token", content).Result;
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        string err = "Ошибка выполнения client.PostAsync :" + response.ToString();
+                        err.WriteError(eventID);
+                    }
                     var result = response.Content.ReadAsStringAsync().Result;
                     // Десериализация полученного JSON-объекта
                     Dictionary<string, string> tokenDictionary =
@@ -76,7 +81,7 @@ namespace WebApiClient
             }
             catch (Exception e)
             {
-                e.WriteErrorMethod(String.Format("GetTokenDictionary()"), eventID);
+                e.WriteErrorMethod(String.Format("GetTokenDictionary(userName={0}, password={1})",userName, password), eventID);
                 return null;
             }
         }
@@ -121,6 +126,10 @@ namespace WebApiClient
             using (var client = CreateClient(token))
             {
                 var response = client.GetAsync(APP_PATH + api_comand).Result;
+                if (response.StatusCode != HttpStatusCode.OK) { 
+                    string err = response.ToString();
+                    err.WriteError(eventID);
+                }
                 return response.Content.ReadAsStringAsync().Result;
             }
         }

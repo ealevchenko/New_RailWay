@@ -45,9 +45,11 @@ namespace EFKIS.Entities
         [StringLength(100)]
         public string close_user { get; set; }
 
-        [StringLength(1000)]
+        [StringLength(250)]
         public string close_comment { get; set; }
 
+        [StringLength(4000)]
+        public string list_update_wagons { get; set; }
 
 
 

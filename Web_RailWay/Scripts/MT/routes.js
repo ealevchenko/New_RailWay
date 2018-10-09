@@ -257,8 +257,10 @@
         viewTable: function (view, data_refresh) {
             table_wt_routes.view = view;
             if (wt_report_cars.select_report.id == -1) return;
+                OnBegin();
             //var date = 
             if (this.list == null | data_refresh == true | this.report_id != wt_report_cars.select_report.id | this.view != view) {
+
                 // Обновим данные
                 if (view == 0) {
                     getAsyncRouteWagonTrackingAndDateTimeOfReports(
@@ -320,6 +322,7 @@
                 });
             }
             //this.obj.draw();
+            LockScreenOff();
         },
         initComplete: function () {
             table_wt_routes.obj.columns([3, 14]).every(function () {
@@ -762,8 +765,10 @@
         },
         viewTable: function (data_refresh) {
             if (wt_report_cars.select_report.id == -1) return;
+                OnBegin();
             //var date = 
             if (this.list == null | data_refresh == true | this.report_id != wt_report_cars.select_report.id) {
+
                 // Обновим данные
                 getAsyncLastWagonTrackingAndDateTimeOfReports(
                     (wt_report_cars.select_report.id != null ? wt_report_cars.select_report.id : 0),
@@ -812,6 +817,7 @@
                 });
             }
             //this.obj.draw();
+            LockScreenOff();
         },
         createTable: function (data) {
 

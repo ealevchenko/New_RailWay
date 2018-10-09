@@ -877,11 +877,12 @@ namespace RW
                 // List<Cars> list_result = new List<Cars>();
                 foreach (ArrivalCars car in sostav.ArrivalCars.ToList())
                 {
+                    DateTime dt_start = DateTime.Now;
                     message += car.Num.ToString() + " - ";
                     Cars car_new = SetCarsToRailWay(car);
                     if (car_new != null)
                     {
-                        int res = ef_rw.SaveCars(car_new);
+                        int res = ef_rw.SaveCarsNoDetect(car_new);
                         if (res > 0)
                         {
                             transfer++;
@@ -894,6 +895,8 @@ namespace RW
                         message += "null";
                     }
                     message += "; ";
+                    TimeSpan ts = DateTime.Now - dt_start;
+                    Console.WriteLine(String.Format("Перенос вагона №{0}, время выполнения: {1}:{2}:{3}({4})", car.Num, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
                 }
                 count = sostav.ArrivalCars != null ? sostav.ArrivalCars.Count() : 0;
                 string mess = String.Format("Перенос состава из базы данных [MT.Arrival] (id состава: {0}, id прибытия {1}, индекс: {2}, дата операции: {3}) в систему RailWay. Определенно для переноса {4} вагона(ов), перенесено {5}, пропущено {6}, ошибок переноса {7}, закрыто по ТСП {8}.",
@@ -1096,28 +1099,6 @@ namespace RW
         #endregion
 
         #region Входящие поставки
-        //public CarsInpDelivery CreateCarsInpDelivery(PromVagon prom_vagon)
-        //{
-        //    try
-        //    {
-        //        DateTime dt_oper = DateTime.Parse(prom_vagon.D_PR_DD.ToString() + "-" + prom_vagon.D_PR_MM.ToString() + "-" + prom_vagon.D_PR_YY.ToString() + " " + prom_vagon.T_PR_HH.ToString() + ":" + prom_vagon.T_PR_MI.ToString() + ":00", CultureInfo.CreateSpecificCulture("ru-RU"));
-        //        // Определим код груза
-        //        return CreateCarsInpDelivery(prom_vagon.N_VAG,
-        //            (prom_vagon.N_NATUR * -1),
-        //            dt_oper, 
-        //            "-",
-        //            prom_vagon.NPP, 
-        //            prom_vagon != null && prom_vagon.KOD_STRAN != null ? (int)prom_vagon.KOD_STRAN : 0,
-        //            rw_ref.GetCorrectCodeETSNGOfKis(prom_vagon.K_GR),
-        //            prom_vagon != null && prom_vagon.WES_GR != null ? (float)prom_vagon.WES_GR : 0,
-        //            7932);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        e.WriteErrorMethod(String.Format("CreateCarsInpDelivery(prom_vagon={0})", prom_vagon.GetFieldsAndValue()), servece_owner, eventID);
-        //        return null;
-        //    }
-        //}
         /// <summary>
         /// Создать справочник SAP Входящие поставки по данным ArrivalCars
         /// </summary>
@@ -1489,7 +1470,78 @@ namespace RW
             ef_rw.RefreshAll();
         }
 
+        /// <summary>
+        /// Получить последнюю операцию по номеру вагона
+        /// </summary>
+        /// <param name="num_car"></param>
+        /// <returns></returns>
+        //public CarOperations GetLastOperation(int num_car)
+        //{
+        //    EFRailWay ef_rw = new EFRailWay();
+        //    List<CarOperations> list_open_operation = ef_rw.query_GetOpenOperationOfNumCar(num_car).ToList();
+        //}
 
+        /// <summary>
+        /// Получить последнюю открытую операцию по номеру вагона, если их много сделать коррекцию (correct=true - закрыть старые операции)
+        /// </summary>
+        /// <param name="num_car"></param>
+        /// <param name="correct"></param>
+        /// <returns></returns>
+        public CarOperations GetLastOpenOperation(int num_car, bool correct) {
+
+            EFRailWay ef_rw = new EFRailWay();
+            List<CarOperations> list_open_operation = ef_rw.query_GetOpenOperationOfNumCar(num_car).ToList();
+            if (list_open_operation == null) return null;
+            if (list_open_operation.Count() == 1) return list_open_operation.FirstOrDefault();
+            CarOperations last_open_operation = null;            
+            // Открытые операции на станции
+            CarOperations last_station_operation = list_open_operation.IsOpenOperation(Filters.IsOpenWay).OrderByDescending(o => o.dt_inp_way).FirstOrDefault();
+            // Открытые операции отправленее вагоны            
+            CarOperations last_sending_operation = list_open_operation.IsOpenOperation(Filters.IsOpenSending).OrderByDescending(o => o.send_dt_inp_way).FirstOrDefault();
+
+            if (last_station_operation == null && last_sending_operation != null) last_open_operation = last_sending_operation;
+            if (last_station_operation != null && last_sending_operation == null) last_open_operation = last_station_operation;
+            if (last_station_operation != null && last_sending_operation != null) {
+                if (last_station_operation.dt_inp_way >= last_sending_operation.send_dt_inp_way)
+                {
+                    last_open_operation = last_station_operation;
+                }
+                else {
+                    last_open_operation = last_sending_operation;
+                };
+            };
+            list_open_operation.Remove(last_open_operation);
+            // Закрыть операции, выполнить коррекции
+            if (correct) { 
+                // TODO: реализовать код
+            }
+            return last_open_operation;
+        }
+
+        /// <summary>
+        /// Выполнить операцию отправки вагона из пути "Прибытия на АМКР" на путь "Отправки на УЗ"
+        /// </summary>
+        /// <param name="code_station_uz"></param>
+        /// <param name="num_car"></param>
+        /// <returns></returns>
+        public int OperationArrivalUZToSendingUZ(int code_station_uz, int num_car)
+        {
+            EFRailWay ef_rw = new EFRailWay();
+            RWReference rw_ref = new RWReference(true);
+            
+            
+            Stations station = rw_ref.GetStationsUZ(code_station_uz, true);
+            Ways way_from = ef_rw.GetWaysOfArrivalUZ(station.id);
+            Ways way_on = ef_rw.GetWaysOfSendingUZ(station.id);
+            // Найти вагон в системе Railway
+            CarOperations last_operation = GetLastOpenOperation(num_car, true);
+            if (last_operation == null)
+            { 
+                
+            }
+            //Cars car
+            return 0;
+        }
 
         ///// <summary>
         ///// Создать вагон новый вагон на указвной станции на указаном пути

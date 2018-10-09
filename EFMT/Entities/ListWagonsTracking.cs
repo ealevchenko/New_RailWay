@@ -19,7 +19,12 @@ namespace EFMT.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int nvagon { get; set; }
 
-        public bool? report1 { get; set; }
+        public int? SAP { get; set; }
+
+        [StringLength(100)]
+        public string Description { get; set; }
+
+        //public bool? report1 { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WTCarsReports> WTCarsReports { get; set; }

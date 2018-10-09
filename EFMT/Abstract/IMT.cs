@@ -45,6 +45,7 @@ namespace EFMT.Abstract
         #endregion
 
         #region На станциях УЗ КР
+        string GetListArrivalCarsToString(List<ArrivalCars> list);
         IQueryable<ArrivalCars> ArrivalCars { get; }
         IQueryable<ArrivalCars> GetArrivalCars();
         ArrivalCars GetArrivalCars(int id);
@@ -169,6 +170,17 @@ namespace EFMT.Abstract
         #region CountCarsOfSostav
         List<CountCarsOfSostav> GetNoCloseArrivalCarsOfStationUZ(int code);
         List<CountCarsOfSostav> GetArrivalCarsOfStationUZ(int code, bool close);
+
+        #endregion
+
+        #region BufferArrivalSostav
+        IQueryable<BufferArrivalSostav> BufferArrivalSostav { get; }
+        IQueryable<BufferArrivalSostav> GetBufferArrivalSostav();
+        BufferArrivalSostav GetBufferArrivalSostav(int id);
+        int SaveBufferArrivalSostav(BufferArrivalSostav BufferArrivalSostav);
+        BufferArrivalSostav DeleteBufferArrivalSostav(int id);
+        IQueryable<BufferArrivalSostav> GetBufferArrivalSostavOfIDArrival(int id_arrival);
+        IQueryable<BufferArrivalSostav> GetBufferArrivalSostavOfNotClose();
 
         #endregion
     }

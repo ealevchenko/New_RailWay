@@ -352,11 +352,11 @@ namespace MetallurgTrans
                 lock (locker_xml_file)
                 {
                     MTTransfer mtt = new MTTransfer(service);
-                    mtt.DayRangeArrivalCars = dayrangeArrivalCars;
-                    mtt.ArrivalToRailWay = arrivalToRailWay;
-                    mtt.ArrivalToRailCars = arrivalToRailCars;
-                    mtt.FromPath = toTMPDirPath;
-                    mtt.DeleteFile = deleteFileMT;
+                    mtt.DayRangeArrivalCars = dayrangeArrivalCars; // 10
+                    mtt.ArrivalToRailWay = arrivalToRailWay;        // true
+                    mtt.ArrivalToRailCars = arrivalToRailCars;    //false
+                    mtt.FromPath = toTMPDirPath;                // C:\RailWay\temp_xml
+                    mtt.DeleteFile = deleteFileMT;             // 10
                     res_transfer = mtt.TransferArrival();
                 }
                 TimeSpan ts = DateTime.Now - dt_start;

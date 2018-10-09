@@ -596,6 +596,17 @@ namespace EFMT.Concrete
 
         #region ArrivalCars
 
+        public string GetListArrivalCarsToString(List<ArrivalCars> list)
+        {
+            if (list == null) return null;
+            string res = null;
+            foreach (ArrivalCars car in list)
+            {
+                res += car.Num.ToString() + ";";
+            }
+            return res;
+        }
+
         public IQueryable<ArrivalCars> ArrivalCars
         {
             get { return context.ArrivalCars; }
@@ -969,7 +980,8 @@ namespace EFMT.Concrete
             try
             {
                 ArrivalCars arr_car = GetArrivalCarsOfSostavNum(id_sostav, num);
-                if (arr_car != null) {
+                if (arr_car != null)
+                {
                     arr_car.Arrival = dt;
                     arr_car.NumDocArrival = doc;
                     return SaveArrivalCars(arr_car);
@@ -1008,7 +1020,7 @@ namespace EFMT.Concrete
         {
             try
             {
-                return GetArrivalCars().Where(c => c.Num == num_car & c.ParentID==null).OrderBy(c => c.ID);
+                return GetArrivalCars().Where(c => c.Num == num_car & c.ParentID == null).OrderBy(c => c.ID);
             }
             catch (Exception e)
             {
@@ -1301,10 +1313,12 @@ namespace EFMT.Concrete
             try
             {
                 List<int> list_num_car = new List<int>();
-                if (sostav.ParentID == null) return list_num_car ;
+                if (sostav.ParentID == null) return list_num_car;
                 ArrivalSostav sostav_old = GetArrivalSostav((int)sostav.ParentID);
-                foreach (ArrivalCars car in sostav_old.ArrivalCars.ToList()) {
-                    if (sostav.ArrivalCars.ToList().Find(c => c.Num == car.Num) == null) {
+                foreach (ArrivalCars car in sostav_old.ArrivalCars.ToList())
+                {
+                    if (sostav.ArrivalCars.ToList().Find(c => c.Num == car.Num) == null)
+                    {
                         list_num_car.Add(car.Num);
                     }
                 }
@@ -1548,789 +1562,931 @@ namespace EFMT.Concrete
         }
         #endregion
 
-        #region WT
-            #region WagonsTracking
+        #region WT Контроль собственного парка
+        #region WagonsTracking
 
-            public IQueryable<WagonsTracking> WagonsTracking
+        public IQueryable<WagonsTracking> WagonsTracking
+        {
+            get { return context.WagonsTracking; }
+        }
+
+        public IQueryable<WagonsTracking> GetWagonsTracking()
+        {
+            try
             {
-                get { return context.WagonsTracking; }
+                return WagonsTracking;
             }
-
-            public IQueryable<WagonsTracking> GetWagonsTracking()
+            catch (Exception e)
             {
-                try
-                {
-                    return WagonsTracking;
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWagonsTracking()"), eventID);
-                    return null;
-                }
+                e.WriteErrorMethod(String.Format("GetWagonsTracking()"), eventID);
+                return null;
             }
+        }
 
-            public WagonsTracking GetWagonsTracking(int id)
+        public WagonsTracking GetWagonsTracking(int id)
+        {
+            try
             {
-                try
-                {
-                    return GetWagonsTracking().Where(t => t.id == id).FirstOrDefault();
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWagonsTracking(id={0})", id), eventID);
-                    return null;
-                }
+                return GetWagonsTracking().Where(t => t.id == id).FirstOrDefault();
             }
-
-            public int SaveWagonsTracking(WagonsTracking WagonsTracking)
+            catch (Exception e)
             {
-                //EFDbContext context1 = new EFDbContext();
-                WagonsTracking dbEntry;
-                try
+                e.WriteErrorMethod(String.Format("GetWagonsTracking(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveWagonsTracking(WagonsTracking WagonsTracking)
+        {
+            //EFDbContext context1 = new EFDbContext();
+            WagonsTracking dbEntry;
+            try
+            {
+                if (WagonsTracking.id == 0)
                 {
-                    if (WagonsTracking.id == 0)
+                    dbEntry = new WagonsTracking()
                     {
-                        dbEntry = new WagonsTracking()
-                        {
-                            id = WagonsTracking.id,
-                            nvagon = WagonsTracking.nvagon,
-                            st_disl = WagonsTracking.st_disl,
-                            nst_disl = WagonsTracking.nst_disl,
-                            kodop = WagonsTracking.kodop,
-                            nameop = WagonsTracking.nameop,
-                            full_nameop = WagonsTracking.full_nameop,
-                            dt = WagonsTracking.dt,
-                            st_form = WagonsTracking.st_form,
-                            nst_form = WagonsTracking.nst_form,
-                            idsost = WagonsTracking.idsost,
-                            nsost = WagonsTracking.nsost,
-                            st_nazn = WagonsTracking.st_nazn,
-                            nst_nazn = WagonsTracking.nst_nazn,
-                            ntrain = WagonsTracking.ntrain,
-                            st_end = WagonsTracking.st_end,
-                            nst_end = WagonsTracking.nst_end,
-                            kgr = WagonsTracking.kgr,
-                            nkgr = WagonsTracking.nkgr,
-                            id_cargo = WagonsTracking.id_cargo,
-                            kgrp = WagonsTracking.kgrp,
-                            ves = WagonsTracking.ves,
-                            updated = WagonsTracking.updated,
-                            kgro = WagonsTracking.kgro,
-                            km = WagonsTracking.km,
-                        };
-                        context.WagonsTracking.Add(dbEntry);
-                    }
-                    else
+                        id = WagonsTracking.id,
+                        nvagon = WagonsTracking.nvagon,
+                        st_disl = WagonsTracking.st_disl,
+                        nst_disl = WagonsTracking.nst_disl,
+                        kodop = WagonsTracking.kodop,
+                        nameop = WagonsTracking.nameop,
+                        full_nameop = WagonsTracking.full_nameop,
+                        dt = WagonsTracking.dt,
+                        st_form = WagonsTracking.st_form,
+                        nst_form = WagonsTracking.nst_form,
+                        idsost = WagonsTracking.idsost,
+                        nsost = WagonsTracking.nsost,
+                        st_nazn = WagonsTracking.st_nazn,
+                        nst_nazn = WagonsTracking.nst_nazn,
+                        ntrain = WagonsTracking.ntrain,
+                        st_end = WagonsTracking.st_end,
+                        nst_end = WagonsTracking.nst_end,
+                        kgr = WagonsTracking.kgr,
+                        nkgr = WagonsTracking.nkgr,
+                        id_cargo = WagonsTracking.id_cargo,
+                        kgrp = WagonsTracking.kgrp,
+                        ves = WagonsTracking.ves,
+                        updated = WagonsTracking.updated,
+                        kgro = WagonsTracking.kgro,
+                        km = WagonsTracking.km,
+                    };
+                    context.WagonsTracking.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.WagonsTracking.Find(WagonsTracking.id);
+                    if (dbEntry != null)
                     {
-                        dbEntry = context.WagonsTracking.Find(WagonsTracking.id);
-                        if (dbEntry != null)
-                        {
-                            dbEntry.nvagon = WagonsTracking.nvagon;
-                            dbEntry.st_disl = WagonsTracking.st_disl;
-                            dbEntry.nst_disl = WagonsTracking.nst_disl;
-                            dbEntry.kodop = WagonsTracking.kodop;
-                            dbEntry.nameop = WagonsTracking.nameop;
-                            dbEntry.full_nameop = WagonsTracking.full_nameop;
-                            dbEntry.dt = WagonsTracking.dt;
-                            dbEntry.st_form = WagonsTracking.st_form;
-                            dbEntry.nst_form = WagonsTracking.nst_form;
-                            dbEntry.idsost = WagonsTracking.idsost;
-                            dbEntry.nsost = WagonsTracking.nsost;
-                            dbEntry.st_nazn = WagonsTracking.st_nazn;
-                            dbEntry.nst_nazn = WagonsTracking.nst_nazn;
-                            dbEntry.ntrain = WagonsTracking.ntrain;
-                            dbEntry.st_end = WagonsTracking.st_end;
-                            dbEntry.nst_end = WagonsTracking.nst_end;
-                            dbEntry.kgr = WagonsTracking.kgr;
-                            dbEntry.nkgr = WagonsTracking.nkgr;
-                            dbEntry.id_cargo = WagonsTracking.id_cargo;
-                            dbEntry.kgrp = WagonsTracking.kgrp;
-                            dbEntry.ves = WagonsTracking.ves;
-                            dbEntry.updated = WagonsTracking.updated;
-                            dbEntry.kgro = WagonsTracking.kgro;
-                            dbEntry.km = WagonsTracking.km;
-                        }
+                        dbEntry.nvagon = WagonsTracking.nvagon;
+                        dbEntry.st_disl = WagonsTracking.st_disl;
+                        dbEntry.nst_disl = WagonsTracking.nst_disl;
+                        dbEntry.kodop = WagonsTracking.kodop;
+                        dbEntry.nameop = WagonsTracking.nameop;
+                        dbEntry.full_nameop = WagonsTracking.full_nameop;
+                        dbEntry.dt = WagonsTracking.dt;
+                        dbEntry.st_form = WagonsTracking.st_form;
+                        dbEntry.nst_form = WagonsTracking.nst_form;
+                        dbEntry.idsost = WagonsTracking.idsost;
+                        dbEntry.nsost = WagonsTracking.nsost;
+                        dbEntry.st_nazn = WagonsTracking.st_nazn;
+                        dbEntry.nst_nazn = WagonsTracking.nst_nazn;
+                        dbEntry.ntrain = WagonsTracking.ntrain;
+                        dbEntry.st_end = WagonsTracking.st_end;
+                        dbEntry.nst_end = WagonsTracking.nst_end;
+                        dbEntry.kgr = WagonsTracking.kgr;
+                        dbEntry.nkgr = WagonsTracking.nkgr;
+                        dbEntry.id_cargo = WagonsTracking.id_cargo;
+                        dbEntry.kgrp = WagonsTracking.kgrp;
+                        dbEntry.ves = WagonsTracking.ves;
+                        dbEntry.updated = WagonsTracking.updated;
+                        dbEntry.kgro = WagonsTracking.kgro;
+                        dbEntry.km = WagonsTracking.km;
                     }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveWagonsTracking(WagonsTracking={0})", WagonsTracking.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public WagonsTracking DeleteWagonsTracking(int id)
+        {
+            WagonsTracking dbEntry = context.WagonsTracking.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.WagonsTracking.Remove(dbEntry);
                     context.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("SaveWagonsTracking(WagonsTracking={0})", WagonsTracking.GetFieldsAndValue()), eventID);
-                    return -1;
-                }
-                return dbEntry.id;
-            }
-
-            public WagonsTracking DeleteWagonsTracking(int id)
-            {
-                WagonsTracking dbEntry = context.WagonsTracking.Find(id);
-                if (dbEntry != null)
-                {
-                    try
-                    {
-                        context.WagonsTracking.Remove(dbEntry);
-                        context.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        e.WriteErrorMethod(String.Format("DeleteWagonsTracking(id={0})", id), eventID);
-                        return null;
-                    }
-                }
-                return dbEntry;
-            }
-            /// <summary>
-            /// Вернуть список операций по номеру вагона
-            /// </summary>
-            /// <param name="num"></param>
-            /// <returns></returns>
-            public IQueryable<WagonsTracking> GetWagonsTrackingOfNumCars(int num)
-            {
-                try
-                {
-                    return GetWagonsTracking().Where(t => t.nvagon == num);
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWagonsTrackingOfNumCars(num={0})", num), eventID);
+                    e.WriteErrorMethod(String.Format("DeleteWagonsTracking(id={0})", id), eventID);
                     return null;
                 }
             }
-            #endregion
-
-            #region ListWagonsTracking
-            public IQueryable<ListWagonsTracking> ListWagonsTracking
+            return dbEntry;
+        }
+        /// <summary>
+        /// Вернуть список операций по номеру вагона
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public IQueryable<WagonsTracking> GetWagonsTrackingOfNumCars(int num)
+        {
+            try
             {
-                get { return context.ListWagonsTracking; }
+                return GetWagonsTracking().Where(t => t.nvagon == num);
             }
-
-            public IQueryable<ListWagonsTracking> GetListWagonsTracking()
+            catch (Exception e)
             {
-                try
-                {
-                    return ListWagonsTracking;
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetListWagonsTracking()"), eventID);
-                    return null;
-                }
+                e.WriteErrorMethod(String.Format("GetWagonsTrackingOfNumCars(num={0})", num), eventID);
+                return null;
             }
+        }
+        #endregion
 
-            public ListWagonsTracking GetListWagonsTracking(int nvagon)
+        #region ListWagonsTracking
+        public IQueryable<ListWagonsTracking> ListWagonsTracking
+        {
+            get { return context.ListWagonsTracking; }
+        }
+
+        public IQueryable<ListWagonsTracking> GetListWagonsTracking()
+        {
+            try
             {
-                try
-                {
-                    return GetListWagonsTracking().Where(t => t.nvagon == nvagon).FirstOrDefault();
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetListWagonsTracking(nvagon={0})", nvagon), eventID);
-                    return null;
-                }
+                return ListWagonsTracking;
             }
-
-            public int SaveListWagonsTracking(ListWagonsTracking ListWagonsTracking)
+            catch (Exception e)
             {
-                ListWagonsTracking dbEntry;
-                try
+                e.WriteErrorMethod(String.Format("GetListWagonsTracking()"), eventID);
+                return null;
+            }
+        }
+
+        public ListWagonsTracking GetListWagonsTracking(int nvagon)
+        {
+            try
+            {
+                return GetListWagonsTracking().Where(t => t.nvagon == nvagon).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetListWagonsTracking(nvagon={0})", nvagon), eventID);
+                return null;
+            }
+        }
+
+        public int SaveListWagonsTracking(ListWagonsTracking ListWagonsTracking)
+        {
+            ListWagonsTracking dbEntry;
+            try
+            {
+                dbEntry = context.ListWagonsTracking.Find(ListWagonsTracking.nvagon);
+                if (dbEntry == null)
                 {
-                    dbEntry = context.ListWagonsTracking.Find(ListWagonsTracking.nvagon);
-                    if (dbEntry == null)
+                    dbEntry = new ListWagonsTracking()
                     {
-                        dbEntry = new ListWagonsTracking()
-                        {
-                            nvagon = ListWagonsTracking.nvagon,
-                            report1 = ListWagonsTracking.report1,
-                            WTCarsReports = ListWagonsTracking.WTCarsReports,
-                        };
-                        context.ListWagonsTracking.Add(dbEntry);
-                    }
-                    else
-                    {
-                        dbEntry.nvagon = ListWagonsTracking.nvagon;
-                        dbEntry.report1 = ListWagonsTracking.report1;
-                        dbEntry.WTCarsReports = ListWagonsTracking.WTCarsReports;
-                    }
+                        nvagon = ListWagonsTracking.nvagon,
+                        SAP = ListWagonsTracking.SAP,
+                        Description = ListWagonsTracking.Description,
+                        //report1 = ListWagonsTracking.report1,
+                        WTCarsReports = ListWagonsTracking.WTCarsReports,
+                    };
+                    context.ListWagonsTracking.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry.nvagon = ListWagonsTracking.nvagon;
+                    dbEntry.SAP = ListWagonsTracking.SAP;
+                    dbEntry.Description = ListWagonsTracking.Description;
+                    //dbEntry.report1 = ListWagonsTracking.report1;
+                    dbEntry.WTCarsReports = ListWagonsTracking.WTCarsReports;
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveListWagonsTracking(ListWagonsTracking={0})", ListWagonsTracking.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.nvagon;
+        }
+
+        public ListWagonsTracking DeleteListWagonsTracking(int nvagon)
+        {
+            ListWagonsTracking dbEntry = context.ListWagonsTracking.Find(nvagon);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.ListWagonsTracking.Remove(dbEntry);
                     context.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("SaveListWagonsTracking(ListWagonsTracking={0})", ListWagonsTracking.GetFieldsAndValue()), eventID);
-                    return -1;
-                }
-                return dbEntry.nvagon;
-            }
-
-            public ListWagonsTracking DeleteListWagonsTracking(int nvagon)
-            {
-                ListWagonsTracking dbEntry = context.ListWagonsTracking.Find(nvagon);
-                if (dbEntry != null)
-                {
-                    try
-                    {
-                        context.ListWagonsTracking.Remove(dbEntry);
-                        context.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        e.WriteErrorMethod(String.Format("DeleteListWagonsTracking(nvagon={0})", nvagon), eventID);
-                        return null;
-                    }
-                }
-                return dbEntry;
-            }
-            #endregion
-
-            #region WTReports
-            public IQueryable<WTReports> WTReports
-            {
-                get { return context.WTReports; }
-            }
-
-            public IQueryable<WTReports> GetWTReports()
-            {
-                try
-                {
-                    return WTReports;
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWTReports()"), eventID);
+                    e.WriteErrorMethod(String.Format("DeleteListWagonsTracking(nvagon={0})", nvagon), eventID);
                     return null;
                 }
             }
+            return dbEntry;
+        }
+        #endregion
 
-            public WTReports GetWTReports(int id)
+        #region WTReports
+        public IQueryable<WTReports> WTReports
+        {
+            get { return context.WTReports; }
+        }
+
+        public IQueryable<WTReports> GetWTReports()
+        {
+            try
             {
-                try
-                {
-                    return GetWTReports().Where(t => t.id == id).FirstOrDefault();
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWTReports(id={0})", id), eventID);
-                    return null;
-                }
+                return WTReports;
             }
-
-            public int SaveWTReports(WTReports WTReports)
+            catch (Exception e)
             {
-                WTReports dbEntry;
+                e.WriteErrorMethod(String.Format("GetWTReports()"), eventID);
+                return null;
+            }
+        }
+
+        public WTReports GetWTReports(int id)
+        {
+            try
+            {
+                return GetWTReports().Where(t => t.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWTReports(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveWTReports(WTReports WTReports)
+        {
+            WTReports dbEntry;
+            try
+            {
+                if (WTReports.id == 0)
+                {
+                    dbEntry = new WTReports()
+                    {
+                        id = WTReports.id,
+                        Report = WTReports.Report,
+                        Description = WTReports.Description,
+                        WTCarsReports = WTReports.WTCarsReports,
+                    };
+                    context.WTReports.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.WTReports.Find(WTReports.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.Report = WTReports.Report;
+                        dbEntry.Description = WTReports.Description;
+                        dbEntry.WTCarsReports = WTReports.WTCarsReports;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveWTReports(WTReports={0})", WTReports.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public WTReports DeleteWTReports(int id)
+        {
+            WTReports dbEntry = context.WTReports.Find(id);
+            if (dbEntry != null)
+            {
                 try
                 {
-                    if (WTReports.id == 0)
-                    {
-                        dbEntry = new WTReports()
-                        {
-                            id = WTReports.id,
-                            Report = WTReports.Report,
-                            Description = WTReports.Description,
-                            WTCarsReports = WTReports.WTCarsReports,
-                        };
-                        context.WTReports.Add(dbEntry);
-                    }
-                    else
-                    {
-                        dbEntry = context.WTReports.Find(WTReports.id);
-                        if (dbEntry != null)
-                        {
-                            dbEntry.Report = WTReports.Report;
-                            dbEntry.Description = WTReports.Description;
-                            dbEntry.WTCarsReports = WTReports.WTCarsReports;
-                        }
-                    }
+                    context.WTReports.Remove(dbEntry);
                     context.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("SaveWTReports(WTReports={0})", WTReports.GetFieldsAndValue()), eventID);
-                    return -1;
-                }
-                return dbEntry.id;
-            }
-
-            public WTReports DeleteWTReports(int id)
-            {
-                WTReports dbEntry = context.WTReports.Find(id);
-                if (dbEntry != null)
-                {
-                    try
-                    {
-                        context.WTReports.Remove(dbEntry);
-                        context.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        e.WriteErrorMethod(String.Format("DeleteWTReports(id={0})", id), eventID);
-                        return null;
-                    }
-                }
-                return dbEntry;
-            }
-            #endregion
-
-            #region WTCarsReports
-            public IQueryable<WTCarsReports> WTCarsReports
-            {
-                get { return context.WTCarsReports; }
-            }
-
-            public IQueryable<WTCarsReports> GetWTCarsReports()
-            {
-                try
-                {
-                    return WTCarsReports;
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWTCarsReports()"), eventID);
+                    e.WriteErrorMethod(String.Format("DeleteWTReports(id={0})", id), eventID);
                     return null;
                 }
             }
+            return dbEntry;
+        }
+        #endregion
 
-            public WTCarsReports GetWTCarsReports(int id)
+        #region WTCarsReports
+        public IQueryable<WTCarsReports> WTCarsReports
+        {
+            get { return context.WTCarsReports; }
+        }
+
+        public IQueryable<WTCarsReports> GetWTCarsReports()
+        {
+            try
             {
-                try
-                {
-                    return GetWTCarsReports().Where(t => t.id == id).FirstOrDefault();
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWTCarsReports(id={0})", id), eventID);
-                    return null;
-                }
+                return WTCarsReports;
             }
-
-            public int SaveWTCarsReports(WTCarsReports WTCarsReports)
+            catch (Exception e)
             {
-                WTCarsReports dbEntry;
+                e.WriteErrorMethod(String.Format("GetWTCarsReports()"), eventID);
+                return null;
+            }
+        }
+
+        public WTCarsReports GetWTCarsReports(int id)
+        {
+            try
+            {
+                return GetWTCarsReports().Where(t => t.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWTCarsReports(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveWTCarsReports(WTCarsReports WTCarsReports)
+        {
+            WTCarsReports dbEntry;
+            try
+            {
+                if (WTCarsReports.id == 0)
+                {
+                    dbEntry = new WTCarsReports()
+                    {
+                        id = WTCarsReports.id,
+                        id_wtreport = WTCarsReports.id_wtreport,
+                        nvagon = WTCarsReports.nvagon,
+                        ListWagonsTracking = WTCarsReports.ListWagonsTracking,
+                        WTReports = WTCarsReports.WTReports,
+                    };
+                    context.WTCarsReports.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.WTCarsReports.Find(WTCarsReports.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.id_wtreport = WTCarsReports.id_wtreport;
+                        dbEntry.nvagon = WTCarsReports.nvagon;
+                        dbEntry.ListWagonsTracking = WTCarsReports.ListWagonsTracking;
+                        dbEntry.WTReports = WTCarsReports.WTReports;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveWTCarsReports(WTCarsReports={0})", WTCarsReports.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public WTCarsReports DeleteWTCarsReports(int id)
+        {
+            WTCarsReports dbEntry = context.WTCarsReports.Find(id);
+            if (dbEntry != null)
+            {
                 try
                 {
-                    if (WTCarsReports.id == 0)
-                    {
-                        dbEntry = new WTCarsReports()
-                        {
-                            id = WTCarsReports.id,
-                            id_wtreport = WTCarsReports.id_wtreport,
-                            nvagon = WTCarsReports.nvagon,
-                            ListWagonsTracking = WTCarsReports.ListWagonsTracking,
-                            WTReports = WTCarsReports.WTReports,
-                        };
-                        context.WTCarsReports.Add(dbEntry);
-                    }
-                    else
-                    {
-                        dbEntry = context.WTCarsReports.Find(WTCarsReports.id);
-                        if (dbEntry != null)
-                        {
-                            dbEntry.id_wtreport = WTCarsReports.id_wtreport;
-                            dbEntry.nvagon = WTCarsReports.nvagon;
-                            dbEntry.ListWagonsTracking = WTCarsReports.ListWagonsTracking;
-                            dbEntry.WTReports = WTCarsReports.WTReports;
-                        }
-                    }
+                    context.WTCarsReports.Remove(dbEntry);
                     context.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("SaveWTCarsReports(WTCarsReports={0})", WTCarsReports.GetFieldsAndValue()), eventID);
-                    return -1;
-                }
-                return dbEntry.id;
-            }
-
-            public WTCarsReports DeleteWTCarsReports(int id)
-            {
-                WTCarsReports dbEntry = context.WTCarsReports.Find(id);
-                if (dbEntry != null)
-                {
-                    try
-                    {
-                        context.WTCarsReports.Remove(dbEntry);
-                        context.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        e.WriteErrorMethod(String.Format("DeleteWTCarsReports(id={0})", id), eventID);
-                        return null;
-                    }
-                }
-                return dbEntry;
-            }
-            #endregion
-
-            #region WTCycle
-            public IQueryable<WTCycle> WTCycle
-            {
-                get { return context.WTCycle; }
-            }
-
-            public IQueryable<WTCycle> GetWTCycle()
-            {
-                try
-                {
-                    return WTCycle;
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWTCycle()"), eventID);
+                    e.WriteErrorMethod(String.Format("DeleteWTCarsReports(id={0})", id), eventID);
                     return null;
                 }
             }
+            return dbEntry;
+        }
+        #endregion
 
-            public WTCycle GetWTCycle(int id)
+        #region WTCycle
+        public IQueryable<WTCycle> WTCycle
+        {
+            get { return context.WTCycle; }
+        }
+
+        public IQueryable<WTCycle> GetWTCycle()
+        {
+            try
             {
-                try
-                {
-                    return GetWTCycle().Where(t => t.id == id).FirstOrDefault();
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWTCycle(id={0})", id), eventID);
-                    return null;
-                }
+                return WTCycle;
             }
-
-            public IQueryable<WTCycle> GetWTCycleOfNumCar(int num)
+            catch (Exception e)
             {
-                try
-                {
-                    return GetWTCycle().Where(t => t.WagonsTracking.nvagon == num);
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetWTCycleOfNumCar(num={0})", num), eventID);
-                    return null;
-                }
+                e.WriteErrorMethod(String.Format("GetWTCycle()"), eventID);
+                return null;
             }
+        }
 
-            public int SaveWTCycle(WTCycle WTCycle)
+        public WTCycle GetWTCycle(int id)
+        {
+            try
             {
-                WTCycle dbEntry;
+                return GetWTCycle().Where(t => t.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWTCycle(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<WTCycle> GetWTCycleOfNumCar(int num)
+        {
+            try
+            {
+                return GetWTCycle().Where(t => t.WagonsTracking.nvagon == num);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWTCycleOfNumCar(num={0})", num), eventID);
+                return null;
+            }
+        }
+
+        public int SaveWTCycle(WTCycle WTCycle)
+        {
+            WTCycle dbEntry;
+            try
+            {
+                if (WTCycle.id == 0)
+                {
+                    dbEntry = new WTCycle()
+                    {
+                        id = WTCycle.id,
+                        id_wt = WTCycle.id_wt,
+                        cycle = WTCycle.cycle,
+                        route = WTCycle.route,
+                        station_from = WTCycle.station_from,
+                        station_end = WTCycle.station_end,
+                        WagonsTracking = WTCycle.WagonsTracking
+                    };
+                    context.WTCycle.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.WTCycle.Find(WTCycle.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.id_wt = WTCycle.id_wt;
+                        dbEntry.cycle = WTCycle.cycle;
+                        dbEntry.route = WTCycle.route;
+                        dbEntry.station_from = WTCycle.station_from;
+                        dbEntry.station_end = WTCycle.station_end;
+                        dbEntry.WagonsTracking = WTCycle.WagonsTracking;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveWTCycle(WTCycle={0})", WTCycle.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public WTCycle DeleteWTCycle(int id)
+        {
+            WTCycle dbEntry = context.WTCycle.Find(id);
+            if (dbEntry != null)
+            {
                 try
                 {
-                    if (WTCycle.id == 0)
-                    {
-                        dbEntry = new WTCycle()
-                        {
-                            id = WTCycle.id,
-                            id_wt = WTCycle.id_wt,
-                            cycle = WTCycle.cycle,
-                            route = WTCycle.route,
-                            station_from = WTCycle.station_from,
-                            station_end = WTCycle.station_end,
-                            WagonsTracking = WTCycle.WagonsTracking
-                        };
-                        context.WTCycle.Add(dbEntry);
-                    }
-                    else
-                    {
-                        dbEntry = context.WTCycle.Find(WTCycle.id);
-                        if (dbEntry != null)
-                        {
-                            dbEntry.id_wt = WTCycle.id_wt;
-                            dbEntry.cycle = WTCycle.cycle;
-                            dbEntry.route = WTCycle.route;
-                            dbEntry.station_from = WTCycle.station_from;
-                            dbEntry.station_end = WTCycle.station_end;
-                            dbEntry.WagonsTracking = WTCycle.WagonsTracking;
-                        }
-                    }
+                    context.WTCycle.Remove(dbEntry);
                     context.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    e.WriteErrorMethod(String.Format("SaveWTCycle(WTCycle={0})", WTCycle.GetFieldsAndValue()), eventID);
-                    return -1;
-                }
-                return dbEntry.id;
-            }
-
-            public WTCycle DeleteWTCycle(int id)
-            {
-                WTCycle dbEntry = context.WTCycle.Find(id);
-                if (dbEntry != null)
-                {
-                    try
-                    {
-                        context.WTCycle.Remove(dbEntry);
-                        context.SaveChanges();
-                    }
-                    catch (Exception e)
-                    {
-                        e.WriteErrorMethod(String.Format("DeleteWTCycle(id={0})", id), eventID);
-                        return null;
-                    }
-                }
-                return dbEntry;
-            }
-            #endregion
-
-            //#region CycleWagonsTracking
-            ///// <summary>
-            ///// 
-            ///// </summary>
-            ///// <param name="id_report"></param>
-            ///// <param name="start"></param>
-            ///// <param name="stop"></param>
-            ///// <returns></returns>
-            //public List<CycleWagonsTracking> GetCycleWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
-            //{
-            //    try
-            //    {
-            //        SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
-            //        SqlParameter dt_start = new SqlParameter("@start", start);
-            //        SqlParameter dt_stop = new SqlParameter("@stop", stop);
-
-            //        List<CycleWagonsTracking> list = this.Database.SqlQuery<CycleWagonsTracking>("EXEC [MT].[GetCycleDBWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
-            //        return list;
-
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        e.WriteErrorMethod(String.Format("GetCycleWagonsTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report,start,stop), eventID);
-            //        return null;
-            //    }
-            //}
-            //#endregion
-
-            #region RouteWagonTracking
-            /// <summary>
-            /// Вернуть все маршруты по выбранным вагонам за указаный период
-            /// </summary>
-            /// <param name="id_report"></param>
-            /// <param name="start"></param>
-            /// <param name="stop"></param>
-            /// <returns></returns>
-            public List<RouteWagonTracking> GetRouteWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
-            {
-                try
-                {
-                    SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
-                    SqlParameter dt_start = new SqlParameter("@start", start);
-                    SqlParameter dt_stop = new SqlParameter("@stop", stop);
-
-                    List<RouteWagonTracking> list = this.Database.SqlQuery<RouteWagonTracking>("EXEC [MT].[GetRouteWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
-                    return list;
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetRouteWagonTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report, start, stop), eventID);
+                    e.WriteErrorMethod(String.Format("DeleteWTCycle(id={0})", id), eventID);
                     return null;
                 }
             }
-            /// <summary>
-            /// Вернуть последний маршрут по выбранным вагонам за указаный период
-            /// </summary>
-            /// <param name="id_report"></param>
-            /// <param name="start"></param>
-            /// <param name="stop"></param>
-            /// <returns></returns>
-            public List<RouteWagonTracking> GetLastRouteWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
-            {
-                try
-                {
-                    SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
-                    SqlParameter dt_start = new SqlParameter("@start", start);
-                    SqlParameter dt_stop = new SqlParameter("@stop", stop);
+            return dbEntry;
+        }
+        #endregion
 
-                    List<RouteWagonTracking> list = this.Database.SqlQuery<RouteWagonTracking>("EXEC [MT].[GetLastRouteWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
-                    return list;
-                }
-                catch (Exception e)
+        //#region CycleWagonsTracking
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="id_report"></param>
+        ///// <param name="start"></param>
+        ///// <param name="stop"></param>
+        ///// <returns></returns>
+        //public List<CycleWagonsTracking> GetCycleWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
+        //{
+        //    try
+        //    {
+        //        SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+        //        SqlParameter dt_start = new SqlParameter("@start", start);
+        //        SqlParameter dt_stop = new SqlParameter("@stop", stop);
+
+        //        List<CycleWagonsTracking> list = this.Database.SqlQuery<CycleWagonsTracking>("EXEC [MT].[GetCycleDBWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
+        //        return list;
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetCycleWagonsTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report,start,stop), eventID);
+        //        return null;
+        //    }
+        //}
+        //#endregion
+
+        #region RouteWagonTracking
+        /// <summary>
+        /// Вернуть все маршруты по выбранным вагонам за указаный период
+        /// </summary>
+        /// <param name="id_report"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public List<RouteWagonTracking> GetRouteWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
+        {
+            try
+            {
+                SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+                SqlParameter dt_start = new SqlParameter("@start", start);
+                SqlParameter dt_stop = new SqlParameter("@stop", stop);
+
+                List<RouteWagonTracking> list = this.Database.SqlQuery<RouteWagonTracking>("EXEC [MT].[GetRouteWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
+                return list;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetRouteWagonTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report, start, stop), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть последний маршрут по выбранным вагонам за указаный период
+        /// </summary>
+        /// <param name="id_report"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <returns></returns>
+        public List<RouteWagonTracking> GetLastRouteWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
+        {
+            try
+            {
+                SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+                SqlParameter dt_start = new SqlParameter("@start", start);
+                SqlParameter dt_stop = new SqlParameter("@stop", stop);
+
+                List<RouteWagonTracking> list = this.Database.SqlQuery<RouteWagonTracking>("EXEC [MT].[GetLastRouteWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
+                return list;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastRouteWagonTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report, start, stop), eventID);
+                return null;
+            }
+        }
+
+        public List<CurentWagonTracking> GetLastWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
+        {
+            try
+            {
+                List<CurentWagonTracking> list_result = new List<CurentWagonTracking>();
+                List<RouteWagonTracking> list = GetLastRouteWagonTrackingOfReports(id_report, start, stop);
+                List<IGrouping<string, RouteWagonTracking>> gr_station = list.GroupBy(g => g.name_station_group).ToList();
+                foreach (IGrouping<string, RouteWagonTracking> gr in gr_station)
                 {
-                    e.WriteErrorMethod(String.Format("GetLastRouteWagonTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report, start, stop), eventID);
-                    return null;
+
+                    int? count_norma_1 = gr.Where(r => r.route == 1 & r.time_left >= 0).Count();
+                    int? count_norma_2 = gr.Where(r => r.route == 2 & r.time_left >= 0).Count();
+                    int? count_norma_3 = gr.Where(r => r.route == 3 & r.time_left >= 0).Count();
+                    int? count_norma_4 = gr.Where(r => r.route == 4 & r.time_left >= 0).Count();
+                    int? count_surplus_1 = gr.Where(r => r.route == 1 & r.time_left < 0).Count();
+                    int? count_surplus_2 = gr.Where(r => r.route == 2 & r.time_left < 0).Count();
+                    int? count_surplus_3 = gr.Where(r => r.route == 3 & r.time_left < 0).Count();
+                    int? count_surplus_4 = gr.Where(r => r.route == 4 & r.time_left < 0).Count();
+                    int? count_1 = gr.Where(r => r.route == 1).Count();
+                    int? count_2 = gr.Where(r => r.route == 2).Count();
+                    int? count_3 = gr.Where(r => r.route == 3).Count();
+                    int? count_4 = gr.Where(r => r.route == 4).Count();
+                    RouteWagonTracking rwt_limit_1 = gr.Where(r => r.route == 1).FirstOrDefault();
+                    RouteWagonTracking rwt_limit_2 = gr.Where(r => r.route == 2).FirstOrDefault();
+                    RouteWagonTracking rwt_limit_3 = gr.Where(r => r.route == 3).FirstOrDefault();
+                    RouteWagonTracking rwt_limit_4 = gr.Where(r => r.route == 4).FirstOrDefault();
+
+                    decimal? time_limit_1 = rwt_limit_1 != null ? rwt_limit_1.time_limit : null;
+                    decimal? time_limit_2 = rwt_limit_2 != null ? rwt_limit_2.time_limit : null;
+                    decimal? time_limit_3 = rwt_limit_3 != null ? rwt_limit_3.time_limit : null;
+                    decimal? time_limit_4 = rwt_limit_4 != null ? rwt_limit_4.time_limit : null;
+
+                    List<RouteWagonTracking> list_rwt_1 = gr.Where(r => r.route == 1).ToList();
+                    List<RouteWagonTracking> list_rwt_2 = gr.Where(r => r.route == 2).ToList();
+                    List<RouteWagonTracking> list_rwt_3 = gr.Where(r => r.route == 3).ToList();
+                    List<RouteWagonTracking> list_rwt_4 = gr.Where(r => r.route == 4).ToList();
+
+
+                    decimal? time_avg_1 = list_rwt_1 != null && list_rwt_1.Count() > 0 ? (decimal?)list_rwt_1.Average(r => r.dt_difference) : null;
+                    decimal? time_avg_2 = list_rwt_2 != null && list_rwt_2.Count() > 0 ? (decimal?)list_rwt_2.Average(r => r.dt_difference) : null;
+                    decimal? time_avg_3 = list_rwt_3 != null && list_rwt_3.Count() > 0 ? (decimal?)list_rwt_3.Average(r => r.dt_difference) : null;
+                    decimal? time_avg_4 = list_rwt_4 != null && list_rwt_4.Count() > 0 ? (decimal?)list_rwt_4.Average(r => r.dt_difference) : null;
+
+                    CurentWagonTracking new_current = new CurentWagonTracking()
+                    {
+                        name_station = gr.Key,
+                        count_1 = count_1 != 0 ? count_1 : null,
+                        count_2 = count_2 != 0 ? count_2 : null,
+                        count_3 = count_3 != 0 ? count_3 : null,
+                        count_4 = count_4 != 0 ? count_4 : null,
+                        count_norma_1 = count_norma_1 != 0 ? count_norma_1 : null,
+                        count_norma_2 = count_norma_2 != 0 ? count_norma_2 : null,
+                        count_norma_3 = count_norma_3 != 0 ? count_norma_3 : null,
+                        count_norma_4 = count_norma_4 != 0 ? count_norma_4 : null,
+                        count_surplus_1 = count_surplus_1 != 0 ? count_surplus_1 : null,
+                        count_surplus_2 = count_surplus_2 != 0 ? count_surplus_2 : null,
+                        count_surplus_3 = count_surplus_3 != 0 ? count_surplus_3 : null,
+                        count_surplus_4 = count_surplus_4 != 0 ? count_surplus_4 : null,
+                        time_limit_1 = time_limit_1 != 0 ? time_limit_1 : null,
+                        time_limit_2 = time_limit_2 != 0 ? time_limit_2 : null,
+                        time_limit_3 = time_limit_3 != 0 ? time_limit_3 : null,
+                        time_limit_4 = time_limit_4 != 0 ? time_limit_4 : null,
+                        time_avg_1 = time_avg_1 != null ? (decimal?)Math.Round((decimal)time_avg_1, 2) : null,
+                        time_avg_2 = time_avg_2 != null ? (decimal?)Math.Round((decimal)time_avg_2, 2) : null,
+                        time_avg_3 = time_avg_3 != null ? (decimal?)Math.Round((decimal)time_avg_3, 2) : null,
+                        time_avg_4 = time_avg_4 != null ? (decimal?)Math.Round((decimal)time_avg_4, 2) : null
+                    };
+                    list_result.Add(new_current);
                 }
+
+                return list_result;
+
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastWagonTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report, start, stop), eventID);
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region OperationWagonsTracking
+        /// <summary>
+        /// Вернуть список операций по указаному вагону в интервале указанных id
+        /// </summary>
+        /// <param name="nvagon"></param>
+        /// <param name="id_start"></param>
+        /// <param name="id_stop"></param>
+        /// <returns></returns>
+        public List<OperationWagonsTracking> GetOperationWagonsTrackingOfNumCar(int nvagon, int? id_start, int? id_stop)
+        {
+            try
+            {
+                SqlParameter i_nvagon = new SqlParameter("@nvagon", nvagon);
+                SqlParameter i_id_start = new SqlParameter();
+                i_id_start.ParameterName = "@id_start";
+                i_id_start.SqlDbType = SqlDbType.Int;
+                //i_id_start.SqlValue = id_start;
+                if (id_start != null)
+                {
+                    i_id_start.SqlValue = id_start;
+                }
+                else
+                {
+                    i_id_start.SqlValue = DBNull.Value;
+                }
+
+                SqlParameter i_id_stop = new SqlParameter();
+                i_id_stop.ParameterName = "@id_stop";
+                i_id_stop.SqlDbType = SqlDbType.Int;
+                //i_id_stop.SqlValue = id_stop;
+                if (i_id_stop != null)
+                {
+                    i_id_stop.SqlValue = id_stop;
+                }
+                else
+                {
+                    i_id_stop.SqlValue = DBNull.Value;
+                }
+                List<OperationWagonsTracking> list = this.Database.SqlQuery<OperationWagonsTracking>("[MT].[GetOperationWagonsTrackingOfNumCarAndID] @nvagon, @id_start, @id_stop", i_nvagon, i_id_start, i_id_stop).ToList();
+                return list;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOperationWagonsTrackingOfNumCar(nvagon={0},id_start ={1},id_stop ={2})", nvagon, id_start, id_stop), eventID);
+                return null;
             }
 
-            public List<CurentWagonTracking> GetLastWagonTrackingOfReports(int id_report, DateTime start, DateTime stop)
-            {
-                try
-                {
-                    List<CurentWagonTracking> list_result = new List<CurentWagonTracking>();                    
-                    List<RouteWagonTracking> list = GetLastRouteWagonTrackingOfReports(id_report, start, stop);
-                    List<IGrouping<string, RouteWagonTracking>> gr_station = list.GroupBy(g => g.name_station_group).ToList();
-                    foreach (IGrouping<string, RouteWagonTracking> gr in gr_station) { 
-                        
-                        int? count_norma_1 =  gr.Where(r=>r.route==1 & r.time_left >=0).Count();
-                        int? count_norma_2 =  gr.Where(r=>r.route==2 & r.time_left >=0).Count();
-                        int? count_norma_3 =  gr.Where(r=>r.route==3 & r.time_left >=0).Count();
-                        int? count_norma_4 =  gr.Where(r=>r.route==4 & r.time_left >=0).Count();
-                        int? count_surplus_1 =  gr.Where(r=>r.route==1 & r.time_left <0).Count();
-                        int? count_surplus_2 =  gr.Where(r=>r.route==2 & r.time_left <0).Count();
-                        int? count_surplus_3 =  gr.Where(r=>r.route==3 & r.time_left <0).Count();
-                        int? count_surplus_4 =  gr.Where(r=>r.route==4 & r.time_left <0).Count();
-                        int? count_1 =  gr.Where(r=>r.route==1).Count();
-                        int? count_2 =  gr.Where(r=>r.route==2).Count();
-                        int? count_3 =  gr.Where(r=>r.route==3).Count();
-                        int? count_4 =  gr.Where(r=>r.route==4).Count();
-                        RouteWagonTracking rwt_limit_1 = gr.Where(r => r.route == 1).FirstOrDefault();
-                        RouteWagonTracking rwt_limit_2 = gr.Where(r => r.route == 2).FirstOrDefault();
-                        RouteWagonTracking rwt_limit_3 = gr.Where(r => r.route == 3).FirstOrDefault();
-                        RouteWagonTracking rwt_limit_4 = gr.Where(r => r.route == 4).FirstOrDefault();
-
-                        decimal? time_limit_1 = rwt_limit_1 != null ? rwt_limit_1.time_limit : null;
-                        decimal? time_limit_2 = rwt_limit_2 != null ? rwt_limit_2.time_limit : null;
-                        decimal? time_limit_3 = rwt_limit_3 != null ? rwt_limit_3.time_limit : null;
-                        decimal? time_limit_4 = rwt_limit_4 != null ? rwt_limit_4.time_limit : null;
-
-                        List<RouteWagonTracking> list_rwt_1 = gr.Where(r => r.route == 1).ToList();
-                        List<RouteWagonTracking> list_rwt_2 = gr.Where(r => r.route == 2).ToList();
-                        List<RouteWagonTracking> list_rwt_3 = gr.Where(r => r.route == 3).ToList();
-                        List<RouteWagonTracking> list_rwt_4 = gr.Where(r => r.route == 4).ToList();
-
-
-                        decimal? time_avg_1 = list_rwt_1!=null && list_rwt_1.Count() >0 ? (decimal?)list_rwt_1.Average(r=>r.dt_difference) : null;
-                        decimal? time_avg_2 = list_rwt_2!=null && list_rwt_2.Count() >0 ? (decimal?)list_rwt_2.Average(r=>r.dt_difference) : null;
-                        decimal? time_avg_3 = list_rwt_3!=null && list_rwt_3.Count() >0 ? (decimal?)list_rwt_3.Average(r=>r.dt_difference) : null;
-                        decimal? time_avg_4 = list_rwt_4!=null && list_rwt_4.Count() >0 ? (decimal?)list_rwt_4.Average(r=>r.dt_difference) : null;
-
-                        CurentWagonTracking new_current = new CurentWagonTracking()
-                        {
-                            name_station = gr.Key,
-                            count_1 = count_1 != 0 ? count_1 : null,
-                            count_2 = count_2 != 0 ? count_2 : null,
-                            count_3 = count_3 != 0 ? count_3 : null,
-                            count_4 = count_4 != 0 ? count_4 : null,
-                            count_norma_1 = count_norma_1 != 0 ? count_norma_1 : null,
-                            count_norma_2 = count_norma_2 != 0 ? count_norma_2 : null,
-                            count_norma_3 = count_norma_3 != 0 ? count_norma_3 : null,
-                            count_norma_4 = count_norma_4 != 0 ? count_norma_4 : null,
-                            count_surplus_1 = count_surplus_1 != 0 ? count_surplus_1 : null,
-                            count_surplus_2 = count_surplus_2 != 0 ? count_surplus_2 : null,
-                            count_surplus_3 = count_surplus_3 != 0 ? count_surplus_3 : null,
-                            count_surplus_4 = count_surplus_4 != 0 ? count_surplus_4 : null,
-                            time_limit_1 = time_limit_1 != 0 ? time_limit_1 : null,
-                            time_limit_2 = time_limit_2 != 0 ? time_limit_2 : null,
-                            time_limit_3 = time_limit_3 != 0 ? time_limit_3 : null,
-                            time_limit_4 = time_limit_4 != 0 ? time_limit_4 : null,
-                            time_avg_1 = time_avg_1 != null ? (decimal?)Math.Round((decimal)time_avg_1,2) : null,
-                            time_avg_2 = time_avg_2 != null ? (decimal?)Math.Round((decimal)time_avg_2, 2) : null,
-                            time_avg_3 = time_avg_3 != null ? (decimal?)Math.Round((decimal)time_avg_3, 2) : null,
-                            time_avg_4 = time_avg_4 != null ? (decimal?)Math.Round((decimal)time_avg_4, 2) : null
-                        };
-                        list_result.Add(new_current);
-                    }
-
-                    return list_result;
-
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetLastWagonTrackingOfReports(id_report={0},start ={1},stop ={2})", id_report, start, stop), eventID);
-                    return null;
-                }
-            }
-
-            #endregion
-
-            #region OperationWagonsTracking
-            /// <summary>
-            /// Вернуть список операций по указаному вагону в интервале указанных id
-            /// </summary>
-            /// <param name="nvagon"></param>
-            /// <param name="id_start"></param>
-            /// <param name="id_stop"></param>
-            /// <returns></returns>
-            public List<OperationWagonsTracking> GetOperationWagonsTrackingOfNumCar(int nvagon, int? id_start, int? id_stop)
-            {
-                try
-                {
-                    SqlParameter i_nvagon = new SqlParameter("@nvagon", nvagon);
-                    SqlParameter i_id_start = new SqlParameter();
-                    i_id_start.ParameterName = "@id_start";
-                    i_id_start.SqlDbType = SqlDbType.Int;
-                    //i_id_start.SqlValue = id_start;
-                    if (id_start != null)
-                    {
-                        i_id_start.SqlValue = id_start;
-                    }
-                    else
-                    {
-                        i_id_start.SqlValue = DBNull.Value;
-                    }
-
-                    SqlParameter i_id_stop = new SqlParameter();
-                    i_id_stop.ParameterName = "@id_stop";
-                    i_id_stop.SqlDbType = SqlDbType.Int;
-                    //i_id_stop.SqlValue = id_stop;
-                    if (i_id_stop != null)
-                    {
-                        i_id_stop.SqlValue = id_stop;
-                    }
-                    else
-                    {
-                        i_id_stop.SqlValue = DBNull.Value;
-                    }
-                    List<OperationWagonsTracking> list = this.Database.SqlQuery<OperationWagonsTracking>("[MT].[GetOperationWagonsTrackingOfNumCarAndID] @nvagon, @id_start, @id_stop", i_nvagon, i_id_start, i_id_stop).ToList();
-                    return list;
-                }
-                catch (Exception e)
-                {
-                    e.WriteErrorMethod(String.Format("GetOperationWagonsTrackingOfNumCar(nvagon={0},id_start ={1},id_stop ={2})", nvagon, id_start, id_stop), eventID);
-                    return null;
-                }
-            
-            }
-            #endregion
+        }
+        #endregion
 
         //#region RouteDBWagonsTracking
-            ///// <summary>
-            ///// 
-            ///// </summary>
-            ///// <param name="id_report"></param>
-            ///// <param name="start"></param>
-            ///// <param name="stop"></param>
-            ///// <returns></returns>
-            //public List<RouteDBWagonsTracking> GetRouteWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
-            //{
-            //    try
-            //    {
-            //        SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
-            //        SqlParameter dt_start = new SqlParameter("@start", start);
-            //        SqlParameter dt_stop = new SqlParameter("@stop", stop);
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="id_report"></param>
+        ///// <param name="start"></param>
+        ///// <param name="stop"></param>
+        ///// <returns></returns>
+        //public List<RouteDBWagonsTracking> GetRouteWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
+        //{
+        //    try
+        //    {
+        //        SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
+        //        SqlParameter dt_start = new SqlParameter("@start", start);
+        //        SqlParameter dt_stop = new SqlParameter("@stop", stop);
 
-            //        List<RouteDBWagonsTracking> list = this.Database.SqlQuery<RouteDBWagonsTracking>("EXEC [MT].[GetRouteDBWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
-            //        return list;
+        //        List<RouteDBWagonsTracking> list = this.Database.SqlQuery<RouteDBWagonsTracking>("EXEC [MT].[GetRouteDBWagonsTrackingOfCarsReports] @idreport, @start, @stop", i_id_report, dt_start, dt_stop).ToList();
+        //        return list;
 
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        e.WriteErrorMethod(String.Format("GetRouteWagonsTrackingOfReports(id_report={0})", id_report), eventID);
-            //        return null;
-            //    }
-            //}
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetRouteWagonsTrackingOfReports(id_report={0})", id_report), eventID);
+        //        return null;
+        //    }
+        //}
 
-            //public List<RouteDBWagonsTracking> GetLastRouteWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
-            //{
-            //    try
-            //    {
-                    
-            //        List<RouteDBWagonsTracking> list_last = new List<RouteDBWagonsTracking>();
-            //        List<IGrouping<int, RouteDBWagonsTracking>> gr = GetRouteWagonsTrackingOfReports(id_report, start, stop).GroupBy(r=>r.nvagon).ToList();
-            //        foreach (IGrouping<int, RouteDBWagonsTracking> rw in gr) { 
-            //            RouteDBWagonsTracking last = rw.OrderByDescending(r=>r.cycle).FirstOrDefault();
-            //            if (last != null)
-            //            {
-            //                list_last.Add(last);
-            //            }
-            //        }
-            //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr4 = list_last.Where(r => r.id_4 != null).GroupBy(r => r.station_from_4).ToList();
-            //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr3 = list_last.Where(r => r.id_3 != null & r.id_4 == null).GroupBy(r => r.station_disl_3).ToList();
-            //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr2 = list_last.Where(r => r.id_2 != null & r.id_3 == null & r.id_4 == null).GroupBy(r => r.station_end_2).ToList();
-            //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr1 = list_last.Where(r => r.id_1 != null & r.id_2 == null & r.id_3 == null & r.id_4 == null).GroupBy(r => r.station_disl_1).ToList();
+        //public List<RouteDBWagonsTracking> GetLastRouteWagonsTrackingOfReports(int id_report, DateTime start, DateTime stop)
+        //{
+        //    try
+        //    {
 
-            //        return list_last;
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        e.WriteErrorMethod(String.Format("GetLastRouteWagonsTrackingOfReports(id_report={0})", id_report), eventID);
-            //        return null;
-            //    }
-            //}
-            //#endregion
+        //        List<RouteDBWagonsTracking> list_last = new List<RouteDBWagonsTracking>();
+        //        List<IGrouping<int, RouteDBWagonsTracking>> gr = GetRouteWagonsTrackingOfReports(id_report, start, stop).GroupBy(r=>r.nvagon).ToList();
+        //        foreach (IGrouping<int, RouteDBWagonsTracking> rw in gr) { 
+        //            RouteDBWagonsTracking last = rw.OrderByDescending(r=>r.cycle).FirstOrDefault();
+        //            if (last != null)
+        //            {
+        //                list_last.Add(last);
+        //            }
+        //        }
+        //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr4 = list_last.Where(r => r.id_4 != null).GroupBy(r => r.station_from_4).ToList();
+        //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr3 = list_last.Where(r => r.id_3 != null & r.id_4 == null).GroupBy(r => r.station_disl_3).ToList();
+        //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr2 = list_last.Where(r => r.id_2 != null & r.id_3 == null & r.id_4 == null).GroupBy(r => r.station_end_2).ToList();
+        //        //List<IGrouping<int?, RouteDBWagonsTracking>> gr1 = list_last.Where(r => r.id_1 != null & r.id_2 == null & r.id_3 == null & r.id_4 == null).GroupBy(r => r.station_disl_1).ToList();
+
+        //        return list_last;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("GetLastRouteWagonsTrackingOfReports(id_report={0})", id_report), eventID);
+        //        return null;
+        //    }
+        //}
+        //#endregion
+        #endregion
+
+        #region BufferArrivalSostav
+        public IQueryable<BufferArrivalSostav> BufferArrivalSostav
+        {
+            get { return context.BufferArrivalSostav; }
+        }
+
+        public IQueryable<BufferArrivalSostav> GetBufferArrivalSostav()
+        {
+            try
+            {
+                return BufferArrivalSostav;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferArrivalSostav()"), eventID);
+                return null;
+            }
+        }
+
+        public BufferArrivalSostav GetBufferArrivalSostav(int id)
+        {
+            try
+            {
+                return GetBufferArrivalSostav().Where(c => c.id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferArrivalSostav(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public int SaveBufferArrivalSostav(BufferArrivalSostav BufferArrivalSostav)
+        {
+            BufferArrivalSostav dbEntry;
+            try
+            {
+                if (BufferArrivalSostav.id == 0)
+                {
+                    dbEntry = new BufferArrivalSostav()
+                    {
+                        id = 0,
+                        datetime = BufferArrivalSostav.datetime,
+                        id_sostav = BufferArrivalSostav.id_sostav,
+                        id_arrival = BufferArrivalSostav.id_arrival,
+                        count_wagons = BufferArrivalSostav.count_wagons,
+                        count_set_wagons = BufferArrivalSostav.count_set_wagons,
+                        close = BufferArrivalSostav.close,
+                        close_user = BufferArrivalSostav.close_user,
+                        close_comment = BufferArrivalSostav.close_comment,
+                        list_wagons = BufferArrivalSostav.list_wagons,
+                        list_no_set_wagons = BufferArrivalSostav.list_no_set_wagons,
+                        message = BufferArrivalSostav.message,
+                    };
+                    context.BufferArrivalSostav.Add(dbEntry);
+                }
+                else
+                {
+                    dbEntry = context.BufferArrivalSostav.Find(BufferArrivalSostav.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.datetime = BufferArrivalSostav.datetime;
+                        dbEntry.id_sostav = BufferArrivalSostav.id_sostav;
+                        dbEntry.id_arrival = BufferArrivalSostav.id_arrival;
+                        dbEntry.count_wagons = BufferArrivalSostav.count_wagons;
+                        dbEntry.count_set_wagons = BufferArrivalSostav.count_set_wagons;
+                        dbEntry.close = BufferArrivalSostav.close;
+                        dbEntry.close_user = BufferArrivalSostav.close_user;
+                        dbEntry.close_comment = BufferArrivalSostav.close_comment;
+                        dbEntry.list_wagons = BufferArrivalSostav.list_wagons;
+                        dbEntry.list_no_set_wagons = BufferArrivalSostav.list_no_set_wagons;
+                        dbEntry.message = BufferArrivalSostav.message;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveBufferArrivalSostav(BufferArrivalSostav={0})", BufferArrivalSostav.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            return dbEntry.id;
+        }
+
+        public BufferArrivalSostav DeleteBufferArrivalSostav(int id)
+        {
+            BufferArrivalSostav dbEntry = context.BufferArrivalSostav.Find(id);
+            if (dbEntry != null)
+            {
+                try
+                {
+                    context.BufferArrivalSostav.Remove(dbEntry);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    e.WriteErrorMethod(String.Format("DeleteBufferArrivalSostav(id={0})", id), eventID);
+                    return null;
+                }
+            }
+            return dbEntry;
+        }
+        /// <summary>
+        /// Показать все строки по одному коду прибытия
+        /// </summary>
+        /// <param name="id_arrival"></param>
+        /// <returns></returns>
+        public IQueryable<BufferArrivalSostav> GetBufferArrivalSostavOfIDArrival(int id_arrival)
+        {
+            try
+            {
+                return GetBufferArrivalSostav().Where(c => c.id_arrival == id_arrival);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferArrivalSostavOfIDArrival(id_arrival={0})", id_arrival), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Показать не закрытые составы
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<BufferArrivalSostav> GetBufferArrivalSostavOfNotClose()
+        {
+            try
+            {
+                return GetBufferArrivalSostav().Where(c => c.close == null);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetBufferArrivalSostavOfNotClose()"), eventID);
+                return null;
+            }
+        }
         #endregion
 
     }

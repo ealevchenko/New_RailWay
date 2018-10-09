@@ -64,7 +64,7 @@ namespace EFMT.Entities
         [StringLength(500)]
         public string nkgr { get; set; }
 
-        public int id_cargo { get; set; }
+        public int? id_cargo { get; set; }
 
         public int? kgrp { get; set; }
 

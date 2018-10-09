@@ -67,6 +67,7 @@
     <Compile Include="Entities\WTCarsReports.cs" />
     <Compile Include="Entities\WTReports.cs" />
     <Compile Include="Entities\WTCycle.cs" />
+    <Compile Include="Entities\BufferArrivalSostav.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

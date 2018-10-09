@@ -45,10 +45,17 @@ namespace EFRW.Concrete
 
         protected EFDbContext context = new EFDbContext();
 
+        protected string field_operation = "o.id, o.id_car,  o.id_car_conditions, o.id_car_status, o.id_station, o.dt_inp_station, o.dt_out_station, o.id_way, o.dt_inp_way, o.dt_out_way, o.position, o.send_id_station, o.send_id_overturning, o.send_id_shop, o.send_dt_inp_way,  o.send_dt_out_way, o.send_id_position, o.send_train1, o.send_train2, o.send_side, o.edit_user, o.edit_dt, o.parent_id ";
+        protected string table_operation = "[KRR-PA-CNT-Railway].[RailWay].[CarOperations] as o ";
+        protected string table_cars = "[KRR-PA-CNT-Railway].[RailWay].[Cars] as c ";
+
         // Перечисление типов отправки составов на другую станцию
         public enum typeSendTransfer : int { railway = 0, kis_output = 1, kis_input = 2, railway_buffer = 3 }
         // Перечисление типов стороны (четная, нечетная)
         public enum Side : int { odd = 1, even = 0 }
+
+
+
 
         public Database Database
         {
@@ -990,6 +997,79 @@ namespace EFRW.Concrete
             }
         }
 
+        public int SaveCarsNoDetect(Cars Cars)
+        {
+            Cars dbEntry;
+            try
+            {
+                context.Configuration.AutoDetectChangesEnabled = false;
+                if (Cars.id == 0)
+                {
+                    dbEntry = new Cars()
+                    {
+                        id = 0,
+                        id_sostav = Cars.id_sostav,
+                        id_arrival = Cars.id_arrival,
+                        num = Cars.num,
+                        dt_uz = Cars.dt_uz,
+                        dt_inp_amkr = Cars.dt_inp_amkr,
+                        dt_out_amkr = Cars.dt_out_amkr,
+                        natur_kis = Cars.natur_kis,
+                        natur_kis_out = Cars.natur_kis_out,
+                        natur = Cars.natur,
+                        dt_create = Cars.dt_create != DateTime.Parse("01.01.0001") ? Cars.dt_create : DateTime.Now,
+                        user_create = Cars.user_create != null ? Cars.user_create : System.Environment.UserDomainName + @"\" + System.Environment.UserName,
+                        dt_close = null,
+                        user_close = null,
+                        ReferenceCars = Cars.ReferenceCars,
+                        CarOperations = Cars.CarOperations,
+                        CarsInpDelivery = Cars.CarsInpDelivery,
+                        CarsOutDelivery = Cars.CarsOutDelivery,
+                        parent_id = Cars.parent_id
+                    };
+                    context.Cars.Add(dbEntry);
+                }
+                else
+                {
+                    // Сделано для отмены изменения даты создания строки
+                    EFDbContext context_real = new EFDbContext();
+                    Cars old_Cars = context_real.Cars.Where(c => c.id == Cars.id).FirstOrDefault();
+                    dbEntry = context.Cars.Find(Cars.id);
+                    if (dbEntry != null)
+                    {
+                        dbEntry.id_sostav = Cars.id_sostav;
+                        dbEntry.id_arrival = Cars.id_arrival;
+                        dbEntry.num = Cars.num;
+                        dbEntry.dt_uz = Cars.dt_uz;
+                        dbEntry.dt_inp_amkr = Cars.dt_inp_amkr;
+                        dbEntry.dt_out_amkr = Cars.dt_out_amkr;
+                        dbEntry.natur_kis = Cars.natur_kis;
+                        dbEntry.natur_kis_out = Cars.natur_kis_out;
+                        dbEntry.natur = Cars.natur;
+                        dbEntry.dt_create = old_Cars.dt_create;
+                        dbEntry.user_create = old_Cars.user_create;
+                        dbEntry.dt_close = Cars.dt_close;
+                        dbEntry.user_close = Cars.user_close;
+                        dbEntry.ReferenceCars = Cars.ReferenceCars;
+                        dbEntry.CarOperations = Cars.CarOperations;
+                        dbEntry.CarsInpDelivery = Cars.CarsInpDelivery;
+                        dbEntry.CarsOutDelivery = Cars.CarsOutDelivery;
+                        dbEntry.parent_id = Cars.parent_id;
+                    }
+                }
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("SaveCarsNoDetect(Cars={0})", Cars.GetFieldsAndValue()), eventID);
+                return -1;
+            }
+            finally {
+                context.Configuration.AutoDetectChangesEnabled = true;
+            }
+            return dbEntry.id;
+        }
+
         public int SaveCars(Cars Cars)
         {
             Cars dbEntry;
@@ -1061,6 +1141,7 @@ namespace EFRW.Concrete
 
         public Cars DeleteCars(int id)
         {
+            
             Cars dbEntry = context.Cars.Find(id);
             if (dbEntry != null)
             {
@@ -1642,6 +1723,33 @@ namespace EFRW.Concrete
                 return -1;
             }
         }
+
+        public IQueryable<CarOperations> query_GetOpenOperationOfNumCar(int num) {
+            try
+            {
+
+                string sql = String.Format("SELECT {0} from {1} INNER JOIN {2} ON c.id = o.id_car WHERE (c.num = {3}) AND (((o.dt_inp_station IS NOT NULL AND o.dt_out_station IS NULL) AND (o.dt_inp_way IS NOT NULL AND o.dt_out_way IS NULL)) OR (o.send_dt_inp_way IS NOT NULL AND o.send_dt_out_way IS NULL))", this.field_operation, this.table_cars, this.table_operation, num);
+                return context.Database.SqlQuery<CarOperations>(sql).AsQueryable();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("query_GetOpenOperationOfNumCar(num={0})", num), eventID);
+                return null;
+            }
+        }
+
+        public IQueryable<CarOperations> GetOpenOperationOfNumCar(int num) {
+            try
+            {
+                return GetCarOperations().Where(o => o.Cars.num == num & o.dt_out_way == null & o.dt_out_station == null & o.send_dt_out_way == null);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOpenOperationOfNumCar(num={0})", num), eventID);
+                return null;
+            }
+        }
+
         #endregion
 
         #region CarConditions

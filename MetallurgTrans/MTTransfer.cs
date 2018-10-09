@@ -28,7 +28,8 @@ namespace MetallurgTrans
         not_fromPath = -2,
         not_listApproachesCars = -3,
         not_listArrivalCars = -4,
-        file_error = -5
+        file_error = -5,
+        not_listWagonsTracking = -6
         //not_listStartArrivalSostav = -5,
     }
     /// <summary>
@@ -122,7 +123,7 @@ namespace MetallurgTrans
         private bool arrival_to_railcars = true;
         public bool ArrivalToRailCars { get { return this.arrival_to_railcars; } set { this.arrival_to_railcars = value; } }
 
-        private DateTime datetime_start_new_tracking = new DateTime(2018,01,01,0,0,0); // Время начала запроса информации по вагону которого нет в базе АМКР
+        private DateTime datetime_start_new_tracking = new DateTime(2018, 01, 01, 0, 0, 0); // Время начала запроса информации по вагону которого нет в базе АМКР
         public DateTime DateTimeStartNewTracking { get { return this.datetime_start_new_tracking; } set { this.datetime_start_new_tracking = value; } }
         private string url_wagons_tracking;
         public string URLWagonsTracking { get { return this.url_wagons_tracking; } set { this.url_wagons_tracking = value; } }
@@ -757,14 +758,13 @@ namespace MetallurgTrans
                 {
                     if (arrival_to_railcars)
                     {
-                        //TODO: Убрать старый метод переноса составов в прибытие, добаить новый переносить из службы КИС
+                        ////TODO: Убрать старый метод переноса составов в прибытие, добаить новый переносить из службы КИС
                         TRailCars trc = new TRailCars();
                         int res = trc.ArrivalToRailCars(new_id);
                     }
                     if (arrival_to_railway)
                     {
-                        RWOperation rw_operations = new RWOperation(this.servece_owner);
-                        int res = rw_operations.TransferArrivalSostavToRailWay(new_id);
+                        int res = AddBufferArrivalSostav(new_id);
                     }
                     return true;
                 }
@@ -940,7 +940,7 @@ namespace MetallurgTrans
         }
         #endregion
 
-        #region TransferWagonsTracking
+        #region TransferWagonsTracking Перенос вагонов из Web.Api МетТранса
         /// <summary>
         /// Добавить список изменений по вагону
         /// </summary>
@@ -961,12 +961,13 @@ namespace MetallurgTrans
                 {
                     try
                     {
-                        int id_cargo =0;
+                        int id_cargo = 0;
                         if (wt.kgr != null && wt.kgr > 0)
                         {
                             id_cargo = rw_ref.GetIDReferenceCargoOfCorrectCodeETSNG((int)wt.kgr);
                         }
-                        res = efmt.SaveWagonsTracking(new WagonsTracking() {
+                        res = efmt.SaveWagonsTracking(new WagonsTracking()
+                        {
                             id = 0,
                             nvagon = wt.nvagon,
                             st_disl = wt.st_disl,
@@ -1035,16 +1036,19 @@ namespace MetallurgTrans
             {
                 WebApiClientMetallurgTrans client = new WebApiClientMetallurgTrans(url, user, psw, api);
                 List<WagonsTrackingMT> list_tracking = client.GetWagonsTracking();
+                if (list_tracking == null) return (int)mtt_err.not_listWagonsTracking;
                 foreach (WagonsTrackingMT wt in list_tracking)
                 {
                     try
                     {
-                        WagonsTracking wt_old = efmt.GetWagonsTrackingOfNumCars(wt.nvagon).OrderByDescending(t => t.dt).FirstOrDefault();
+                        List<WagonsTracking> list = efmt.GetWagonsTrackingOfNumCars(wt.nvagon).ToList();
+                        WagonsTracking wt_old = list.OrderByDescending(t => t.dt).FirstOrDefault();
                         if (wt_old == null)
                         {
                             // Обновляем информацию переносим все
                             List<WagonsTrackingMT> list_new = client.GetWagonsTracking(wt.nvagon, datetime_start_new_tracking);
-                            if (list_new == null || list_new.Count() == 0) {
+                            if (list_new == null || list_new.Count() == 0)
+                            {
                                 list_new.Add(wt);
                             }
                             res = TransferWagonsTracking(list_new);
@@ -1073,7 +1077,8 @@ namespace MetallurgTrans
                                     countError++;
                                 }
                             }
-                            else {
+                            else
+                            {
                                 countSkip++;
                             }
                         }
@@ -1106,7 +1111,171 @@ namespace MetallurgTrans
         }
         #endregion
 
-        #region Автозакрытие вагонов на подходах
+        #region WTCycle Формирование циклограмм движения вагонов по данным МетТранса (TransferWagonsTracking)
+        /// <summary>
+        /// Проверка строка WagonsTracking это начало цикла
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public bool IsStartCycle(WagonsTracking car)
+        {
+            return IsArrivalAMKR(car);
+        }
+
+        public bool IsSendingClient(WagonsTracking car)
+        {
+            return car.st_disl == 46700 & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") & car.st_end != 46700 ? true : false;
+        }
+        /// <summary>
+        /// Начало вагон у клиента
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="client_code"></param>
+        /// <returns></returns>
+        public bool IsArrivalClient(WagonsTracking car, int client_code)
+        {
+            return car.st_disl != 46700 & (car.nameop == "ОТОТ") & car.st_disl == client_code ? true : false;
+        }
+        /// <summary>
+        /// Начало возвращения вагона
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public bool IsReturnClient(WagonsTracking car)
+        {
+            return car.st_end == 46700 & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") ? true : false;
+        }
+        /// <summary>
+        /// Начало вагон на АМКР
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public bool IsArrivalAMKR(WagonsTracking car)
+        {
+            return car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН") & (car.kgrp == 7932 | car.kgrp == 3437 | car.kgrp == 6302) ? true : false;
+        }
+        /// <summary>
+        /// Перенос и формирование циклограммы по всем вагонам
+        /// </summary>
+        /// <returns></returns>
+        public int TransferWTCycle()
+        {
+            try
+            {
+                int transfer = 0;
+                int transfer_car = 0;
+                int error = 0;
+                EFMetallurgTrans efmt = new EFMetallurgTrans();
+                List<int> cars = efmt.WagonsTracking.ToList().Select(c => c.nvagon).Distinct().ToList();
+                foreach (int car in cars)
+                {
+                    int res_tr = TransferWTCycle(car);
+                    if (res_tr > 0) { transfer++; transfer_car += res_tr; }
+                    if (res_tr < 0) { error++; }
+                    if (res_tr == 0) { transfer++; }
+                }
+                string mess = String.Format("Коррекция данных БД MT.WagonsTracking выполнена, найдено для коррекции {0} вагонов, скорректировано {1} групп вагонов, общее количество коррекций {2}, ошибки при коррекции {3}."
+                    , cars != null ? cars.Count() : 0, transfer, transfer_car, error);
+                mess.WriteInformation(servece_owner, this.eventID);
+                if (cars != null && cars.Count() > 0) { mess.WriteEvents(error > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
+                return transfer;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferWTCycle()"), servece_owner, eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Перенос и формирование циклограммы по указаному вагону 
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public int TransferWTCycle(int num)
+        {
+            try
+            {
+                int transfer = 0;
+                int error = 0;
+                EFMetallurgTrans efmt = new EFMetallurgTrans();
+                int cycle = 0;
+                wtroute route = wtroute.not;
+                int station_sending = 0;
+                int station_from = 0;
+                List<WagonsTracking> list_wt_cars;
+                WTCycle last_Cycle = efmt.GetWTCycleOfNumCar(num).OrderByDescending(c => c.id).FirstOrDefault();
+                if (last_Cycle == null)
+                {
+                    // Последней записи нет переносим все
+                    list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).OrderBy(t => t.dt).ToList();
+                }
+                else
+                {
+                    list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).Where(t => t.id > last_Cycle.id_wt).OrderBy(t => t.dt).ToList();
+                    cycle = last_Cycle.cycle;
+                    route = (wtroute)last_Cycle.route;
+                    station_sending = last_Cycle.station_end;
+                    station_from = last_Cycle.station_from;
+                }
+                // Переносим двнные
+                foreach (WagonsTracking car in list_wt_cars)
+                {
+                    if (IsStartCycle(car))
+                    { // Это старт цикла
+                        cycle++;
+                        route = wtroute.amkr;
+                        station_sending = 46700;
+                        station_from = station_sending;
+                    }
+                    if (route == wtroute.amkr & IsSendingClient(car))
+                    { // отправка клиенту
+                        route = wtroute.send;
+                        station_from = 46700;
+                        station_sending = (int)car.st_end;
+                    }
+                    if (route == wtroute.send & IsArrivalClient(car, station_sending))
+                    { // прибыл клиенту
+                        route = wtroute.client;
+                        station_from = station_sending;
+                    }
+                    if (route == wtroute.client & IsReturnClient(car))
+                    { // возврат
+                        route = wtroute.ret;
+                        station_sending = 46700;
+
+                    }
+                    if (route == wtroute.ret & IsArrivalAMKR(car))
+                    { // возврат
+                        route = wtroute.amkr;
+                        station_sending = 46700;
+                        station_from = station_sending;
+                    }
+                    // Сохраним
+                    if (cycle > 0)
+                    {
+                        int res = efmt.SaveWTCycle(new WTCycle()
+                        {
+                            id = 0,
+                            id_wt = car.id,
+                            cycle = cycle,
+                            station_end = station_sending,
+                            station_from = station_from,
+                            route = (int)route
+                        });
+                        if (res > 0) { transfer++; } else { error++; }
+                    }
+                }
+                return transfer;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferWTCycle(num={0})", num), servece_owner, eventID);
+                return -1;
+            }
+        }
+        #endregion
+
+        #region CloseApproaches Автозакрытие вагонов на подходах
         /// <summary>
         /// проверить все вагоны
         /// </summary>
@@ -1241,7 +1410,161 @@ namespace MetallurgTrans
         }
         #endregion
 
-        #region Коррекция данных
+        #region BufferArrivalSostav Перенос составов на станциях УЗ Кривого Рога из МТ в Railway
+        /// <summary>
+        /// Добавить строку в таблицу-буффер переноса составов на путь отправки на АМКР станции УЗ.
+        /// </summary>
+        /// <param name="id_sostav"></param>
+        /// <returns></returns>
+        public int AddBufferArrivalSostav(int id_sostav)
+        {
+            try
+            {
+                EFMetallurgTrans efmt = new EFMetallurgTrans();
+                ArrivalSostav sostav = efmt.GetArrivalSostav(id_sostav);
+                // Закрыть старые прибытия
+                List<BufferArrivalSostav> list_arrival = efmt.GetBufferArrivalSostavOfIDArrival(sostav.IDArrival).ToList(); // Получим список прибытий
+                if (list_arrival != null)
+                {
+                    // Получим список не закрытых старых составов принадлежащих прибытию
+                    List<BufferArrivalSostav> list_arrival_no_close = list_arrival.Where(b => b.id_sostav < sostav.ID & b.close == null).ToList();
+                    // Закроем
+                    foreach (BufferArrivalSostav bas in list_arrival_no_close)
+                    {
+                        bas.close = DateTime.Now;
+                        bas.close_user = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                        bas.close_comment = "По составу пришло новое ТСП";
+
+                        int res_close = efmt.SaveBufferArrivalSostav(bas);
+
+                    }
+                }
+                // Создадим новое прибытие
+                BufferArrivalSostav new_bas = new BufferArrivalSostav()
+                {
+                    id = 0,
+                    datetime = sostav.DateTime,
+                    id_sostav = sostav.ID,
+                    id_arrival = sostav.IDArrival,
+                    count_wagons = sostav.ArrivalCars != null ? (int?)sostav.ArrivalCars.Count() : null,
+                    list_wagons = efmt.GetListArrivalCarsToString(sostav.ArrivalCars.ToList())
+                };
+                return efmt.SaveBufferArrivalSostav(new_bas);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddBufferArrivalSostav(id_sostav={0})", id_sostav), servece_owner, eventID);
+                return -1;
+            }
+        }
+
+        public int TransferArrivalSostavToRailWay()
+        {
+
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            // Выбераем все составы которые не закрылись
+            List<BufferArrivalSostav> list_no_close = efmt.GetBufferArrivalSostavOfNotClose().OrderBy(s => s.datetime).ToList();
+            foreach (BufferArrivalSostav bas in list_no_close)
+            {
+
+                int res = TransferArrivalSostavToRailWay(bas);
+            }
+            return 0;
+        }
+
+        public int TransferArrivalSostavToRailWay(BufferArrivalSostav bas)
+        {
+            try
+            {
+                EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+                RWOperation rw_operations = new RWOperation(this.servece_owner);                
+                int count = 0;
+                int transfer = 0;
+                int skip = 0;
+                int error = 0;
+                string message = null;
+                //int close = 0;
+
+                ArrivalSostav sostav = ef_mt.GetArrivalSostav(bas.id_sostav);
+                // Получим список отцепленных вагонов по последнему ТСП
+                List<int> not_nums = ef_mt.GetNotCarsOfOldArrivalSostav(sostav);
+
+                EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
+
+                int codeon = int.Parse(sostav.CompositionIndex.Substring(9, 4));
+                EFReference.Entities.Stations corect_station_on = ef_reference.GetCorrectStationsOfCode(codeon, false);
+                int code_station_on = corect_station_on != null ? corect_station_on.code : codeon;
+
+
+
+
+
+                //EFReference.Entities.Stations station_in = ef_reference.GetStationsOfCode(int.Parse(arr_car.CompositionIndex.Substring(9, 4)) * 10);
+                //int codecs_in = station_in != null ? (int)station_in.code_cs : int.Parse(arr_car.CompositionIndex.Substring(9, 4)) * 10;
+                ////EFReference.Entities.Stations station_from = ef_reference.GetStationsOfCode(int.Parse(sost.CompositionIndex.Substring(0, 4)) * 10);
+                ////int? codecs_from = station_from != null ? station_from.code_cs : int.Parse(sost.CompositionIndex.Substring(0, 4)) * 10;
+                //Stations station = rw_ref.GetStationsUZ(codecs_in, true);
+                //Ways way = ef_rw.GetWaysOfArrivalUZ(station.id);
+
+                // Переставить отцепленные вагоны с пути "Прибытие на АМКР" на путь "Отправка на УЗ"
+                int result_close = 0;
+                if (not_nums != null && not_nums.Count() > 0)
+                {
+                    foreach(int num in not_nums){
+                        int result = rw_operations.OperationArrivalUZToSendingUZ(code_station_on, num);
+                    }
+                    
+                    
+                    
+                    //List<Cars> list_not_cars = ef_rw.GetCarsOfArrivalNum(sostav.IDArrival, not_nums.ToArray());
+                    ////List<CarOperations> list_operations = ExecOperation(list_not_cars, OperationClose, new OperationClose(sostav.DateTime));
+                    //List<CarOperations> list_operations = list_not_cars.CloseOperations(sostav.DateTime, true);
+                    //result_close = SaveChanges(list_operations);
+                }
+                // Поставим новые
+                // List<Cars> list_result = new List<Cars>();
+                foreach (ArrivalCars car in sostav.ArrivalCars.ToList())
+                {
+                    DateTime dt_start = DateTime.Now;
+                    //message += car.Num.ToString() + " - ";
+                    //Cars car_new = SetCarsToRailWay(car);
+                    //if (car_new != null)
+                    //{
+                    //    int res = ef_rw.SaveCarsNoDetect(car_new);
+                    //    if (res > 0)
+                    //    {
+                    //        transfer++;
+                    //        message += res.ToString();
+                    //    }
+                    //    else { error++; message += res.ToString(); }
+                    //}
+                    //else
+                    //{
+                    //    skip++;
+                    //    message += "null";
+                    //}
+                    message += "; ";
+                    TimeSpan ts = DateTime.Now - dt_start;
+                    Console.WriteLine(String.Format("Перенос вагона №{0}, время выполнения: {1}:{2}:{3}({4})", car.Num, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
+                }
+                count = sostav.ArrivalCars != null ? sostav.ArrivalCars.Count() : 0;
+                string mess = String.Format("Перенос состава из базы данных [MT.Arrival] (id состава: {0}, id прибытия {1}, индекс: {2}, дата операции: {3}) в систему RailWay. Определенно для переноса {4} вагона(ов), перенесено {5}, пропущено {6}, ошибок переноса {7}, закрыто по ТСП {8}.",
+                    sostav.ID, sostav.IDArrival, sostav.CompositionIndex, sostav.DateTime, count, transfer, skip, error, result_close);
+                mess.WriteInformation(servece_owner, eventID);
+                if (error > 0) { mess.WriteEvents(message, servece_owner, eventID); }
+                return transfer;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferArrivalSostavToRailWay(bas={0})", bas.GetFieldsAndValue()), servece_owner, eventID);
+                return -1;
+            }
+        }
+
+
+        #endregion
+
+        #region АДМИНИСТРИРОВАНИЕ Коррекция данных
         /// <summary>
         /// 
         /// </summary>
@@ -1323,158 +1646,8 @@ namespace MetallurgTrans
 
         #endregion
 
-        #region WTCycle
-        /// <summary>
-        /// Проверка строка WagonsTracking это начало цикла
-        /// </summary>
-        /// <param name="car"></param>
-        /// <returns></returns>
-        public bool IsStartCycle(WagonsTracking car) {
-            return IsArrivalAMKR(car);
-        }
 
-        public bool IsSendingClient(WagonsTracking car) {
-            return car.st_disl == 46700 & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") & car.st_end != 46700 ? true : false;
-        }
-        /// <summary>
-        /// Начало вагон у клиента
-        /// </summary>
-        /// <param name="car"></param>
-        /// <param name="client_code"></param>
-        /// <returns></returns>
-        public bool IsArrivalClient(WagonsTracking car, int client_code) {
-            return car.st_disl != 46700 & (car.nameop == "ОТОТ") & car.st_disl == client_code ? true : false;
-        }
-        /// <summary>
-        /// Начало возвращения вагона
-        /// </summary>
-        /// <param name="car"></param>
-        /// <returns></returns>
-        public bool IsReturnClient(WagonsTracking car) {
-            return car.st_end == 46700 & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") ? true : false;
-        }
-        /// <summary>
-        /// Начало вагон на АМКР
-        /// </summary>
-        /// <param name="car"></param>
-        /// <returns></returns>
-        public bool IsArrivalAMKR(WagonsTracking car) {
-            return car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН") & (car.kgrp == 7932 | car.kgrp == 3437 | car.kgrp == 6302) ? true : false;
-        }
-        /// <summary>
-        /// Перенос и формирование циклограммы по всем вагонам
-        /// </summary>
-        /// <returns></returns>
-        public int TransferWTCycle() {
-            try
-            {
-                int transfer = 0;
-                int transfer_car = 0;
-                int error = 0; 
-                EFMetallurgTrans efmt = new EFMetallurgTrans();
-                List<int> cars = efmt.WagonsTracking.ToList().Select(c => c.nvagon).Distinct().ToList();
-                foreach (int car in cars){
-                   int res_tr = TransferWTCycle(car);
-                   if (res_tr > 0) { transfer++; transfer_car += res_tr; }
-                   if (res_tr < 0) { error++; }
-                   if (res_tr == 0) { transfer++; }
-                }
-                string mess = String.Format("Коррекция данных БД MT.WagonsTracking выполнена, найдено для коррекции {0} вагонов, скорректировано {1} групп вагонов, общее количество коррекций {2}, ошибки при коррекции {3}."
-                    , cars != null ? cars.Count() : 0, transfer, transfer_car, error);
-                mess.WriteInformation(servece_owner, this.eventID);
-                if (cars != null && cars.Count() > 0) { mess.WriteEvents(error > 0 ? EventStatus.Error : EventStatus.Ok, servece_owner, eventID); }
-                return transfer;
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("TransferWTCycle()"), servece_owner, eventID);
-                return -1;
-            }
-        }
-        /// <summary>
-        /// Перенос и формирование циклограммы по указаному вагону 
-        /// </summary>
-        /// <param name="num"></param>
-        /// <returns></returns>
-        public int TransferWTCycle(int num) {
-            try
-            {
-                int transfer = 0;
-                int error = 0; 
-                EFMetallurgTrans efmt = new EFMetallurgTrans();
-                int cycle = 0;
-                wtroute route = wtroute.not;
-                int station_sending = 0;
-                int station_from = 0;
-                List<WagonsTracking> list_wt_cars;
-                WTCycle last_Cycle = efmt.GetWTCycleOfNumCar(num).OrderByDescending(c=>c.id).FirstOrDefault();
-                if (last_Cycle == null)
-                {
-                    // Последней записи нет переносим все
-                    list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).OrderBy(t=>t.dt).ToList();
-                }
-                else { 
-                    list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).Where(t=>t.id>last_Cycle.id_wt).OrderBy(t=>t.dt).ToList();
-                    cycle = last_Cycle.cycle;
-                    route = (wtroute)last_Cycle.route;
-                    station_sending = last_Cycle.station_end;
-                    station_from = last_Cycle.station_from;
-                }
-                // Переносим двнные
-                foreach (WagonsTracking car in list_wt_cars)
-                {
-                    if (IsStartCycle(car))
-                    { // Это старт цикла
-                        cycle++;
-                        route = wtroute.amkr;
-                        station_sending = 46700;
-                        station_from = station_sending;
-                    }
-                    if (route == wtroute.amkr & IsSendingClient(car))
-                    { // отправка клиенту
-                        route = wtroute.send;
-                        station_from = 46700;
-                        station_sending = (int)car.st_end;
-                    }
-                    if (route == wtroute.send & IsArrivalClient(car, station_sending)) { // прибыл клиенту
-                        route = wtroute.client;
-                        station_from = station_sending;
-                    }
-                    if (route == wtroute.client & IsReturnClient(car))
-                    { // возврат
-                        route = wtroute.ret;
-                        station_sending = 46700;
 
-                    }
-                    if (route == wtroute.ret & IsArrivalAMKR(car))
-                    { // возврат
-                        route = wtroute.amkr;
-                        station_sending = 46700;
-                        station_from = station_sending;
-                    }
-                    // Сохраним
-                    if (cycle > 0)
-                    {
-                        int res = efmt.SaveWTCycle(new WTCycle()
-                        {
-                            id = 0,
-                            id_wt = car.id,
-                            cycle = cycle,
-                            station_end = station_sending,
-                            station_from = station_from,
-                            route = (int)route
-                        });
-                        if (res > 0) { transfer++; } else { error++; }
-                    }
-                }
-                return transfer;
-            }
-            catch (Exception e)
-            {
-                e.WriteErrorMethod(String.Format("TransferWTCycle(num={0})", num), servece_owner, eventID);
-                return -1;
-            }
-        }
-        #endregion
+
     }
 }
