@@ -32,10 +32,13 @@ namespace Testing
         public void TransferArrival()
         {
             MTTransfer mtt = new MTTransfer();
-            mtt.FromPath = @"D:\xlm_new";
-            mtt.DeleteFile = false;
-            mtt.ArrivalToRailWay = false;
-            int res_transfer = mtt.TransferArrival();
+            mtt.DayRangeArrivalCars = 10; // 10
+            mtt.ArrivalToRailWay = true;        // true
+            mtt.ArrivalToRailCars = false;    //false
+            mtt.FromPath = @"D:\xlm_new";                // C:\RailWay\temp_xml
+            mtt.DeleteFile = true;             // 10
+            int result = mtt.TransferArrival();
+
         }
 
         public void EFMetallurgTrans_Consignee()
@@ -234,6 +237,14 @@ namespace Testing
             EFMetallurgTrans efmt = new EFMetallurgTrans();
 
             List<HistoryArrivalCars> history = efmt.GetHistoryArrivalCarsOfNum(52921004);
+
+        }
+
+        public void EFMetallurgTrans_GetWagonsTrackingOfNumCars()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+
+            List<WagonsTracking> list = efmt.GetWagonsTrackingOfNumCars(52921004).ToList();
 
         }
 

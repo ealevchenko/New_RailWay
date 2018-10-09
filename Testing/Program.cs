@@ -75,6 +75,13 @@ namespace Testing
             //tst_rw.RWOperation_SetWayCorrectPosition(); // Переставить вагон + скорректировать позиции.
             //tst_rw.EFRailWay_GetListCars();
             //tst_rw.RWOperation_DeleteSaveCar();
+
+            // EFRailWay Тесты модуля
+         
+            //tst_rw.EFRailWay_query_GetOpenOperationOfNumCar(); // Получить последнюю открытую операцию по указаному вагону (через query)
+            //tst_rw.EFRailWay_GetOpenOperationOfNumCar(); // Получить последнюю открытую операцию по указаному вагону   
+
+
             #endregion
 
 
@@ -123,11 +130,13 @@ namespace Testing
             //tst_tr_app.EFMetallurgTrans_GetOperationWagonsTrackingOfNumCar(); // Проверка получения списка операций по номеру и id
             //tst_tr_app.EFMetallurgTrans_GetHistoryArrivalCarsOfNum(); // Проверка получения истории прибытия вагона
 
+            //tst_tr_app.EFMetallurgTrans_GetWagonsTrackingOfNumCars();
+
             #endregion
 
             #region Test_KIS
             Test_KIS tst_kis = new Test_KIS();
-            //tst_kis.Test_KISTransfer_TransferArrivalKISToRailWay(); // Запустить перенос в потоке
+
             //tst_kis.Test_KISTransfer_PutCarsToStation(); // Поставить на путь
             //tst_kis.Test_KISTransfer_UpdateCarsToStation(); // Поставить на путь
             //tst_kis.Test_KISThread_StartCopyBufferArrivalSostav(); // Запустить поток переноса составов
@@ -153,13 +162,17 @@ namespace Testing
             //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay_SetWayRailWayOfKIS(); // Переноса строки состава отправленных на УЗ
             //tst_kis.Test_KISThread_StartTransferSendingOfKIS(); // Перенос составов на УЗ из АМКР
             //tst_kis.Test_KIS_RW_Transfer_IsVagonOfSendingNatHistNatur();
+            // ПЕРЕНОС ПО ПРИБЫТИЮ 
+            //tst_kis.Test_KIS_RW_Transfer_TransferArrivalKISToRailWay(); // Перенос составов отправленных на УЗ
+            //tst_kis.Test_KIS_RW_Transfer_SetWayRailWayOfKIS(); // тест постановки вагонов по данным КИС(buffer) в систему RailWay
+            //tst_kis.Test_KISTransfer_UpdWayRailWayOfKIS(); // тест обновления вагонов по данным КИС(buffer) в систему RailWay
 
             // ПЕРЕНОС ОТПРАВКА НА УЗ
             //tst_kis.Test_KIS_RW_Transfer_CopyBufferSendingSostavOfKIS(); // Тест переноса данных по отправленым составам в таблицу буфер
             //tst_kis.Test_KIS_RW_Transfer_TransferSendingKISToRailWay(); // Перенос составов отправленных на УЗ
 
             // ПЕРЕНОС ВНУТРЕНИЕ СТАНЦИИ ПО ПРИБЫТИЮ
-            tst_kis.Test_KIS_RW_Transfer_CopyBufferInputSostavOfKIS(); // Тест переноса данных по внутреним станциям (по прибытию)
+            //tst_kis.Test_KIS_RW_Transfer_CopyBufferInputSostavOfKIS(); // Тест переноса данных по внутреним станциям (по прибытию)
             //tst_kis.Test_KISThread_StartCopyBufferInputSostav(); // Тест ПОТОКА переноса данных по внутреним станциям (по прибытию)
             //tst_kis.Test_KIS_RW_Transfer_TransferInputSostavKISToRailway();    // Тест переноса составов по внутреним станциям (по прибытию)
             //tst_kis.Test_KIS_RW_Transfer_TransferInputSostavKISToRailway_of_RWBufferInputSostav();    // Тест переноса составов по внутреним станциям (по прибытию) по указаной строке
@@ -168,7 +181,7 @@ namespace Testing
             //tst_kis.Test_KIS_RW_Transfer_CopyBufferOutputSostavOfKIS();       // Тест переноса данных по внутреним станциям (по отправке)
             //tst_kis.Test_KISThread_StartCopyBufferOutputSostav();             // Тест ПОТОКА переноса данных по внутреним станциям (по отправке)
             //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway();    // Тест переноса составов по внутреним станциям (по отправке)
-            //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway_of_RWBufferOutputSostav();    // Тест переноса составов по внутреним станциям (по отправке) по указаной строке 
+            tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway_of_RWBufferOutputSostav();    // Тест переноса составов по внутреним станциям (по отправке) по указаной строке 
 
             #endregion
 

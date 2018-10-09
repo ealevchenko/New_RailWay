@@ -21,15 +21,15 @@ namespace Testing
         public void RWTransfer_ArrivalMTToRailway() {
             RWOperation rw_oper = new RWOperation();
 
-            //rw_oper.TransferArrivalSostavToRailWay(7290);
+            rw_oper.TransferArrivalSostavToRailWay(13083);
             //rw_oper.TransferArrivalSostavToRailWay(7291);
             //rw_oper.TransferArrivalSostavToRailWay(7293);
             //rw_oper.TransferArrivalSostavToRailWay(7295); 
 
-            rw_oper.TransferArrivalSostavToRailWay(7461);
-            rw_oper.TransferArrivalSostavToRailWay(7462);
-            rw_oper.TransferArrivalSostavToRailWay(7463);
-             rw_oper.TransferArrivalSostavToRailWay(7464);    
+            //rw_oper.TransferArrivalSostavToRailWay(7461);
+            //rw_oper.TransferArrivalSostavToRailWay(7462);
+            //rw_oper.TransferArrivalSostavToRailWay(7463);
+            //rw_oper.TransferArrivalSostavToRailWay(7464);    
        
             //rw_oper.SaveChanges(rw_oper.ExecOperation(2441, new int[] {52736956, 56671670}, rw_oper.OperationSendingStation, new OperationSendingStation(6,20,DateTime.Now,null) ));
             //rw_oper.TransferArrivalSostavToRailWay(7861);
@@ -180,6 +180,25 @@ namespace Testing
         {
             RWOperation rw_oper = new RWOperation();
             int res = rw_oper.DeleteSaveCar(1197);
+        }
+
+        public void EFRailWay_query_GetOpenOperationOfNumCar()
+        { 
+            EFRailWay ef_rw = new EFRailWay();
+            DateTime dt_start = DateTime.Now;
+            List<CarOperations> list1 = ef_rw.query_GetOpenOperationOfNumCar(52921079).ToList();
+            TimeSpan ts = DateTime.Now - dt_start;
+            Console.WriteLine(String.Format("sql -> Количество строк {0}, время выполнения: {1}:{2}:{3}({4})", list1.Count(), ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
+
+        }
+
+        public void EFRailWay_GetOpenOperationOfNumCar() { 
+            EFRailWay ef_rw = new EFRailWay();
+            DateTime dt_start = DateTime.Now;
+            List<CarOperations> list2 = ef_rw.GetOpenOperationOfNumCar(52921079).ToList();
+            TimeSpan ts = DateTime.Now - dt_start;
+            Console.WriteLine(String.Format("Количество строк {0}, время выполнения: {1}:{2}:{3}({4})", list2.Count(), ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
+
         }
 
     }

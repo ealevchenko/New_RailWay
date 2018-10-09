@@ -16,10 +16,10 @@ namespace Testing
 
         #region RC
 
-        public void Test_KISTransfer_TransferArrivalKISToRailWay()
+        public void Test_KIS_RW_Transfer_TransferArrivalKISToRailWay()
         {
-            KIS_RC_Transfer kis_trans = new KIS_RC_Transfer();
-            kis_trans.CopyRCBufferArrivalSostavOfKIS(1);
+            KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
+            kis_trans.TransferArrivalKISToRailWay();
         }
         /// <summary>
         /// Поставить на путь
@@ -150,11 +150,11 @@ namespace Testing
             kis_trans.SetCarToWayRailWay(807, 54645593, DateTime.Parse("2018-03-11 18:30:00"), 103);
         }
 
-        public void Test_KISTransfer_SetWayRailWayOfKIS()
+        public void Test_KIS_RW_Transfer_SetWayRailWayOfKIS()
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(4429);
+            EFKIS.Entities.RWBufferArrivalSostav arr_s = ef_tkis.GetRWBufferArrivalSostav(4595);
             kis_trans.SetWayRailWayOfKIS(ref arr_s);
         }
 
@@ -267,7 +267,7 @@ namespace Testing
         {
             KIS_RW_Transfer kis_trans = new KIS_RW_Transfer();
             EFTKIS ef_tkis = new EFTKIS();
-            EFKIS.Entities.RWBufferOutputSostav bos = ef_tkis.GetRWBufferOutputSostav(10126);
+            EFKIS.Entities.RWBufferOutputSostav bos = ef_tkis.GetRWBufferOutputSostav(10455);
             int result = kis_trans.TransferOutputSostavKISToRailway(ref bos);
         }
 
