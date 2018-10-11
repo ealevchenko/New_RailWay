@@ -16,6 +16,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 # [Ll]ogs/
+.vs/
 
 Web_RailWay/[Ll]ogs
 
