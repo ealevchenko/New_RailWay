@@ -1477,23 +1477,40 @@ namespace MetallurgTrans
             try
             {
                 EFMetallurgTrans ef_mt = new EFMetallurgTrans();
-                RWOperation rw_operations = new RWOperation(this.servece_owner);                
+                RWOperations rw_operations = new RWOperations(this.servece_owner);                
                 int count = 0;
                 int transfer = 0;
                 int skip = 0;
+                int tsp = 0;
+                int tsp_error = 0;
                 int error = 0;
                 string message = null;
                 //int close = 0;
 
-                ArrivalSostav sostav = ef_mt.GetArrivalSostav(bas.id_sostav);
+                // Получить новый и предыдущий состав
+                ArrivalSostav sostav_new = ef_mt.GetArrivalSostav(bas.id_sostav);
+                ArrivalSostav sostav_old = sostav_new.ParentID != null ? ef_mt.GetArrivalSostav((int)sostav_new.ParentID) : null;
+                // Получить новый и предыдущий список вагонов в составе
+                List<ArrivalCars> list_new_car = sostav_new.ArrivalCars != null ? sostav_new.ArrivalCars.ToList() : new List<ArrivalCars>();
+                List<ArrivalCars> list_old_car = sostav_old != null && sostav_old.ArrivalCars != null ? sostav_old.ArrivalCars.ToList() : new List<ArrivalCars>();
+                // Провести анализ спсиков и убрать существующие вагоны
+                ef_mt.RemoveMatchingArrivalCars(ref list_new_car, ref list_old_car);
+                // Сделать ТСП по УЗ вагонов которые были оцеплены на станции УЗ
+                foreach (ArrivalCars car_old in list_old_car) {
+                    int res_tsp = rw_operations.TSPOnUZ(car_old);
+                    tsp += res_tsp > 0 ? 1 : 0;
+                    tsp_error += res_tsp < 0 ? 1 : 0;
+                }
+
+
                 // Получим список отцепленных вагонов по последнему ТСП
-                List<int> not_nums = ef_mt.GetNotCarsOfOldArrivalSostav(sostav);
+                //List<int> not_nums = ef_mt.GetNotCarsOfOldArrivalSostav(sostav);
 
-                EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
+                //EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
 
-                int codeon = int.Parse(sostav.CompositionIndex.Substring(9, 4));
-                EFReference.Entities.Stations corect_station_on = ef_reference.GetCorrectStationsOfCode(codeon, false);
-                int code_station_on = corect_station_on != null ? corect_station_on.code : codeon;
+                //int codeon = int.Parse(sostav.CompositionIndex.Substring(9, 4));
+                //EFReference.Entities.Stations corect_station_on = ef_reference.GetCorrectStationsOfCode(codeon, false);
+                //int code_station_on = corect_station_on != null ? corect_station_on.code : codeon;
 
 
 
@@ -1507,51 +1524,51 @@ namespace MetallurgTrans
                 //Ways way = ef_rw.GetWaysOfArrivalUZ(station.id);
 
                 // Переставить отцепленные вагоны с пути "Прибытие на АМКР" на путь "Отправка на УЗ"
-                int result_close = 0;
-                if (not_nums != null && not_nums.Count() > 0)
-                {
-                    foreach(int num in not_nums){
-                        int result = rw_operations.OperationArrivalUZToSendingUZ(code_station_on, num);
-                    }
+                //int result_close = 0;
+                //if (not_nums != null && not_nums.Count() > 0)
+                //{
+                //    foreach(int num in not_nums){
+                //        int result = rw_operations.OperationArrivalUZToSendingUZ(code_station_on, num);
+                //    }
                     
                     
                     
-                    //List<Cars> list_not_cars = ef_rw.GetCarsOfArrivalNum(sostav.IDArrival, not_nums.ToArray());
-                    ////List<CarOperations> list_operations = ExecOperation(list_not_cars, OperationClose, new OperationClose(sostav.DateTime));
-                    //List<CarOperations> list_operations = list_not_cars.CloseOperations(sostav.DateTime, true);
-                    //result_close = SaveChanges(list_operations);
-                }
+                //    //List<Cars> list_not_cars = ef_rw.GetCarsOfArrivalNum(sostav.IDArrival, not_nums.ToArray());
+                //    ////List<CarOperations> list_operations = ExecOperation(list_not_cars, OperationClose, new OperationClose(sostav.DateTime));
+                //    //List<CarOperations> list_operations = list_not_cars.CloseOperations(sostav.DateTime, true);
+                //    //result_close = SaveChanges(list_operations);
+                //}
                 // Поставим новые
                 // List<Cars> list_result = new List<Cars>();
-                foreach (ArrivalCars car in sostav.ArrivalCars.ToList())
-                {
-                    DateTime dt_start = DateTime.Now;
-                    //message += car.Num.ToString() + " - ";
-                    //Cars car_new = SetCarsToRailWay(car);
-                    //if (car_new != null)
-                    //{
-                    //    int res = ef_rw.SaveCarsNoDetect(car_new);
-                    //    if (res > 0)
-                    //    {
-                    //        transfer++;
-                    //        message += res.ToString();
-                    //    }
-                    //    else { error++; message += res.ToString(); }
-                    //}
-                    //else
-                    //{
-                    //    skip++;
-                    //    message += "null";
-                    //}
-                    message += "; ";
-                    TimeSpan ts = DateTime.Now - dt_start;
-                    Console.WriteLine(String.Format("Перенос вагона №{0}, время выполнения: {1}:{2}:{3}({4})", car.Num, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
-                }
-                count = sostav.ArrivalCars != null ? sostav.ArrivalCars.Count() : 0;
-                string mess = String.Format("Перенос состава из базы данных [MT.Arrival] (id состава: {0}, id прибытия {1}, индекс: {2}, дата операции: {3}) в систему RailWay. Определенно для переноса {4} вагона(ов), перенесено {5}, пропущено {6}, ошибок переноса {7}, закрыто по ТСП {8}.",
-                    sostav.ID, sostav.IDArrival, sostav.CompositionIndex, sostav.DateTime, count, transfer, skip, error, result_close);
-                mess.WriteInformation(servece_owner, eventID);
-                if (error > 0) { mess.WriteEvents(message, servece_owner, eventID); }
+                //foreach (ArrivalCars car in sostav.ArrivalCars.ToList())
+                //{
+                //    DateTime dt_start = DateTime.Now;
+                //    //message += car.Num.ToString() + " - ";
+                //    //Cars car_new = SetCarsToRailWay(car);
+                //    //if (car_new != null)
+                //    //{
+                //    //    int res = ef_rw.SaveCarsNoDetect(car_new);
+                //    //    if (res > 0)
+                //    //    {
+                //    //        transfer++;
+                //    //        message += res.ToString();
+                //    //    }
+                //    //    else { error++; message += res.ToString(); }
+                //    //}
+                //    //else
+                //    //{
+                //    //    skip++;
+                //    //    message += "null";
+                //    //}
+                //    message += "; ";
+                //    TimeSpan ts = DateTime.Now - dt_start;
+                //    Console.WriteLine(String.Format("Перенос вагона №{0}, время выполнения: {1}:{2}:{3}({4})", car.Num, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
+                //}
+                //count = sostav.ArrivalCars != null ? sostav.ArrivalCars.Count() : 0;
+                //string mess = String.Format("Перенос состава из базы данных [MT.Arrival] (id состава: {0}, id прибытия {1}, индекс: {2}, дата операции: {3}) в систему RailWay. Определенно для переноса {4} вагона(ов), перенесено {5}, пропущено {6}, ошибок переноса {7}, закрыто по ТСП {8}.",
+                //    sostav.ID, sostav.IDArrival, sostav.CompositionIndex, sostav.DateTime, count, transfer, skip, error, result_close);
+                //mess.WriteInformation(servece_owner, eventID);
+                //if (error > 0) { mess.WriteEvents(message, servece_owner, eventID); }
                 return transfer;
             }
             catch (Exception e)
