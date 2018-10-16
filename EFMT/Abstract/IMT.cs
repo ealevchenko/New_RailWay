@@ -68,6 +68,8 @@ namespace EFMT.Abstract
         ArrivalCars GetArrivalCarsOfParentID(int parent_id);
         IQueryable<ArrivalCars> GetFirstArrivalCarsOfNum(int num_car);
         List<HistoryArrivalCars> GetHistoryArrivalCarsOfNum(int num);
+        bool DeleteExistArrivalCars(ref List<ArrivalCars> list, int num_car);
+        void RemoveMatchingArrivalCars(ref List<ArrivalCars> list_new, ref List<ArrivalCars> list_old);
 
         IQueryable<ArrivalSostav> ArrivalSostav { get; }
         IQueryable<ArrivalSostav> GetArrivalSostav();
