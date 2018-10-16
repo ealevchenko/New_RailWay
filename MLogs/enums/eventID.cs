@@ -67,7 +67,8 @@ namespace MessageLog
 
         RW = 4200,                          // Библиотека сервисов обработки данных RailWay
         RW_RWFilters = 4201,               // Модуль переноса данных системы RailWay
-        RW_RWOperation = 4202,              // Модуль операций системы RailWay
+        RW_RWOperation = 4202,              // Модуль операций системы RailWay (TODO: Этот модуль удалить)
+        RW_RWOperations = 4204,              // Модуль операций системы RailWay
         RW_RWReference = 4203,              // Модуль спрвочных данных системы RailWay
         #endregion
 
