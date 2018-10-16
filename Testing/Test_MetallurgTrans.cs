@@ -12,6 +12,7 @@ using System.Timers;
 using TransferRailCars;
 using EFRC.Concrete;
 using EFRC.Entities;
+using RWConversionFunctions;
 
 namespace Testing
 {
@@ -246,6 +247,15 @@ namespace Testing
 
             List<WagonsTracking> list = efmt.GetWagonsTrackingOfNumCars(52921004).ToList();
 
+        }
+
+        public void EFMetallurgTrans_RemoveMatchingArrivalCars()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+
+            List<ArrivalCars> list_new = efmt.GetArrivalSostav(13443).ArrivalCars.ToList();
+            List<ArrivalCars> list_old = efmt.GetArrivalSostav(13427).ArrivalCars.ToList();
+            efmt.RemoveMatchingArrivalCars(ref list_new, ref list_old);
         }
 
     }

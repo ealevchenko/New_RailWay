@@ -12,9 +12,6 @@ using WebAPI;
 namespace Testing
 {
 
-
-
-
     class Program
     {
 
@@ -132,6 +129,8 @@ namespace Testing
 
             //tst_tr_app.EFMetallurgTrans_GetWagonsTrackingOfNumCars();
 
+            tst_tr_app.EFMetallurgTrans_RemoveMatchingArrivalCars();
+
             #endregion
 
             #region Test_KIS
@@ -181,7 +180,7 @@ namespace Testing
             //tst_kis.Test_KIS_RW_Transfer_CopyBufferOutputSostavOfKIS();       // Тест переноса данных по внутреним станциям (по отправке)
             //tst_kis.Test_KISThread_StartCopyBufferOutputSostav();             // Тест ПОТОКА переноса данных по внутреним станциям (по отправке)
             //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway();    // Тест переноса составов по внутреним станциям (по отправке)
-            tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway_of_RWBufferOutputSostav();    // Тест переноса составов по внутреним станциям (по отправке) по указаной строке 
+            //tst_kis.Test_KIS_RW_Transfer_TransferOutputSostavKISToRailway_of_RWBufferOutputSostav();    // Тест переноса составов по внутреним станциям (по отправке) по указаной строке 
 
             #endregion
 

@@ -1068,6 +1068,61 @@ namespace EFMT.Concrete
                 return null;
             }
         }
+        /// <summary>
+        /// Удалить из списка ArrivalCars, объект с указаным номером вагона
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="num_car"></param>
+        /// <returns></returns>
+        public bool DeleteExistArrivalCars(ref List<ArrivalCars> list, int num_car)
+        {
+            bool Result = false;
+            try
+            {
+                if (list == null) return false;
+
+                int index = list.Count() - 1;
+                while (index >= 0)
+                {
+                    if (list[index].Num == num_car)
+                    {
+                        list.RemoveAt(index);
+                        Result = true;
+                    }
+                    index--;
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("DeleteExistArrivalCars(list={0}, num_car={1})", list, num_car), eventID);
+            }
+            return Result;
+        }
+        /// <summary>
+        /// Удалить совпадения двух списков ArrivalCars (проверка по номеру вагона)
+        /// </summary>
+        /// <param name="list_new"></param>
+        /// <param name="list_old"></param>
+        public void RemoveMatchingArrivalCars(ref List<ArrivalCars> list_new, ref List<ArrivalCars> list_old)
+        {
+            try
+            {
+                if (list_new == null & list_old == null) return;
+                int index = list_new.Count() - 1;
+                while (index >= 0)
+                {
+                    if (DeleteExistArrivalCars(ref list_old, list_new[index].Num))
+                    {
+                        list_new.RemoveAt(index);
+                    }
+                    index--;
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("RemoveMatchingArrivalCars(list_new={0}, list_old={1})", list_new, list_old), eventID);
+            }
+        }
 
         #endregion
 

@@ -150,6 +150,10 @@
       <Project>{a1f50999-31d4-4793-a92f-4d0f436922cb}</Project>
       <Name>TransferRailCars</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RWConversionFunctions\RWConversionFunctions.csproj">
+      <Project>{d4c8d1c2-db0f-42d3-a432-94c0549907e4}</Project>
+      <Name>RWConversionFunctions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RWCorrection\RWCorrection.csproj">
       <Project>{91fe966c-d3a2-4421-a18c-88fb3253e528}</Project>
       <Name>RWCorrection</Name>
