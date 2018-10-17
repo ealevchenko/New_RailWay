@@ -1121,10 +1121,14 @@ namespace MetallurgTrans
         {
             return IsArrivalAMKR(car);
         }
-
+        /// <summary>
+        ///  Отправка вагона клиенту
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
         public bool IsSendingClient(WagonsTracking car)
         {
-            return car.st_disl == 46700 & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") & car.st_end != 46700 ? true : false;
+            return (car.st_disl == 46700 | car.st_disl == 46720) & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") & car.st_end != 46700 ? true : false;
         }
         /// <summary>
         /// Начало вагон у клиента
