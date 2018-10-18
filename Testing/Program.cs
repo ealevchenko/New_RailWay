@@ -31,7 +31,7 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            
+
             //CorrectionTransfer corr = new CorrectionTransfer();
             //corr.CorrSAPIncSupplyArrival("N:6742 D:13.12.2017 5-0");
             //corr.CorrSAPIncSupply(2356);
@@ -74,7 +74,7 @@ namespace Testing
             //tst_rw.RWOperation_DeleteSaveCar();
 
             // EFRailWay Тесты модуля
-         
+
             //tst_rw.EFRailWay_query_GetOpenOperationOfNumCar(); // Получить последнюю открытую операцию по указаному вагону (через query)
             //tst_rw.EFRailWay_GetOpenOperationOfNumCar(); // Получить последнюю открытую операцию по указаному вагону   
 
@@ -103,35 +103,47 @@ namespace Testing
             #endregion
 
             #region Test_MetallurgTrans
-            Test_MetallurgTrans tst_tr_app = new Test_MetallurgTrans();
-            //tst_tr_app.TransferApproaches();
-            //tst_tr_app.TransferArrival();
-            //tst_tr_app.EFMetallurgTrans_Consignee(); //
-            //tst_tr_app.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
-            //tst_tr_app.MTThread_TransferApproaches(); // Запустить перенос в потоке
-            //tst_tr_app.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
-            //tst_tr_app.MTThread_TransferArrival(); // Запустить перенос в потоке
-            //tst_tr_app.MTTransfer_CloseApproachesCars(); // автозакрытие вагонов на подходах
-            //tst_tr_app.MTThread_CloseApproachesCars(); // поток автозакрытие вагонов на подходах
-            //tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(); // Коррекция составов по прибытию
-            //tst_tr_app.MTTransfer_CorrectCloseArrivalSostav(10);// Коррекция составов по прибытию всех составов
-            //tst_tr_app.EFMetallurgTrans_GetWagonsTracking();
-            //tst_tr_app.MTTransfer_TransferWagonsTracking(); // Тест переноса информации слежения за вагонами
-            //tst_tr_app.MTThread_TransferWagonsTracking(); // Тест работы потока переноса информации слежения за вагонами
-            //tst_tr_app.MTArrivalCarsClose(); // Закроем вагоны натурками
-            //tst_tr_app.MTTransfer_TransferTransferWTCycle(); // Перенесем и создадим циклы движения одного вагона
-            //tst_tr_app.MTTransfer_TransferWTCycle(); // Перенесем и создадим циклы движения всех вагонов
-            //tst_tr_app.EFMetallurgTrans_GetRouteWagonsTrackingOfReports(); // получить данные по циклам движения указанных вагонов за указанное время
-            //tst_tr_app.EFMetallurgTrans_GetLastRouteWagonsTrackingOfReports(); // получить данные по циклам движения указанных вагонов за указанное время
-            //tst_tr_app.EFMetallurgTrans_GetLastWagonTrackingOfReports();
-            //tst_tr_app.EFMetallurgTrans_GetOperationWagonsTrackingOfNumCar(); // Проверка получения списка операций по номеру и id
-            //tst_tr_app.EFMetallurgTrans_GetHistoryArrivalCarsOfNum(); // Проверка получения истории прибытия вагона
+                Test_MetallurgTrans tst_mt = new Test_MetallurgTrans();
+                //tst_mt.TransferApproaches();
+                //tst_mt.TransferArrival();
+                //tst_mt.EFMetallurgTrans_Consignee(); //
+                //tst_mt.TRailCars_ArrivalToRailCars(); //Поставить состав в прибытие системы Railcars
+                //tst_mt.MTThread_TransferApproaches(); // Запустить перенос в потоке
+                //tst_mt.MTThread_Timer_TransferApproaches(); // Запустить перенос в потоке через таймер
+                //tst_mt.MTThread_TransferArrival(); // Запустить перенос в потоке
+                //tst_mt.MTTransfer_CloseApproachesCars(); // автозакрытие вагонов на подходах
+                //tst_mt.MTThread_CloseApproachesCars(); // поток автозакрытие вагонов на подходах
+                //tst_mt.MTTransfer_CorrectCloseArrivalSostav(); // Коррекция составов по прибытию
+                //tst_mt.MTTransfer_CorrectCloseArrivalSostav(10);// Коррекция составов по прибытию всех составов
+                //tst_mt.EFMetallurgTrans_GetWagonsTracking();
+                //tst_mt.MTTransfer_TransferWagonsTracking(); // Тест переноса информации слежения за вагонами
+                //tst_mt.MTThread_TransferWagonsTracking(); // Тест работы потока переноса информации слежения за вагонами
+                //tst_mt.MTArrivalCarsClose(); // Закроем вагоны натурками
+                //tst_mt.MTTransfer_TransferTransferWTCycle(); // Перенесем и создадим циклы движения одного вагона
+                //tst_mt.MTTransfer_TransferWTCycle(); // Перенесем и создадим циклы движения всех вагонов
+                //tst_mt.EFMetallurgTrans_GetRouteWagonsTrackingOfReports(); // получить данные по циклам движения указанных вагонов за указанное время
+                //tst_mt.EFMetallurgTrans_GetLastRouteWagonsTrackingOfReports(); // получить данные по циклам движения указанных вагонов за указанное время
+                //tst_mt.EFMetallurgTrans_GetLastWagonTrackingOfReports();
+                //tst_mt.EFMetallurgTrans_GetOperationWagonsTrackingOfNumCar(); // Проверка получения списка операций по номеру и id
+                //tst_mt.EFMetallurgTrans_GetHistoryArrivalCarsOfNum(); // Проверка получения истории прибытия вагона
 
-            //tst_tr_app.EFMetallurgTrans_GetWagonsTrackingOfNumCars();
+                #region ArrivalCars Прибытие вагонов в составах
 
-            tst_tr_app.EFMetallurgTrans_RemoveMatchingArrivalCars();
+                    //tst_mt.EFMetallurgTrans_RemoveMatchingArrivalCars(); // Тест удаления соответствий между двумя списками List<ArrivalCars>
+                #endregion
 
-            #endregion
+                #region  TransferWagonsTracking Перенос вагонов из Web.Api МетТранса
+
+                //tst_tr_app.EFMetallurgTrans_GetWagonsTrackingOfNumCars();
+                #endregion
+
+                #region  WTCycle Формирование циклограмм движения вагонов по данным МетТранса (TransferWagonsTracking)
+
+                tst_mt.MTTransfer_TransferWTCycleOfNumm();
+
+                #endregion
+
+            #endregion // end Test_MetallurgTrans
 
             #region Test_KIS
             Test_KIS tst_kis = new Test_KIS();
@@ -195,7 +207,7 @@ namespace Testing
             Test_RW_Reference tst_rw_ref = new Test_RW_Reference();
             //tst_rw_ref.ReferenceCargo_Copy();
             //tst_rw_ref.ReferenceCargo_Get();
-            
+
             #endregion
 
             #region Test_Wagons
@@ -237,7 +249,7 @@ namespace Testing
             //tst_wag.Test_PROM_GetNatHistOfVagonMoreSD();
             //tst_wag.Test_PROM_GetNatHistOfVagonMoreSD();
 
-           // tst_wag.Test_PROM_GetProm_NatHistOfVagonMoreEqualSD();
+            // tst_wag.Test_PROM_GetProm_NatHistOfVagonMoreEqualSD();
 
             //tst_wag.Test_PROM_GetNatHistOfVagonLessPR();
             //tst_wag.Test_PROM_GetNatHistOfVagonLessPR();
@@ -258,7 +270,7 @@ namespace Testing
             //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessEqualPR();
             //tst_wag.Test_PROM_GetNatHistOfVagonLessEqualPR();
             //tst_wag.Test_PROM_GetProm_NatHistOfVagonLessEqualPR();
-           
+
             //tst_wag.Test_PROM_GetNatHistPR();
             //tst_wag.Test_PROM_GetNatHistPR();
             //tst_wag.Test_PROM_GetNatHistPR();

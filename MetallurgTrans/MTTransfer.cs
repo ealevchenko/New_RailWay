@@ -1121,14 +1121,33 @@ namespace MetallurgTrans
         {
             return IsArrivalAMKR(car);
         }
+
         /// <summary>
-        ///  Отправка вагона клиенту
+        /// Начало вагон на АМКР (Старт нового цикла)
         /// </summary>
         /// <param name="car"></param>
         /// <returns></returns>
-        public bool IsSendingClient(WagonsTracking car)
+        public bool IsArrivalAMKR(WagonsTracking car)
+        {
+            return car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН") & (car.kgrp == 7932 | car.kgrp == 3437 | car.kgrp == 6302) ? true : false;
+        }
+        /// <summary>
+        ///  Отправка вагона клиенту из АМКР
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public bool IsAMKRSendingClient(WagonsTracking car)
         {
             return (car.st_disl == 46700 | car.st_disl == 46720) & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") & car.st_end != 46700 ? true : false;
+        }
+        /// <summary>
+        ///  Отправка вагона клиенту от клиента (пустой вагон после выгрузкиотроавлен на загрузку к другому клиенту)
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public bool IsClientSendingClient(WagonsTracking car, int client_code)
+        {
+            return (client_code != 46700 & car.st_disl != 46720) && (car.st_disl == client_code) && (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") && (car.st_end != client_code && car.st_end != 46700 && car.st_end != 46720) ? true : false;
         }
         /// <summary>
         /// Начало вагон у клиента
@@ -1138,26 +1157,18 @@ namespace MetallurgTrans
         /// <returns></returns>
         public bool IsArrivalClient(WagonsTracking car, int client_code)
         {
-            return car.st_disl != 46700 & (car.nameop == "ОТОТ") & car.st_disl == client_code ? true : false;
+            return car.st_disl != 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГРН") & car.st_disl == client_code ? true : false;
         }
         /// <summary>
-        /// Начало возвращения вагона
+        /// Начало возвращения вагона от клиента на АМКР
         /// </summary>
         /// <param name="car"></param>
         /// <returns></returns>
-        public bool IsReturnClient(WagonsTracking car)
+        public bool IsReturnAMKR(WagonsTracking car)
         {
             return car.st_end == 46700 & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") ? true : false;
         }
-        /// <summary>
-        /// Начало вагон на АМКР
-        /// </summary>
-        /// <param name="car"></param>
-        /// <returns></returns>
-        public bool IsArrivalAMKR(WagonsTracking car)
-        {
-            return car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН") & (car.kgrp == 7932 | car.kgrp == 3437 | car.kgrp == 6302) ? true : false;
-        }
+
         /// <summary>
         /// Перенос и формирование циклограммы по всем вагонам
         /// </summary>
@@ -1170,7 +1181,9 @@ namespace MetallurgTrans
                 int transfer_car = 0;
                 int error = 0;
                 EFMetallurgTrans efmt = new EFMetallurgTrans();
+                // выбираю список всех уникальных вагононов который были на контроле
                 List<int> cars = efmt.WagonsTracking.ToList().Select(c => c.nvagon).Distinct().ToList();
+                // Формирование циклограммы по всем вагонам списка 
                 foreach (int car in cars)
                 {
                     int res_tr = TransferWTCycle(car);
@@ -1206,7 +1219,9 @@ namespace MetallurgTrans
                 wtroute route = wtroute.not;
                 int station_sending = 0;
                 int station_from = 0;
+                int? kode_cargo_out = null;
                 List<WagonsTracking> list_wt_cars;
+                // Получим оследнюю запись циклограммы
                 WTCycle last_Cycle = efmt.GetWTCycleOfNumCar(num).OrderByDescending(c => c.id).FirstOrDefault();
                 if (last_Cycle == null)
                 {
@@ -1220,42 +1235,140 @@ namespace MetallurgTrans
                     route = (wtroute)last_Cycle.route;
                     station_sending = last_Cycle.station_end;
                     station_from = last_Cycle.station_from;
+                    kode_cargo_out = last_Cycle.WagonsTracking.kgrp;
                 }
                 // Переносим двнные
                 foreach (WagonsTracking car in list_wt_cars)
                 {
-                    if (IsStartCycle(car))
-                    { // Это старт цикла
-                        cycle++;
-                        route = wtroute.amkr;
-                        station_sending = 46700;
-                        station_from = station_sending;
+                    if (car.kgrp != null)
+                    {
+                        // Кто грузополучатель?
+                        if (car.kgrp == 7932 | car.kgrp == 3437 | car.kgrp == 6302)
+                        {
+                            // Грузополучатель АМКР
+                            // Первый цикл
+                            if (cycle == 0 && car.kgrp>0 && route==wtroute.not)
+                            {
+                                // возврат
+                                route = wtroute.ret;
+                                station_sending = 46700;
+                            }
+                            // Вагон возвращается на АМКР?
+                            if (car.st_end == 46700 && (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН"))
+                            {
+                                //Вагон следует на АМКР
+                                if (route == wtroute.client)
+                                {
+                                    // возврат
+                                    route = wtroute.ret;
+                                    station_sending = 46700;
+                                }
+                                else
+                                {
+                                    if (route == wtroute.send)
+                                    {
+                                        // возврат
+                                        route = wtroute.ret;
+                                        station_sending = 46700;
+                                    }
+                                    // возврат вагона на АМКР а route != wtroute.client
+                                }
+                            }
+                            // Вагон прибыл на АМКР?
+                            if (car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН")) { 
+                                // Вагон прибыл на АМКР
+                                if (route == wtroute.ret | route == wtroute.not)
+                                {
+                                    // Прибыл новый цикл
+                                    cycle++;
+                                    route = wtroute.amkr;
+                                    station_sending = 46700;
+                                    station_from = station_sending;
+                                }
+                                else
+                                {
+                                    // Если wtroute.amkr пропускаем (начало цыкла было определено выше)
+                                    // Вагон прибыл на АМКР а route != wtroute.ret
+                                }
+                            }
+                        }
+                        else { 
+                            // Грузополучатель Клиент 
+                            // Первый цикл
+                            if (cycle == 0 && car.kgrp > 0 && route == wtroute.not)
+                            {
+                                // отправка клиенту
+                                route = wtroute.send;
+                                station_from = (int)car.st_disl;
+                                station_sending = (int)car.st_end;
+                            }
+                            
+                            // Вагон движится клиенту из АМКР?
+                            if ((car.st_disl == 46700 | car.st_disl == 46720) & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") & car.st_end != 46700){
+                                // Вагон движется к клиенту
+                                if (route == wtroute.amkr)
+                                {
+                                    // отправка клиенту
+                                    route = wtroute.send;
+                                    station_from = 46700;
+                                    station_sending = (int)car.st_end;
+                                }
+                                else
+                                {
+                                    if (route == wtroute.ret)
+                                    {
+                                        // Нет фиксации зашел на АМКР (будет выполнена начало нового цикла и отправка клиенту)
+                                        cycle++;
+                                        route = wtroute.send;
+                                        station_from = 46700;
+                                        station_sending = (int)car.st_end;
+                                    }
+                                    // Отправка клиенту из АМКР а route != wtroute.amkr
+                                }
+                            }
+                            // Вагон движится клиенту от клиета?
+                            if ((station_sending != 46700 & car.st_disl != 46720) && (car.st_disl == station_sending) && (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") && (car.st_end != station_sending && car.st_end != 46700 && car.st_end != 46720))
+                            {
+                                // Вагон движится клиенту от клиета
+                                if (route == wtroute.client)
+                                {
+                                    // отправка опять клиенту
+                                    route = wtroute.send;
+                                    station_from = station_sending;
+                                    station_sending = (int)car.st_end;
+                                }
+                                else
+                                {
+                                    // Отправка клиенту другому клиенту а route != wtroute.client
+                                }
+                            
+                            }
+                            // Вагон прибыл к клиенту?
+                            if (car.st_disl != 46700 && (car.nameop == "ОТОТ" | car.nameop == "ВЫГРН") && car.st_disl == car.st_end)
+                            {
+                                // Вагон прибыл к клиенту
+                                if (route == wtroute.send)
+                                {
+                                    // прибыл клиенту
+                                    route = wtroute.client;
+                                    station_from = station_sending;
+                                }
+                                else
+                                {
+                                    // Если wtroute.client пропускаем (за ОТОТ может прийти ВЫГРН)
+                                    // прибытие клиенту а route != wtroute.send
+                                }
+                            }
+                        }
                     }
-                    if (route == wtroute.amkr & IsSendingClient(car))
-                    { // отправка клиенту
-                        route = wtroute.send;
-                        station_from = 46700;
-                        station_sending = (int)car.st_end;
+                    else { 
+                        // Обработать эти операции
+                        // ВУ23	Перечисление в неиспр. вагоны
+                        // ПРМ	Прием на дорогу
+                        // ВУ36	Возвращение в рабочий парк
                     }
-                    if (route == wtroute.send & IsArrivalClient(car, station_sending))
-                    { // прибыл клиенту
-                        route = wtroute.client;
-                        station_from = station_sending;
-                    }
-                    if (route == wtroute.client & IsReturnClient(car))
-                    { // возврат
-                        route = wtroute.ret;
-                        station_sending = 46700;
-
-                    }
-                    if (route == wtroute.ret & IsArrivalAMKR(car))
-                    { // возврат
-                        route = wtroute.amkr;
-                        station_sending = 46700;
-                        station_from = station_sending;
-                    }
-                    // Сохраним
-                    if (cycle > 0)
+                    // Сохраним если это не нулевой цикл или если нулевой тогда код грузополучателя должен быть определен
+                    if (cycle > 0 || (cycle == 0 && car.kgrp>0))
                     {
                         int res = efmt.SaveWTCycle(new WTCycle()
                         {
@@ -1277,6 +1390,181 @@ namespace MetallurgTrans
                 return -1;
             }
         }
+        //public int TransferWTCycle(int num)
+        //{
+        //    try
+        //    {
+        //        int transfer = 0;
+        //        int error = 0;
+        //        EFMetallurgTrans efmt = new EFMetallurgTrans();
+        //        int cycle = 0;
+        //        wtroute route = wtroute.not;
+        //        int station_sending = 0;
+        //        int station_from = 0;
+        //        int? kode_cargo_out = null;
+        //        List<WagonsTracking> list_wt_cars;
+        //        // Получим оследнюю запись циклограммы
+        //        WTCycle last_Cycle = efmt.GetWTCycleOfNumCar(num).OrderByDescending(c => c.id).FirstOrDefault();
+        //        if (last_Cycle == null)
+        //        {
+        //            // Последней записи нет переносим все
+        //            list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).OrderBy(t => t.dt).ToList();
+        //        }
+        //        else
+        //        {
+        //            list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).Where(t => t.id > last_Cycle.id_wt).OrderBy(t => t.dt).ToList();
+        //            cycle = last_Cycle.cycle;
+        //            route = (wtroute)last_Cycle.route;
+        //            station_sending = last_Cycle.station_end;
+        //            station_from = last_Cycle.station_from;
+        //            kode_cargo_out = last_Cycle.WagonsTracking.kgrp;
+        //        }
+        //        // Переносим двнные
+        //        foreach (WagonsTracking car in list_wt_cars)
+        //        {
+        //            if (IsStartCycle(car))
+        //            { // Это старт цикла
+        //                cycle++;
+        //                route = wtroute.amkr;
+        //                station_sending = 46700;
+        //                station_from = station_sending;
+        //            }
+        //            // Проверка на отправку вагона клиенту из АМКР
+        //            if (IsAMKRSendingClient(car))
+        //            {
+        //                if (route == wtroute.amkr)
+        //                {
+        //                    // отправка клиенту
+        //                    route = wtroute.send;
+        //                    station_from = 46700;
+        //                    station_sending = (int)car.st_end;
+        //                }
+        //                else
+        //                {
+        //                    if (route == wtroute.ret)
+        //                    {
+        //                        // Нет фиксации зашел на АМКР (будет выполнена начало нового цикла и отправка клиенту)
+        //                        cycle++;
+        //                        route = wtroute.send;
+        //                        station_from = 46700;
+        //                        station_sending = (int)car.st_end;
+        //                    }
+        //                    // Отправка клиенту из АМКР а route != wtroute.amkr
+        //                }
+        //            }
+        //            // Проверка на прибытие клиенту вагона
+        //            if (IsArrivalClient(car, station_sending))
+        //            {
+        //                if (route == wtroute.send)
+        //                {
+        //                    // прибыл клиенту
+        //                    route = wtroute.client;
+        //                    station_from = station_sending;
+        //                }
+        //                else
+        //                {
+        //                    // Если wtroute.client пропускаем (за ОТОТ может прийти ВЫГРН)
+        //                    // прибытие клиенту а route != wtroute.send
+        //                }
+        //            }
+        //            // Проверка на отправку вагона клиенту от клиента
+        //            if (IsClientSendingClient(car, station_sending))
+        //            {
+        //                if (route == wtroute.client)
+        //                {
+        //                    // отправка опять клиенту
+        //                    route = wtroute.send;
+        //                    station_from = station_sending;
+        //                    station_sending = (int)car.st_end;
+        //                }
+        //                else
+        //                {
+        //                    // Отправка клиенту другому клиенту а route != wtroute.client
+        //                }
+        //            }
+        //            // Проверка на возврат вагона на АМКР
+        //            if (IsReturnAMKR(car))
+        //            {
+        //                if (route == wtroute.client)
+        //                {
+        //                    // возврат
+        //                    route = wtroute.ret;
+        //                    station_sending = 46700;
+        //                }
+        //                else
+        //                {
+        //                    if (route == wtroute.send)
+        //                    {
+        //                        // возврат
+        //                        route = wtroute.ret;
+        //                        station_sending = 46700;
+        //                    }
+
+        //                    // возврат вагона на АМКР а route != wtroute.client
+        //                }
+        //            }
+        //            // Проверка на прибытие вагона на АМКР
+        //            if (IsArrivalAMKR(car))
+        //            {
+        //                if (route == wtroute.ret)
+        //                {
+        //                    // возврат
+        //                    route = wtroute.amkr;
+        //                    station_sending = 46700;
+        //                    station_from = station_sending;
+        //                }
+        //                else
+        //                {
+        //                    // Если wtroute.amkr пропускаем (начало цыкла было определено выше)
+        //                    // Вагон прибыл на АМКР а route != wtroute.ret
+        //                }
+        //            }
+        //            //if (route == wtroute.amkr & IsAMKRSendingClient(car))
+        //            //{ // отправка клиенту
+        //            //    route = wtroute.send;
+        //            //    station_from = 46700;
+        //            //    station_sending = (int)car.st_end;
+        //            //}
+        //            //if (route == wtroute.send & IsArrivalClient(car, station_sending))
+        //            //{ // прибыл клиенту
+        //            //    route = wtroute.client;
+        //            //    station_from = station_sending;
+        //            //}
+        //            //if (route == wtroute.client & IsReturnAMKR(car))
+        //            //{ // возврат
+        //            //    route = wtroute.ret;
+        //            //    station_sending = 46700;
+
+        //            //}
+        //            //if (route == wtroute.ret & IsArrivalAMKR(car))
+        //            //{ // возврат
+        //            //    route = wtroute.amkr;
+        //            //    station_sending = 46700;
+        //            //    station_from = station_sending;
+        //            //}
+        //            // Сохраним
+        //            if (cycle > 0)
+        //            {
+        //                int res = efmt.SaveWTCycle(new WTCycle()
+        //                {
+        //                    id = 0,
+        //                    id_wt = car.id,
+        //                    cycle = cycle,
+        //                    station_end = station_sending,
+        //                    station_from = station_from,
+        //                    route = (int)route
+        //                });
+        //                if (res > 0) { transfer++; } else { error++; }
+        //            }
+        //        }
+        //        return transfer;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        e.WriteErrorMethod(String.Format("TransferWTCycle(num={0})", num), servece_owner, eventID);
+        //        return -1;
+        //    }
+        //}
         #endregion
 
         #region CloseApproaches Автозакрытие вагонов на подходах
@@ -1481,7 +1769,7 @@ namespace MetallurgTrans
             try
             {
                 EFMetallurgTrans ef_mt = new EFMetallurgTrans();
-                RWOperations rw_operations = new RWOperations(this.servece_owner);                
+                RWOperations rw_operations = new RWOperations(this.servece_owner);
                 int count = 0;
                 int transfer = 0;
                 int skip = 0;
@@ -1500,7 +1788,8 @@ namespace MetallurgTrans
                 // Провести анализ спсиков и убрать существующие вагоны
                 ef_mt.RemoveMatchingArrivalCars(ref list_new_car, ref list_old_car);
                 // Сделать ТСП по УЗ вагонов которые были оцеплены на станции УЗ
-                foreach (ArrivalCars car_old in list_old_car) {
+                foreach (ArrivalCars car_old in list_old_car)
+                {
                     int res_tsp = rw_operations.TSPOnUZ(car_old);
                     tsp += res_tsp > 0 ? 1 : 0;
                     tsp_error += res_tsp < 0 ? 1 : 0;
@@ -1534,9 +1823,9 @@ namespace MetallurgTrans
                 //    foreach(int num in not_nums){
                 //        int result = rw_operations.OperationArrivalUZToSendingUZ(code_station_on, num);
                 //    }
-                    
-                    
-                    
+
+
+
                 //    //List<Cars> list_not_cars = ef_rw.GetCarsOfArrivalNum(sostav.IDArrival, not_nums.ToArray());
                 //    ////List<CarOperations> list_operations = ExecOperation(list_not_cars, OperationClose, new OperationClose(sostav.DateTime));
                 //    //List<CarOperations> list_operations = list_not_cars.CloseOperations(sostav.DateTime, true);

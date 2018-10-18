@@ -186,13 +186,6 @@ namespace Testing
 
         }
 
-        public void MTTransfer_TransferTransferWTCycle()
-        {
-            MTTransfer mtt = new MTTransfer();
-            int res = mtt.TransferWTCycle(56857808);
-            Console.WriteLine("Перенесено {0}", res);
-        }
-
         public void MTTransfer_TransferWTCycle()
         {
             MTTransfer mtt = new MTTransfer();
@@ -248,7 +241,9 @@ namespace Testing
             List<WagonsTracking> list = efmt.GetWagonsTrackingOfNumCars(52921004).ToList();
 
         }
-
+        /// <summary>
+        /// Удалить соответствия между списками вагонов
+        /// </summary>
         public void EFMetallurgTrans_RemoveMatchingArrivalCars()
         {
             EFMetallurgTrans efmt = new EFMetallurgTrans();
@@ -258,5 +253,15 @@ namespace Testing
             efmt.RemoveMatchingArrivalCars(ref list_new, ref list_old);
         }
 
+
+        #region  WTCycle Формирование циклограмм движения вагонов по данным МетТранса (TransferWagonsTracking)
+
+        public void MTTransfer_TransferWTCycleOfNumm()
+        {
+            MTTransfer mtt = new MTTransfer();
+            int res = mtt.TransferWTCycle(52921715);
+            Console.WriteLine("Перенесено {0}", res);
+        }
+        #endregion
     }
 }
