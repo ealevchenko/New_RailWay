@@ -1261,6 +1261,7 @@ namespace MetallurgTrans
                                 {
                                     // возврат
                                     route = wtroute.ret;
+                                    station_from = (int)car.st_disl;
                                     station_sending = 46700;
                                 }
                                 else
@@ -1270,6 +1271,7 @@ namespace MetallurgTrans
                                         // возврат
                                         route = wtroute.ret;
                                         station_sending = 46700;
+
                                     }
                                     // возврат вагона на АМКР а route != wtroute.client
                                 }
@@ -1287,9 +1289,23 @@ namespace MetallurgTrans
                                 }
                                 else
                                 {
-                                    // Если wtroute.amkr пропускаем (начало цыкла было определено выше)
+                                    if (route == wtroute.client)
+                                    {
+                                        cycle++;
+                                        route = wtroute.amkr;
+                                        station_sending = 46700;
+                                        station_from = station_sending;
+                                    }
                                     // Вагон прибыл на АМКР а route != wtroute.ret
                                 }
+                            }
+                            // Проверим изменения на код грузополучателя (Направление изменилось?)
+                            if (car.kgrp > 0 && kode_cargo_out > 0 && car.nameop != "ОКОТ" && car.kgrp != kode_cargo_out)
+                            {
+                                // возврат
+                                route = wtroute.ret;
+                                station_from = (int)car.st_disl;
+                                station_sending = 46700;
                             }
                         }
                         else { 
@@ -1301,6 +1317,7 @@ namespace MetallurgTrans
                                 route = wtroute.send;
                                 station_from = (int)car.st_disl;
                                 station_sending = (int)car.st_end;
+                                //kode_cargo_out = car.kgrp;
                             }
                             
                             // Вагон движится клиенту из АМКР?
@@ -1310,8 +1327,10 @@ namespace MetallurgTrans
                                 {
                                     // отправка клиенту
                                     route = wtroute.send;
-                                    station_from = 46700;
+                                    //station_from = 46700;
+                                    station_from = (int)car.st_disl;
                                     station_sending = (int)car.st_end;
+                                    //kode_cargo_out = car.kgrp;
                                 }
                                 else
                                 {
@@ -1320,7 +1339,8 @@ namespace MetallurgTrans
                                         // Нет фиксации зашел на АМКР (будет выполнена начало нового цикла и отправка клиенту)
                                         cycle++;
                                         route = wtroute.send;
-                                        station_from = 46700;
+                                        //station_from = 46700;
+                                        station_from = (int)car.st_disl;
                                         station_sending = (int)car.st_end;
                                     }
                                     // Отправка клиенту из АМКР а route != wtroute.amkr
@@ -1334,7 +1354,8 @@ namespace MetallurgTrans
                                 {
                                     // отправка опять клиенту
                                     route = wtroute.send;
-                                    station_from = station_sending;
+                                    //station_from = station_sending;
+                                    station_from = (int)car.st_disl;
                                     station_sending = (int)car.st_end;
                                 }
                                 else
@@ -1359,7 +1380,32 @@ namespace MetallurgTrans
                                     // прибытие клиенту а route != wtroute.send
                                 }
                             }
+                            // Проверим изменения на код грузополучателя (Направление изменилось?)
+                            if (car.kgrp > 0 && kode_cargo_out > 0 && car.nameop != "ОКОТ" && car.kgrp != kode_cargo_out)
+                            {
+                                // Отправка из АМКР
+                                if (kode_cargo_out == 7932 | kode_cargo_out == 3437 | kode_cargo_out == 6302)
+                                {
+                                    // Отправка из АМКР
+                                    // отправка клиенту
+                                    route = wtroute.send;
+                                    //station_from = 46700;
+                                    station_from = (int)car.st_disl;
+                                    station_sending = (int)car.st_end;
+
+                                }
+                                else { 
+                                    // Отправка от клиента клиенту   
+                                    // отправка опять клиенту
+                                    route = wtroute.send;
+                                    station_from = (int)car.st_disl;
+                                    station_sending = (int)car.st_end;
+                                
+                                }
+                            }
                         }
+                        // Сохранить грузополучателя если опреация не ОКОТ (на этой операции не меняется станция получателя)
+                        if (car.nameop != "ОКОТ") { kode_cargo_out = car.kgrp; }// Всегда актуальный код грузополучателя
                     }
                     else { 
                         // Обработать эти операции
@@ -1368,6 +1414,7 @@ namespace MetallurgTrans
                         // ВУ36	Возвращение в рабочий парк
                     }
                     // Сохраним если это не нулевой цикл или если нулевой тогда код грузополучателя должен быть определен
+
                     if (cycle > 0 || (cycle == 0 && car.kgrp>0))
                     {
                         int res = efmt.SaveWTCycle(new WTCycle()

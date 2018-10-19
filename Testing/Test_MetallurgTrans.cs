@@ -186,13 +186,6 @@ namespace Testing
 
         }
 
-        public void MTTransfer_TransferWTCycle()
-        {
-            MTTransfer mtt = new MTTransfer();
-            int res = mtt.TransferWTCycle();
-            Console.WriteLine("Перенесено {0}", res);
-        }
-
         public void EFMetallurgTrans_GetRouteWagonsTrackingOfReports()
         {
             EFMetallurgTrans efmt = new EFMetallurgTrans();
@@ -256,10 +249,18 @@ namespace Testing
 
         #region  WTCycle Формирование циклограмм движения вагонов по данным МетТранса (TransferWagonsTracking)
 
+
+        public void MTTransfer_TransferWTCycle()
+        {
+            MTTransfer mtt = new MTTransfer();
+            int res = mtt.TransferWTCycle();
+            Console.WriteLine("Перенесено {0}", res);
+        }
+
         public void MTTransfer_TransferWTCycleOfNumm()
         {
             MTTransfer mtt = new MTTransfer();
-            int res = mtt.TransferWTCycle(52921715);
+            int res = mtt.TransferWTCycle(63532535);
             Console.WriteLine("Перенесено {0}", res);
         }
         #endregion
