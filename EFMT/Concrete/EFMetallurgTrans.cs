@@ -2093,6 +2093,8 @@ namespace EFMT.Concrete
                         route = WTCycle.route,
                         station_from = WTCycle.station_from,
                         station_end = WTCycle.station_end,
+                        Shipper = WTCycle.Shipper,
+                        Consignee = WTCycle.Consignee,
                         WagonsTracking = WTCycle.WagonsTracking
                     };
                     context.WTCycle.Add(dbEntry);
@@ -2107,6 +2109,8 @@ namespace EFMT.Concrete
                         dbEntry.route = WTCycle.route;
                         dbEntry.station_from = WTCycle.station_from;
                         dbEntry.station_end = WTCycle.station_end;
+                        dbEntry.Shipper = WTCycle.Shipper;
+                        dbEntry.Consignee = WTCycle.Consignee;
                         dbEntry.WagonsTracking = WTCycle.WagonsTracking;
                     }
                 }

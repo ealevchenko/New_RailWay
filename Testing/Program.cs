@@ -138,8 +138,9 @@ namespace Testing
                 #endregion
 
                 #region  WTCycle Формирование циклограмм движения вагонов по данным МетТранса (TransferWagonsTracking)
-                tst_mt.MTTransfer_TransferWTCycle();    // Сформировать циклы по всем вагонам.
-                //tst_mt.MTTransfer_TransferWTCycleOfNumm();    // Сформировать циклы по указаному вагону.
+                //tst_mt.MTTransfer_TransferWTCycle();              // Сформировать циклы по всем вагонам.
+                //tst_mt.MTTransfer_TransferWTCycleOfNumm();        // Сформировать циклы по указаному вагону (По грузополучателю).
+                tst_mt.MTTransfer_TransferWTCycle_StationOfNumm();  // Сформировать циклы по указаному вагону (По станции назначения).
 
                 #endregion
 

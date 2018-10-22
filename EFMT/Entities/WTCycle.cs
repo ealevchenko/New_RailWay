@@ -21,6 +21,10 @@ namespace EFMT.Entities
 
         public int station_end { get; set; }
 
+        public int? Shipper { get; set; }
+
+        public int? Consignee { get; set; }
+
         public virtual WagonsTracking WagonsTracking { get; set; }
     }
 }
