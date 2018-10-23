@@ -43,6 +43,13 @@ tr.shown td.details-control {
     border-radius: 4px;
     text-align: left;
 }
+.tabs-detali-data {
+    width:600px;
+}
+
+table.table-data-detali td {
+    border-bottom: 1px solid #808080; /* Линия снизу */
+}
 /*разбить строку без пробелов в ячейке*/
 .list-status {
     width: 400px;

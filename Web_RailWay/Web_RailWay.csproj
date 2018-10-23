@@ -734,9 +734,10 @@
     <Content Include="Scripts\MT\operations.js" />
     <Content Include="Scripts\MT\routes.js" />
     <Content Include="Scripts\MT\wagons_tracking.js" />
+    <Content Include="Scripts\Plugins\data_detali.js" />
     <Content Include="Scripts\Plugins\MT.js" />
-    <Content Include="Scripts\Plugins\KIS_Tables.js" />
     <Content Include="Scripts\Plugins\MT_Tables.js" />
+    <Content Include="Scripts\Plugins\pl_common.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />

@@ -349,7 +349,7 @@
                                 '<li><a href="#tabs-detali' + row.data().id + '-1" id="link-tabs-detali' + row.data().id + '-1"></a></li> ' +
                                 '<li><a href="#tabs-detali' + row.data().id + '-2" id="link-tabs-detali' + row.data().id + '-2"></a></li> ' +
                                 '</ul> ' +
-                                '<div id="tabs-detali' + row.data().id + '-1"> ' +
+                                '<div id="tabs-detali' + row.data().id + '-1" class="tabs-detali-data"> ' +
                                 //'<table class="display compact" id="table-detali-full" style="width:100%" cellpadding="0"></table> ' +
                                 '</div> ' +
                                 '<div id="tabs-detali' + row.data().id + '-2"> ' +
@@ -401,38 +401,72 @@
             },
             // Показать все поля
             viewTableChildAllFields: function (data) {
-                var target = $("#tabs-detali" + data.id + "-1");
-                target.empty();
-                var tab = this.createTableAllFields(data);
-                target.append(tab);
+                var target = $("#tabs-detali" + data.id + "-1").DataDetali({
+                    class_table: 'compact table-hover table-data-detali',
+                    columns: {
+                        id: { title: { ru: 'id', en: 'id' }, visible: true },
+                        datetime: { title: { ru: 'Дата и время', en: 'DateAndTime' }, visible: true },
+                        natur: { title: { ru: 'Натурка', en: 'Natur' }, visible: true },
+                        station_on: {
+                            title: { ru: 'Отправлен', en: 'Station on' },
+                            visible: true,
+                            value: { str: '(#0) - #1', val: ['id_station_kis', 'station_on'] }
+                        },
+                        way: {
+                            title: { ru: 'Путь', en: 'Way' },
+                            visible: true,
+                        },
+                        napr: {
+                            title: { ru: 'Голова\Хвост', en: 'napr' },
+                            visible: true,
+                        },
+                        count_wagons: { title: { ru: 'Кол. Vagons', en: 'Count Vagons' }, visible: true },
+                        count_nathist: { title: { ru: 'Кол. Nat_Hist', en: 'Count Nat_Hist' }, visible: true },
+                        status: {
+                            title: { ru: 'Статус', en: 'Status' },
+                            visible: true,
+                            value: { str: '(#0) - #1', val: ['status_id', 'status'] }
+                        },
+                        close: { title: { ru: 'Закрыт', en: 'Close' }, visible: true },
+                        list_wagons: { title: { ru: 'Список вагонов', en: 'List wagons' }, visible: true, class: 'list-status' },
+                        list_no_set_wagons: { title: { ru: 'Не перенесенные вагоны', en: 'No set wagons' }, visible: true, class: 'list-status' },
+                        list_no_update_wagons: { title: { ru: 'Не обновленные вагоны', en: 'Not updated wagons' }, visible: true, class: 'list-status' },
+                        message: { title: { ru: 'Сообщение', en: 'Message' }, visible: true, class: 'list-status' },
+                    },
+                });
+                target.DataDetali("viewDetali", data);
+                //var target = $("#tabs-detali" + data.id + "-1");
+                //target.empty();
+                //var tab = this.createTableAllFields(data);
+                //target.append(tab);
             },
             // Сформировать таблицу все поля
-            createTableAllFields: function (data) {
-                if (data == null || data.length == 0) {
-                    return resurses.getText("table_not_data")
-                }
-                var list_tr = '<thead><tr>' +
-                    '<th>' + resurses.getText("table_field_value") + '</th>' +
-                    '<th>' + resurses.getText("table_field_text") + '</th>' +
-                    '</tr></thead>' +
-                    '<tbody>' +
-                    '<tr><th>' + resurses.getText("table_field_id") + '</th>' + '<td>' + data.id + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_datetime") + '</th>' + '<td>' + data.datetime + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_natur") + '</th>' + '<td>' + data.natur + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_station_on") + '</th>' + '<td>' + '(' + data.id_station_kis + ') - ' + data.station_on + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_way") + '</th>' + '<td>' + data.way + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_napr") + '</th>' + '<td>' + data.napr + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_count_wagons") + '</th>' + '<td>' + data.count_wagons + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_count_nathist") + '</th>' + '<td>' + data.count_nathist + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_status") + '</th>' + '<td>' + '(' + data.status_id + ') - ' + data.status + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_close") + '</th>' + '<td>' + data.close + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_list_wagons") + '</th>' + '<td class="list-status">' + data.list_wagons + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_list_no_set_wagons") + '</th>' + '<td class="list-status">' + data.list_no_set_wagons + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_list_no_update_wagons") + '</th>' + '<td class="list-status">' + data.list_no_update_wagons + '</td></tr>' +
-                    '<tr><th>' + resurses.getText("table_field_list_message") + '</th>' + '<td class="list-status">' + data.message + '</td></tr>' +
-                    '</tbody>';
-                return '<table class="table-transfer-detali" id="table-detali-all-' + data.id + '" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
-            },
+            //createTableAllFields: function (data) {
+            //    if (data == null || data.length == 0) {
+            //        return resurses.getText("table_not_data")
+            //    }
+            //    var list_tr = '<thead><tr>' +
+            //        '<th>' + resurses.getText("table_field_value") + '</th>' +
+            //        '<th>' + resurses.getText("table_field_text") + '</th>' +
+            //        '</tr></thead>' +
+            //        '<tbody>' +
+            //        '<tr><th>' + resurses.getText("table_field_id") + '</th>' + '<td>' + data.id + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_datetime") + '</th>' + '<td>' + data.datetime + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_natur") + '</th>' + '<td>' + data.natur + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_station_on") + '</th>' + '<td>' + '(' + data.id_station_kis + ') - ' + data.station_on + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_way") + '</th>' + '<td>' + data.way + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_napr") + '</th>' + '<td>' + data.napr + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_count_wagons") + '</th>' + '<td>' + data.count_wagons + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_count_nathist") + '</th>' + '<td>' + data.count_nathist + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_status") + '</th>' + '<td>' + '(' + data.status_id + ') - ' + data.status + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_close") + '</th>' + '<td>' + data.close + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_list_wagons") + '</th>' + '<td class="list-status">' + data.list_wagons + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_list_no_set_wagons") + '</th>' + '<td class="list-status">' + data.list_no_set_wagons + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_list_no_update_wagons") + '</th>' + '<td class="list-status">' + data.list_no_update_wagons + '</td></tr>' +
+            //        '<tr><th>' + resurses.getText("table_field_list_message") + '</th>' + '<td class="list-status">' + data.message + '</td></tr>' +
+            //        '</tbody>';
+            //    return '<table class="table-transfer-detali" id="table-detali-all-' + data.id + '" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' + list_tr + '</table>';
+            //},
             // Добавить значения количества вагонов по таблице Prom.Vagon
             viewFieldClose: function (data) {
                 if (data.close != null) {
@@ -649,7 +683,7 @@
                                 '<li><a href="#tabs-detali' + row.data().id + '-1" id="link-tabs-detali' + row.data().id + '-1"></a></li> ' +
                                 '<li><a href="#tabs-detali' + row.data().id + '-2" id="link-tabs-detali' + row.data().id + '-2"></a></li> ' +
                                 '</ul> ' +
-                                '<div id="tabs-detali' + row.data().id + '-1" style="width:600px"> ' +
+                                '<div id="tabs-detali' + row.data().id + '-1" class="tabs-detali-data"> ' +
                                 //'<table class="display compact" id="table-detali-full" style="width:100%" cellpadding="0"></table> ' +
                                 '</div> ' +
                                 '<div id="tabs-detali' + row.data().id + '-2"> ' +
@@ -702,9 +736,8 @@
             },
             // Показать все поля
             viewTableChildAllFields: function (data) {
-                var target = $("#tabs-detali" + data.id + "-1").kisDetaliField({
-                    ordering: true,
-                    class_table: 'hover',
+                var target = $("#tabs-detali" + data.id + "-1").DataDetali({
+                    class_table: 'compact table-hover table-data-detali',
                     columns: {
                         id: { title: { ru: 'id', en: 'id' }, visible: true },
                         datetime: { title: { ru: 'Дата и время', en: 'DateAndTime' }, visible: true },
@@ -726,13 +759,12 @@
                             value: { str: '(#0) - #1', val: ['status_id', 'status'] }
                         },
                         close: { title: { ru: 'Закрыт', en: 'Close' }, visible: true },
-                        list_wagons: { title: { ru: 'Список вагонов', en: 'List wagons' }, visible: true, class:'list-status'},
-                        no_set_wagons: { title: { ru: 'Не перенесенные вагоны', en: 'No set wagons' }, visible: true, class:'list-status'},
-                        message: { title: { ru: 'Сообщение', en: 'Message' }, visible: true, class:'list-status' },
+                        list_wagons: { title: { ru: 'Список вагонов', en: 'List wagons' }, visible: true, class: 'list-status' },
+                        list_no_set_wagons: { title: { ru: 'Не перенесенные вагоны', en: 'No set wagons' }, visible: true, class: 'list-status' },
+                        message: { title: { ru: 'Сообщение', en: 'Message' }, visible: true, class: 'list-status' },
                     },
-
                 });
-                target.kisDetaliField("viewDetali", data);
+                target.DataDetali("viewDetali", data);
                 //target.empty();
                 //var tab = this.createTableAllFields(data);
                 //target.append(tab);

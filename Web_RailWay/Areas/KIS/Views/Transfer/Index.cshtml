@@ -30,7 +30,9 @@
     @Scripts.Render("~/bundles/datetime")
     <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
     <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
-    <script src="~/Scripts/Plugins/KIS_Tables.js" type="text/javascript"></script>
+
+    <script src="~/Scripts/Plugins/pl_common.js" type="text/javascript"></script>
+    <script src="~/Scripts/Plugins/data_detali.js" type="text/javascript"></script>
 
     @*<script src="~/Scripts/api_helpers/metallurgtrans.js" type="text/javascript"></script>*@
     <script src="~/Scripts/api_helpers/railway.js" type="text/javascript"></script>
@@ -82,7 +84,7 @@
                 <li><a href="#tabs-transfer-output" id="link-tabs-transfer-output"></a></li>
             </ul>
             <div id="tabs-transfer-arrival">
-                <table class='display compact' id="table-transfer-arrival" style="width:100%" cellpadding="0"></table>
+                <table class='compact table-hover' id="table-transfer-arrival" style="width:100%" cellpadding="0"></table>
             </div>
             <div id="tabs-transfer-sending">
                 <table class='compact table-bordered' id="table-transfer-sending" style="width:100%" cellpadding="0"></table>
