@@ -267,7 +267,7 @@ namespace Testing
         public void MTTransfer_TransferWTCycle_StationOfNumm()
         {
             MTTransfer mtt = new MTTransfer();
-            int res = mtt.TransferWTCycle_Station(63530661);
+            int res = mtt.TransferWTCycle_Station(63532519);
             Console.WriteLine("Перенесено {0}", res);
         }
         #endregion
