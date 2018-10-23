@@ -1247,7 +1247,7 @@ namespace MetallurgTrans
                         {
                             // Грузополучатель АМКР
                             // Первый цикл
-                            if (cycle == 0 && car.kgrp>0 && route==wtroute.not)
+                            if (cycle == 0 && car.kgrp > 0 && route == wtroute.not)
                             {
                                 // возврат
                                 route = wtroute.ret;
@@ -1277,7 +1277,8 @@ namespace MetallurgTrans
                                 }
                             }
                             // Вагон прибыл на АМКР?
-                            if (car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН")) { 
+                            if (car.st_disl == 46700 & (car.nameop == "ОТОТ" | car.nameop == "ВЫГ2" | car.nameop == "ВЫГРН"))
+                            {
                                 // Вагон прибыл на АМКР
                                 if (route == wtroute.ret | route == wtroute.not)
                                 {
@@ -1308,7 +1309,8 @@ namespace MetallurgTrans
                                 station_sending = 46700;
                             }
                         }
-                        else { 
+                        else
+                        {
                             // Грузополучатель Клиент 
                             // Первый цикл
                             if (cycle == 0 && car.kgrp > 0 && route == wtroute.not)
@@ -1319,9 +1321,10 @@ namespace MetallurgTrans
                                 station_sending = (int)car.st_end;
                                 //kode_cargo_out = car.kgrp;
                             }
-                            
+
                             // Вагон движится клиенту из АМКР?
-                            if ((car.st_disl == 46700 | car.st_disl == 46720) & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") & car.st_end != 46700){
+                            if ((car.st_disl == 46700 | car.st_disl == 46720) & (car.nameop == "ОДПВ" | car.nameop == "ПГР2" | car.nameop == "ПОГРН") & car.st_end != 46700)
+                            {
                                 // Вагон движется к клиенту
                                 if (route == wtroute.amkr)
                                 {
@@ -1362,7 +1365,7 @@ namespace MetallurgTrans
                                 {
                                     // Отправка клиенту другому клиенту а route != wtroute.client
                                 }
-                            
+
                             }
                             // Вагон прибыл к клиенту?
                             if (car.st_disl != 46700 && (car.nameop == "ОТОТ" | car.nameop == "ВЫГРН") && car.st_disl == car.st_end)
@@ -1394,20 +1397,22 @@ namespace MetallurgTrans
                                     station_sending = (int)car.st_end;
 
                                 }
-                                else { 
+                                else
+                                {
                                     // Отправка от клиента клиенту   
                                     // отправка опять клиенту
                                     route = wtroute.send;
                                     station_from = (int)car.st_disl;
                                     station_sending = (int)car.st_end;
-                                
+
                                 }
                             }
                         }
                         // Сохранить грузополучателя если опреация не ОКОТ (на этой операции не меняется станция получателя)
                         if (car.nameop != "ОКОТ") { kode_cargo_out = car.kgrp; }// Всегда актуальный код грузополучателя
                     }
-                    else { 
+                    else
+                    {
                         // Обработать эти операции
                         // ВУ23	Перечисление в неиспр. вагоны
                         // ПРМ	Прием на дорогу
@@ -1415,7 +1420,7 @@ namespace MetallurgTrans
                     }
                     // Сохраним если это не нулевой цикл или если нулевой тогда код грузополучателя должен быть определен
 
-                    if (cycle > 0 || (cycle == 0 && car.kgrp>0))
+                    if (cycle > 0 || (cycle == 0 && car.kgrp > 0))
                     {
                         int res = efmt.SaveWTCycle(new WTCycle()
                         {
@@ -1437,6 +1442,293 @@ namespace MetallurgTrans
                 return -1;
             }
         }
+        /// <summary>
+        /// Прибыл на АМКР
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="cycle"></param>
+        /// <param name="route"></param>
+        /// <param name="station_end"></param>
+        /// <param name="station_from"></param>
+        public void ArrivalAMKR(WagonsTracking car, ref int cycle, ref wtroute route, ref  int station_end, ref int station_from)
+        {
+            // Прибыл на АМКР (считаем время прибытия)
+            if (route == wtroute.ret | route == wtroute.not)
+            {
+                // Прибыл новый цикл
+                cycle++;
+                route = wtroute.amkr;
+                station_from = (int)car.st_disl;
+                station_end = (int)car.st_end;
+            }
+            else
+            {
+                // Алгоритм неопределил "вагон возвращается"  
+                if (route == wtroute.client)
+                {
+                    cycle++;
+                    route = wtroute.amkr;
+                    station_from = (int)car.st_disl;
+                    station_end = (int)car.st_end;
+                }
+                // Вагон возращается на АМКР (цикл не меняем)
+                if (route == wtroute.send) { 
+
+                    route = wtroute.amkr;
+                    station_from = (int)car.st_disl;
+                    station_end = (int)car.st_end;                
+                }
+                // Сообщение "Вагон прибыл на АМКР а route != wtroute.ret"
+            }
+
+        }
+        /// <summary>
+        /// Возвращается на АМКР
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="cycle"></param>
+        /// <param name="route"></param>
+        /// <param name="station_end"></param>
+        /// <param name="station_from"></param>
+        public void ReturnAMKR(WagonsTracking car, ref int cycle, ref wtroute route, ref  int station_end, ref int station_from)
+        {
+            // Отправлен на АМКР (считаем время отправки)
+            if (route == wtroute.client || route == wtroute.not)
+            {
+                // возврат
+                route = wtroute.ret;
+                station_from = (int)car.st_disl;
+                station_end = (int)car.st_end;
+            }
+            else
+            {
+                // Алгоритм неопределил "вагон у клиента"  
+                if (route == wtroute.send)
+                {
+                    // возврат
+                    route = wtroute.ret;
+                    station_from = (int)car.st_disl;
+                    station_end = (int)car.st_end;
+
+                }
+                // Сообщение "Возврат вагона на АМКР а route != wtroute.client"
+            } // {end Отправлен на АМКР}
+        }
+        /// <summary>
+        /// Вагон прибыл клиенту
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="cycle"></param>
+        /// <param name="route"></param>
+        /// <param name="station_end"></param>
+        /// <param name="station_from"></param>
+        public void ArrivalClient(WagonsTracking car, ref int cycle, ref wtroute route, ref  int station_end, ref int station_from) {
+            // Вагон прибыл к клиенту
+            if (route == wtroute.send || route == wtroute.not)
+            {
+                // прибыл клиенту
+                route = wtroute.client;
+                station_from = (int)car.st_disl;
+                station_end = (int)car.st_end;
+            }
+            else
+            {
+                // Алгоритм неопределил "вагон направлен клиенту" 
+                if (route == wtroute.amkr)
+                {
+                    route = wtroute.client;
+                    station_from = (int)car.st_disl;
+                    station_end = (int)car.st_end;
+                }
+                // Если wtroute.client пропускаем (за ОТОТ может прийти ВЫГРН)
+                // Сообщение "Вагон прибыл к клиенту а route != wtroute.send"
+            }
+        }
+        /// <summary>
+        /// Вагон движится к клиенту
+        /// </summary>
+        /// <param name="car"></param>
+        /// <param name="cycle"></param>
+        /// <param name="route"></param>
+        /// <param name="station_end"></param>
+        /// <param name="station_from"></param>
+        public void SendClient(WagonsTracking car, ref int cycle, ref wtroute route, ref  int station_end, ref int station_from) {
+            // Вагон движется к клиенту
+            // Откуда движется вагон от АМКР или Клиента
+            if (car.st_disl == 46700 || car.st_disl == 46720)
+            {
+                // Вагон движется к клиенту от АМКР (считаем время отправки)
+                if (route == wtroute.amkr || route == wtroute.not)
+                {
+                    // отправка клиенту
+                    route = wtroute.send;
+                    station_from = (int)car.st_disl;
+                    station_end = (int)car.st_end;
+                }
+                else
+                {
+                    // Алгоритм неопределил "вагон на АМКР" 
+                    if (route == wtroute.ret)
+                    {
+                        cycle++;
+                        route = wtroute.send;
+                        station_from = (int)car.st_disl;
+                        station_end = (int)car.st_end;
+                    }
+                    // Сообщение "Отправка клиенту из АМКР а route != wtroute.amkr"
+                }
+            }
+            else
+            {
+                // Вагон движется к клиенту от клиента (считаем время отправки)                                
+                if (route == wtroute.client || route == wtroute.not)
+                {
+                    // отправка опять клиенту
+                    route = wtroute.send;
+                    station_from = (int)car.st_disl;
+                    station_end = (int)car.st_end;
+                }
+                else
+                {
+                    // Алгоритм неопределил "вагон у клиента" 
+                    if (route == wtroute.send)
+                    {
+                        station_from = (int)car.st_disl;
+                        station_end = (int)car.st_end;
+                    }
+
+                    // Сообщение "Отправка клиенту другому клиенту а route != wtroute.client"
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Перенос и формирование циклограммы (алгоритм по изменению станции назначения) по указаному вагону 
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public int TransferWTCycle_Station(int num)
+        {
+            try
+            {
+                int transfer = 0;
+                int error = 0;
+                EFMetallurgTrans efmt = new EFMetallurgTrans();
+                int cycle = 0;
+                wtroute route = wtroute.not;
+                int station_end = 0;
+                int station_from = 0;
+                int shipper = 0;
+                int consignee = 0;
+                int kode_cargo_consignee = 0; // Код грузополучатель
+                int kode_cargo_shipper = 0; // Код грузоотправитель
+                List<WagonsTracking> list_wt_cars;
+                // Получим оследнюю запись циклограммы
+                WTCycle last_Cycle = efmt.GetWTCycleOfNumCar(num).OrderByDescending(c => c.id).FirstOrDefault();
+                if (last_Cycle == null)
+                {
+                    // Последней записи нет переносим все
+                    list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).OrderBy(t => t.dt).ToList();
+                }
+                else
+                {
+                    list_wt_cars = efmt.GetWagonsTrackingOfNumCars(num).Where(t => t.id > last_Cycle.id_wt).OrderBy(t => t.dt).ToList();
+                    cycle = last_Cycle.cycle;
+                    route = (wtroute)last_Cycle.route;
+                    station_end = last_Cycle.station_end;
+                    station_from = last_Cycle.station_from;
+                    shipper = last_Cycle.Shipper != null ? (int)last_Cycle.Shipper : 0;
+                    consignee = last_Cycle.Consignee != null ? (int)last_Cycle.Consignee : 0;
+                    kode_cargo_consignee = last_Cycle.WagonsTracking.kgrp != null ? (int)last_Cycle.WagonsTracking.kgrp : 0;
+                    kode_cargo_shipper = last_Cycle.WagonsTracking.kgro != null ? (int)last_Cycle.WagonsTracking.kgro : 0;
+                }
+                //Console.WriteLine("list_wt_cars определено - {0} записей", list_wt_cars.Count());
+                // Переносим двнные
+                //int index = 1;
+                foreach (WagonsTracking car in list_wt_cars)
+                {
+                    //Console.WriteLine("Обрабатываю car.id - {0}?, осталось {1}", car.id, list_wt_cars.Count()-index);
+                    //index++;
+                    // Определим цепочку следования грузополучатель грузоприемник
+                    kode_cargo_consignee = car.kgrp > 0 ? (int)car.kgrp : kode_cargo_consignee;
+                    kode_cargo_shipper = car.kgro > 0 ? (int)car.kgro : kode_cargo_shipper;                  
+                    
+                    // Конечная станция не равна null и "в регулировании"
+                    if (car.st_end > 0)
+                    {
+                        if (car.st_end == 46700 || car.st_end == 46720)
+                        {
+                            // Конечная станция Кривой Рог
+                            switch (car.nameop)
+                            {
+                                // Прибыли
+                                case "ОТОТ": ArrivalAMKR(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                case "ВЫГ2": ArrivalAMKR(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                case "ВЫГРН": ArrivalAMKR(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                // Движутся
+                                case "ОДПВ": ReturnAMKR(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                case "ПГР2": ReturnAMKR(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                case "ПОГРН": ReturnAMKR(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                // Проверим на смену маршрута
+                                default: if (car.st_end != station_end)
+                                    // Маршрут поменялся вагон движется назад
+                                        ReturnAMKR(car, ref cycle, ref route, ref station_end, ref station_from);
+                                    break;
+                            }                            
+                        }
+                        else
+                        {
+                            // Конечная станция Клиент
+                            switch (car.nameop)
+                            {
+                                // Прибыл
+                                case "ОТОТ": ArrivalClient(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                case "ВЫГРН": ArrivalClient(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                // Движутся
+                                case "ОДПВ": SendClient(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                case "ПГР2": SendClient(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                case "ПОГРН": SendClient(car, ref cycle, ref route, ref station_end, ref station_from); break;
+                                // Проверим на смену маршрута
+                                default: if (car.st_end != station_end)
+                                        // Маршрут поменялся вагон движется к клиенту
+                                        SendClient(car, ref cycle, ref route, ref station_end, ref station_from);
+                                    break;
+                            } 
+                        }
+                    }
+                    else
+                    {
+                        // Обработать эти операции
+                        //ВЫГРН,РАСФ,ТСП,ВЫГРО,ОКОТ,ПРМ,ФОРМ,-НЕИС,ОСВ,ВУ36
+                    }
+                    // Сохраним если это не нулевой цикл или если нулевой тогда код грузополучателя должен быть определен
+
+                    if (cycle > 0 || (cycle == 0 && car.st_end > 0))
+                    {
+                        int res = efmt.SaveWTCycle(new WTCycle()
+                        {
+                            id = 0,
+                            id_wt = car.id,
+                            cycle = cycle,
+                            station_end = station_end,
+                            station_from = station_from,
+                            Shipper = kode_cargo_shipper,
+                            Consignee = kode_cargo_consignee,
+                            route = (int)route
+                        });
+                        if (res > 0) { transfer++; } else { error++; }
+                    }
+                }
+                return transfer;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("TransferWTCycle_Station(num={0})", num), servece_owner, eventID);
+                return -1;
+            }
+        }
+
         //public int TransferWTCycle(int num)
         //{
         //    try

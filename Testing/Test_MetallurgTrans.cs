@@ -263,6 +263,13 @@ namespace Testing
             int res = mtt.TransferWTCycle(63532535);
             Console.WriteLine("Перенесено {0}", res);
         }
+
+        public void MTTransfer_TransferWTCycle_StationOfNumm()
+        {
+            MTTransfer mtt = new MTTransfer();
+            int res = mtt.TransferWTCycle_Station(63532519);
+            Console.WriteLine("Перенесено {0}", res);
+        }
         #endregion
     }
 }
