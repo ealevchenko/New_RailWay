@@ -1186,7 +1186,8 @@ namespace MetallurgTrans
                 // Формирование циклограммы по всем вагонам списка 
                 foreach (int car in cars)
                 {
-                    int res_tr = TransferWTCycle(car);
+                    //int res_tr = TransferWTCycle(car);
+                    int res_tr = TransferWTCycle_Station(car);
                     if (res_tr > 0) { transfer++; transfer_car += res_tr; }
                     if (res_tr < 0) { error++; }
                     if (res_tr == 0) { transfer++; }
