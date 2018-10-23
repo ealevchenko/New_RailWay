@@ -227,13 +227,7 @@ namespace Testing
 
         }
 
-        public void EFMetallurgTrans_GetWagonsTrackingOfNumCars()
-        {
-            EFMetallurgTrans efmt = new EFMetallurgTrans();
 
-            List<WagonsTracking> list = efmt.GetWagonsTrackingOfNumCars(52921004).ToList();
-
-        }
         /// <summary>
         /// Удалить соответствия между списками вагонов
         /// </summary>
@@ -245,6 +239,18 @@ namespace Testing
             List<ArrivalCars> list_old = efmt.GetArrivalSostav(13427).ArrivalCars.ToList();
             efmt.RemoveMatchingArrivalCars(ref list_new, ref list_old);
         }
+
+
+
+        #region  WagonsTracking Перенос вагонов из Web.Api МетТранса
+
+        public void EFMetallurgTrans_GetWagonsTrackingOfNumCars()
+        {
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            List<WagonsTracking> list = efmt.GetWagonsTrackingOfNumCars(52921004).ToList();
+
+        }
+        #endregion
 
 
         #region  WTCycle Формирование циклограмм движения вагонов по данным МетТранса (TransferWagonsTracking)

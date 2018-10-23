@@ -132,15 +132,17 @@ namespace Testing
                     //tst_mt.EFMetallurgTrans_RemoveMatchingArrivalCars(); // Тест удаления соответствий между двумя списками List<ArrivalCars>
                 #endregion
 
-                #region  TransferWagonsTracking Перенос вагонов из Web.Api МетТранса
 
-                //tst_tr_app.EFMetallurgTrans_GetWagonsTrackingOfNumCars();
+
+                #region WagonsTracking Перенос вагонов из Web.Api МетТранса
+
+                //tst_mt.EFMetallurgTrans_GetWagonsTrackingOfNumCars();
                 #endregion
 
                 #region  WTCycle Формирование циклограмм движения вагонов по данным МетТранса (TransferWagonsTracking)
                 //tst_mt.MTTransfer_TransferWTCycle();              // Сформировать циклы по всем вагонам.
                 //tst_mt.MTTransfer_TransferWTCycleOfNumm();        // Сформировать циклы по указаному вагону (По грузополучателю).
-                tst_mt.MTTransfer_TransferWTCycle_StationOfNumm();  // Сформировать циклы по указаному вагону (По станции назначения).
+                //tst_mt.MTTransfer_TransferWTCycle_StationOfNumm();  // Сформировать циклы по указаному вагону (По станции назначения).
 
                 #endregion
 
