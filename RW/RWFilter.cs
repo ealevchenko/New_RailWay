@@ -271,6 +271,35 @@ namespace RW
         }
 
         /// <summary>
+        /// Стоит вагон на укащаном пути
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public static bool IsSetWay(this CarOperations oper, int id_way)
+        {
+            return IsSetOperation(oper, id_way, null, true);
+        }
+        /// <summary>
+        /// Стоит вагон на укащаном пути
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public static int IsSetWay(this CarOperations oper, int[] id_way)
+        {
+            foreach (int id in id_way)
+            {
+                if (IsSetOperation(oper, id, null, true))
+                {
+                    return id;
+                }
+            }
+            return 0;
+
+        }
+
+        /// <summary>
         /// Проверим текущее положение вагона - вагон стоит на указанном пути за указанное время
         /// </summary>
         /// <param name="car"></param>
