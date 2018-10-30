@@ -2130,7 +2130,7 @@ namespace MetallurgTrans
                 // Сделать ТСП по УЗ вагонов которые были оцеплены на станции УЗ
                 foreach (ArrivalCars car_old in list_old_car)
                 {
-                    int res_tsp = rw_operations.TSPOnUZ(car_old);
+                    int res_tsp = rw_operations.TSPOnUZ(car_old, sostav_new.DateTime);
                     tsp += res_tsp > 0 ? 1 : 0;
                     tsp_error += res_tsp < 0 ? 1 : 0;
                 }

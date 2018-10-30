@@ -182,6 +182,8 @@ namespace Testing
             int res = rw_oper.DeleteSaveCar(1197);
         }
 
+        #region EFRailWay
+
         public void EFRailWay_query_GetOpenOperationOfNumCar()
         { 
             EFRailWay ef_rw = new EFRailWay();
@@ -200,6 +202,29 @@ namespace Testing
             Console.WriteLine(String.Format("Количество строк {0}, время выполнения: {1}:{2}:{3}({4})", list2.Count(), ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
 
         }
+        #endregion
+
+        #region RWOperations
+
+        public void RWOperations_GetOpenOperationOfNumCar()
+        {
+            RWOperations rw_oper = new RWOperations();
+            CarOperations res = rw_oper.GetOpenOperation(61362018);
+        }
+
+        public void RWOperations_GetLastOperationOfNumCar()
+        {
+            RWOperations rw_oper = new RWOperations();
+            CarOperations res = rw_oper.GetLastOperation(61362018);
+        }
+
+        public void RWOperations_GetCurrentOperationOfNumCar()
+        {
+            RWOperations rw_oper = new RWOperations();
+            CarOperations res = rw_oper.GetCurrentOperation(61362018);
+        }
+
+        #endregion
 
     }
 }

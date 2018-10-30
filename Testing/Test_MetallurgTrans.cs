@@ -19,7 +19,7 @@ namespace Testing
     public class Test_MetallurgTrans
     {
         MTThread mth_timer = new MTThread(service.ServicesMT);
-        
+
         public Test_MetallurgTrans() { }
 
         public void TransferApproaches()
@@ -46,8 +46,12 @@ namespace Testing
         {
             EFMetallurgTrans efmt = new EFMetallurgTrans();
 
-            Consignee code_amkr = new Consignee() { 
-             code = 3437, description ="Основной код ПАО АМКР", consignee1 = 1, send =false
+            Consignee code_amkr = new Consignee()
+            {
+                code = 3437,
+                description = "Основной код ПАО АМКР",
+                consignee1 = 1,
+                send = false
             };
             Consignee code_send6302 = new Consignee()
             {
@@ -70,13 +74,15 @@ namespace Testing
         /// <summary>
         /// Поставить состав в прибытие системы RailCars
         /// </summary>
-        public void TRailCars_ArrivalToRailCars() {
+        public void TRailCars_ArrivalToRailCars()
+        {
             TRailCars trc = new TRailCars();
             trc.ArrivalToRailCars(10564);
 
         }
 
-        public void MTThread_TransferApproaches() {
+        public void MTThread_TransferApproaches()
+        {
 
             MTThread mth = new MTThread(service.ServicesMT);
             mth.StartTransferApproaches();
@@ -87,7 +93,8 @@ namespace Testing
             //mth.StartTransferApproaches();
         }
 
-        public void MTThread_Timer_TransferApproaches() {
+        public void MTThread_Timer_TransferApproaches()
+        {
 
             Timer timer_TransferApproaches = new Timer();
             timer_TransferApproaches.Interval = 30000;
@@ -102,7 +109,7 @@ namespace Testing
         {
             try
             {
-                    //mth_timer.StartTransferApproaches();
+                //mth_timer.StartTransferApproaches();
             }
             catch (Exception ex)
             {
@@ -133,7 +140,7 @@ namespace Testing
         public void MTTransfer_CorrectCloseArrivalSostav()
         {
             MTTransfer mtt = new MTTransfer();
-            mtt.CorrectCloseArrivalSostav(120,10);
+            mtt.CorrectCloseArrivalSostav(120, 10);
         }
 
         public void MTTransfer_CorrectCloseArrivalSostav(int id)
@@ -145,7 +152,7 @@ namespace Testing
         public void EFMetallurgTrans_GetWagonsTracking()
         {
             EFMetallurgTrans efmt = new EFMetallurgTrans();
-            List<WagonsTracking> list =  efmt.GetWagonsTracking().ToList();
+            List<WagonsTracking> list = efmt.GetWagonsTracking().ToList();
         }
         /// <summary>
         /// Тест проверки переноса информации слежения по вагонам АМКР
@@ -173,15 +180,17 @@ namespace Testing
         {
             EFMetallurgTrans efmt = new EFMetallurgTrans();
             EFRailCars ef_rc = new EFRailCars();
-            List<ArrivalCars> list = efmt.ArrivalCars.Where(c=>c.Arrival == null & c.IDSostav>7234).OrderBy(c=>c.ID).ToList();
-            foreach (ArrivalCars car in list) {
+            List<ArrivalCars> list = efmt.ArrivalCars.Where(c => c.Arrival == null & c.IDSostav > 7234).OrderBy(c => c.ID).ToList();
+            foreach (ArrivalCars car in list)
+            {
                 VAGON_OPERATIONS vag = ef_rc.VAGON_OPERATIONS.Where(o => o.IDSostav == car.IDSostav & o.num_vagon == car.Num & o.n_natur != null).FirstOrDefault();
-                    if (vag!=null){
-                        car.Arrival = vag.dt_amkr;
-                        car.NumDocArrival = vag.n_natur;
-                        int res = efmt.SaveArrivalCars(car);
-                        Console.WriteLine("Добавим закроем вагон {0}, состава {1} - {2}", car.Num, car.IDSostav, res);
-                    }
+                if (vag != null)
+                {
+                    car.Arrival = vag.dt_amkr;
+                    car.NumDocArrival = vag.n_natur;
+                    int res = efmt.SaveArrivalCars(car);
+                    Console.WriteLine("Добавим закроем вагон {0}, состава {1} - {2}", car.Num, car.IDSostav, res);
+                }
             }
 
         }
@@ -240,7 +249,23 @@ namespace Testing
             efmt.RemoveMatchingArrivalCars(ref list_new, ref list_old);
         }
 
+        #region MTTransfer
 
+        public void MTTransfer_TransferArrivalSostavToRailWay()
+        {
+            MTTransfer mtt = new MTTransfer();
+            mtt.TransferArrivalSostavToRailWay();
+        }
+
+        public void MTTransfer_TransferArrivalSostavToRailWayOfBas()
+        {
+            MTTransfer mtt = new MTTransfer();
+            EFMetallurgTrans efmt = new EFMetallurgTrans();
+            BufferArrivalSostav bas = efmt.GetBufferArrivalSostav(13);
+            mtt.TransferArrivalSostavToRailWay(bas);
+        }
+
+        #endregion
 
         #region  WagonsTracking Перенос вагонов из Web.Api МетТранса
 

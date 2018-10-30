@@ -65,6 +65,89 @@ namespace RW
             }
             return result;
         }
+
+        /// <summary>
+        /// Вернуть последнюю открытую операцию на пути станции или пути отправки
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static CarOperations IsOpenOperation(this IEnumerable<CarOperations> list)
+        {
+            if (list == null || list.Count() == 0) return null;
+            // Открытые операции на станции
+            CarOperations last_station_operation = list.IsOpenOperation(Filters.IsOpenWay).OrderByDescending(o => o.dt_inp_way).FirstOrDefault();
+            // Открытые операции отправленее вагоны            
+            CarOperations last_sending_operation = list.IsOpenOperation(Filters.IsOpenSending).OrderByDescending(o => o.send_dt_inp_way).FirstOrDefault();
+
+            return IsLastOperation(last_station_operation, last_sending_operation);
+        }
+
+        /// <summary>
+        /// Вернуть последнюю операцию на пути станции
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static CarOperations IsLastWayOperation(this IEnumerable<CarOperations> list)
+        {
+            if (list == null || list.Count() == 0) return null;
+            // Открытые операции на станции
+            CarOperations last_station_operation = list.Where(o => o.dt_inp_way != null).OrderByDescending(o => o.dt_inp_way).FirstOrDefault();
+            return last_station_operation;
+
+        }
+        /// <summary>
+        /// Вернуть последнюю операцию на пути отправки
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static CarOperations IsLastSendingOperation(this IEnumerable<CarOperations> list)
+        {
+            if (list == null || list.Count() == 0) return null;
+            // Открытые операции на станции
+            CarOperations last_sending_operation = list.Where(o => o.send_dt_inp_way!= null).OrderByDescending(o => o.send_dt_inp_way).FirstOrDefault();
+            return last_sending_operation;
+        }
+        /// <summary>
+        /// Вернуть последнюю операцию на пути станции или отправки
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static CarOperations IsLastOperation(this IEnumerable<CarOperations> list)
+        {
+            if (list == null || list.Count() == 0) return null;
+            // Открытые операции на станции
+            CarOperations last_station_operation = list.IsLastWayOperation();
+            // Открытые операции отправленее вагоны            
+            CarOperations last_sending_operation = list.IsLastSendingOperation();
+
+            return IsLastOperation(last_station_operation, last_sending_operation);
+        }
+
+        /// <summary>
+        /// Вернуть последнюю операцию между операциями путь станции и путь отправки
+        /// </summary>
+        /// <param name="station_operation"></param>
+        /// <param name="sending_operation"></param>
+        /// <returns></returns>
+        public static CarOperations IsLastOperation(CarOperations station_operation, CarOperations sending_operation)
+        {
+            if (station_operation == null && sending_operation != null) return sending_operation;
+            if (station_operation != null && sending_operation == null) return station_operation;
+            if (station_operation != null && sending_operation != null)
+            {
+                if (station_operation.dt_inp_way >= sending_operation.send_dt_inp_way)
+                {
+                    return station_operation;
+                }
+                else
+                {
+                    return sending_operation;
+                };
+            };
+            return null;
+        }
+
+
         /// <summary>
         /// Вернуть последнюю операцию
         /// </summary>
@@ -185,6 +268,35 @@ namespace RW
                 }
             }
             return 0;
+        }
+
+        /// <summary>
+        /// Стоит вагон на укащаном пути
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public static bool IsSetWay(this CarOperations oper, int id_way)
+        {
+            return IsSetOperation(oper, id_way, null, true);
+        }
+        /// <summary>
+        /// Стоит вагон на укащаном пути
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public static int IsSetWay(this CarOperations oper, int[] id_way)
+        {
+            foreach (int id in id_way)
+            {
+                if (IsSetOperation(oper, id, null, true))
+                {
+                    return id;
+                }
+            }
+            return 0;
+
         }
 
         /// <summary>

@@ -517,9 +517,10 @@ namespace RW
             {
                 if (String.IsNullOrWhiteSpace(index_mt)) return null;
                 EFReference.Concrete.EFReference reference = new EFReference.Concrete.EFReference();
-                EFReference.Entities.Stations station_in = reference.GetStationsOfCode(int.Parse(index_mt.Substring(9, 4)) * 10);
-                int codecs_in = station_in != null ? (int)station_in.code_cs : int.Parse(index_mt.Substring(9, 4)) * 10;
-                return GetStationsUZ(codecs_in, true);
+                int code = int.Parse(index_mt.Substring(9, 4));
+                EFReference.Entities.Stations station_in = reference.GetStationsOfCode(code * 10);
+                int codecs = station_in != null ? (int)station_in.code_cs : code * 10;
+                return GetStationsUZ(codecs, true);
             }
             catch (Exception e)
             {
@@ -673,6 +674,8 @@ namespace RW
                 return 0;
             }
         }
+
+
         #endregion
 
         #region Справочник "Станций УЗ для отправки"
