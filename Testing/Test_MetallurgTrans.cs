@@ -262,7 +262,7 @@ namespace Testing
             MTTransfer mtt = new MTTransfer();
             EFMetallurgTrans efmt = new EFMetallurgTrans();
             BufferArrivalSostav bas = efmt.GetBufferArrivalSostav(13);
-            mtt.TransferArrivalSostavToRailWay(bas);
+            mtt.TransferArrivalSostavToRailWay(ref bas);
         }
 
         #endregion

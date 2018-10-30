@@ -168,9 +168,44 @@ namespace RW
         #endregion
 
         #region ПУТЬ ОТПРАВКИ НА АМКР
+        /// <summary>
+        /// Выполнить операцию Прибытие на УЗ Кривого Рога ( Автоматически при обновлении состава на УЗ Кривого Рога)
+        /// </summary>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public int ArrivalOnUZ(ArrivalCars car)
+        {
+            try
+            {
+                // Определим станцию
+                RWReference rw_ref = new RWReference(servece_owner, reference_kis);
+                Stations station_uz = rw_ref.GetStationsUZ(car.CompositionIndex, true);
+                // Определим текущую операцию
+                CarOperations current_operation = GetCurrentOperation(car.Num);
+                // Определим входящую поставку
+                CarsInpDelivery delivery = CreateCarsInpDelivery(car);
+                // Создадим Cars и вернем текущую операцию
+                current_operation = CreateCars(current_operation, car.IDSostav, station_uz.id, car.DateOperation, delivery);
 
-        #endregion
+                return current_operation!=null ? current_operation.id_car : 0;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("ArrivalOnUZ(car={0})",
+                    car.GetFieldsAndValue()), servece_owner, eventID);
+                return -1; // Ошибка глобальная
+            }
+        }
 
+        /// <summary>
+        /// Создать Cars
+        /// </summary>
+        /// <param name="current_operation"></param>
+        /// <param name="id_sostav"></param>
+        /// <param name="id_station_uz"></param>
+        /// <param name="dt_set"></param>
+        /// <param name="delivery"></param>
+        /// <returns></returns>
         public CarOperations CreateCars(CarOperations current_operation, int id_sostav, int id_station_uz,  DateTime dt_set, CarsInpDelivery delivery)
         {
             try
@@ -270,6 +305,9 @@ namespace RW
                 return -1;
             }
         }
+        #endregion
+
+
 
 
         #endregion
