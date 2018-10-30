@@ -1,9 +1,9 @@
 [submodule "AppSettings"]
 	path = AppSettings
-	url = http://krr-app-bbgit01.europe.mittalco.com/AppSettings.git
+	url = http://krr-app-gitlab01/ppm/AppSettings.git
 [submodule "Helpers"]
 	path = Helpers
-	url = http://krr-app-bbgit01.europe.mittalco.com/Helpers.git
+	url = http://krr-app-gitlab01/ppm/Helpers.git
 [submodule "MessageLogs"]
 	path = MessageLogs
-	url = http://krr-app-bbgit01.europe.mittalco.com/MessageLogs.git
+	url = http://krr-app-gitlab01/ppm/MessageLogs.git
