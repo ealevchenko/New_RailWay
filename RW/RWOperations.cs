@@ -16,17 +16,21 @@ namespace RW
     {
         private eventID eventID = eventID.RW_RWOperations;
         protected service servece_owner = service.Null;
-        bool log_detali = false;                            // Признак детального логирования
+        bool log_detali = true;                            // Признак детального логирования
         private bool reference_kis = true;                  // Использовать справочники КИС
+
+        EFRailWay ef_rw = new EFRailWay();
+        RWReference rw_ref;
 
         public RWOperations()
         {
-
+            rw_ref = new RWReference(servece_owner, reference_kis);
         }
 
         public RWOperations(service servece_owner)
         {
             this.servece_owner = servece_owner;
+            rw_ref = new RWReference(servece_owner, reference_kis);
         }
 
         #region Вспомогательные методы
@@ -45,10 +49,19 @@ namespace RW
         {
             try
             {
-                RWReference rw_ref = new RWReference(servece_owner, reference_kis);
+                //RWReference rw_ref = new RWReference(servece_owner, reference_kis);
                 Stations station_uz = rw_ref.GetStationsUZ(car.CompositionIndex, true);
 
                 CarOperations current_operation = GetCurrentOperation(car.Num);
+                if (!current_operation.IsLessDateTime(dt_set)) {
+                    if (log_detali)
+                    {
+                        string mess = String.Format("(Подсистема учета и контроля ж.д. транспорта на АМКР). Операция ТСП на УЗ (вагон №{0}, id_arrival={1}, id_sostav={2}, dt_set={3}) – Отменена, время текущей операция id = {4} больше операции ТСП"
+                            , car.Num, car.ArrivalSostav.IDArrival, car.IDSostav, dt_set, current_operation.id);
+                        mess.WriteWarning(servece_owner, eventID);
+                    }
+                    return 0; // Пропущен
+                }
                 CarsInpDelivery delivery = CreateCarsInpDelivery(car);
                 // Операция нет или операция закрыта?
                 if (current_operation==null || !current_operation.IsOpenAll()) {
@@ -178,7 +191,7 @@ namespace RW
             try
             {
                 // Определим станцию
-                RWReference rw_ref = new RWReference(servece_owner, reference_kis);
+                //RWReference rw_ref = new RWReference(servece_owner, reference_kis);
                 Stations station_uz = rw_ref.GetStationsUZ(car.CompositionIndex, true);
                 // Определим текущую операцию
                 CarOperations current_operation = GetCurrentOperation(car.Num);
@@ -222,6 +235,11 @@ namespace RW
                         {
                             // Это старое ТСП
                             // Сообщение "Операция отменена «В систему этот вагон заходил. ТСП -устарело»"
+                            if (log_detali) {
+                                string mess = String.Format("(Подсистема учета и контроля ж.д. транспорта на АМКР). Операция создания новой строки Cars (вагон №{0}, id_arrival={1}, id_sostav={2}, dt_set={3}, id текущей операции = {4}) – Отменена, ТСП устарело."
+                                    ,delivery.num_car,delivery.id_arrival,id_sostav,dt_set,current_operation.id);
+                                mess.WriteWarning(servece_owner, eventID);
+                            }
                             return null; // Ошибка Операция отменена
                         }
                         else { 
@@ -238,13 +256,37 @@ namespace RW
                     }
                     else { 
                         // Это новый состав
-                        // Закроем старый CARS
-                        parent_id_car = CloseCars(current_operation, id_station_uz, dt_set);
+                        // Проверим этот состав уже заходил
+                        Cars car = ef_rw.GetCarsOfArrivalNum(delivery.id_arrival, delivery.num_car);
+                        if (car != null)
+                        {
+                            // Сообщение "Операция отменена «В систему этот вагон c id_arrival заходил и был закрыт.»"
+                            if (log_detali)
+                            {
+                                string mess = String.Format("(Подсистема учета и контроля ж.д. транспорта на АМКР). Операция создания новой строки Cars (вагон №{0}, id_arrival={1}, id_sostav={2}, dt_set={3}, id текущей операции = {4}) – Отменена, строка была создана ранее id_car={5} и была закрыта."
+                                    , delivery.num_car, delivery.id_arrival, id_sostav, dt_set, current_operation.id,car.id);
+                                mess.WriteWarning(servece_owner, eventID);
+                            }
+                            // Обновим старую запись входящей поставку
+                            int res = CarsUpdateSave(car.id, id_sostav, dt_set);
+                            if (res > 0)
+                            {
+                                int id_new_delivery = AddCarsInpDeliverySave(car.id, delivery);
+                                int res_close_mt = CloseArrivalCars(car.id);
+                                //return GetOperation(current_operation.id); // Вернем текушую операцию
+                            }
+                            return null; // Ошибка нет обновления
+                        }
+                        else
+                        {
+                            // Закроем старый CARS
+                            parent_id_car = CloseCars(current_operation, id_station_uz, dt_set);
+                        }
                     }
                 }
                 else { 
                     // нет это первый заход
-                    RWReference rw_ref = new RWReference(servece_owner, reference_kis);
+                    //RWReference rw_ref = new RWReference(servece_owner, reference_kis);
                     // Проверим наличие вагона в справочнике если нет создадим + если есть из КИС перенесем аренды и владельца
                     ReferenceCars ref_car = rw_ref.GetReferenceCarsOfNum(delivery.num_car, delivery.id_arrival, dt_set, (int)delivery.id_country, true, true);
                 }
@@ -252,7 +294,7 @@ namespace RW
                 int id_new_car = CarsCreateSave(delivery.num_car, id_sostav, delivery.id_arrival, dt_set, parent_id_car);
                 if (id_new_car>0){
                     // Поставим вагон в ожидание прибытия с УЗ
-                    RWReference rw_ref = new RWReference(servece_owner, reference_kis);
+                    //RWReference rw_ref = new RWReference(servece_owner, reference_kis);
                     int way_inp = rw_ref.GetIDWayOfStation(id_station_uz, "1");
                     current_operation = OperationSetWayInEnd(id_new_car, way_inp, dt_set, 15, null);  
                     // Входяшие поставки
@@ -279,11 +321,20 @@ namespace RW
         {
             try
             {
-                RWReference rw_ref = new RWReference(servece_owner, reference_kis);
-                int way_inp = rw_ref.GetIDWayOfStation(id_station_uz, "1");
-                int way_out = rw_ref.GetIDWayOfStation(id_station_uz, "2");
-                if (!current_operation.IsSetWay(way_out)) {
-                    if (current_operation.IsSetWay(way_inp))
+                //RWReference rw_ref = new RWReference(servece_owner, reference_kis);
+                // Получим станции УЗ по которым можно получать вагоны на указаную станцию
+                //List<Stations> list_station_arrival_uz_to_station = ef_rw.GetStations().Where(s => s.station_uz == true).ToList();
+
+                List<Ways> list_arrival_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "1").ToList();
+                List<Ways> list_sending_ways_uz = ef_rw.GetWays().Where(w => w.Stations.station_uz == true & w.num == "2").ToList();
+                //int way_inp = rw_ref.GetIDWayOfStation(id_station_uz, "1");
+                //int way_out = rw_ref.GetIDWayOfStation(id_station_uz, "2");
+                //if (!current_operation.IsSetWay(way_out)) {
+                // Не стоит на пути отправки из любой станции УЗ
+                if (current_operation.IsSetWay(list_sending_ways_uz.Select(w => w.id).ToArray())==0)
+                {
+                    //if (current_operation.IsSetWay(way_inp))
+                    if (current_operation.IsSetWay(list_arrival_ways_uz.Select(w => w.id).ToArray())>0)
                     {
                         // Вагон стоит на пути сделаем маневр
                         // Поставим вагон в конец состава
@@ -296,7 +347,8 @@ namespace RW
                     }                
                 }
                 // Закрыть путь
-                int res_close = OperationCloseCorrectPositionSave(current_operation, dt_set);
+                //int res_close = OperationCloseCorrectPositionSave(current_operation, dt_set);
+                int res_close = OperationCloseSave(current_operation, dt_set);
                 return res_close > 0 ? CarsCloseSave(current_operation, dt_set) : res_close;
             }
             catch (Exception e)
@@ -324,8 +376,9 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
-                List<CarOperations> list_open_operation = ef_rw.query_GetOpenOperationOfNumCar(num_car).ToList();
+                //EFRailWay ef_rw = new EFRailWay();
+                //List<CarOperations> list_open_operation = ef_rw.query_GetOpenOperationOfNumCar(num_car).ToList(); // При использовании нет .Cars
+                List<CarOperations> list_open_operation = ef_rw.GetOpenOperationOfNumCar(num_car).ToList();
                 if (list_open_operation == null) return null;
                 if (list_open_operation.Count() == 1) return list_open_operation.FirstOrDefault();
                 CarOperations last_open_operation = null;
@@ -363,7 +416,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                //EFRailWay ef_rw = new EFRailWay();
                 List<CarOperations> list_operation = ef_rw.GetCarOperationsOfNumCar(num_car).ToList();
                 if (list_operation == null) return null;
                 if (list_operation.Count() == 1) return list_operation.FirstOrDefault();
@@ -405,7 +458,7 @@ namespace RW
         }
 
         public CarOperations GetOperation(int id_operation) {
-            EFRailWay ef_rw = new EFRailWay();
+            //EFRailWay ef_rw = new EFRailWay();
             return ef_rw.GetCarOperations(id_operation);
         }
 
@@ -426,12 +479,13 @@ namespace RW
             try
             {
                 if (current_operation == null) return null; // Не указана последняя операия      
-                EFRailWay ef_rw = new EFRailWay();
+                //EFRailWay ef_rw = new EFRailWay();
                 // Определим путь
                 Ways way = ef_rw.GetWays(id_way);
                 if (way == null) return null; // Путь не оределен
                 // Закроем последнюю операцию
-                int res_close = OperationCloseCorrectPositionSave(current_operation, dt_set);
+                //int res_close = OperationCloseCorrectPositionSave(current_operation, dt_set);
+                int res_close = OperationCloseSave(current_operation, dt_set);
                 if (res_close > 0)
                 {
                     int? position = way.CarOperations.IsOpenOperation(Filters.IsOpenAll).Max(o => o.position);
@@ -467,7 +521,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                //EFRailWay ef_rw = new EFRailWay();
                 // Определим путь
                 Ways way = ef_rw.GetWays(id_way);
                 if (way == null) return null; // Путь не оределен
@@ -508,7 +562,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                //EFRailWay ef_rw = new EFRailWay();
                 Ways way = ef_rw.GetWays(id_way);
                 return new CarOperations()
                 {
@@ -560,7 +614,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                //EFRailWay ef_rw = new EFRailWay();
                 CarOperations new_operation = OperationSetWay(id_car, parent_id, id_way, id_station, dt_set, position, id_status, id_сonditions);
                 return ef_rw.SaveCarOperations(new_operation);
             }
@@ -605,7 +659,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                //EFRailWay ef_rw = new EFRailWay();
                 CarOperations close_operation = OperationClose(current_operation, dt_close);
                 return ef_rw.SaveCarOperations(close_operation);
             }
@@ -653,7 +707,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                //EFRailWay ef_rw = new EFRailWay();
                 Ways way = ef_rw.GetWays(id_way);
                 if (way == null || way.CarOperations == null) return null;
                 List<CarOperations> list = way.CarOperations.IsOpenOperation(Filters.IsOpenWay).OrderBy(w => w.position).ToList();
@@ -688,7 +742,7 @@ namespace RW
                 int count = 0;
                 List<CarOperations> list_operation = CorrectPositionStationWay(id_way, start_position_way, start_position);
                 if (list_operation == null) return count;
-                EFRailWay ef_rw = new EFRailWay();
+                //EFRailWay ef_rw = new EFRailWay();
                 foreach (CarOperations operation in list_operation)
                 {
                     int res = ef_rw.SaveCarOperations(operation);
@@ -741,7 +795,7 @@ namespace RW
         {
             Cars car = CarsCreate(num, id_sostav, id_arrival, dt_uz, parent_id_car);
             if (car != null) {
-                EFRailWay ef_rw = new EFRailWay();                
+                //EFRailWay ef_rw = new EFRailWay();                
                 return ef_rw.SaveCars(car);
             }
             return 0;        
@@ -774,7 +828,7 @@ namespace RW
 
             Cars car = CarsClose(current_operation, dt_close);
             if (car != null) {
-                EFRailWay ef_rw = new EFRailWay();                
+                //EFRailWay ef_rw = new EFRailWay();                
                 return ef_rw.SaveCars(car);
             }
             return 0;
@@ -787,7 +841,7 @@ namespace RW
         /// <param name="parent_id_car"></param>
         /// <returns></returns>
         public Cars CarsUpdate(int id_car, int id_sostav, DateTime dt_uz) {
-            EFRailWay ef_rw = new EFRailWay();
+            //EFRailWay ef_rw = new EFRailWay();
             Cars car = ef_rw.GetCars(id_car);
             if (car != null)
             { 
@@ -804,7 +858,7 @@ namespace RW
         /// <param name="dt_uz"></param>
         /// <returns></returns>
         public int CarsUpdateSave(int id_car, int id_sostav, DateTime dt_uz) {
-            EFRailWay ef_rw = new EFRailWay();
+            //EFRailWay ef_rw = new EFRailWay();
             Cars car = CarsUpdate(id_car, id_sostav, dt_uz);
             if (car != null)
             {
@@ -852,8 +906,8 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
-                RWReference rw_ref = new RWReference(servece_owner, reference_kis);
+                //EFRailWay ef_rw = new EFRailWay();
+                //RWReference rw_ref = new RWReference(servece_owner, reference_kis);
                 Cars car = ef_rw.GetCarsOfArrivalNum(id_arrival, num);
                 return new CarsInpDelivery()
                 {
@@ -907,7 +961,7 @@ namespace RW
         /// <returns></returns>
         public CarsInpDelivery AddCarsInpDelivery(int id_car, CarsInpDelivery delivery)
         {
-            EFRailWay ef_rw = new EFRailWay();
+            //EFRailWay ef_rw = new EFRailWay();
             Cars car = ef_rw.GetCars(id_car);
             CarsInpDelivery new_delivery = null;
             if (car != null)
@@ -935,11 +989,11 @@ namespace RW
         /// <returns></returns>
         public int AddCarsInpDeliverySave(int id_car, CarsInpDelivery delivery)
         {
-            EFRailWay ef_rw = new EFRailWay();
+            //EFRailWay ef_rw = new EFRailWay();
             CarsInpDelivery new_delivery = AddCarsInpDelivery(id_car, delivery);
             if (new_delivery != null)
             {
-                return ef_rw.SaveCarsInpDelivery(delivery);
+                return ef_rw.SaveCarsInpDelivery(new_delivery);
             }
             return 0;
         }
@@ -953,7 +1007,7 @@ namespace RW
         /// <returns></returns>
         public int CloseArrivalCars(int id_car)
         {
-            EFRailWay ef_rw = new EFRailWay();
+            //EFRailWay ef_rw = new EFRailWay();
             Cars car = ef_rw.GetCars(id_car);
             if (car != null)
             {

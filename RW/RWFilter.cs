@@ -175,6 +175,32 @@ namespace RW
         #region Набор функций проверок операций над вагонами
 
         /// <summary>
+        /// Текущее время операции меньше указаного времени
+        /// </summary>
+        /// <param name="oper"></param>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static bool IsLessDateTime(this CarOperations oper, DateTime dt) {
+            DateTime? dt_oper;
+            if (oper.dt_inp_way != null)
+            {
+                if (oper.dt_out_way != null) {
+                    dt_oper = oper.dt_out_way;
+                } else {
+                dt_oper = oper.dt_inp_way;
+                }
+            }
+            else { 
+                if (oper.send_dt_out_way != null) { 
+                    dt_oper = oper.send_dt_out_way;
+                } else {
+                dt_oper = oper.send_dt_inp_way;
+                }                
+            }
+            return dt_oper < dt ? true : false;
+        }
+
+        /// <summary>
         /// Проверка опирации, стоит(стоял set=false) вагон на указаном пути (по указаному времени)
         /// </summary>
         /// <param name="oper"></param>

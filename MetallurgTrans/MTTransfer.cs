@@ -2193,13 +2193,13 @@ namespace MetallurgTrans
                 transfer_count = list_car_transfer != null ? list_car_transfer.Count() : 0;
                 foreach (ArrivalCars car in list_car_transfer) {
                     DateTime dt_start = DateTime.Now;
-                    message += car.Num.ToString() + " - ";
+                    message += car.Num.ToString() + ":";
                     int res_transfer = rw_operations.ArrivalOnUZ(car);
                     transfer += res_transfer > 0 ? 1 : 0;
                     transfer_skip += res_transfer == 0 ? 1 : 0;
                     transfer_error += res_transfer < 0 ? 1 : 0;
                     list_no_set += res_transfer < 0 ? car.Num.ToString() + ";" : null;
-                    message += res_transfer.ToString()+ "; ";
+                    message += res_transfer.ToString()+ ";";
                     TimeSpan ts = DateTime.Now - dt_start;
                     Console.WriteLine(String.Format("Перенос вагона №{0}, время выполнения: {1}:{2}:{3}({4})", car.Num, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
                 }
@@ -2208,7 +2208,7 @@ namespace MetallurgTrans
                 mess.WriteInformation(servece_owner, eventID);
                 if (transfer_error > 0 || tsp_error>0) { mess.WriteEvents(message, servece_owner, eventID); }
                 // Сохраним в буфере
-                bas.count_set_wagons = transfer;
+                bas.count_set_wagons = transfer + transfer_skip;
                 bas.message = message;
                 bas.list_no_set_wagons = list_no_set;
                 int res_bas = ef_mt.SaveBufferArrivalSostav(bas);

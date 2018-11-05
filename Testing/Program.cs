@@ -140,8 +140,8 @@ namespace Testing
 
             #region MTTransfer
 
-            //tst_mt.MTTransfer_TransferArrivalSostavToRailWay();         // Тест переноса составов на путь отправки на АМКР
-            tst_mt.MTTransfer_TransferArrivalSostavToRailWayOfBas();    // Тест переноса строки буффера составов на путь отправки на АМКР
+            tst_mt.MTTransfer_TransferArrivalSostavToRailWay();         // Тест переноса составов на путь отправки на АМКР
+            //tst_mt.MTTransfer_TransferArrivalSostavToRailWayOfBas();    // Тест переноса строки буффера составов на путь отправки на АМКР
 
             #endregion
 

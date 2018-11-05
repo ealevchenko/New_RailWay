@@ -261,7 +261,7 @@ namespace Testing
         {
             MTTransfer mtt = new MTTransfer();
             EFMetallurgTrans efmt = new EFMetallurgTrans();
-            BufferArrivalSostav bas = efmt.GetBufferArrivalSostav(13);
+            BufferArrivalSostav bas = efmt.GetBufferArrivalSostav(10);
             mtt.TransferArrivalSostavToRailWay(ref bas);
         }
 
