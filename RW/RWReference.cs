@@ -1,7 +1,7 @@
 ﻿using EFKIS.Concrete;
 using EFKIS.Entities;
 using EFRW.Concrete;
-using EFRW.Entities;
+using EFRW.Entities1;
 using MessageLog;
 using System;
 using System.Collections.Generic;
@@ -538,7 +538,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 EFReference.Concrete.EFReference reference = new EFReference.Concrete.EFReference();
                 Stations station = ef_rw.GetStationsOfCodeUZ(code_uz);
                 // Если нет станции создадим
@@ -624,7 +624,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 EFWagons kis = new EFWagons();
                 Stations station = ef_rw.GetStationsOfKis(id_kis);
                 // Если нет станции создадим
@@ -780,7 +780,7 @@ namespace RW
             try
             {
                 if (String.IsNullOrWhiteSpace(num)) return null;
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 EFWagons kis = new EFWagons();
                 Ways way = ef_rw.GetWaysOfStation(id_station, num);
                 // Если нет станции создадим
@@ -844,7 +844,7 @@ namespace RW
         public int GetIDDefaultWayOfStation(int id_station, string num) {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 int id = GetIDWayOfStation(id_station, num);
                 if (id == 0)
                 {
@@ -904,7 +904,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 Shops shop = ef_rw.GetShopsOfKis(id_kis);
                 if (shop == null & create & this.reference_kis)
                 {
@@ -952,7 +952,7 @@ namespace RW
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 Deadlock deadlock = ef_rw.GetDeadlockOfKis(id_kis);
                 if (deadlock == null & create & this.reference_kis)
                 {

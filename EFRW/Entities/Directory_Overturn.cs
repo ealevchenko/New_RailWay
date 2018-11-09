@@ -6,27 +6,37 @@ namespace EFRW.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("RW.CarConditions")]
-    public partial class CarConditions
+    [Table("RW.Directory_Overturn")]
+    public partial class Directory_Overturn
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CarConditions()
+        public Directory_Overturn()
         {
-            CarOperations = new HashSet<CarOperations>();
+            Directory_Ways = new HashSet<Directory_Ways>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int id { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(250)]
         public string name_ru { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(250)]
         public string name_en { get; set; }
 
+        [Required]
+        [StringLength(50)]
+        public string user_create { get; set; }
+
+        public DateTime dt_create { get; set; }
+
+        [StringLength(50)]
+        public string user_edit { get; set; }
+
+        public DateTime? dt_edit { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CarOperations> CarOperations { get; set; }
+        public virtual ICollection<Directory_Ways> Directory_Ways { get; set; }
     }
 }

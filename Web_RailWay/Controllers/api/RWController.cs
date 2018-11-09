@@ -1,7 +1,7 @@
 ﻿using EFMT.Abstract;
 using EFRW.Abstract;
 using EFRW.Concrete;
-using EFRW.Entities;
+using EFRW.Entities1;
 using MessageLog;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace Web_RailWay.Controllers.api
     public class RWController : ApiController
     {
         private eventID eventID = eventID.Web_API_RWController;
-        protected IRailWay rep_rw;
+        protected IRailWay1 rep_rw;
 
         public class ArrivalSostav
         {
@@ -156,7 +156,7 @@ namespace Web_RailWay.Controllers.api
 
         public RWController()
         {
-            this.rep_rw = new EFRailWay();
+            this.rep_rw = new EFRailWay1();
         }
 
         /// Вернуть текстовое сообщение из ресурса
@@ -718,7 +718,7 @@ namespace Web_RailWay.Controllers.api
             try
             {
                 List<Option> sides = new List<Option>();
-                foreach (EFRailWay.Side side in Enum.GetValues(typeof(EFRailWay.Side)))
+                foreach (EFRailWay1.Side side in Enum.GetValues(typeof(EFRailWay1.Side)))
                 {
                     sides.Add(new Option() { value = (int)side, text = side.ToString() });
                 }

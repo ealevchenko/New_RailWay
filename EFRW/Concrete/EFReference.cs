@@ -1,5 +1,5 @@
 ﻿using EFRW.Abstract;
-using EFRW.Entities;
+using EFRW.Entities1;
 using MessageLog;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace EFRW.Concrete
     {
         private eventID eventID = eventID.EFRW_EFReference;
 
-        protected EFDbContext context = new EFDbContext();
+        protected EFDbContext1 context = new EFDbContext1();
 
         public Database Database
         {
@@ -64,7 +64,7 @@ namespace EFRW.Concrete
                 {
                     dbEntry = context.ReferenceCargo.Find(ReferenceCargo.id);
                     // Сделано для отмены изменения даты создания строки
-                    EFDbContext context_real = new EFDbContext();
+                    EFDbContext1 context_real = new EFDbContext1();
                     ReferenceCargo old_ReferenceCargo = context_real.ReferenceCargo.Where(c => c.id == ReferenceCargo.id).FirstOrDefault();
                     if (dbEntry != null)
                     {
@@ -386,7 +386,7 @@ namespace EFRW.Concrete
                 {
                     dbEntry = context.ReferenceCars.Find(ReferenceCars.num);
                     // Сделано для отмены изменения даты создания строки
-                    EFDbContext context_real = new EFDbContext();
+                    EFDbContext1 context_real = new EFDbContext1();
                     ReferenceCars old_ReferenceCars = context_real.ReferenceCars.Where(c => c.num == ReferenceCars.num).FirstOrDefault();
                     if (dbEntry != null)
                     {
@@ -1169,7 +1169,7 @@ namespace EFRW.Concrete
                 {
                     dbEntry = context.ReferenceConsignee.Find(ReferenceConsignee.id);
                     // Сделано для отмены изменения даты создания строки
-                    EFDbContext context_real = new EFDbContext();
+                    EFDbContext1 context_real = new EFDbContext1();
                     ReferenceConsignee old_ReferenceConsignee = context_real.ReferenceConsignee.Where(c => c.id == ReferenceConsignee.id).FirstOrDefault();
                     if (dbEntry != null)
                     {

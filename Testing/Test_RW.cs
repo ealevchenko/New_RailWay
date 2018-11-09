@@ -1,6 +1,7 @@
 ﻿using EFMT.Concrete;
 using EFMT.Entities;
 using EFRW.Concrete;
+using EFRW.Entities1;
 using EFRW.Entities;
 using RW;
 using System;
@@ -14,9 +15,91 @@ namespace Testing
 {
     public class Test_RW
     {
+        EFRailWay ef_rw = new EFRailWay();      
+   
         public Test_RW() { 
         
         }
+
+        #region NEW RW
+
+        #region CarsInterna
+        public void EFRailWay_SaveCarsInternal() {
+
+
+            EFRailWay_SaveDirectory_Cars(777);
+
+            CarsInternal new_ci = new CarsInternal()
+            {
+                id = 0,
+                id_sostav = 1,
+                id_arrival = 2,
+                num = 777,
+                dt_uz = DateTime.Now,
+                dt_inp_amkr = null,
+                dt_out_amkr = null,
+                natur_kis_inp = 11,
+                natur_kis_out = 22,
+                natur_rw = null,
+                parent_id = null,
+                //Directory_Cars = new Directory_Cars()
+                //{
+                //    num = 5555,
+                //    id_type = 0,
+                //    sap = null,
+                //    note = null,
+                //    lifting_capacity = 0,
+                //    tare = 0,
+                //    id_country = 0,
+                //    count_axles = 0,
+                //    is_output_uz = true,
+                //}
+            };
+            int res = ef_rw.SaveCarsInternal(new_ci);
+        }
+        #endregion
+
+        #region Directory_Cars
+        public void EFRailWay_SaveDirectory_Cars()
+        {
+            EFRailWay ef_rw = new EFRailWay();
+            Directory_Cars new_car = new Directory_Cars()
+            {
+                num = 111,
+                id_type = 2,
+                sap = null,
+                note = null,
+                lifting_capacity = 0,
+                tare = 0,
+                id_country = 0,
+                count_axles = 0,
+                is_output_uz = true,
+            };
+            int res = ef_rw.SaveDirectory_Cars(new_car);
+        }
+
+        public int EFRailWay_SaveDirectory_Cars(int num)
+        {
+            //EFRailWay ef_rw = new EFRailWay();
+            Directory_Cars new_car = new Directory_Cars()
+            {
+                num = num,
+                id_type = 2,
+                sap = null,
+                note = null,
+                lifting_capacity = 0,
+                tare = 0,
+                id_country = 0,
+                count_axles = 0,
+                is_output_uz = true,
+            };
+            int res = ef_rw.SaveDirectory_Cars(new_car);
+            return res;
+        }
+        #endregion
+
+        #endregion
+
 
         public void RWTransfer_ArrivalMTToRailway() {
             RWOperation rw_oper = new RWOperation();
@@ -103,7 +186,7 @@ namespace Testing
             DateTime dt1 = DateTime.Now;
             DateTime dt2 = DateTime.Now.AddHours(+2);
             ReferenceCars ref_car = rw_ref.GetReferenceCarsOfNum(1111, 1, DateTime.Now, 0, true, true);
-            EFRailWay ef_rw = new EFRailWay();
+            EFRailWay1 ef_rw = new EFRailWay1();
             //Cars car = new Cars() {
             //    id = 0,
             //    id_arrival = 1,
@@ -124,8 +207,8 @@ namespace Testing
         public void RWOperation_IsOpenOperation()
         {
             RWOperation rw_oper = new RWOperation();
-            List<CarOperations> list = rw_oper.IsOpenAllOperationOfNum(54645593);
-            List<CarOperations> list1 = rw_oper.IsOpenAllOperationOfNum(0);
+            List<EFRW.Entities1.CarOperations> list = rw_oper.IsOpenAllOperationOfNum(54645593);
+            List<EFRW.Entities1.CarOperations> list1 = rw_oper.IsOpenAllOperationOfNum(0);
         }
 
         public void RWTransfer_TransferArivalCarsToRailWay()
@@ -170,7 +253,7 @@ namespace Testing
 
         public void EFRailWay_GetListCars()
         {
-            EFRailWay ef_rw = new EFRailWay();
+            EFRailWay1 ef_rw = new EFRailWay1();
             //List<Cars> list = ef_rw.GetFirstCarsOfNum(52921343).ToList();
             List<CarsHistory> list1 = ef_rw.GetHistoryCarsOfNum(52921343);
 
@@ -186,18 +269,18 @@ namespace Testing
 
         public void EFRailWay_query_GetOpenOperationOfNumCar()
         { 
-            EFRailWay ef_rw = new EFRailWay();
+            EFRailWay1 ef_rw = new EFRailWay1();
             DateTime dt_start = DateTime.Now;
-            List<CarOperations> list1 = ef_rw.query_GetOpenOperationOfNumCar(52921079).ToList();
+            List<EFRW.Entities1.CarOperations> list1 = ef_rw.query_GetOpenOperationOfNumCar(52921079).ToList();
             TimeSpan ts = DateTime.Now - dt_start;
             Console.WriteLine(String.Format("sql -> Количество строк {0}, время выполнения: {1}:{2}:{3}({4})", list1.Count(), ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
 
         }
 
         public void EFRailWay_GetOpenOperationOfNumCar() { 
-            EFRailWay ef_rw = new EFRailWay();
+            EFRailWay1 ef_rw = new EFRailWay1();
             DateTime dt_start = DateTime.Now;
-            List<CarOperations> list2 = ef_rw.GetOpenOperationOfNumCar(52921079).ToList();
+            List<EFRW.Entities1.CarOperations> list2 = ef_rw.GetOpenOperationOfNumCar(52921079).ToList();
             TimeSpan ts = DateTime.Now - dt_start;
             Console.WriteLine(String.Format("Количество строк {0}, время выполнения: {1}:{2}:{3}({4})", list2.Count(), ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
 
@@ -209,19 +292,19 @@ namespace Testing
         public void RWOperations_GetOpenOperationOfNumCar()
         {
             RWOperations rw_oper = new RWOperations();
-            CarOperations res = rw_oper.GetOpenOperation(61362018);
+            EFRW.Entities1.CarOperations res = rw_oper.GetOpenOperation(61362018);
         }
 
         public void RWOperations_GetLastOperationOfNumCar()
         {
             RWOperations rw_oper = new RWOperations();
-            CarOperations res = rw_oper.GetLastOperation(61362018);
+            EFRW.Entities1.CarOperations res = rw_oper.GetLastOperation(61362018);
         }
 
         public void RWOperations_GetCurrentOperationOfNumCar()
         {
             RWOperations rw_oper = new RWOperations();
-            CarOperations res = rw_oper.GetCurrentOperation(61362018);
+            EFRW.Entities1.CarOperations res = rw_oper.GetCurrentOperation(61362018);
         }
 
         #endregion

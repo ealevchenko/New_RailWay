@@ -1,4 +1,4 @@
-namespace EFRW.Entities
+namespace EFRW.Entities1
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@ namespace EFRW.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("RW.CarStatus")]
+    [Table("RailWay.CarStatus")]
     public partial class CarStatus
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]

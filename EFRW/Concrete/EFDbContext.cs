@@ -1,86 +1,41 @@
-﻿using EFRW.Entities;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace EFRW.Concrete
 {
-    public class EFDbContext : DbContext
+    using System;
+    using System.Data.Entity;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
+    using EFRW.Entities;
+
+    public partial class EFDbContext : DbContext
     {
         public EFDbContext()
             : base("name=RW")
         {
         }
-
-        //public override int SaveChanges()
-        //{
-        //    UpdateDates();
-        //    return base.SaveChanges();
-        //}
-
-        //private void UpdateDates()
-        //{
-        //    foreach (var change in ChangeTracker.Entries<CarOperations>())
-        //    {
-        //        var values = change.CurrentValues;
-        //        foreach (var name in values.PropertyNames)
-        //        {
-        //            var value = values[name];
-        //            if (value is DateTime)
-        //            {
-        //                var date = (DateTime)value;
-        //                if (date < SqlDateTime.MinValue.Value)
-        //                {
-        //                    values[name] = SqlDateTime.MinValue.Value;
-        //                }
-        //                else if (date > SqlDateTime.MaxValue.Value)
-        //                {
-        //                    values[name] = SqlDateTime.MaxValue.Value;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-
-        // Справочники системы Railway
-        // Грузы
-        public virtual DbSet<ReferenceGroupCargo> ReferenceGroupCargo { get; set; }
-        public virtual DbSet<ReferenceTypeCargo> ReferenceTypeCargo { get; set; }
-        public virtual DbSet<ReferenceCargo> ReferenceCargo { get; set; }
-        // страны
-        public virtual DbSet<ReferenceCountry> ReferenceCountry { get; set; }
-        // Станции отпракви
-        public virtual DbSet<ReferenceStation> ReferenceStation { get; set; }
-        // Вагоны
-        public virtual DbSet<ReferenceGroupCars> ReferenceGroupCars { get; set; }
-        public virtual DbSet<ReferenceTypeCars> ReferenceTypeCars { get; set; }
-        public virtual DbSet<ReferenceCars> ReferenceCars { get; set; }
-        // Владельцы
-        public virtual DbSet<ReferenceOwnerCars> ReferenceOwnerCars { get; set; }
-        public virtual DbSet<ReferenceOwners> ReferenceOwners { get; set; }
-        // Грузополучатели на АМКР
-        public virtual DbSet<ReferenceConsignee> ReferenceConsignee { get; set; }
-
-        // таблицы Railway
-        // Станции, узлы и пути, цеха, тупики
-        public virtual DbSet<Stations> Stations { get; set; }
-        public virtual DbSet<StationsNodes> StationsNodes { get; set; }
-        public virtual DbSet<Ways> Ways { get; set; }
-        public virtual DbSet<Shops> Shops { get; set; }
-        public virtual DbSet<Deadlock> Deadlock { get; set; }
-        // Вагоны и опрерации
-        public virtual DbSet<Cars> Cars { get; set; }
-        public virtual DbSet<CarOperations> CarOperations { get; set; }
-        public virtual DbSet<CarStatus> CarStatus { get; set; }
+        // ������
         public virtual DbSet<CarConditions> CarConditions { get; set; }
-        // Входящие и исходящие грузы
-        public virtual DbSet<CarsInpDelivery> CarsInpDelivery { get; set; }
-        public virtual DbSet<CarsOutDelivery> CarsOutDelivery { get; set; }
+        public virtual DbSet<CarInboundDelivery> CarInboundDelivery { get; set; }
+        public virtual DbSet<CarOperations> CarOperations { get; set; }
+        public virtual DbSet<CarOutboundDelivery> CarOutboundDelivery { get; set; }
+        public virtual DbSet<CarsInternal> CarsInternal { get; set; }
+        public virtual DbSet<CarStatus> CarStatus { get; set; }
+        // �����������
+        public virtual DbSet<Directory_Cargo> Directory_Cargo { get; set; }
+        public virtual DbSet<Directory_Cars> Directory_Cars { get; set; }
+        public virtual DbSet<Directory_Consignee> Directory_Consignee { get; set; }
+        public virtual DbSet<Directory_Country> Directory_Country { get; set; }
+        public virtual DbSet<Directory_ExternalStations> Directory_ExternalStations { get; set; }
+        public virtual DbSet<Directory_GroupCargo> Directory_GroupCargo { get; set; }
+        public virtual DbSet<Directory_GroupCars> Directory_GroupCars { get; set; }
+        public virtual DbSet<Directory_InternalStations> Directory_InternalStations { get; set; }
+        public virtual DbSet<Directory_Overturn> Directory_Overturn { get; set; }
+        public virtual DbSet<Directory_OwnerCars> Directory_OwnerCars { get; set; }
+        public virtual DbSet<Directory_Owners> Directory_Owners { get; set; }
+        public virtual DbSet<Directory_Shops> Directory_Shops { get; set; }
+        public virtual DbSet<Directory_TypeCargo> Directory_TypeCargo { get; set; }
+        public virtual DbSet<Directory_TypeCars> Directory_TypeCars { get; set; }
+        public virtual DbSet<Directory_TypeWays> Directory_TypeWays { get; set; }
+        public virtual DbSet<Directory_Ways> Directory_Ways { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -89,170 +44,173 @@ namespace EFRW.Concrete
                 .WithOptional(e => e.CarConditions)
                 .HasForeignKey(e => e.id_car_conditions);
 
-            modelBuilder.Entity<Cars>()
+            modelBuilder.Entity<CarInboundDelivery>()
+                .Property(e => e.weight_cargo)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<CarInboundDelivery>()
+                .Property(e => e.weight_reweighing_sap)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<CarOperations>()
+                .HasMany(e => e.CarOperations1)
+                .WithOptional(e => e.CarOperations2)
+                .HasForeignKey(e => e.parent_id);
+
+            modelBuilder.Entity<CarOutboundDelivery>()
+                .Property(e => e.weight_cargo)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<CarOutboundDelivery>()
+                .Property(e => e.weight_reweighing_sap)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<CarsInternal>()
+                .HasMany(e => e.CarInboundDelivery)
+                .WithRequired(e => e.CarsInternal)
+                .HasForeignKey(e => e.id_car_internal)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<CarsInternal>()
                 .HasMany(e => e.CarOperations)
-                .WithRequired(e => e.Cars)
-                .HasForeignKey(e => e.id_car)
+                .WithRequired(e => e.CarsInternal)
+                .HasForeignKey(e => e.id_car_internal)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Cars>()
-                .HasMany(e => e.CarsInpDelivery)
-                .WithRequired(e => e.Cars)
-                .HasForeignKey(e => e.id_car)
+            modelBuilder.Entity<CarsInternal>()
+                .HasMany(e => e.CarOutboundDelivery)
+                .WithRequired(e => e.CarsInternal)
+                .HasForeignKey(e => e.id_car_internal)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Cars>()
-                .HasMany(e => e.CarsOutDelivery)
-                .WithRequired(e => e.Cars)
-                .HasForeignKey(e => e.id_car)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<CarsInpDelivery>()
-                .Property(e => e.weight_cargo)
-                .HasPrecision(18, 3);
-
-            modelBuilder.Entity<CarsInpDelivery>()
-                .Property(e => e.weight_reweighing_sap)
-                .HasPrecision(18, 3);
-
-            modelBuilder.Entity<CarsOutDelivery>()
-                .Property(e => e.weight_cargo)
-                .HasPrecision(18, 3);
-
-            modelBuilder.Entity<CarsOutDelivery>()
-                .Property(e => e.weight_reweighing_sap)
-                .HasPrecision(18, 3);
+            modelBuilder.Entity<CarsInternal>()
+                .HasMany(e => e.CarsInternal1)
+                .WithOptional(e => e.CarsInternal2)
+                .HasForeignKey(e => e.parent_id);
 
             modelBuilder.Entity<CarStatus>()
                 .HasMany(e => e.CarOperations)
                 .WithOptional(e => e.CarStatus)
                 .HasForeignKey(e => e.id_car_status);
 
-            modelBuilder.Entity<ReferenceCargo>()
-                .HasMany(e => e.CarsInpDelivery)
-                .WithOptional(e => e.ReferenceCargo)
+            modelBuilder.Entity<Directory_Cargo>()
+                .HasMany(e => e.CarInboundDelivery)
+                .WithOptional(e => e.Directory_Cargo)
                 .HasForeignKey(e => e.id_cargo);
 
-            modelBuilder.Entity<ReferenceCargo>()
-                .HasMany(e => e.CarsOutDelivery)
-                .WithOptional(e => e.ReferenceCargo)
+            modelBuilder.Entity<Directory_Cargo>()
+                .HasMany(e => e.CarOutboundDelivery)
+                .WithOptional(e => e.Directory_Cargo)
                 .HasForeignKey(e => e.id_cargo);
 
-            modelBuilder.Entity<ReferenceCars>()
+            modelBuilder.Entity<Directory_Cars>()
                 .Property(e => e.lifting_capacity)
                 .HasPrecision(18, 3);
 
-            modelBuilder.Entity<ReferenceCars>()
+            modelBuilder.Entity<Directory_Cars>()
                 .Property(e => e.tare)
                 .HasPrecision(18, 3);
 
-            modelBuilder.Entity<ReferenceCars>()
-                .HasMany(e => e.Cars)
-                .WithRequired(e => e.ReferenceCars)
+            modelBuilder.Entity<Directory_Cars>()
+                .HasMany(e => e.CarsInternal)
+                .WithRequired(e => e.Directory_Cars)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ReferenceCars>()
-                .HasMany(e => e.ReferenceOwnerCars)
-                .WithRequired(e => e.ReferenceCars)
+            modelBuilder.Entity<Directory_Cars>()
+                .HasMany(e => e.Directory_OwnerCars)
+                .WithRequired(e => e.Directory_Cars)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ReferenceCountry>()
-                .HasMany(e => e.CarsOutDelivery)
-                .WithOptional(e => e.ReferenceCountry)
-                .HasForeignKey(e => e.id_country_out);
+            modelBuilder.Entity<Directory_Consignee>()
+                .HasMany(e => e.CarInboundDelivery)
+                .WithOptional(e => e.Directory_Consignee)
+                .HasForeignKey(e => e.id_consignee);
 
-            modelBuilder.Entity<ReferenceCountry>()
-                .HasMany(e => e.ReferenceCars)
-                .WithOptional(e => e.ReferenceCountry)
+            modelBuilder.Entity<Directory_Country>()
+                .HasMany(e => e.CarInboundDelivery)
+                .WithOptional(e => e.Directory_Country)
                 .HasForeignKey(e => e.id_country);
 
-            modelBuilder.Entity<ReferenceGroupCargo>()
-                .HasMany(e => e.ReferenceTypeCargo)
-                .WithRequired(e => e.ReferenceGroupCargo)
-                .HasForeignKey(e => e.id_group)
-                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<Directory_Country>()
+                .HasMany(e => e.CarOutboundDelivery)
+                .WithOptional(e => e.Directory_Country)
+                .HasForeignKey(e => e.id_country_out);
 
-            modelBuilder.Entity<ReferenceGroupCars>()
-                .HasMany(e => e.ReferenceTypeCars)
-                .WithRequired(e => e.ReferenceGroupCars)
-                .HasForeignKey(e => e.id_group)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<ReferenceOwners>()
-                .HasMany(e => e.ReferenceOwnerCars)
-                .WithRequired(e => e.ReferenceOwners)
-                .HasForeignKey(e => e.id_owner)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<ReferenceStation>()
-                .HasMany(e => e.CarsOutDelivery)
-                .WithOptional(e => e.ReferenceStation)
+            modelBuilder.Entity<Directory_ExternalStations>()
+                .HasMany(e => e.CarOutboundDelivery)
+                .WithOptional(e => e.Directory_ExternalStations)
                 .HasForeignKey(e => e.id_station_out);
 
-            modelBuilder.Entity<ReferenceTypeCargo>()
-                .HasMany(e => e.ReferenceCargo)
-                .WithRequired(e => e.ReferenceTypeCargo)
-                .HasForeignKey(e => e.id_type)
+            modelBuilder.Entity<Directory_GroupCargo>()
+                .HasMany(e => e.Directory_TypeCargo)
+                .WithRequired(e => e.Directory_GroupCargo)
+                .HasForeignKey(e => e.id_group)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ReferenceTypeCars>()
-                .HasMany(e => e.ReferenceCars)
-                .WithOptional(e => e.ReferenceTypeCars)
-                .HasForeignKey(e => e.id_type);
-
-            modelBuilder.Entity<Stations>()
-                .HasMany(e => e.CarOperations)
-                .WithOptional(e => e.Stations)
-                .HasForeignKey(e => e.id_station);
-
-            modelBuilder.Entity<Stations>()
-                .HasMany(e => e.StationsNodes)
-                .WithRequired(e => e.Stations)
-                .HasForeignKey(e => e.id_station_from)
+            modelBuilder.Entity<Directory_GroupCars>()
+                .HasMany(e => e.Directory_TypeCars)
+                .WithRequired(e => e.Directory_GroupCars)
+                .HasForeignKey(e => e.id_group)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Stations>()
-                .HasMany(e => e.StationsNodes1)
-                .WithRequired(e => e.Stations1)
-                .HasForeignKey(e => e.id_station_on)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Stations>()
-                .HasMany(e => e.Ways)
-                .WithRequired(e => e.Stations)
+            modelBuilder.Entity<Directory_InternalStations>()
+                .HasMany(e => e.Directory_Ways)
+                .WithRequired(e => e.Directory_InternalStations)
                 .HasForeignKey(e => e.id_station)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Stations>()
-                .HasMany(e => e.Shops)
-                .WithOptional(e => e.Stations)
-                .HasForeignKey(e => e.id_station);
+            modelBuilder.Entity<Directory_InternalStations>()
+                .HasMany(e => e.Directory_Ways1)
+                .WithOptional(e => e.Directory_InternalStations1)
+                .HasForeignKey(e => e.id_station_end);
 
-            modelBuilder.Entity<Ways>()
+            modelBuilder.Entity<Directory_Overturn>()
+                .HasMany(e => e.Directory_Ways)
+                .WithOptional(e => e.Directory_Overturn)
+                .HasForeignKey(e => e.id_overturn_end);
+
+            modelBuilder.Entity<Directory_Owners>()
+                .HasMany(e => e.Directory_OwnerCars)
+                .WithRequired(e => e.Directory_Owners)
+                .HasForeignKey(e => e.id_owner)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Directory_Shops>()
+                .HasMany(e => e.Directory_Consignee)
+                .WithOptional(e => e.Directory_Shops)
+                .HasForeignKey(e => e.id_shop);
+
+            modelBuilder.Entity<Directory_Shops>()
+                .HasMany(e => e.Directory_Shops1)
+                .WithOptional(e => e.Directory_Shops2)
+                .HasForeignKey(e => e.parent_id);
+
+            modelBuilder.Entity<Directory_Shops>()
+                .HasMany(e => e.Directory_Ways)
+                .WithOptional(e => e.Directory_Shops)
+                .HasForeignKey(e => e.id_shop_end);
+
+            modelBuilder.Entity<Directory_TypeCargo>()
+                .HasMany(e => e.Directory_Cargo)
+                .WithRequired(e => e.Directory_TypeCargo)
+                .HasForeignKey(e => e.id_type)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Directory_TypeCars>()
+                .HasMany(e => e.Directory_Cars)
+                .WithOptional(e => e.Directory_TypeCars)
+                .HasForeignKey(e => e.id_type);
+
+            modelBuilder.Entity<Directory_TypeWays>()
+                .HasMany(e => e.Directory_Ways)
+                .WithRequired(e => e.Directory_TypeWays)
+                .HasForeignKey(e => e.id_type_way)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Directory_Ways>()
                 .HasMany(e => e.CarOperations)
-                .WithOptional(e => e.Ways)
-                .HasForeignKey(e => e.id_way);
-
-            modelBuilder.Entity<ReferenceConsignee>()
-                .HasMany(e => e.CarsInpDelivery)
-                .WithOptional(e => e.Reference_Consignee)
-                .HasForeignKey(e => e.id_consignee);
-
-            modelBuilder.Entity<Shops>()
-                .HasMany(e => e.Reference_Consignee)
-                .WithOptional(e => e.Shops)
-                .HasForeignKey(e => e.id_shop);
-
-            modelBuilder.Entity<Shops>()
-                .HasMany(e => e.Deadlock)
-                .WithOptional(e => e.Shops)
-                .HasForeignKey(e => e.id_shop);
-
-            modelBuilder.Entity<Ways>()
-                .HasMany(e => e.Deadlock)
-                .WithOptional(e => e.Ways)
+                .WithOptional(e => e.Directory_Ways)
                 .HasForeignKey(e => e.id_way);
         }
-
     }
 }

@@ -1,4 +1,4 @@
-namespace EFRW.Entities
+namespace EFRW.Entities1
 {
     using System;
     using System.Collections.Generic;
@@ -6,28 +6,26 @@ namespace EFRW.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("RW.CarStatus")]
-    public partial class CarStatus
+    [Table("RailWay.Reference_GroupCars")]
+    public partial class ReferenceGroupCars
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CarStatus()
+        public ReferenceGroupCars()
         {
-            CarOperations = new HashSet<CarOperations>();
+            ReferenceTypeCars = new HashSet<ReferenceTypeCars>();
         }
 
         public int id { get; set; }
 
+        [Required]
         [StringLength(50)]
-        public string status_ru { get; set; }
+        public string group_cars_ru { get; set; }
 
+        [Required]
         [StringLength(50)]
-        public string status_en { get; set; }
-
-        public int? id_status_next { get; set; }
-
-        public int? order { get; set; }
+        public string group_cars_en { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CarOperations> CarOperations { get; set; }
+        public virtual ICollection<ReferenceTypeCars> ReferenceTypeCars { get; set; }
     }
 }

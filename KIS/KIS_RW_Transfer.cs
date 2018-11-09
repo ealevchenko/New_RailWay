@@ -9,7 +9,7 @@ using EFKIS.Entities;
 using EFKIS.Concrete;
 //using EFKIS.Helpers;
 using System.Globalization;
-using EFRW.Entities;
+using EFRW.Entities1;
 using RW;
 using EFRW.Concrete;
 using EFMT.Concrete;
@@ -593,7 +593,7 @@ namespace KIS
         /// <returns></returns>
         protected int DeleteRWBufferInputSostav(List<RWBufferInputSostav> list)
         {
-            EFRailWay ef_rw = new EFRailWay();
+            EFRailWay1 ef_rw = new EFRailWay1();
             EFTKIS ef_tkis = new EFTKIS();
             if (list == null || list.Count == 0) return 0;
             int delete = 0;
@@ -827,7 +827,7 @@ namespace KIS
         {
             try
             {
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 EFTKIS ef_tkis = new EFTKIS();
                 if (list == null || list.Count == 0) return 0;
                 int delete = 0;
@@ -1559,7 +1559,7 @@ namespace KIS
             try
             {
                 RWOperation rw_oper = new RWOperation(this.servece_owner);
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 EFMetallurgTrans ef_mt = new EFMetallurgTrans();
                 //EFWagons ef_wag = new EFWagons();
 
@@ -1831,7 +1831,7 @@ namespace KIS
             try
             {
                 //RWOperation rw_oper = new RWOperation(this.servece_owner);
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 RWReference rw_ref = new RWReference(base.servece_owner, reference_kis);
                 //EFMetallurgTrans ef_mt = new EFMetallurgTrans();
                 //EFWagons ef_wag = new EFWagons();
@@ -2112,7 +2112,7 @@ namespace KIS
                 string mess_err = "[RailWay] Ошибка при отправке" + mess;
 
                 EFWagons ef_wag = new EFWagons();
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
 
                 // Определим входящие данные по таблице Prom.NatHist
                 //List<PromNatHist> list = ef_wag.GetNatHistOfVagonLessPR(num_vag, dt_out_amkr, true).ToList();
@@ -2206,7 +2206,7 @@ namespace KIS
                 string mess_ok = "[RailWay] Отправка " + mess;
                 string mess_err = "[RailWay] Ошибка при отправке" + mess;
 
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 Cars car = ef_rw.GetCars(id_car);
                 if (car == null) return 0;
                 //-----------------------------------------------------
@@ -2495,7 +2495,7 @@ namespace KIS
             {
                 RWOperation rw_oper = new RWOperation(this.servece_owner);
                 EFMetallurgTrans ef_mt = new EFMetallurgTrans();
-                EFRailWay ef_rw = new EFRailWay();
+                EFRailWay1 ef_rw = new EFRailWay1();
                 RWReference rw_ref = new RWReference(base.servece_owner, reference_kis); // создавать содержимое справочника из данных КИС
 
                 //Cars car = null;
@@ -2799,7 +2799,7 @@ namespace KIS
         {
             try
             {
-                EFRW.Concrete.EFRailWay ef_rw = new EFRW.Concrete.EFRailWay();
+                EFRW.Concrete.EFRailWay1 ef_rw = new EFRW.Concrete.EFRailWay1();
 
                 // Обновим количество вагонов
                 int res_list_wagons = UpdateCountWagons(ref bis);
@@ -2816,7 +2816,7 @@ namespace KIS
                 }
                 // Проверка соответствия переносу и правилам
                 if (this.type_transfer_input_kis == 1 ||
-                    (this.type_transfer_input_kis == 2 && ef_rw.IsRulesTransferOfKis(bis.id_station_from_kis, bis.id_station_on_kis, EFRW.Concrete.EFRailWay.typeSendTransfer.kis_input)))
+                    (this.type_transfer_input_kis == 2 && ef_rw.IsRulesTransferOfKis(bis.id_station_from_kis, bis.id_station_on_kis, EFRW.Concrete.EFRailWay1.typeSendTransfer.kis_input)))
                 {
                     // переносим
                     int res_put = SetInputSostavKISToRailway(ref bis);
@@ -3041,7 +3041,7 @@ namespace KIS
         public int TransferOutputSostavKISToRailway(ref RWBufferOutputSostav bos) {
             try
             {
-                EFRW.Concrete.EFRailWay ef_rw = new EFRW.Concrete.EFRailWay();
+                EFRW.Concrete.EFRailWay1 ef_rw = new EFRW.Concrete.EFRailWay1();
 
                 // Обновим количество вагонов
                 int res_list_wagons = UpdateCountWagons(ref bos);
@@ -3058,7 +3058,7 @@ namespace KIS
                 }
                 // Проверка соответствия переносу и правилам
                 if (this.type_transfer_output_kis == 1 ||
-                    (this.type_transfer_output_kis == 2 && ef_rw.IsRulesTransferOfKis(bos.id_station_from_kis, bos.id_station_on_kis, EFRW.Concrete.EFRailWay.typeSendTransfer.kis_output)))
+                    (this.type_transfer_output_kis == 2 && ef_rw.IsRulesTransferOfKis(bos.id_station_from_kis, bos.id_station_on_kis, EFRW.Concrete.EFRailWay1.typeSendTransfer.kis_output)))
                 {
                     // переносим
                     int res_put = SetOutputSostavKISToRailway(ref bos);

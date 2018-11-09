@@ -1,4 +1,4 @@
-namespace EFRW.Entities
+namespace EFRW.Entities1
 {
     using System;
     using System.Collections.Generic;

@@ -7,7 +7,7 @@ using libClass;
 using MessageLog;
 using EFMT.Entities;
 using EFMT.Concrete;
-using EFRW.Entities;
+using EFRW.Entities1;
 using EFRW.Concrete;
 
 namespace RW
@@ -19,7 +19,7 @@ namespace RW
         bool log_detali = true;                            // Признак детального логирования
         private bool reference_kis = true;                  // Использовать справочники КИС
 
-        EFRailWay ef_rw = new EFRailWay();
+        EFRailWay1 ef_rw = new EFRailWay1();
         RWReference rw_ref;
 
         public RWOperations()

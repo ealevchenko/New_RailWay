@@ -6,14 +6,14 @@ namespace EFRW.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("RailWay.Reference_Country")]
-    public partial class ReferenceCountry
+    [Table("RW.Directory_Country")]
+    public partial class Directory_Country
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ReferenceCountry()
+        public Directory_Country()
         {
-            CarsOutDelivery = new HashSet<CarsOutDelivery>();
-            ReferenceCars = new HashSet<ReferenceCars>();
+            CarInboundDelivery = new HashSet<CarInboundDelivery>();
+            CarOutboundDelivery = new HashSet<CarOutboundDelivery>();
         }
 
         public int id { get; set; }
@@ -29,20 +29,9 @@ namespace EFRW.Entities
         public int code { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CarsOutDelivery> CarsOutDelivery { get; set; }
+        public virtual ICollection<CarInboundDelivery> CarInboundDelivery { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReferenceCars> ReferenceCars { get; set; }
+        public virtual ICollection<CarOutboundDelivery> CarOutboundDelivery { get; set; }
     }
-    //public partial class ReferenceCountry
-    //{
-    //    [Key]
-    //    public int id { get; set; }
-
-    //    [Required]
-    //    [StringLength(100)]
-    //    public string country { get; set; }
-
-    //    public int code { get; set; }
-    //}
 }

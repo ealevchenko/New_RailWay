@@ -50,33 +50,58 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IRailWay.cs" />
+    <Compile Include="Abstract\IRailWay1.cs" />
     <Compile Include="Abstract\IReference.cs" />
-    <Compile Include="Concrete\EFDbContext.cs" />
-    <Compile Include="Concrete\EFRailWay.cs" />
+    <Compile Include="Abstract\IRailWay.cs" />
+    <Compile Include="Concrete\EFDbContext1.cs" />
+    <Compile Include="Concrete\EFRailWay1.cs" />
     <Compile Include="Concrete\EFReference.cs" />
-    <Compile Include="Entities\ReferenceCargo.cs" />
-    <Compile Include="Entities\ReferenceCountry.cs" />
-    <Compile Include="Entities\ReferenceStation.cs" />
-    <Compile Include="Entities\ReferenceGroupCargo.cs" />
-    <Compile Include="Entities\ReferenceTypeCargo.cs" />
-    <Compile Include="Entities\Stations.cs" />
-    <Compile Include="Entities\StationsNodes.cs" />
+    <Compile Include="Concrete\EFRailWay.cs" />
+    <Compile Include="Entities\old\ReferenceCargo.cs" />
+    <Compile Include="Entities\old\ReferenceCountry.cs" />
+    <Compile Include="Entities\old\ReferenceStation.cs" />
+    <Compile Include="Entities\old\ReferenceGroupCargo.cs" />
+    <Compile Include="Entities\old\ReferenceTypeCargo.cs" />
+    <Compile Include="Entities\old\Stations.cs" />
+    <Compile Include="Entities\old\StationsNodes.cs" />
+    <Compile Include="Entities\old\CarConditions.cs" />
+    <Compile Include="Entities\old\CarOperations.cs" />
+    <Compile Include="Entities\old\Cars.cs" />
+    <Compile Include="Entities\old\CarsInpDelivery.cs" />
+    <Compile Include="Entities\old\CarsOutDelivery.cs" />
+    <Compile Include="Entities\old\CarStatus.cs" />
+    <Compile Include="Entities\old\ReferenceCars.cs" />
+    <Compile Include="Entities\old\ReferenceGroupCars.cs" />
+    <Compile Include="Entities\old\ReferenceOwnerCars.cs" />
+    <Compile Include="Entities\old\ReferenceOwners.cs" />
+    <Compile Include="Entities\old\ReferenceTypeCars.cs" />
+    <Compile Include="Entities\old\Ways.cs" />
+    <Compile Include="Entities\old\ReferenceConsignee.cs" />
+    <Compile Include="Entities\old\Shops.cs" />
+    <Compile Include="Entities\old\Deadlock.cs" />
     <Compile Include="Entities\CarConditions.cs" />
+    <Compile Include="Entities\CarInboundDelivery.cs" />
     <Compile Include="Entities\CarOperations.cs" />
-    <Compile Include="Entities\Cars.cs" />
-    <Compile Include="Entities\CarsInpDelivery.cs" />
-    <Compile Include="Entities\CarsOutDelivery.cs" />
+    <Compile Include="Entities\CarOutboundDelivery.cs" />
+    <Compile Include="Entities\CarsInternal.cs" />
     <Compile Include="Entities\CarStatus.cs" />
-    <Compile Include="Entities\ReferenceCars.cs" />
-    <Compile Include="Entities\ReferenceGroupCars.cs" />
-    <Compile Include="Entities\ReferenceOwnerCars.cs" />
-    <Compile Include="Entities\ReferenceOwners.cs" />
-    <Compile Include="Entities\ReferenceTypeCars.cs" />
-    <Compile Include="Entities\Ways.cs" />
-    <Compile Include="Entities\ReferenceConsignee.cs" />
-    <Compile Include="Entities\Shops.cs" />
-    <Compile Include="Entities\Deadlock.cs" />
+    <Compile Include="Entities\Directory_Cargo.cs" />
+    <Compile Include="Entities\Directory_Cars.cs" />
+    <Compile Include="Entities\Directory_Consignee.cs" />
+    <Compile Include="Entities\Directory_Country.cs" />
+    <Compile Include="Entities\Directory_ExternalStations.cs" />
+    <Compile Include="Entities\Directory_GroupCargo.cs" />
+    <Compile Include="Entities\Directory_GroupCars.cs" />
+    <Compile Include="Entities\Directory_InternalStations.cs" />
+    <Compile Include="Entities\Directory_Overturn.cs" />
+    <Compile Include="Entities\Directory_OwnerCars.cs" />
+    <Compile Include="Entities\Directory_Owners.cs" />
+    <Compile Include="Entities\Directory_Shops.cs" />
+    <Compile Include="Entities\Directory_TypeCargo.cs" />
+    <Compile Include="Entities\Directory_TypeCars.cs" />
+    <Compile Include="Entities\Directory_TypeWays.cs" />
+    <Compile Include="Entities\Directory_Ways.cs" />
+    <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +118,7 @@
       <Name>MLogs</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,7 +1,7 @@
 ﻿using EFMT.Concrete;
 using EFMT.Entities;
 using EFRW.Concrete;
-using EFRW.Entities;
+using EFRW.Entities1;
 using MessageLog;
 using System;
 using System.Collections.Generic;
@@ -210,7 +210,7 @@ namespace RW
         protected service servece_owner = service.Null;
         bool log_detali = false;
 
-        EFRailWay ef_rw = new EFRailWay();
+        EFRailWay1 ef_rw = new EFRailWay1();
         RWReference rw_ref = new RWReference(true);
         EFMetallurgTrans ef_mt = new EFMetallurgTrans();
         EFReference.Concrete.EFReference ef_reference = new EFReference.Concrete.EFReference();
@@ -1489,7 +1489,7 @@ namespace RW
         /// <returns></returns>
         public CarOperations GetLastOpenOperation(int num_car, bool correct) {
 
-            EFRailWay ef_rw = new EFRailWay();
+            EFRailWay1 ef_rw = new EFRailWay1();
             List<CarOperations> list_open_operation = ef_rw.query_GetOpenOperationOfNumCar(num_car).ToList();
             if (list_open_operation == null) return null;
             if (list_open_operation.Count() == 1) return list_open_operation.FirstOrDefault();
@@ -1526,7 +1526,7 @@ namespace RW
         /// <returns></returns>
         public int OperationArrivalUZToSendingUZ(int code_station_uz, int num_car)
         {
-            EFRailWay ef_rw = new EFRailWay();
+            EFRailWay1 ef_rw = new EFRailWay1();
             RWReference rw_ref = new RWReference(true);
             
             

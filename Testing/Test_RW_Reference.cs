@@ -1,7 +1,7 @@
 ﻿//using EFRailWay.Entities;
 //using EFRailWay.References;
 using EFRW.Concrete;
-using EFRW.Entities;
+using EFRW.Entities1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +65,7 @@ namespace Testing
             try
             {
                 EFRW.Concrete.EFReference ef_ref = new EFRW.Concrete.EFReference();
-                foreach (EFRW.Entities.ReferenceCargo cargo in ef_ref.GetReferenceCargo().ToList()) {
+                foreach (EFRW.Entities1.ReferenceCargo cargo in ef_ref.GetReferenceCargo().ToList()) {
                     Console.WriteLine(cargo.GetFieldsAndValue());                
                 }
             }

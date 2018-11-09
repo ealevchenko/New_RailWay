@@ -6,12 +6,12 @@ namespace EFRW.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("RailWay.CarsOutDelivery")]
-    public partial class CarsOutDelivery
+    [Table("RW.CarOutboundDelivery")]
+    public partial class CarOutboundDelivery
     {
         public int id { get; set; }
 
-        public int id_car { get; set; }
+        public int id_car_internal { get; set; }
 
         [StringLength(35)]
         public string num_nakl_sap { get; set; }
@@ -43,12 +43,12 @@ namespace EFRW.Entities
 
         public int? post_reweighing_sap { get; set; }
 
-        public virtual Cars Cars { get; set; }
+        public virtual CarsInternal CarsInternal { get; set; }
 
-        public virtual ReferenceCargo ReferenceCargo { get; set; }
+        public virtual Directory_Cargo Directory_Cargo { get; set; }
 
-        public virtual ReferenceCountry ReferenceCountry { get; set; }
+        public virtual Directory_Country Directory_Country { get; set; }
 
-        public virtual ReferenceStation ReferenceStation { get; set; }
+        public virtual Directory_ExternalStations Directory_ExternalStations { get; set; }
     }
 }

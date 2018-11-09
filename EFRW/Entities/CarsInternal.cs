@@ -6,15 +6,16 @@ namespace EFRW.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("RailWay.Cars")]
-    public partial class Cars
+    [Table("RW.CarsInternal")]
+    public partial class CarsInternal
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Cars()
+        public CarsInternal()
         {
+            CarInboundDelivery = new HashSet<CarInboundDelivery>();
             CarOperations = new HashSet<CarOperations>();
-            CarsOutDelivery = new HashSet<CarsOutDelivery>();
-            CarsInpDelivery = new HashSet<CarsInpDelivery>();
+            CarOutboundDelivery = new HashSet<CarOutboundDelivery>();
+            CarsInternal1 = new HashSet<CarsInternal>();
         }
 
         public int id { get; set; }
@@ -25,44 +26,44 @@ namespace EFRW.Entities
 
         public int num { get; set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? dt_uz { get; set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? dt_inp_amkr { get; set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? dt_out_amkr { get; set; }
 
-        public int? natur_kis { get; set; }
+        public int? natur_kis_inp { get; set; }
 
-        public int? natur_kis_out { get; set; }    
-    
-        public int? natur { get; set; }
+        public int? natur_kis_out { get; set; }
 
-        public DateTime dt_create { get; set; }
+        public int? natur_rw { get; set; }
 
         [StringLength(50)]
         public string user_create { get; set; }
 
-        public DateTime? dt_close { get; set; }
+        public DateTime dt_create { get; set; }
 
         [StringLength(50)]
         public string user_close { get; set; }
 
+        public DateTime? dt_close { get; set; }
+
         public int? parent_id { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CarInboundDelivery> CarInboundDelivery { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CarOperations> CarOperations { get; set; }
 
-        public virtual ReferenceCars ReferenceCars { get; set; }
-
-        //public virtual CarsInpDelivery CarsInpDelivery { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CarOutboundDelivery> CarOutboundDelivery { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CarsInpDelivery> CarsInpDelivery { get; set; }
+        public virtual ICollection<CarsInternal> CarsInternal1 { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CarsOutDelivery> CarsOutDelivery { get; set; }
+        public virtual CarsInternal CarsInternal2 { get; set; }
+
+        public virtual Directory_Cars Directory_Cars { get; set; }
     }
 }

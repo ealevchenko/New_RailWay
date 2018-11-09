@@ -6,14 +6,13 @@ namespace EFRW.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("RailWay.Ways")]
-    public partial class Ways
+    [Table("RW.Directory_Ways")]
+    public partial class Directory_Ways
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Ways()
+        public Directory_Ways()
         {
             CarOperations = new HashSet<CarOperations>();
-            Deadlock = new HashSet<Deadlock>();
         }
 
         public int id { get; set; }
@@ -36,30 +35,38 @@ namespace EFRW.Entities
 
         public int? capacity { get; set; }
 
+        public int id_type_way { get; set; }
+
         public int? id_car_status { get; set; }
 
-        public bool? tupik { get; set; }
+        public int? id_station_end { get; set; }
 
-        public bool? dissolution { get; set; }
+        public int? id_shop_end { get; set; }
 
-        public bool? defrosting { get; set; }
+        public int? id_overturn_end { get; set; }
 
-        public bool? overturning { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string user_create { get; set; }
 
-        public bool? pto { get; set; }
+        public DateTime dt_create { get; set; }
 
-        public bool? cleaning { get; set; }
+        [StringLength(50)]
+        public string user_edit { get; set; }
 
-        public bool? rest { get; set; }
-
-        public int? id_rc { get; set; }
+        public DateTime? dt_edit { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CarOperations> CarOperations { get; set; }
 
-        public virtual Stations Stations { get; set; }
+        public virtual Directory_InternalStations Directory_InternalStations { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Deadlock> Deadlock { get; set; }
+        public virtual Directory_InternalStations Directory_InternalStations1 { get; set; }
+
+        public virtual Directory_Overturn Directory_Overturn { get; set; }
+
+        public virtual Directory_Shops Directory_Shops { get; set; }
+
+        public virtual Directory_TypeWays Directory_TypeWays { get; set; }
     }
 }
