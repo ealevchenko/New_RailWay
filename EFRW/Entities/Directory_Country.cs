@@ -14,6 +14,7 @@ namespace EFRW.Entities
         {
             CarInboundDelivery = new HashSet<CarInboundDelivery>();
             CarOutboundDelivery = new HashSet<CarOutboundDelivery>();
+            Directory_Cars = new HashSet<Directory_Cars>();
         }
 
         public int id { get; set; }
@@ -33,5 +34,8 @@ namespace EFRW.Entities
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CarOutboundDelivery> CarOutboundDelivery { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Directory_Cars> Directory_Cars { get; set; }
     }
 }

@@ -76,9 +76,9 @@ namespace Testing
             //tst_rw.RWOperation_DeleteSaveCar();
 
             #region EFRailWay
-            tst_rw.EFRailWay_SaveCarsInternal(); // Получить сохранить внутренее перемещение
+            //tst_rw.EFRailWay_SaveCarsInternal(); // Получить сохранить внутренее перемещение
 
-            //tst_rw.EFRailWay_SaveDirectory_Cars(); // Получить сохранить справочник вагонов
+            tst_rw.EFRailWay_CreateSaveEditDeleteDirectory_Cars(); // Тест создать строку справочника вагона, прочесть, изменить, удалить.
 
             //tst_rw.EFRailWay_query_GetOpenOperationOfNumCar(); // Получить последнюю открытую операцию по указаному вагону (через query)
             //tst_rw.EFRailWay_GetOpenOperationOfNumCar(); // Получить последнюю открытую операцию по указаному вагону   

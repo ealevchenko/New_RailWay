@@ -136,6 +136,11 @@ namespace EFRW.Concrete
                 .WithOptional(e => e.Directory_Country)
                 .HasForeignKey(e => e.id_country_out);
 
+            modelBuilder.Entity<Directory_Country>()
+                .HasMany(e => e.Directory_Cars)
+                .WithOptional(e => e.Directory_Country)
+                .HasForeignKey(e => e.id_country);
+
             modelBuilder.Entity<Directory_ExternalStations>()
                 .HasMany(e => e.CarOutboundDelivery)
                 .WithOptional(e => e.Directory_ExternalStations)

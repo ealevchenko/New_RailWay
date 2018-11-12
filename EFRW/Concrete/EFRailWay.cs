@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace EFRW.Concrete
 {
@@ -14,7 +15,7 @@ namespace EFRW.Concrete
     {
         private eventID eventID = eventID.EFRW_EFRailWay;
 
-        protected EFDbContext context = new EFDbContext();
+        private EFDbContext context = new EFDbContext();
 
         #region ДВИЖЕНИЕ ВАГОНОВ
 
@@ -72,8 +73,8 @@ namespace EFRW.Concrete
                         natur_rw = CarsInternal.natur_rw,
                         dt_create = CarsInternal.dt_create != DateTime.Parse("01.01.0001") ? CarsInternal.dt_create : DateTime.Now,
                         user_create = CarsInternal.user_create != null ? CarsInternal.user_create : System.Environment.UserDomainName + @"\" + System.Environment.UserName,
-                        //user_close = CarsInternal.user_close,
-                        //dt_close = CarsInternal.dt_close,
+                        user_close = CarsInternal.user_close,
+                        dt_close = CarsInternal.dt_close,
                         parent_id = CarsInternal.parent_id,
                         CarInboundDelivery = CarsInternal.CarInboundDelivery,
                         CarOutboundDelivery = CarsInternal.CarOutboundDelivery,
@@ -203,6 +204,10 @@ namespace EFRW.Concrete
                         Directory_OwnerCars = Directory_Cars.Directory_OwnerCars,
                         CarsInternal = Directory_Cars.CarsInternal,
                     };
+
+                    //context.Entry(Directory_TypeCars).Reload();
+                    //context.Entry<Directory_TypeCars>(Directory_Cars.Directory_TypeCars).State = EntityState.Modified;
+                    //context.Entry<Directory_OwnerCars>(dbEntry.Directory_OwnerCars).State = EntityState.Modified;
                     context.Directory_Cars.Add(dbEntry);
                 }
                 else
@@ -256,9 +261,89 @@ namespace EFRW.Concrete
             return dbEntry;
         }
         #endregion
+
+        //Directory_Cars
+
+
         #endregion
 
 
+
+
+    }
+
+    public class DirectoryCars : IRepository<Directory_Cars>
+    {
+        private eventID eventID = eventID.EFRW_EFRailWay;
+        
+        private EFDbContext db;
+
+        public DirectoryCars() {
+
+            this.db = new EFDbContext();
+        }
+        
+        public IEnumerable<Directory_Cars> GetList()
+        {
+            return db.Directory_Cars;
+        }
+
+        public Directory_Cars Get(int id)
+        {
+            return db.Directory_Cars.Find(id);
+        }
+
+        public void Add(Directory_Cars item)
+        {
+            item.user_create = item.user_create != null ? item.user_create : System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+            item.dt_create = item.dt_create != DateTime.Parse("01.01.0001") ? item.dt_create : DateTime.Now;
+            db.Directory_Cars.Add(item);
+        }
+
+        public void Update(Directory_Cars item)
+        {
+            db.Entry(item).State = EntityState.Modified;
+        }
+
+        public void Delete(int id)
+        {
+            Directory_Cars item = db.Directory_Cars.Find(id);
+            if (item != null)
+                db.Directory_Cars.Remove(item);
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save(Directory_Cars={0})", "Directory_Cars"), eventID);
+                return -1;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
 
     }

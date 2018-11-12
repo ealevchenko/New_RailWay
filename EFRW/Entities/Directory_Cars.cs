@@ -51,6 +51,8 @@ namespace EFRW.Entities
 
         public DateTime? dt_edit { get; set; }
 
+        public virtual Directory_Country Directory_Country { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CarsInternal> CarsInternal { get; set; }
 

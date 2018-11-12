@@ -53,10 +53,12 @@
     <Compile Include="Abstract\IRailWay1.cs" />
     <Compile Include="Abstract\IReference.cs" />
     <Compile Include="Abstract\IRailWay.cs" />
+    <Compile Include="Abstract\IRepository.cs" />
     <Compile Include="Concrete\EFDbContext1.cs" />
     <Compile Include="Concrete\EFRailWay1.cs" />
     <Compile Include="Concrete\EFReference.cs" />
     <Compile Include="Concrete\EFRailWay.cs" />
+    <Compile Include="Concrete\Repository.cs" />
     <Compile Include="Entities\old\ReferenceCargo.cs" />
     <Compile Include="Entities\old\ReferenceCountry.cs" />
     <Compile Include="Entities\old\ReferenceStation.cs" />
@@ -118,7 +120,9 @@
       <Name>MLogs</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
