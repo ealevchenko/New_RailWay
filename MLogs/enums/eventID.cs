@@ -65,6 +65,18 @@ namespace MessageLog
         EFRW_EFReference = 4101,            // Модуль доступа к БД справочников системы RailWay
         EFRW_EFRailWay = 4102,              // Библиотека доступа к данным БД RailWay
 
+        EFRW_EFDirectoryCars = 4110,         // Библиотека доступа к данным Directory_Cars БД RailWay
+        EFRW_EFDirectoryTypeCars = 4111,         // Библиотека доступа к данным Directory_TypeCars БД RailWay
+        EFRW_DirectoryGroupCars = 4112,         // Библиотека доступа к данным Directory_GroupCars БД RailWay
+        EFRW_EFDirectoryCargo = 4113,         // Библиотека доступа к данным Directory_Cars БД RailWay
+
+        EFRW_EFCarsInternal = 4150,             // Библиотека доступа к данным CarsInternal БД RailWay
+        EFRW_EFCarOperations = 4151,            // Библиотека доступа к данным CarOperations БД RailWay
+        EFRW_EFCarInboundDelivery = 4152,       // Библиотека доступа к данным CarInboundDelivery БД RailWay
+        EFRW_EFCarOutboundDelivery = 4153,      // Библиотека доступа к данным CarOutboundDelivery БД RailWay
+        EFRW_EFCarConditions = 4154,            // Библиотека доступа к данным CarConditions БД RailWay
+        EFRW_EFCarStatus = 4155,                // Библиотека доступа к данным CarStatus БД RailWay
+
         RW = 4200,                          // Библиотека сервисов обработки данных RailWay
         RW_RWFilters = 4201,               // Модуль переноса данных системы RailWay
         RW_RWOperation = 4202,              // Модуль операций системы RailWay (TODO: Этот модуль удалить)
