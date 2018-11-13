@@ -64,38 +64,7 @@ namespace Testing
         {
             //Repository
             
-            EFRW.Concrete.EFDbContext context = new EFRW.Concrete.EFDbContext();
-
-            Directory_Cars new_car = new Directory_Cars()
-            {
-                num = 99999997,
-                id_type = 2,
-                sap = null,
-                note = null,
-                lifting_capacity = 0,
-                tare = 0,
-                id_country = 0,
-                count_axles = 0,
-                is_output_uz = true,
-            };
-            new_car.user_create = new_car.user_create != null ? new_car.user_create : System.Environment.UserDomainName + @"\" + System.Environment.UserName;
-            new_car.dt_create = new_car.dt_create != DateTime.Parse("01.01.0001") ? new_car.dt_create : DateTime.Now;
-            Repository.Insert<Directory_Cars>(new_car);
-            Directory_Cars res = Repository.Select<Directory_Cars>().Where(c => c.num == 99999997).FirstOrDefault();
-            //res.count_axles = 6;
-            
-            
-            Directory_Cars res_upd = context.Directory_Cars.Where(c => c.num == 99999997).FirstOrDefault();
-            res_upd.lifting_capacity = 9;
-            Repository.Update<Directory_Cars>(res_upd, context);
-            Directory_Cars res1 = Repository.Select<Directory_Cars>().Where(c => c.num == 99999997).FirstOrDefault();
-            
-            
-            Directory_Cars res_del = context.Directory_Cars.Where(c => c.num == 99999997).FirstOrDefault();
-            res_upd.lifting_capacity = 9;
-            Repository.Delete<Directory_Cars>(res_del, context);
-
-            //DirectoryCars dcars = new DirectoryCars();
+            //EFRW.Concrete.EFDbContext context = new EFRW.Concrete.EFDbContext();
 
             //Directory_Cars new_car = new Directory_Cars()
             //{
@@ -109,22 +78,63 @@ namespace Testing
             //    count_axles = 0,
             //    is_output_uz = true,
             //};
+            //new_car.user_create = new_car.user_create != null ? new_car.user_create : System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+            //new_car.dt_create = new_car.dt_create != DateTime.Parse("01.01.0001") ? new_car.dt_create : DateTime.Now;
+            //Repository.Insert<Directory_Cars>(new_car);
+            //Directory_Cars res = Repository.Select<Directory_Cars>().Where(c => c.num == 99999997).FirstOrDefault();
+            ////res.count_axles = 6;
+            
+            
+            //Directory_Cars res_upd = context.Directory_Cars.Where(c => c.num == 99999997).FirstOrDefault();
+            //res_upd.lifting_capacity = 9;
+            //Repository.Update<Directory_Cars>(res_upd, context);
+            //Directory_Cars res1 = Repository.Select<Directory_Cars>().Where(c => c.num == 99999997).FirstOrDefault();
+            
+            
+            //Directory_Cars res_del = context.Directory_Cars.Where(c => c.num == 99999997).FirstOrDefault();
+            //res_upd.lifting_capacity = 9;
+            //Repository.Delete<Directory_Cars>(res_del, context);
 
-            //dcars.Add(new_car);
-            //int res1 = dcars.Save();
-            //Directory_Cars new_car1 = dcars.Get(99999997);
-            //new_car1.count_axles = 7;
-            //dcars.Update(new_car1);
-            //int res2 = dcars.Save();
-            //Directory_Cars new_car2 = dcars.Get(99999997);
-            //dcars.Delete(99999997);
-            //int res3= dcars.Save();
+            EFRW.Concrete.EFDbContext context = new EFRW.Concrete.EFDbContext();
 
 
-           ////EFRailWay ef_rw = new EFRailWay();  
+            EFDirectoryCars dcars = new EFDirectoryCars(context);
+            //DirectoryCars dcars = new DirectoryCars();
+
+            Directory_Cars new_car = new Directory_Cars()
+            {
+                num = 99999997,
+                id_type = 2,
+                sap = null,
+                note = null,
+                lifting_capacity = 0,
+                tare = 0,
+                id_country = 0,
+                count_axles = 0,
+                is_output_uz = true,
+            };
+
+            dcars.AddOrUpdate(new_car);
+            int res1 = dcars.Save();
+            new_car = dcars.Refresh(new_car);
+
+            Directory_Cars new_car1 = dcars.Get(99999997);
+            new_car1 = dcars.Refresh(new_car1);
+
+            new_car1.count_axles = 33;
+            new_car1.id_type = 1;
+            dcars.AddOrUpdate(new_car1);
+            int res2 = dcars.Save();
+            Directory_Cars new_car2 = dcars.Get(99999997);
+            dcars.Delete(99999997);
+            int res3 = dcars.Save();
+
+
+
+            //EFRailWay ef_rw = new EFRailWay();  
             //Directory_Cars new_car = new Directory_Cars()
             //{
-            //    num = 99999998,
+            //    num = 99999990,
             //    id_type = 2,
             //    sap = null,
             //    note = null,
@@ -134,15 +144,16 @@ namespace Testing
             //    count_axles = 0,
             //    is_output_uz = true,
             //};
-            ////int res = ef_rw.SaveDirectory_Cars(new_car);
-
-            //int res = EFRailWay_SaveDirectory_Cars(new_car);
-
-            //Directory_Cars new_car1 = EFRailWay_GetDirectory_Cars(res);
-            //new_car1.count_axles = 2;
-            ////int res1 = ef_rw.SaveDirectory_Cars(new_car1);
-            //int res1 = EFRailWay_SaveDirectory_Cars(new_car1);
-            //Directory_Cars new_car_del = EFRailWay_DeleteDirectory_Cars(res1);
+            //int res = ef_rw.AddDirectory_Cars(new_car);
+            //Directory_Cars new_car1 = ef_rw.GetDirectory_Cars(99999990);
+            //new_car1.lifting_capacity = 66;
+            ////new_car1.Directory_Country = null;
+            ////new_car1.Directory_OwnerCars = null;
+            ////new_car1.Directory_TypeCars = null;
+            ////new_car1.CarsInternal = null;
+            //int res1 = ef_rw.UpdateDirectory_Cars(new_car1);
+            //Directory_Cars new_car2 = ef_rw.GetDirectory_Cars(99999990);
+            //Directory_Cars new_car_del = ef_rw.DeleteDirectory_Cars(99999990);
         }
 
         public int EFRailWay_SaveDirectory_Cars(Directory_Cars car)
@@ -160,7 +171,7 @@ namespace Testing
             //    count_axles = 0,
             //    is_output_uz = true,
             //};
-            int res = ef_rw.SaveDirectory_Cars(car);
+            int res = ef_rw.AddDirectory_Cars(car);
             return res;
         }
 
