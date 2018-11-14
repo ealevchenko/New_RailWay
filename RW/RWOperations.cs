@@ -19,7 +19,7 @@ namespace RW
         bool log_detali = true;                            // Признак детального логирования
         private bool reference_kis = true;                  // Использовать справочники КИС
 
-        EFRailWay1 ef_rw = new EFRailWay1();
+        EFRailWay ef_rw = new EFRailWay();
         RWReference rw_ref;
 
         public RWOperations()

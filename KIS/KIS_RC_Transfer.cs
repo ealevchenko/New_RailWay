@@ -1164,7 +1164,7 @@ namespace KIS
         public int TransferArrivalOfKISInput()
         {
             EFTKIS ef_tkis = new EFTKIS();
-            EFRW.Concrete.EFRailWay1 ef_rw = new EFRW.Concrete.EFRailWay1();
+            EFRW.Concrete.EFRailWay ef_rw = new EFRW.Concrete.EFRailWay();
             int close = 0;
             IQueryable<RCBufferInputSostav> list_noClose = ef_tkis.GetRCBufferInputSostavNoClose();
             if (list_noClose == null || list_noClose.Count() == 0) return 0;
@@ -1185,7 +1185,7 @@ namespace KIS
                         mess_put.WriteEvents(res_close > 0 ? EventStatus.Ok : EventStatus.Error, servece_owner, eventID);
                         close++;
                     }
-                    if (ef_rw.IsRulesTransferOfKis(bis.id_station_from_kis, bis.id_station_on_kis, EFRW.Concrete.EFRailWay1.typeSendTransfer.kis_input))
+                    if (ef_rw.IsRulesTransferOfKis(bis.id_station_from_kis, bis.id_station_on_kis, EFRW.Concrete.EFRailWay.typeSendTransfer.kis_input))
                     {
                         if (this.transfer_input_kis)
                         {
@@ -1538,7 +1538,7 @@ namespace KIS
         public int TransferArrivalOfKISOutput()
         {
             EFTKIS ef_tkis = new EFTKIS();
-            EFRW.Concrete.EFRailWay1 ef_rw = new EFRW.Concrete.EFRailWay1();
+            EFRW.Concrete.EFRailWay ef_rw = new EFRW.Concrete.EFRailWay();
             int close = 0;
             IQueryable<RCBufferOutputSostav> list_noClose = ef_tkis.GetRCBufferOutputSostavNoClose();
             if (list_noClose == null || list_noClose.Count() == 0) return 0;
@@ -1559,7 +1559,7 @@ namespace KIS
                         mess_put.WriteEvents(res_close > 0 ? EventStatus.Ok : EventStatus.Error, servece_owner, eventID);
                         close++;
                     }
-                    if (ef_rw.IsRulesTransferOfKis(bos.id_station_from_kis, bos.id_station_on_kis, EFRW.Concrete.EFRailWay1.typeSendTransfer.kis_output))
+                    if (ef_rw.IsRulesTransferOfKis(bos.id_station_from_kis, bos.id_station_on_kis, EFRW.Concrete.EFRailWay.typeSendTransfer.kis_output))
                     {
                         if (this.transfer_output_kis)
                         {

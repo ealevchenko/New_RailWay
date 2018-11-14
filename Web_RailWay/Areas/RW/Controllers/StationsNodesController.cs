@@ -10,9 +10,9 @@ namespace Web_RailWay.Areas.RW.Controllers
 {
     public class StationsNodesController : Controller
     {
-        IRailWay1 ef_rw;
+        IRailWay ef_rw;
 
-        public StationsNodesController(IRailWay1 rw)
+        public StationsNodesController(IRailWay rw)
         {
                     this.ef_rw = rw;
         }

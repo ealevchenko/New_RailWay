@@ -20,22 +20,32 @@ namespace EFRW.Concrete
         public virtual DbSet<CarsInternal> CarsInternal { get; set; }
         public virtual DbSet<CarStatus> CarStatus { get; set; }
         // Справочники
+        public virtual DbSet<Directory_GroupCargo> Directory_GroupCargo { get; set; }        
+        public virtual DbSet<Directory_TypeCargo> Directory_TypeCargo { get; set; }
         public virtual DbSet<Directory_Cargo> Directory_Cargo { get; set; }
+
+        public virtual DbSet<Directory_GroupCars> Directory_GroupCars { get; set; }
+        public virtual DbSet<Directory_TypeCars> Directory_TypeCars { get; set; }
         public virtual DbSet<Directory_Cars> Directory_Cars { get; set; }
+
+        public virtual DbSet<Directory_OwnerCars> Directory_OwnerCars { get; set; }
+        public virtual DbSet<Directory_Owners> Directory_Owners { get; set; }
+
+        public virtual DbSet<Directory_InternalStations> Directory_InternalStations { get; set; }
+        public virtual DbSet<Directory_Shops> Directory_Shops { get; set; }
+        public virtual DbSet<Directory_Overturn> Directory_Overturn { get; set; }
+
+        public virtual DbSet<Directory_TypeWays> Directory_TypeWays { get; set; }
+        public virtual DbSet<Directory_Ways> Directory_Ways { get; set; }
+
         public virtual DbSet<Directory_Consignee> Directory_Consignee { get; set; }
         public virtual DbSet<Directory_Country> Directory_Country { get; set; }
         public virtual DbSet<Directory_ExternalStations> Directory_ExternalStations { get; set; }
-        public virtual DbSet<Directory_GroupCargo> Directory_GroupCargo { get; set; }
-        public virtual DbSet<Directory_GroupCars> Directory_GroupCars { get; set; }
-        public virtual DbSet<Directory_InternalStations> Directory_InternalStations { get; set; }
-        public virtual DbSet<Directory_Overturn> Directory_Overturn { get; set; }
-        public virtual DbSet<Directory_OwnerCars> Directory_OwnerCars { get; set; }
-        public virtual DbSet<Directory_Owners> Directory_Owners { get; set; }
-        public virtual DbSet<Directory_Shops> Directory_Shops { get; set; }
-        public virtual DbSet<Directory_TypeCargo> Directory_TypeCargo { get; set; }
-        public virtual DbSet<Directory_TypeCars> Directory_TypeCars { get; set; }
-        public virtual DbSet<Directory_TypeWays> Directory_TypeWays { get; set; }
-        public virtual DbSet<Directory_Ways> Directory_Ways { get; set; }
+
+
+
+
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

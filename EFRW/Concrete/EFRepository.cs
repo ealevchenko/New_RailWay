@@ -93,7 +93,9 @@ namespace EFRW.Concrete
     #region СПРАВОЧНИКИ
 
     #region ВАГОНЫ
-    // Класс справочник вагонов
+    /// <summary>
+    /// Класс справочник вагонов
+    /// </summary>
     public class EFDirectoryCars : IRepository<Directory_Cars>
     {
         private eventID eventID = eventID.EFRW_EFDirectoryCars;
@@ -247,7 +249,9 @@ namespace EFRW.Concrete
         }
 
     }
-    // Класс справочник типов вагонов
+    /// <summary>
+    /// Класс справочник типов вагонов
+    /// </summary>
     public class EFDirectoryTypeCars : IRepository<Directory_TypeCars>
     {
         private eventID eventID = eventID.EFRW_EFDirectoryTypeCars;
@@ -397,10 +401,12 @@ namespace EFRW.Concrete
         }
 
     }
-    // Класс справочник групп вагонов
+    /// <summary>
+    /// Класс справочник групп вагонов
+    /// </summary>
     public class EFDirectoryGroupCars : IRepository<Directory_GroupCars>
     {
-        private eventID eventID = eventID.EFRW_DirectoryGroupCars;
+        private eventID eventID = eventID.EFRW_EFDirectoryGroupCars;
 
         private EFDbContext db;
 
@@ -550,6 +556,9 @@ namespace EFRW.Concrete
     #endregion
 
     #region ГРУЗЫ
+    /// <summary>
+    /// Класс справочник грузов
+    /// </summary>
     public class EFDirectoryCargo : IRepository<Directory_Cargo>
     {
         private eventID eventID = eventID.EFRW_EFDirectoryCargo;
@@ -703,12 +712,1879 @@ namespace EFRW.Concrete
         }
 
     }
+    /// <summary>
+    /// Класс типов грузов
+    /// </summary>
+    public class EFDirectoryTypeCargo : IRepository<Directory_TypeCargo>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryTypeCargo;
+
+        private EFDbContext db;
+
+        public EFDirectoryTypeCargo(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryTypeCargo()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_TypeCargo> Get()
+        {
+            try
+            {
+                return db.Select<Directory_TypeCargo>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_TypeCargo Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_TypeCargo>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_TypeCargo item)
+        {
+            try
+            {
+                db.Insert<Directory_TypeCargo>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_TypeCargo item)
+        {
+            try
+            {
+                db.Update<Directory_TypeCargo>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_TypeCargo item)
+        {
+            try
+            {
+                Directory_TypeCargo dbEntry = db.Directory_TypeCargo.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_TypeCargo item = db.Delete<Directory_TypeCargo>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_TypeCargo Refresh(Directory_TypeCargo item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_TypeCargo>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    /// <summary>
+    /// Класс группы грузов грузов
+    /// </summary>
+    public class EFDirectoryGroupCargo : IRepository<Directory_GroupCargo>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryGroupCargo;
+
+        private EFDbContext db;
+
+        public EFDirectoryGroupCargo(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryGroupCargo()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_GroupCargo> Get()
+        {
+            try
+            {
+                return db.Select<Directory_GroupCargo>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_GroupCargo Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_GroupCargo>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_GroupCargo item)
+        {
+            try
+            {
+                db.Insert<Directory_GroupCargo>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_GroupCargo item)
+        {
+            try
+            {
+                db.Update<Directory_GroupCargo>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_GroupCargo item)
+        {
+            try
+            {
+                Directory_GroupCargo dbEntry = db.Directory_GroupCargo.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_GroupCargo item = db.Delete<Directory_GroupCargo>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_GroupCargo Refresh(Directory_GroupCargo item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_GroupCargo>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
     #endregion
+
+    #region ВЛАДЕЛЬЦЫ
+    /// <summary>
+    /// Класс список владельцев
+    /// </summary>
+    public class EFDirectoryOwners : IRepository<Directory_Owners>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryOwners;
+
+        private EFDbContext db;
+
+        public EFDirectoryOwners(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryOwners()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_Owners> Get()
+        {
+            try
+            {
+                return db.Select<Directory_Owners>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_Owners Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_Owners>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_Owners item)
+        {
+            try
+            {
+                item.user_create = item.user_create ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_create = item.dt_create != DateTime.Parse("01.01.0001") ? item.dt_create : DateTime.Now;
+                db.Insert<Directory_Owners>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_Owners item)
+        {
+            try
+            {
+                item.user_edit = item.user_edit ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_edit = item.dt_edit != null ? item.dt_edit : DateTime.Now;
+                db.Update<Directory_Owners>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_Owners item)
+        {
+            try
+            {
+                Directory_Owners dbEntry = db.Directory_Owners.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_Owners item = db.Delete<Directory_Owners>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_Owners Refresh(Directory_Owners item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_Owners>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    /// <summary>
+    /// Класс аренды вагонов и владельцев
+    /// </summary>
+    public class EFDirectoryOwnerCars : IRepository<Directory_OwnerCars>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryOwnerCars;
+
+        private EFDbContext db;
+
+        public EFDirectoryOwnerCars(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryOwnerCars()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_OwnerCars> Get()
+        {
+            try
+            {
+                return db.Select<Directory_OwnerCars>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_OwnerCars Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_OwnerCars>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_OwnerCars item)
+        {
+            try
+            {
+                item.user_create = item.user_create ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_create = item.dt_create != DateTime.Parse("01.01.0001") ? item.dt_create : DateTime.Now;
+                db.Insert<Directory_OwnerCars>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_OwnerCars item)
+        {
+            try
+            {
+                item.user_edit = item.user_edit ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_edit = item.dt_edit != null ? item.dt_edit : DateTime.Now;
+                db.Update<Directory_OwnerCars>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_OwnerCars item)
+        {
+            try
+            {
+                Directory_OwnerCars dbEntry = db.Directory_OwnerCars.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_OwnerCars item = db.Delete<Directory_OwnerCars>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_OwnerCars Refresh(Directory_OwnerCars item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_OwnerCars>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+
+    #endregion
+
+    #region ВНУТРЕНИЕ СПРАВОЧНИКИ
+    /// <summary>
+    /// Класс внутрение станции АМКР
+    /// </summary>
+    public class EFDirectoryInternalStations : IRepository<Directory_InternalStations>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryInternalStations;
+
+        private EFDbContext db;
+
+        public EFDirectoryInternalStations(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryInternalStations()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_InternalStations> Get()
+        {
+            try
+            {
+                return db.Select<Directory_InternalStations>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_InternalStations Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_InternalStations>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_InternalStations item)
+        {
+            try
+            {
+                item.user_create = item.user_create ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_create = item.dt_create != DateTime.Parse("01.01.0001") ? item.dt_create : DateTime.Now;
+                db.Insert<Directory_InternalStations>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_InternalStations item)
+        {
+            try
+            {
+                item.user_edit = item.user_edit ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_edit = item.dt_edit != null ? item.dt_edit : DateTime.Now;
+                db.Update<Directory_InternalStations>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_InternalStations item)
+        {
+            try
+            {
+                Directory_InternalStations dbEntry = db.Directory_InternalStations.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_InternalStations item = db.Delete<Directory_InternalStations>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_InternalStations Refresh(Directory_InternalStations item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_InternalStations>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    /// <summary>
+    /// Класс цеха
+    /// </summary>
+    public class EFDirectoryShops : IRepository<Directory_Shops>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryShops;
+
+        private EFDbContext db;
+
+        public EFDirectoryShops(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryShops()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_Shops> Get()
+        {
+            try
+            {
+                return db.Select<Directory_Shops>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_Shops Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_Shops>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_Shops item)
+        {
+            try
+            {
+                item.user_create = item.user_create ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_create = item.dt_create != DateTime.Parse("01.01.0001") ? item.dt_create : DateTime.Now;
+                db.Insert<Directory_Shops>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_Shops item)
+        {
+            try
+            {
+                item.user_edit = item.user_edit ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_edit = item.dt_edit != null ? item.dt_edit : DateTime.Now;
+                db.Update<Directory_Shops>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_Shops item)
+        {
+            try
+            {
+                Directory_Shops dbEntry = db.Directory_Shops.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_Shops item = db.Delete<Directory_Shops>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_Shops Refresh(Directory_Shops item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_Shops>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    /// <summary>
+    /// Класс вагонаопрокид
+    /// </summary>
+    public class EFDirectoryOverturn : IRepository<Directory_Overturn>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryOverturn;
+
+        private EFDbContext db;
+
+        public EFDirectoryOverturn(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryOverturn()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_Overturn> Get()
+        {
+            try
+            {
+                return db.Select<Directory_Overturn>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_Overturn Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_Overturn>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_Overturn item)
+        {
+            try
+            {
+                item.user_create = item.user_create ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_create = item.dt_create != DateTime.Parse("01.01.0001") ? item.dt_create : DateTime.Now;
+                db.Insert<Directory_Overturn>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_Overturn item)
+        {
+            try
+            {
+                item.user_edit = item.user_edit ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_edit = item.dt_edit != null ? item.dt_edit : DateTime.Now;
+                db.Update<Directory_Overturn>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_Overturn item)
+        {
+            try
+            {
+                Directory_Overturn dbEntry = db.Directory_Overturn.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_Overturn item = db.Delete<Directory_Overturn>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_Overturn Refresh(Directory_Overturn item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_Overturn>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    /// <summary>
+    /// Класс пути и перегоны
+    /// </summary>
+    public class EFDirectoryWays : IRepository<Directory_Ways>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryWays;
+
+        private EFDbContext db;
+
+        public EFDirectoryWays(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryWays()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_Ways> Get()
+        {
+            try
+            {
+                return db.Select<Directory_Ways>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_Ways Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_Ways>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_Ways item)
+        {
+            try
+            {
+                item.user_create = item.user_create ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_create = item.dt_create != DateTime.Parse("01.01.0001") ? item.dt_create : DateTime.Now;
+                db.Insert<Directory_Ways>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_Ways item)
+        {
+            try
+            {
+                item.user_edit = item.user_edit ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_edit = item.dt_edit != null ? item.dt_edit : DateTime.Now;
+                db.Update<Directory_Ways>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_Ways item)
+        {
+            try
+            {
+                Directory_Ways dbEntry = db.Directory_Ways.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_Ways item = db.Delete<Directory_Ways>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_Ways Refresh(Directory_Ways item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_Ways>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    /// <summary>
+    /// Класс типы путей
+    /// </summary>
+    public class EFDirectoryTypeWays : IRepository<Directory_TypeWays>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryTypeWays;
+
+        private EFDbContext db;
+
+        public EFDirectoryTypeWays(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryTypeWays()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_TypeWays> Get()
+        {
+            try
+            {
+                return db.Select<Directory_TypeWays>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_TypeWays Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_TypeWays>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_TypeWays item)
+        {
+            try
+            {
+                db.Insert<Directory_TypeWays>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_TypeWays item)
+        {
+            try
+            {
+                db.Update<Directory_TypeWays>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_TypeWays item)
+        {
+            try
+            {
+                Directory_TypeWays dbEntry = db.Directory_TypeWays.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_TypeWays item = db.Delete<Directory_TypeWays>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_TypeWays Refresh(Directory_TypeWays item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_TypeWays>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    #endregion
+
+    #region ОБЩИЕ СПРАВОЧНИКИ
+    /// <summary>
+    /// Класс грузополучатели
+    /// </summary>
+    public class EFDirectoryConsignee : IRepository<Directory_Consignee>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryConsignee;
+
+        private EFDbContext db;
+
+        public EFDirectoryConsignee(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryConsignee()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_Consignee> Get()
+        {
+            try
+            {
+                return db.Select<Directory_Consignee>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_Consignee Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_Consignee>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_Consignee item)
+        {
+            try
+            {
+                item.user_create = item.user_create ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_create = item.dt_create != DateTime.Parse("01.01.0001") ? item.dt_create : DateTime.Now;
+                db.Insert<Directory_Consignee>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_Consignee item)
+        {
+            try
+            {
+                item.user_edit = item.user_edit ?? System.Environment.UserDomainName + @"\" + System.Environment.UserName;
+                item.dt_edit = item.dt_edit != null ? item.dt_edit : DateTime.Now;
+                db.Update<Directory_Consignee>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_Consignee item)
+        {
+            try
+            {
+                Directory_Consignee dbEntry = db.Directory_Consignee.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_Consignee item = db.Delete<Directory_Consignee>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_Consignee Refresh(Directory_Consignee item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_Consignee>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    /// <summary>
+    /// Класс стран
+    /// </summary>
+    public class EFDirectoryCountry : IRepository<Directory_Country>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryCountry;
+
+        private EFDbContext db;
+
+        public EFDirectoryCountry(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryCountry()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_Country> Get()
+        {
+            try
+            {
+                return db.Select<Directory_Country>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_Country Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_Country>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_Country item)
+        {
+            try
+            {
+
+                db.Insert<Directory_Country>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_Country item)
+        {
+            try
+            {
+                db.Update<Directory_Country>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_Country item)
+        {
+            try
+            {
+                Directory_Country dbEntry = db.Directory_Country.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_Country item = db.Delete<Directory_Country>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_Country Refresh(Directory_Country item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_Country>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    /// <summary>
+    /// Класс внешних станций
+    /// </summary>
+    public class EFDirectoryExternalStations : IRepository<Directory_ExternalStations>
+    {
+        private eventID eventID = eventID.EFRW_EFDirectoryExternalStations;
+
+        private EFDbContext db;
+
+        public EFDirectoryExternalStations(EFDbContext db)
+        {
+
+            this.db = db;
+        }
+
+        public EFDirectoryExternalStations()
+        {
+
+            this.db = new EFDbContext();
+        }
+
+        public IEnumerable<Directory_ExternalStations> Get()
+        {
+            try
+            {
+                return db.Select<Directory_ExternalStations>();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get()"), eventID);
+                return null;
+            }
+        }
+
+        public Directory_ExternalStations Get(int id)
+        {
+            try
+            {
+                return db.Select<Directory_ExternalStations>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Get(id={0})", id), eventID);
+                return null;
+            }
+        }
+
+        public void Add(Directory_ExternalStations item)
+        {
+            try
+            {
+
+                db.Insert<Directory_ExternalStations>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Add(item={0})", item), eventID);
+            }
+        }
+
+        public void Update(Directory_ExternalStations item)
+        {
+            try
+            {
+                db.Update<Directory_ExternalStations>(item);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Update(item={0})", item), eventID);
+            }
+        }
+
+        public void AddOrUpdate(Directory_ExternalStations item)
+        {
+            try
+            {
+                Directory_ExternalStations dbEntry = db.Directory_ExternalStations.Find(item.id);
+                if (dbEntry == null)
+                {
+                    Add(item);
+                }
+                else
+                {
+                    Update(item);
+                }
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOrUpdate(item={0})", item), eventID);
+            }
+
+        }
+
+        public void Delete(int id)
+        {
+            try
+            {
+                Directory_ExternalStations item = db.Delete<Directory_ExternalStations>(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Delete(id={0})", id), eventID);
+            }
+        }
+
+        public int Save()
+        {
+            try
+            {
+                return db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Save()"), eventID);
+                return -1;
+            }
+        }
+
+        public Directory_ExternalStations Refresh(Directory_ExternalStations item)
+        {
+            try
+            {
+                db.Entry(item).State = EntityState.Detached;
+                return db.Select<Directory_ExternalStations>(item.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("Refresh(item={0})", item), eventID);
+                return null;
+            }
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+    }
+    #endregion
+
 
     #endregion
 
     #region ВАГОНЫ
-    // Класс внутренего перемещения вагонов
+    /// <summary>
+    /// Класс внутренего перемещения вагонов
+    /// </summary>
     public class EFCarsInternal : IRepository<CarsInternal>
     {
         private eventID eventID = eventID.EFRW_EFCarsInternal;
@@ -860,7 +2736,9 @@ namespace EFRW.Concrete
         }
 
     }
-    // Класс операций над  вагоном
+    /// <summary>
+    /// Класс операций над  вагоном
+    /// </summary>
     public class EFCarOperations : IRepository<CarOperations>
     {
         private eventID eventID = eventID.EFRW_EFCarOperations;
@@ -1014,7 +2892,9 @@ namespace EFRW.Concrete
         }
 
     }
-    // Класс входящих поставок
+    /// <summary>
+    /// Класс входящих поставок
+    /// </summary>
     public class EFCarInboundDelivery : IRepository<CarInboundDelivery>
     {
         private eventID eventID = eventID.EFRW_EFCarInboundDelivery;
@@ -1164,7 +3044,9 @@ namespace EFRW.Concrete
         }
 
     }
-    // Класс исходящих поставок
+    /// <summary>
+    /// Класс исходящих поставок
+    /// </summary>
     public class EFCarOutboundDelivery : IRepository<CarOutboundDelivery>
     {
         private eventID eventID = eventID.EFRW_EFCarOutboundDelivery;
@@ -1314,7 +3196,9 @@ namespace EFRW.Concrete
         }
 
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class EFCarConditions : IRepository<CarConditions>
     {
         private eventID eventID = eventID.EFRW_EFCarConditions;
@@ -1464,7 +3348,9 @@ namespace EFRW.Concrete
         }
 
     }
-
+    /// <summary>
+    /// Класс сотояний вагона
+    /// </summary>
     public class EFCarStatus : IRepository<CarStatus>
     {
         private eventID eventID = eventID.EFRW_EFCarStatus;
@@ -1614,6 +3500,8 @@ namespace EFRW.Concrete
         }
 
     }
+
+
     #endregion
 
 }

@@ -61,27 +61,42 @@ namespace MessageLog
 
         #region Служба RailWay 4000
 
-        EFRW = 4100,                        // Библиотека доступа к данным БД RailWay
-        EFRW_EFReference = 4101,            // Модуль доступа к БД справочников системы RailWay
-        EFRW_EFRailWay = 4102,              // Библиотека доступа к данным БД RailWay
+        EFRW = 4100,                                // Библиотека доступа к данным БД RailWay
+        EFRW_EFReference = 4101,                    // Модуль доступа к БД справочников системы RailWay
+        EFRW_EFRailWay = 4102,                      // Библиотека доступа к данным БД RailWay
 
-        EFRW_EFDirectoryCars = 4110,         // Библиотека доступа к данным Directory_Cars БД RailWay
-        EFRW_EFDirectoryTypeCars = 4111,         // Библиотека доступа к данным Directory_TypeCars БД RailWay
-        EFRW_DirectoryGroupCars = 4112,         // Библиотека доступа к данным Directory_GroupCars БД RailWay
-        EFRW_EFDirectoryCargo = 4113,         // Библиотека доступа к данным Directory_Cars БД RailWay
+        EFRW_EFDirectoryCars = 4110,                // Библиотека доступа к данным Directory_Cars БД RailWay
+        EFRW_EFDirectoryTypeCars = 4111,            // Библиотека доступа к данным Directory_TypeCars БД RailWay
+        EFRW_EFDirectoryGroupCars = 4112,           // Библиотека доступа к данным Directory_GroupCars БД RailWay
+        EFRW_EFDirectoryCargo = 4113,               // Библиотека доступа к данным Directory_Cargo БД RailWay
+        EFRW_EFDirectoryTypeCargo = 4114,           // Библиотека доступа к данным Directory_TypeCargo БД RailWay
+        EFRW_EFDirectoryGroupCargo = 4115,          // Библиотека доступа к данным Directory_GroupCargo БД RailWay
+        EFRW_EFDirectoryOwners = 4116,              // Библиотека доступа к данным Directory_Owners БД RailWay
+        EFRW_EFDirectoryOwnerCars = 4117,           // Библиотека доступа к данным Directory_OwnerCars БД RailWay
+        EFRW_EFDirectoryInternalStations = 4118,    // Библиотека доступа к данным Directory_InternalStations БД RailWay
+        EFRW_EFDirectoryShops = 4119,               // Библиотека доступа к данным Directory_Shops БД RailWay
+        EFRW_EFDirectoryOverturn = 4120,            // Библиотека доступа к данным Directory_Overturn БД RailWay
+        EFRW_EFDirectoryWays = 4121,                // Библиотека доступа к данным Directory_Ways БД RailWay
+        EFRW_EFDirectoryTypeWays = 4122,            // Библиотека доступа к данным Directory_TypeWays БД RailWay
+        EFRW_EFDirectoryConsignee = 4123,           // Библиотека доступа к данным Directory_Consignee БД RailWay
+        EFRW_EFDirectoryCountry = 4124,             // Библиотека доступа к данным Directory_Country БД RailWay
+        EFRW_EFDirectoryExternalStations = 4125,    // Библиотека доступа к данным Directory_ExternalStations БД RailWay
 
-        EFRW_EFCarsInternal = 4150,             // Библиотека доступа к данным CarsInternal БД RailWay
-        EFRW_EFCarOperations = 4151,            // Библиотека доступа к данным CarOperations БД RailWay
-        EFRW_EFCarInboundDelivery = 4152,       // Библиотека доступа к данным CarInboundDelivery БД RailWay
-        EFRW_EFCarOutboundDelivery = 4153,      // Библиотека доступа к данным CarOutboundDelivery БД RailWay
-        EFRW_EFCarConditions = 4154,            // Библиотека доступа к данным CarConditions БД RailWay
-        EFRW_EFCarStatus = 4155,                // Библиотека доступа к данным CarStatus БД RailWay
+        EFRW_EFCarsInternal = 4150,                 // Библиотека доступа к данным CarsInternal БД RailWay
+        EFRW_EFCarOperations = 4151,                // Библиотека доступа к данным CarOperations БД RailWay
+        EFRW_EFCarInboundDelivery = 4152,           // Библиотека доступа к данным CarInboundDelivery БД RailWay
+        EFRW_EFCarOutboundDelivery = 4153,          // Библиотека доступа к данным CarOutboundDelivery БД RailWay
+        EFRW_EFCarConditions = 4154,                // Библиотека доступа к данным CarConditions БД RailWay
+        EFRW_EFCarStatus = 4155,                    // Библиотека доступа к данным CarStatus БД RailWay
 
-        RW = 4200,                          // Библиотека сервисов обработки данных RailWay
-        RW_RWFilters = 4201,               // Модуль переноса данных системы RailWay
-        RW_RWOperation = 4202,              // Модуль операций системы RailWay (TODO: Этот модуль удалить)
-        RW_RWOperations = 4204,              // Модуль операций системы RailWay
-        RW_RWReference = 4203,              // Модуль спрвочных данных системы RailWay
+        RW = 4200,                                  // Библиотека сервисов обработки данных RailWay
+        RW_RWCars = 4201,                           // Модуль класса вагоны системы RailWay
+        RW_RWDirectory = 4202,                      // Модуль класса справочники системы RailWay
+
+        RW_RWFilters = 4210,                        // Модуль переноса данных системы RailWay
+        RW_RWOperation = 4220,                      // Модуль операций системы RailWay (TODO: Этот модуль удалить)
+        RW_RWOperations = 4221,                     // Модуль операций системы RailWay
+        RW_RWReference = 4222,                      // Модуль спрвочных данных системы RailWay
         #endregion
 
         #region Служба общей справочной системы 5000

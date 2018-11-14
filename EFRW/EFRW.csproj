@@ -50,14 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IRailWay1.cs" />
-    <Compile Include="Abstract\IReference.cs" />
     <Compile Include="Abstract\IRailWay.cs" />
+    <Compile Include="Abstract\IReference.cs" />
     <Compile Include="Abstract\IRepository.cs" />
     <Compile Include="Concrete\EFDbContext1.cs" />
-    <Compile Include="Concrete\EFRailWay1.cs" />
-    <Compile Include="Concrete\EFReference.cs" />
     <Compile Include="Concrete\EFRailWay.cs" />
+    <Compile Include="Concrete\EFReference.cs" />
     <Compile Include="Concrete\EFRepository.cs" />
     <Compile Include="Entities\old\ReferenceCargo.cs" />
     <Compile Include="Entities\old\ReferenceCountry.cs" />

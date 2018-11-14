@@ -538,7 +538,7 @@ namespace RW
         {
             try
             {
-                EFRailWay1 ef_rw = new EFRailWay1();
+                EFRailWay ef_rw = new EFRailWay();
                 EFReference.Concrete.EFReference reference = new EFReference.Concrete.EFReference();
                 Stations station = ef_rw.GetStationsOfCodeUZ(code_uz);
                 // Если нет станции создадим
@@ -624,7 +624,7 @@ namespace RW
         {
             try
             {
-                EFRailWay1 ef_rw = new EFRailWay1();
+                EFRailWay ef_rw = new EFRailWay();
                 EFWagons kis = new EFWagons();
                 Stations station = ef_rw.GetStationsOfKis(id_kis);
                 // Если нет станции создадим
@@ -780,7 +780,7 @@ namespace RW
             try
             {
                 if (String.IsNullOrWhiteSpace(num)) return null;
-                EFRailWay1 ef_rw = new EFRailWay1();
+                EFRailWay ef_rw = new EFRailWay();
                 EFWagons kis = new EFWagons();
                 Ways way = ef_rw.GetWaysOfStation(id_station, num);
                 // Если нет станции создадим
@@ -844,7 +844,7 @@ namespace RW
         public int GetIDDefaultWayOfStation(int id_station, string num) {
             try
             {
-                EFRailWay1 ef_rw = new EFRailWay1();
+                EFRailWay ef_rw = new EFRailWay();
                 int id = GetIDWayOfStation(id_station, num);
                 if (id == 0)
                 {
@@ -904,7 +904,7 @@ namespace RW
         {
             try
             {
-                EFRailWay1 ef_rw = new EFRailWay1();
+                EFRailWay ef_rw = new EFRailWay();
                 Shops shop = ef_rw.GetShopsOfKis(id_kis);
                 if (shop == null & create & this.reference_kis)
                 {
@@ -952,7 +952,7 @@ namespace RW
         {
             try
             {
-                EFRailWay1 ef_rw = new EFRailWay1();
+                EFRailWay ef_rw = new EFRailWay();
                 Deadlock deadlock = ef_rw.GetDeadlockOfKis(id_kis);
                 if (deadlock == null & create & this.reference_kis)
                 {

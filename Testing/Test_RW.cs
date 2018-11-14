@@ -155,42 +155,6 @@ namespace Testing
             //Directory_Cars new_car2 = ef_rw.GetDirectory_Cars(99999990);
             //Directory_Cars new_car_del = ef_rw.DeleteDirectory_Cars(99999990);
         }
-
-        public int EFRailWay_SaveDirectory_Cars(Directory_Cars car)
-        {
-            EFRailWay ef_rw = new EFRailWay();  
-            //Directory_Cars new_car = new Directory_Cars()
-            //{
-            //    num = num,
-            //    id_type = 2,
-            //    sap = null,
-            //    note = null,
-            //    lifting_capacity = 0,
-            //    tare = 0,
-            //    id_country = 0,
-            //    count_axles = 0,
-            //    is_output_uz = true,
-            //};
-            int res = ef_rw.AddDirectory_Cars(car);
-            return res;
-        }
-
-        public Directory_Cars EFRailWay_GetDirectory_Cars(int num)
-        {
-            EFRailWay ef_rw = new EFRailWay();  
-            Directory_Cars res = ef_rw.GetDirectory_Cars(num);
-            return res;
-        }
-
-        public Directory_Cars EFRailWay_DeleteDirectory_Cars(int num)
-        {
-            EFRailWay ef_rw = new EFRailWay();  
-            Directory_Cars res = ef_rw.DeleteDirectory_Cars(num);
-            return res;
-        }
-
-
-
         #endregion
 
         #endregion
@@ -281,7 +245,7 @@ namespace Testing
             DateTime dt1 = DateTime.Now;
             DateTime dt2 = DateTime.Now.AddHours(+2);
             ReferenceCars ref_car = rw_ref.GetReferenceCarsOfNum(1111, 1, DateTime.Now, 0, true, true);
-            EFRailWay1 ef_rw = new EFRailWay1();
+            EFRailWay ef_rw = new EFRailWay();
             //Cars car = new Cars() {
             //    id = 0,
             //    id_arrival = 1,
@@ -348,7 +312,7 @@ namespace Testing
 
         public void EFRailWay_GetListCars()
         {
-            EFRailWay1 ef_rw = new EFRailWay1();
+            EFRailWay ef_rw = new EFRailWay();
             //List<Cars> list = ef_rw.GetFirstCarsOfNum(52921343).ToList();
             List<CarsHistory> list1 = ef_rw.GetHistoryCarsOfNum(52921343);
 
@@ -364,7 +328,7 @@ namespace Testing
 
         public void EFRailWay_query_GetOpenOperationOfNumCar()
         { 
-            EFRailWay1 ef_rw = new EFRailWay1();
+            EFRailWay ef_rw = new EFRailWay();
             DateTime dt_start = DateTime.Now;
             List<EFRW.Entities1.CarOperations> list1 = ef_rw.query_GetOpenOperationOfNumCar(52921079).ToList();
             TimeSpan ts = DateTime.Now - dt_start;
@@ -373,7 +337,7 @@ namespace Testing
         }
 
         public void EFRailWay_GetOpenOperationOfNumCar() { 
-            EFRailWay1 ef_rw = new EFRailWay1();
+            EFRailWay ef_rw = new EFRailWay();
             DateTime dt_start = DateTime.Now;
             List<EFRW.Entities1.CarOperations> list2 = ef_rw.GetOpenOperationOfNumCar(52921079).ToList();
             TimeSpan ts = DateTime.Now - dt_start;
