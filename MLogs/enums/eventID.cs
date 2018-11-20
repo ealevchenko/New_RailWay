@@ -97,6 +97,8 @@ namespace MessageLog
         RW_RWOperation = 4220,                      // Модуль операций системы RailWay (TODO: Этот модуль удалить)
         RW_RWOperations = 4221,                     // Модуль операций системы RailWay
         RW_RWReference = 4222,                      // Модуль спрвочных данных системы RailWay
+
+        RW_RWHelpers = 4230,                        // Вспомогательный класс статических методов
         #endregion
 
         #region Служба общей справочной системы 5000

@@ -52,7 +52,8 @@
     <Compile Include="IRWOperations.cs" />
     <Compile Include="RWCars.cs" />
     <Compile Include="RWDirectory.cs" />
-    <Compile Include="RWFilter.cs" />
+    <Compile Include="RWFilter1.cs" />
+    <Compile Include="RWHelpers.cs" />
     <Compile Include="RWOperation.cs" />
     <Compile Include="RWOperations.cs" />
     <Compile Include="RWReference.cs" />
