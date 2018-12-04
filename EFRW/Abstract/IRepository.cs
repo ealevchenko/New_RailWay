@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace EFRW.Abstract
 {
     interface IRepository<T> : IDisposable where T : class
     {
+        Database Database { get; }
         IEnumerable<T> Get();       // получение всех объектов
         T Get(int id);              // получение одного объекта по id
         void Add(T item);           // создание объекта
