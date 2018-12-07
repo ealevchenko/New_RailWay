@@ -57,6 +57,10 @@ namespace Testing
             #region Test_RW
             Test_RW tst_rw = new Test_RW();
 
+            #region RWCars
+            //tst_rw.RWCars_CreateCarsInternal(); // Создать строку внутренего перемещения вагона
+            //tst_rw.RWCars_CreateCarOperations(); // Создать новую операцию над вагоном
+            #endregion
 
             //tst_rw.RWTransfer_ArrivalMTToRailway(); // Тест переноса данных МТ (по id_sostav) в систему RailWay
             //tst_rw.RWReference_GetReferenceCarsOfNum(); // Тест справочника вагонов
@@ -78,7 +82,7 @@ namespace Testing
             #region EFRailWay
             //tst_rw.EFRailWay_SaveCarsInternal(); // Получить сохранить внутренее перемещение
 
-            tst_rw.EFRailWay_CreateSaveEditDeleteDirectory_Cars(); // Тест создать строку справочника вагона, прочесть, изменить, удалить.
+            //tst_rw.EFRailWay_CreateSaveEditDeleteDirectory_Cars(); // Тест создать строку справочника вагона, прочесть, изменить, удалить.
 
             //tst_rw.EFRailWay_query_GetOpenOperationOfNumCar(); // Получить последнюю открытую операцию по указаному вагону (через query)
             //tst_rw.EFRailWay_GetOpenOperationOfNumCar(); // Получить последнюю открытую операцию по указаному вагону   
@@ -147,7 +151,7 @@ namespace Testing
             #region MTTransfer
 
             //tst_mt.MTTransfer_TransferArrivalSostavToRailWay();         // Тест переноса составов на путь отправки на АМКР
-            //tst_mt.MTTransfer_TransferArrivalSostavToRailWayOfBas();    // Тест переноса строки буффера составов на путь отправки на АМКР
+            ////tst_mt.MTTransfer_TransferArrivalSostavToRailWayOfBas();    // Тест переноса строки буффера составов на путь отправки на АМКР
 
             #endregion
 
@@ -234,7 +238,7 @@ namespace Testing
 
             #region Test_Wagons
             Test_Wagons tst_wag = new Test_Wagons();
-            //tst_wag.Test_KometaContent_KometaVagonSob(); // все данные KometaVagonSob
+            tst_wag.Test_KometaContent_KometaVagonSob(); // все данные KometaVagonSob
             //tst_wag.Test_KometaContent_KometaVagonSob(68823137); // все данные KometaVagonSob
             //tst_wag.Test_KometaContent_KometaVagonSob(68823137, DateTime.Now); // все данные KometaVagonSob
             //tst_rw_ref.ReferenceCargo_Get();

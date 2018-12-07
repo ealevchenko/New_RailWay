@@ -2160,6 +2160,7 @@ namespace MetallurgTrans
             try
             {
                 EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+                //RWOperations_old rw_operations = new RWOperations_old(this.servece_owner);
                 RWOperations rw_operations = new RWOperations(this.servece_owner);
                 int transfer_count = 0;
                 int transfer = 0;
@@ -2184,7 +2185,8 @@ namespace MetallurgTrans
                 tsp_count = list_old_car != null ? list_old_car.Count() : 0;
                 foreach (ArrivalCars car_old in list_old_car)
                 {
-                    int res_tsp = rw_operations.TSPOnUZ(car_old, sostav_new.DateTime);
+                    //int res_tsp = rw_operations.TSPOnUZ(car_old, sostav_new.DateTime);
+                    int res_tsp = rw_operations.CarTSPUZ(car_old, sostav_new.DateTime);
                     tsp += res_tsp > 0 ? 1 : 0;
                     tsp_error += res_tsp < 0 ? 1 : 0;
                 }
@@ -2194,7 +2196,8 @@ namespace MetallurgTrans
                 foreach (ArrivalCars car in list_car_transfer) {
                     DateTime dt_start = DateTime.Now;
                     message += car.Num.ToString() + ":";
-                    int res_transfer = rw_operations.ArrivalOnUZ(car);
+                    //int res_transfer = rw_operations.ArrivalOnUZ(car);
+                    int res_transfer = rw_operations.CarArrivesUZ(car);
                     transfer += res_transfer > 0 ? 1 : 0;
                     transfer_skip += res_transfer == 0 ? 1 : 0;
                     transfer_error += res_transfer < 0 ? 1 : 0;
@@ -2209,6 +2212,7 @@ namespace MetallurgTrans
                 if (transfer_error > 0 || tsp_error>0) { mess.WriteEvents(message, servece_owner, eventID); }
                 // Сохраним в буфере
                 bas.count_set_wagons = transfer + transfer_skip;
+                //bas.count_set_wagons = rw_operations.CarsArrivesUZ(sostav_new);
                 bas.message = message;
                 bas.list_no_set_wagons = list_no_set;
                 int res_bas = ef_mt.SaveBufferArrivalSostav(bas);

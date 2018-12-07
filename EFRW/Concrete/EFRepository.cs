@@ -52,8 +52,8 @@ namespace EFRW.Concrete
         {
 
             //// Отключаем отслеживание и проверку изменений для оптимизации вставки множества полей
-            //context.Configuration.AutoDetectChangesEnabled = false;
-            //context.Configuration.ValidateOnSaveEnabled = false;
+            context.Configuration.AutoDetectChangesEnabled = false;
+            context.Configuration.ValidateOnSaveEnabled = false;
 
             context.Database.Log = (s => System.Diagnostics.Debug.WriteLine(s));
 
@@ -61,8 +61,8 @@ namespace EFRW.Concrete
                 context.Entry(entity).State = EntityState.Added;
 
 
-            //context.Configuration.AutoDetectChangesEnabled = true;
-            //context.Configuration.ValidateOnSaveEnabled = true;
+            context.Configuration.AutoDetectChangesEnabled = true;
+            context.Configuration.ValidateOnSaveEnabled = true;
         }
 
         public static void Update<TEntity>(this EFDbContext context, TEntity entity) where TEntity : class

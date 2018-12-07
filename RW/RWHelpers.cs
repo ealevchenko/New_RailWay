@@ -50,5 +50,39 @@ namespace RW
             }
             return result;
         }
+
+        /// <summary>
+        /// Вернуть последнюю операцию из списка операций
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static CarOperations GetLastOperation(this IEnumerable<CarOperations> list)
+        {
+            try
+            {
+                if (list == null) return null;
+                return list.OrderByDescending(o => o.dt_inp).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastOperation(list={0})", list), eventID);
+                return null;
+            }
+        }
+
+        public static CarOperations GetLastOpenOperation(this IEnumerable<CarOperations> list)
+        {
+            try
+            {
+                if (list == null) return null;
+                return list.IsStatusOperatio(RWHelpers.IsOpen).OrderByDescending(o => o.dt_inp).GetLastOperation();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetLastOpenOperation(list={0})", list), eventID);
+                return null;
+            }
+        }
+
     }
 }
