@@ -125,19 +125,32 @@ namespace RW
             try
             {
                 RWCars rw_cars = new RWCars();
+                int result = 0;
                 // Вернем последнюю операцию
                 CarOperations last_operation = rw_cars.GetLastOperation(car.Num);
-                // Вагон заходил на АМКР
+                // Вагон заходил на АМКР?
                 if (last_operation == null)
                 {
-                    // Вагон не заходил на АМКР
-
+                    // Вагон Не заходил на АМКР. 
+                    result = rw_cars.NewCarsInternal(car, null);
                 }
                 else { 
-                
+                    // Вагон Есть в системе RailWay
+                    DateTime? data_operation = last_operation.GetDateOperation();
+                    // Дата выполняемой операции больше или равно (сразу ТСП после прибытия) текущей операции?
+                    if (data_operation != null && data_operation <= car.DateOperation)
+                    {
+                        // Да, перейдем к следующей проверке
+
+                    }
+                    else { 
+                        // Нет, это старая операция найдем ее по данным КИС и выполним заход и если есть выход 
+                        // TODO: Выполнить код поиска по КИС старой операции входа на и выход из АМКР, вставка операций в систему RAILWAY
+                        return -2;
+                    }
                 }
 
-                return 0;
+                return result;
             }
             catch (Exception e)
             {

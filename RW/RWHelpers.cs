@@ -83,6 +83,22 @@ namespace RW
                 return null;
             }
         }
-
+        /// <summary>
+        /// Вернуть дату и время операции (если не закрыта берется дата прибытия, если закрыта берется дата отправки)
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <returns></returns>
+        public static DateTime? GetDateOperation(this CarOperations operation) {
+            try
+            {
+                if (operation == null) return null;
+                return operation.dt_out != null ? operation.dt_out : operation.dt_inp;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetDateOperation(operation={0})", operation), eventID);
+                return null;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using EFReference.Entities;
+﻿using EFKIS.Entities;
+using EFReference.Entities;
 using EFRW.Concrete;
 using EFRW.Concrete.EFDirectory;
 using EFRW.Entities;
@@ -295,6 +296,24 @@ namespace RW
 
         #region Справочник "Станций railway"
         /// <summary>
+        /// Получить строку справочника "Станций railway" по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Directory_InternalStations GetInternalStations(int id)
+        {
+            try
+            {
+                EFDirectoryInternalStations ef_station = new EFDirectoryInternalStations(this.db);
+                return ef_station.Get(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWays(id={0})", id), eventID);
+                return null;
+            }
+        }
+        /// <summary>
         /// Получить строку справочника "Станций railway" по коду станции УЗ
         /// </summary>
         /// <param name="code_uz"></param>
@@ -467,6 +486,24 @@ namespace RW
         #endregion
 
         #region Справочник "Путей railway"
+        /// <summary>
+        /// Вернуть путь по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Directory_Ways GetWay(int id)
+        {
+            try
+            {
+                EFDirectoryWays ef_way = new EFDirectoryWays(this.db);
+                return ef_way.Get(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWays(id={0})", id), eventID);
+                return null;
+            }
+        }
         /// <summary>
         /// Получить строку справочника "Путей railway" по коду станции и номеру пити
         /// </summary>
@@ -643,10 +680,251 @@ namespace RW
 
         #endregion
 
+        #region Справочник типов вагонов
+        /// <summary>
+        /// Вернуть тип вагона по абривиатуре
+        /// </summary>
+        /// <param name="abr"></param>
+        /// <returns></returns>
+        public Directory_TypeCars GetTypeCarsOfAbr(string abr)
+        {
+            try
+            {
+                EFDirectoryTypeCars ef_type = new EFDirectoryTypeCars(this.db);
+                return ef_type.Get().Where(t => t.type_cars_abr_ru.Trim().ToLower() == abr.Trim().ToLower()).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetTypeCarsOfAbr(abr={0})", abr), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Вернуть строку справочника тип вагона по роду вагона, если род вагона пуст вернет тип "Не определен"
+        /// </summary>
+        /// <param name="rod"></param>
+        /// <returns></returns>
+        public Directory_TypeCars GetTypeCarsOfRod(string rod)
+        {
+            try
+            {
+                EFDirectoryTypeCars ef_type = new EFDirectoryTypeCars(this.db);
+                if (String.IsNullOrWhiteSpace(rod)) return ef_type.Get(0);
+                return GetTypeCarsOfAbr(rod);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetTypeCarsOfRod(rod={0})", rod), servece_owner, eventID);
+                return null;
+            }
+        }
+        #endregion
 
+        #region Справочник вагонов
+        /// <summary>
+        /// Получить строку справочника "Вагон" по номеру, если нет создать новую строку справочника "Вагон", "Аренда Вагона"
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="id_arrival"></param>
+        /// <param name="dt"></param>
+        /// <param name="id_country"></param>
+        /// <param name="create_car"></param>
+        /// <param name="create_owner"></param>
+        /// <returns></returns>
+        public Directory_Cars GetCarsOfNum(int num, int id_arrival, DateTime dt, int id_country, string note, string sap, bool create_car, bool create_owner)
+        {
+            try
+            {
 
+                EFDirectoryCars ef_car = new EFDirectoryCars(this.db);
+                EFKIS.Concrete.EFWagons ef_wag = new EFKIS.Concrete.EFWagons();
+                Directory_Cars car = ef_car.Get(num); ;
+                // Создаем строку справочника вагона и строки аренды и владельца
+                if (car == null & create_car)
+                {
+                    EFKIS.Entities.KometaVagonSob car_kis = null;
+                    Directory_TypeCars type_car_kis = null;
+                    List<EFKIS.Entities.KometaVagonSob> list_owner = null;
+                    if (this.reference_kis)
+                    {
+                        list_owner = ef_wag.GetVagonsSob(num).ToList();
+                        if (list_owner != null && list_owner.Count() > 0)
+                        {
+                            car_kis = ef_wag.GetVagonsSob(num, dt); // Получим текущий вагон из КИС
+                            if (car_kis == null)
+                            { // Текущего нет возьмем последнюю запись
+                                car_kis = list_owner.FirstOrDefault();
+                            }
+                            type_car_kis = GetTypeCarsOfRod(car_kis != null ? car_kis.ROD : null);
+                        }
+                    }
+                    // Создать строку справочника "Вагоны"
+                    car = new Directory_Cars()
+                    {
+                        num = num,
+                        id_type = (type_car_kis != null ? type_car_kis.id : 0),
+                        note = note,
+                        sap = sap,
+                        lifting_capacity = 0,
+                        tare = 0,
+                        id_country = id_country,
+                        count_axles = null,
+                        is_output_uz = (car_kis != null ? true : false), // Выход на дорогу
 
+                    };
+                    ef_car.Add(car);
+                    int res = ef_car.Save();
+                    // Создаем список аренд и собственника вагона
+                    if (res > 0 && create_owner)
+                    {
+                        int res_oc = AddOwnerCars(num, id_arrival, dt);
+                    }
+                }
+                return car;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetReferenceCarsOfNum(num={0}, id_arrival={1}, dt={2}, id_country={3}, note={4}, sap={5}, create_car={6}, create_owner={7})",
+                    num, id_arrival, dt, id_country, note, sap, create_car, create_owner), servece_owner, eventID);
+                return null;
+            }
+        }
+        #endregion
 
+        #region Справочник "Владельцы вагонов"
+        /// <summary>
+        /// Вернуть строку справочника "Владельцы вагонов" по коду системы KIS
+        /// </summary>
+        /// <param name="id_kis"></param>
+        /// <returns></returns>
+        public Directory_Owners GetOwnersOfKIS(int id_kis)
+        {
+            try
+            {
+                EFDirectoryOwners ef_owner = new EFDirectoryOwners(this.db);
+                return ef_owner.Get().Where(o => o.id_kis == id_kis).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOwnersOfKIS(id_kis={0})", id_kis), servece_owner, eventID);
+                return null;
+            };
+        }
+        /// <summary>
+        /// Получить владельца по id_kis, если нет создать по данным КИС
+        /// </summary>
+        /// <param name="id_kis"></param>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public Directory_Owners GetOwnersOfKIS(int id_kis, bool create)
+        {
+            try
+            {
+                EFKIS.Concrete.EFWagons ef_wag = new EFKIS.Concrete.EFWagons();
+                //EFRW.Concrete.EFReference ef_ref = new EFRW.Concrete.EFReference();
+                EFDirectoryOwners ef_owner = new EFDirectoryOwners(this.db);
+                Directory_Owners owner= GetOwnersOfKIS(id_kis);
+                if (owner == null & create)
+                {
+                    KometaSobstvForNakl owner_kis = ef_wag.GetSobstvForNakl(id_kis);
+                    if (owner_kis != null)
+                    {
+                        owner = new Directory_Owners()
+                        {
+                            id = 0,
+                            owner_name = owner_kis.NPLAT,
+                            owner_abr = owner_kis.ABR,
+                            id_kis = owner_kis.SOBSTV
+                        };
+                        ef_owner.Add(owner);
+                        ef_owner.Save();
+                    }
+                }
+                return owner;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOwnersOfKIS(id_kis={0}, create={1})", servece_owner, id_kis, create), servece_owner, eventID);
+                return null;
+            }
+        }
+        #endregion
+
+        #region Справочник "Аренда вагонов"
+        /// <summary>
+        /// Создать строку справочника "Аренда вагона"
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="id_owner"></param>
+        /// <param name="start_lease"></param>
+        /// <param name="end_lease"></param>
+        /// <param name="id_arrival"></param>
+        /// <returns></returns>
+        public int CreateOwnerCars(int num, int id_owner, DateTime? start_lease, DateTime? end_lease, int? id_arrival)
+        {
+            try
+            {
+                EFDirectoryOwnerCars ef_oc = new EFDirectoryOwnerCars(this.db);
+                Directory_OwnerCars owner_car = new Directory_OwnerCars()
+                {
+                    num = num,
+                    id_owner = id_owner,
+                    start_lease = start_lease,
+                    end_lease = end_lease,
+                    id_arrival = id_arrival,
+                };
+                ef_oc.Add(owner_car);
+                ef_oc.Save();
+                return owner_car.id;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CreateOwnerCars(num={0}, id_owner={1}, start_lease={2}, end_lease={3}, id_arrival={4})",
+                    num, id_owner, start_lease, end_lease, id_arrival), servece_owner, eventID);
+                return -1;
+            }
+        }
+        /// <summary>
+        /// Добавить в систему RailWay строки справочника "Аренда вагона" на новый вагон
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="id_arrival"></param>
+        /// <param name="dt"></param>
+        public int AddOwnerCars(int num, int id_arrival, DateTime dt)
+        {
+            try
+            {
+                EFKIS.Concrete.EFWagons ef_wag = new EFKIS.Concrete.EFWagons();
+
+                int result = 0;
+                List<KometaVagonSob> list_owner = ef_wag.GetVagonsSob(num).ToList();
+                // Проверим есть данные и признак использовать данные КИС - переносим данные в сисему RW
+                if (list_owner != null && list_owner.Count() > 0 & this.reference_kis)
+                {
+                    foreach (KometaVagonSob kvs in list_owner)
+                    {
+                        // Определим владельца если нет создадим
+                        Directory_Owners owner = GetOwnersOfKIS(kvs.SOB, true);
+                        // Создать по данным кис
+                        int res_roc = CreateOwnerCars(num, (owner != null ? owner.id : 0), kvs.DATE_AR, kvs.DATE_END, id_arrival);
+                        if (res_roc > 0) { result++; }
+                    }
+                }
+                else
+                {
+                    //Создать без данных кис
+                    int res_roc = CreateOwnerCars(num, 0, dt, null, id_arrival);
+                    if (res_roc > 0) { result++; }
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("AddOwnerCars(num={0}, id_arrival={1}, dt={2})", num, id_arrival, dt), servece_owner, eventID);
+                return -1;
+            }
+        }
+        #endregion
 
     }
 }

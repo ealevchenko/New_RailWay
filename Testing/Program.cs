@@ -60,6 +60,8 @@ namespace Testing
             #region RWCars
             //tst_rw.RWCars_CreateCarsInternal(); // Создать строку внутренего перемещения вагона
             //tst_rw.RWCars_CreateCarOperations(); // Создать новую операцию над вагоном
+
+            tst_rw.RWCars_CarOperationTransitUZ(); // Выполнить операцию транзит
             #endregion
 
             //tst_rw.RWTransfer_ArrivalMTToRailway(); // Тест переноса данных МТ (по id_sostav) в систему RailWay
@@ -238,7 +240,7 @@ namespace Testing
 
             #region Test_Wagons
             Test_Wagons tst_wag = new Test_Wagons();
-            tst_wag.Test_KometaContent_KometaVagonSob(); // все данные KometaVagonSob
+            //tst_wag.Test_KometaContent_KometaVagonSob(); // все данные KometaVagonSob
             //tst_wag.Test_KometaContent_KometaVagonSob(68823137); // все данные KometaVagonSob
             //tst_wag.Test_KometaContent_KometaVagonSob(68823137, DateTime.Now); // все данные KometaVagonSob
             //tst_rw_ref.ReferenceCargo_Get();

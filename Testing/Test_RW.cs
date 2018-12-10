@@ -60,12 +60,28 @@ namespace Testing
                 Console.WriteLine(e);
                 return -1;
             }
+        }
+
+        public int RWCars_CarOperationTransitUZ()
+        {
+            try
+            {
+                RWCars rwc = new RWCars();
+                EFRW.Entities.CarOperations operation = rwc.GetOperation(23);
+                int res = rwc.CarOperationTransitUZ(operation,DateTime.Now);
+                Console.WriteLine("Код выполнения - {0}",res);
+                return res;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return -1;
+            }
 
 
 
 
         }
-
 
         //public void EFRailWay_SaveCarsInternal() {
 

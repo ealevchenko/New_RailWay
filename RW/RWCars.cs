@@ -87,7 +87,55 @@ namespace RW
                 return null;
             }
         }
+        /// <summary>
+        /// Показать операцию по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public CarOperations GetOperation(int id)
+        {
+            try
+            {
+                EFCarOperations ef_operation = new EFCarOperations(this.db);
+                return ef_operation.Get(id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOperation(id={0})", id), servece_owner, eventID);
+                return null;
+            }
+        }
 
+        /// <summary>
+        /// Выполнить операцию транзит УЗ
+        /// </summary>
+        /// <param name="current_operation"></param>
+        /// <param name="dt_inp"></param>
+        /// <returns></returns>
+        public int CarOperationTransitUZ(CarOperations current_operation, DateTime dt_inp) {
+            try
+            {
+                if (current_operation == null) return 0; // Текущая операция не определена
+                RWDirectory rw_directory = new RWDirectory(this.db, servece_owner);
+                // Это станция УЗ
+                Directory_Ways way_current = rw_directory.GetWay((int)current_operation.id_way);
+                if (way_current == null) return -1; // Текущий путь не определен
+                Directory_InternalStations is_current = rw_directory.GetInternalStations(way_current.id_station);
+                if (is_current == null) return -1; // Текущая станция не определена
+                if (is_current != null && is_current.station_uz)
+                {
+                    Directory_Ways way_send = rw_directory.GetWaysOfStation(is_current.id, "2"); // Путь транзита на АМКР
+                    return CreateCarOperations(current_operation.id_car_internal, current_operation.id_car_conditions, 17, dt_inp, way_send.id, (int)current_operation.position, current_operation.train1, current_operation.train2, null, current_operation.id);
+                }
+                else return  -1; // Текущая станция не УЗ
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CarOperationTransitUZ(current_operation={0}, dt_inp={1})",
+                    current_operation, dt_inp), servece_owner, eventID);
+                return -1;
+            }
+        }
 
         /// <summary>
         /// Добавить новую операцию
@@ -218,6 +266,10 @@ namespace RW
 
             try
             {
+                // Проверим в справочнике вагонов
+                RWDirectory rw_directory = new RWDirectory(this.db);
+                Directory_Cars car_directory = rw_directory.GetCarsOfNum(num, id_arrival, dt_inp, rw_directory.GetIDCountryOfCodeSNG(CountryCode), null, null, true, true);
+                // Создадим новю строку внутренего перемещения вагона
                 int new_id_operation = 0;
                 int new_delivery = 0;
                 int new_id_car_internal = CreateCarsInternal(id_sostav, id_arrival, num, dt_inp, parent_id);
@@ -262,6 +314,7 @@ namespace RW
                     old_ci.dt_close = dt_uz;
                     old_ci.user_close = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
                 }
+                RWDirectory rw_directory = new RWDirectory(this.db);
                 CarsInternal new_ci = new CarsInternal()
                 {
                     id_sostav = id_sostav,
