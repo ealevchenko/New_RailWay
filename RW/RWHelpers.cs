@@ -100,5 +100,61 @@ namespace RW
                 return null;
             }
         }
+
+        /// <summary>
+        /// Последняя операция
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <returns></returns>
+        public static bool IsEndOperation(this CarOperations operation) {
+            return operation.CarOperations1.Count() == 0 ? true : false;
+        }
+        /// <summary>
+        /// Первая операция
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <returns></returns>
+        public static bool IsStartOperation(this CarOperations operation) {
+            return operation.CarOperations2 == null ? true : false;
+        }
+        /// <summary>
+        /// Определить задвоение операций (Ошибка)
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <returns></returns>
+        public static bool IsErrorOperation(this CarOperations operation) {
+            return operation.CarOperations1.Count() >1 ? true : false;
+        }
+
+        /// <summary>
+        /// Операция пренадлежит указаному пути
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="id_way"></param>
+        /// <returns></returns>
+        public static bool IsSetWayOperation(this CarOperations operation, int id_way) {
+            return operation.id_way == id_way ? true : false;
+        }
+        /// <summary>
+        /// Операция пренадлежит указанной станции
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="id_internal_stations"></param>
+        /// <returns></returns>
+        public static bool IsSetStationOperation(this CarOperations operation, int id_internal_stations)
+        {
+            return operation.Directory_Ways.id_station == id_internal_stations ? true : false;
+        }
+        /// <summary>
+        /// Операция пренадлежит станции УЗ
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="id_internal_stations"></param>
+        /// <returns></returns>
+        public static bool IsSetStationOperationUZ(this CarOperations operation)
+        {
+            return operation.Directory_Ways.Directory_InternalStations.station_uz ? true : false;
+        }
+
     }
 }

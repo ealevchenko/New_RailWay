@@ -67,8 +67,8 @@ namespace Testing
             try
             {
                 RWCars rwc = new RWCars();
-                EFRW.Entities.CarOperations operation = rwc.GetOperation(23);
-                int res = rwc.CarOperationTransitUZ(operation,DateTime.Now);
+                EFRW.Entities.CarOperations operation = rwc.GetOperation(61);
+                int res = rwc.SetOperationTransitUZ(operation,DateTime.Now);
                 Console.WriteLine("Код выполнения - {0}",res);
                 return res;
             }

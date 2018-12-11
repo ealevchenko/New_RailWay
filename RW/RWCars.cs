@@ -23,6 +23,15 @@ namespace RW
         private EFDbContext db;
         private bool log_detali = false;
 
+        public enum error : int
+        {
+            global_error = -1,
+            operation_is_not_last = -2,                     // операция не последняя
+            operation_does_not_belong_to_station = -10,     // операция не принадлежит станции
+            operation_does_not_belong_to_station_UZ = -11,  // операция не принадлежит станции УЗ
+            operation_path_match = -20,                     // операция попытка поставить на тот-же путь
+
+        }
 
         public RWCars()
         {
@@ -106,36 +115,76 @@ namespace RW
             }
         }
 
+
+        //public int SetOperation_TSPUZ(CarOperations current_operation, DateTime dt_inp, int id_arrival, int id_sostav) { 
+        
+        //}
+
         /// <summary>
-        /// Выполнить операцию транзит УЗ
+        /// Выполнить операцию "Транзит по УЗ"
         /// </summary>
         /// <param name="current_operation"></param>
         /// <param name="dt_inp"></param>
         /// <returns></returns>
-        public int CarOperationTransitUZ(CarOperations current_operation, DateTime dt_inp) {
+        public int PerformOperation_TransitUZ(CarOperations current_operation, DateTime dt_inp) {
             try
             {
-                if (current_operation == null) return 0; // Текущая операция не определена
-                RWDirectory rw_directory = new RWDirectory(this.db, servece_owner);
-                // Это станция УЗ
-                Directory_Ways way_current = rw_directory.GetWay((int)current_operation.id_way);
-                if (way_current == null) return -1; // Текущий путь не определен
-                Directory_InternalStations is_current = rw_directory.GetInternalStations(way_current.id_station);
-                if (is_current == null) return -1; // Текущая станция не определена
-                if (is_current != null && is_current.station_uz)
-                {
-                    Directory_Ways way_send = rw_directory.GetWaysOfStation(is_current.id, "2"); // Путь транзита на АМКР
-                    return CreateCarOperations(current_operation.id_car_internal, current_operation.id_car_conditions, 17, dt_inp, way_send.id, (int)current_operation.position, current_operation.train1, current_operation.train2, null, current_operation.id);
-                }
-                else return  -1; // Текущая станция не УЗ
+                return SetOperation_ManeuversUZ(current_operation, dt_inp, 17);
             }
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("CarOperationTransitUZ(current_operation={0}, dt_inp={1})",
                     current_operation, dt_inp), servece_owner, eventID);
-                return -1;
+                return (int)error.global_error;
             }
         }
+        /// <summary>
+        /// Выполнить операцию "ТСП по УЗ"
+        /// </summary>
+        /// <param name="current_operation"></param>
+        /// <param name="dt_inp"></param>
+        /// <returns></returns>
+        public int PerformOperation_TSPUZ(CarOperations current_operation, DateTime dt_inp)
+        {
+            try
+            {
+                return SetOperation_ManeuversUZ(current_operation, dt_inp, 19);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CarOperationTransitUZ(current_operation={0}, dt_inp={1})",
+                    current_operation, dt_inp), servece_owner, eventID);
+                return (int)error.global_error;
+            }
+        }
+        /// <summary>
+        /// Выполнить маневры на путях станций УЗ
+        /// </summary>
+        /// <param name="current_operation"></param>
+        /// <param name="dt_inp"></param>
+        /// <param name="id_car_status"></param>
+        /// <returns></returns>
+        private int SetOperation_ManeuversUZ(CarOperations current_operation, DateTime dt_inp, int id_car_status)
+        {
+            try
+            {
+                if (current_operation == null) return 0; // Текущая операция не определена
+                if (!current_operation.IsEndOperation()) return (int)error.operation_is_not_last; // Текущая операция не последняя
+                if (!current_operation.IsSetStationOperationUZ()) return (int)error.operation_does_not_belong_to_station_UZ; // Текущая операция не пренадлежит стануции УЗ
+
+                RWDirectory rw_directory = new RWDirectory(this.db, servece_owner);
+                Directory_Ways way_send = rw_directory.GetWaysOfStation(current_operation.Directory_Ways.Directory_InternalStations.id, "2"); // Путь транзита на АМКР
+                if (current_operation.IsSetWayOperation(way_send.id)) return (int)error.operation_path_match; // Текущая операция пренадлежит пути на который хотят поставить 
+                return CreateCarOperations(current_operation.id_car_internal, current_operation.id_car_conditions, id_car_status, dt_inp, way_send.id, (int)current_operation.position, current_operation.train1, current_operation.train2, null, current_operation.id);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("CarOperationManeuversUZ(current_operation={0}, dt_inp={1}, id_car_status={2})",
+                    current_operation, dt_inp, id_car_status), servece_owner, eventID);
+                return (int)error.global_error;
+            }
+        }
+
 
         /// <summary>
         /// Добавить новую операцию
@@ -183,13 +232,19 @@ namespace RW
             {
                 e.WriteErrorMethod(String.Format("CreateCarOperations(id_car_internal={0}, id_car_conditions={1}, id_car_status={2}, dt_inp={3}, id_way={4}, position={5}, train1={6}, train2={7}, side={8}, parent_id={9})",
                     id_car_internal, id_car_conditions, id_car_status, dt_inp, id_way, position, train1, train2,side, parent_id), servece_owner, eventID);
-                return -1;
+                return (int)error.global_error;
             }
         }
 
         #endregion
 
         #region CarsInternal - ВНУТРЕНЕЕ ПЕРЕМЕЩЕНИЕ ВАГОНОВ
+        /// <summary>
+        /// Добавить новую строку "Внутренего перемещения вагона"
+        /// </summary>
+        /// <param name="car_mt"></param>
+        /// <param name="parent_id"></param>
+        /// <returns></returns>
         public int NewCarsInternal(ArrivalCars car_mt, int? parent_id)
         {
             try
@@ -218,13 +273,13 @@ namespace RW
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("NewCarsInternal(car_mt={0},parent_id={1})", car_mt.GetFieldsAndValue(), parent_id), servece_owner, eventID);
-                return -1;
+                return (int)error.global_error;
             }
 
         }
 
         /// <summary>
-        /// 
+        /// Добавить новую строку "Внутренего перемещения вагона"
         /// </summary>
         /// <param name="id_sostav"></param>
         /// <param name="id_arrival"></param>
@@ -244,7 +299,7 @@ namespace RW
         /// <param name="Consignee"></param>
         /// <param name="parent_id"></param>
         /// <returns></returns>
-        public int NewCarsInternal(
+        private int NewCarsInternal(
             int id_sostav,
             int id_arrival,
             int num,
@@ -285,11 +340,11 @@ namespace RW
             {
                 e.WriteErrorMethod(String.Format("NewCarsInternal(id_sostav={0},id_arrival={1},num={2},index={3},id_car_conditions={4},id_car_status={5},dt_inp={6},id_way={7},position={8},train1={9},train2={10},side={11},CountryCode={12},CargoCode={13},Weight={14},Consignee={15},parent_id={16})",
                     id_sostav, id_arrival, num, index, id_car_conditions, id_car_status, dt_inp, id_way, position, train1, train2, side, CountryCode, CargoCode, Weight, Consignee, parent_id), servece_owner, eventID);
-                return -1;
+                return (int)error.global_error;
             }
         }
         /// <summary>
-        /// Создать новую строку внутренего перемещения вагона.
+        /// Создать новую строку "Внутренего перемещения вагона"
         /// </summary>
         /// <param name="id_sostav"></param>
         /// <param name="id_arrival"></param>
@@ -297,7 +352,7 @@ namespace RW
         /// <param name="dt_uz"></param>
         /// <param name="parent_id"></param>
         /// <returns></returns>
-        public int CreateCarsInternal(int id_sostav, int id_arrival, int num, DateTime dt_uz, int? parent_id) {
+        private int CreateCarsInternal(int id_sostav, int id_arrival, int num, DateTime dt_uz, int? parent_id) {
             try
             {
                 EFCarsInternal ef_ci = new EFCarsInternal(this.db);
@@ -330,7 +385,7 @@ namespace RW
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("CreateCarsInternal(id_sostav={0},id_arrival={1},num={2},dt_uz={3},parent_id={4})", id_sostav,id_arrival,num,dt_uz,parent_id), servece_owner, eventID);
-                return -1;
+                return (int)error.global_error;
             }
         }
 
@@ -377,7 +432,7 @@ namespace RW
             catch (Exception e)
             {
                 e.WriteErrorMethod(String.Format("CreateCarInboundDelivery(id_car_internal={0}, car_mt={1})", id_car_internal, car_mt.GetFieldsAndValue()), servece_owner, eventID);
-                return -1;
+                return (int)error.global_error;
             }
         }
         /// <summary>
@@ -411,7 +466,7 @@ namespace RW
             {
                 e.WriteErrorMethod(String.Format("CreateCarInboundDelivery(id_car_internal={0}, num={1}, id_arrival={2}, dt_operation={3}, index={4}, position={5}, CountryCode={6}, CargoCode={7}, Weight={8}, Consignee={9})"
                     , id_car_internal, num, id_arrival, dt_operation, index, position, CountryCode, CargoCode, Weight, Consignee), servece_owner, eventID);
-                return -1;
+                return (int)error.global_error;
             }
         }
         /// <summary>
@@ -476,7 +531,7 @@ namespace RW
             {
                 e.WriteErrorMethod(String.Format("AddCarInboundDelivery(id_car_internal={0}, num={1}, id_arrival={2}, dt_operation={3}, index={4}, position={5}, CountryCode={6}, CargoCode={7}, Weight={8}, Consignee={9})"
                     ,id_car_internal, num, id_arrival, dt_operation, index, position, CountryCode, CargoCode, Weight, Consignee), servece_owner, eventID);
-                return -1;
+                return (int)error.global_error;
             }
         }
         /// <summary>
@@ -518,7 +573,7 @@ namespace RW
             {
                 e.WriteErrorMethod(String.Format("UpdateCarInboundDelivery(delivery={0}, dt_operation={1}, index={2}, position={3}, CountryCode={4}, CargoCode={5}, Weight={6}, Consignee={7})"
                     , delivery.GetFieldsAndValue(), dt_operation, index, position, CountryCode, CargoCode, Weight, Consignee), servece_owner, eventID);
-                return -1;
+                return (int)error.global_error;
             }
         }
         #endregion
