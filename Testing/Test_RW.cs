@@ -31,7 +31,8 @@ namespace Testing
             try
             {
                 RWCars rwc = new RWCars();
-                int res = rwc.CreateCarsInternal(3, 3, 77777777, DateTime.Now, 6);
+                //int res = rwc.CreateCarsInternal(3, 3, 77777777, DateTime.Now, 6);
+                int res = 0;
                 Console.WriteLine("Код выполнения - {0}",res);
                 return res;
             }
@@ -68,7 +69,7 @@ namespace Testing
             {
                 RWCars rwc = new RWCars();
                 EFRW.Entities.CarOperations operation = rwc.GetOperation(61);
-                int res = rwc.SetOperationTransitUZ(operation,DateTime.Now);
+                int res = 0;// rwc.SetOperationTransitUZ(operation, DateTime.Now);
                 Console.WriteLine("Код выполнения - {0}",res);
                 return res;
             }

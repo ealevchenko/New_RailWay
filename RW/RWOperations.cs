@@ -1,4 +1,5 @@
-﻿using EFMT.Concrete;
+﻿//using EFKIS.Concrete;
+using EFMT.Concrete;
 using EFMT.Entities;
 using EFRW.Entities;
 using libClass;
@@ -15,9 +16,10 @@ namespace RW
     {
         private eventID eventID = eventID.RW_RWOperations;
         protected service servece_owner = service.Null;
-        bool log_detali = true;                            // Признак детального логирования
-        private bool reference_kis = true;                  // Использовать справочники КИС
-  
+        bool log_detali = true;                             // Признак детального логирования
+        private bool directory_kis = true;                  // Использовать справочники из системы транспорт КИС
+        private bool data_kis = true;                       // Использовать информацию из системы транспорт КИС
+        
 
         public RWOperations()
         {
@@ -126,30 +128,128 @@ namespace RW
             {
                 RWCars rw_cars = new RWCars();
                 int result = 0;
-                // Вернем последнюю операцию
-                CarOperations last_operation = rw_cars.GetLastOperation(car.Num);
+                List<CarsInternal> list = rw_cars.GetCarsInternalOfNum(car.Num).ToList();
                 // Вагон заходил на АМКР?
-                if (last_operation == null)
+                if (list != null && list.Count() == 0)
                 {
-                    // Вагон Не заходил на АМКР. 
-                    result = rw_cars.NewCarsInternal(car, null);
+                    // Вагон Не заходил на АМКР.
+                   result = rw_cars.NewCarsInternal(car, null);
                 }
-                else { 
+                else
+                {
                     // Вагон Есть в системе RailWay
-                    DateTime? data_operation = last_operation.GetDateOperation();
-                    // Дата выполняемой операции больше или равно (сразу ТСП после прибытия) текущей операции?
-                    if (data_operation != null && data_operation <= car.DateOperation)
+                    // Вернуть последнюю запись из списка строк "Внутренего перемещения вагона"
+                    CarsInternal car_internal = list.GetLastCarsInternal();
+                    // Код прибытия совподает?
+                    if (car_internal.id_arrival == car.ArrivalSostav.IDArrival)
                     {
-                        // Да, перейдем к следующей проверке
-
+                        // Да, код прибытия совподает. Это новая операция ТСП
+                        if (car_internal.id_sostav < car.IDSostav)
+                        {
+                            // Да. Это новое ТСП обновим информацию
+                            result = rw_cars.UpdateCarsInternal(car_internal, car);
+                            // Закроем в базе МТ
+                            EFMetallurgTrans ef_mt = new EFMetallurgTrans();
+                            // Закрываем прибытие (по вагону пришло ТСП, а вагон уже принят на АМКР)
+                            if (result > 0 && (car_internal.natur_rw != null || car_internal.natur_kis_inp != null))
+                            {
+                                int res_close_mt = ef_mt.CloseArrivalCars(car.IDSostav, car.Num, car_internal.natur_rw != null ? (int)car_internal.natur_rw : (int)car_internal.natur_kis_inp, (DateTime)car.DateOperation);
+                            }
+                        }
+                        else { 
+                            // Нет. Это ТСП уже устарело
+                            result = 0; // Пропустить, ТСП уже устарело
+                        }
                     }
                     else { 
-                        // Нет, это старая операция найдем ее по данным КИС и выполним заход и если есть выход 
-                        // TODO: Выполнить код поиска по КИС старой операции входа на и выход из АМКР, вставка операций в систему RAILWAY
-                        return -2;
-                    }
-                }
+                        // Нет, код прибытия Не совподает.
+                        int id_arr = car.ArrivalSostav.IDArrival;
 
+                        if (car_internal.id_arrival > car.ArrivalSostav.IDArrival)
+                        {
+                            // Код прибыти меньше чем код прибытия в системе, это старая запись (возможна обработка через КИС)
+                            // TODO: Выполнить код поиска по КИС старой операции входа на и выход из АМКР, вставка операций в систему RAILWAY
+                            result = -20; // Это старая запись (возможна обработка через КИС)
+                        }
+                        else { 
+                            // Код прибыти больше чем код прибытия в системе, это новая запись. Ставим в прибытие.
+                            CarOperations last_operation = car_internal.GetLastOperation();
+                            DateTime? data_operation = last_operation.GetDateOperation();
+                            DateTime? data_operation_new = car.DateOperation; // тестовая
+                            int id = car.IDSostav;
+                            // Дата выполняемой операции больше или равно (сразу ТСП после прибытия) текущей операции?
+                            if (data_operation != null && data_operation <= car.DateOperation)
+                            {
+                                // Да, это новая операция
+                                //------------------------------------
+                                //TODO: Добавить модуль обработки принятие на АМКР и отправка с АМКР по данным КИС (выборка происходит из данных КИС за период data_operation и data_operation_new)
+                                //// если включен режим "Переносить из КИС"
+                                //if (this.data_kis)
+                                //{
+                                //    EFWagons ef_wag = new EFWagons();
+                                //    List<Prom_NatHistAndSostav> pnh_list = ef_wag.GetProm_NatHistAndSostav(car.Num).Where(h => h.DT >= data_operation & h.DT <= data_operation_new).ToList();
+
+                                //}
+                                 //------------------------------------ 
+                              
+                                // Вагон стоит на пути прибытия с АМКР?
+                                RWDirectory rw_directory = new RWDirectory(servece_owner);
+                                if (last_operation.IsSetWayOperation(rw_directory.GetOnWaysExternalStationUZ().ToList()))
+                                {
+                                    // Да, вагон стоит на пути прибытия с АМКР
+                                    // TODO:Выполним операцию принять на УЗ и создадим новое внутреннее перемещение 
+                                }
+                                else { 
+                                    // Нет, вагон не стоит на пути прибытия с АМКР
+                                    // Вагон стоит на пути отправки на АМКР?
+                                    //List<Directory_Ways> list_w = rw_directory.GetSendingWaysStationUZ().ToList();
+                                    if (last_operation.IsSetWayOperation(rw_directory.GetSendingWaysStationUZ().ToList()))
+                                    {
+                                        // Да, вагон стоит на пути отправки на АМКР
+                                        // TODO:Выполним операцию "Транзит по УЗ" и создадим новое внутреннее перемещение
+                                        int res = rw_cars.PerformOperation_TransitUZ(last_operation, car.DateOperation);
+                                        if (res <= 0) return res * 100; 
+                                        result = rw_cars.NewCarsInternal(car, car_internal.id);
+                                    }
+                                    else
+                                    {
+                                        // Нет, вагон Не стоит на пути отправки на АМКР
+                                        // Вагон стоит на пути маневра УЗ?
+                                        if (last_operation.IsSetWayOperation(rw_directory.GetManeuversWaysStationUZ().ToList()))
+                                        {
+                                            // Да, вагон стоит на пути маневра УЗ
+
+                                            // TODO: Создадим новое внутреннее перемещение
+                                            result = rw_cars.NewCarsInternal(car, car_internal.id);
+                                        }
+                                        else
+                                        {
+                                            // Нет, вагон Не стоит на пути маневра УЗ
+                                            // Вагон стоит на АМКР
+
+                                            // TODO: Выведим Ошибку или обработаем в КИС выход на УЗ и Создадим новое внутреннее перемещение     
+                                        }
+
+                                    }
+
+
+
+                                }
+
+
+                            }
+                            else
+                            {
+                                // Дата прибыти меньше чем дата прибытия в системе, это старая запись (возможна обработка через КИС)
+                                // TODO: Выполнить код поиска по КИС старой операции входа на и выход из АМКР, вставка операций в систему RAILWAY
+                                result = -20; // Это старая запись (возможна обработка через КИС)
+                            }
+                        
+                        }
+                    
+                    }
+
+                }
                 return result;
             }
             catch (Exception e)

@@ -17,8 +17,8 @@ namespace EFRW.Concrete
 
             // Здесь мы можем указывать различные настройки контекста,
             // например выводить в отладчик сгенерированный SQL-код
-            context.Database.Log =
-                (s => System.Diagnostics.Debug.WriteLine(s));
+            //context.Database.Log =
+            //    (s => System.Diagnostics.Debug.WriteLine(s));
 
             // Загрузка данных с помощью универсального метода Set
             return context.Set<TEntity>();
@@ -27,10 +27,12 @@ namespace EFRW.Concrete
         public static TEntity Select<TEntity>(this EFDbContext context, int id) where TEntity : class
         {
 
+            
+            
             // Здесь мы можем указывать различные настройки контекста,
             // например выводить в отладчик сгенерированный SQL-код
-            context.Database.Log =
-                (s => System.Diagnostics.Debug.WriteLine(s));
+            //context.Database.Log =
+            //    (s => System.Diagnostics.Debug.WriteLine(s));
 
             // Загрузка данных с помощью универсального метода Set
             return context.Set<TEntity>().Find(id);
@@ -38,12 +40,18 @@ namespace EFRW.Concrete
 
         public static void Insert<TEntity>(this EFDbContext context, TEntity entity) where TEntity : class
         {
+            //// Отключаем отслеживание и проверку изменений для оптимизации вставки множества полей
+            context.Configuration.AutoDetectChangesEnabled = false;
+            context.Configuration.ValidateOnSaveEnabled = false;
             // Здесь мы можем указывать различные настройки контекста,
             // например выводить в отладчик сгенерированный SQL-код
-            context.Database.Log =
-                (s => System.Diagnostics.Debug.WriteLine(s));
+            //context.Database.Log =
+            //    (s => System.Diagnostics.Debug.WriteLine(s));
 
             context.Entry(entity).State = EntityState.Added;
+
+            context.Configuration.AutoDetectChangesEnabled = true;
+            context.Configuration.ValidateOnSaveEnabled = true;
         }  
         /// <summary>
         /// Запись нескольких полей в БД
@@ -55,7 +63,7 @@ namespace EFRW.Concrete
             context.Configuration.AutoDetectChangesEnabled = false;
             context.Configuration.ValidateOnSaveEnabled = false;
 
-            context.Database.Log = (s => System.Diagnostics.Debug.WriteLine(s));
+            //context.Database.Log = (s => System.Diagnostics.Debug.WriteLine(s));
 
             foreach (TEntity entity in entities)
                 context.Entry(entity).State = EntityState.Added;
@@ -69,8 +77,8 @@ namespace EFRW.Concrete
         {
             // Здесь мы можем указывать различные настройки контекста,
             // например выводить в отладчик сгенерированный SQL-код
-            context.Database.Log =
-                (s => System.Diagnostics.Debug.WriteLine(s));
+            //context.Database.Log =
+            //    (s => System.Diagnostics.Debug.WriteLine(s));
 
             context.Entry(entity).State = EntityState.Modified;
         }
@@ -79,8 +87,8 @@ namespace EFRW.Concrete
         {
             // Здесь мы можем указывать различные настройки контекста,
             // например выводить в отладчик сгенерированный SQL-код
-            context.Database.Log =
-                (s => System.Diagnostics.Debug.WriteLine(s));
+            //context.Database.Log =
+            //    (s => System.Diagnostics.Debug.WriteLine(s));
             
             TEntity item = context.Set<TEntity>().Find(id);
             if (item != null)

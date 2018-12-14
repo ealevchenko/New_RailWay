@@ -2185,6 +2185,8 @@ namespace MetallurgTrans
                 tsp_count = list_old_car != null ? list_old_car.Count() : 0;
                 foreach (ArrivalCars car_old in list_old_car)
                 {
+                    int id = car_old.IDSostav;
+                    int ida = car_old.ArrivalSostav.IDArrival;
                     //int res_tsp = rw_operations.TSPOnUZ(car_old, sostav_new.DateTime);
                     int res_tsp = rw_operations.CarTSPUZ(car_old, sostav_new.DateTime);
                     tsp += res_tsp > 0 ? 1 : 0;
@@ -2193,10 +2195,10 @@ namespace MetallurgTrans
                 // Перенесем новые
                 List<ArrivalCars> list_car_transfer = sostav_new.ArrivalCars != null ? sostav_new.ArrivalCars.ToList() : new List<ArrivalCars>();
                 transfer_count = list_car_transfer != null ? list_car_transfer.Count() : 0;
-                foreach (ArrivalCars car in list_car_transfer) {
+                DateTime dt_start_glob = DateTime.Now;                
+                foreach (ArrivalCars car in list_car_transfer.ToList()) {
                     DateTime dt_start = DateTime.Now;
                     message += car.Num.ToString() + ":";
-                    //int res_transfer = rw_operations.ArrivalOnUZ(car);
                     int res_transfer = rw_operations.CarArrivesUZ(car);
                     transfer += res_transfer > 0 ? 1 : 0;
                     transfer_skip += res_transfer == 0 ? 1 : 0;
@@ -2206,6 +2208,8 @@ namespace MetallurgTrans
                     TimeSpan ts = DateTime.Now - dt_start;
                     Console.WriteLine(String.Format("Перенос вагона №{0}, время выполнения: {1}:{2}:{3}({4})", car.Num, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds));
                 }
+                TimeSpan ts_glob = DateTime.Now - dt_start_glob;
+                Console.WriteLine(String.Format("Перенос вагонов в количестве {0}, время выполнения: {1}:{2}:{3}({4})", transfer_count, ts_glob.Hours, ts_glob.Minutes, ts_glob.Seconds, ts_glob.Milliseconds));
                 string mess = String.Format("(Подсистема учета и контроля магистрального парка на УЗ) Перенос состава (BufferArrivalSostav.id: {0}, id состава: {1}, id прибытия {2}, индекс: {3}, дата операции: {4}) на путь отправки на АМКР системы RailWay. Определенно для ТСП по УЗ {5} вагона(ов), выполнено ТСП {6}, ошибок ТСП {7}. Определенно для переноса {8} вагона(ов), перенесено {9}, пропущено {10}, ошибок переноса {11}.",
                     bas.id, sostav_new.ID, sostav_new.IDArrival, sostav_new.CompositionIndex, sostav_new.DateTime, tsp_count, tsp, tsp_error, transfer_count, transfer, transfer_skip, transfer_error);
                 mess.WriteInformation(servece_owner, eventID);

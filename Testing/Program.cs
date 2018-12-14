@@ -61,7 +61,7 @@ namespace Testing
             //tst_rw.RWCars_CreateCarsInternal(); // Создать строку внутренего перемещения вагона
             //tst_rw.RWCars_CreateCarOperations(); // Создать новую операцию над вагоном
 
-            tst_rw.RWCars_CarOperationTransitUZ(); // Выполнить операцию транзит
+            ////tst_rw.RWCars_CarOperationTransitUZ(); // Выполнить операцию транзит
             #endregion
 
             //tst_rw.RWTransfer_ArrivalMTToRailway(); // Тест переноса данных МТ (по id_sostav) в систему RailWay
@@ -152,8 +152,8 @@ namespace Testing
 
             #region MTTransfer
 
-            //tst_mt.MTTransfer_TransferArrivalSostavToRailWay();         // Тест переноса составов на путь отправки на АМКР
-            ////tst_mt.MTTransfer_TransferArrivalSostavToRailWayOfBas();    // Тест переноса строки буффера составов на путь отправки на АМКР
+            tst_mt.MTTransfer_TransferArrivalSostavToRailWay();         // Тест переноса составов на путь отправки на АМКР
+            //tst_mt.MTTransfer_TransferArrivalSostavToRailWayOfBas();    // Тест переноса строки буффера составов на путь отправки на АМКР
 
             #endregion
 

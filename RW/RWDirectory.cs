@@ -677,7 +677,130 @@ namespace RW
                 return 0;
             }
         }
+        /// <summary>
+        /// Получить строки всех перегонов между станциями справочника "Путей railway"
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Directory_Ways> GetWaysExternalStation()
+        {
+            try
+            {
+                EFDirectoryWays ef_way = new EFDirectoryWays(this.db);
+                return ef_way.Get().Where(w => w.id_station_end != null);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetWaysExternalStation()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить строки перегонов для отправки на другие станции справочника "Путей railway" по коду станции
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <returns></returns>
+        public IEnumerable<Directory_Ways> GetFromWaysExternalStation(int id_station)
+        {
+            try
+            {
+                EFDirectoryWays ef_way = new EFDirectoryWays(this.db);
+                return ef_way.Get().Where(w => w.id_station == id_station);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetFromWaysExternalStation(id_station={0})",id_station), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить строки перегонов для приема из других станций справочника "Путей railway" по коду станции
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <returns></returns>
+        public IEnumerable<Directory_Ways> GetOnWaysExternalStation(int id_station)
+        {
+            try
+            {
+                EFDirectoryWays ef_way = new EFDirectoryWays(this.db);
+                return ef_way.Get().Where(w => w.id_station_end == id_station);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOnWaysExternalStation(id_station={0})",id_station), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить строки перегонов для отправки из станции УЗ на другие станции, справочник "Путей railway"
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <returns></returns>
+        public IEnumerable<Directory_Ways> GetFromWaysExternalStationUZ()
+        {
+            try
+            {
+                EFDirectoryWays ef_way = new EFDirectoryWays(this.db);
+                return ef_way.Get().Where(w => w.Directory_InternalStations.station_uz);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetFromWaysExternalStationUZ()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить строки перегонов для приема на станци УЗ из других станций, справочник "Путей railway"
+        /// </summary>
+        /// <param name="id_station"></param>
+        /// <returns></returns>
+        public IEnumerable<Directory_Ways> GetOnWaysExternalStationUZ()
+        {
+            try
+            {
+                EFDirectoryWays ef_way = new EFDirectoryWays(this.db);
+                //List<Directory_Ways> list = ef_way.Get().Where(w => w.id_type_way==2).ToList();
+                //List<Directory_Ways> list = ef_way.Get().Where(w => w.Directory_InternalStations1 != null && w.Directory_InternalStations1.station_uz).ToList();
+                return ef_way.Get().Where(w => w.Directory_InternalStations1 != null && w.Directory_InternalStations1.station_uz);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetOnWaysExternalStationUZ()"), eventID);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Получить строки путей станций УЗ для отправки на АМКР, справочник "Путей railway"
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Directory_Ways> GetSendingWaysStationUZ()
+        {
+            try
+            {
+                EFDirectoryWays ef_way = new EFDirectoryWays(this.db);
+                //List<Directory_Ways> list = ef_way.Get().Where(w => w.Directory_InternalStations.station_uz && w.id_station_end == null && w.id_shop_end == null && w.id_overturn_end == null && w.num == "1" ).ToList();
+                return ef_way.Get().Where(w => w.Directory_InternalStations.station_uz && w.id_station_end == null && w.id_shop_end == null && w.id_overturn_end == null && w.num == "1");
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetSendingWaysStationUZ()"), eventID);
+                return null;
+            }
+        }
 
+        public IEnumerable<Directory_Ways> GetManeuversWaysStationUZ()
+        {
+            try
+            {
+                EFDirectoryWays ef_way = new EFDirectoryWays(this.db);
+                //List<Directory_Ways> list = ef_way.Get().Where(w => w.Directory_InternalStations.station_uz && w.id_station_end == null && w.id_shop_end == null && w.id_overturn_end == null && w.num == "2" ).ToList();
+                return ef_way.Get().Where(w => w.Directory_InternalStations.station_uz && w.id_station_end == null && w.id_shop_end == null && w.id_overturn_end == null && w.num == "2");
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetManeuversWaysStationUZ()"), eventID);
+                return null;
+            }
+        }
         #endregion
 
         #region Справочник типов вагонов

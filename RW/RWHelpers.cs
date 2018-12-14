@@ -69,6 +69,15 @@ namespace RW
                 return null;
             }
         }
+        /// <summary>
+        /// Вернуть последнюю операцию из строки "Внутренего перемещения вагона"
+        /// </summary>
+        /// <param name="car_internal"></param>
+        /// <returns></returns>
+        public static CarOperations GetLastOperation(this CarsInternal car_internal)
+        {
+            return car_internal.CarOperations.GetLastOperation();
+        }
 
         public static CarOperations GetLastOpenOperation(this IEnumerable<CarOperations> list)
         {
@@ -136,6 +145,19 @@ namespace RW
             return operation.id_way == id_way ? true : false;
         }
         /// <summary>
+        /// Операция пренадлежит списку путей
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="ways"></param>
+        /// <returns></returns>
+        public static bool IsSetWayOperation(this CarOperations operation, List<Directory_Ways> ways) {
+            foreach (Directory_Ways way in ways) {
+                if (way.id == operation.id_way) return true;
+            }
+            return  false;
+        }
+
+        /// <summary>
         /// Операция пренадлежит указанной станции
         /// </summary>
         /// <param name="operation"></param>
@@ -155,6 +177,16 @@ namespace RW
         {
             return operation.Directory_Ways.Directory_InternalStations.station_uz ? true : false;
         }
+
+        /// <summary>
+        /// Вернуть последнюю запись из списка строк "Внутренего перемещения вагона"
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public static CarsInternal GetLastCarsInternal(this IEnumerable<CarsInternal> list) {
+            return list.OrderByDescending(c => c.id_arrival).FirstOrDefault();
+        }
+
 
     }
 }

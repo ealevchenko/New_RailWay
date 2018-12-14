@@ -35,7 +35,7 @@ namespace EFMT.Entities
         [StringLength(1000)]
         public string list_no_set_wagons { get; set; }
 
-        [StringLength(1000)]
+        [StringLength(2000)]
         public string message { get; set; }
     }
 }

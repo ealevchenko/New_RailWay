@@ -781,7 +781,7 @@ namespace Testing
                 EFWagons ef_wag = new EFWagons();
 
                 //List<Prom_NatHistAndSostav> list_vas = ef_wag.GetProm_VagonAndSostav().ToList();
-                List<Prom_NatHistAndSostav> list_vas1 = ef_wag.GetProm_NatHistAndSostav(94814431).ToList();
+                List<Prom_NatHistAndSostav> list_vas1 = ef_wag.GetProm_NatHistAndSostav(62125950).ToList();
                 //List<Prom_NatHistAndSostav> list_psc1 = ef_wag.GetProm_SostavAndCount(new DateTime(2018, 6, 20, 0, 0, 0), new DateTime(2018, 6, 20, 23, 59, 59)).ToList();
                 //List<Prom_NatHistAndSostav> list_psc2 = ef_wag.GetProm_SostavAndCount(1234,null,null,null,null,null).ToList();
             }

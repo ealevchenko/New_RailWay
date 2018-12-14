@@ -23,6 +23,11 @@ namespace RW
         private EFDbContext db;
         private bool log_detali = false;
 
+        //EFCarInboundDelivery ef_cid;
+        //EFCarsInternal ef_ci;
+        //EFCarOperations ef_co;
+        //RWDirectory rw_directory;
+
         public enum error : int
         {
             global_error = -1,
@@ -37,25 +42,38 @@ namespace RW
         {
             this.db = new EFDbContext();
             this.servece_owner = service.Null;
+            initEF();
         }
 
         public RWCars(EFDbContext db)
         {
             this.db = db;
             this.servece_owner = service.Null;
+            initEF();
         }
 
         public RWCars(service servece_owner)
         {
             this.servece_owner = servece_owner;
             this.db = new EFDbContext();
+            initEF();
         }
 
         public RWCars(EFDbContext db, service servece_owner)
         {
             this.servece_owner = servece_owner;
             this.db = db;
+            initEF();
         }
+
+        public void initEF()
+        {
+            //rw_directory = new RWDirectory(this.db, servece_owner);
+            //ef_cid = new EFCarInboundDelivery(this.db);
+            //ef_ci = new EFCarsInternal(this.db);
+            //ef_co = new EFCarOperations(this.db);
+        }
+
 
         #region CarOperations ОПЕРАЦИИ НАД ВАГОНАМИ
         /// <summary>
@@ -67,8 +85,8 @@ namespace RW
         {
             try
             {
-                EFCarOperations ef_operation = new EFCarOperations(this.db);
-                return  ef_operation.Get().Where(o => o.CarsInternal.num == num_car).GetLastOpenOperation();
+                EFCarOperations ef_co = new EFCarOperations(this.db);
+                return  ef_co.Get().Where(o => o.CarsInternal.num == num_car).GetLastOpenOperation();
             }
             catch (Exception e)
             {
@@ -85,8 +103,8 @@ namespace RW
         {
             try
             {
-                EFCarOperations ef_operation = new EFCarOperations(this.db);
-                List<CarOperations> list_open_operation = ef_operation.Get().Where(o => o.CarsInternal.num == num_car).ToList();
+                EFCarOperations ef_co = new EFCarOperations(this.db);
+                List<CarOperations> list_open_operation = ef_co.Get().Where(o => o.CarsInternal.num == num_car).ToList();
                 if (list_open_operation == null) return null;
                 return list_open_operation.GetLastOperation();
             }
@@ -105,8 +123,8 @@ namespace RW
         {
             try
             {
-                EFCarOperations ef_operation = new EFCarOperations(this.db);
-                return ef_operation.Get(id);
+                EFCarOperations ef_co = new EFCarOperations(this.db);
+                return ef_co.Get(id);
             }
             catch (Exception e)
             {
@@ -203,12 +221,12 @@ namespace RW
         {
             try
             {
-                EFCarOperations co = new EFCarOperations(this.db);
+                EFCarOperations ef_co = new EFCarOperations(this.db);
                 // Закроем старую 
                 if (parent_id!=null) {
-                    CarOperations old_co = co.Get((int)parent_id);
+                    CarOperations old_co = ef_co.Get((int)parent_id);
                     old_co.dt_out = dt_inp;
-                    co.Update(old_co);
+                    ef_co.Update(old_co);
                 }
                 // Создадим новую
                 CarOperations new_co = new CarOperations()
@@ -224,8 +242,8 @@ namespace RW
                     side = side,
                     parent_id = parent_id,
                 };
-                co.Add(new_co);
-                co.Save();
+                ef_co.Add(new_co);
+                ef_co.Save();
                 return new_co.id;
             }
             catch (Exception e)
@@ -239,6 +257,26 @@ namespace RW
         #endregion
 
         #region CarsInternal - ВНУТРЕНЕЕ ПЕРЕМЕЩЕНИЕ ВАГОНОВ
+        /// <summary>
+        /// Врнуть все внутрение перемещения по указаному вагону
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        public IEnumerable<CarsInternal> GetCarsInternalOfNum(int num)
+        {
+            try
+            {
+                EFCarsInternal ef_ci = new EFCarsInternal(this.db);
+                return ef_ci.Get().Where(c => c.num == num);
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("GetCarsInternalOfNum(num={0})", num), servece_owner, eventID);
+                return null;
+            }
+        }
+
+
         /// <summary>
         /// Добавить новую строку "Внутренего перемещения вагона"
         /// </summary>
@@ -277,6 +315,40 @@ namespace RW
             }
 
         }
+        /// <summary>
+        /// Добавить новую строку "Внутренего перемещения вагона"
+        /// </summary>
+        /// <param name="car_mt"></param>
+        /// <param name="parent_id"></param>
+        /// <returns></returns>
+        public int UpdateCarsInternal(CarsInternal car_internal, ArrivalCars car_mt)
+        {
+            try
+            {
+                // Обновим строку "Внутренего перемещения вагона"
+                EFCarsInternal ef_ci = new EFCarsInternal(this.db);
+                car_internal.id_sostav = car_mt.IDSostav;
+                car_internal.dt_uz = car_mt.DateOperation;
+                ef_ci.Update(car_internal);
+                ef_ci.Save();
+                // Обновим строку "Входящая поставка"
+                EFCarInboundDelivery ef_cid = new EFCarInboundDelivery(this.db);
+                CarInboundDelivery delivery = GetCarInboundDeliveryOfCarsInternal(car_internal.id);
+                delivery.datetime = car_mt.DateOperation;
+                delivery.position = car_mt.Position;
+                delivery.consignee = car_mt.Consignee;
+                ef_cid.Update(delivery);
+                ef_cid.Save();
+                return car_internal.id;
+            }
+            catch (Exception e)
+            {
+                e.WriteErrorMethod(String.Format("UpdCarsInternal(cars_internal={0},cars_internal={1})", car_internal.GetFieldsAndValue(), car_mt.GetFieldsAndValue()), servece_owner, eventID);
+                return (int)error.global_error;
+            }
+
+        }
+
 
         /// <summary>
         /// Добавить новую строку "Внутренего перемещения вагона"
@@ -322,7 +394,7 @@ namespace RW
             try
             {
                 // Проверим в справочнике вагонов
-                RWDirectory rw_directory = new RWDirectory(this.db);
+                RWDirectory rw_directory = new RWDirectory(this.db, servece_owner);
                 Directory_Cars car_directory = rw_directory.GetCarsOfNum(num, id_arrival, dt_inp, rw_directory.GetIDCountryOfCodeSNG(CountryCode), null, null, true, true);
                 // Создадим новю строку внутренего перемещения вагона
                 int new_id_operation = 0;
@@ -369,7 +441,6 @@ namespace RW
                     old_ci.dt_close = dt_uz;
                     old_ci.user_close = System.Environment.UserDomainName + @"\" + System.Environment.UserName;
                 }
-                RWDirectory rw_directory = new RWDirectory(this.db);
                 CarsInternal new_ci = new CarsInternal()
                 {
                     id_sostav = id_sostav,
