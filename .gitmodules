@@ -1,9 +1,9 @@
-[submodule "AppSettings"]
-	path = AppSettings
-	url = http://krr-app-gitlab01/ppm/AppSettings.git
 [submodule "Helpers"]
 	path = Helpers
-	url = http://krr-app-gitlab01/ppm/Helpers.git
+	url = http://krr-app-gitlab01.europe.mittalco.com/ppm/Helpers.git
+[submodule "AppSettings"]
+	path = AppSettings
+	url = http://krr-app-gitlab01.europe.mittalco.com/ppm/AppSettings.git
 [submodule "MessageLogs"]
 	path = MessageLogs
-	url = http://krr-app-gitlab01/ppm/MessageLogs.git
+	url = http://krr-app-gitlab01.europe.mittalco.com/ppm/MessageLogs.git
