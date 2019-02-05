@@ -2184,6 +2184,8 @@ namespace EFMT.Concrete
         {
             try
             {
+                ((System.Data.Entity.Infrastructure.IObjectContextAdapter)context).ObjectContext.CommandTimeout = 60*5;
+                
                 SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
                 SqlParameter dt_start = new SqlParameter("@start", start);
                 SqlParameter dt_stop = new SqlParameter("@stop", stop);
@@ -2208,6 +2210,8 @@ namespace EFMT.Concrete
         {
             try
             {
+                ((System.Data.Entity.Infrastructure.IObjectContextAdapter)context).ObjectContext.CommandTimeout = 180;
+                
                 SqlParameter i_id_report = new SqlParameter("@idreport", id_report);
                 SqlParameter dt_start = new SqlParameter("@start", start);
                 SqlParameter dt_stop = new SqlParameter("@stop", stop);
