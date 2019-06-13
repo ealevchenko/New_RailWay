@@ -19,3 +19,16 @@
 .img-header-error {
     background-image: url(../Image/error.jpg);
 }
+.img-header-td {
+     background-image: url(../Image/pattern.png), url(../Image/td.jpg);
+}
+/*.img-header-td-marriage {
+     background-image: url(../Image/pattern.png), url(../Image/td.jpg);
+}*/
+
+div.col-md-3 h2 {
+    font-size: 22px;
+    /*color:#f8e051;*/
+    font-weight:600;
+    /*text-align:center*/
+}

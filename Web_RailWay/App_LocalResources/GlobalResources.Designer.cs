@@ -19,7 +19,7 @@ namespace Web_RailWay.App_LocalResources {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class GlobalResources {
@@ -435,6 +435,24 @@ namespace Web_RailWay.App_LocalResources {
         public static string rw_title_report_rw_desc {
             get {
                 return ResourceManager.GetString("rw_title_report_rw_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ТД.
+        /// </summary>
+        public static string rw_title_report_td {
+            get {
+                return ResourceManager.GetString("rw_title_report_td", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Отчетная документация транспортного департамента АМКР..
+        /// </summary>
+        public static string rw_title_report_td_desc {
+            get {
+                return ResourceManager.GetString("rw_title_report_td_desc", resourceCulture);
             }
         }
         

@@ -117,61 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="home_index_link_station" xml:space="preserve">
-    <value>Go to the station</value>
+  <data name="index_description" xml:space="preserve">
+    <value>Отчетная документация, транспортного департамента</value>
   </data>
-  <data name="lang" xml:space="preserve">
-    <value>en-US</value>
+  <data name="index_report_marriage_work_desc" xml:space="preserve">
+    <value>Информация о браке и несоответствиях в работе подразделения транспортного департамента.</value>
   </data>
-  <data name="Layout_rw_link_admins" xml:space="preserve">
-    <value>Administration</value>
+  <data name="index_report_marriage_work_title" xml:space="preserve">
+    <value>Брак в работе</value>
   </data>
-  <data name="Layout_rw_link_contacs" xml:space="preserve">
-    <value>Contacts</value>
-  </data>
-  <data name="Layout_rw_link_instructions" xml:space="preserve">
-    <value>Instructions</value>
-  </data>
-  <data name="Layout_rw_link_reports" xml:space="preserve">
-    <value>Reports</value>
-  </data>
-  <data name="Layout_rw_title_admins" xml:space="preserve">
-    <value>Administration web application</value>
-  </data>
-  <data name="Layout_rw_title_contacs" xml:space="preserve">
-    <value>Contact us below!</value>
-  </data>
-  <data name="Layout_rw_title_contacs_admin" xml:space="preserve">
-    <value>Administrative support (access, configure the web application)</value>
-  </data>
-  <data name="Layout_rw_title_contacs_admin_name" xml:space="preserve">
-    <value>Sidorenco Eugen</value>
-  </data>
-  <data name="Layout_rw_title_contacs_admin_post" xml:space="preserve">
-    <value>Руководитель проекта</value>
-  </data>
-  <data name="Layout_rw_title_contacs_deverl" xml:space="preserve">
-    <value>Technical support (error, database administration, web application development)</value>
-  </data>
-  <data name="Layout_rw_title_contacs_deverl_name" xml:space="preserve">
-    <value>Levchenko Eduard</value>
-  </data>
-  <data name="Layout_rw_title_contacs_deverl_post" xml:space="preserve">
-    <value>Chief of department of industrial automation systems DATP</value>
-  </data>
-  <data name="Layout_rw_title_instructions" xml:space="preserve">
-    <value>Instructions</value>
-  </data>
-  <data name="Layout_rw_web_dpa" xml:space="preserve">
-    <value>DATP Web site</value>
-  </data>
-  <data name="rw_caption" xml:space="preserve">
-    <value>RailWay - web app rolling stock accounting PJSC "ArcelorMittal Kryvyi Rih</value>
-  </data>
-  <data name="rw_title_report_td" xml:space="preserve">
-    <value>TD</value>
-  </data>
-  <data name="rw_title_report_td_desc" xml:space="preserve">
-    <value>Reporting documentation of the transport department of AMKR.</value>
+  <data name="index_title" xml:space="preserve">
+    <value>ТД</value>
   </data>
 </root>

@@ -1,0 +1,39 @@
+﻿DIV#report {
+    padding: 0;
+    margin: 20px auto;
+    width: 1200px;
+    color: #666;
+    background: White;
+}
+
+h1 {
+    color: #0026ff;
+}
+
+    h1 span {
+        color: #000;
+    }
+
+.title-foot {
+    text-align: right;
+    color: #0026ff;
+    font-weight: bold;
+}
+
+.total-foot {
+    text-align: right;
+    color: #ff0000;
+    font-weight: bold;
+}
+
+#table-panel button {
+    margin: 5px;
+}
+
+#table-panel input {
+    margin: 5px;
+}
+
+#table-panel label {
+    margin: 5px;
+}

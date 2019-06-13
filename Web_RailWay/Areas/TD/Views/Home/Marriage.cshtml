@@ -1,0 +1,63 @@
+﻿@using Web_RailWay.App_LocalResources;
+@using Web_RailWay.App_Code;
+
+@{
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @TDResource.index_report_marriage_work_desc;
+    ViewBag.Home = @TDResource.index_report_marriage_work_title;
+}
+
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("LinkAdmin", "Home", new { area = "" }); }
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    @Styles.Render("~/jquery-ui/css")
+    @Styles.Render("~/DataTables/css")
+    @Styles.Render("~/datetime/css")
+    <link rel="stylesheet" type="text/css" href="~/Content/TD/marriage_work.css">
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/Ajax")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/DataTables")
+    @Scripts.Render("~/bundles/datetime")
+    <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/TD/marriage_work.js" type="text/javascript"></script>
+    <script>
+        $('header').addClass('img-header-td');
+    </script>
+}
+
+<div id="report" class="report-narrow">
+    <div id="header">
+        <div class="title">@ViewBag.Title</div>
+    </div>
+    <div id="table-panel">
+    </div>
+    <div id="tabs-reports">
+        <ul>
+            <li><a href="#tabs-report-1" id="link-tabs-report-1"></a></li>
+            @*<li><a href="#tabs-report-2" id="link-tabs-report-2"></a></li>*@
+        </ul>
+        <div id="tabs-report-1">
+            @*<table class='display compact' id="table-report" style="width:100%" cellpadding="0">*@
+            <table class='display compact table-bordered fuel-list-table' id="table-report" style="width:100%" cellpadding="0">
+                @*<tfoot>
+                        <tr><th colspan="5" class="title-foot">ИТОГО A92: </th><td class="total-foot" id="a92-volume"></td><td class="total-foot" id="a92-mass"></td><th colspan="8"></th></tr>
+                        <tr><th colspan="5" class="title-foot">ИТОГО A95: </th><td class="total-foot" id="a95-volume"></td><td class="total-foot" id="a95-mass"></td><th colspan="8"></th></tr>
+                        <tr><th colspan="5" class="title-foot">ИТОГО ДТ: </th><td class="total-foot" id="dt-volume"></td><td class="total-foot" id="dt-mass"></td><th colspan="8"></th></tr>
+                        <tr><th colspan="5" class="title-foot">ИТОГО Керосин: </th><td class="total-foot" id="kerosin-volume"></td><td class="total-foot" id="kerosin-mass"></td><th colspan="8"></th></tr>
+                    </tfoot>*@
+            </table>
+        </div>
+    </div>
+</div>
+

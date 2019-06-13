@@ -1,0 +1,49 @@
+﻿@using Web_RailWay.App_LocalResources;
+
+@{
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @TDResource.index_title;
+    ViewBag.Home = @TDResource.index_title;
+}
+@section Document {
+
+}
+
+@section Admin {
+    @*@{ Html.RenderAction("LinkRWControl", "Home", new { area = "TD" }); }*@
+}
+
+
+@section styles {
+
+}
+
+@section scripts {
+    <script>
+        $('header').addClass('img-header-td');
+    </script>
+}
+
+<div class="jumbotron">
+    <h1>@ViewBag.Title</h1>
+    <p class="lead">@TDResource.index_description</p>
+    @*<p><a href="#" class="btn btn-primary btn-lg">@GlobalResources.link_goto</a></p>*@
+</div>
+
+<div class="content">
+    <ul class="ca-menu">
+        <li>
+            <a href='@Url.Action("Marriage", "Home", new { area = "TD" })'>
+                <span class="ca-icon">v</span>
+                <div class="ca-content">
+                    <h2 class="ca-main">@TDResource.index_report_marriage_work_title</h2>
+                    <h3 class="ca-sub">@TDResource.index_report_marriage_work_desc</h3>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+
+

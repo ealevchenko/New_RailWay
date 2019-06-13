@@ -97,3 +97,6 @@
 /// <reference path="rw/test.js" />
 /// <reference path="plugins/mt_tables.js" />
 /// <reference path="rw/vagon1.js" />
+/// <reference path="Plugins/data_detali.js" />
+/// <reference path="Plugins/pl_common.js" />
+/// <reference path="td/marriage_work.js" />

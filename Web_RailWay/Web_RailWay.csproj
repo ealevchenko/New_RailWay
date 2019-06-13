@@ -170,6 +170,8 @@
     <Folder Include="Areas\RW\Views\Shared\" />
     <Folder Include="Areas\SAP\Models\" />
     <Folder Include="Areas\SAP\Views\Shared\" />
+    <Folder Include="Areas\TD\Models\" />
+    <Folder Include="Areas\TD\Views\Shared\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -218,6 +220,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SAPResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_LocalResources\TDResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TDResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\Ninject.Web.Common.cs" />
@@ -258,6 +265,8 @@
     <Compile Include="Areas\MT\MTAreaRegistration.cs" />
     <Compile Include="Areas\RW\RWAreaRegistration.cs" />
     <Compile Include="Areas\SAP\SAPAreaRegistration.cs" />
+    <Compile Include="Areas\TD\Controllers\HomeController.cs" />
+    <Compile Include="Areas\TD\TDAreaRegistration.cs" />
     <Compile Include="Controllers\api\KisKometaController.cs" />
     <Compile Include="Controllers\api\KisNumVagController.cs" />
     <Compile Include="Controllers\api\KisPromController.cs" />
@@ -487,6 +496,7 @@
     <Content Include="Content\Services\services.css" />
     <Content Include="Content\DataTables\css\reports-dataTables.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\TD\marriage_work.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -542,6 +552,7 @@
     <Content Include="Image\header-home.jpg" />
     <Content Include="Image\Levchenko.jpg" />
     <Content Include="Image\log.jpg" />
+    <Content Include="Image\pattern.png" />
     <Content Include="Image\railway\even.png" />
     <Content Include="Image\railway\odd.png" />
     <Content Include="Image\railway\type_buffer.png" />
@@ -549,6 +560,8 @@
     <Content Include="Image\railway\type_output.png" />
     <Content Include="Image\railway\type_railway.png" />
     <Content Include="Image\Statistic.jpg" />
+    <Content Include="Image\td.jpg" />
+    <Content Include="Image\td_marriage.jpg" />
     <Content Include="Scripts\admin\sap\sapisadmin.js" />
     <Content Include="Scripts\api_helpers\kis.js" />
     <Content Include="Scripts\api_helpers\kist.js" />
@@ -615,6 +628,9 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Areas\RW\Views\Home\PluginTest.cshtml" />
     <Content Include="Areas\RW\Views\Home\Vagon1.cshtml" />
+    <Content Include="Areas\TD\Views\web.config" />
+    <Content Include="Areas\TD\Views\Home\Index.cshtml" />
+    <Content Include="Areas\TD\Views\Home\Marriage.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
     <Content Include="Scripts\api_helpers\reference.js" />
     <Content Include="Scripts\api_helpers\settings.js" />
@@ -756,6 +772,7 @@
     <Content Include="Scripts\MT\arrivalsostav.js" />
     <Content Include="Scripts\RW\stationsnodes.js" />
     <Content Include="Scripts\Shared\common.js" />
+    <Content Include="Scripts\TD\marriage_work.js" />
     <Content Include="Scripts\wow.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -936,6 +953,10 @@
     <EmbeddedResource Include="App_LocalResources\SAPResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SAPResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_LocalResources\TDResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TDResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
