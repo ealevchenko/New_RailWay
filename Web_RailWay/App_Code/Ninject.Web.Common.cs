@@ -11,31 +11,12 @@ namespace Web_RailWay.App_Start
     using Ninject;
     using Ninject.Web.Common;
     using Ninject.Web.Common.WebHost;
-    using Ninject.Web.WebApi;
     using System.Web.Http;
-    using Ninject.Web.Mvc;
-    using System.Web.Mvc;
-    using System.Web.Http.Dependencies;
+    using Ninject.Web.WebApi;
 
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
-
-        public class NinjectDependencyResolver : NinjectDependencyScope, System.Web.Http.Dependencies.IDependencyResolver, System.Web.Mvc.IDependencyResolver
-        {
-            private readonly IKernel kernel;
-
-            public NinjectDependencyResolver(IKernel kernel)
-                : base(kernel)
-            {
-                this.kernel = kernel;
-            }
-
-            public IDependencyScope BeginScope()
-            {
-                return new NinjectDependencyScope(this.kernel.BeginBlock());
-            }
-        }
 
         /// <summary>
         /// Starts the application
@@ -67,18 +48,8 @@ namespace Web_RailWay.App_Start
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
                 kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
                 RegisterServices(kernel);
-                var ninjectResolver = new NinjectDependencyResolver(kernel);
-                
-                DependencyResolver.SetResolver(ninjectResolver); // MVC 
-
-                GlobalConfiguration.Configuration.DependencyResolver = ninjectResolver;
-
-
-                //GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
+                GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
                 return kernel;
-
-               
-
             }
             catch
             {

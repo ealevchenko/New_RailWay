@@ -22,6 +22,11 @@ namespace Web_RailWay.Areas.MT.Controllers
             this.ef_mt = mt;
         }
 
+        //public ArrivalController()
+        //{
+        //    this.ef_mt = new EFMetallurgTrans();
+        //}
+
         // GET: Arrival
 
         public ActionResult Index()
