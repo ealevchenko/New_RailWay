@@ -36,27 +36,141 @@
     </script>
 }
 
-<div id="report" class="report-narrow">
-    <div id="header">
-        <div class="title">@ViewBag.Title</div>
-    </div>
-    <div id="table-panel">
-    </div>
+<input id="username" type="hidden" value="@User.Identity.Name" />
+
+<div id="ins-edit-confirm" title="" style="display:none">
+    <form id="form-ins-edit">
+        <fieldset>
+            <table id="confirm" class="display">
+                <tr>
+                    <th><label for="Number" id="label-number-cards"></label></th>
+                    <td><input id="Number" name="Number" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th><label for="DriverName" id="label-drivername-cards"></label></th>
+                    <td><input id="DriverName" name="DriverName" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th><label for="AutoNumber" id="label-autonumber-cards"></label></th>
+                    <td><input id="AutoNumber" name="AutoNumber" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th><label for="Debitor" id="label-debitor-cards"></label></th>
+                    <td><input id="Debitor" name="Debitor" type="number" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th><label for="Sn1" id="label-sn1-cards"></label></th>
+                    <td><input id="Sn1" name="Sn1" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th><label for="Sn2" id="label-sn2-cards"></label></th>
+                    <td><input id="Sn2" name="Sn1" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th><label for="AutoModel" id="label-automodel-cards"></label></th>
+                    <td><input id="AutoModel" name="AutoModel" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th><label for="Street" id="label-street-cards"></label></th>
+                    <td><input id="Street" name="Street" type="number" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th><label for="House" id="label-house-cards"></label></th>
+                    <td><select id="House" name="House" class="ui-widget-content ui-corner-all"></select></td>
+                </tr>
+                <tr>
+                    <th><label for="Owner" id="label-owner-cards"></label></th>
+                    <td><input id="Owner" name="Owner" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th><label for="Active" id="label-active-cards"></label></th>
+                    <td><input id="Active" name="Active" type="checkbox" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+            </table>
+
+            @*<input id="id-nodes" name="id-nodes" type="hidden" />
+                <p>
+                    <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+                    <label id="delete-confirm-text" name="delete-confirm-text"></label>
+                </p>*@
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+<div id="delete-confirm" title="" style="display:none">
+    <form id="form-delete">
+        <fieldset>
+            <legend id="legend-delete"></legend>
+            <table id="confirm" class="display">
+                <tr>
+                    <th><label for="Number" id="label-id-cards"></label></th>
+                    <td><label id="value-id-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="Number" id="label-number-cards"></label></th>
+                    <td><label id="value-number-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="DriverName" id="label-drivername-cards"></label></th>
+                    <td><label id="value-drivername-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="AutoNumber" id="label-autonumber-cards"></label></th>
+                    <td><label id="value-autonumber-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="Debitor" id="label-debitor-cards"></label></th>
+                    <td><label id="value-debitor-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="Sn1" id="label-sn1-cards"></label></th>
+                    <td><label id="value-sn1-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="Sn2" id="label-sn2-cards"></label></th>
+                    <td><label id="value-sn2-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="AutoModel" id="label-automodel-cards"></label></th>
+                    <td><label id="value-automodel-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="Street" id="label-street-cards"></label></th>
+                    <td><label id="value-street-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="House" id="label-house-cards"></label></th>
+                    <td><label id="value-house-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="Owner" id="label-owner-cards"></label></th>
+                    <td><label id="value-owner-cards"></label></td>
+                </tr>
+                <tr>
+                    <th><label for="Active" id="label-active-cards"></label></th>
+                    <td><label id="value-active-cards"></label></td>
+                </tr>
+            </table>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+<div id="report" class="report-wide">
     <div id="tabs-reports">
         <ul>
-            <li><a href="#tabs-report-1" id="link-tabs-report-1"></a></li>
-            @*<li><a href="#tabs-report-2" id="link-tabs-report-2"></a></li>*@
+            <li><a href="#tab-report-1" id="link-tab-report-1"></a></li>
+            <li><a href="#tab-report-2" id="link-tab-report-2"></a></li>
         </ul>
-        <div id="tabs-report-1">
-            @*<table class='display compact' id="table-report" style="width:100%" cellpadding="0">*@
-            <table class='display compact table-bordered fuel-list-table' id="table-report" style="width:100%" cellpadding="0">
-                @*<tfoot>
-                        <tr><th colspan="5" class="title-foot">ИТОГО A92: </th><td class="total-foot" id="a92-volume"></td><td class="total-foot" id="a92-mass"></td><th colspan="8"></th></tr>
-                        <tr><th colspan="5" class="title-foot">ИТОГО A95: </th><td class="total-foot" id="a95-volume"></td><td class="total-foot" id="a95-mass"></td><th colspan="8"></th></tr>
-                        <tr><th colspan="5" class="title-foot">ИТОГО ДТ: </th><td class="total-foot" id="dt-volume"></td><td class="total-foot" id="dt-mass"></td><th colspan="8"></th></tr>
-                        <tr><th colspan="5" class="title-foot">ИТОГО Керосин: </th><td class="total-foot" id="kerosin-volume"></td><td class="total-foot" id="kerosin-mass"></td><th colspan="8"></th></tr>
-                    </tfoot>*@
-            </table>
+        <div id="tab-report-1">
+            <div id="table-panel"></div>
+            <table class='display compact' id="table-report-1" style="width:100%" cellpadding="0"></table>
+        </div>
+        <div id="tab-report-2">
+            <table class='display compact' id="table-report-2" style="width:100%" cellpadding="0"></table>
         </div>
     </div>
 </div>
