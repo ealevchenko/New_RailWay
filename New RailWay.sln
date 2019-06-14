@@ -96,6 +96,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{73C428
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TD", "TD", "{8A79B013-67C5-449A-8BDF-C8187BB70911}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFTD", "EFTD\EFTD.csproj", "{71D04252-1237-41C8-8D82-63A627E3B1A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -234,6 +238,10 @@ Global
 		{1DA8DDFF-BD6C-4102-897D-55911A9F87AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DA8DDFF-BD6C-4102-897D-55911A9F87AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DA8DDFF-BD6C-4102-897D-55911A9F87AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71D04252-1237-41C8-8D82-63A627E3B1A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71D04252-1237-41C8-8D82-63A627E3B1A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71D04252-1237-41C8-8D82-63A627E3B1A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71D04252-1237-41C8-8D82-63A627E3B1A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -273,6 +281,7 @@ Global
 		{375BC2B8-2CD2-4801-9F84-54916CA8A310} = {5F57B36F-18B4-4AD7-8BBB-EB737932A1B0}
 		{4DFB537D-A480-47D9-8D3C-29124822D02A} = {4808388D-6837-49BE-9213-B3D8BC5BF100}
 		{1DA8DDFF-BD6C-4102-897D-55911A9F87AB} = {2FAA2C5D-4A51-4CD1-AA98-4BDDF9843D24}
+		{71D04252-1237-41C8-8D82-63A627E3B1A3} = {8A79B013-67C5-449A-8BDF-C8187BB70911}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A356AE68-D58C-4CF0-9078-E5D69D44254C}

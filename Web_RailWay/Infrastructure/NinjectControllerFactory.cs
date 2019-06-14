@@ -42,7 +42,8 @@ namespace Web_RailWay.Infrastructure
             ninjectKernel.Bind<IMT>().To<EFMetallurgTrans>();
             ninjectKernel.Bind<ISAP>().To<EFSAP>();
             ninjectKernel.Bind<ITKIS>().To<EFTKIS>();
-            ninjectKernel.Bind<IRailWay>().To<EFRailWay>();            
+            ninjectKernel.Bind<IRailWay>().To<EFRailWay>();
+            ninjectKernel.Bind<EFTD.Abstract.IRepository<EFTD.Entities.MarriageWork>>().To<EFOC.Concrete.EFMarriageWork>();    
         }
     }
 }

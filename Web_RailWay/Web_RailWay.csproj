@@ -267,6 +267,7 @@
     <Compile Include="Areas\SAP\SAPAreaRegistration.cs" />
     <Compile Include="Areas\TD\Controllers\HomeController.cs" />
     <Compile Include="Areas\TD\TDAreaRegistration.cs" />
+    <Compile Include="Controllers\api\DTMarriageController.cs" />
     <Compile Include="Controllers\api\KisKometaController.cs" />
     <Compile Include="Controllers\api\KisNumVagController.cs" />
     <Compile Include="Controllers\api\KisPromController.cs" />
@@ -875,6 +876,10 @@
     <ProjectReference Include="..\EFRW\EFRW.csproj">
       <Project>{9d7a67b0-932b-40b7-8f30-696832b5088d}</Project>
       <Name>EFRW</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFTD\EFTD.csproj">
+      <Project>{71d04252-1237-41c8-8d82-63a627e3b1a3}</Project>
+      <Name>EFTD</Name>
     </ProjectReference>
     <ProjectReference Include="..\KIS\KIS.csproj">
       <Project>{27da4048-f46e-4c77-857b-2bd1809fea87}</Project>
