@@ -98,6 +98,12 @@ namespace Web_RailWay.App_Start
             kernel.Bind<EFKIS.Abstract.ITKIS>().To<EFKIS.Concrete.EFTKIS>();
             kernel.Bind<EFRW.Abstract.IRailWay>().To<EFRW.Concrete.EFRailWay>();
             kernel.Bind<EFTD.Abstract.IRepository<EFTD.Entities.MarriageWork>>().To<EFOC.Concrete.EFMarriageWork>();
+            kernel.Bind<EFTD.Abstract.IRepository<EFTD.Entities.MarriagePlace>>().To<EFOC.Concrete.EFMarriagePlace>();
+            kernel.Bind<EFTD.Abstract.IRepository<EFTD.Entities.MarriageClassification>>().To<EFOC.Concrete.EFMarriageClassification>();
+            kernel.Bind<EFTD.Abstract.IRepository<EFTD.Entities.MarriageNature>>().To<EFOC.Concrete.EFMarriageNature>();
+            kernel.Bind<EFTD.Abstract.IRepository<EFTD.Entities.MarriageCause>>().To<EFOC.Concrete.EFMarriageCause>();
+            kernel.Bind<EFTD.Abstract.IRepository<EFTD.Entities.MarriageSubdivision>>().To<EFOC.Concrete.EFMarriageSubdivision>();
+
         }        
     }
 }

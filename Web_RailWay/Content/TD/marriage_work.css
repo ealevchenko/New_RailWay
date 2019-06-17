@@ -1,7 +1,7 @@
 ﻿DIV#report {
     padding: 0;
     margin: 20px auto;
-    width: 1200px;
+    max-width: 1800px;
     color: #666;
     background: White;
 }
@@ -37,3 +37,64 @@ h1 {
 #table-panel label {
     margin: 5px;
 }
+
+#table_cards th {
+    font-size:13px;
+}
+
+#table_cards td{
+    font-size:13px;
+}
+
+div.setup-operation {
+    text-align:left;
+}
+
+.overflow {
+    height: 200px;
+}
+
+
+div#ins-edit-confirm {
+    font-size: 14px;
+}
+
+.table-confirm-ins-edit {
+    margin-top: 10px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-weight: normal;
+}
+
+    .table-confirm-ins-edit th {
+        /*padding:3px 0;*/
+        font-size: 14px;
+        text-align: right;
+        font-weight: bold;
+        width: 250px;
+    }
+
+    .table-confirm-ins-edit td {
+        /*padding:3px 0;*/
+        /*font-size: 14px;*/
+        font-weight: bold;
+        text-align: left;
+        width: 650px;
+    }
+
+        .table-confirm-ins-edit td input#confirm-date-start, .table-confirm-ins-edit td input#confirm-date-stop {
+            width: 200px;
+        }
+
+        .table-confirm-ins-edit td input {
+            width: 95%;
+        }
+
+        .table-confirm-ins-edit td select {
+            width: 95%;
+        }
+
+        .table-confirm-ins-edit td textarea {
+            width: 95%;
+            height: 50px
+        }

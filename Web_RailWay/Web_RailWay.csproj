@@ -477,6 +477,7 @@
     <Content Include="Content\DataTables\images1\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
     <Content Include="Content\datetime\daterangepicker.css" />
+    <Content Include="Content\datetime\daterangepicker.min.css" />
     <Content Include="Content\dropdownlist.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\ui-icons_444444_256x240.png" />
@@ -570,6 +571,7 @@
     <Content Include="Image\td.jpg" />
     <Content Include="Image\td_marriage.jpg" />
     <Content Include="Scripts\admin\sap\sapisadmin.js" />
+    <Content Include="Scripts\api_helpers\dt.js" />
     <Content Include="Scripts\api_helpers\kis.js" />
     <Content Include="Scripts\api_helpers\kist.js" />
     <Content Include="Scripts\api_helpers\logs.js" />
@@ -722,6 +724,7 @@
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
     <Content Include="Scripts\datetime\jquery.daterangepicker.js" />
+    <Content Include="Scripts\datetime\jquery.daterangepicker.min.js" />
     <Content Include="Scripts\datetime\moment.min.js" />
     <Content Include="Scripts\Home\home.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />

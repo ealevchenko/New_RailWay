@@ -30,6 +30,7 @@
     @Scripts.Render("~/bundles/datetime")
     <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
     <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/dt.js" type="text/javascript"></script>
     <script src="~/Scripts/TD/marriage_work.js" type="text/javascript"></script>
     <script>
         $('header').addClass('img-header-td');
@@ -40,59 +41,80 @@
 
 <div id="ins-edit-confirm" title="" style="display:none">
     <form id="form-ins-edit">
+        <p class="validateTips"></p>
         <fieldset>
-            <table id="confirm" class="display">
+            <table id="confirm" class="table-confirm-ins-edit table-condensed">
                 <tr>
-                    <th><label for="Number" id="label-number-cards"></label></th>
-                    <td><input id="Number" name="Number" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="date-start"></th>
+                    <td><input id="confirm-date-start" type="datetime" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
-                    <th><label for="DriverName" id="label-drivername-cards"></label></th>
-                    <td><input id="DriverName" name="DriverName" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="date-stop"></th>
+                    <td><input id="confirm-date-stop" type="datetime" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
-                    <th><label for="AutoNumber" id="label-autonumber-cards"></label></th>
-                    <td><input id="AutoNumber" name="AutoNumber" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="place"></th>
+                    <td><select id="confirm-place" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
                 <tr>
-                    <th><label for="Debitor" id="label-debitor-cards"></label></th>
-                    <td><input id="Debitor" name="Debitor" type="number" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="site"></th>
+                    <td><textarea id="confirm-site" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
                 </tr>
                 <tr>
-                    <th><label for="Sn1" id="label-sn1-cards"></label></th>
-                    <td><input id="Sn1" name="Sn1" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="classification"></th>
+                    <td><select id="confirm-classification" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
                 <tr>
-                    <th><label for="Sn2" id="label-sn2-cards"></label></th>
-                    <td><input id="Sn2" name="Sn1" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="nature"></th>
+                    <td><select id="confirm-nature" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
                 <tr>
-                    <th><label for="AutoModel" id="label-automodel-cards"></label></th>
-                    <td><input id="AutoModel" name="AutoModel" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="num"></th>
+                    <td><textarea id="confirm-num" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
                 </tr>
                 <tr>
-                    <th><label for="Street" id="label-street-cards"></label></th>
-                    <td><input id="Street" name="Street" type="number" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="cause"></th>
+                    <td><select id="confirm-cause" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
                 <tr>
-                    <th><label for="House" id="label-house-cards"></label></th>
-                    <td><select id="House" name="House" class="ui-widget-content ui-corner-all"></select></td>
+                    <th id="type-cause"></th>
+                    <td><select id="confirm-type-cause" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
                 <tr>
-                    <th><label for="Owner" id="label-owner-cards"></label></th>
-                    <td><input id="Owner" name="Owner" type="text" disabled="disabled" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="subdivision"></th>
+                    <td><select id="confirm-subdivision" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
                 <tr>
-                    <th><label for="Active" id="label-active-cards"></label></th>
-                    <td><input id="Active" name="Active" type="checkbox" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <th id="akt"></th>
+                    <td><input id="confirm-akt" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th id="locomotive-series"></th>
+                    <td><textarea id="confirm-locomotive-series" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                </tr>
+                <tr>
+                    <th id="driver"></th>
+                    <td><input id="confirm-drivers" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th id="helper"></th>
+                    <td><input id="confirm-helper" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th id="measures"></th>
+                    <td><textarea id="confirm-measures" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                </tr>
+                <tr>
+                    <th id="note"></th>
+                    <td><textarea id="confirm-note" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
                 </tr>
             </table>
 
             @*<input id="id-nodes" name="id-nodes" type="hidden" />
-                <p>
-                    <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
-                    <label id="delete-confirm-text" name="delete-confirm-text"></label>
-                </p>*@
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+                <label id="delete-confirm-text" name="delete-confirm-text"></label>
+            </p>*@
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>

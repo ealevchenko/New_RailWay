@@ -198,9 +198,40 @@ $.extend({
 //
 function OnBegin() {
     var lang = $.cookie('lang');
-    LockScreen(lang == 'en' ? 'We are processing your request ...' : 'Мы обрабатываем ваш запрос...');
+    LockScreen(lang === 'en' ? 'We are processing your request ...' : 'Мы обрабатываем ваш запрос...');
 }
+/* ----------------------------------------------------------
+    Общие спомогательные функции
+-------------------------------------------------------------*/
+// Коррекция вывода даты с учетом зоны
+var toISOStringTZ = function (date) {
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+};
+// Вернуть дату взависимости от языка
+var dateISOtoStringOfLang = function (dateISO, lang) {
+    if (dateISO !== null) {
+        var dt = new Date(Date.parse(dateISO));
+        return datetoStringOfLang(dt, lang);
+    }
+    return null;
+};
+// Вернуть дату взависимости от языка
+var datetoStringOfLang = function (dt, lang) {
+        if (dt !== null) {
+            if (lang === 'en') {
+                return (dt.getMonth() + 1) + '/' + dt.getDate() + '/' + dt.getFullYear() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
 
+            } else {
+                return dt.getDate() + '.' + (dt.getMonth() + 1) + '.' + dt.getFullYear() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
+            }
+    }
+    return null;
+};
+
+//
+var outVal = function (i) {
+    return i != null ? Number(i) : '';
+};
 //-------------------------------------------------------------------------
 // Обработчики ajax - функций
 // Событие перед запросом
@@ -223,21 +254,21 @@ function AJAXComplete() {
 // Инициализация компонента Select
 function initSelect(obj_select, property, data, callback_option, value_select, event_change, exceptions_value) {
     var options = [];
-    var lang = $.cookie('lang');
+    var lang = $.cookie('lang') === undefined ? 'ru' : $.cookie('lang');
     // Проверка выбор неопределен
-    if (value_select == -1) {
-        options.push("<option value='-1' >" + (lang == 'en' ? 'Select...' : 'Выберите...') + "</option>");
+    if (value_select === -1) {
+        options.push("<option value='-1' >" + (lang === 'en' ? 'Select...' : 'Выберите...') + "</option>");
     }
-    if (data != null) {
+    if (data !== null) {
         for (i = 0; i < data.length; i++) {
-            var option = { value: data[i].value, text: data[i].text, disabled:data[i].disabled  }
+            var option = { value: data[i].value, text: data[i].text, disabled: data[i].disabled };
             // Преобразовать формат
             if (typeof callback_option === 'function') {
                 option = callback_option(data[i]);
             }
-            if (option != null) {
-                if (exceptions_value != null) {
-                    if (exceptions_value.indexOf(option.value) == -1) {
+            if (option !== null) {
+                if (exceptions_value !== null) {
+                    if (exceptions_value.indexOf(option.value) === -1) {
                         options.push("<option value='" + option.value + "' " + (option.disabled ? "disabled='disabled'" : "") + ">" + option.text + "</option>");
                     }
                 } else {
@@ -251,11 +282,12 @@ function initSelect(obj_select, property, data, callback_option, value_select, e
         icons: { button: "ui-icon ui-icon-circle-triangle-s" },
         width: property.width,
         change: event_change,
-    });
+    }).selectmenu("menuWidget").addClass("overflow");
     // Заполним селект 
     obj_select.append(options.join(""))
         .val(value_select)
         .selectmenu("refresh");
+    return obj_select;
 }
 // Инициализация компонента DateTime
 function initDateTime(obj_select, property) {
