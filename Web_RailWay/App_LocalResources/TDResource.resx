@@ -120,6 +120,9 @@
   <data name="index_description" xml:space="preserve">
     <value>Отчетная документация, транспортного департамента</value>
   </data>
+  <data name="index_report_marriage_admin_work_title" xml:space="preserve">
+    <value>Брак в работе (ввод данных)</value>
+  </data>
   <data name="index_report_marriage_work_desc" xml:space="preserve">
     <value>Информация о браке и несоответствиях в работе подразделения транспортного департамента.</value>
   </data>

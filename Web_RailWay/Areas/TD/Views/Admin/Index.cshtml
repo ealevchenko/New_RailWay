@@ -1,0 +1,28 @@
+﻿@using Web_RailWay.App_LocalResources;
+
+@{
+    Layout = null;
+}
+
+@{ Html.RenderAction("LinkAdmin", "Home", new { area = "" }); }
+
+<div class="row m-3t">
+    <div class="col-md-4 text-center">
+        <div class="service-box">
+            <i class="fa fa-files-o fa-3x wow bounceIn" data-wow-delay=".1s"></i>
+            <p><a href='@Url.Action("Marriage", "Admin", new { area = "TD" })' class="link-admin">@TDResource.index_report_marriage_admin_work_title</a></p>
+        </div>
+    </div>
+    @*<div class="col-md-4 text-center">
+            <div class="service-box">
+                <i class="fa fa-cog fa-3x wow bounceIn" data-wow-delay=".2s"></i>
+                <p><a href='@Url.Action("Index", "Services", new { area = "Admin" })' class="link-admin">@GlobalResources.lunk_service_control</a></p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="service-box">
+                <i class="fa fa-book fa-3x wow bounceIn" data-wow-delay=".3s"></i>
+                <p><a href='#' class="link-admin">@GlobalResources.link_reference_control</a></p>
+            </div>
+        </div>*@
+</div>

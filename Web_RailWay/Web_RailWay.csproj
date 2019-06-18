@@ -271,6 +271,7 @@
     <Compile Include="Areas\MT\MTAreaRegistration.cs" />
     <Compile Include="Areas\RW\RWAreaRegistration.cs" />
     <Compile Include="Areas\SAP\SAPAreaRegistration.cs" />
+    <Compile Include="Areas\TD\Controllers\AdminController.cs" />
     <Compile Include="Areas\TD\Controllers\HomeController.cs" />
     <Compile Include="Areas\TD\TDAreaRegistration.cs" />
     <Compile Include="Controllers\api\DTMarriageController.cs" />
@@ -569,6 +570,7 @@
     <Content Include="Image\railway\type_railway.png" />
     <Content Include="Image\Statistic.jpg" />
     <Content Include="Image\td.jpg" />
+    <Content Include="Image\td_admin.jpg" />
     <Content Include="Image\td_marriage.jpg" />
     <Content Include="Scripts\admin\sap\sapisadmin.js" />
     <Content Include="Scripts\api_helpers\dt.js" />
@@ -640,6 +642,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\TD\Views\Admin\Index.cshtml" />
+    <Content Include="Areas\TD\Views\Admin\Marriage.cshtml" />
     <None Include="Properties\PublishProfiles\RailWay_API.pubxml" />
     <Content Include="Scripts\api_helpers\reference.js" />
     <Content Include="Scripts\api_helpers\settings.js" />
@@ -782,6 +786,7 @@
     <Content Include="Scripts\MT\arrivalsostav.js" />
     <Content Include="Scripts\RW\stationsnodes.js" />
     <Content Include="Scripts\Shared\common.js" />
+    <Content Include="Scripts\TD\marriage_work_admin.js" />
     <Content Include="Scripts\TD\marriage_work.js" />
     <Content Include="Scripts\wow.min.js" />
     <Content Include="Web.config">

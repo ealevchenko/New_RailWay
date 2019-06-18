@@ -1,0 +1,215 @@
+﻿@using Web_RailWay.App_LocalResources;
+
+@{
+    Layout = "~/Views/Shared/_RailWay.cshtml";
+    ViewBag.Title = @TDResource.index_report_marriage_work_desc;
+    ViewBag.Home = @TDResource.index_report_marriage_work_title;
+}
+
+@section Document {
+
+}
+
+@section Admin {
+    @{ Html.RenderAction("Index", "Admin", new { area = "TD" }); }
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="~/Content/reports.css">
+    @Styles.Render("~/jquery-ui/css")
+    @Styles.Render("~/DataTables/css")
+    @Styles.Render("~/datetime/css")
+    <link rel="stylesheet" type="text/css" href="~/Content/TD/marriage_work.css">
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/Ajax")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/DataTables")
+    @Scripts.Render("~/bundles/datetime")
+    <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
+    <script src="~/Scripts/api_helpers/dt.js" type="text/javascript"></script>
+    <script src="~/Scripts/TD/marriage_work_admin.js" type="text/javascript"></script>
+    <script>
+        $('header').addClass('img-header-td-admin');
+    </script>
+}
+
+<input id="username" type="hidden" value="@User.Identity.Name" />
+
+<div id="ins-edit-confirm" title="" style="display:none">
+    <form id="form-ins-edit">
+        <p class="validateTips"></p>
+        <fieldset>
+            <table id="confirm" class="table-confirm-ins-edit table-condensed">
+                <tr>
+                    <th id="date-period"></th>
+                    <td><input id="confirm-date-start" type="datetime" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <td><input id="confirm-date-stop" type="datetime" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                @*<tr>
+                        <th id="date-stop"></th>
+                        <td><input id="confirm-date-stop" type="datetime" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    </tr>*@
+                <tr>
+                    <th id="district-object"></th>
+                    <td colspan="2"><select id="confirm-district-object" class="ui-widget-content ui-corner-all"></select></td>
+                </tr>
+                <tr>
+                    <th id="site"></th>
+                    <td colspan="2"><textarea id="confirm-site" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                </tr>
+                <tr>
+                    <th id="classification-nature"></th>
+                    <td><select id="confirm-classification" class="ui-widget-content ui-corner-all"></select></td>
+                    <td><select id="confirm-nature" class="ui-widget-content ui-corner-all"></select></td>
+                </tr>
+                @*<tr>
+                        <th id="nature"></th>
+                        <td><select id="confirm-nature" class="ui-widget-content ui-corner-all"></select></td>
+                    </tr>*@
+                <tr>
+                    <th id="num"></th>
+                    <td colspan="2"><textarea id="confirm-num" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                </tr>
+                <tr>
+                    <th id="cause-type-cause"></th>
+                    <td><select id="confirm-cause" class="ui-widget-content ui-corner-all"></select></td>
+                    <td><select id="confirm-type-cause" class="ui-widget-content ui-corner-all"></select></td>
+                </tr>
+                @*<tr>
+                        <th id="type-cause"></th>
+                        <td><select id="confirm-type-cause" class="ui-widget-content ui-corner-all"></select></td>
+                    </tr>*@
+                <tr>
+                    <th id="subdivision"></th>
+                    <td colspan="2"><select id="confirm-subdivision" class="ui-widget-content ui-corner-all"></select></td>
+                </tr>
+                <tr>
+                    <th id="akt"></th>
+                    <td colspan="2"><input id="confirm-akt" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th id="locomotive-series"></th>
+                    <td colspan="2"><textarea id="confirm-locomotive-series" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                </tr>
+                <tr>
+                    <th id="driver"></th>
+                    <td colspan="2"> <input id="confirm-drivers" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th id="helper"></th>
+                    <td colspan="2"><input id="confirm-helper" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                </tr>
+                <tr>
+                    <th id="measures"></th>
+                    <td colspan="2"><textarea id="confirm-measures" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                </tr>
+                <tr>
+                    <th id="note"></th>
+                    <td colspan="2"><textarea id="confirm-note" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                </tr>
+            </table>
+
+            @*<input id="id-nodes" name="id-nodes" type="hidden" />
+                <p>
+                    <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+                    <label id="delete-confirm-text" name="delete-confirm-text"></label>
+                </p>*@
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+<div id="delete-confirm" title="" style="display:none">
+    <form id="form-delete">
+        <fieldset>
+            <table id="confirm" class="table-confirm-delete table-condensed">
+                <tr>
+                    <th id="date-period"></th>
+                    <td id="confirm-date-start"></td>
+                    <td id="confirm-date-stop"></td>
+                </tr>
+                <tr>
+                    <th id="district-object"></th>
+                    <td colspan="2" id="confirm-district-object"></td>
+                </tr>
+                <tr>
+                    <th id="site"></th>
+                    <td colspan="2" id="confirm-site"></td>
+                </tr>
+                <tr>
+                    <th id="classification-nature"></th>
+                    <td id="confirm-classification"></td>
+                    <td id="confirm-nature"></td>
+                </tr>
+                <tr>
+                    <th id="num"></th>
+                    <td colspan="2" id="confirm-num"></td>
+                </tr>
+                <tr>
+                    <th id="cause-type-cause"></th>
+                    <td id="confirm-cause"></td>
+                    <td id="confirm-type-cause"></td>
+                </tr>
+                <tr>
+                    <th id="subdivision"></th>
+                    <td colspan="2" id="confirm-subdivision"></td>
+                </tr>
+                <tr>
+                    <th id="akt"></th>
+                    <td colspan="2" id="confirm-akt"></td>
+                </tr>
+                <tr>
+                    <th id="locomotive-series"></th>
+                    <td colspan="2" id="confirm-locomotive-series"></td>
+                </tr>
+                <tr>
+                    <th id="driver"></th>
+                    <td colspan="2" id="confirm-drivers"></td>
+                </tr>
+                <tr>
+                    <th id="helper"></th>
+                    <td colspan="2" id="confirm-helper"></td>
+                </tr>
+                <tr>
+                    <th id="measures"></th>
+                    <td colspan="2" id="confirm-measures"></td>
+                </tr>
+                <tr>
+                    <th id="note"></th>
+                    <td colspan="2" id="confirm-note"></td>
+                </tr>
+                <tr>
+                    <th id="create"></th>
+                    <td id="confirm-create"></td>
+                    <td id="confirm-create-user"></td>
+                </tr>
+            </table>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+<div id="report" class="report-wide">
+
+    <div id="tabs-reports">
+        <ul>
+            <li><a href="#tab-report-1" id="link-tab-report-1"></a></li>
+            @*<li><a href="#tab-report-2" id="link-tab-report-2"></a></li>*@
+        </ul>
+        <div id="tab-report-1">
+            <div id="table-panel"></div>
+            <p class="messageTips"></p>
+            <table class='display compact' id="table-report-1" style="width:100%" cellpadding="0"></table>
+        </div>
+        @*<div id="tab-report-2">
+            <table class='display compact' id="table-report-2" style="width:100%" cellpadding="0"></table>
+        </div>*@
+    </div>
+</div>
+
+

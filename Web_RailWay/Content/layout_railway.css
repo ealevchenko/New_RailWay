@@ -22,6 +22,10 @@
 .img-header-td {
      background-image: url(../Image/pattern.png), url(../Image/td.jpg);
 }
+.img-header-td-admin {
+    background-image: url(../Image/pattern.png), url(../Image/header.jpg);
+}
+
 /*.img-header-td-marriage {
      background-image: url(../Image/pattern.png), url(../Image/td.jpg);
 }*/

@@ -7,9 +7,9 @@ using Web_RailWay.Infrastructure;
 
 namespace Web_RailWay.Areas.TD.Controllers
 {
-    public class HomeController : Controller
+    public class AdminController : Controller
     {
-        // GET: TD/Home
+        // GET: TD/Admin
         public ActionResult Index()
         {
             return View();
@@ -19,5 +19,6 @@ namespace Web_RailWay.Areas.TD.Controllers
         {
             return View();
         }
+
     }
 }
