@@ -51,9 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IRepository.cs" />
+    <Compile Include="Concrete\EFMarriageDistrictObject.cs" />
+    <Compile Include="Concrete\EFMarriageDistrict.cs" />
     <Compile Include="Concrete\EFMarriageWork.cs" />
     <Compile Include="Concrete\EFMarriageSubdivision.cs" />
-    <Compile Include="Concrete\EFMarriagePlace.cs" />
     <Compile Include="Concrete\EFMarriageNature.cs" />
     <Compile Include="Concrete\EFMarriageClassification.cs" />
     <Compile Include="Concrete\EFMarriageCause.cs" />
@@ -61,10 +62,11 @@
     <Compile Include="Entities\MarriageCause.cs" />
     <Compile Include="Entities\MarriageClassification.cs" />
     <Compile Include="Entities\MarriageNature.cs" />
-    <Compile Include="Entities\MarriagePlace.cs" />
     <Compile Include="Entities\MarriageSubdivision.cs" />
     <Compile Include="Entities\MarriageWork.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
+    <Compile Include="Entities\MarriageDistrict.cs" />
+    <Compile Include="Entities\MarriageDistrictObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

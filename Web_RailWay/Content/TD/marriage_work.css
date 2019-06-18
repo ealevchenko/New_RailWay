@@ -39,15 +39,15 @@ h1 {
 }
 
 #table_cards th {
-    font-size:13px;
+    font-size: 13px;
 }
 
-#table_cards td{
-    font-size:13px;
+#table_cards td {
+    font-size: 13px;
 }
 
 div.setup-operation {
-    text-align:left;
+    text-align: left;
 }
 
 .overflow {
@@ -56,7 +56,7 @@ div.setup-operation {
 
 
 div#ins-edit-confirm {
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .table-confirm-ins-edit {
@@ -68,22 +68,23 @@ div#ins-edit-confirm {
 
     .table-confirm-ins-edit th {
         /*padding:3px 0;*/
-        font-size: 14px;
+        font-size: 13px;
         text-align: right;
         font-weight: bold;
-        width: 250px;
+        width: 200px;
     }
 
     .table-confirm-ins-edit td {
         /*padding:3px 0;*/
         /*font-size: 14px;*/
-        font-weight: bold;
+        /*font-weight: bold;*/
+        font-style: italic;
         text-align: left;
-        width: 650px;
+        width: 300px;
     }
 
         .table-confirm-ins-edit td input#confirm-date-start, .table-confirm-ins-edit td input#confirm-date-stop {
-            width: 200px;
+            width: 150px;
         }
 
         .table-confirm-ins-edit td input {
@@ -96,5 +97,35 @@ div#ins-edit-confirm {
 
         .table-confirm-ins-edit td textarea {
             width: 95%;
-            height: 50px
+            height: 50px;
         }
+
+/*table-confirm-delete*/
+.table-confirm-delete {
+    margin-top: 10px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-weight: normal;
+}
+
+    .table-confirm-delete th {
+        /*padding:3px 0;*/
+        font-size: 13px;
+        text-align: right;
+        font-weight: bold;
+        width: 200px;
+    }
+
+    .table-confirm-delete td {
+        font-style: italic;
+        text-align: left;
+        width: 300px;
+        color:#ff0000;
+    }
+
+header .header-content .header-content-inner p.messageTips {
+    margin:0;
+    font-size:14px;
+    text-align:left;
+    color:#666;
+}

@@ -67,12 +67,84 @@ function getAsyncDTMarriageOfID(id, callback) {
         }
     });
 }
+//Добавить брака вработе
+var postAsyncDTMarriage = function (marriage_work, callback) {
+    $.ajax({
+        url: '../../api/dt/marriage_work',
+        type: 'POST',
+        data: JSON.stringify(marriage_work),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+//Обновить брака вработе
+var putAsyncDTMarriage = function (marriage_work, callback) {
+    $.ajax({
+        type: 'PUT',
+        url: '../../api/dt/marriage_work/' + marriage_work.id,
+        data: JSON.stringify(marriage_work),
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
+// Удалить брака вработе по id
+var deleteAsyncDTMarriage = function (id, callback) {
+    $.ajax({
+        url: '../../api/dt/marriage_work/' + id,
+        type: 'DELETE',
+        contentType: "application/json;charset=utf-8",
+        async: true,
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        },
+    });
+}
 
-// Получить список place
-function getAsyncDTMarriagePlace(callback) {
+
+// Получить список MarriageDistrictObject
+function getAsyncDTMarriageDistrictObject(callback) {
     $.ajax({
         type: 'GET',
-        url: '../../api/dt/marriage_place',
+        url: '../../api/dt/marriage_district_object',
         async: true,
         dataType: 'json',
         beforeSend: function () {

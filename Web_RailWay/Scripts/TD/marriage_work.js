@@ -1,4 +1,16 @@
-﻿$(function () {
+﻿// Контроль нажатия кнопки на клавиатуре (исключить сворачивание окон по нажатию "ENTER")
+$(document).keypress(
+    function (event) {
+
+        if (event.which === 13) {
+            $(".validateTips").text('');
+            $(".ui-state-error").removeClass("ui-state-error");
+            event.preventDefault();
+
+        }
+    });
+
+$(function () {
 
     // Список общесистемных слов 
     $.Text_View =
@@ -9,13 +21,16 @@
                 'text_link_tabs_marriage_report': 'Отчеты',
                 'field_date_start': 'Дата, время инцидента',
                 'field_date_stop': 'Дата, время устранения инцидента',
-                'field_place': 'Место нарушения (станция, пост, перегон)',
+                'field_date_period': 'Дата и время начала и устранения инцидента',
+                'field_district_object': 'Место нарушения (станция, пост, перегон)',
                 'field_site': 'Участок нарушения (путь, СП)',
                 'field_classification': 'Классификация нарушения',
                 'field_nature': 'Характер нарушения',
+                'field_classification_nature': 'Классификация и характер нарушения',
                 'field_num': '№ подвижного состава',
                 'field_cause': 'Причина нарушения',
                 'field_type_cause': 'Техническая / организационная',
+                'field_cause_type_cause': 'Причина нарушения',
                 'field_subdivision': 'Подразделение',
                 'field_akt': '№ акта',
                 'field_locomotive_series': 'Серия, № локомотива',
@@ -23,11 +38,12 @@
                 'field_helper': 'Помощник, составитель',
                 'field_measures': 'Принятые меры',
                 'field_note': 'Примечание',
+                'field_create': 'Запись создана',
 
                 'label-text-date': 'Выберите период',
-                'title_insert_marriage': 'Добавить карту',
-                'title_edit_marriage': 'Править карту',
-                'title_delete_marriage': 'Удалить карту',
+                'title_insert_marriage': 'Добавить запись брак в работе',
+                'title_edit_marriage': 'Править запись брак в работе',
+                'title_delete_marriage': 'Удалить запись брак в работе',
                 'button_insert': 'Добавить',
                 'button_edit': 'Править',
                 'button_delete': 'Удалить',
@@ -40,7 +56,7 @@
                 'text_link_tabs_marriage_report': 'Users',
                 'field_date_start': 'Date, time of incident',
                 'field_date_stop': 'Date, time of incident elimination',
-                'field_place': 'Place of violation (station, post, stage)',
+                'field_district_object': 'Place of violation (station, post, stage)',
                 'field_site': 'Site of violation (path, joint venture)',
                 'field_classification': 'Classification of violation',
                 'field_nature': 'Nature of the violation',
@@ -74,8 +90,8 @@
             LockScreen(langView('mess_load', langs));
             var count = 5;
             // Загрузка списка (dt.js)
-            getAsyncDTMarriagePlace(function (result) {
-                reference_place = result;
+            getAsyncDTMarriageDistrictObject(function (result) {
+                reference_district_object = result;
                 count -= 1;
                 if (count <= 0) {
                     if (typeof callback === 'function') {
@@ -126,7 +142,7 @@
             });
         },
         // список place
-        reference_place = null,
+        reference_district_object = null,
         // список classification
         reference_classification = null,
         // список nature
@@ -243,7 +259,7 @@
                     "paging": true,
                     "ordering": true,
                     "info": false,
-                    "select": true,
+                    //"select": true,
                     "autoWidth": false,
                     //"filter": true,
                     //"scrollY": "600px",
@@ -257,7 +273,7 @@
                     columns: [
                         { data: "date_start", title: langView('field_date_start', langs), width: "100px", orderable: true, searchable: true },
                         { data: "date_stop", title: langView('field_date_stop', langs), width: "100px", orderable: true, searchable: true },
-                        { data: "place", title: langView('field_place', langs), width: "100px", orderable: true, searchable: true },
+                        { data: "district_object", title: langView('field_district_object', langs), width: "100px", orderable: true, searchable: true },
                         { data: "site", title: langView('field_site', langs), width: "100px", orderable: true, searchable: true },
                         { data: "classification", title: langView('field_classification', langs), width: "100px", orderable: true, searchable: true },
                         { data: "nature", title: langView('field_nature', langs), width: "100px", orderable: true, searchable: true },
@@ -305,8 +321,8 @@
                         "id": data[i].id,
                         "date_start": data[i].date_start,
                         "date_stop": data[i].date_stop,
-                        "id_place": data[i].id_place,
-                        "place": data[i].MarriagePlace !== null ? data[i].MarriagePlace.place : null,
+                        "id_district_object": data[i].id_district_object,
+                        "district_object": data[i].MarriageDistrictObject !== null ? data[i].MarriageDistrictObject.district_object : null,
                         "site": data[i].site,
                         "id_classification": data[i].id_classification,
                         "classification": data[i].MarriageClassification !== null ? data[i].MarriageClassification.classification : null,
@@ -353,18 +369,26 @@
             clearSelect: function () {
                 this.html_table.find('tbody tr').removeClass('selected');
             },
-            // Обновим
+            //// Обновим
             viewUpdateString: function (data) {
                 if (data != null) {
-                    var row_ind = table_report_1.obj.row('#' + data.Id).index();
-                    table_report_1.obj.cell(row_ind, 1).data(data.Number);
-                    table_report_1.obj.cell(row_ind, 2).data(data.AutoNumber);
-                    table_report_1.obj.cell(row_ind, 3).data(data.Debitor);
-                    table_report_1.obj.cell(row_ind, 4).data(data.Sn1);
-                    table_report_1.obj.cell(row_ind, 5).data(data.AutoModel);
-                    table_report_1.obj.cell(row_ind, 6).data(data.Street);
-                    table_report_1.obj.cell(row_ind, 7).data(reference_departs !== null ? reference_departs.getText(data.House) : data.House);
-                    table_report_1.viewUpdateActive(table_report_1.html_table.find('tbody tr.selected'), data.Active);
+                    var row_ind = table_report_1.obj.row('#' + data.id).index();
+                    table_report_1.obj.cell(row_ind, 0).data(data.date_start);
+                    table_report_1.obj.cell(row_ind, 1).data(data.date_stop);
+                    table_report_1.obj.cell(row_ind, 2).data(data.MarriageDistrictObject !== null ? data.MarriageDistrictObject.district_object : null);
+                    table_report_1.obj.cell(row_ind, 3).data(data.site);
+                    table_report_1.obj.cell(row_ind, 4).data(data.MarriageClassification !== null ? data.MarriageClassification.classification : null);
+                    table_report_1.obj.cell(row_ind, 5).data(data.MarriageNature !== null ? data.MarriageNature.nature : null);
+                    table_report_1.obj.cell(row_ind, 6).data(data.num);
+                    table_report_1.obj.cell(row_ind, 7).data(data.MarriageCause !== null ? data.MarriageCause.cause : null);
+                    table_report_1.obj.cell(row_ind, 8).data(data.id_type_cause === 0 ? "О" : "Т");
+                    table_report_1.obj.cell(row_ind, 9).data(data.MarriageSubdivision !== null ? data.MarriageSubdivision.subdivision : null);
+                    table_report_1.obj.cell(row_ind, 10).data(data.akt);
+                    table_report_1.obj.cell(row_ind, 11).data(data.locomotive_series);
+                    table_report_1.obj.cell(row_ind, 12).data(data.driver);
+                    table_report_1.obj.cell(row_ind, 13).data(data.helper);
+                    table_report_1.obj.cell(row_ind, 14).data(data.measures);
+                    table_report_1.obj.cell(row_ind, 15).data(data.note);
                     table_report_1.obj.draw(false);
                 }
             },
@@ -372,23 +396,33 @@
             viewInsertString: function (data) {
                 if (data != null) {
                     this.obj.row.add({
-                        "id": data.Id,
-                        "Number": data.Number,
-                        "DriverName": data.DriverName,
-                        "AutoNumber": data.AutoNumber,
-                        "Debitor": data.Debitor,
-                        "Sn1": data.Sn1,
-                        "Sn2": data.Sn2,
-                        "AutoModel": data.AutoModel,
-                        "Street": data.Street,
-                        "House": data.House,
-                        "CreateDate": data.CreateDate,
-                        "CreateTime": data.CreateTime,
-                        "UpdateTime": data.UpdateTime,
-                        "Owner": data.Owner,
-                        "UpdateDate": data.UpdateDate,
-                        "Active": data.Active,
-                        "HouseName": reference_departs != null ? reference_departs.getText(data.House) : data.House,
+                        "id": data.id,
+                        "date_start": data.date_start,
+                        "date_stop": data.date_stop,
+                        "id_district_object": data.id_district_object,
+                        "district_object": data.MarriageDistrictObject !== null ? data.MarriageDistrictObject.district_object : null,
+                        "site": data.site,
+                        "id_classification": data.id_classification,
+                        "classification": data.MarriageClassification !== null ? data.MarriageClassification.classification : null,
+                        "id_nature": data.id_nature,
+                        "nature": data.MarriageNature !== null ? data.MarriageNature.nature : null,
+                        "num": data.num,
+                        "id_cause": data.id_cause,
+                        "cause": data.MarriageCause !== null ? data.MarriageCause.cause : null,
+                        "id_type_cause": data.id_type_cause,
+                        "type_cause": data.id_type_cause === 0 ? "О" : "Т",
+                        "id_subdivision": data.id_subdivision,
+                        "subdivision": data.MarriageSubdivision !== null ? data.MarriageSubdivision.subdivision : null,
+                        "akt": data.akt,
+                        "locomotive_series": data.locomotive_series,
+                        "driver": data.driver,
+                        "helper": data.helper,
+                        "measures": data.measures,
+                        "note": data.note,
+                        "create": data.create,
+                        "create_user": data.create_user,
+                        "change": data.change,
+                        "change_user": data.change_user,
                     });
                     table_report_1.obj.draw();
                 }
@@ -399,16 +433,6 @@
                     table_report_1.obj.row('.selected').remove().draw(false);
                 }
             },
-            // Показать поле активности
-            viewUpdateActive: function (row, active) {
-                if (active == null) {
-                    $('td', row).eq(8).html("").removeClass().addClass('null_active');
-                } else {
-                    if (active) { $('td', row).eq(8).html("").removeClass().addClass('active'); }
-                    else { $('td', row).eq(8).html("").removeClass().addClass('not_active'); }
-                }
-            },
-
         },
         // Панель добавить обновить карту
         confirm_ins_edit_panel = {
@@ -421,7 +445,7 @@
             dt_stop: null,
             confirm_date_start: null,
             confirm_date_stop: null,
-            confirm_place: null,
+            confirm_district_object: null,
             confirm_site: null,
             confirm_classification: null,
             confirm_nature: null,
@@ -548,7 +572,7 @@
                 $(".ui-state-error").removeClass("ui-state-error");
                 // Проверка RFID карты на активность
                 valid = valid && confirm_ins_edit_panel.checkDateOfMessage(confirm_ins_edit_panel.confirm_date_start, "Укажите дату и время инцидента");
-                valid = valid && confirm_ins_edit_panel.checkSelectValOfMessage(confirm_ins_edit_panel.confirm_place, "Укажите место нарушения");
+                valid = valid && confirm_ins_edit_panel.checkSelectValOfMessage(confirm_ins_edit_panel.confirm_district_object, "Укажите место нарушения");
                 valid = valid && confirm_ins_edit_panel.checkIsNullOfMessage(confirm_ins_edit_panel.confirm_site, "Укажите участок нарушения");
                 valid = valid && confirm_ins_edit_panel.checkSelectValOfMessage(confirm_ins_edit_panel.confirm_classification, "Укажите классификацию нарушения");
                 //valid = valid && confirm_ins_edit_panel.checkSelectValOfMessage(confirm_ins_edit_panel.confirm_nature, "Укажите характер нарушения");
@@ -566,68 +590,73 @@
                     modal: true,
                     autoOpen: false,
                     height: "auto",
-                    width: 800,
+                    width: 900,
                     buttons: {
                         Save: function () {
                             // Проверка формы
                             var valid = confirm_ins_edit_panel.validationConfirm();
                             if (valid) {
                                 var marriage_work = confirm_ins_edit_panel.getNewMarriageWork();
+                                if (marriage_work.id === 0) {
+                                    // Добавить
+                                    postAsyncDTMarriage(marriage_work,
+                                        function (result) {
+                                            // Проверка на ошибку
+                                            if (result > 0) {
+                                                // ошибки нет
+                                                getAsyncDTMarriageOfID(result,
+                                                    function (result) {
+                                                        // Обновим
+                                                        updateMessageTips("Строка добавлена, id=" + result.id + ", добавил :" + result.create_user);
+                                                        table_report_1.viewInsertString(result)
+                                                    });
+                                            } else {
+                                                updateMessageTips("ОШИБКА Добавления строки, код ошибки="+result);
+                                            }
+                                        });
+                                } else {
+                                    // Обновить
+                                    putAsyncDTMarriage(marriage_work,
+                                           function (result) {
+                                               // Проверка на ошибку
+                                               if (result > 0) {
+                                                   // ошибки нет
+                                                   getAsyncDTMarriageOfID(confirm_ins_edit_panel.id, function (result) {
+                                                       // Обновим
+                                                       updateMessageTips("Строка id=" + result.id + " - обновлена, правил пользователь :" + result.change_user);
+                                                       table_report_1.viewUpdateString(result)
+                                                   });
+                                               } else {
+                                                   updateMessageTips("ОШИБКА Обновления строки, код ошибки=" + result);
+                                               }
+                                           });
+                                }
                                 // Да форма заполнена
                                 $(this).dialog("close");
                             } else {
+                                updateMessageTips("Операция отменена, не все поля заполнены.");
                                 // Нет форма не заполнена
                                 // .....
                                 //alert('valid form');
                             }
-
-                            //var cards = confirm_ins_edit_panel.getNewCards();
-                            //if (cards.Id == 0) {
-                            //    // Добавить
-                            //    postAsyncazsCards(cards,
-                            //        function (result) {
-                            //            // Проверка на ошибку
-                            //            if (result > 0) {
-                            //                // ошибки нет
-                            //                getAsyncViewazsCardsOfID(result, function (result) {
-                            //                    // Обновим
-                            //                    table_report_1.viewInsertString(result)
-                            //                });
-                            //            } else {
-                            //                alert('error insert')
-                            //            }
-                            //        });
-                            //} else {
-                            //    // Обновить
-                            //    putAsyncazsCards(cards,
-                            //        function (result) {
-                            //            // Проверка на ошибку
-                            //            if (result > 0) {
-                            //                // ошибки нет
-                            //                getAsyncViewazsCardsOfID(confirm_ins_edit_panel.id, function (result) {
-                            //                    // Обновим
-                            //                    table_report_1.viewUpdateString(result)
-                            //                });
-                            //            } else {
-                            //                alert('error update')
-                            //            }
-                            //        });
-                            //}
                         },
                         Cancel: function () {
                             $(this).dialog("close");
                         }
                     }
                 });
-                $('th#date-start').text(langView('field_date_start', langs) + ':');
-                $('th#date-stop').text(langView('field_date_stop', langs) + ':');
-                $('th#place').text(langView('field_place', langs) + ':');
+                //$('th#date-start').text(langView('field_date_start', langs) + ':');
+                //$('th#date-stop').text(langView('field_date_stop', langs) + ':');
+                $('th#date-period').text(langView('field_date_period', langs) + ':');
+                $('th#district-object').text(langView('field_district_object', langs) + ':');
                 $('th#site').text(langView('field_site', langs) + ':');
-                $('th#classification').text(langView('field_classification', langs) + ':');
-                $('th#nature').text(langView('field_nature', langs) + ':');
+                //$('th#classification').text(langView('field_classification', langs) + ':');
+                //$('th#nature').text(langView('field_nature', langs) + ':');
+                $('th#classification-nature').text(langView('field_classification_nature', langs) + ':');
                 $('th#num').text(langView('field_num', langs) + ':');
-                $('th#cause').text(langView('field_cause', langs) + ':');
-                $('th#type-cause').text(langView('field_type_cause', langs) + ':');
+                //$('th#cause').text(langView('field_cause', langs) + ':');
+                //$('th#type-cause').text(langView('field_type_cause', langs) + ':');
+                $('th#cause-type-cause').text(langView('field_cause_type_cause', langs) + ':');
                 $('th#subdivision').text(langView('field_subdivision', langs) + ':');
                 $('th#akt').text(langView('field_akt', langs) + ':');
                 $('th#locomotive-series').text(langView('field_locomotive_series', langs) + ':');
@@ -668,12 +697,12 @@
                         confirm_ins_edit_panel.dt_stop = obj.date1;
                     });
                 // 
-                this.confirm_place = initSelect(
-                    $('select#confirm-place'),
+                this.confirm_district_object = initSelect(
+                    $('select#confirm-district-object'),
                     { width: 350 },
-                    reference_place,
+                    reference_district_object,
                     function (row) {
-                        return { value: Number(row.id), text: row.place };
+                        return { value: Number(row.id), text: row.district_object };
                     },
                     -1,
                     function (event, ui) {
@@ -780,7 +809,7 @@
                     this.create_user = result_mw.create_user;
                     // режим edit
                     confirm_ins_edit_panel.dt_start = new Date(Date.parse(result_mw.date_start));
-                    confirm_ins_edit_panel.dt_stop = new Date(Date.parse(result_mw.date_stop));
+                    confirm_ins_edit_panel.dt_stop = result_mw.date_stop !== null ? new Date(Date.parse(result_mw.date_stop)) : null;
 
                     confirm_ins_edit_panel.id = result_mw.id;
 
@@ -792,7 +821,7 @@
                         if (confirm_ins_edit_panel.dt_stop !== null) this.confirm_date_stop.data('dateRangePicker').setDateRange(datetoStringOfLang(confirm_ins_edit_panel.dt_stop, 'ru'), datetoStringOfLang(confirm_ins_edit_panel.dt_stop, 'ru'));
 
                     }
-                    this.confirm_place.val(result_mw !== null ? result_mw.id_place : -1).selectmenu("refresh");
+                    this.confirm_district_object.val(result_mw !== null ? result_mw.id_district_object : -1).selectmenu("refresh");
                     this.confirm_site.val(result_mw.site);
                     this.confirm_classification.val(result_mw !== null ? result_mw.id_classification : -1).selectmenu("refresh");
                     this.confirm_nature.val(result_mw !== null ? result_mw.id_nature : -1).selectmenu("refresh");
@@ -817,9 +846,9 @@
 
             // Сбросить
             resetMarriage: function () {
-                $('input#confirm-date-start').text('');
-                $('input#confirm-date-stop').text('');
-                this.confirm_place.val(-1).selectmenu("refresh");
+                $('input#confirm-date-start').val('');
+                $('input#confirm-date-stop').val('');
+                this.confirm_district_object.val(-1).selectmenu("refresh");
                 this.confirm_site.val('');
                 this.confirm_classification.val(-1).selectmenu("refresh");
                 this.confirm_nature.val(-1).selectmenu("refresh");
@@ -835,14 +864,14 @@
                 this.confirm_note.val('');
 
             },
-            // Получить cards после правки
+            // Получить MarriageWork после правки
             getNewMarriageWork: function () {
                 var now = new Date();
                 return marriage_work = {
                     id: Number(confirm_ins_edit_panel.id),
-                    date_start: confirm_ins_edit_panel.dt_start,
-                    date_stop: confirm_ins_edit_panel.dt_stop,
-                    id_place: confirm_ins_edit_panel.confirm_place.val() !== "-1" ? Number(confirm_ins_edit_panel.confirm_place.val()) : null,
+                    date_start: toISOStringTZ(confirm_ins_edit_panel.dt_start),
+                    date_stop: confirm_ins_edit_panel.dt_stop !== null ? toISOStringTZ(confirm_ins_edit_panel.dt_stop) : null,
+                    id_district_object: confirm_ins_edit_panel.confirm_district_object.val() !== "-1" ? Number(confirm_ins_edit_panel.confirm_district_object.val()) : null,
                     site: confirm_ins_edit_panel.confirm_site.val(),
                     id_classification: confirm_ins_edit_panel.confirm_classification.val() !== "-1" ? Number(confirm_ins_edit_panel.confirm_classification.val()) : null,
                     id_nature: confirm_ins_edit_panel.confirm_nature.val() !== "-1" ? Number(confirm_ins_edit_panel.confirm_nature.val()) : null,
@@ -856,9 +885,9 @@
                     helper: confirm_ins_edit_panel.confirm_helper.val(),
                     measures: confirm_ins_edit_panel.confirm_measures.val(),
                     note: confirm_ins_edit_panel.confirm_note.val(),
-                    create: confirm_ins_edit_panel.id > 0 ? confirm_ins_edit_panel.create_date : now,
+                    create: confirm_ins_edit_panel.id > 0 ? confirm_ins_edit_panel.create_date : toISOStringTZ(now),
                     create_user: confirm_ins_edit_panel.id > 0 ? confirm_ins_edit_panel.create_user : confirm_ins_edit_panel.user,
-                    change: now,
+                    change: toISOStringTZ(now),
                     change_user: confirm_ins_edit_panel.user,
                 };
             },
@@ -873,73 +902,90 @@
                     modal: true,
                     autoOpen: false,
                     height: "auto",
-                    width: 600,
+                    width: 900,
                     buttons: {
-                        "Удалить": function () {
-                            $(this).dialog("close");
-                            deleteAsynczsCards(confirm_delete_panel.id,
+                        Delete: function () {
+                            deleteAsyncDTMarriage(confirm_delete_panel.id,
                                 function (result) {
                                     // Проверка на ошибку
                                     if (result > 0) {
                                         // ошибки нет
+                                        updateMessageTips("Строка id=" + result + " - удалена.");
                                         table_report_1.viewDeleteString(confirm_delete_panel.id)
 
                                     } else {
-                                        alert('error delete')
+                                        updateMessageTips("ОШИБКА Удаления строки, код ошибки=" + result);
                                     }
                                 });
+                            $(this).dialog("close");
                         },
                         Cancel: function () {
                             $(this).dialog("close");
                         }
                     }
+
                 });
-                $('#legend-delete').text(langView('legend_delete_text', langs));
-                $('#label-id-cards').text(langView('field_id', langs) + ':');
-                $('#label-number-cards').text(langView('field_Number', langs) + ':');
-                $('#label-drivername-cards').text(langView('field_DriverName', langs) + ':');
-                $('#label-autonumber-cards').text(langView('field_AutoNumber', langs) + ':');
-                $('#label-debitor-cards').text(langView('field_Debitor', langs) + ':');
-                $('#label-sn1-cards').text(langView('field_Sn1', langs) + ':');
-                $('#label-sn2-cards').text(langView('field_Sn2', langs) + ':');
-                $('#label-automodel-cards').text(langView('field_AutoModel', langs) + ':');
-                $('#label-street-cards').text(langView('field_Street', langs) + ':');
-                $('#label-house-cards').text(langView('field_House', langs) + ':');
-                $('#label-owner-cards').text(langView('field_Owner', langs) + ':');
-                $('#label-active-cards').text(langView('field_Active', langs) + ':');
+                $('th#date-period').text(langView('field_date_period', langs) + ':');
+                $('th#district-object').text(langView('field_district_object', langs) + ':');
+                $('th#site').text(langView('field_site', langs) + ':');
+                $('th#classification-nature').text(langView('field_classification_nature', langs) + ':');
+                $('th#num').text(langView('field_num', langs) + ':');
+                $('th#cause-type-cause').text(langView('field_cause_type_cause', langs) + ':');
+                $('th#subdivision').text(langView('field_subdivision', langs) + ':');
+                $('th#akt').text(langView('field_akt', langs) + ':');
+                $('th#locomotive-series').text(langView('field_locomotive_series', langs) + ':');
+                $('th#driver').text(langView('field_driver', langs) + ':');
+                $('th#helper').text(langView('field_helper', langs) + ':');
+                $('th#measures').text(langView('field_measures', langs) + ':');
+                $('th#note').text(langView('field_note', langs) + ':');
+                $('th#create').text(langView('field_create', langs) + ':');
             },
             Open: function (id) {
                 if (id != null) {
-                    getAsyncViewazsCardsOfID(id,
-                        function (result) {
-                            confirm_delete_panel.setCards(result);
-                            confirm_delete_panel.obj.dialog("option", "title", langView('title_delete_cards', langs));
+                    getAsyncDTMarriageOfID(id,
+                        function (result_mw) {
+                            confirm_delete_panel.setMarriageWork(result_mw);
+                            confirm_delete_panel.obj.dialog("option", "title", langView('title_delete_marriage', langs));
                             confirm_delete_panel.obj.dialog("open");
                         });
                 }
             },
-            setCards: function (cards) {
-                if (cards != null) {
-                    confirm_delete_panel.id = cards.Id;
-                    $('#value-id-cards').text(cards.Id);
-                    $('#value-number-cards').text(cards.Number);
-                    $('#value-drivername-cards').text(cards.DriverName);
-                    $('#value-autonumber-cards').text(cards.AutoNumber);
-                    $('#value-debitor-cards').text(cards.Debitor);
-                    $('#value-sn1-cards').text(cards.Sn1);
-                    $('#value-sn2-cards').text(cards.Sn2);
-                    $('#value-automodel-cards').text(cards.AutoModel);
-                    $('#value-street-cards').text(cards.Street);
-                    $('#value-house-cards').text(reference_departs != null ? reference_departs.getText(cards.House) : cards.House);
-                    $('#value-owner-cards').text(cards.Owner);
-                    $('#value-active-cards').text(cards.Active);
+            setMarriageWork: function (result_mw) {
+                if (result_mw != null) {
+                    confirm_delete_panel.id = result_mw.id;
+                    $('td#confirm-date-start').text(result_mw.date_start);
+                    $('td#confirm-date-stop').text(result_mw.date_stop);
+                    $('td#confirm-district-object').text(result_mw.MarriageDistrictObject !== null ? result_mw.MarriageDistrictObject.district_object : null);
+                    $('td#confirm-site').text(result_mw.site);
+                    $('td#confirm-classification').text(result_mw.MarriageClassification !== null ? result_mw.MarriageClassification.classification : null);
+                    $('td#confirm-nature').text(result_mw.MarriageNature !== null ? result_mw.MarriageNature.nature : null);
+                    $('td#confirm-num').text(result_mw.num);
+                    $('td#confirm-cause').text(result_mw.MarriageCause !== null ? result_mw.MarriageCause.cause : null);
+                    $('td#confirm-type-cause').text(result_mw.id_type_cause === 0 ? "О" : "Т");
+                    $('td#confirm-subdivision').text(result_mw.MarriageSubdivision !== null ? result_mw.MarriageSubdivision.subdivision : null);
+                    $('td#confirm-akt').text(result_mw.akt);
+                    $('td#confirm-locomotive-series').text(result_mw.locomotive_series);
+                    $('td#confirm-drivers').text(result_mw.driver);
+                    $('td#confirm-helper').text(result_mw.helper);
+                    $('td#confirm-measures').text(result_mw.measures);
+                    $('td#confirm-note').text(result_mw.note);
+                    $('td#confirm-create').text(result_mw.create);
+                    $('td#confirm-create-user').text(result_mw.create_user);
                 }
             },
         }
     //-----------------------------------------------------------------------------------------
     // Функции
     //-----------------------------------------------------------------------------------------
-
+    // Вывести сообщение на основной экран
+    var updateMessageTips = function (t) {
+        $(".messageTips")
+            .text(t)
+            .addClass("ui-state-highlight");
+        setTimeout(function () {
+            $(".messageTips").removeClass("ui-state-highlight", 1500);
+        }, 500);
+    }
     //-----------------------------------------------------------------------------------------
     // Инициализация объектов
     //-----------------------------------------------------------------------------------------

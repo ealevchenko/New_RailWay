@@ -15,8 +15,9 @@ namespace EFTD.Concrete
 
         public virtual DbSet<MarriageCause> MarriageCause { get; set; }
         public virtual DbSet<MarriageClassification> MarriageClassification { get; set; }
+        public virtual DbSet<MarriageDistrict> MarriageDistrict { get; set; }
+        public virtual DbSet<MarriageDistrictObject> MarriageDistrictObject { get; set; }
         public virtual DbSet<MarriageNature> MarriageNature { get; set; }
-        public virtual DbSet<MarriagePlace> MarriagePlace { get; set; }
         public virtual DbSet<MarriageSubdivision> MarriageSubdivision { get; set; }
         public virtual DbSet<MarriageWork> MarriageWork { get; set; }
 
@@ -34,16 +35,22 @@ namespace EFTD.Concrete
                 .HasForeignKey(e => e.id_classification)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<MarriageDistrict>()
+                .HasMany(e => e.MarriageDistrictObject)
+                .WithRequired(e => e.MarriageDistrict)
+                .HasForeignKey(e => e.id_district)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<MarriageDistrictObject>()
+                .HasMany(e => e.MarriageWork)
+                .WithRequired(e => e.MarriageDistrictObject)
+                .HasForeignKey(e => e.id_district_object)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<MarriageNature>()
                 .HasMany(e => e.MarriageWork)
                 .WithOptional(e => e.MarriageNature)
                 .HasForeignKey(e => e.id_nature);
-
-            modelBuilder.Entity<MarriagePlace>()
-                .HasMany(e => e.MarriageWork)
-                .WithRequired(e => e.MarriagePlace)
-                .HasForeignKey(e => e.id_place)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<MarriageSubdivision>()
                 .HasMany(e => e.MarriageWork)

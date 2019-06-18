@@ -45,76 +45,79 @@
         <fieldset>
             <table id="confirm" class="table-confirm-ins-edit table-condensed">
                 <tr>
-                    <th id="date-start"></th>
+                    <th id="date-period"></th>
                     <td><input id="confirm-date-start" type="datetime" class="confirm-input ui-widget-content ui-corner-all" /></td>
-                </tr>
-                <tr>
-                    <th id="date-stop"></th>
                     <td><input id="confirm-date-stop" type="datetime" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
+                @*<tr>
+                        <th id="date-stop"></th>
+                        <td><input id="confirm-date-stop" type="datetime" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    </tr>*@
                 <tr>
-                    <th id="place"></th>
-                    <td><select id="confirm-place" class="ui-widget-content ui-corner-all"></select></td>
+                    <th id="district-object"></th>
+                    <td colspan="2"><select id="confirm-district-object" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
                 <tr>
                     <th id="site"></th>
-                    <td><textarea id="confirm-site" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                    <td colspan="2"><textarea id="confirm-site" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
                 </tr>
                 <tr>
-                    <th id="classification"></th>
+                    <th id="classification-nature"></th>
                     <td><select id="confirm-classification" class="ui-widget-content ui-corner-all"></select></td>
-                </tr>
-                <tr>
-                    <th id="nature"></th>
                     <td><select id="confirm-nature" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
+                @*<tr>
+                        <th id="nature"></th>
+                        <td><select id="confirm-nature" class="ui-widget-content ui-corner-all"></select></td>
+                    </tr>*@
                 <tr>
                     <th id="num"></th>
-                    <td><textarea id="confirm-num" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                    <td colspan="2"><textarea id="confirm-num" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
                 </tr>
                 <tr>
-                    <th id="cause"></th>
+                    <th id="cause-type-cause"></th>
                     <td><select id="confirm-cause" class="ui-widget-content ui-corner-all"></select></td>
-                </tr>
-                <tr>
-                    <th id="type-cause"></th>
                     <td><select id="confirm-type-cause" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
+                @*<tr>
+                        <th id="type-cause"></th>
+                        <td><select id="confirm-type-cause" class="ui-widget-content ui-corner-all"></select></td>
+                    </tr>*@
                 <tr>
                     <th id="subdivision"></th>
-                    <td><select id="confirm-subdivision" class="ui-widget-content ui-corner-all"></select></td>
+                    <td colspan="2"><select id="confirm-subdivision" class="ui-widget-content ui-corner-all"></select></td>
                 </tr>
                 <tr>
                     <th id="akt"></th>
-                    <td><input id="confirm-akt" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <td colspan="2"><input id="confirm-akt" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
                     <th id="locomotive-series"></th>
-                    <td><textarea id="confirm-locomotive-series" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                    <td colspan="2"><textarea id="confirm-locomotive-series" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
                 </tr>
                 <tr>
                     <th id="driver"></th>
-                    <td><input id="confirm-drivers" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <td colspan="2"> <input id="confirm-drivers" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
                     <th id="helper"></th>
-                    <td><input id="confirm-helper" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
+                    <td colspan="2"><input id="confirm-helper" type="text" class="confirm-input ui-widget-content ui-corner-all" /></td>
                 </tr>
                 <tr>
                     <th id="measures"></th>
-                    <td><textarea id="confirm-measures" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                    <td colspan="2"><textarea id="confirm-measures" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
                 </tr>
                 <tr>
                     <th id="note"></th>
-                    <td><textarea id="confirm-note" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
+                    <td colspan="2"><textarea id="confirm-note" class="confirm-input ui-widget-content ui-corner-all"></textarea></td>
                 </tr>
             </table>
 
             @*<input id="id-nodes" name="id-nodes" type="hidden" />
-            <p>
-                <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
-                <label id="delete-confirm-text" name="delete-confirm-text"></label>
-            </p>*@
+                <p>
+                    <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
+                    <label id="delete-confirm-text" name="delete-confirm-text"></label>
+                </p>*@
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
             <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
         </fieldset>
@@ -124,55 +127,66 @@
 <div id="delete-confirm" title="" style="display:none">
     <form id="form-delete">
         <fieldset>
-            <legend id="legend-delete"></legend>
-            <table id="confirm" class="display">
+            <table id="confirm" class="table-confirm-delete table-condensed">
                 <tr>
-                    <th><label for="Number" id="label-id-cards"></label></th>
-                    <td><label id="value-id-cards"></label></td>
+                    <th id="date-period"></th>
+                    <td id="confirm-date-start"></td>
+                    <td id="confirm-date-stop"></td>
                 </tr>
                 <tr>
-                    <th><label for="Number" id="label-number-cards"></label></th>
-                    <td><label id="value-number-cards"></label></td>
+                    <th id="district-object"></th>
+                    <td colspan="2" id="confirm-district-object"></td>
                 </tr>
                 <tr>
-                    <th><label for="DriverName" id="label-drivername-cards"></label></th>
-                    <td><label id="value-drivername-cards"></label></td>
+                    <th id="site"></th>
+                    <td colspan="2" id="confirm-site"></td>
                 </tr>
                 <tr>
-                    <th><label for="AutoNumber" id="label-autonumber-cards"></label></th>
-                    <td><label id="value-autonumber-cards"></label></td>
+                    <th id="classification-nature"></th>
+                    <td id="confirm-classification"></td>
+                    <td id="confirm-nature"></td>
                 </tr>
                 <tr>
-                    <th><label for="Debitor" id="label-debitor-cards"></label></th>
-                    <td><label id="value-debitor-cards"></label></td>
+                    <th id="num"></th>
+                    <td colspan="2" id="confirm-num"></td>
                 </tr>
                 <tr>
-                    <th><label for="Sn1" id="label-sn1-cards"></label></th>
-                    <td><label id="value-sn1-cards"></label></td>
+                    <th id="cause-type-cause"></th>
+                    <td id="confirm-cause"></td>
+                    <td id="confirm-type-cause"></td>
                 </tr>
                 <tr>
-                    <th><label for="Sn2" id="label-sn2-cards"></label></th>
-                    <td><label id="value-sn2-cards"></label></td>
+                    <th id="subdivision"></th>
+                    <td colspan="2" id="confirm-subdivision"></td>
                 </tr>
                 <tr>
-                    <th><label for="AutoModel" id="label-automodel-cards"></label></th>
-                    <td><label id="value-automodel-cards"></label></td>
+                    <th id="akt"></th>
+                    <td colspan="2" id="confirm-akt"></td>
                 </tr>
                 <tr>
-                    <th><label for="Street" id="label-street-cards"></label></th>
-                    <td><label id="value-street-cards"></label></td>
+                    <th id="locomotive-series"></th>
+                    <td colspan="2" id="confirm-locomotive-series"></td>
                 </tr>
                 <tr>
-                    <th><label for="House" id="label-house-cards"></label></th>
-                    <td><label id="value-house-cards"></label></td>
+                    <th id="driver"></th>
+                    <td colspan="2" id="confirm-drivers"></td>
                 </tr>
                 <tr>
-                    <th><label for="Owner" id="label-owner-cards"></label></th>
-                    <td><label id="value-owner-cards"></label></td>
+                    <th id="helper"></th>
+                    <td colspan="2" id="confirm-helper"></td>
                 </tr>
                 <tr>
-                    <th><label for="Active" id="label-active-cards"></label></th>
-                    <td><label id="value-active-cards"></label></td>
+                    <th id="measures"></th>
+                    <td colspan="2" id="confirm-measures"></td>
+                </tr>
+                <tr>
+                    <th id="note"></th>
+                    <td colspan="2" id="confirm-note"></td>
+                </tr>
+                <tr>
+                    <th id="create"></th>
+                    <td id="confirm-create"></td>
+                    <td id="confirm-create-user"></td>
                 </tr>
             </table>
             <!-- Allow form submission with keyboard without duplicating the dialog button -->
@@ -182,6 +196,7 @@
 </div>
 
 <div id="report" class="report-wide">
+    
     <div id="tabs-reports">
         <ul>
             <li><a href="#tab-report-1" id="link-tab-report-1"></a></li>
@@ -189,6 +204,7 @@
         </ul>
         <div id="tab-report-1">
             <div id="table-panel"></div>
+            <p class="messageTips"></p>
             <table class='display compact' id="table-report-1" style="width:100%" cellpadding="0"></table>
         </div>
         <div id="tab-report-2">

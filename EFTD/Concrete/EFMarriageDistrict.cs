@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace EFOC.Concrete
 {
-    public class EFMarriagePlace : IRepository<MarriagePlace>
+    public class EFMarriageDistrict : IRepository<MarriageDistrict>
     {
 
         private EFDbContext db;
 
-        public EFMarriagePlace(EFDbContext db)
+        public EFMarriageDistrict(EFDbContext db)
         {
 
             this.db = db;
         }
 
-        public EFMarriagePlace()
+        public EFMarriageDistrict()
         {
 
             this.db = new EFDbContext();
@@ -33,11 +33,11 @@ namespace EFOC.Concrete
             get { return this.db.Database; }
         }
 
-        public IEnumerable<MarriagePlace> Get()
+        public IEnumerable<MarriageDistrict> Get()
         {
             try
             {
-                return db.Select<MarriagePlace>();
+                return db.Select<MarriageDistrict>();
             }
             catch (Exception e)
             {
@@ -45,11 +45,11 @@ namespace EFOC.Concrete
             }
         }
 
-        public MarriagePlace Get(int id)
+        public MarriageDistrict Get(int id)
         {
             try
             {
-                return db.Select<MarriagePlace>(id);
+                return db.Select<MarriageDistrict>(id);
             }
             catch (Exception e)
             {
@@ -57,11 +57,11 @@ namespace EFOC.Concrete
             }
         }
 
-        public void Add(MarriagePlace item)
+        public void Add(MarriageDistrict item)
         {
             try
             {
-                db.Insert<MarriagePlace>(item);
+                db.Insert<MarriageDistrict>(item);
             }
             catch (Exception e)
             {
@@ -69,11 +69,11 @@ namespace EFOC.Concrete
             }
         }
 
-        public void Update(MarriagePlace item)
+        public void Update(MarriageDistrict item)
         {
             try
             {
-                db.Update<MarriagePlace>(item);
+                db.Update<MarriageDistrict>(item);
             }
             catch (Exception e)
             {
@@ -81,11 +81,11 @@ namespace EFOC.Concrete
             }
         }
 
-        public void AddOrUpdate(MarriagePlace item)
+        public void AddOrUpdate(MarriageDistrict item)
         {
             try
             {
-                MarriagePlace dbEntry = db.MarriagePlace.Find(item.id);
+                MarriageDistrict dbEntry = db.MarriageDistrict.Find(item.id);
                 if (dbEntry == null)
                 {
                     Add(item);
@@ -106,7 +106,7 @@ namespace EFOC.Concrete
         {
             try
             {
-                MarriagePlace item = db.Delete<MarriagePlace>(id);
+                MarriageDistrict item = db.Delete<MarriageDistrict>(id);
             }
             catch (Exception e)
             {
@@ -126,12 +126,12 @@ namespace EFOC.Concrete
             }
         }
 
-        public MarriagePlace Refresh(MarriagePlace item)
+        public MarriageDistrict Refresh(MarriageDistrict item)
         {
             try
             {
                 db.Entry(item).State = EntityState.Detached;
-                return db.Select<MarriagePlace>(item.id);
+                return db.Select<MarriageDistrict>(item.id);
             }
             catch (Exception e)
             {

@@ -15,16 +15,18 @@ namespace Web_RailWay.Controllers.api
     {
 
         protected IRepository<MarriageWork> ef_mw;
-        protected IRepository<MarriagePlace> ef_mp;
+        protected IRepository<MarriageDistrict> ef_md;
+        protected IRepository<MarriageDistrictObject> ef_mdo;
         protected IRepository<MarriageClassification> ef_mc;
         protected IRepository<MarriageNature> ef_mn;
         protected IRepository<MarriageCause> ef_mcs;
         protected IRepository<MarriageSubdivision> ef_ms;
 
-        public DTMarriageController(IRepository<MarriageWork> mw, IRepository<MarriagePlace> mp, IRepository<MarriageClassification> mc, IRepository<MarriageNature> mn, IRepository<MarriageCause> mcs, IRepository<MarriageSubdivision> ms)
+        public DTMarriageController(IRepository<MarriageWork> mw, IRepository<MarriageDistrict> md, IRepository<MarriageDistrictObject> mdo, IRepository<MarriageClassification> mc, IRepository<MarriageNature> mn, IRepository<MarriageCause> mcs, IRepository<MarriageSubdivision> ms)
         {
             this.ef_mw = mw;
-            this.ef_mp = mp;
+            this.ef_md = md;
+            this.ef_mdo = mdo;
             this.ef_mc = mc;
             this.ef_mn = mn;
             this.ef_mcs = mcs;
@@ -44,8 +46,8 @@ namespace Web_RailWay.Controllers.api
                     {
                         id = c.id,
                         date_start = c.date_start,
-                        date_stop = c.date_stop,
-                        id_place = c.id_place,
+                        date_stop = c.date_stop, 
+                        id_district_object = c.id_district_object,
                         site = c.site,
                         id_classification = c.id_classification,
                         id_nature = c.id_nature,
@@ -78,10 +80,12 @@ namespace Web_RailWay.Controllers.api
                             id = c.MarriageNature.id,
                             nature = c.MarriageNature.nature,
                         } : null,
-                        MarriagePlace = new MarriagePlace
+                        MarriageDistrictObject = new MarriageDistrictObject
                         {
-                            id = c.MarriagePlace.id,
-                            place = c.MarriagePlace.place,
+                            id = c.MarriageDistrictObject.id, 
+                            id_district = c.MarriageDistrictObject.id_district, 
+                            district_object = c.MarriageDistrictObject.district_object,
+                            type_object = c.MarriageDistrictObject.type_object,
                         },
                         MarriageSubdivision = new MarriageSubdivision
                         {
@@ -118,7 +122,7 @@ namespace Web_RailWay.Controllers.api
                         id = c.id,
                         date_start = c.date_start,
                         date_stop = c.date_stop,
-                        id_place = c.id_place,
+                        id_district_object = c.id_district_object,
                         site = c.site,
                         id_classification = c.id_classification,
                         id_nature = c.id_nature,
@@ -151,10 +155,12 @@ namespace Web_RailWay.Controllers.api
                             id = c.MarriageNature.id,
                             nature = c.MarriageNature.nature,
                         } : null,
-                        MarriagePlace = new MarriagePlace
+                        MarriageDistrictObject = new MarriageDistrictObject
                         {
-                            id = c.MarriagePlace.id,
-                            place = c.MarriagePlace.place,
+                            id = c.MarriageDistrictObject.id,
+                            id_district = c.MarriageDistrictObject.id_district,
+                            district_object = c.MarriageDistrictObject.district_object,
+                            type_object = c.MarriageDistrictObject.type_object,
                         },
                         MarriageSubdivision = new MarriageSubdivision
                         {
@@ -190,7 +196,7 @@ namespace Web_RailWay.Controllers.api
                         id = c.id,
                         date_start = c.date_start,
                         date_stop = c.date_stop,
-                        id_place = c.id_place,
+                        id_district_object = c.id_district_object,
                         site = c.site,
                         id_classification = c.id_classification,
                         id_nature = c.id_nature,
@@ -223,10 +229,12 @@ namespace Web_RailWay.Controllers.api
                             id = c.MarriageNature.id,
                             nature = c.MarriageNature.nature,
                         } : null,
-                        MarriagePlace = new MarriagePlace
+                        MarriageDistrictObject = new MarriageDistrictObject
                         {
-                            id = c.MarriagePlace.id,
-                            place = c.MarriagePlace.place,
+                            id = c.MarriageDistrictObject.id,
+                            id_district = c.MarriageDistrictObject.id_district,
+                            district_object = c.MarriageDistrictObject.district_object,
+                            type_object = c.MarriageDistrictObject.type_object,
                         },
                         MarriageSubdivision = new MarriageSubdivision
                         {
@@ -246,23 +254,78 @@ namespace Web_RailWay.Controllers.api
                 return NotFound();
             }
         }
-        #endregion
 
-        #region MarriagePlace
-        // GET: api/dt/marriage_place
-        [Route("marriage_place")]
-        [ResponseType(typeof(MarriagePlace))]
-        public IHttpActionResult GetMarriagePlace()
+        // POST api/dt/marriage_work
+        [HttpPost]
+        [Route("marriage_work")]
+        public int PostMarriageWork([FromBody]MarriageWork value)
         {
             try
             {
-                List<MarriagePlace> list = this.ef_mp.Get().ToList()
-                    .Select(c => new MarriagePlace
+                this.ef_mw.Add(value);
+                this.ef_mw.Save();
+                return value.id;
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+        }
+
+        // PUT api/dt/marriage_work/66
+        [HttpPut]
+        [Route("marriage_work/{id:int}")]
+        public int PutMarriageWork(int id, [FromBody]MarriageWork value)
+        {
+            try
+            {
+                this.ef_mw.Update(value);
+                return this.ef_mw.Save();
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+        }
+
+        // PUT api/dt/marriage_work/66
+        [HttpDelete]
+        [Route("marriage_work/{id:int}")]
+        public int DeleteMarriageWork(int id)
+        {
+            try
+            {
+                this.ef_mw.Delete(id);
+                return this.ef_mw.Save();
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+        }
+
+        #endregion
+
+        #region MarriageDistrictObject
+        // GET: api/dt/marriage_district_object
+        [Route("marriage_district_object")]
+        [ResponseType(typeof(MarriageDistrictObject))]
+        public IHttpActionResult GetMarriageDistrictObject()
+        {
+            try
+            {
+                List<MarriageDistrictObject> list = this.ef_mdo.Get().ToList()
+                    .Select(c => new MarriageDistrictObject
                     {
                         id = c.id,
-                        place = c.place,
-                        MarriageWork = null
-
+                        id_district = c.id_district,
+                        district_object = c.district_object,
+                        type_object = c.type_object,
+                        MarriageDistrict = new MarriageDistrict
+                        {
+                            id = c.MarriageDistrict.id,
+                            district = c.MarriageDistrict.district
+                        }
                     }).ToList();
                 if (list == null || list.Count() == 0)
                 {
@@ -372,7 +435,7 @@ namespace Web_RailWay.Controllers.api
         {
             try
             {
-                List<MarriageSubdivision> list = this.ef_ms.Get().ToList()
+                List<MarriageSubdivision> list = this.ef_ms.Get().ToList().OrderBy(s=>s.subdivision)
                     .Select(c => new MarriageSubdivision
                     {
                         id = c.id,

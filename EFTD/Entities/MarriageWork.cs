@@ -15,7 +15,7 @@ namespace EFTD.Entities
 
         public DateTime? date_stop { get; set; }
 
-        public int id_place { get; set; }
+        public int id_district_object { get; set; }
 
         [Required]
         [StringLength(200)]
@@ -69,9 +69,9 @@ namespace EFTD.Entities
 
         public virtual MarriageClassification MarriageClassification { get; set; }
 
-        public virtual MarriageNature MarriageNature { get; set; }
+        public virtual MarriageDistrictObject MarriageDistrictObject { get; set; }
 
-        public virtual MarriagePlace MarriagePlace { get; set; }
+        public virtual MarriageNature MarriageNature { get; set; }
 
         public virtual MarriageSubdivision MarriageSubdivision { get; set; }
     }
