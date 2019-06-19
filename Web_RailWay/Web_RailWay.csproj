@@ -753,6 +753,8 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jszip.js" />
+    <Content Include="Scripts\jszip.min.js" />
     <Content Include="Scripts\KIS\transfer_kis.js" />
     <Content Include="Scripts\KIS\transfer_kis_old.js" />
     <Content Include="Scripts\KIS\natur.js" />

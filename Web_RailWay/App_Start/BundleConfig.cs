@@ -60,10 +60,12 @@ namespace Web_RailWay
             bundles.Add(new ScriptBundle("~/bundles/DataTables").Include(
                 "~/Scripts/DataTables/jquery.dataTables.min.js",
                 "~/Scripts/DataTables/dataTables.buttons.min.js",
-                "~/Scripts/DataTables/buttons.jqueryui.js",
+                "~/Scripts/DataTables/buttons.jqueryui.min.js",
                 "~/Scripts/DataTables/dataTables.select.min.js",
-                "~/Scripts/DataTables/dataTables.jqueryui.min.js"
-
+                "~/Scripts/DataTables/dataTables.jqueryui.min.js",
+                "~/Scripts/DataTables/buttons.html5.min.js",
+                //"~/Scripts/DataTables/buttons.colVis.min.js"
+                "~/Scripts/jszip.min.js"
                 ));
 
             //-----------------------------------------------------------------------

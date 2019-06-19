@@ -100,3 +100,6 @@
 /// <reference path="Plugins/data_detali.js" />
 /// <reference path="Plugins/pl_common.js" />
 /// <reference path="td/marriage_work.js" />
+/// <reference path="api_helpers/dt.js" />
+/// <reference path="TD/marriage_work_admin.js" />
+/// <reference path="jszip.js" />

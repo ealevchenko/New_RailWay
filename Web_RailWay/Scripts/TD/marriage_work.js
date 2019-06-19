@@ -274,6 +274,11 @@ $(function () {
                         { data: "measures", title: langView('field_measures', langs), width: "100px", orderable: true, searchable: true },
                         { data: "note", title: langView('field_note', langs), width: "100px", orderable: true, searchable: true },
                     ],
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                    ]
                 });
                 this.initEventSelect();
                 panel_table_1.initPanel($('DIV#table-panel'));
