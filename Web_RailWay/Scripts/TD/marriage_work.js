@@ -165,7 +165,7 @@ $(function () {
                     collapsible: true,
                     activate: function (event, ui) {
                         tab_type_report.active = tab_type_report.html_div.tabs("option", "active");
-                        //tab_type_report.activeTable(tab_type_report.active, false);
+                        tab_type_report.activeTable(tab_type_report.active, false);
                     },
                 });
                 //this.activeTable(this.active, true);
@@ -174,9 +174,9 @@ $(function () {
                 if (active === 0) {
                     table_report_1.viewTable(data_refresh);
                 }
-                //if (active === 1) {
-                //    table_sending.viewTable(data_refresh);
-                //}
+                if (active === 1) {
+                    diogram_report.view(data_refresh);
+                }
 
             },
 
@@ -231,6 +231,8 @@ $(function () {
                 }
             }
         },
+
+
         // Таблица 
         table_report_1 = {
             html_table: $('table#table-report-1'),
@@ -274,7 +276,7 @@ $(function () {
                         { data: "measures", title: langView('field_measures', langs), width: "100px", orderable: true, searchable: true },
                         { data: "note", title: langView('field_note', langs), width: "100px", orderable: true, searchable: true },
                     ],
-                    dom: 'Bfrtip',
+                    dom: 'Blftipr',//'Bfrtip',
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
@@ -358,6 +360,169 @@ $(function () {
             clearSelect: function () {
                 this.html_table.find('tbody tr').removeClass('selected');
             },
+        },
+
+                // Панель таблицы
+        panel_diogram = {
+            date_start: new Date(new Date().getFullYear(), new Date().getMonth(), 1, 0, 0, 0),
+            date_stop: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 23, 59, 59),
+            period: null,
+            obj_date: null,
+            html_div_panel: $('<div class="setup-operation" id="property"></div>'),
+            label: $('<label for="date" ></label>'),
+            span: $('<span id="select-range"></span>'),
+            input_data_start: $('<input id="date-start" name="date-start" size="20">'),
+            input_data_stop: $('<input id="date-stop" name="date-stop" size="20">'),
+            init: function (obj) {
+                this.html_div_panel
+                    .append(this.label.text(langView('label-text-date', langs)))
+                    .append(this.span.append(this.input_data_start).append(' - ').append(this.input_data_stop));
+
+                //}
+                obj.prepend(this.html_div_panel);
+                // настроим компонент выбора времени
+                this.obj_date = this.span.dateRangePicker(
+                    {
+                        language: lang,
+                        format: lang === 'en' ? 'MM/DD/YYYY HH:mm' : 'DD.MM.YYYY HH:mm',
+                        separator: lang === 'en' ? '-' : '-',
+                        autoClose: false,
+                        time: {
+                            enabled: true
+                        },
+                        setValue: function (s, s1, s2) {
+                            $('input#date-start').val(s1);
+                            $('input#date-stop').val(s2);
+                            panel_diogram.period = s1 + '-' + s2;
+                        }
+                    }).
+                    bind('datepicker-change', function (evt, obj) {
+                        panel_diogram.date_start = obj.date1;
+                        panel_diogram.date_stop = obj.date2;
+                        panel_diogram.period = obj.value;
+                    })
+                    .bind('datepicker-closed', function () {
+                        tab_type_report.activeTable(tab_type_report.active, false);
+                    });
+                if (lang === 'en') {
+                    this.obj_date.data('dateRangePicker').setDateRange(datetoStringOfLang(this.date_start, 'en'), datetoStringOfLang(this.date_stop, 'en'));
+
+                } else {
+                    this.obj_date.data('dateRangePicker').setDateRange(datetoStringOfLang(this.date_start, 'ru'), datetoStringOfLang(this.date_stop, 'ru'));
+                }
+            }
+        },
+        // Диограмма 
+        diogram_report = {
+            chart_common: null,
+            chart_district: null,
+            list_cause_count: null,
+            list_distric_count: null,
+            period_cause: null,
+            period_distric: null,
+            init: function () {
+
+                am4core.useTheme(am4themes_animated);
+                // chart_common
+                //this.chart_common = am4core.create("chartdiv-common", am4charts.PieChart);
+                this.chart_common = am4core.create("chartdiv-common", am4charts.PieChart3D);
+
+                //this.chart_common.innerRadius = am4core.percent(40);
+                //this.chart_common.depth = 90;
+
+
+                this.chart_common.data = [];
+                //var series = this.chart_common.series.push(new am4charts.PieSeries());
+                var series = this.chart_common.series.push(new am4charts.PieSeries3D());
+                series.dataFields.value = "count";
+                series.dataFields.category = "name";
+                // this creates initial animation
+                series.hiddenState.properties.opacity = 1;
+                series.hiddenState.properties.endAngle = -90;
+                series.hiddenState.properties.startAngle = -90;
+                series.labels.template.text = "{category}: {value.value}";
+                //series.slices.template.tooltipText = "{category}: {value.value}";
+
+                var title = this.chart_common.titles.create();
+                title.text = "Общее количесто брака";
+                title.fontSize = 20;
+                title.marginBottom = 30;
+
+                this.chart_common.legend = new am4charts.Legend();
+
+                this.chart_common.legend.position = "left";
+                this.chart_common.legend.valign = "top";
+                this.chart_common.legend.height = 400;
+                this.chart_common.legend.align = "right";
+                //this.chart_common.legend.valueLabels.template.text = "{value.value}";
+
+                this.chart_common.legend.fontSize = 11;
+
+                //this.chart_common.legend.markers.template.disabled = true;
+                var markerTemplate = this.chart_common.legend.markers.template;
+                markerTemplate.width = 20;
+                markerTemplate.height = 20;
+
+
+                // chart_district
+                this.chart_district = am4core.create("chartdiv-district", am4charts.PieChart3D);
+                this.chart_district.data = [];
+                var series = this.chart_district.series.push(new am4charts.PieSeries3D());
+                series.dataFields.value = "count";
+                series.dataFields.category = "name";
+                // this creates initial animation
+                series.hiddenState.properties.opacity = 1;
+                series.hiddenState.properties.endAngle = -90;
+                series.hiddenState.properties.startAngle = -90;
+                series.labels.template.text = "{category}: {value.value}";
+
+                var title = this.chart_district.titles.create();
+                title.text = "Браки по районам";
+                title.fontSize = 20;
+                title.marginBottom = 30;
+
+                this.chart_district.legend = new am4charts.Legend();
+                this.chart_district.legend.position = "left";
+                this.chart_district.legend.valign = "top";
+                this.chart_district.legend.height = 400;
+                this.chart_district.legend.align = "right";
+
+                this.chart_district.legend.fontSize = 11;
+
+                //this.chart_common.legend.markers.template.disabled = true;
+                var markerTemplate = this.chart_district.legend.markers.template;
+                markerTemplate.width = 20;
+                markerTemplate.height = 20;
+
+                panel_diogram.init($('DIV#table-panel-chart'));
+            },
+            view: function (data_refresh) {
+
+                if (this.list_cause_count === null || this.period_cause !== panel_diogram.period || data_refresh === true) {
+                    LockScreen(langView('mess_delay', langs));
+                    getAsyncReportCauseCount(
+                        panel_diogram.date_start,
+                        panel_diogram.date_stop,
+                        function (result_cause_count) {
+                            diogram_report.chart_common.data = result_cause_count;
+                            diogram_report.period_cause = panel_diogram.period;
+                            diogram_report.list_cause_count = result_cause_count;
+                            LockScreenOff();
+                        });
+                }
+                if (this.list_distric_count === null || this.period_distric !== panel_diogram.period || data_refresh === true) {
+                    LockScreen(langView('mess_delay', langs));
+                    getAsyncReportDistrictCount(
+                        panel_diogram.date_start,
+                        panel_diogram.date_stop,
+                        function (result_distric_count) {
+                            diogram_report.chart_district.data = result_distric_count;
+                            diogram_report.period_distric = panel_diogram.period;
+                            diogram_report.list_distric_count = result_distric_count;
+                            LockScreenOff();
+                        });
+                }
+            }
         };
     //-----------------------------------------------------------------------------------------
     // Функции
@@ -377,8 +542,10 @@ $(function () {
     tab_type_report.initObject();
     // Загрузка библиотек
     //loadReference(function (result) {
-        table_report_1.initObject();
-        tab_type_report.activeTable(tab_type_report.active, true);
+    table_report_1.initObject();
+    diogram_report.init();
+    //tab_type_report.activeTable(tab_type_report.active, true);
+
     //});
 
 });

@@ -10,6 +10,11 @@ using System.Web.Http.Description;
 
 namespace Web_RailWay.Controllers.api
 {
+    public class ReportNC {
+        public string name { get; set; }        
+        public int count { get; set; }
+    }
+    
     [RoutePrefix("api/dt")]
     public class DTMarriageController : ApiController
     {
@@ -454,6 +459,57 @@ namespace Web_RailWay.Controllers.api
                 return NotFound();
             }
         }
+        #endregion
+
+        #region Report
+        // GET: api/dt/marriage_work/cause_count/start/2019-04-15T00:00:00/stop/2019-04-16T06:59:59
+        [Route("marriage_work/cause_count/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(ReportNC))]
+        public IHttpActionResult GetReportCauseCount(DateTime start, DateTime stop)
+        {
+
+            try
+            {
+                string sql = "SELECT c.cause as name, COUNT(mw.id) AS count FROM TD.MarriageWork as mw INNER JOIN  TD.MarriageCause as c ON mw.id_cause = c.id " +
+                "where mw.date_start >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and  mw.date_start <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
+                "GROUP BY c.cause order by c.cause";
+                List<ReportNC> list = this.ef_mw.Database.SqlQuery<ReportNC>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
+        // GET: api/dt/marriage_work/district_count/start/2019-04-15T00:00:00/stop/2019-04-16T06:59:59
+        [Route("marriage_work/district_count/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(ReportNC))]
+        public IHttpActionResult GetReportDistrictCount(DateTime start, DateTime stop)
+        {
+
+            try
+            {
+                string sql = "SELECT d.district as name, COUNT(mw.id) AS count FROM TD.MarriageWork as mw INNER JOIN TD.MarriageDistrictObject as do ON mw.id_district_object = do.id INNER JOIN TD.MarriageDistrict as d ON do.id_district = d.id " +
+                "where mw.date_start >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and  mw.date_start <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
+                "GROUP BY d.district order by d.district";
+                List<ReportNC> list = this.ef_mw.Database.SqlQuery<ReportNC>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
         #endregion
     }
 }

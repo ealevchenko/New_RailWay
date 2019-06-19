@@ -11,7 +11,7 @@ namespace Web_RailWay
             //-----------------------------------------------------------------------
             //JS
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        //"~/Scripts/jquery-3.2.1.js"));
+                //"~/Scripts/jquery-3.2.1.js"));
                         "~/Scripts/jquery-3.3.1.min.js"));
             //"~/Scripts/jquery-{version}.js"));
 
@@ -35,7 +35,7 @@ namespace Web_RailWay
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      //"~/Scripts/bootstrap.js",
+                //"~/Scripts/bootstrap.js",
                       "~/Scripts/bootstrap.min.js",
                       "~/Scripts/respond.js"));
 
@@ -68,6 +68,10 @@ namespace Web_RailWay
                 "~/Scripts/jszip.min.js"
                 ));
 
+            bundles.Add(new ScriptBundle("~/bundles/amcharts4").Include(
+                "~/Scripts/amcharts4/core.js",
+                "~/Scripts/amcharts4/charts.js",
+                "~/Scripts/amcharts4/themes/animated.js"));
             //-----------------------------------------------------------------------
             //CSS
             bundles.Add(new StyleBundle("~/layout_railway/css").Include(
@@ -100,7 +104,7 @@ namespace Web_RailWay
                 "~/Content/DataTables/css/select.dataTables.min.css",
                 "~/Content/DataTables/css/datatables.css"));
 
-                //"~/Content/table/reports-dataTables.css"));
+            //"~/Content/table/reports-dataTables.css"));
         }
     }
 }

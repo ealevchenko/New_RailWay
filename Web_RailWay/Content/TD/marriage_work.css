@@ -129,3 +129,36 @@ header .header-content .header-content-inner p.messageTips {
     text-align:left;
     color:#666;
 }
+
+/*div {
+    border: 1px solid #ff0000;
+}*/
+
+#chartdiv-common {
+  width: 100%;
+  /*max-height: 600px;*/
+  height: 100vh;
+}
+#chartdiv-district {
+  width: 100%;
+  /*max-height: 600px;*/
+  height: 100vh;
+}
+
+div#chart-common {
+    /*float: left;*/
+    /*width: 45%;*/
+    /*padding: .3em;*/
+    /*height: 500px*/
+}
+div#chart-district {
+    /*margin-left: 50%;*/
+    /*padding: 1em;*/
+    /*border-left: 2px solid gray;*/
+    /*height: 500px*/
+}
+/*div#chart-vagon {
+    margin-top: 10px;
+    height: 500px;
+}*/
+

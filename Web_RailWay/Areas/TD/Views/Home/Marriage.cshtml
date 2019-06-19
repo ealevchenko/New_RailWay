@@ -27,6 +27,7 @@
     @Scripts.Render("~/bundles/jquery-ui")
     @Scripts.Render("~/bundles/DataTables")
     @Scripts.Render("~/bundles/datetime")
+    @Scripts.Render("~/bundles/amcharts4")
     <script src="~/Scripts/jquery.cookie.js" type="text/javascript"></script>
     <script src="~/Scripts/Shared/common.js" type="text/javascript"></script>
     <script src="~/Scripts/api_helpers/dt.js" type="text/javascript"></script>
@@ -50,7 +51,17 @@
             <table class='display compact' id="table-report-1" style="width:100%" cellpadding="0"></table>
         </div>
         <div id="tab-report-2">
-            <table class='display compact' id="table-report-2" style="width:100%" cellpadding="0"></table>
+            <div id="table-panel-chart"></div>
+            <div id="chart-common">
+                <div id="chartdiv-common">
+
+                </div>
+            </div>
+            <div id="chart-district">
+                <div id="chartdiv-district"></div>
+            </div>
+            <div id="chart-vagon"></div>
+            
         </div>
     </div>
 </div>
