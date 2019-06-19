@@ -510,6 +510,31 @@ namespace Web_RailWay.Controllers.api
             }
         }
 
+        // GET: api/dt/marriage_work/dinamic_count/classification/10/start/2019-01-01T00:00:00/stop/2019-06-30T23:59:59
+        [Route("marriage_work/dinamic_count/classification/{id:int}/start/{start:datetime}/stop/{stop:datetime}")]
+        [ResponseType(typeof(ReportNC))]
+        public IHttpActionResult GetReportDinamicCount(int id, DateTime start, DateTime stop)
+        {
+
+            try
+            {
+                string sql = "SELECT DATENAME(month,max(date_start)) + ' ' + DATENAME(year, max(date_start)) as name , COUNT(DATEPART(month,date_start)) AS count FROM TD.MarriageWork " +
+                "where (id_classification = "+ id.ToString() + ") and  date_start >= CONVERT(datetime,'" + start.ToString("yyyy-MM-dd HH:mm:ss") + "',120) and  date_start <= CONVERT(datetime,'" + stop.ToString("yyyy-MM-dd HH:mm:ss") + "',120) " +
+                "GROUP BY DATEPART(year, date_start), DATEPART(month, date_start) order by DATEPART(year, date_start), DATEPART(month, date_start)";
+                List<ReportNC> list = this.ef_mw.Database.SqlQuery<ReportNC>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
+
         #endregion
     }
 }

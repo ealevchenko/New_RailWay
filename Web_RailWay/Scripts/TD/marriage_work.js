@@ -19,6 +19,11 @@ $(function () {
             {
                 'text_link_tabs_marriage_table': 'Браки в работе',
                 'text_link_tabs_marriage_report': 'Отчеты',
+
+                'text_link_tabs_chart_1': 'Общее количесто',
+                'text_link_tabs_chart_2': 'По районам',
+                'text_link_tabs_chart_3': 'Динамика',
+
                 'field_date_start': 'Дата, время инцидента',
                 'field_date_stop': 'Дата, время устранения инцидента',
                 'field_date_period': 'Дата и время начала и устранения инцидента',
@@ -53,6 +58,11 @@ $(function () {
             {
                 'text_link_tabs_marriage_table': 'Marriages at work',
                 'text_link_tabs_marriage_report': 'Reports',
+
+                'text_link_tabs_chart_1': 'Total amount',
+                'text_link_tabs_chart_2': 'By districts',
+                'text_link_tabs_chart_3': 'Dynamics',
+
                 'field_date_start': 'Date, time of incident',
                 'field_date_stop': 'Date, time to eliminate incident',
                 'field_date_period': 'Date and time of the beginning and elimination of the incident',
@@ -87,67 +97,66 @@ $(function () {
 
     var lang = $.cookie('lang') === undefined ? 'ru' : $.cookie('lang'),
         langs = $.extend(true, $.extend(true, getLanguages($.Text_View, lang), getLanguages($.Text_Common, lang)), getLanguages($.Text_Table, lang)),
-        //function_delete_cards_b = Boolean(Number(function_delete_cards)),
-        //// Загрузка библиотек
-        //loadReference = function (callback) {
-        //    LockScreen(langView('mess_load', langs));
-        //    var count = 5;
-        //    // Загрузка списка (dt.js)
-        //    getAsyncDTMarriageDistrictObject(function (result) {
-        //        reference_district_object = result;
-        //        count -= 1;
-        //        if (count <= 0) {
-        //            if (typeof callback === 'function') {
-        //                LockScreenOff();
-        //                callback();
-        //            }
-        //        }
-        //    });
-        //    getAsyncDTMarriageClassification(function (result) {
-        //        reference_classification = result;
-        //        count -= 1;
-        //        if (count <= 0) {
-        //            if (typeof callback === 'function') {
-        //                LockScreenOff();
-        //                callback();
-        //            }
-        //        }
-        //    });
-        //    getAsyncDTMarriageNature(function (result) {
-        //        reference_nature = result;
-        //        count -= 1;
-        //        if (count <= 0) {
-        //            if (typeof callback === 'function') {
-        //                LockScreenOff();
-        //                callback();
-        //            }
-        //        }
-        //    });
-        //    getAsyncDTMarriageCause(function (result) {
-        //        reference_cause = result;
-        //        count -= 1;
-        //        if (count <= 0) {
-        //            if (typeof callback === 'function') {
-        //                LockScreenOff();
-        //                callback();
-        //            }
-        //        }
-        //    });
-        //    getAsyncDTMarriageSubdivision(function (result) {
-        //        reference_subdivision = result;
-        //        count -= 1;
-        //        if (count <= 0) {
-        //            if (typeof callback === 'function') {
-        //                LockScreenOff();
-        //                callback();
-        //            }
-        //        }
-        //    });
-        //},
+        // Загрузка библиотек
+        loadReference = function (callback) {
+            LockScreen(langView('mess_load', langs));
+            var count = 1;
+            // Загрузка списка (dt.js)
+            //getAsyncDTMarriageDistrictObject(function (result) {
+            //    reference_district_object = result;
+            //    count -= 1;
+            //    if (count <= 0) {
+            //        if (typeof callback === 'function') {
+            //            LockScreenOff();
+            //            callback();
+            //        }
+            //    }
+            //});
+            getAsyncDTMarriageClassification(function (result) {
+                reference_classification = result;
+                count -= 1;
+                if (count <= 0) {
+                    if (typeof callback === 'function') {
+                        LockScreenOff();
+                        callback();
+                    }
+                }
+            });
+            //getAsyncDTMarriageNature(function (result) {
+            //    reference_nature = result;
+            //    count -= 1;
+            //    if (count <= 0) {
+            //        if (typeof callback === 'function') {
+            //            LockScreenOff();
+            //            callback();
+            //        }
+            //    }
+            //});
+            //getAsyncDTMarriageCause(function (result) {
+            //    reference_cause = result;
+            //    count -= 1;
+            //    if (count <= 0) {
+            //        if (typeof callback === 'function') {
+            //            LockScreenOff();
+            //            callback();
+            //        }
+            //    }
+            //});
+            //getAsyncDTMarriageSubdivision(function (result) {
+            //    reference_subdivision = result;
+            //    count -= 1;
+            //    if (count <= 0) {
+            //        if (typeof callback === 'function') {
+            //            LockScreenOff();
+            //            callback();
+            //        }
+            //    }
+            //});
+        },
         // список place
         //reference_district_object = null,
         //// список classification
-        //reference_classification = null,
+        reference_classification = null,
         //// список nature
         //reference_nature = null,
         //// список cause
@@ -175,7 +184,7 @@ $(function () {
                     table_report_1.viewTable(data_refresh);
                 }
                 if (active === 1) {
-                    diogram_report.view(data_refresh);
+                    diogram_report.activeChart(diogram_report.active_chart, data_refresh);
                 }
 
             },
@@ -231,8 +240,6 @@ $(function () {
                 }
             }
         },
-
-
         // Таблица 
         table_report_1 = {
             html_table: $('table#table-report-1'),
@@ -361,13 +368,13 @@ $(function () {
                 this.html_table.find('tbody tr').removeClass('selected');
             },
         },
-
-                // Панель таблицы
+        // Панель диаграммы
         panel_diogram = {
             date_start: new Date(new Date().getFullYear(), new Date().getMonth(), 1, 0, 0, 0),
             date_stop: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 23, 59, 59),
             period: null,
             obj_date: null,
+            select_classification: null,
             html_div_panel: $('<div class="setup-operation" id="property"></div>'),
             label: $('<label for="date" ></label>'),
             span: $('<span id="select-range"></span>'),
@@ -410,19 +417,65 @@ $(function () {
                 } else {
                     this.obj_date.data('dateRangePicker').setDateRange(datetoStringOfLang(this.date_start, 'ru'), datetoStringOfLang(this.date_stop, 'ru'));
                 }
+
+                this.select_classification = initSelect(
+                    $('select#classification-chart'),
+                    { width: 300 },
+                    reference_classification,
+                    function (row) {
+                        return { value: Number(row.id), text: row.classification };
+                    },
+                    10,
+                    function (event, ui) {
+                        event.preventDefault();
+                        diogram_report.viewChart3(true);
+                    },
+                    null);
             }
         },
         // Диограмма 
         diogram_report = {
             chart_common: null,
             chart_district: null,
+            chart_dinamik: null,
             list_cause_count: null,
             list_distric_count: null,
+            list_dinamik_count: null,
             period_cause: null,
             period_distric: null,
+            period_dinamik: null,
+            active_chart: 0,
+            // Инициализация закладок 
+            initTabs: function () {
+                $('#link-tab-chart-1').text(langView('text_link_tabs_chart_1', langs));
+                $('#link-tab-chart-2').text(langView('text_link_tabs_chart_2', langs));
+                $('#link-tab-chart-3').text(langView('text_link_tabs_chart_3', langs));
+                $("div#tabs-reports-chart").tabs({
+                    collapsible: true,
+                    activate: function (event, ui) {
+                        diogram_report.active_chart = $("div#tabs-reports-chart").tabs("option", "active");
+                        diogram_report.activeChart(diogram_report.active_chart, false);
+                    },
+                });
+            },
+            // Выбор акнивной закладки
+            activeChart: function (active, data_refresh) {
+                if (active === 0) {
+                    diogram_report.viewChart1(data_refresh);
+                }
+                if (active === 1) {
+                    diogram_report.viewChart2(data_refresh);
+                }
+                if (active === 2) {
+                    diogram_report.viewChart3(data_refresh);
+                }
+            },
+            // Инициализация всех диаграм
             init: function () {
-
-                am4core.useTheme(am4themes_animated);
+                // Инициализация закладок
+                this.initTabs();
+                // Инициализация дианграм
+                am4core.useTheme(am4themes_material);
                 // chart_common
                 //this.chart_common = am4core.create("chartdiv-common", am4charts.PieChart);
                 this.chart_common = am4core.create("chartdiv-common", am4charts.PieChart3D);
@@ -443,17 +496,17 @@ $(function () {
                 series.labels.template.text = "{category}: {value.value}";
                 //series.slices.template.tooltipText = "{category}: {value.value}";
 
-                var title = this.chart_common.titles.create();
-                title.text = "Общее количесто брака";
-                title.fontSize = 20;
-                title.marginBottom = 30;
+                //var title = this.chart_common.titles.create();
+                //title.text = "Общее количесто брака";
+                //title.fontSize = 20;
+                //title.marginBottom = 30;
 
                 this.chart_common.legend = new am4charts.Legend();
 
                 this.chart_common.legend.position = "left";
-                this.chart_common.legend.valign = "top";
-                this.chart_common.legend.height = 400;
-                this.chart_common.legend.align = "right";
+                //this.chart_common.legend.valign = "top";
+                //this.chart_common.legend.height = 400;
+                //this.chart_common.legend.align = "right";
                 //this.chart_common.legend.valueLabels.template.text = "{value.value}";
 
                 this.chart_common.legend.fontSize = 11;
@@ -463,7 +516,7 @@ $(function () {
                 markerTemplate.width = 20;
                 markerTemplate.height = 20;
 
-
+                //------------------------------------------------------------------------------
                 // chart_district
                 this.chart_district = am4core.create("chartdiv-district", am4charts.PieChart3D);
                 this.chart_district.data = [];
@@ -476,16 +529,16 @@ $(function () {
                 series.hiddenState.properties.startAngle = -90;
                 series.labels.template.text = "{category}: {value.value}";
 
-                var title = this.chart_district.titles.create();
-                title.text = "Браки по районам";
-                title.fontSize = 20;
-                title.marginBottom = 30;
+                //var title = this.chart_district.titles.create();
+                //title.text = "Браки по районам";
+                //title.fontSize = 20;
+                //title.marginBottom = 30;
 
                 this.chart_district.legend = new am4charts.Legend();
                 this.chart_district.legend.position = "left";
-                this.chart_district.legend.valign = "top";
-                this.chart_district.legend.height = 400;
-                this.chart_district.legend.align = "right";
+                //this.chart_district.legend.valign = "top";
+                //this.chart_district.legend.height = 400;
+                //this.chart_district.legend.align = "right";
 
                 this.chart_district.legend.fontSize = 11;
 
@@ -494,10 +547,43 @@ $(function () {
                 markerTemplate.width = 20;
                 markerTemplate.height = 20;
 
+                //------------------------------------------------------------------------------
+                // chart_dinamik
+                this.chart_dinamik = am4core.create("chartdiv-dinamik", am4charts.XYChart);
+
+                // Create axes
+
+                var categoryAxis = this.chart_dinamik.xAxes.push(new am4charts.CategoryAxis());
+                categoryAxis.dataFields.category = "name";
+                categoryAxis.renderer.grid.template.location = 0;
+                categoryAxis.renderer.minGridDistance = 30;
+
+                categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+                    if (target.dataItem && target.dataItem.index & 2 == 2) {
+                        return dy + 25;
+                    }
+                    return dy;
+                });
+
+                var valueAxis = this.chart_dinamik.yAxes.push(new am4charts.ValueAxis());
+
+                // Create series
+                var series = this.chart_dinamik.series.push(new am4charts.ColumnSeries());
+                series.dataFields.valueY = "count";
+                series.dataFields.categoryX = "name";
+                series.name = "count";
+                series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+                series.columns.template.fillOpacity = .8;
+
+                var columnTemplate = series.columns.template;
+                columnTemplate.strokeWidth = 2;
+                columnTemplate.strokeOpacity = 1;
+
+
                 panel_diogram.init($('DIV#table-panel-chart'));
             },
-            view: function (data_refresh) {
-
+            //
+            viewChart1: function (data_refresh) {
                 if (this.list_cause_count === null || this.period_cause !== panel_diogram.period || data_refresh === true) {
                     LockScreen(langView('mess_delay', langs));
                     getAsyncReportCauseCount(
@@ -510,6 +596,9 @@ $(function () {
                             LockScreenOff();
                         });
                 }
+            },
+            //
+            viewChart2: function (data_refresh) {
                 if (this.list_distric_count === null || this.period_distric !== panel_diogram.period || data_refresh === true) {
                     LockScreen(langView('mess_delay', langs));
                     getAsyncReportDistrictCount(
@@ -522,7 +611,23 @@ $(function () {
                             LockScreenOff();
                         });
                 }
-            }
+            },
+            //
+            viewChart3: function (data_refresh) {
+                if (this.list_dinamik_count === null || this.period_dinamik !== panel_diogram.period || data_refresh === true) {
+                    LockScreen(langView('mess_delay', langs));
+                    getAsyncReportDinamicCount(
+                        Number(panel_diogram.select_classification.val()),
+                        panel_diogram.date_start,
+                        panel_diogram.date_stop,
+                        function (result_dinamik_count) {
+                            diogram_report.chart_dinamik.data = result_dinamik_count;
+                            diogram_report.period_dinamik = panel_diogram.period;
+                            diogram_report.list_dinamik_count = result_dinamik_count;
+                            LockScreenOff();
+                        });
+                }
+            },
         };
     //-----------------------------------------------------------------------------------------
     // Функции
@@ -541,11 +646,11 @@ $(function () {
     //-----------------------------------------------------------------------------------------
     tab_type_report.initObject();
     // Загрузка библиотек
-    //loadReference(function (result) {
-    table_report_1.initObject();
-    diogram_report.init();
-    //tab_type_report.activeTable(tab_type_report.active, true);
+    loadReference(function (result) {
+        table_report_1.initObject();
+        diogram_report.init();
+        //tab_type_report.activeTable(tab_type_report.active, true);
 
-    //});
+    });
 
 });

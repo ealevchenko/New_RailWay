@@ -71,7 +71,9 @@ namespace Web_RailWay
             bundles.Add(new ScriptBundle("~/bundles/amcharts4").Include(
                 "~/Scripts/amcharts4/core.js",
                 "~/Scripts/amcharts4/charts.js",
-                "~/Scripts/amcharts4/themes/animated.js"));
+                "~/Scripts/amcharts4/themes/animated.js",
+                "~/Scripts/amcharts4/themes/material.js"
+                ));
             //-----------------------------------------------------------------------
             //CSS
             bundles.Add(new StyleBundle("~/layout_railway/css").Include(
