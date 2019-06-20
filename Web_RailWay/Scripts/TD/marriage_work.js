@@ -649,7 +649,7 @@ $(function () {
     loadReference(function (result) {
         table_report_1.initObject();
         diogram_report.init();
-        //tab_type_report.activeTable(tab_type_report.active, true);
+        tab_type_report.activeTable(tab_type_report.active, true);
 
     });
 
