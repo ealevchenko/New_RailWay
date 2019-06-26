@@ -329,3 +329,26 @@ function getAsyncReportDinamicCount(id, start, stop, callback) {
         }
     });
 }
+// Получить репорт
+function getAsyncReportDinamicClassification(year, callback) {
+    $.ajax({
+        type: 'GET',
+        url: '../../api/dt/marriage_work/dinamic/classification/year/' + year,
+        async: true,
+        dataType: 'json',
+        beforeSend: function () {
+            AJAXBeforeSend();
+        },
+        success: function (data) {
+            if (typeof callback === 'function') {
+                callback(data);
+            }
+        },
+        error: function (x, y, z) {
+            OnAJAXError(x, y, z);
+        },
+        complete: function () {
+            AJAXComplete();
+        }
+    });
+}

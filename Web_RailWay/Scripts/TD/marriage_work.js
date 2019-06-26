@@ -421,11 +421,9 @@ $(function () {
                 this.select_classification = initSelect(
                     $('select#classification-chart'),
                     { width: 300 },
-                    reference_classification,
-                    function (row) {
-                        return { value: Number(row.id), text: row.classification };
-                    },
-                    10,
+                    [{ value: 2019, text: 2019 },{ value: 2020, text: 2020 }, { value: 2020, text: 2020 }],
+                    null,
+                    2019,
                     function (event, ui) {
                         event.preventDefault();
                         diogram_report.viewChart3(true);
@@ -549,36 +547,82 @@ $(function () {
 
                 //------------------------------------------------------------------------------
                 // chart_dinamik
+
                 this.chart_dinamik = am4core.create("chartdiv-dinamik", am4charts.XYChart);
-
+                this.chart_dinamik.data = [];
                 // Create axes
-
                 var categoryAxis = this.chart_dinamik.xAxes.push(new am4charts.CategoryAxis());
-                categoryAxis.dataFields.category = "name";
+                categoryAxis.dataFields.category = "month";
+                categoryAxis.title.text = "Динамика браков ТД";
                 categoryAxis.renderer.grid.template.location = 0;
-                categoryAxis.renderer.minGridDistance = 30;
-
-                categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
-                    if (target.dataItem && target.dataItem.index & 2 == 2) {
-                        return dy + 25;
-                    }
-                    return dy;
-                });
+                categoryAxis.renderer.minGridDistance = 20;
+                categoryAxis.renderer.cellStartLocation = 0.1;
+                categoryAxis.renderer.cellEndLocation = 0.9;
 
                 var valueAxis = this.chart_dinamik.yAxes.push(new am4charts.ValueAxis());
+                valueAxis.min = 0;
+                valueAxis.title.text = "Количество брака";
 
+                // axis break
+                //var axisBreak = valueAxis.axisBreaks.create();
+                //axisBreak.startValue = 10;
+                //axisBreak.endValue = 90;
+                //axisBreak.breakSize = 0.005;
+                
                 // Create series
-                var series = this.chart_dinamik.series.push(new am4charts.ColumnSeries());
-                series.dataFields.valueY = "count";
-                series.dataFields.categoryX = "name";
-                series.name = "count";
-                series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-                series.columns.template.fillOpacity = .8;
+                function createSeries(field, name, stacked) {
+                    var series = diogram_report.chart_dinamik.series.push(new am4charts.ColumnSeries());
+                    series.dataFields.valueY = field;
+                    series.dataFields.categoryX = "month";
+                    series.name = name;
+                    //series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
+                    series.stacked = stacked;
+                    //series.columns.template.width = am4core.percent(95);
 
-                var columnTemplate = series.columns.template;
-                columnTemplate.strokeWidth = 2;
-                columnTemplate.strokeOpacity = 1;
 
+                    series.columns.template.width = am4core.percent(60);
+                    series.columns.template.tooltipText = "[bold]{name}[/]\n[font-size:14px]{categoryX}: {valueY}";
+
+                    var labelBullet = series.bullets.push(new am4charts.LabelBullet());
+                    labelBullet.label.text = "{valueY}";
+                    labelBullet.locationY = 0.5;
+
+
+                }
+
+                createSeries("classification1", "Взрез стрелки", true);
+                createSeries("classification2", "Нарушения ПТЭ и инструкций", true);
+                createSeries("classification3", "Наезд на автотранспорт", true);
+                createSeries("classification4", "Наезд на тупик", true);
+                createSeries("classification5", "Перевод стрелки под составом", true);
+                createSeries("classification6", "Повреждение оборудования", true);
+                createSeries("classification7", "Проезд запрещающего показ. сфет.", true);
+                createSeries("classification8", "Саморасцеп", true);
+                createSeries("classification9", "Столкновение", true);
+                createSeries("classification10", "Сход с рельс", true);
+   
+                //1	Взрез стрелки
+                //2	Другие нарушения ПТЭ и инструкций
+                //3	Наезд на автотранспорт и другие препятствия
+                //4	Наезд на тупик
+                //5	Перевод стрелки под составом
+                //6	Повреждение оборудования
+                //7	Проезд запрещающего показания светофора или предельного столбика
+                //8	Саморасцеп
+                //9	Столкновение
+                //10	Сход с рельс
+                //11	Просыпь агломерата
+
+
+                // Add legend
+                this.chart_dinamik.legend = new am4charts.Legend();
+                this.chart_district.legend.fontSize = 11;
+                //this.chart_district.legend.valueLabels.template.text = "{value.value}";
+                //this.chart_dinamik.legend.position = "left";
+
+                var markerTemplate = this.chart_dinamik.legend.markers.template;
+                markerTemplate.width = 20;
+                markerTemplate.height = 20;
 
                 panel_diogram.init($('DIV#table-panel-chart'));
             },
@@ -616,10 +660,8 @@ $(function () {
             viewChart3: function (data_refresh) {
                 if (this.list_dinamik_count === null || this.period_dinamik !== panel_diogram.period || data_refresh === true) {
                     LockScreen(langView('mess_delay', langs));
-                    getAsyncReportDinamicCount(
-                        Number(panel_diogram.select_classification.val()),
-                        panel_diogram.date_start,
-                        panel_diogram.date_stop,
+                    getAsyncReportDinamicClassification(
+                        panel_diogram.select_classification.val(),
                         function (result_dinamik_count) {
                             diogram_report.chart_dinamik.data = result_dinamik_count;
                             diogram_report.period_dinamik = panel_diogram.period;

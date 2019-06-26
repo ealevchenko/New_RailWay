@@ -14,6 +14,21 @@ namespace Web_RailWay.Controllers.api
         public string name { get; set; }        
         public int count { get; set; }
     }
+
+    public class DinamicClassification
+    {
+        public string month { get; set; }
+        public int classification1 { get; set; }
+        public int classification2 { get; set; }
+        public int classification3 { get; set; }
+        public int classification4 { get; set; }
+        public int classification5 { get; set; }
+        public int classification6 { get; set; }
+        public int classification7 { get; set; }
+        public int classification8 { get; set; }
+        public int classification9 { get; set; }
+        public int classification10 { get; set; }
+    }
     
     [RoutePrefix("api/dt")]
     public class DTMarriageController : ApiController
@@ -534,7 +549,39 @@ namespace Web_RailWay.Controllers.api
             }
         }
 
+        // GET: api/dt/marriage_work/dinamic/classification/year/2019
+        [Route("marriage_work/dinamic/classification/year/{year:int}")]
+        [ResponseType(typeof(DinamicClassification))]
+        public IHttpActionResult GetReportDinamicClassification(int year)
+        {
 
+            try
+            {
+                string sql = "SELECT DATENAME(month,max(date_start)) + ' ' + DATENAME(year, max(date_start)) as 'month' , " +
+                    "Sum(CASE id_classification WHEN 1 THEN 1 ELSE 0 END) as 'classification1', " +
+                    "Sum(CASE id_classification WHEN 2 THEN 1 ELSE 0 END) as 'classification2', " +
+                    "Sum(CASE id_classification WHEN 3 THEN 1 ELSE 0 END) as 'classification3', " +
+                    "Sum(CASE id_classification WHEN 4 THEN 1 ELSE 0 END) as 'classification4', " +
+                    "Sum(CASE id_classification WHEN 5 THEN 1 ELSE 0 END) as 'classification5', " +
+                    "Sum(CASE id_classification WHEN 6 THEN 1 ELSE 0 END) as 'classification6', " +
+                    "Sum(CASE id_classification WHEN 7 THEN 1 ELSE 0 END) as 'classification7', " +
+                    "Sum(CASE id_classification WHEN 8 THEN 1 ELSE 0 END) as 'classification8', " +
+                    "Sum(CASE id_classification WHEN 9 THEN 1 ELSE 0 END) as 'classification9', " +
+                    "Sum(CASE id_classification WHEN 10 THEN 1 ELSE 0 END) as 'classification10' " +
+	                "FROM TD.MarriageWork "+
+                    "where DATEPART(year, date_start) = " + year.ToString() + " GROUP BY DATEPART(year, date_start), DATEPART(month, date_start) order by DATEPART(year, date_start), DATEPART(month, date_start)";
+                List<DinamicClassification> list = this.ef_mw.Database.SqlQuery<DinamicClassification>(sql).ToList();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
         #endregion
     }
 }
